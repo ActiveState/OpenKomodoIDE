@@ -1,0 +1,34 @@
+<VirtualHost *:443>
+    ServerName collaboration-push.activestate.com
+    ServerAlias collaboration-push
+
+    CustomLog logs/collaboration-push.activestate.com-access_log combined
+    ErrorLog logs/collaboration-push.activestate.com-error_log
+#	LogLevel debug
+
+    ProxyPass / https://collab1:8001/
+    ProxyPassReverse / https://collab1:8001/
+    # This may need to be off -- depends on Node.js' mood.
+    ProxyPreserveHost on
+
+    SSLEngine on
+    SSLProxyEngine on
+    SSLProtocol all -SSLv2
+    SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
+
+    SSLCertificateFile /etc/pki/tls/certs/star_activestate_com.crt
+    SSLCertificateKeyFile /etc/pki/tls/private/star_activestate_com.key
+    SSLCertificateChainFile /etc/pki/tls/certs/DigiCertCA.crt
+    SSLCACertificateFile /etc/pki/tls/certs/TrustedRoot.crt
+
+    #SSLVerifyClient require
+    #SSLVerifyDepth  10
+
+    SetEnvIf User-Agent ".*MSIE.*" \
+             nokeepalive ssl-unclean-shutdown \
+             downgrade-1.0 force-response-1.0
+
+    # CustomLog logs/ssl_request_log \
+    #    "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+</VirtualHost>
+

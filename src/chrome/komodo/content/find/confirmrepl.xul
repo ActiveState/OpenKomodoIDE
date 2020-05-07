@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % findDTD SYSTEM "chrome://komodo/locale/find.dtd">
+  %findDTD;
+]>
+<!-- ***** BEGIN LICENSE BLOCK *****
+ Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ 
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.1 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
+ 
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ License for the specific language governing rights and limitations
+ under the License.
+ 
+ The Original Code is Komodo code.
+ 
+ The Initial Developer of the Original Code is ActiveState Software Inc.
+ Portions created by ActiveState Software Inc are Copyright (C) 2000-2007
+ ActiveState Software Inc. All Rights Reserved.
+ 
+ Contributor(s):
+   ActiveState Software Inc
+ 
+ Alternatively, the contents of this file may be used under the terms of
+ either the GNU General Public License Version 2 or later (the "GPL"), or
+ the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ in which case the provisions of the GPL or the LGPL are applicable instead
+ of those above. If you wish to allow use of your version of this file only
+ under the terms of either the GPL or the LGPL, and not to allow others to
+ use your version of this file under the terms of the MPL, indicate your
+ decision by deleting the provisions above and replace them with the notice
+ and other provisions required by the GPL or the LGPL. If you do not delete
+ the provisions above, a recipient may use your version of this file under
+ the terms of any one of the MPL, the GPL or the LGPL.
+ 
+ ***** END LICENSE BLOCK ***** -->
+
+<!-- Dialog to run a "Replace in Files" operation and confirm with the
+     user the replacements to make. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/tree.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/find.css" type="text/css"?>
+
+<dialog id="dialog-confirm-repl"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        windowtype="komodo_confirm_repl"
+        title="&confirmReplacement.title;"
+        orient="vertical"
+        style="min-width: 40em;"
+        screenX="110"
+        screenY="110"
+        width="640"
+        persist="height width"
+        flex="1"
+        onload="on_load()"
+        buttons="accept,cancel"
+        defaultButton="accept"
+        ondialogaccept="return make_changes();"
+        ondialogcancel="return cancel();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uilayout.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/launch.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/find/confirmrepl.js" type="application/x-javascript;version=1.7"/>
+
+    <menupopup id="tree_context_menu" onpopupshowing="onTreeContextMenuShowing()">
+        <menuitem id="context_menu_diff"
+                  label="&showSelectedChanges.label;"
+                  tooltiptext="&showSelectedChanges.tooltiptext;"
+                  oncommand="show_selected_changes();"/>
+        <menuseparator id="context_menu_separator_1" />
+        <menuitem id="context_menu_check" label="&context_menu_check.label;" oncommand="check_selected();"/>
+        <menuitem id="context_menu_uncheck" label="&context_menu_uncheck.label;" oncommand="uncheck_selected();"/>
+        <menu id="context_menu_associate"
+              label="&context_menu_associate.label;"
+              accesskey="&context_menu_associate.accesskey;"
+              >
+            <menupopup id="popup_viewAsLanguage"
+                       onpopupshowing="updateAssociateLanguageMenu(this);"
+                       />
+        </menu>
+        <menuitem id="context_menu_ignore"
+                  label="&context_menu_ignore.label;"
+                  accesskey="&context_menu_ignore.accesskey;"
+                  oncommand="addIgnoredAssociation();"/>
+    </menupopup>
+
+    <hbox align="center">
+        <image id="dialog-icon" class="question-icon spaced" />
+        <separator orient="vertical" class="thin"/>
+        <description flex="1">
+            &confirmReplacement.description;
+        </description>
+    </hbox>
+
+    <separator class="thin"/>
+    <hbox align="center" style="padding: 5px;">
+        <image id="status-img" />
+        <label id="status-lbl" crop="center" flex="1"
+               value="&preparing.label;"/>
+    </hbox>
+    <tree id="repls" flex="1"
+          seltype="multiple"
+          class="no-border"
+          editable="true"
+          style="margin: 0px; height: 200px;"
+          hidecolumnpicker="true"
+          onkeypress="return repls_on_keypress(event)">
+        <treecols>
+            <treecol id="repls-marked"
+                     type="checkbox"
+                     fixed="true" hideheader="true"
+                     editable="true"
+                     class="treecol-image"
+                     ignoreincolumnpicker="true"
+                     tooltiptext="&checkToApplyChanges.tooltiptext;" />
+            <splitter class="tree-splitter"/>
+            <treecol id="repls-desc"
+                     hideheader="true"
+                     persist="width"
+                     crop="center"
+                     flex="1" />
+        </treecols>
+        <treechildren id="repls-body" flex="1"
+                      alternatingbackground="true"
+                      context="tree_context_menu"
+                      class="confirmrepl"/>
+    </tree>
+
+    <separator class="thin"/>
+    <hbox>
+        <checkbox id="filter-skipped-paths"
+                  persist="checked"
+                  label="Filter skipped paths"
+                  oncommand="filter_skipped_paths(this);"/>
+        <separator flex="1"/>
+        <button id="show-marked-changes-btn" label="&showMarkedChanges.label;"
+                tooltiptext="&showMarkedChanges.tooltiptext;"
+                disabled="true"
+                accesskey="&showMarkedChanges.accesskey;"
+                oncommand="show_marked_changes();"/>
+    </hbox>
+
+    <separator class="thin"/>
+</dialog>
+

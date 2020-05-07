@@ -1,0 +1,182 @@
+
+Notes on the protocol for Komodo debuggers
+==========================================
+
+==========================================
+Launch of a debugger ...
+------------------------
+
+Komodo has to tell a debugger during launch the following information:
+
+-	script to debug
+-	arguments to the script
+-	port komodo listens on
+-	host komodo resides on
+
+During launch the debugger server then decides on the port he will be
+listening on and on the cookie (see below) and transfers this
+information back to the client. This is done in a single connection to
+the port komodo listens on. The format expected by komodo is
+
+	<language>:<port-of-debugger>:<cookie>
+
+Note: This is *not* a line-oriented protocol. IOW, transfer only the
+information above, without EOL behind it. If the debugger server sends
+an EOL it wil become part of the cookie!
+
+Note 2: Close the transfer-connection immediately after the
+information is send.
+
+This mechanism is called 'connect-back'.
+
+Komodo can use a debugger server only if it calls back to komodo
+telling it that it is ready to accept and handle requests.
+
+==========================================
+Debugger protocol bascis ...
+----------------------------
+
+The base protocol is HTTP-encapsulated XMLRPC over a socket. This
+means that the server (the debugger) has to contain a minimal HTTP
+server working on any port to accept debugger requests.
+
+Currently each request is done in a new connection to the server.
+IOW, currently there are *no* multiple request-replies over a single
+tcp connection between client and server.
+
+The class for the methods is "Requester."
+
+All methods take a single structure parameter containing the actual
+arguments as their argument. One element of the structure is the
+'cookie'-string which serves as minimal protection against
+outsiders. Only requests containing the correct cookie must be
+accepted by the server. The cookie will not be mentioned below in the
+descriptions of the methods itself.
+
+All methods return a structure containing their results. For some
+methods the single element in the result structure is an array of
+structures.
+
+Note upfront:	Whereever file names are mentionend komodo does not
+		actually expect file names, but URIs!
+
+==========================================
+Debugger protocol methods ...
+-----------------------------
+
+void redirectStdout	(int port)
+void redirectStderr	(int port)
+void redirectStdin	(int port)
+
+	Redirect the stdin/out/err of the debugger server to a socket
+	connected to the specified port.
+
+{string status} hello ()
+
+	A ping type message. Just return status 'hello'.
+
+void resumeExecution (int request)
+
+	Stepping through the code in various ways.
+
+	0 stop - stop session, kill the debugger server
+	1 in   - step one command, step into procedure
+	2 over - step one command, step over procedure
+	3 out  - run until leaving current procedure
+	4 go   - run until next breakpoint
+
+{int numFrames} getNumFrames ()
+
+	Return the depth of the runtime stack or 0 if the programming
+	being debugged is not running.
+
+{[{string file, int lineno, string where}] frames} getFrames ()
+
+	Returns an array containing structures describing the frames
+	currently on the runtime stack. Frame 0 (first in the array)
+	is the current frame, frame n (last i nthe array) is the
+	global frame.
+
+	file   = uri of file containing the code executed in that frame
+	lineno = Line in the file containing the current code
+	where  = procedure we are currently in (can be any string,
+		 should be meaningful for language).
+
+{string source} getSourceCode (string filename)
+
+	Returns the source code associated with the specified filename.
+
+{{{string name, string fullName} name, string value, string type, bool hasChildren} propertyInfo}
+	getDebugPropertyInfo (int frame_index, string expr, string radix)
+
+	Evaluate the expression expr and return the result.  This is
+	used by komodo for its 'watched variables', which are actually
+	more similar to the display expressions of gdb. Whenever
+	execution of the debugged code is stopped komodo will ask the
+	debugger to evaluate the known display expressions and display
+	the results.
+
+{string setResultString} setDebugPropertyInfo (int frame_index, string lhs, string rhs, int radix)
+
+	Komodo asks the debugger to eval the rhs and assign the result
+	to the rhs. An empty string is returned on success and on
+	error string is returned on failure.
+
+{[{{string name, string fullName} name, string value, string type, bool hasChildren}] propertyInfo}
+	getChildrenInfos (string context, int frame_index, string parent_expr, string radix)
+
+	For structured information komodo usualy asks only for the
+	toplevel information and uses the 'hasChildren' flag to tell
+	the user that there is more. If the user opens such an item
+	komodo will ask the debugger for the information about the
+	children using this call.
+
+	The information returned is an array containing the
+	information about the children. The information about one
+	child is in the same format as returned by
+	'getDebugPropertyInfo'.
+
+	For Tcl, structured properties are 'array'-variables and namespaces.
+
+
+{[{{string name, string fullName} name, string value, string type, bool hasChildren}] propertyInfo}
+	getContext (string context, int frame_index, string radix)
+
+	This call is used by komodo to get all information about the
+	properties in a specific scope, described by the stack frame
+	and a context name.
+
+	Tcl for examples has the contexts 'globals', independent of
+	the stackframe, and 'locals', dependent on the stackframe.
+
+	The format of the result is the same as for 'getChildrenInfos'.
+
+{string names} getContextNamesAsStrings (int frame_index)
+
+	Returns the names of the available context for the
+	language. The frame_index is provided to allow komodo to
+	handle weird languages where contexts change with the
+	stackframe.
+
+{int breakpointNumber} addBreakpoint (string file, int lineno, bool temporary, string cond)
+
+	Adds a breakpoint to watch to a specific line in the given file.
+	A temporary breakpoint is automatically deleted when it is reached.
+	This is used by komodo to implement a run-to-line stepping.
+
+	If a condition is set the breakpoint stops execution only if
+	the condition is evaluated to true.
+
+	Returns an id komodo can use to refer to the breakpoint.
+
+	The id -1 indicates failure.
+
+	The arguments 'temporary' and 'cond' are placeholders for future
+	extensions.
+
+
+void removeBreakpoint (int breakpointNumber)
+
+	Removes the specified breakpoint.
+
+==========================================

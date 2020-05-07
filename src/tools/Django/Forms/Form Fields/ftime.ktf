@@ -1,0 +1,10 @@
+# komodo tool: ftime
+# ==================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ==================
+<% /* TimeField (ftime) */ %>
+[[%tabstop1:FIELDNAME]] = forms.TimeField([[%tabstop2:2]])

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+]>
+
+<!-- Copyright (c) 2005-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/prefwidgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        class="pref-window"
+        orient="vertical"
+        onload="PrefEnviron_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/pref-environ.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="environ-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical" flex="1" id="environ-prefs-groupbox">
+            <caption label="&environment.label;"/>
+            <vbox flex="1">
+                <vbox flex="1" id="pref-environment-global-env-vbox"
+                  class="load-context-check" hideUnlessLoadContext="global">
+                    <label value="&startEnvironVar.label;" control="env-sys" class="kopadded"/>
+                    <EnvPrefs id="env-sys" editable="false" flex="1"/>
+                </vbox>
+                <label value="&userEnvironVar.label;" control="user-env-prefs" class="kopadded"/>
+                <EnvPrefs id="user-env-prefs" editable="true"
+                    prefwidget="true" pref="true"
+                    prefstring="userEnvironmentStartupOverride" flex="1"/>
+            </vbox>
+        </groupbox>
+
+    </vbox>
+
+</window>
+
+
+
+

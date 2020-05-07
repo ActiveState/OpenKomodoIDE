@@ -1,0 +1,27 @@
+// komodo tool: db:migrate-to-version
+// ==================================
+// async: 0
+// icon: chrome://famfamfamsilk/skin/icons/database_lightning.png
+// language: JavaScript
+// rank: 100
+// trigger: trigger_postopen
+// trigger_enabled: 0
+// type: macro
+// version: 1.0.12
+// ==================================
+try {
+    var obj = {base: 'rake', ruby: null, rake:null, env:null};
+    ko.extensions.rails.setup_associated_paths_env(obj);
+    var options = {
+        env: obj.env,
+        __END__ : null
+    };
+    var version = ko.dialogs.prompt(ko.extensions.rails.bundle.GetStringFromName("migrate to which version"));
+    var cmd = obj.rake + ' db:migrate';
+    if (version && /^\d+$/.test(version)) {
+        cmd += " VERSION=" + version;
+    }
+    ko.extensions.rails.runCommand(window, cmd, options);
+} catch(ex) {
+    alert(ex + "\n");
+}

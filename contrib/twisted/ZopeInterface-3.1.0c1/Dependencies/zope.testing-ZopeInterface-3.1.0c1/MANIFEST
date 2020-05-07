@@ -1,0 +1,14 @@
+MANIFEST
+zope.testing/loggingsupport.py
+zope.testing/DEPENDENCIES.cfg
+zope.testing/__init__.py
+zope.testing/loghandler.py
+zope.testing/formparser.py
+zope.testing/tests.py
+zope.testing/doctestunit.py
+zope.testing/doctest.py
+zope.testing/module.py
+zope.testing/cleanup.py
+zope.testing/formparser.txt
+setup.py
+setup.cfg

@@ -1,0 +1,343 @@
+/* Copyright (c) 2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "nsITreeView.idl"
+#include "koIPrefs.idl"
+#include "koIOrderedPreference.idl"
+
+/*
+ * A HTTP Proxy Debugger for Komodo.
+ *
+ * Contributors:
+ *  - Todd Whiteman
+ *
+ */
+
+/*
+ * Ruleset - for when/how to break/modify/timeout on transactions
+ */
+
+// Rule requirement - matching rules
+[scriptable, uuid(73dab868-152d-4a6a-8dad-2b1128967417)]
+interface koIHttpInspectorRuleRequirement: nsISupports {
+    const long RULE_ON_FLAGS                = 1;
+    const long RULE_ON_METHOD               = 2;
+    const long RULE_ON_URL                  = 3;
+    const long RULE_ON_CLIENT_IP_ADDRESS    = 4;
+    const long RULE_ON_STATUS               = 5;
+    const long RULE_ON_VERSION              = 6;
+    const long RULE_ON_DATA                 = 7;
+    const long RULE_ON_HEADER               = 8;
+
+    const long MATCH_USING_STRING           = 1;
+    const long MATCH_USING_REGEX            = 2;
+
+    // Get a text message explaining what the rule matches to
+    void getRequirementText([retval] out wstring text);
+    
+    // See if requirement value matches the given val
+    boolean matches(in wstring val);
+
+    // Copy another requirement
+    void copy(in koIHttpInspectorRuleRequirement requirement);
+
+    // Load rule from a komodo preference
+    boolean loadFromPreference(in koIPreferenceSet pref);
+
+    // Convert rule into a komodo preference
+    void convertToPreference(out koIPreferenceSet pref);
+
+    // rule_type uses the values from above, RULE_XXX
+    attribute long type;
+    attribute long match_type;
+    attribute wstring field; /* special field, only used for headers */
+    attribute wstring value;
+};
+
+// Rule action - what to do when a match is made
+[scriptable, uuid(25397e3e-a3f7-4a30-a2b3-994fcdb31deb)]
+interface koIHttpInspectorRuleAction: nsISupports {
+    const long ACTION_BREAK                = 1;
+    const long ACTION_DELAY                = 2;
+    const long ACTION_TIMEOUT              = 3;
+    const long ACTION_MODIFY_FIELD         = 4;
+    const long ACTION_SET_HEADER           = 5;
+    const long ACTION_REMOVE_HEADER        = 6;
+
+    const long ACTION_FLAG_LITERAL         = 1;
+    const long ACTION_FLAG_RANDOM          = 2;
+    const long ACTION_FLAG_METHOD          = 3;
+    const long ACTION_FLAG_URL             = 4;
+    const long ACTION_FLAG_CLIENT_IP       = 5;
+    const long ACTION_FLAG_STATUS          = 6;
+    const long ACTION_FLAG_DATA            = 7;
+
+    // Get a text message explaining what the rule does
+    void getActionText([retval] out wstring text);
+
+    // Copy another action
+    void copy(in koIHttpInspectorRuleAction action);
+
+    // Load rule from a komodo preference
+    boolean loadFromPreference(in koIPreferenceSet pref);
+
+    // Convert rule into a komodo preference
+    void convertToPreference(out koIPreferenceSet pref);
+
+    // action_type uses the values from above, ACTION_XXX
+    attribute long type;
+    attribute long flags; /* Used to specify if random or literal delay used */
+    attribute wstring value1;  /* used for modify field, modify header or delay */
+    attribute wstring value2;  /* delay 2nd value, or set the field in value1 to this value2 */
+    //
+    // How rule type maps to other field values:
+    //
+    // type: Break
+    //    flags:  N/A
+    //    value1: N/A
+    //    value2: N/A
+    // type: Delay
+    //    flags: Literal
+    //       value1: Time in ms to delay
+    //       value2: N/A
+    //    flags: Random
+    //       value1: Min time in ms to delay
+    //       value2: Max time in ms to delay
+    // type: Timeout
+    //    flags:  N/A
+    //    value1: N/A
+    //    value2: N/A
+    // type: Modify field
+    //    flags: One of (method, url, client ip, status, data)
+    //    value1: Set flags field to this value
+    //    value2: N/A
+    // type: Set header
+    //    flags: N/A
+    //    value1: Header name to set
+    //    value2: Value for header
+    // type: Remove header
+    //    flags: N/A
+    //    value1: Header name to remove
+    //    value2: N/A
+    // 
+};
+
+[scriptable, uuid(a62d81b1-c238-4856-86f2-c2aac95d17cb)]
+interface koIHttpInspectorRule: nsISupports {
+    // Get a text message explaining how the rule works
+    void getRuleText([retval] out wstring actionText);
+
+    // Get the rule match requirements
+    void getRequirements(out unsigned long ncount,
+                         [array, size_is(ncount), retval]
+                         out koIHttpInspectorRuleRequirement requirements);
+    // Set the rule match requirements
+    void setRequirements(in unsigned long ncount,
+                         [array, size_is(ncount)]
+                         in koIHttpInspectorRuleRequirement requirements);
+
+    // Get the rule actions
+    void getActions(out unsigned long ncount,
+                    [array, size_is(ncount), retval]
+                    out koIHttpInspectorRuleAction actions);
+    // Set the rule actions
+    void setActions(in unsigned long ncount,
+                    [array, size_is(ncount)]
+                    in koIHttpInspectorRuleAction actions);
+
+    boolean hasBreakAction();
+    boolean hasDelayAction();
+    boolean hasTimeoutAction();
+
+    // Load rule from a komodo preference
+    boolean loadFromPreference(in koIPreferenceSet pref);
+
+    // Convert rule into a komodo preference
+    void convertToPreference(out koIPreferenceSet pref);
+
+    const long TYPE_REQUEST            = 1;
+    const long TYPE_RESPONSE           = 2;
+    const long TYPE_REQUEST_RESPONSE   = 3;
+
+    attribute boolean enabled;
+    // Flags use the values from koIHttpInspectorReqRespPair
+    attribute long type;     /* Request, response or both */
+    attribute boolean match_any;
+    attribute wstring name;
+};
+
+
+/*
+ * Request and response pair.
+ */
+[scriptable, uuid(5098843E-C8BD-49EF-A24C-036739EFD9C7)]
+interface koIHttpInspectorReqRespPair : nsISupports {
+    void getText(in wstring columnName, [retval] out wstring columnValue);
+    void getRequestHeaderNames(out unsigned long count,
+                                [array, size_is(count), retval] out wstring names);
+    void getRequestHeaderValues(out unsigned long count,
+                                [array, size_is(count), retval] out wstring values);
+    void getResponseHeaderNames(out unsigned long count,
+                                [array, size_is(count), retval] out wstring names);
+    void getResponseHeaderValues(out unsigned long count,
+                                [array, size_is(count), retval] out wstring values);
+    // Save the edited request headers
+    void saveRequestHeaders(in unsigned long ncount,
+                            [array, size_is(ncount)] in wstring names,
+                            in unsigned long vcount,
+                            [array, size_is(vcount)] in wstring values);
+    // Save the edited response headers
+    void saveResponseHeaders(in unsigned long ncount,
+                             [array, size_is(ncount)] in wstring names,
+                             in unsigned long vcount,
+                             [array, size_is(vcount)] in wstring values);
+
+    // Flags is used to set the state of the request/response
+    //   0 - normal, finished request and response
+    //   1 - modified (unsaved)
+    //   2 - breakOnRequest, is in a break state
+    //   4 - breakOnResponse, is in a break state
+    const long FLAGS_NONE              = 0;
+    const long FLAGS_REQUEST_MODIFIED  = 1;
+    const long FLAGS_RESPONSE_MODIFIED = 2;
+    const long FLAGS_BREAK_REQUEST     = 4;
+    const long FLAGS_BREAK_RESPONSE    = 8;
+    const long FLAGS_BREAK             = 12;    // Combo of request and response
+
+    const long FLAGS_MODIFY_FIELD      = 16;
+    const long FLAGS_ADD_LATENCY       = 32;
+
+    const long FLAGS_MATCH_ON_ANY      = 64;
+    const long FLAGS_MATCH_ON_ALL      = 128;
+
+    attribute long creation_id;
+    attribute long flags;
+    attribute wstring client_address;
+    attribute wstring client_port;
+    attribute wstring method;
+    attribute wstring url;
+    attribute wstring status;
+    attribute wstring version;
+    attribute wstring content_type;
+    attribute AString request_data;
+    attribute AString response_data;
+    // Decoded means to convert from zip,gzip to unzipped format
+    attribute AString decoded_request_data;
+    attribute AString decoded_response_data;
+    attribute long request_time;
+    attribute long response_time;
+    // Set from the UI in a request break
+    attribute long forcedResponseStatus;
+};
+
+
+/*
+ * Used by proxy to notify the UI that a request/response has been made. This
+ * allows the UI to modifiy the data before it is forwarded on. The UI must
+ * notify the proxy that it's done modifying the data with a
+ * koIHttpInspector.notifyUIModificationFinished() call.
+ */
+[scriptable, uuid(4AC6608F-AA44-4F89-8A71-E9756BB6006F)]
+interface koIHttpInspectorUIObserver : nsISupports {
+    // Notify that data has changed
+    //void notifyChanged();
+    // Notify that request has been made and now awaiting modification and submission
+    void notifyBreakRequest(in koIHttpInspectorReqRespPair koReqResp);
+    // Notify that response has been made and now awaiting modification and submission
+    void notifyBreakResponse(in koIHttpInspectorReqRespPair koReqResp);
+    // Inform UI that the rows have changed, it should rebuild the tree
+    void notifyRowsChanged();
+    // Notify that the koReqResp has been modified, if the UI has this koReqResp
+    // currently displayed, then it should update the info shown.
+    void notifyProxyPairHasChanged(in koIHttpInspectorReqRespPair koReqResp);
+};
+
+
+/*
+ * Main proxy service.
+ */
+[scriptable, uuid(2FCA181C-6D03-4474-9859-4AA07F8AC799)]
+interface koIHttpInspector: nsISupports {
+    // Start the proxy listening
+    //   errorMessage is only set when startListener returns false
+    boolean startListener(out wstring errorMessage);
+
+    // Stop the proxy from listening
+    void stopListener();
+
+    // Add the UI observer to the running proxy
+    void addUIObserver(in koIHttpInspectorUIObserver observer);
+    // Remove the UI observer from the running proxy
+    void removeUIObserver();
+    // Notify from the UI has finished any modications to the request/response
+    void notifyUIModificationFinished();
+
+    // Clear out the proxy cache / history
+    void clear();
+
+    // Return the size of cache ( in bytes )
+    long getCacheSize();
+
+    // Get the ruleset (filtering and breaking rules)
+    void getRuleset(out unsigned long ncount,
+                    [array, size_is(ncount), retval]
+                    out koIHttpInspectorRule ruleset);
+    // Get the ruleset (filtering and breaking rules)
+    void setRuleset(in unsigned long ncount,
+                    [array, size_is(ncount)]
+                    in koIHttpInspectorRule ruleset);
+
+    readonly attribute boolean isListening;
+    readonly attribute boolean enabled;
+    readonly attribute long port;
+    readonly attribute boolean acceptLocalConnectionsOnly;
+    readonly attribute boolean proxyForwardingEnabled;
+    readonly attribute wstring proxy_to_host;
+    readonly attribute long proxy_to_port;
+
+    attribute boolean breakOnIncomingRequest;
+    attribute boolean breakOnOutgoingResponse;
+};
+
+
+/*
+ * Used by the UI for the main tree view of the request and responses.
+ */
+[scriptable, uuid(818923CC-961A-48BE-B581-A3828CD5065F)]
+interface koIHttpInspectorTreeView : nsITreeView {
+    // save tree-specific prefs for the proxy
+    // this happens automatically when adding/removing columns in the main tree
+    // or when setting the filter (setFilter).
+    void restorePrefs();
+    void savePrefs();
+
+    // Not implemented yet
+    // Specify the sort order.
+    // directions:
+    //  0 = natural
+    //  1 = normal
+    //  -1 = reverse
+    //void sortBy(in wstring key, in long direction);
+
+    // specify a filtering string
+    // XXX - Not implemented yet
+    void setFilter(in wstring filterString);
+
+    // Cause one tree row to be invalidated
+    void invalidateRow(in long row);
+
+    // Ensure this row is visible
+    void ensureRowIsVisible(in long row);
+
+    // Cause the tree to rebuild itself (loads the _rows again)
+    void rebuild();
+
+    // Return the row number for the given koReqResp , returns -1 when not found
+    void getRowForReqRespPair(in koIHttpInspectorReqRespPair koReqResp,
+                              [retval] out long row);
+
+    // Return the koReqResp for the given row number, returns null when not found
+    void getReqRespPairForRow(in long row,
+                              [retval] out koIHttpInspectorReqRespPair koReqResp);
+};

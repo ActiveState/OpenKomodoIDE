@@ -1,0 +1,141 @@
+/* Scrollbars */
+
+page.widget[containerOrient="vertical"] scrollbar
+{
+    margin: 3px;
+    margin-left: -18px;
+}
+
+.autoscroll
+{
+    overflow: -moz-scrollbars-vertical;
+    overflow-y: scroll !important;
+}
+
+scrollcorner
+{
+    background: transparent !important;
+}
+
+scrollbar
+{
+    -moz-appearance: none !important;
+    border: 0;
+    background: transparent;
+    opacity: 1.0 !important;
+    margin: 1px;
+    z-index: 999;
+    position: relative;
+    
+    &[orient="vertical"]
+    {
+        min-width: 15px;
+    }
+    
+    &[orient="horizontal"]
+    {
+        min-height: 15px;
+    }
+
+    slider
+    {
+        -moz-appearance: none !important;
+        border: 0;
+    }
+
+    thumb
+    {
+        -moz-appearance: none !important;
+        background: @contrast;
+        border: 0;
+    }
+    
+    scrollbarbutton
+    {
+        display: none;
+    }
+    
+    scrollcorner
+    {
+        -moz-appearance: none;
+        background: transparent;
+    }
+}
+
+.native-scrollbars
+{
+    scrollbar
+    {
+        -moz-appearance: scrollbar !important;
+        margin: inherit !important;
+        min-width: inherit !important;
+        min-height: inherit !important;
+
+        slider
+        {
+            -moz-appearance: scrollbartrack-horizontal !important;
+        }
+
+        slider[orient="vertical"]
+        {
+            -moz-appearance: scrollbartrack-vertical !important;
+        }
+
+
+        thumb
+        {
+            -moz-appearance: scrollbarthumb-horizontal !important;
+            background: inherit !important;
+        }
+
+        thumb[orient="vertical"]
+        {
+            -moz-appearance: scrollbarthumb-vertical !important;
+        }
+    }
+}
+
+/* Modals */
+
+dialog, :root.dialog, :root.pref-window, .markdown-body, .widgetToolbarWrap
+{
+    scrollbar thumb
+    {
+        background: @button;
+    }
+}
+
+#commando-panel
+{
+    scrollbar
+    {
+        margin-left: -16px;
+    }
+}
+
+:root.special scrollbar thumb
+{
+    background: @contrast-special;
+}
+
+/* Scintilla */
+
+@media all and (-moz-overlay-scrollbars)
+{
+    scintilla[virtualScrollbars="true"]
+    {
+        embed[anonid="scimoz"] {
+            margin-right: 16px;
+        }
+        
+        &[wrapped="false"] embed[anonid="scimoz"]
+        {
+            margin-bottom: 16px;
+        }
+        
+        &[wrapped="true"] row > scrollbar[orient="horizontal"]
+        {
+            visibility: collapse !important;
+        }
+    }
+}

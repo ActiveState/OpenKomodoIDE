@@ -1,0 +1,59 @@
+#!/bin/bash
+#
+# collab3      Startup script for the Komodo collaboration server (version 3)
+#
+# chkconfig: - 85 15
+# description: Komodo collaboration server (v3).
+# processname: collab3
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Paths and stuff.
+PROG=collab3
+NODE=/opt/node/bin/node
+WORKDIR="/data/komob-socket-server-v3"
+PIDFILE="$WORKDIR/run/pid/master.pid"
+CMD="nohup $NODE ${WORKDIR}/server.js >/dev/null 2>&1 &"
+
+RETVAL=0
+
+# Start me up!
+start() {
+        echo -n $"Starting $PROG: "
+        daemon --user collab --pidfile=${PIDFILE} $CMD
+        RETVAL=$?
+        echo
+        return $RETVAL
+}
+
+stop() {
+	echo -n $"Stopping $PROG: "
+	killproc -p ${PIDFILE} $NODE
+	RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && rm -f ${PIDFILE}
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+        status -p ${PIDFILE} $NODE
+	RETVAL=$?
+	;;
+  restart)
+	stop
+	start
+	;;
+  *)
+	echo $"Usage: $PROG {start|stop|restart|status|help}"
+	RETVAL=2
+esac
+
+exit $RETVAL

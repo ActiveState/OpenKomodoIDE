@@ -1,0 +1,11 @@
+
+# Use alternate API URL if in the environment.
+>>> import os
+>>> api_url = os.environ.get("FIREFLY_API_URL")
+
+>>> from activeapis2.fireflyapi import FireflyAPI
+>>> api = FireflyAPI(api_url=api_url, auth_name="webops_firefly",
+...    auth_password="t0m4t0")
+>>> "system.listMethods" in api.system.listMethods()
+True
+

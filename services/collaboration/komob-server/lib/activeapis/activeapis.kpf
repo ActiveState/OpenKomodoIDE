@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="a296f117-8971-be41-a993-c5a9d2870326" kpf_version="4" name="activeapis.kpf">
+<preference-set idref="a296f117-8971-be41-a993-c5a9d2870326">
+  <boolean id="import_live">1</boolean>
+  <string id="pythonExtraPaths">/Users/trentm/as/activeapis/lib:/Users/trentm/as/activeapis/externals/lib</string>
+</preference-set>
+</project>

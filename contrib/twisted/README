@@ -1,0 +1,26 @@
+This is the README for the Twisted Sumo package. For general
+information about Twisted, see Twisted core README or our web site
+at http://twistedmatrix.com/.
+
+Twisted Sumo contains all of Twisted and its subprojects. A setup.py
+is provided which will install Twisted and each subproject for
+you. Run the command "python setup.py --help" for more information.
+Twisted Sumo also includes Zope Interface, a dependency of Twisted and
+most of its subprojects, in a directory named ZopeInterface-* in the
+root directory.  Twisted requires at least Zope Interface 3.0.1 or
+higher. It can also work with ZopeX3 version 3.0.0c1 or higher.
+
+For information about the Twisted split that happened before 2.0, see
+http://twistedmatrix.com/products/splitfaq
+
+Twisted 2.4.0
+Twisted Conch 0.7.0
+Twisted Flow 0.1.0
+Twisted Lore 0.2.0
+Twisted Mail 0.3.0
+Twisted Names 0.3.0
+Twisted News 0.2.0
+Twisted Pair 0.1.0
+Twisted Runner 0.2.0
+Twisted Web 0.6.0
+Twisted Words 0.4.0

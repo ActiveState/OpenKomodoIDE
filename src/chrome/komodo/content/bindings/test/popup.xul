@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Popups"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script>
+<![CDATA[
+
+]]>
+</script>
+
+<html:h1>XUL Popups</html:h1>
+
+<popupset>
+  <popup id="contextpopup">
+   <menuitem label="This is a context popup" />
+  </popup>
+
+  <popup id="popupmenu">
+   <menuitem label="Pearl"   />
+   <menuitem label="Aramis"  />
+   <menuitem label="Yakima"  />
+  </popup>
+
+  <popup id="start_before" position="start_before">
+     <menuitem label="To the left of the button" />
+     <menuitem label="aligned on the top" />
+  </popup>
+  <popup id="before_start" position="before_start">
+     <menuitem label="Above the button" />
+     <menuitem label="aligned on the left" />
+  </popup>
+  <popup id="before_end" position="before_end">
+     <menuitem label="Above the button" />
+     <menuitem label="aligned on the right" />
+  </popup>
+  <popup id="end_before" position="end_before">
+     <menuitem label="To the right of the button" />
+     <menuitem label="aligned on the top" />
+  </popup>
+  <popup id="start_after" position="start_after">
+     <menuitem label="To the left of the button" />
+     <menuitem label="aligned on the bottom" />
+  </popup>
+  <popup id="after_start" position="after_start">
+     <menuitem label="Below the button" />
+     <menuitem label="aligned on the left" />
+  </popup>
+  <popup id="after_end" position="after_end">
+     <menuitem label="Below the button" />
+     <menuitem label="aligned on the right" />
+  </popup>
+  <popup id="end_after" position="end_after">
+     <menuitem label="To the right of the button" />
+     <menuitem label="aligned on the bottom" />
+  </popup>
+  <popup id="overlap" position="overlap">
+     <menuitem label="On top of the button" />
+  </popup>
+  <popup id="at_pointer" position="at_pointer">
+     <menuitem label="At the pointer" />
+  </popup>
+  <popup id="after_pointer" position="after_pointer">
+     <menuitem label="Below the button" />
+     <menuitem label="aligned with the pointer" />
+  </popup>
+
+</popupset>
+
+  <vbox flex="1" style="overflow: auto">
+
+   <hbox>
+    <groupbox flex="1" orient="horizontal">
+    <caption label="menulists" />
+    <groupbox flex="1">
+    <caption label="states" />
+    <menulist label="Selected">
+     <menupopup>
+      <menuitem label="Normal"/>
+      <menuitem label="Selected" selected="true" />
+      <menuitem label="Disabled" disabled="true" />
+      <menuitem label="Checkbox" type="checkbox" />
+      <menuitem label="Checked"  type="checkbox" checked="true" />
+     </menupopup>
+    </menulist>
+    </groupbox>
+
+    <groupbox flex="1">
+    <caption label="non-editable" />
+    <menulist label="Pearl">
+     <menupopup>
+      <menuitem label="Pearl" selected="true"  />
+      <menuitem label="Aramis"  />
+      <menuitem label="Yakima"  />
+      <menuitem label="Tribble" />
+      <menuitem label="Cosmo"   />
+     </menupopup>
+    </menulist>
+    </groupbox>
+
+    <groupbox flex="1">
+    <caption label="editable" />
+    <menulist label="Gray" editable="true">
+     <menupopup>
+      <menuitem label="Gray" selected="true"  />
+      <menuitem label="Black"  />
+      <menuitem label="Holstein"  />
+      <menuitem label="Orange"  />
+      <menuitem label="White"   />
+     </menupopup>
+    </menulist>
+    </groupbox>
+    </groupbox>
+   </hbox>
+
+   <groupbox orient="horizontal">
+   <caption label="Regular Popups, Context Popups, and Tooltips" />
+     <button flex="1" label="Press Normal Button"  popup="popupmenu" />
+     <button flex="1" label="Press Context Button" context="contextpopup" />
+     <button flex="1" label="Hover Mouse Here"
+                      tooltiptext="This is a tooltip" />
+     <button flex="1" label="Three-in-one"  popup="popupmenu"
+                                            context="contextpopup"
+                                            tooltiptext="This is a tooltip" />
+   </groupbox>
+
+<groupbox>
+<caption label="positions for popups" />
+<grid>
+  <columns>
+    <column flex="1" />
+    <column flex="1" />
+    <column flex="1" />
+    <column flex="1" />
+  </columns>
+  <rows>
+    <row>
+       <button label="Start Before" popup="start_before" />
+       <button label="Before Start" popup="before_start" />
+       <button label="Before End" popup="before_end" />
+       <button label="End Before" popup="end_before" />
+    </row>
+    <row>
+       <button label="Start After"  popup="start_after" />
+       <button label="After Start" popup="after_start" />
+       <button label="After End" popup="after_end" />
+       <button label="End After" popup="end_after" />
+    </row>
+    <row>
+       <button label="Overlap"  popup="overlap" />
+       <button label="At Pointer" popup="at_pointer" />
+       <button label="After Pointer" popup="after_pointer" />
+    </row>
+  </rows>
+</grid>
+</groupbox>
+
+</vbox>
+
+</window>

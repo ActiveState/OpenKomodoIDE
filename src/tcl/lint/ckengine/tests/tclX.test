@@ -1,0 +1,37 @@
+# tclX.test --
+#
+#	This file contains regression tests for the TclX checkers.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: tclX.test,v 1.2 2000/05/30 22:25:04 wart Exp $
+
+if {[string compare test [info procs resetAnalyzer]] == 1} {
+    source [file join [pwd] [file dirname [info script]] defs.tcl]
+}
+
+analyzer::init
+renameMessageShow
+resetUProcData
+addTestUserProc
+
+# Many of the tests expect that "a" is understood as a defined
+# procedure that takes any number of args.  To keep from getting
+# warnUndefProc warnings, pretend we've already gotten the warning.
+
+lappend ::analyzer::unknownCmds a
+
+foreach tclXVer $::protest::supportedVersions(TclX) {
+    resetAnalyzer
+    coreTcl::init $::protest::tclVersion(TclX$tclXVer)
+    tclX::init    $tclXVer
+    testVersion   checkTclX $tclXVer
+}
+
+resetMessageShow
+resetAnalyzer
+resetUProcData
+
+# cleanup
+cleanupTests

@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2013 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % commandoDTD SYSTEM "chrome://commando/locale/commando.dtd">
+  %commandoDTD;
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+]>
+
+<?xml-stylesheet href="less://commando/skin/commando.less" type="text/css"?>
+
+<overlay id="commandoOverlay"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://commando/content/js/commands.js"
+            type="application/x-javascript;version=1.7"/>
+
+    <menupopup id="naviation_menupopup">
+        <menuseparator id="naviation_menupopup_separator_commando" insertbefore="naviation_menupopup_separator_editor_nav"/>
+        <menuitem id="menu_show_commando"
+                  insertbefore="naviation_menupopup_separator_editor_nav"
+                  oncommand="ko.commands.doCommand('cmd_showCommando', event)"
+                  label="&showCommando.desc;"/>
+        <script id="tpl-co-scope-nav-menuitem" type="x-dot-template">
+            <menuitem id="nav-{{=it.id}}"
+                      label="{{!it.menuLabel}}"
+                      oncommand="ko.commands.doCommand('cmd_{{=it.id}}', event)"
+                      key="key_cmd_{{=it.id}}"/>
+        </script>
+    </menupopup>
+
+    <popupset id="komodoMainPopupSet">
+        <panel id="commando-panel" class="hud" noautohide="true" level="floating">
+            <vbox flex="1" id="commando-panel-wrapper">
+                <hbox id="commando-search-wrapper" class="input-field loader">
+                    <!-- Menuitem template -->
+                    <script id="tpl-co-scope-menuitem" type="x-dot-template">
+                        <menuitem id="scope-{{=it.id}}"
+                                  label="{{!it.name}}"
+                                  value="{{=it.id}}"
+                                  image="{{!it.icon}}"
+                                  class="scope-item"
+                                  key="key_cmd_{{=it.id}}"/>
+                    </script>
+                    <menulist id="commando-scope" class="unstyled" sizetopopup="none">
+                        <menupopup id="commando-scope-menupopup">
+                            <menuseparator id="scope-separator"/>
+                            <menuitem label="Clear Cache"
+                                      oncommand="ko.commands.doCommand('cmd_commandoClearCache', event)"/>
+                            <menuitem label="Preferences"
+                                      oncommand="ko.commands.doCommand('cmd_commandoPrefs', event)"/>
+                        </menupopup>
+                    </menulist>
+                    <textbox flex="1" id="commando-search" class="transparent"/>
+                    <hbox id="commando-spinner" class="spinner">
+                        <hbox class="rect1"/>
+                        <hbox class="rect2"/>
+                        <hbox class="rect3"/>
+                    </hbox>
+                </hbox>
+                <vbox id="commando-subscope-wrap" pack="start">
+                    <script id="tpl-co-subscope" type="x-dot-template">
+                        <hbox align="center">
+                            {{~it.scopes :s:index}}
+                                <button tooltiptext="{{!s.subscope.name}}" index="{{=index}}">
+                                    {{?s.subscope.favourite}}
+                                        <box class="icon favourite-icon"></box>
+                                    {{??s.subscope.icon}}
+                                        <box class="icon" style='background-image: url({{!s.subscope.icon}})'></box>
+                                    {{?}}
+                                    <label value="{{!s.subscope.name}}" accesskey="{{=s.subscope.accesskey}}" class="title"/>
+                                </button>
+                            {{~}}
+                        </hbox>
+                    </script>
+                </vbox>
+                <hbox id="commando-scope-filter-wrapper" pack="start">
+                    <script id="tpl-co-scopefilter" type="x-dot-template">
+                        <hbox align="center">
+                        {{~it.scopes :s:index}}
+                            <button tooltiptext="{{!s.scope.name}}" scope="{{=s.scope.id}}">
+                                <box class="icon" style='background-image: url({{!s.scope.icon}})'></box>
+                                <label class="count">{{=s.count}}</label>
+                                <label class="title" accesskey="{{=s.scope.accesskey}}" value="{{!s.scope.name}}"/>
+                                <label class="title short" accesskey="{{=s.scope.accesskey}}" value="({{!s.scope.accesskey}})"/>
+                            </button>
+                        {{~}}
+                        </hbox>
+                    </script>
+                </hbox>
+                <hbox flex="1" id="commando-result-outer">
+                    <vbox flex="1" id="commando-results-outer">
+                        <vbox flex="1" id="commando-results-wrapper">
+                            <!-- Result template -->
+                            <script id="tpl-co-result" type="x-dot-template">
+                                <richlistitem
+                                              class="{{?it.classList}}{{=it.classList}}{{?}}"
+                                              id="co-result-item-{{!it.id}}"
+                                              result-id="{{!it.id}}"
+                                              xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+                                              xmlns:html="http://www.w3.org/1999/xhtml">
+                                    <hbox class="entry-wrapper" flex="1">
+                                        <vbox class="number-wrapper" align="center" pack="center"><label class="number"/></vbox>
+                                        <vbox class="icon-wrapper" pack="center" align="center">
+                                            {{?it.favourite}}
+                                                <box class="icon favourite-icon"></box>
+                                            {{??it.icon}}
+                                                <box class="icon" style="background-image: url('{{!it.icon}}')"></box>
+                                            {{?}}
+                                        </vbox>
+                                        <vbox class="entry-inner" flex="1" pack="center">
+                                            <hbox class="title-wrapper">
+                                                <hbox class="title-inner" align="center">
+                                                    <!-- We use description here as it can wrap, whereas label cannot -->
+                                                    {{?!it.searchQuery}}
+                                                        <description class="title" accesskey="{{?it.accesskey}}{{=it.accesskey}}{{?}}" value="{{!it.name}}"/>
+                                                    {{??}}
+                                                        <description class="title">{{=it.nameHighlighted}}</description>
+                                                    {{?}}
+                                                    {{?it.descriptionPrefix}}
+                                                        <description class="descriptionPrefix"> ({{=it.descriptionPrefixHighlighted}})</description>
+                                                    {{?}}
+                                                </hbox>
+                                                <spacer flex="1"/>
+                                            </hbox>
+                                            <hbox class="description-wrapper">
+                                                {{?it.description}}
+                                                    <description class="description" flex="1">{{=it.descriptionHighlighted}}</description>
+                                                {{?}}
+                                            </hbox>
+                                        </vbox>
+                                        <vbox class="action-wrapper" pack="center" align="center">
+                                            <button anonid="expand" class="icon icon-cog" tooltiptext="Options. Press right-arrow key to access this with your keyboard."/>
+                                        </vbox>
+                                    </hbox>
+                                </richlistitem>
+                            </script>
+        
+                            <richlistbox id="commando-results" flex="1" seltype="multiple"></richlistbox>
+                        </vbox>
+                        <description id="commando-tip" tip-type="normal" align="center">
+                            TIP: Hit the right arrow key to "expand" your selection
+                        </description>
+                    </vbox>
+                    <vbox id="commando-preview" collapsed="true" flex="1"></vbox>
+                </hbox>
+            </vbox>
+        </panel>
+    </popupset>
+    
+    <broadcasterset id="broadcasterset_global">
+
+        <broadcaster
+            id="cmd_showCommando"
+            observes="cmd_showCommando"
+            key="key_cmd_showCommando"
+            desc="&showCommando.desc;"
+            autoCheck="false"/>
+        
+        <broadcaster
+            id="cmd_focusQuickCommando"
+            observes="cmd_focusQuickCommando"
+            key="key_cmd_focusQuickCommando"
+            desc="&focusQuickCommando.desc;"
+            autoCheck="false"/>
+
+    </broadcasterset>
+
+    <commandset
+        id="cmdset_commando"
+        oncommandupdate="ko.commands.updateCommandset(this, event)"
+        commandupdater="true">
+
+        <command
+            id="cmd_showCommando"
+            key="key_cmd_showCommando"
+            oncommand="ko.commands.doCommand('showCommando', event)"
+            desc="&showCommando.desc;"/>
+
+        <command
+            id="cmd_commandoPrefs"
+            key="key_cmd_commandoPrefs"
+            oncommand="ko.commands.doCommand('cmd_commandoPrefs', event)"
+            desc="&commandoPrefs.desc;"/>
+
+        <command
+            id="cmd_commandoClearCache"
+            key="key_cmd_commandoClearCache"
+            oncommand="ko.commands.doCommand('cmd_commandoClearCache', event)"
+            desc="&clearCache.desc;"/>
+        
+        <command
+            id="cmd_focusQuickCommando"
+            key="key_cmd_focusQuickCommando"
+            oncommand="ko.commands.doCommand('cmd_focusQuickCommando', event)"
+            desc="&focusQuickCommando.desc;"/>
+
+    </commandset>
+
+</overlay>

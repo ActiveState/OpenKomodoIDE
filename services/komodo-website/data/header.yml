@@ -1,0 +1,62 @@
+navigation: 
+  - 
+    name: "Forums"
+    link: "/"
+  - 
+    name: "Packages"
+    icon: "caret-down"
+    sub:
+      -
+        name: "Addons"
+        link: "{site.url}/packages/addons"
+      -
+        name: "Userscripts"
+        link: "{site.url}/packages/userscripts"
+      -
+        name: "Toolbox"
+        link: "{site.url}/packages/toolbox"
+      -
+        name: "Color Schemes"
+        link: "{site.url}/packages/schemes"
+      -
+        name: "Languages"
+        link: "{site.url}/packages/languages"
+      -
+        name: "Keybindings"
+        link: "{site.url}/packages/keybinds"
+      -
+        name: "Miscellaneous"
+        link: "{site.url}/packages/misc"
+  - 
+    name: "Contribute"
+    link: "{site.url}/packages/submit-instructions"
+  - 
+    name: "Bug Tracker"
+    icon: "external-link"
+    link: "https://github.com/Komodo/KomodoEdit/issues"
+  - 
+    name: "Documentation"
+    icon: "external-link"
+    link: "http://docs.activestate.com/komodo/11"
+navigation_left: 
+  -
+    name: "Learn More About Komodo"
+    link: "http://www.activestate.com/komodo-ide"
+    icon: "external-link"
+  - 
+    name: "Try"
+    link: "http://www.activestate.com/komodo-ide"
+    icon: "external-link"
+  - 
+    name: "Buy"
+    link: "https://store.activestate.com/komodo-ide"
+    icon: "external-link"
+navigation_right: 
+  - 
+    name: "Store"
+    link: "https://store.activestate.com/"
+    icon_before: "shopping-cart"
+  - 
+    name: "My Account"
+    link: "https://account.activestate.com/"
+    icon_before: "user"

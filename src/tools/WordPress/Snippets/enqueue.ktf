@@ -1,0 +1,27 @@
+{
+  "name": "wp_enqueue", 
+  "language": "", 
+  "value": [
+    "<% /* WordPress Enqueue Script */ %>", 
+    "", 
+    "    /**", 
+    "\t * Enqueue scripts", 
+    "\t *", 
+    "\t * @param string \\$handle Script name", 
+    "\t * @param string \\$src Script url", 
+    "\t * @param array \\$deps (optional) Array of script names on which this script depends", 
+    "\t * @param string|bool \\$ver (optional) Script version (used for cache busting), set to null to disable", 
+    "\t * @param bool \\$in_footer (optional) Whether to enqueue the script before </head> or before </body>", 
+    "\t */", 
+    "\tfunction ${1:theme_name_scripts}() {", 
+    "\t\twp_enqueue_script( ${2:'${3:\\$handle}', '${4:\\$src}', ${5:array( 'jquery' )}, ${6:false}, ${7:false}});", 
+    "\t}", 
+    "", 
+    "\tadd_action( 'wp_enqueue_scripts', '${1:theme_name_scripts}' );", 
+    ""
+  ], 
+  "version": "1.1.5", 
+  "type": "snippet", 
+  "treat_as_ejs": "true", 
+  "auto_abbreviation": "true"
+}

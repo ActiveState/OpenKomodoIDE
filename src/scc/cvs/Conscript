@@ -1,0 +1,29 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'build',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'mozBin',
+    'mozVersion',
+    'version',
+    'buildNum',
+    'buildType',
+    'buildFlavour',
+    'komodoPythonUtilsDir',
+    'withSCC',
+    'sdkDir',
+    'mozSrc',
+    'unsiloedPythonExe',
+);
+
+if ($withSCC) {
+    $cons->InstallPythonUtility('cvslib.py');
+    $cons->InstallXpcomComponent('koCVS.py');
+}

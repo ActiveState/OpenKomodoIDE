@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="PrefSCCCVS_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/pref/pref-scc-cvs.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="scc-cvs-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical">
+            <caption>
+                <checkbox id="cvsEnabled" label="&CVSIntegration.label;"
+                          pref="true" prefstring="cvsEnabled"
+                          prefattribute="checked"
+                          oncommand="PrefSCCCVS_UpdateEnabledUI();"/>
+            </caption>
+            <vbox>
+                <hbox align="center">
+                    <label value="CVS executable used: "/>
+                </hbox>
+                <hbox>
+                <menulist id="cvsExecutable"
+                    flex="1"
+                    pref="true"
+                    prefstring="cvsExecutable"
+                    tooltiptext="&clickOnItemToSelectItAsTheDefault.tooltiptext;"
+                    oncommand="PrefSCCCVS_CheckAgain();">
+                    <menupopup id="avail-exec-list"/>
+                </menulist>
+                <button id='browse1' label="&browse.label;"
+                    oncommand="PrefSCCCVS_getExecutable();"/>
+                </hbox>
+            </vbox>
+            <separator class="thin"/>
+            <deck id="cvsDeck" flex="1" selectedIndex='0'>
+                <vbox>
+                    <checkbox label="&checkForStatusChangesFromOutsideOfKomodo.label;"
+                              id="cvsBackgroundCheck" pref="true"
+                              prefstring="cvsBackgroundCheck"
+                              prefattribute="checked"
+                              oncommand="PrefSCCCVS_UpdateBackgroundEnabledUI();"/>
+                    <vbox style="padding-left: 20px;">
+                        <hbox align="center">
+                            <label value="Check every "/>
+                            <textbox id="cvsBackgroundMinutes"
+                                     size="3"
+                                     pref="true"
+                                     prefstring="cvsBackgroundMinutes"
+                                     prefattribute="value"/>
+                            <label value=" minutes"/>
+                        </hbox>
+                        <checkbox label="&doRecursiveStatusChecks.label;"
+                                  id="cvsRecursive" pref="true"
+                                  prefstring="cvsRecursive"
+                                  prefattribute="checked"/>
+                    </vbox>
+                    <hbox align="center">
+                        <label value="Diff options"/>
+                        <textbox id="cvsDiffOptions"
+                                    size="25"
+                                    pref="true"
+                                    prefstring="cvsDiffOptions"
+                                    prefattribute="value"/>
+                    </hbox>
+                    <checkbox id="cvs_externaldiff_checkbox"
+                              label="&usesExternalDiff.checkbox.label;"
+                              tooltiptext="&usesExternalDiff.checkbox.tooltiptext;"
+                              pref="true"
+                              prefstring="cvs_uses_externaldiff"
+                              prefattribute="checked" />
+                    <checkbox label="&doNotWarnAboutCVSExternalProtocolsCVSRSHAtStartup.label;"
+                              id="donotask_cvs_ssh_setup_warning" pref="true"
+                              prefstring="donotask_cvs_ssh_setup_warning"
+                              prefattribute="checked"/>
+                </vbox>
+                <vbox flex="1">
+                    <description id="cvsNotFunctional"
+                                 style="font-weight: bold;"/>
+                    <vbox align="center">
+                        <button label="&downloadCVS.label;"
+                                class="button-link-a" style="cursor:pointer;"
+                                oncommand="getKoObject('browse').openUrlInDefaultBrowser('http://www.nongnu.org/cvs/')"/>
+                    </vbox>
+                    <separator class="thin"/>
+                    <vbox align="right">
+                        <button label="&checkAgain.label;"
+                                oncommand="PrefSCCCVS_CheckAgain();"/>
+                    </vbox>
+                </vbox>
+            </deck>
+            <separator class="thin"/>
+        </groupbox>
+
+    </vbox>
+
+</window>
+
+
+
+

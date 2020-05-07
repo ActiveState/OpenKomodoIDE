@@ -1,0 +1,12 @@
+// komodo tool: has_filter
+// =======================
+// auto_abbreviation: true
+// indent_relative: false
+// is_clean: true
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// =======================
+has_filter( [[%tabstop:$tag]], [[%tabstop:$function_to_check]] );!@#_currentPos!@#_anchor

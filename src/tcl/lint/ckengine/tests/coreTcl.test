@@ -1,0 +1,48 @@
+# coreTcl.test --
+#
+#	This file contains regression tests for the coreTcl checkers.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: coreTcl.test,v 1.3 2000/05/30 22:24:46 wart Exp $
+
+if {[string compare test [info procs resetAnalyzer]] == 1} {
+    source [file  join [pwd] [file dirname [info script]] defs.tcl]
+}
+
+analyzer::init
+renameMessageShow
+resetUProcData
+addTestUserProc
+
+# Many of the tests expect that "a" is understood as a defined
+# procedure that takes any number of args.  To keep from getting
+# warnUndefProc warnings, pretend we've already gotten the warning.
+
+lappend ::analyzer::unknownCmds a
+
+foreach ver $::protest::supportedVersions(Tcl) {
+    resetAnalyzer
+    coreTcl::init $ver
+    # This if for the regexp checker tests.  
+    set configure::versions(coreTcl) $ver
+    testVersion checkCoreTcl $ver
+}
+
+set major 1	
+set minor 0
+foreach {cmd expected} [set ::checkDebugger] {
+    test checkDebugger-$major.$minor [list $cmd] {
+	testCmd $cmd
+    } $expected
+    incr minor	
+}
+
+
+resetMessageShow
+resetAnalyzer
+resetUProcData
+
+# cleanup
+cleanupTests

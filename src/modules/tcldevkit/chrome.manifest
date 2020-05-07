@@ -1,0 +1,5 @@
+content tcldevkit jar:tcldevkit.jar!/content/
+skin tcldevkit classic/1.0 jar:tcldevkit.jar!/skin/
+
+overlay chrome://komodo/content/komodo.xul chrome://tcldevkit/content/overlay.xul
+overlay chrome://komodo/content/pref/pref.xul chrome://tcldevkit/content/prefsOverlay.xul

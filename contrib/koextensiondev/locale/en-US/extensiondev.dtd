@@ -1,0 +1,97 @@
+<!ENTITY toolsExtensionDevMenu.label "Extension Developer">
+<!ENTITY toolsExtensionDevMenu.accesskey "x">
+
+<!ENTITY extensionDevTogglePrefs.label "Enable Debugging Preferences">
+<!ENTITY extensionDevTogglePrefs.accesskey "D">
+
+<!ENTITY jsshell.title "Javascript Shell 1.0">
+<!ENTITY extensionDevJSShell.label "Javascript Shell">
+<!ENTITY extensionDevJSShell.tooltip "Launch Javascript Shell">
+<!ENTITY extensionDevJSShell.accesskey "S">
+<!ENTITY jsshell.url "chrome://extensiondev/content/shell.xul">
+<!ENTITY jsshell.html.url "chrome://extensiondev/content/shell.html">
+
+<!ENTITY jsenv.title "JS Dev Env">
+<!ENTITY extensionDevJSEnv.label "Javascript Environment">
+<!ENTITY extensionDevJSEnv.tooltip "Launch Javascript Environment">
+<!ENTITY extensionDevJSEnv.accesskey "E">
+<!ENTITY jsenv.url "chrome://extensiondev/content/jsenv.xul">
+<!ENTITY jsenv.html.url "chrome://extensiondev/content/jsenv/index.html">
+
+<!ENTITY jsinj.title "Javascript Injector">
+<!ENTITY extensionDevJSInj.label "Javascript Injector">
+<!ENTITY extensionDevJSInj.tooltip "Launch Javascript Injector">
+<!ENTITY extensionDevJSInj.accesskey "I">
+<!ENTITY jsinj.url "chrome://extensiondev/content/injector.xul">
+
+<!ENTITY pyshell.title "Python Shell">
+<!ENTITY pyshell_menuitem.label "PyShell">
+<!ENTITY pyshell_menuitem.accesskey "P">
+
+<!ENTITY htmledit.title "Real-time HTML Editor">
+<!ENTITY extensionDevHTMLEdit.label "HTML Editor">
+<!ENTITY extensionDevHTMLEdit.tooltip "Launch HTML Editor">
+<!ENTITY extensionDevHTMLEdit.accesskey "H">
+<!ENTITY htmledit.url "chrome://extensiondev/content/htmledit.xul">
+<!ENTITY htmledit.html.url "chrome://extensiondev/content/htmledit/index.html">
+
+<!ENTITY xuledit.title "Real-time XUL Editor">
+<!ENTITY extensionDevXULEdit.label "XUL Editor">
+<!ENTITY extensionDevXULEdit.tooltip "Launch XUL Editor">
+<!ENTITY extensionDevXULEdit.accesskey "X">
+<!ENTITY xuledit.yourXUL "Put your XUL here!">
+<!ENTITY xuledit.newWindow "Open preview in new window">
+<!ENTITY xuledit.url "chrome://extensiondev/content/xuledit.xul">
+
+<!ENTITY extensionDevReloadChrome.tooltip "Reload all Chrome (anything you're doing in your browser will be lost)">
+<!ENTITY extensionDevReloadChrome.label "Reload all Chrome">
+<!ENTITY extensionDevReloadChrome.accesskey "C">
+
+<!ENTITY extensionBuilder.tooltip "Launch Extension Builder">
+<!ENTITY extensionBuilder.label "Extension Builder">
+<!ENTITY extensionBuilder.accesskey "B">
+<!ENTITY extensionBuilder.url "chrome://extensiondev/content/extensionbuilder.xul">
+
+<!ENTITY extensionDevJRX.tooltip "Launch Real-Time RegExp Evaluator">
+<!ENTITY extensionDevJRX.label "RegExp Evaluator">
+<!ENTITY extensionDevJRX.accesskey "R">
+<!ENTITY jrx.title "JRX: real-time JavaScript RegExp evaluator">
+<!ENTITY jrx.url "chrome://extensiondev/content/jrx.xul">
+<!ENTITY jrx.html.url "chrome://extensiondev/content/jrx.html">
+<!ENTITY jrx.window.width "620">
+<!ENTITY jrx.window.height "530">
+
+<!ENTITY extensionDevXPath.tooltip "Launch Interactive XPath Tester">
+<!ENTITY extensionDevXPath.label "Interactive XPath Tester">
+<!ENTITY extensionDevXPath.accesskey "P">
+<!ENTITY xpath.title "Interactive XPath Tester">
+<!ENTITY xpath.url "chrome://extensiondev/content/xpath.xul">
+<!ENTITY xpath.html.url "chrome://extensiondev/content/xpath.html">
+
+<!ENTITY installEdit.title "Edit install.rdf">
+<!ENTITY guid.label "GUID:">
+<!ENTITY getone.button "Get one">
+<!ENTITY name.label "Name:">
+<!ENTITY version.label "Version:">
+<!ENTITY creator.label "Creator:">
+<!ENTITY contributors.label "Contributors:">
+<!ENTITY add.button "Add">
+<!ENTITY remove.button "Remove">
+<!ENTITY description.label "Description:">
+<!ENTITY homepage.label "Homepage:">
+<!ENTITY options.label "Options chrome URL:">
+<!ENTITY about.label "About chrome URL:">
+<!ENTITY icon.label "Icon chrome URL:">
+<!ENTITY updateURL.label "Update URL:">
+<!ENTITY files.label "Files:">
+<!ENTITY jarfile.label "Jar File:">
+<!ENTITY chromepaths.label "Chrome Paths to register:">
+
+<!ENTITY targetApp.label "Target Applications:">
+<!ENTITY firefox.label "Firefox">
+<!ENTITY minver.label "Min Ver:">
+<!ENTITY maxver.label "Max Ver:">
+<!ENTITY thunderbird.label "Thunderbird">
+<!ENTITY seamonkey.label "Mozilla Suite">
+<!ENTITY save.button "Save">
+<!ENTITY close.button "Close">

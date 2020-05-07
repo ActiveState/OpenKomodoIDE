@@ -1,0 +1,1833 @@
+# expect.tcl --
+#
+#	This file contains the table of commands used to check expect.
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on Expect commands.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+# 
+# RCS: @(#) $Id: expectTable,v 1.3 2000/06/21 20:35:54 hershey Exp $
+
+# Notes:
+# 1) interact, expect, expect_tty and expect_user all use parseExpectCmd
+#    to determine how to parse the bodies.  This command is only tested
+#    by the expect command checker.
+# 2) expect, expect_tty and expect_user all use all use checkExpectCmd
+#    to check the statement.  This command is checked by the expect 
+#    command checker with some sanity checking done on the two others.
+# 3) exp_send, exp_send_error exp_send_tty exp_send_user all use the
+#    checkSendCmd to check the statement.  This command is checked by 
+#    the send command checker with some sanity checking done on the three
+#    others.
+
+
+set checkExpect5.28 {
+
+{exp_close}					{ok}
+{exp_close -i foo}				{ok}
+{exp_close -onexec 0}				{ok}
+{exp_close -onexec 1}				{ok}
+{exp_close -slave}				{ok}
+{exp_close -slave -i foo}			{ok}
+{exp_close -slave -onexec 0}			{ok}
+{exp_close -slave -onexec 1}			{ok}
+{exp_close -i -slave}				{ok}
+{exp_close -slave -i -onexec}			{ok}
+{exp_close -slave -onexec 0 -i foo}		{ok}
+{exp_close -slave -onexec 1 -i foo}		{ok}
+{exp_close -slave -onexec 1 -i foo -slave -onexec 1 -i foo}	{ok}
+{exp_close -i}					{1 {0 12} noSwitchArg {10 2} -i}
+{exp_close -slave -i}				{1 {0 19} noSwitchArg {17 2} -i}
+{exp_close -slave -onexec 0 -i}			{1 {0 29} noSwitchArg {27 2} -i}
+{exp_close -slave -onexec 1 -i}			{1 {0 29} noSwitchArg {27 2} -i}
+{exp_close -onexec}				{1 {0 17} noSwitchArg {10 7} -onexec}
+{exp_close -onexec -slave}			{1 {0 24} badKey {18 6} {{0 1} -slave}}
+{exp_close -slave -onexec}			{1 {0 24} noSwitchArg {17 7} -onexec}
+{exp_close [set]}				{1 {11 3} numArgs {} {}}
+{exp_close -i [set]}				{1 {14 3} numArgs {} {}}
+{exp_close -slave -i [set]}			{1 {21 3} numArgs {} {}}
+{exp_close -onexec foo}				{1 {0 21} badKey {18 3} {{0 1} foo}}
+{exp_close -slave -onexec -i foo}		{1 {0 31} badKey {25 2} {{0 1} -i}}
+{exp_close -slave -onexec foo}			{1 {0 28} badKey {25 3} {{0 1} foo}}
+{exp_close -slave [set]}			{1 {18 3} numArgs {} {}}
+{exp_close -slave -onexec 1 -i foo -slave -onexec 1 -i}		{1 {0 53} noSwitchArg {51 2} -i}
+
+{close -onexec foo}				{1 {0 17} badKey {14 3} {{0 1} foo}}
+
+{exp_continue}					{ok}
+{exp_continue -continue_timer}			{ok}
+{exp_continue a -continue_timer}		{1 {0 30} numArgs {} {}}
+{exp_continue -continue_timer a}		{1 {0 30} numArgs {} {}}
+{exp_continue a}				{1 {0 14} badKey {13 1} {-continue_timer a}}
+
+{exp_debug}					{ok}
+{exp_debug 1}					{ok}
+{exp_debug 0}					{ok}
+{exp_debug -now}				{ok}
+{exp_debug -now 1}				{ok}
+{exp_debug -now 0}				{ok}
+{exp_debug foo}					{1 {0 13} badKey {10 3} {{0 1} foo}}
+{exp_debug 0 1}					{1 {0 13} numArgs {12 1} {}}
+{exp_debug 1 1}					{1 {0 13} numArgs {12 1} {}}
+{exp_debug 1 foo}				{1 {0 15} numArgs {12 3} {}}
+{exp_debug -now 1 foo}				{1 {0 20} numArgs {} {}}
+{exp_debug -now foo}				{1 {0 18} badKey {15 3} {{0 1} foo}}
+{exp_debug -now 0 1}				{1 {0 18} numArgs {} {}}
+{exp_debug -now 1 1}				{1 {0 18} numArgs {} {}}
+{exp_debug -now foo}				{1 {0 18} badKey {15 3} {{0 1} foo}}
+
+{debug -now foo}				{1 {0 14} badKey {11 3} {{0 1} foo}}
+
+{exp_disconnect}				{ok}
+{exp_disconnect a}				{1 {0 16} numArgs {} {}}
+{exp_disconnect a a}				{1 {0 18} numArgs {} {}}
+
+{disconnect a}					{1 {0 12} numArgs {} {}}
+
+{exp_exit}					{ok}
+{exp_exit 1}					{ok}
+{exp_exit -onexit}				{ok}
+{exp_exit -onexit a}				{ok}
+{exp_exit -noexit}				{ok}
+{exp_exit 1 1}					{1 {0 12} numArgs {} {}}
+{exp_exit -a}					{1 {0 11} badInt {9 2} {}}
+{exp_exit -noexit 1}				{1 {0 18} numArgs {} {}}
+{exp_exit a}					{1 {0 10} badInt {9 1} {}}
+{exp_exit -onexit {set}}			{1 {18 3} numArgs {} {}}
+{exp_exit -onexit {testScanCmd} }		{1 {18 11} procNumArgs {} testScanCmd}
+
+{exit -onexit {testScanCmd} }			{1 {14 11} procNumArgs {} testScanCmd}
+
+{exp_fork}					{ok}
+{exp_fork a}					{1 {0 10} numArgs {} {}}
+{exp_fork a a}					{1 {0 12} numArgs {} {}}
+
+{fork a}					{1 {0 6} numArgs {} {}}
+
+{exp_inter_return}				{ok}
+{exp_inter_return a}				{ok}
+{exp_inter_return -code ok}			{ok}
+{exp_inter_return -errorinfo a}			{ok}
+{exp_inter_return -errorcode a}			{ok}
+{exp_inter_return -code ok a}			{ok}
+{exp_inter_return -errorinfo a a}		{ok}
+{exp_inter_return -errorcode a a}		{ok}
+{exp_inter_return -code ok -errorinfo a -errorcode a}		{ok}
+{exp_inter_return -code ok -errorinfo a -errorcode a a}		{ok}
+{exp_inter_return a a}				{1 {0 20} numArgs {} {}}
+{exp_inter_return -code ok a a}			{1 {0 29} numArgs {} {}}
+{exp_inter_return -errorinfo a a a}		{1 {0 33} numArgs {} {}}
+{exp_inter_return -errorcode a a a}		{1 {0 33} numArgs {} {}}
+{exp_inter_return -code a}			{1 {0 24} badKey {23 1} {{ok error return break continue} a}}
+{exp_inter_return -errorinfo [set]}		{1 {29 3} numArgs {} {}}
+{exp_inter_return -errorcode [set]}		{1 {29 3} numArgs {} {}}
+{exp_inter_return [set]}			{1 {18 3} numArgs {} {}}
+{exp_inter_return -code ok [set]}		{1 {27 3} numArgs {} {}}
+{exp_inter_return -code ok -errorinfo a -errorcode a a a}	{1 {0 55} numArgs {} {}}
+
+{inter_return a a}				{1 {0 16} numArgs {} {}}
+
+{exp_interact}					{ok}
+{exp_interact {
+    pat1 $act1
+}}						{ok}
+{exp_interact pat1}				{ok}
+{exp_interact -brace "pat1 $act1"}		{ok}
+{exp_interact pat1 $act1}			{ok}
+{exp_interact \
+    pat1 $act1 \
+    pat2 $act2
+}						{ok}
+{exp_interact $pat1}				{ok}
+{exp_interact $pat1 $act1}			{ok}
+{exp_interact pat1 $act1}			{ok}
+{exp_interact $pat1 $act1}			{ok}
+{exp_interact a {testScanCmd}}			{1 {16 11} procNumArgs {} testScanCmd}
+{exp_interact \
+    eof  act1 \
+    null act2
+}						{ok}
+{exp_interact \
+    timeout 1 act1
+}						{ok}
+{exp_interact \
+    -exact set act1 \
+    -- set act2 \
+    -ex          \
+}						{ok}
+{exp_interact \
+    -exact set act1 \
+    -ex set act2 \
+    --            \
+}						{ok}
+{exp_interact \
+    -regexp set act1 \
+    -re     set act1 \
+    -re     set 
+}						{ok}
+{exp_interact \
+    -regexp set act1 \
+    -re     set act1 \
+    -re
+}						{1 {0 54} noSwitchArg {50 3} -re}
+{exp_interact \
+    -i foo set act1 \
+    -i foo set act2 \
+    -i foo set act3 \
+    -i
+}						{ok}
+{exp_interact \
+    -input foo set act1 \
+    -in    foo set act2 \
+    -input foo set act3 \
+    -input foo
+}						{ok}
+{exp_interact \
+    -input foo set act1 \
+    -in    foo set act2 \
+    -input foo set act3 \
+    -input
+}						{1 {0 84} noSwitchArg {77 6} -input}
+{exp_interact \
+    -output foo set act1 \
+    -out    foo set act2 \
+    -output foo set act3 \
+    -output foo
+}						{ok}
+{exp_interact \
+    -output foo set act1 \
+    -out    foo set act2 \
+    -output foo set act3 \
+    -output
+}						{1 {0 88} noSwitchArg {80 7} -output}
+{exp_interact \
+    -u foo set act1 \
+    -u foo set act2 \
+    -u foo
+}						{ok}
+{exp_interact \
+    -u foo set act1 \
+    -u foo set act2 \
+    -u
+}						{1 {0 51} noSwitchArg {48 2} -u}
+{exp_interact \
+    -nobuffer pat1 act1 \
+    -indices  pat1 act1 \
+    -iread    pat1 act1 \
+    -iwrite   pat1 act1 \
+    -echo     pat1 act1 \
+    -f        pat1 act1 \
+    -F        pat1 act1 \
+    -reset    pat1 act1 \
+    -nobrace  pat1 act1 \
+    -o        pat1 act1 \
+    -nob      pat1 act1 \
+    -indi     pat1 act1 \
+    -ir       pat1 act1 \
+    -iw       pat1 act1
+}						{ok}
+{exp_interact \
+    -eof act1
+}						{1 {0 24} warnDeprecated {14 4} eof}
+{exp_interact \
+    -timeout 1 pat1 act1
+}						{1 {0 35} warnDeprecated {14 8} timeout}
+{exp_interact \
+    -timeout 1 pat1
+}						{1 {0 30} warnDeprecated {14 8} timeout}
+{exp_interact \
+    -timeout 1
+}						{1 {0 25} warnDeprecated {14 8} timeout}
+{exp_interact \
+    -timestamp pat1 act1
+}						{1 {0 35} warnDeprecated {14 10} clock}
+{exp_interact \
+    -timestamp pat1
+}						{1 {0 30} warnDeprecated {14 10} clock}
+{exp_interact \
+    -timestamp
+}						{1 {0 25} warnDeprecated {14 10} clock}
+{exp_interact \
+    -ti pat1 act1
+}						{1 {0 28} warnDeprecated {14 3} clock}
+{exp_interact \
+    -ti pat1
+}						{1 {0 23} warnDeprecated {14 3} clock}
+{exp_interact \
+    -ti
+}						{1 {0 18} warnDeprecated {14 3} clock}
+{exp_interact \
+    -foo act1
+}						{1 {0 24} expect::warnAmbiguous {14 4} -ex}
+{exp_interact \
+    set $act1 \
+    set {act2} \
+    set act3 \
+    set "act4" \
+    -brace "lindex act5"
+}						{1 {0 80} expect::warnAmbiguous {59 6} -ex 1 {67 11} numArgs {} {}}
+{exp_interact \
+    set $act1 \
+    set {act2} \
+    set act3 \
+    set "act4" \
+    set -brace "act5"
+}						{1 {63 6} warnUndefProc {63 6} -brace}
+{exp_interact \
+    eo  act1
+}						{ok}
+{exp_interact \
+    nul act2
+}						{ok}
+{exp_interact \
+    eof  [set]
+}						{1 {20 3} numArgs {} {}}
+{exp_interact \
+    null [set]
+}						{1 {20 3} numArgs {} {}}
+{exp_interact \
+    timeout 1 act1
+}						{ok}
+{exp_interact \
+    timeout a act1
+}						{1 {0 29} badInt {22 1} {}}
+{exp_interact \
+    timeout 1 [set]
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    timeout
+}						{1 {0 22} noSwitchArg {14 7} timeout}
+{exp_interact \
+    -e pat1 act1
+}						{1 {0 27} expect::warnAmbiguous {14 2} -ex}
+{exp_interact \
+    -e
+}						{1 {0 17} expect::warnAmbiguous {14 2} -ex}
+{exp_interact \
+    -regexp [set] act1
+}						{1 {23 3} numArgs {} {}}
+{exp_interact \
+    -regexp pat1 [set]
+}						{1 {28 3} numArgs {} {}}
+{exp_interact \
+    -regexp [set]
+}						{1 {23 3} numArgs {} {}}
+{exp_interact \
+    -regexp
+}						{1 {0 22} noSwitchArg {14 7} -regexp}
+{exp_interact \
+    -r pat1 act1
+}						{1 {0 27} expect::warnAmbiguous {14 2} -ex}
+{exp_interact \
+    -i [set] pat1 act1
+}						{1 {18 3} numArgs {} {}}
+{exp_interact \
+    -i foo [set] act1
+}						{1 {22 3} numArgs {} {}}
+{exp_interact \
+    -i foo pat1 [set]
+}						{1 {27 3} numArgs {} {}}
+{exp_interact \
+    -i foo [set]
+}						{1 {22 3} numArgs {} {}}
+{exp_interact \
+    -i [set]
+}						{1 {18 3} numArgs {} {}}
+{exp_interact \
+    -input [set] pat1 act1
+}						{1 {22 3} numArgs {} {}}
+{exp_interact \
+    -input foo [set] act1
+}						{1 {26 3} numArgs {} {}}
+{exp_interact \
+    -input foo pat1 [set]
+}						{1 {31 3} numArgs {} {}}
+{exp_interact \
+    -input [set] pat1
+}						{1 {22 3} numArgs {} {}}
+{exp_interact \
+    -input foo [set]
+}						{1 {26 3} numArgs {} {}}
+{exp_interact \
+    -input [set]
+}						{1 {22 3} numArgs {} {}}
+{exp_interact \
+    -input
+}						{1 {0 21} noSwitchArg {14 6} -input}
+{exp_interact \
+    -output [set] pat1 act1
+}						{1 {23 3} numArgs {} {}}
+{exp_interact \
+    -output foo [set] act1
+}						{1 {27 3} numArgs {} {}}
+{exp_interact \
+    -output foo pat1 [set]
+}						{1 {32 3} numArgs {} {}}
+{exp_interact \
+    -output [set] pat1
+}						{1 {23 3} numArgs {} {}}
+{exp_interact \
+    -output foo [set]
+}						{1 {27 3} numArgs {} {}}
+{exp_interact \
+    -output [set]
+}						{1 {23 3} numArgs {} {}}
+{exp_interact \
+    -output
+}						{1 {0 22} noSwitchArg {14 7} -output}
+{exp_interact \
+    -u [set] pat1 act1
+}						{1 {18 3} numArgs {} {}}
+{exp_interact \
+    -u foo [set] act1
+}						{1 {22 3} numArgs {} {}}
+{exp_interact \
+    -u foo pat1 [set]
+}						{1 {27 3} numArgs {} {}}
+{exp_interact \
+    -u [set] pat1
+}						{1 {18 3} numArgs {} {}}
+{exp_interact \
+    -u foo [set]
+}						{1 {22 3} numArgs {} {}}
+{exp_interact \
+    -u [set]
+}						{1 {18 3} numArgs {} {}}
+{exp_interact \
+    -u
+}						{1 {0 17} noSwitchArg {14 2} -u}
+{exp_interact \
+    -nobuffer [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -nobuffer pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -indices [set] act1
+}						{1 {24 3} numArgs {} {}}
+{exp_interact \
+    -indices pat1 [set]
+}						{1 {29 3} numArgs {} {}}
+{exp_interact \
+    -iread    [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -iread    pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -iwrite   [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -iwrite   pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -echo     [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -echo     pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -f        [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -f        pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -F        [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -F        pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -reset    [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -reset    pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -nobrace  [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -nobrace  pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -o        [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -o        pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -nob      [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -nob      pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -indi     [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -indi     pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -ir       [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -ir       pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -iw       [set] act1
+}						{1 {25 3} numArgs {} {}}
+{exp_interact \
+    -iw       pat1 [set]
+}						{1 {30 3} numArgs {} {}}
+{exp_interact \
+    -eof [set]
+}						{1 {20 3} numArgs {} {}}
+{exp_interact \
+    -timeout 1 [set] act1
+}						{1 {0 36} warnDeprecated {14 8} timeout 1 {26 3} numArgs {} {}}
+{exp_interact \
+    -timeout 1 pat1 [set]
+}						{1 {0 36} warnDeprecated {14 8} timeout 1 {31 3} numArgs {} {}}
+{exp_interact \
+    -timeout 1 [set]
+}						{1 {0 31} warnDeprecated {14 8} timeout 1 {26 3} numArgs {} {}}
+{exp_interact \
+    -timeout a
+}						{1 {0 25} warnDeprecated {14 8} timeout 1 {0 25} badInt {23 1} {}}
+{exp_interact \
+    -timestamp [set] act1
+}						{1 {0 36} warnDeprecated {14 10} clock 1 {26 3} numArgs {} {}}
+{exp_interact \
+    -timestamp pat1 [set]
+}						{1 {0 36} warnDeprecated {14 10} clock 1 {31 3} numArgs {} {}}
+{exp_interact \
+    -timestamp [set]
+}						{1 {26 3} numArgs {} {}}
+{exp_interact \
+    -foo act1
+}						{1 {0 24} expect::warnAmbiguous {14 4} -ex}
+{exp_interact \
+    [set] act1
+}						{1 {15 3} numArgs {} {}}
+{exp_interact \
+    pat2 [set]
+}						{1 {20 3} numArgs {} {}}
+{exp_interact \
+    pat2 {set}
+}						{1 {20 3} numArgs {} {}}
+{exp_interact \
+    pat2 set
+}						{1 {19 3} numArgs {} {}}
+{exp_interact \
+    pat2 "set"
+}						{1 {20 3} numArgs {} {}}
+{exp_interact \
+    -brace "pat1 set"
+}						{1 {27 3} numArgs {} {}}
+{exp_interact {
+    eof  act1
+    null act2
+}}						{ok}
+{exp_interact {
+    timeout 1 act1
+}}						{ok}
+{exp_interact {
+    -exact set act1
+    -exact set act2     
+    --     set act3
+    -ex
+}}						{ok}
+{exp_interact {
+    -exact set act1
+    -exact set act2     
+    -ex    set act3
+    --
+}}						{ok}
+{exp_interact {
+    -regexp set act1
+    -re     set act2
+}}						{ok}
+{exp_interact {
+    -regexp set act1
+    -re     set 
+}}						{ok}
+{exp_interact {
+    -regexp set act1
+    -re
+}}						{1 {0 45} noSwitchArg {40 3} -re}
+{exp_interact {
+    -i foo set act1
+    -i foo set act2
+    -i foo set act3 
+    -i
+}}						{ok}
+{exp_interact {
+    -input foo set act1
+    -in    foo set act2
+    -input foo set act3
+    -input foo
+}}						{ok}
+{exp_interact {
+    -input foo set act1
+    -in    foo set act2
+    -input foo set act3
+    -input
+}}						{1 {0 99} noSwitchArg {91 6} -input}
+{exp_interact {
+    -output foo set act1
+    -out    foo set act2
+    -output foo set act3
+    -output foo
+}}						{ok}
+{exp_interact {
+    -output foo set act1
+    -out    foo set act2
+    -output foo set act3
+    -output
+}}						{1 {0 103} noSwitchArg {94 7} -output}
+{exp_interact {
+    -u foo set act1
+    -u foo set act2
+    -u foo
+}}						{ok}
+{exp_interact {
+    -u foo set act1
+    -u foo set act2
+    -u
+}}						{1 {0 63} noSwitchArg {59 2} -u}
+{exp_interact {
+    -nobuffer pat1 act1
+    -indices pat1 act1
+    -iread    pat1 act1
+    -iwrite   pat1 act1
+    -echo     pat1 act1
+    -f        pat1 act1
+    -F        pat1 act1
+    -reset    pat1 act1
+    -nobrace  pat1 act1
+    -o        pat1 act1
+    -nob      pat1 act1
+    -indi     pat1 act1
+    -ir       pat1 act1
+    -iw       pat1 act1
+}}						{ok}
+{exp_interact {
+    -eof act1
+}}						{1 {0 30} warnDeprecated {19 4} eof}
+{exp_interact {
+    -timeout 1 pat1 act1
+}}						{1 {0 41} warnDeprecated {19 8} timeout}
+{exp_interact {
+    -timeout 1 pat1
+}}						{1 {0 36} warnDeprecated {19 8} timeout}
+{exp_interact {
+    -timeout 1
+}}						{1 {0 31} warnDeprecated {19 8} timeout}
+{exp_interact {
+    -timeout a
+}   }						{1 {0 34} warnDeprecated {19 8} timeout 1 {0 34} badInt {28 1} {}}
+{exp_interact {
+    -timeout
+}   }						{1 {0 32} warnDeprecated {19 8} timeout 1 {0 32} noSwitchArg {19 8} -timeout}
+{exp_interact {
+    -timestamp pat1 act1
+}}						{1 {0 41} warnDeprecated {19 10} clock}
+{exp_interact {
+    -timestamp pat1
+}}						{1 {0 36} warnDeprecated {19 10} clock}
+{exp_interact {
+    -ti pat1 act1
+}   }						{1 {0 37} warnDeprecated {19 3} clock}
+{exp_interact {
+    -ti pat1
+}   }						{1 {0 32} warnDeprecated {19 3} clock}
+{exp_interact {
+    -foo act1
+}}						{1 {0 30} expect::warnAmbiguous {19 4} -ex}
+{exp_interact {
+    eo  act1
+}}						{ok}
+{exp_interact {
+    nul act2
+}}						{ok}
+{exp_interact {
+    eof  [set]
+}}						{2 {25 3} numArgs {} {}}
+{exp_interact {
+    null [set]
+}}						{2 {25 3} numArgs {} {}}
+{exp_interact {
+    timeout 1 act1
+}}						{ok}
+{exp_interact {
+    timeout a act1
+}}						{1 {0 35} badInt {27 1} {}}
+{exp_interact {
+    timeout 1 [set]
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    timeout
+}}						{1 {0 28} noSwitchArg {19 7} timeout}
+{exp_interact {
+    -e pat1 act1
+}}						{1 {0 33} expect::warnAmbiguous {19 2} -ex}
+{exp_interact {
+    -e
+}}						{1 {0 23} expect::warnAmbiguous {19 2} -ex}
+{exp_interact {
+    -regexp [set] act1
+}}						{2 {28 3} numArgs {} {}}
+{exp_interact {
+    -regexp pat1 [set]
+}}						{2 {33 3} numArgs {} {}}
+{exp_interact {
+    -regexp [set]
+}}						{2 {28 3} numArgs {} {}}
+{exp_interact {
+    -regexp
+}}						{1 {0 28} noSwitchArg {19 7} -regexp}
+{exp_interact {
+    -r pat1 act1
+}}						{1 {0 33} expect::warnAmbiguous {19 2} -ex}
+{exp_interact {
+    -i [set] pat1 act1
+}}						{2 {23 3} numArgs {} {}}
+{exp_interact {
+    -i foo [set] act1
+}}						{2 {27 3} numArgs {} {}}
+{exp_interact {
+    -i foo [set] act1
+}}						{2 {27 3} numArgs {} {}}
+{exp_interact {
+    -i foo pat1 [set]
+}}						{2 {32 3} numArgs {} {}}
+{exp_interact {
+    -i foo [set]
+}}						{2 {27 3} numArgs {} {}}
+{exp_interact {
+    -i [set]
+}}						{2 {23 3} numArgs {} {}}
+{exp_interact {
+    -input [set] pat1 act1
+}}						{2 {27 3} numArgs {} {}}
+{exp_interact {
+    -input foo [set] act1
+}}						{2 {31 3} numArgs {} {}}
+{exp_interact {
+    -input foo pat1 [set]
+}}						{2 {36 3} numArgs {} {}}
+{exp_interact {
+    -input [set] pat1
+}}						{2 {27 3} numArgs {} {}}
+{exp_interact {
+    -input foo [set]
+}}						{2 {31 3} numArgs {} {}}
+{exp_interact {
+    -input [set]
+}}						{2 {27 3} numArgs {} {}}
+{exp_interact {
+    -input
+}}						{1 {0 27} noSwitchArg {19 6} -input}
+{exp_interact {
+    -output [set] pat1 act1
+}}						{2 {28 3} numArgs {} {}}
+{exp_interact {
+    -output foo [set] act1
+}}						{2 {32 3} numArgs {} {}}
+{exp_interact {
+    -output foo pat1 [set]
+}}						{2 {37 3} numArgs {} {}}
+{exp_interact {
+    -output [set] pat1
+}}						{2 {28 3} numArgs {} {}}
+{exp_interact {
+    -output foo [set]
+}}						{2 {32 3} numArgs {} {}}
+{exp_interact {
+    -output [set]
+}}						{2 {28 3} numArgs {} {}}
+{exp_interact {
+    -output
+}}						{1 {0 28} noSwitchArg {19 7} -output}
+{exp_interact {
+    -u [set] pat1 act1
+}}						{2 {23 3} numArgs {} {}}
+{exp_interact {
+    -u foo [set] act1
+}}						{2 {27 3} numArgs {} {}}
+{exp_interact {
+    -u foo pat1 [set]
+}}						{2 {32 3} numArgs {} {}}
+{exp_interact {
+    -u [set] pat1
+}}						{2 {23 3} numArgs {} {}}
+{exp_interact {
+    -u foo [set]
+}}						{2 {27 3} numArgs {} {}}
+{exp_interact {
+    -u [set]
+}}						{2 {23 3} numArgs {} {}}
+{exp_interact {
+    -u
+}}						{1 {0 23} noSwitchArg {19 2} -u}
+{exp_interact {
+    -nobuffer [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -nobuffer pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -indices [set] act1
+}}						{2 {29 3} numArgs {} {}}
+{exp_interact {
+    -indices pat1 [set]
+}}						{2 {34 3} numArgs {} {}}
+{exp_interact {
+    -iread    [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -iread    pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -iwrite   [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -iwrite   pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -echo     [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -echo     pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -f        [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -f        pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -F        [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -F        pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -reset    [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -reset    pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -nobrace  [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -nobrace  pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -o        [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -o        pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -nob      [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -nob      pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -indi     [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -indi     pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -ir       [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -ir       pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -iw       [set] act1
+}}						{2 {30 3} numArgs {} {}}
+{exp_interact {
+    -iw       pat1 [set]
+}}						{2 {35 3} numArgs {} {}}
+{exp_interact {
+    -eof act1
+}}						{1 {0 30} warnDeprecated {19 4} eof}
+{exp_interact {
+    -timeout 1 pat1 act1
+}}						{1 {0 41} warnDeprecated {19 8} timeout}
+{exp_interact {
+    -timeout 1 pat1
+}}						{1 {0 36} warnDeprecated {19 8} timeout}
+{exp_interact {
+    -timeout 1
+}}						{1 {0 31} warnDeprecated {19 8} timeout}
+{exp_interact {
+    -timestamp pat1 act1
+}}						{1 {0 41} warnDeprecated {19 10} clock}
+{exp_interact {
+    -timestamp pat1
+}}						{1 {0 36} warnDeprecated {19 10} clock}
+{exp_interact {
+    -ti pat1 act1
+}}						{1 {0 34} warnDeprecated {19 3} clock}
+{exp_interact {
+    -ti pat1
+}}						{1 {0 29} warnDeprecated {19 3} clock}
+{exp_interact {
+    -foo act1
+}}						{1 {0 30} expect::warnAmbiguous {19 4} -ex}
+{exp_interact {
+    [set] act1
+}}						{2 {20 3} numArgs {} {}}
+{exp_interact {
+    pat2 [set]
+}}						{2 {25 3} numArgs {} {}}
+{exp_interact {
+    pat2 {set}
+}}						{2 {25 3} numArgs {} {}}
+{exp_interact {
+    pat2 set
+}}						{2 {24 3} numArgs {} {}}
+{exp_interact {
+    pat2 "set"
+}}						{2 {25 3} numArgs {} {}}
+{exp_interact {
+    -brace "pat2 set"
+}}						{1 {0 38} expect::warnAmbiguous {19 6} -ex}
+
+{interact a {testScanCmd}}			{1 {12 11} procNumArgs {} testScanCmd}
+
+{exp_internal}					{ok}
+{exp_internal -info}				{ok}
+{exp_internal 0}				{ok}
+{exp_internal 1}				{ok}
+{exp_internal -f file 0}			{ok}
+{exp_internal -f file 1}			{ok}
+{exp_internal 1 1}				{1 {0 16} numArgs {15 1} {}}
+{exp_internal -info 1}				{1 {0 20} numArgs {} {}}
+{exp_internal -f file 1 1}			{1 {0 24} numArgs {23 1} {}}
+{exp_internal -f}				{1 {0 15} noSwitchArg {13 2} -f}
+{exp_internal a}				{1 {0 14} badKey {13 1} {{0 1} a}}
+{exp_internal -a}				{1 {0 15} badKey {13 2} {{0 1} -a}}
+{exp_internal -f [set] 0}			{1 {17 3} numArgs {} {}}
+{exp_internal -f file a}			{1 {0 22} badKey {21 1} {{0 1} a}}
+
+{exp_interpreter}				{ok}
+{exp_interpreter -eof $a}			{1 {0 23} numArgs {} {}}
+{exp_interpreter a}				{1 {0 17} numArgs {} {}}
+{exp_interpreter a a}				{1 {0 19} numArgs {} {}}
+
+{interpreter a}					{1 {0 13} numArgs {} {}}
+
+{exp_log_file}					{ok}
+{exp_log_file a}				{ok}
+{exp_log_file $a}				{ok}
+{exp_log_file -open a}				{ok}
+{exp_log_file -leaveopen a}			{ok}
+{exp_log_file -a a}				{ok}
+{exp_log_file -noappend}			{ok}
+{exp_log_file -noappend a}			{ok}
+{exp_log_file -a -open -noappend -leaveopen a}	{ok}
+{exp_log_file -info}				{ok}
+{exp_log_file -a -open -noappend -info}		{ok}
+{exp_log_file a a}				{1 {0 16} numArgs {} {}}
+{exp_log_file -open}				{1 {0 18} numArgs {} {}}
+{exp_log_file -leaveopen}			{1 {0 23} numArgs {} {}}
+{exp_log_file -a}				{1 {0 15} numArgs {} {}}
+{exp_log_file -a -open -noappend -leaveopen}	{1 {0 42} numArgs {} {}}
+{exp_log_file -info a}				{1 {0 20} numArgs {} {}}
+{exp_log_file -a -open -noappend -info a}	{1 {0 39} numArgs {} {}}
+{exp_log_file -o a}				{1 {0 17} numArgs {} {}}
+{exp_log_file -l a}				{1 {0 17} numArgs {} {}}
+{exp_log_file -n a}				{1 {0 17} numArgs {} {}}
+{exp_log_file file0}				{1 {0 18} nonPortChannel {13 5} stdin}
+{exp_log_file -open [set]}			{1 {20 3} numArgs {} {}}
+{exp_log_file -leaveopen [set]}			{1 {25 3} numArgs {} {}}
+{exp_log_file -a [set]}				{1 {17 3} numArgs {} {}}
+{exp_log_file -noappend file0}			{1 {0 28} nonPortChannel {23 5} stdin}
+
+{log_file file0}				{1 {0 14} nonPortChannel {9 5} stdin}
+
+{exp_log_user}					{ok}
+{exp_log_user -info}				{ok}
+{exp_log_user 0}				{ok}
+{exp_log_user 1}				{ok}
+{exp_log_user a}				{1 {0 14} badKey {13 1} {{0 1 -info} a}}
+{exp_log_user 0 a}				{1 {0 16} numArgs {} {}}
+{exp_log_user -in}				{1 {0 16} badKey {13 3} {{0 1 -info} -in}}
+{exp_log_user [set]}				{1 {14 3} numArgs {} {}}
+
+{log_user -in}					{1 {0 12} badKey {9 3} {{0 1 -info} -in}}
+
+{exp_match_max}					{ok}
+{exp_match_max 1}				{ok}
+{exp_match_max $a}				{ok}
+{exp_match_max -d}				{ok}
+{exp_match_max -d 1}				{ok}
+{exp_match_max -d $a}				{ok}
+{exp_match_max -i foo}				{ok}
+{exp_match_max -i foo 1}			{ok}
+{exp_match_max -i $a}				{ok}
+{exp_match_max -i $a 1}				{ok}
+{exp_match_max -i foo $a}			{ok}
+{exp_match_max -i}				{1 {0 16} noSwitchArg {14 2} -i}
+{exp_match_max 1 1}				{1 {0 17} numArgs {} {}}
+{exp_match_max $a 1}				{1 {0 18} numArgs {} {}}
+{exp_match_max -d 1 1}				{1 {0 20} numArgs {} {}}
+{exp_match_max -i foo 1 1}			{1 {0 24} numArgs {} {}}
+{exp_match_max -d -i}				{1 {0 19} noSwitchArg {17 2} -i 1 {0 19} mismatchOptions {17 2} {}}
+{exp_match_max -d -i foo}			{1 {0 23} mismatchOptions {17 2} {}}
+{exp_match_max -d -i foo 1}			{1 {0 25} mismatchOptions {17 2} {}}
+{exp_match_max -d 1 -i foo 1}			{1 {0 27} numArgs {} {}}
+{exp_match_max -d -i foo 1 1}			{1 {0 27} mismatchOptions {17 2} {} 1 {0 27} numArgs {} {}}
+{exp_match_max a}				{1 {0 15} badWholeNum {14 1} a}
+{exp_match_max -1}				{1 {0 16} badWholeNum {14 2} -1}
+{exp_match_max -d a}				{1 {0 18} badWholeNum {17 1} a}
+{exp_match_max -d -i [set]}			{1 {21 3} numArgs {} {} 1 {0 25} mismatchOptions {17 2} {}}
+
+{match_max -i}					{1 {0 12} noSwitchArg {10 2} -i}
+
+{exp_open}					{ok}
+{exp_open -leaveopen}				{ok}
+{exp_open -i foo}				{ok}
+{exp_open -i foo -leaveopen}			{ok}
+{exp_open -leaveopen -i foo}			{ok}
+{exp_open a}					{1 {0 10} badSwitch {9 1} a}
+{exp_open a a}					{1 {0 12} badSwitch {9 1} a}
+{exp_open -leaveopen a}				{1 {0 21} badSwitch {20 1} a}
+{exp_open -i}					{1 {0 11} noSwitchArg {9 2} -i}
+{exp_open a -i}					{1 {0 13} badSwitch {9 1} a}
+{exp_open -i foo a}				{1 {0 17} badSwitch {16 1} a}
+{exp_open -i foo -leaveopen a}			{1 {0 28} badSwitch {27 1} a}
+{exp_open -leaveopen -i foo a}			{1 {0 28} badSwitch {27 1} a}
+{exp_open -i foo -leaveopen a a}		{1 {0 30} badSwitch {27 1} a}
+{exp_open a -leaveopen}				{1 {0 21} badSwitch {9 1} a}
+{exp_open a -leaveopen -i foo}			{1 {0 28} badSwitch {9 1} a}
+
+{exp_overlay}					{1 {0 11} warnDeprecated {0 11} {{well... Don says don't use it}}}
+{exp_overlay a}					{1 {0 13} warnDeprecated {0 11} {{well... Don says don't use it}}}
+{exp_overlay [set]}				{1 {0 17} warnDeprecated {0 11} {{well... Don says don't use it}} 1 {13 3} numArgs {} {}}
+
+{overlay}					{1 {0 7} warnDeprecated {0 7} {{well... Don says don't use it}}}
+
+{exp_parity}					{ok}
+{exp_parity 1}					{ok}
+{exp_parity $a}					{ok}
+{exp_parity -d}					{ok}
+{exp_parity -d 1}				{ok}
+{exp_parity -d $a}				{ok}
+{exp_parity -i foo}				{ok}
+{exp_parity -i foo 1}				{ok}
+{exp_parity -i $a}				{ok}
+{exp_parity -i $a 1}				{ok}
+{exp_parity -i foo $a}				{ok}
+{exp_parity -i}					{1 {0 13} noSwitchArg {11 2} -i}
+{exp_parity 1 1}				{1 {0 14} numArgs {} {}}
+{exp_parity $a 1}				{1 {0 15} numArgs {} {}}
+{exp_parity -d 1 1}				{1 {0 17} numArgs {} {}}
+{exp_parity -i foo 1 1}				{1 {0 21} numArgs {} {}}
+{exp_parity -d -i}				{1 {0 16} noSwitchArg {14 2} -i 1 {0 16} mismatchOptions {14 2} {}}
+{exp_parity -i foo -d}				{1 {0 20} mismatchOptions {18 2} {}}
+{exp_parity -d -i foo}				{1 {0 20} mismatchOptions {14 2} {}}
+{exp_parity -d -i foo 1}			{1 {0 22} mismatchOptions {14 2} {}}
+{exp_parity -d 1 -i foo 1}			{1 {0 24} numArgs {} {}}
+{exp_parity -d -i foo 1 1}			{1 {0 24} mismatchOptions {14 2} {} 1 {0 24} numArgs {} {}}
+{exp_parity a}					{1 {0 12} badInt {11 1} {}}
+{exp_parity -d a}				{1 {0 15} badInt {14 1} {}}
+{exp_parity -d -i [set]}			{1 {18 3} numArgs {} {} 1 {0 22} mismatchOptions {14 2} {}}
+
+{parity -d a}					{1 {0 11} badInt {10 1} {}}
+
+{exp_pid}					{ok}
+{exp_pid -i foo}				{ok}
+{exp_pid $i foo}				{1 {0 14} numArgs {} {}}
+{exp_pid foo}					{1 {0 11} badInt {8 3} {}}
+{exp_pid foo foo}				{1 {0 15} numArgs {} {}}
+{exp_pid -i}					{1 {0 10} noSwitchArg {8 2} -i}
+{exp_pid -i foo foo}				{1 {0 18} badInt {15 3} {}}
+{exp_pid -a foo}				{1 {0 14} numArgs {} {}}
+{exp_pid -i [set]}				{1 {12 3} numArgs {} {}}
+
+{exp_remove_nulls}				{ok}
+{exp_remove_nulls 1}				{ok}
+{exp_remove_nulls $a}				{ok}
+{exp_remove_nulls -d}				{ok}
+{exp_remove_nulls -d 1}				{ok}
+{exp_remove_nulls -d $a}			{ok}
+{exp_remove_nulls -i foo}			{ok}
+{exp_remove_nulls -i foo 1}			{ok}
+{exp_remove_nulls -i $a}			{ok}
+{exp_remove_nulls -i $a 1}			{ok}
+{exp_remove_nulls -i foo $a}			{ok}
+{exp_remove_nulls -i}				{1 {0 19} noSwitchArg {17 2} -i}
+{exp_remove_nulls 1 1}				{1 {0 20} numArgs {} {}}
+{exp_remove_nulls $a 1}				{1 {0 21} numArgs {} {}}
+{exp_remove_nulls -d 1 1}			{1 {0 23} numArgs {} {}}
+{exp_remove_nulls -i foo 1 1}			{1 {0 27} numArgs {} {}}
+{exp_remove_nulls -d -i}			{1 {0 22} noSwitchArg {20 2} -i 1 {0 22} mismatchOptions {20 2} {}}
+{exp_remove_nulls -d -i foo}			{1 {0 26} mismatchOptions {20 2} {}}
+{exp_remove_nulls -d -i foo 1}			{1 {0 28} mismatchOptions {20 2} {}}
+{exp_remove_nulls -d 1 -i foo 1}		{1 {0 30} numArgs {} {}}
+{exp_remove_nulls -d -i foo 1 1}		{1 {0 30} mismatchOptions {20 2} {} 1 {0 30} numArgs {} {}}
+{exp_remove_nulls a}				{1 {0 18} badInt {17 1} {}}
+{exp_remove_nulls -d a}				{1 {0 21} badInt {20 1} {}}
+{exp_remove_nulls -d -i [set]}			{1 {24 3} numArgs {} {} 1 {0 28} mismatchOptions {20 2} {}}
+
+{remove_nulls -i}				{1 {0 15} noSwitchArg {13 2} -i}
+
+{exp_send a}					{ok}
+{exp_send $a}					{ok}
+{exp_send -- a}					{ok}
+{exp_send -i foo -h -s -n -- a}			{ok}
+{exp_send -s -h -i foo -- -n a}			{1 {0 29} numArgs {} {}}
+{exp_send -s -i foo -n -- bar a}		{1 {0 30} numArgs {} {}}
+{exp_send -i foo a}				{ok}
+{exp_send -h a}					{ok}
+{exp_send -s a}					{ok}
+{exp_send -null a}				{ok}
+{exp_send -n a}					{ok}
+{exp_send -raw}					{ok}
+{exp_send -r}					{ok}
+{exp_send -break}				{ok}
+{exp_send -b}					{ok}
+{exp_send a a}					{1 {0 12} numArgs {} {}}
+{exp_send -i}					{1 {0 11} noSwitchArg {9 2} i 1 {0 11} numArgs {} {}}
+{exp_send -i foo}				{1 {0 15} numArgs {} {}}
+{exp_send -i foo a a}				{1 {0 19} numArgs {} {}}
+{exp_send -h}					{1 {0 11} numArgs {} {}}
+{exp_send -s}					{1 {0 11} numArgs {} {}}
+{exp_send -h a a}				{1 {0 15} numArgs {} {}}
+{exp_send -s a a}				{1 {0 15} numArgs {} {}}
+{exp_send -null a a}				{1 {0 18} numArgs {} {}}
+{exp_send -raw a}				{1 {0 15} numArgs {} {}}
+{exp_send -break a}				{1 {0 17} numArgs {} {}}
+{exp_send [set]}				{1 {10 3} numArgs {} {}}
+{exp_send -i [set]}				{1 {13 3} numArgs {} {} 1 {0 17} numArgs {} {}}
+
+{send -i}					{1 {0 7} noSwitchArg {5 2} i 1 {0 7} numArgs {} {}}
+{exp_send -i foo a}				{ok}
+
+{exp_send_error a}				{ok}
+{exp_send_error -i foo a}			{ok}
+{exp_send_error -i [set]}			{1 {19 3} numArgs {} {} 1 {0 23} numArgs {} {}}
+
+{send_error -i [set]}				{1 {15 3} numArgs {} {} 1 {0 19} numArgs {} {}}
+
+{exp_send_log a}				{ok}
+{exp_send_log -- a}				{ok}
+{exp_send_log a a}				{1 {0 16} numArgs {} {}}
+{exp_send_log -- a a}				{1 {0 19} numArgs {} {}}
+{exp_send_log -a a}				{1 {0 17} badSwitch {13 2} -a}
+
+{send_log -a a}					{1 {0 13} badSwitch {9 2} -a}
+
+{exp_send_tty a}				{ok}
+{exp_send_tty -i foo a}				{ok}
+{exp_send_tty -i [set]}				{1 {17 3} numArgs {} {} 1 {0 21} numArgs {} {}}
+
+{send_tty -i [set]}				{1 {13 3} numArgs {} {} 1 {0 17} numArgs {} {}}
+
+{exp_send_user a}				{ok}
+{exp_send_user -i foo a}			{ok}
+{exp_send_user -i [set]}			{1 {18 3} numArgs {} {} 1 {0 22} numArgs {} {}}
+
+{send_user -i [set]}				{1 {14 3} numArgs {} {} 1 {0 18} numArgs {} {}}
+
+{exp_sleep 1}					{ok}
+{exp_sleep .1}					{ok}
+{exp_sleep 2.1}					{ok}
+{exp_sleep}					{1 {0 9} numArgs {} {}}
+{exp_sleep 1 1}					{1 {0 13} numArgs {} {}}
+{exp_sleep a}					{1 {0 11} badFloat {10 1} {}}
+
+{sleep a}					{1 {0 7} badFloat {6 1} {}}
+
+{exp_spawn a}					{ok}
+{exp_spawn a a a}				{ok}
+{exp_spawn -nottyinit a}			{ok}
+{exp_spawn -nottycopy a}			{ok}
+{exp_spawn -noecho a}				{ok}
+{exp_spawn -console a}				{ok}
+{exp_spawn -nottyinit a a}			{ok}
+{exp_spawn -nottycopy a a}			{ok}
+{exp_spawn -noecho a a}				{ok}
+{exp_spawn -console a a}			{ok}
+{exp_spawn -pty a a}				{ok}
+{exp_spawn -ignore INT a a}			{ok}
+{exp_spawn -trap a SIG_DFL a a}			{ok}
+{exp_spawn -pty}				{ok}
+{exp_spawn -pty a}				{ok}
+{exp_spawn -open a}				{ok}
+{exp_spawn -leaveopen a}			{ok}
+{exp_spawn -ignore INT a}			{ok}
+{exp_spawn -trap a SIG_DFL a}			{ok}
+{exp_spawn -trap a}				{1 {0 17} noSwitchArg {16 1} -trap 1 {0 17} numArgs {} {}}
+{exp_spawn -trap}				{1 {0 15} noSwitchArg {10 5} -trap}
+{exp_spawn -nottyinit}				{1 {0 20} numArgs {} {}}
+{exp_spawn -nottycopy}				{1 {0 20} numArgs {} {}}
+{exp_spawn -noecho}				{1 {0 17} numArgs {} {}}
+{exp_spawn -console}				{1 {0 18} numArgs {} {}}
+{exp_spawn -open}				{1 {0 15} noSwitchArg {10 5} -open 1 {0 15} numArgs {} {}}
+{exp_spawn -leaveopen}				{1 {0 20} noSwitchArg {10 10} -leaveopen 1 {0 20} numArgs {} {}}
+{exp_spawn -ignore INT}				{1 {0 21} numArgs {} {}}
+{exp_spawn -ignore}				{1 {0 17} noSwitchArg {10 7} -ignore}
+{exp_spawn -open a a}				{1 {0 19} numArgs {} {}}
+{exp_spawn -leaveopen a a}			{1 {0 24} numArgs {} {}}
+{exp_spawn {set}}				{1 {11 3} numArgs {} {}}
+{exp_spawn -nottyinit {set}}			{1 {22 3} numArgs {} {}}
+{exp_spawn -nottycopy {set}}			{1 {22 3} numArgs {} {}}
+{exp_spawn -noecho {set}}			{1 {19 3} numArgs {} {}}
+{exp_spawn -console {set}}			{1 {20 3} numArgs {} {}}
+{exp_spawn -pty {set}}				{1 {16 3} numArgs {} {}}
+{exp_spawn -open file0}				{1 {0 21} nonPortChannel {16 5} stdin}
+{exp_spawn -leaveopen file0}			{1 {0 26} nonPortChannel {21 5} stdin}
+{exp_spawn -ignore [set] a}			{1 {19 3} numArgs {} {}}
+{exp_spawn -ignore INT [set]}			{1 {23 3} numArgs {} {}}
+{exp_spawn -trap [set] SIG_DFL a}		{1 {17 3} numArgs {} {}}
+{exp_spawn -trap a a a}				{1 {0 21} badKey {18 1} {{SIG_DFL SIF_IGN} a}}
+{exp_spawn -trap a SIG_DFL [set]}		{1 {27 3} numArgs {} {}}
+
+{spawn -open file0}				{1 {0 17} nonPortChannel {12 5} stdin}
+
+{exp_strace 1}					{ok}
+{exp_strace -info}				{ok}
+{exp_strace -info 1}				{ok}
+{exp_strace a}					{1 {0 12} badInt {11 1} {}}
+{exp_strace -info a}				{1 {0 18} badInt {17 1} {}}
+{exp_strace -info a a}				{1 {0 20} badInt {17 1} {} 1 {0 20} numArgs {19 1} {}}
+{exp_strace -in a a}				{1 {0 18} badInt {11 3} {} 1 {0 18} numArgs {15 1} {}}
+
+{strace a}					{1 {0 8} badInt {7 1} {}}
+
+{exp_stty}					{ok}
+{exp_stty $a}					{ok}
+{exp_stty cooked}				{ok}
+{exp_stty echo}					{ok}
+{exp_stty raw}					{ok}
+{exp_stty -cooked}				{ok}
+{exp_stty -echo}				{ok}
+{exp_stty -raw}					{ok}
+{exp_stty rows}					{ok}
+{exp_stty rows 1}				{ok}
+{exp_stty columns}				{ok}
+{exp_stty columns 1}				{ok}
+{exp_stty < foo}				{ok}
+{exp_stty -raw -echo -cooked}			{ok}
+{exp_stty -raw -echo -cooked rows 1}		{ok}
+{exp_stty -raw -echo -cooked columns}		{ok}
+{exp_stty -raw -echo -cooked columns 1 < foo}	{ok}
+{exp_stty a}					{1 {0 10} nonPortOption {9 1} {}}
+{exp_stty cooked a}				{1 {0 17} nonPortOption {16 1} {}}
+{exp_stty rows a}				{1 {0 15} badInt {14 1} {}}
+{exp_stty columns a}				{1 {0 18} badInt {17 1} {}}
+{exp_stty <}					{1 {0 10} numArgs {} {}}
+{exp_stty < [set]}				{1 {12 3} numArgs {} {}}
+{exp_stty -raw -echo -cooked a}			{1 {0 29} nonPortOption {28 1} {}}
+{exp_stty -raw -echo -cooked rows 1 a}		{1 {0 36} nonPortOption {35 1} {}}
+{exp_stty -raw -echo -cooked columns a}		{1 {0 37} badInt {36 1} {}}
+{exp_stty -raw -echo -cooked columns 1 < foo a}	{1 {0 45} numArgs {} {}}
+
+{stty a}					{1 {0 6} nonPortOption {5 1} {}}
+
+{exp_system}					{ok}
+{exp_system a}					{ok}
+{exp_system a a}				{ok}
+{exp_system [set]}				{1 {12 3} numArgs {} {}}
+
+{system [set]}					{1 {8 3} numArgs {} {}}
+
+{exp_timestamp}					{ok}
+{exp_timestamp -seconds 1}			{ok}
+{exp_timestamp -format a}			{ok}
+{exp_timestamp -format a -seconds 1}		{ok}
+{exp_timestamp -seconds 1 -format a}		{ok}
+{exp_timestamp a}				{1 {0 15} badSwitch {14 1} a}
+{exp_timestamp -seconds 1 a}			{1 {0 26} badSwitch {25 1} a}
+{exp_timestamp -format a a}			{1 {0 25} badSwitch {24 1} a}
+{exp_timestamp -format a -seconds 1 a}		{1 {0 36} badSwitch {35 1} a}
+{exp_timestamp -seconds 1 -format a a}		{1 {0 36} badSwitch {35 1} a}
+{exp_timestamp -seconds a}			{1 {0 24} badInt {23 1} {}}
+{exp_timestamp -format [set]}			{1 {23 3} numArgs {} {}}
+{exp_timestamp -s 1}				{1 {0 18} badSwitch {14 2} -s}
+{exp_timestamp -f a}				{1 {0 18} badSwitch {14 2} -f}
+
+{timestamp a}					{1 {0 11} badSwitch {10 1} a}
+
+{exp_trap INT}					{ok}
+{exp_trap a INT}				{ok}
+{exp_trap -code INT}				{ok}
+{exp_trap -code a INT}				{ok}
+{exp_trap -max}					{ok}
+{exp_trap -name}				{ok}
+{exp_trap -number}				{ok}
+{exp_trap -max -name -number}			{ok}
+{exp_trap -max INT}				{1 {0 17} numArgs {} {}}
+{exp_trap -name INT}				{1 {0 18} numArgs {} {}}
+{exp_trap -number INT}				{1 {0 20} numArgs {} {}}
+{exp_trap -max a INT}				{1 {0 19} numArgs {} {}}
+{exp_trap -name a INT}				{1 {0 20} numArgs {} {}}
+{exp_trap -number a INT}			{1 {0 22} numArgs {} {}}
+{exp_trap -max -code INT}			{1 {0 23} numArgs {} {}}
+{exp_trap -name -code INT}			{1 {0 24} numArgs {} {}}
+{exp_trap -number -code INT}			{1 {0 26} numArgs {} {}}
+{exp_trap -max -code a INT}			{1 {0 25} numArgs {} {}}
+{exp_trap -name -code a INT}			{1 {0 26} numArgs {} {}}
+{exp_trap -number -code a INT}			{1 {0 28} numArgs {} {}}
+{exp_trap [set]}				{1 {10 3} numArgs {} {}}
+{exp_trap [set] INT}				{1 {10 3} numArgs {} {}}
+{exp_trap a [set]}				{1 {12 3} numArgs {} {}}
+{exp_trap -code [set]}				{1 {16 3} numArgs {} {}}
+{exp_trap -code [set] INT}			{1 {16 3} numArgs {} {}}
+{exp_trap -code a [set]}			{1 {18 3} numArgs {} {}}
+{exp_trap {testScanCmd} a}			{1 {10 11} procNumArgs {} testScanCmd}
+
+{trap -max INT}					{1 {0 13} numArgs {} {}}
+
+{exp_version}					{ok}
+{exp_version 1.1}				{ok}
+{exp_version -exit 1.1}				{ok}
+{exp_version a}					{1 {0 13} badVersion {12 1} {}}
+{exp_version -exit}				{1 {0 17} noSwitchArg {12 5} -exit}
+{exp_version -exit a}				{1 {0 19} badVersion {18 1} {}}
+
+{exp_wait}					{ok}
+{exp_wait -nowait}				{ok}
+{exp_wait -i foo}				{ok}
+{exp_wait -i foo -nowait}			{ok}
+{exp_wait -nowait -i foo}			{ok}
+{exp_wait a}					{1 {0 10} badSwitch {9 1} a}
+{exp_wait -nowait a}				{1 {0 18} badSwitch {17 1} a}
+{exp_wait -i foo a}				{1 {0 17} badSwitch {16 1} a}
+{exp_wait -i foo -nowait a}			{1 {0 25} badSwitch {24 1} a}
+{exp_wait -nowait -i foo a}			{1 {0 25} badSwitch {24 1} a}
+{exp_wait -no}					{1 {0 12} badSwitch {9 3} -no}
+
+{wait a}					{1 {0 6} badSwitch {5 1} a}
+
+{expect {
+    pat1 act1
+}}						{ok}
+{expect pat1}					{ok}
+{expect -brace "pat1 act1"}			{ok}
+{expect pat1 act1}				{ok}
+{expect \
+    pat1 act1 \
+    pat2 act2
+}						{ok}
+{expect $pat1}					{ok}
+{expect $pat1 act1}				{ok}
+{expect pat1 $act1}				{ok}
+{expect $pat1 act1}				{ok}
+{expect a {testScanCmd}}			{1 {10 11} procNumArgs {} testScanCmd}
+{expect \
+    eof     act1 \
+    null    act2 \
+    default act3 \
+    timeout act4 \
+    full_buffer act5
+}						{ok}
+{expect \
+    -exact  pat1 act1 \
+    -glob   pat2 act2 \
+    -regexp pat3 act3 \
+    -ex     pat4 act4 \
+    -gl     pat5 act5 \
+    -re     pat6 act6 \
+    --      pat7 act7
+}						{1 {0 140} warnDeprecated {122 2} -gl}
+{expect \
+    -timestamp pat1 act1 \
+    -iread     pat2 act2 \
+    -iwrite    pat3 act3 \
+    -indices  pat4 act4 \
+    -ti        pat5 act5 \
+    -ir        pat6 act6 \
+    -iw        pat7 act7 \
+    -in        pat8 act8
+}						{1 {0 182} warnDeprecated {8 10} {{expect without the -timestamp option}} 1 {0 182} warnDeprecated {52 7} {{expect without the -iwrite option}} 1 {0 182} warnDeprecated {95 3} {{expect without the -ti option}} 1 {0 182} warnDeprecated {139 3} {{expect without the -iw option}}}
+{expect \
+    -notransfer pat1 act1 \
+    -no    pat2 act2 \
+    -n          pat2 act2
+}						{ok}
+{expect \
+    -nocase pat1 act1 \
+    -noc    pat2 act2
+}						{ok}
+{expect \
+    -nobrace pat1 act1
+}						{ok}
+{expect \
+    -i foo pat1 act1
+}						{ok}
+{expect \
+    -timeout 1 pat1 act1 \
+    -timeo      1 pat1 act1
+}						{ok}
+{expect \
+    set $act1 \
+    set {act2} \
+    set act3 \
+    set "act4" \
+    -brace "lindex act5"
+}						{1 {0 74} expect::warnAmbiguous {53 6} -gl 1 {61 11} numArgs {} {}}
+{expect \
+    -timestamp -iread -iwrite -indices \
+    -notransfer -nocase -nobrace        \
+    -i foo -timeout 1 pat3 act3
+}						{1 {0 109} warnDeprecated {8 10} {{expect without the -timestamp option}} 1 {0 109} warnDeprecated {26 7} {{expect without the -iwrite option}}}
+{expect \
+    eof     [set]
+}						{1 {17 3} numArgs {} {}}
+{expect \
+    null    [set]
+}						{1 {17 3} numArgs {} {}}
+{expect \
+    default [set]
+}						{1 {17 3} numArgs {} {}}
+{expect \
+    timeout [set]
+}						{1 {17 3} numArgs {} {}}
+{expect \
+    full_buffer [set]
+}						{1 {21 3} numArgs {} {}}
+{expect \
+    -exact  [set] act1
+}						{1 {17 3} numArgs {} {}}
+{expect \
+    -exact  pat1 [set]
+}						{1 {22 3} numArgs {} {}}
+{expect \
+    -glob   [set] act1
+}						{1 {17 3} numArgs {} {}}
+{expect \
+    -glob   pat1 [set]
+}						{1 {22 3} numArgs {} {}}
+{expect \
+    -regexp [set] act1
+}						{1 {17 3} numArgs {} {}}
+{expect \
+    -regexp pat1 [set]
+}						{1 {22 3} numArgs {} {}}
+{expect \
+    -timestamp [set] act1
+}						{1 {0 30} warnDeprecated {8 10} {{expect without the -timestamp option}} 1 {20 3} numArgs {} {}}
+{expect \
+    -timestamp pat1 [set]
+}						{1 {0 30} warnDeprecated {8 10} {{expect without the -timestamp option}} 1 {25 3} numArgs {} {}}
+{expect \
+    -iread     [set] act1
+}						{1 {20 3} numArgs {} {}}
+{expect \
+    -iread     pat1 [set]
+}						{1 {25 3} numArgs {} {}}
+{expect \
+    -iwrite    [set] act1
+}						{1 {0 30} warnDeprecated {8 7} {{expect without the -iwrite option}} 1 {20 3} numArgs {} {}}
+{expect \
+    -iwrite    pat1 [set]
+}						{1 {0 30} warnDeprecated {8 7} {{expect without the -iwrite option}} 1 {25 3} numArgs {} {}}
+{expect \
+    -indices  [set] act1
+}						{1 {19 3} numArgs {} {}}
+{expect \
+    -indices  pat1 [set]
+}						{1 {24 3} numArgs {} {}}
+{expect \
+    -notransfer [set] act1
+}						{1 {21 3} numArgs {} {}}
+{expect \
+    -notransfer pat1 [set]
+}						{1 {26 3} numArgs {} {}}
+{expect \
+    -nocase [set] act1
+}						{1 {17 3} numArgs {} {}}
+{expect \
+    -nocase pat1 [set]
+}						{1 {22 3} numArgs {} {}}
+{expect \
+    -nobrace [set] act1
+}						{1 {18 3} numArgs {} {}}
+{expect \
+    -nobrace pat1 [set]
+}						{1 {23 3} numArgs {} {}}
+{expect \
+    -e     pat4 act4 \
+}						{1 {0 26} expect::warnAmbiguous {8 2} -gl}
+{expect \
+    -g     pat5 act5 \
+}						{1 {0 26} expect::warnAmbiguous {8 2} -gl}
+{expect \
+    -r     pat6 act6 \
+}						{1 {0 26} expect::warnAmbiguous {8 2} -gl}
+{expect \
+    -      pat7 act7
+}						{1 {0 25} expect::warnAmbiguous {8 1} -gl}
+{expect \
+    -t set pat5 act5 \
+           pat6 act6 
+}						{1 {0 37} expect::warnAmbiguous {8 2} -gl 1 {11 3} numArgs {} {}}
+{expect \
+    -nobrac pat1 act1
+}						{1 {0 26} expect::warnAmbiguous {8 7} -gl}
+{expect \
+    -i 
+}						{1 {0 12} noSwitchArg {8 2} -i}
+{expect \
+    -i [set] pat1 act1
+}						{1 {12 3} numArgs {} {}}
+{expect \
+    -timeout a pat1 act1
+}						{1 {0 29} badInt {17 1} {}}
+{expect \
+    -t set pat1 act1
+}						{1 {0 25} expect::warnAmbiguous {8 2} -gl 1 {11 3} numArgs {} {}}
+{expect \
+    -timeout
+}						{1 {0 17} noSwitchArg {8 8} -timeout}
+{expect \
+    pat1 [set] \
+}						{1 {14 3} numArgs {} {}}
+{expect \
+    pat2 {set} \
+}						{1 {14 3} numArgs {} {}}
+{expect \
+    pat2 set \
+}						{1 {13 3} numArgs {} {}}
+{expect \
+    pat2 "set" \
+}						{1 {14 3} numArgs {} {}}
+{expect \
+    -brace "pat1 set"
+}						{1 {21 3} numArgs {} {}}
+{expect \
+    -timestamp -iread -iwrite -indices \
+    -notransfer -nocase -nobrace        \
+    -i
+}						{1 {0 84} warnDeprecated {8 10} {{expect without the -timestamp option}} 1 {0 84} warnDeprecated {26 7} {{expect without the -iwrite option}} 1 {0 84} noSwitchArg {81 2} -i}
+{expect \
+    -timestamp -iread -iwrite -indices \
+    -notransfer -nocase -nobrace        \
+    -i foo -timeout
+}						{1 {0 97} warnDeprecated {8 10} {{expect without the -timestamp option}} 1 {0 97} warnDeprecated {26 7} {{expect without the -iwrite option}} 1 {0 97} noSwitchArg {88 8} -timeout}
+{expect \
+    -timestamp -iread -iwrite -indices \
+    -notransfer -nocase -nobrace        \
+    -i foo -timeout 1 [set] act3
+}						{1 {0 110} warnDeprecated {8 10} {{expect without the -timestamp option}} 1 {0 110} warnDeprecated {26 7} {{expect without the -iwrite option}} 1 {100 3} numArgs {} {}}
+{expect \
+    -timestamp -iread -iwrite -indices \
+    -notransfer -nocase -nobrace        \
+    -i foo -timeout 1 pat3 [set]
+}						{1 {0 110} warnDeprecated {8 10} {{expect without the -timestamp option}} 1 {0 110} warnDeprecated {26 7} {{expect without the -iwrite option}} 1 {105 3} numArgs {} {}}
+{expect {
+    eof     act1
+    null    act2
+    default act3
+    timeout act4
+    full_buffer act5
+}}						{ok}
+{expect {
+    -exact  pat1 act1
+    -glob   pat2 act2
+    -regexp pat3 act3
+    -ex     pat4 act4
+    -gl     pat5 act5
+    -re     pat6 act6
+    --      pat7 act7
+}}						{1 {0 164} warnDeprecated {145 2} -gl}
+{expect {
+    -timestamp pat1 act1
+    -iread     pat2 act2
+    -iwrite    pat3 act3
+    -indices  pat4 act4
+    -ti        pat5 act5
+    -ir        pat6 act6
+    -iw        pat7 act7
+    -in        pat8 act8
+}}						{1 {0 209} warnDeprecated {13 10} {{expect without the -timestamp option}} 1 {0 209} warnDeprecated {63 7} {{expect without the -iwrite option}} 1 {0 209} warnDeprecated {112 3} {{expect without the -ti option}} 1 {0 209} warnDeprecated {162 3} {{expect without the -iw option}}}
+{expect {
+    -notransfer pat1 act1
+    -no         pat2 act2
+    -n          pat2 act2
+}}						{ok}
+{expect {
+    -nocase pat1 act1
+    -noc    pat2 act2
+}}						{ok}
+{expect {
+    -nobrace pat1 act1
+}}						{ok}
+{expect {
+    -i foo pat1 act1
+}}						{ok}
+{expect {
+    -timeout 1 pat1 act1
+    -timeo   1 pat1 act1
+}}						{ok}
+{expect {
+    -timestamp -iread -iwrite -indices
+    -notransfer -nocase -nobrace       
+    -i foo -timeout 1 pat3 act3
+}}						{1 {0 121} warnDeprecated {13 10} {{expect without the -timestamp option}} 1 {0 121} warnDeprecated {31 7} {{expect without the -iwrite option}}}
+{expect {
+    eof     [set]
+}}						{2 {22 3} numArgs {} {}}
+{expect {
+    null    [set]
+}}						{2 {22 3} numArgs {} {}}
+{expect {
+    default [set]
+}}						{2 {22 3} numArgs {} {}}
+{expect {
+    timeout [set]
+}}						{2 {22 3} numArgs {} {}}
+{expect {
+    full_buffer [set]
+}}						{2 {26 3} numArgs {} {}}
+{expect {
+    -exact  [set] act1
+}}						{2 {22 3} numArgs {} {}}
+{expect {
+    -exact  pat1 [set]
+}}						{2 {27 3} numArgs {} {}}
+{expect {
+    -glob   [set] act1
+}}						{2 {22 3} numArgs {} {}}
+{expect {
+    -glob   pat1 [set]
+}}						{2 {27 3} numArgs {} {}}
+{expect {
+    -regexp [set] act1
+}}						{2 {22 3} numArgs {} {}}
+{expect {
+    -regexp pat1 [set]
+}}						{2 {27 3} numArgs {} {}}
+{expect {
+    -timestamp [set] act1
+}}						{1 {0 36} warnDeprecated {13 10} {{expect without the -timestamp option}} 2 {25 3} numArgs {} {}}
+{expect {
+    -timestamp pat1 [set]
+}}						{1 {0 36} warnDeprecated {13 10} {{expect without the -timestamp option}} 2 {30 3} numArgs {} {}}
+{expect {
+    -iread     [set] act1
+}}						{2 {25 3} numArgs {} {}}
+{expect {
+    -iread     pat1 [set]
+}}						{2 {30 3} numArgs {} {}}
+{expect {
+    -iwrite    [set] act1
+}}						{1 {0 36} warnDeprecated {13 7} {{expect without the -iwrite option}} 2 {25 3} numArgs {} {}}
+{expect {
+    -iwrite    pat1 [set]
+}}						{1 {0 36} warnDeprecated {13 7} {{expect without the -iwrite option}} 2 {30 3} numArgs {} {}}
+{expect {
+    -indices  [set] act1
+}}						{2 {24 3} numArgs {} {}}
+{expect {
+    -indices  pat1 [set]
+}}						{2 {29 3} numArgs {} {}}
+{expect {
+    -notransfer [set] act1
+}}						{2 {26 3} numArgs {} {}}
+{expect {
+    -notransfer pat1 [set]
+}}						{2 {31 3} numArgs {} {}}
+{expect {
+    -nocase [set] act1
+}}						{2 {22 3} numArgs {} {}}
+{expect {
+    -nocase pat1 [set]
+}}						{2 {27 3} numArgs {} {}}
+{expect {
+    -nobrace [set] act1
+}}						{2 {23 3} numArgs {} {}}
+{expect {
+    -nobrace pat1 [set]
+}}						{2 {28 3} numArgs {} {}}
+{expect {
+    -e     pat4 act4
+}}						{1 {0 31} expect::warnAmbiguous {13 2} -gl}
+{expect {
+    -g     pat5 act5
+}}						{1 {0 31} expect::warnAmbiguous {13 2} -gl}
+{expect {
+    -r     pat6 act6
+}}						{1 {0 31} expect::warnAmbiguous {13 2} -gl}
+{expect {
+    -      pat7 act7
+}}						{1 {0 31} expect::warnAmbiguous {13 1} -gl}
+{expect {
+    -t        set  act5
+}}						{1 {0 34} expect::warnAmbiguous {13 2} -gl 2 {23 3} numArgs {} {}}
+{expect {
+    -nobrac pat1 act1
+}}						{1 {0 32} expect::warnAmbiguous {13 7} -gl}
+{expect {
+    -i 
+}}						{1 {0 18} noSwitchArg {13 2} -i}
+{expect {
+    -i [set] pat1 act1
+}}						{2 {17 3} numArgs {} {}}
+{expect {
+    -timeout a pat1 act1
+}}						{1 {0 35} badInt {22 1} {}}
+{expect {
+    -t set pat1 act1
+}}						{1 {0 31} expect::warnAmbiguous {13 2} -gl 2 {16 3} numArgs {} {}}
+{expect {
+    -timeout
+}}						{1 {0 23} noSwitchArg {13 8} -timeout}
+{expect {
+    pat1 [set]
+}}						{2 {19 3} numArgs {} {}}
+{expect {
+    pat2 {set}
+}}						{2 {19 3} numArgs {} {}}
+{expect {
+    pat2 set
+}}						{2 {18 3} numArgs {} {}}
+{expect {
+    pat2 "set"
+}}						{2 {19 3} numArgs {} {}}
+{expect {
+    -timestamp -iread -iwrite -indices
+    -notransfer -nocase -nobrace       
+    -i
+}}						{1 {0 96} warnDeprecated {13 10} {{expect without the -timestamp option}} 1 {0 96} warnDeprecated {31 7} {{expect without the -iwrite option}} 1 {0 96} noSwitchArg {92 2} -i}
+{expect {
+    -timestamp -iread -iwrite -indices
+    -notransfer -nocase -nobrace       
+    -i foo -timeout
+}}						{1 {0 109} warnDeprecated {13 10} {{expect without the -timestamp option}} 1 {0 109} warnDeprecated {31 7} {{expect without the -iwrite option}} 1 {0 109} noSwitchArg {99 8} -timeout}
+{expect {
+    -iread -indices
+    -notransfer -nocase -nobrace       
+    -i foo -timeout 1 [set] act3
+}}						{4 {92 3} numArgs {} {}}
+{expect {
+    -iread -indices
+    -notransfer -nocase -nobrace       
+    -i foo -timeout 1 pat3 [set]
+}}						{4 {97 3} numArgs {} {}}
+
+{expect_after}					{ok}
+{expect_after -info}				{ok}
+{expect_after -info -i foo}			{ok}
+{expect_after -info -i foo -i foo}		{ok}
+{expect_after -info -all -nodirect -i foo}	{ok}
+{expect_after {
+    -timestamp -iread -iwrite -indices
+    -notransfer -nocase -nobrace       
+    -i foo -timeout 1 pat3 act3
+}}						{1 {0 127} warnDeprecated {19 10} {{expect without the -timestamp option}} 1 {0 127} warnDeprecated {37 7} {{expect without the -iwrite option}}}
+{expect_after \
+    -timestamp -iread -iwrite -indices \
+    -notransfer -nocase -nobrace        \
+    -i foo -timeout 1 pat3 act3  
+}						{1 {0 117} warnDeprecated {14 10} {{expect without the -timestamp option}} 1 {0 117} warnDeprecated {32 7} {{expect without the -iwrite option}}}
+{expect_after -inf}				{1 {0 17} expect::warnAmbiguous {13 4} -gl}
+{expect_after -info -foo}			{1 {0 23} badSwitch {19 4} -foo}
+{expect_after -info -i [set]}			{1 {23 3} numArgs {} {}}
+{expect_after -info -all -nodirect -i [set]}	{1 {38 3} numArgs {} {}}
+{expect_after -info -i}				{1 {0 21} noSwitchArg {19 2} -i}
+{expect_after -info -i foo -i}			{1 {0 28} noSwitchArg {26 2} -i}
+{expect_after {
+    -timestamp -iread -iwrite -indices
+    -notransfer -nocase -nobrace       
+    -i foo -timeout 1 pat3 [set]
+}}						{1 {0 128} warnDeprecated {19 10} {{expect without the -timestamp option}} 1 {0 128} warnDeprecated {37 7} {{expect without the -iwrite option}} 4 {122 3} numArgs {} {}}
+{expect_after \
+    -timestamp -iread -iwrite -indices \
+    -notransfer -nocase -nobrace        \
+    -i foo -timeout 1 pat3 [set]
+}						{1 {0 116} warnDeprecated {14 10} {{expect without the -timestamp option}} 1 {0 116} warnDeprecated {32 7} {{expect without the -iwrite option}} 1 {111 3} numArgs {} {}}
+{expect_after a {testScanCmd}}			{1 {16 11} procNumArgs {} testScanCmd}
+
+{expect_background}				{ok}
+{expect_background -info -all -nodirect -i foo}	{ok}
+{expect_background -info -all -i [set]}		{1 {33 3} numArgs {} {}}
+
+{expect_before}					{ok}
+{expect_before -info -all -nodirect -i foo}	{ok}
+{expect_before -info -all -nodirect -i [set]}	{1 {39 3} numArgs {} {}}
+
+{expect_tty}					{ok}
+{expect_tty {
+    -timestamp -iread -iwrite -indices
+    -notransfer -nocase -nobrace       
+    -i foo -timeout 1 pat3 act3
+}}						{1 {0 125} warnDeprecated {17 10} {{expect without the -timestamp option}} 1 {0 125} warnDeprecated {35 7} {{expect without the -iwrite option}}}
+{expect_tty \
+    -timestamp -iread -iwrite -indices \
+    -notransfer -nocase -nobrace        \
+    -i foo -timeout 1 pat3 act3  
+}						{1 {0 115} warnDeprecated {12 10} {{expect without the -timestamp option}} 1 {0 115} warnDeprecated {30 7} {{expect without the -iwrite option}}}
+{expect_tty {
+    -timestamp -iread -iwrite -indices
+    -notransfer -nocase -nobrace       
+    -i foo -timeout 1 pat3 [set]
+}}						{1 {0 126} warnDeprecated {17 10} {{expect without the -timestamp option}} 1 {0 126} warnDeprecated {35 7} {{expect without the -iwrite option}} 4 {120 3} numArgs {} {}}
+{expect_tty \
+    -timestamp -iread -iwrite -indices \
+    -notransfer -nocase -nobrace        \
+    -i foo -timeout 1 pat3 [set]
+}						{1 {0 114} warnDeprecated {12 10} {{expect without the -timestamp option}} 1 {0 114} warnDeprecated {30 7} {{expect without the -iwrite option}} 1 {109 3} numArgs {} {}}
+
+{expect_user}					{ok}
+{expect_user {
+    -timestamp -iread -iwrite -indices
+    -notransfer -nocase -nobrace       
+    -i foo -timeout 1 pat3 act3
+}}						{1 {0 126} warnDeprecated {18 10} {{expect without the -timestamp option}} 1 {0 126} warnDeprecated {36 7} {{expect without the -iwrite option}}}
+{expect_user \
+    -timestamp -iread -iwrite -indices \
+    -notransfer -nocase -nobrace        \
+    -i foo -timeout 1 pat3 act3  
+}						{1 {0 116} warnDeprecated {13 10} {{expect without the -timestamp option}} 1 {0 116} warnDeprecated {31 7} {{expect without the -iwrite option}}}
+{expect_user {
+    -timestamp -iread -iwrite -indices
+    -notransfer -nocase -nobrace       
+    -i foo -timeout 1 pat3 [set]
+}}						{1 {0 127} warnDeprecated {18 10} {{expect without the -timestamp option}} 1 {0 127} warnDeprecated {36 7} {{expect without the -iwrite option}} 4 {121 3} numArgs {} {}}
+{expect_user \
+    -timestamp -iread -iwrite -indices \
+    -notransfer -nocase -nobrace        \
+    -i foo -timeout 1 pat3 [set]
+}						{1 {0 115} warnDeprecated {13 10} {{expect without the -timestamp option}} 1 {0 115} warnDeprecated {31 7} {{expect without the -iwrite option}} 1 {110 3} numArgs {} {}}
+}
+
+set checkExpect5.29 {
+}
+
+set checkExpect5.30 {
+{exp_interpreter -eof $a a}			{1 {0 25} numArgs {} {}}
+{exp_interact -eof pat1 act1}			{1 {0 27} warnDeprecated {13 4} eof}
+{exp_interact -timeout 1 pat1 act1}		{1 {0 33} warnDeprecated {13 8} timeout}
+{exp_interact -timestamp 1 pat1 act1}		{1 {0 35} warnDeprecated {13 10} clock}
+{expect -timestamp pat1 act1}			{1 {0 27} warnDeprecated {7 10} {{expect without the -timestamp option}}}
+{expect -iwrite pat1 act1}			{1 {0 24} warnDeprecated {7 7} {{expect without the -iwrite option}}}
+}
+
+set checkExpect5.31 {
+
+{exp_interpreter}				{ok}
+{exp_interpreter a}				{1 {0 17} numArgs {} {}}
+{exp_interpreter a a}				{1 {0 19} numArgs {} {}}
+{exp_interpreter -eof $a}			{ok}
+{exp_interpreter -eof {set}}			{1 {22 3} numArgs {} {}}
+{exp_interpreter -eof $a $b}			{1 {0 26} numArgs {} {}}
+
+{exp_interact -eof act1}			{1 {0 22} obsoleteCmd {13 4} eof}
+{exp_interact -timeout act1 pat2 act2}		{1 {0 36} obsoleteCmd {13 8} timeout 1 {0 36} badInt {22 4} {}}
+{exp_interact -timestamp act1 pat2 act2}	{1 {0 38} obsoleteCmd {13 10} clock}
+{expect -timestamp act1}			{1 {0 22} expect::warnAmbiguous {7 10} -gl}
+{expect -iwrite act1}				{1 {0 19} expect::warnAmbiguous {7 7} -gl}
+}

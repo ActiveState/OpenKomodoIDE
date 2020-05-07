@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://git/locale/git-prefs.dtd" >
+
+<overlay id="git_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <treechildren id="sourceCodeControlItemChildren">
+        <treeitem id="prefs_git_treeitem">
+            <treerow id="prefs_git_treecrow">
+                <treecell id="prefs_git_treecell"
+                          class="treecell-indent"
+                          url="chrome://git/content/pref-scc-git.xul"
+                          label="&Git.label;"
+                          helptag="scc.html"/>
+            </treerow>
+        </treeitem>
+    </treechildren>
+</overlay>

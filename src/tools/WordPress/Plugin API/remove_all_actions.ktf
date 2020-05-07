@@ -1,0 +1,11 @@
+// komodo tool: remove_all_actions
+// ===============================
+// auto_abbreviation: true
+// indent_relative: false
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// ===============================
+remove_all_actions( [[%tabstop:$tag]], [[%tabstop:$priority]] )!@#_currentPos!@#_anchor

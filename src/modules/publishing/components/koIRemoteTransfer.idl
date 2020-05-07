@@ -1,0 +1,42 @@
+/* Copyright (c) 2010 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "koIAsyncOperations.idl"
+
+[scriptable, uuid(784a455c-d10d-442d-9f9b-ba690ce19ef8)]
+interface koIRemoteTransferCallback: koIAsyncCallbackWithProgress {
+    void notifyFileTransferStarting(in AString local_uri, in AString remote_uri);
+    void notifyFileTransferCompleted(in AString local_uri, in AString remote_uri);
+    void notifyFileTransferFailed(in AString local_uri, in AString remote_uri,
+                                  in AString message);
+};
+
+[scriptable, uuid(5286cc71-b0b4-46ab-ba90-0358da1cbac0)]
+interface koIRemoteTransferOperation: koIAsyncOperation {
+    void rename_locally(in AString from_uri, in AString to_uri);
+    void remove_locally(in AString local_uri, in AString remote_uri);
+    void remove_remotely(in AString local_uri, in AString remote_uri);
+};
+
+[scriptable, uuid(a750d6b4-34f0-42b3-b364-3447611682f4)]
+interface koIRemoteTransferService : nsISupports {
+        /**
+         * Download the given remote paths into the local directory.
+         */
+    koIRemoteTransferOperation download(in unsigned long count_remote,
+                               [array, size_is(count_remote)] in wstring remote_paths,
+                               in unsigned long count_local,
+                               [array, size_is(count_local)] in wstring local_paths,
+                               in koIRemoteTransferCallback callback);
+
+        /**
+         * Upload the given remote paths into the local directory.
+         */
+    koIRemoteTransferOperation upload(in unsigned long count_local,
+                             [array, size_is(count_local)] in wstring local_paths,
+                             in unsigned long count_remote,
+                             [array, size_is(count_remote)] in wstring remote_paths,
+                             in koIRemoteTransferCallback callback);
+};
+

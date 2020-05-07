@@ -1,0 +1,59 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2007 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+Import(
+    'cons',
+    'build',
+    'mozChromeDir',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'komodoPythonUtilsDir',
+    'unsiloedPythonExe',
+    'jarring',
+    'mozBin',
+    'supportDir',
+    'buildFlavour',
+    'platform',
+    'productType',
+    'mozVersion',
+    'komodoShortVersion',
+);
+
+# The Plan:
+# - installer builds:
+#   Nothing. While there *is* code here for installer (aka "full") builds
+#   the Conscript is excluded in Construct for full builds.
+# - dev builds:
+#   Install the remotesvn extension by default.
+#   Note: this part is spread out over "src/modules/remotesvn/...Conscript".
+
+if ($buildFlavour ne "full") {
+  $cons->InstallAs("$mozBin/extensions/remotesvn\@ActiveState.com/install.rdf", 'install.rdf');
+  $cons->InstallAs("$mozBin/extensions/remotesvn\@ActiveState.com/chrome.manifest", 'devbuild.manifest');
+} else {
+  $cons->Depends("remotesvn.xpi", "$buildAbsDir/modules/remotesvn/components/koIRemoteSvn.xpt");
+  $cons->Command(
+      ["remotesvn.xpi", "remotesvn.jar"],
+      # needed for 1.8 extensions
+      "install.rdf",
+      "chrome.manifest",
+      # extension files
+      "content/remotesvn_options.js",
+      "content/remotesvn_options.xul",
+      "components/koRemoteSvn.py",
+      qq(
+          $unsiloedPythonExe bin/run-in-dir.py %1:d zip -X -Dr remotesvn.jar content
+          $unsiloedPythonExe bin/run-in-dir.py %1:d zip -X -Dr remotesvn.jar
+          $unsiloedPythonExe bin/run-in-dir.py %1:d zip -X remotesvn.xpi remotesvn.jar install.rdf chrome.manifest components
+      )
+  );
+  
+  # It's not available yet, so don't install by default.
+  $cons->InstallAs("$mozBin/extensions/remotesvn\@ActiveState.com/remotesvn.jar", 'remotesvn.jar');
+  $cons->InstallAs("$mozBin/extensions/remotesvn\@ActiveState.com/install.rdf", 'install.rdf');
+  $cons->InstallAs("$mozBin/extensions/remotesvn\@ActiveState.com/chrome.manifest", 'chrome.manifest');
+  $cons->Install("$supportDir/modules", 'remotesvn.xpi');
+}

@@ -1,0 +1,6 @@
+<!ENTITY HTTPInspector.label "HTTP Inspector">
+<!ENTITY HTTPInspectorOptions.label "HTTP Inspector Options">
+<!ENTITY HTTPInspectorProxyForwarding.label "HTTP Inspector - Proxy forwarding">
+<!ENTITY enableProxyForwarding.label "Enable proxy forwarding">
+<!ENTITY onlyAcceptConnectionsFromTheLocalMachine.label "Only accept connections from the local machine">
+<!ENTITY runHTTPInspectorInTheBackgroundWhenKomodoStartsUp.label "Run HTTP Inspector in the background when Komodo starts up.">

@@ -1,0 +1,53 @@
+<div class="search-wrapper">
+    <input type="search" id="package-search" placeholder="Search Keywords"/>
+    <ul id="package-search-results" class="results"></ul>
+</div>
+
+<hr>
+
+<ul class="categories">
+    <li>
+        <h3>
+            <a href="/packages">All Packages</a>
+        </h3>
+    </li>
+    <li>
+        <h3>
+            <a href="/packages/popular">Most Popular</a>
+        </h3>
+    </li>
+    <li>
+        <h3>
+            <a href="/packages/downloads">Most Downloaded</a>
+        </h3>
+    </li>
+</ul>
+
+<hr>
+
+<ul class="categories">
+    <% data.resources.categories.each() do |category| %>
+        <% next if category.resources == 0 or category.resource == "skins.yml" %>
+        <li>
+            <h3>
+                <a href="<%= site_url %>/packages/<%= File.basename(category.resource, ".yml") %>"><%= category.name %></a>
+            </h3>
+        </li>
+    <% end %>
+</ul>
+
+<hr>
+
+<h2>How To ..</h2>
+
+<ul class="disc">
+    <li>
+        <a href="<%= site_url %>/packages/install-instructions">Install Packages</a>
+    </li>
+    <li>
+        <a href="<%= site_url %>/packages/submit-instructions#pane-packages">Submit a Package</a>
+    </li>
+    <li>
+        <a href="<%= site_url %>/customize">Customize Komodo</a>
+    </li>
+</ul>

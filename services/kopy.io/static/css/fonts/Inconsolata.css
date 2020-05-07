@@ -1,0 +1,6 @@
+@import url(http://fonts.googleapis.com/css?family=Inconsolata);
+
+.CodeMirror
+{
+    font-family: "Inconsolata", Menlo, Monaco, "Courier New", Courier, Monospace;
+}

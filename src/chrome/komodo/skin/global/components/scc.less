@@ -1,0 +1,56 @@
+scc_checkout[type="svn"] {
+    -moz-binding: url('chrome://komodo/content/scc/bindings/svn_checkout.xml#svn_checkout');
+}
+
+/* scc checkout bindings */
+scc_checkout[type="cvs"] {
+    -moz-binding: url('chrome://komodo/content/scc/bindings/cvs_checkout.xml#cvs_checkout');
+}
+
+:-moz-any(richlistitem, listitem, tab, toolbarbutton, menuitem)[file_scc_status="scc_ok"],
+treechildren::-moz-tree-cell-text(sccOk)
+{
+    color: @scc-ok;
+}
+
+:-moz-any(richlistitem, listitem, tab, toolbarbutton, menuitem)[file_scc_status_extra="scc_needSync"],
+treechildren::-moz-tree-cell-text(sccSync) {
+    color: @scc-sync;
+}
+
+:-moz-any(richlistitem, listitem, tab, toolbarbutton, menuitem)[file_scc_status_extra="scc_conflict"],
+:-moz-any(richlistitem, listitem, tab, toolbarbutton, menuitem)[file_scc_status="scc_conflict"],
+treechildren::-moz-tree-cell-text(sccConflict) {
+    color: @scc-conflict;
+}
+
+:-moz-any(richlistitem, listitem, tab, toolbarbutton, menuitem)[file_scc_status="scc_add"],
+:-moz-any(richlistitem, listitem, tab, toolbarbutton, menuitem)[file_scc_status="scc_added"],
+treechildren::-moz-tree-cell-text(sccAdd) {
+    color: @scc-new;
+}
+
+:-moz-any(richlistitem, listitem, tab, toolbarbutton, menuitem)[file_scc_status="scc_delete"],
+:-moz-any(richlistitem, listitem, tab, toolbarbutton, menuitem)[file_scc_status="scc_deleted"],
+:-moz-any(richlistitem, listitem, tab, toolbarbutton, menuitem)[file_scc_status="scc_removed"],
+treechildren::-moz-tree-cell-text(sccDelete) {
+    color: @scc-deleted;
+}
+
+:-moz-any(richlistitem, listitem, tab, toolbarbutton, menuitem)[file_scc_status="scc_edit"],
+treechildren::-moz-tree-cell-text(sccEdit) {
+    color: @scc-modified;
+}
+
+.tab-icon.file-status-icon,
+.tab-icon.file-scc-status-extra-icon {
+    visibility: collapse;
+}
+
+.scc-menu
+{
+    menuitem[disabled="true"]
+    {
+        visibility: collapse;
+    }
+}

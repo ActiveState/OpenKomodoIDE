@@ -1,0 +1,91 @@
+- task attributes in db
+- tests !
+- some 'tsk help ...' way to learn how to specify query conds
+- bugzilla: help for sanity checking on what is common for query and
+  task data between repo types
+
+- actions on a task:
+    - comment/reply
+    - attach file
+    - change a field state (property)
+    - download an attachment
+    - create
+    - browse/list/dump info
+    - set as current (could also use 'focus' verb here, a la mylyn)
+- "a task is a dir" commands:
+    tsk cd 1#4      set as current
+    tsk less|cat
+    tsk attach foo.txt
+    tsk attach NAME
+    tsk comment
+    tsk reply  # related to comment
+    #TODO: change a bug field state
+    #TODO: a bunch of changes at one time (e.g. for email notifications)
+    
+
+
+
+- local dev bugzilla (again) for playing
+    - doc how to set it up
+    - persistent one for test suites
+
+- basic trac test suite
+- tasks.py cmdln
+    Overview:
+        tsk update|up [RIDs...] [QIDs...] [TIDs...]
+            # update queries and tasks and repos
+            # - define a TID, perhaps: <repo-nick-or-id>#<task-id>
+            # - repo update: gets all "recent changes", presuming the repo
+            #   connector supports that
+            # - query update: updates the set of tasks in that query
+            # - task update: just updates all the info for that task
+            # - common usages (in the UI):
+            #   - if updating for a particular query, then want updates to
+            #     any existing tasks and info for new tasks. Best way to
+            #     get the former is to get "recent changes" for the whole
+            #     repo. Hence really want a regular repo update:
+            #       - all recent changes to tasks already in our db
+            #       - re-run each query to update the set of tasks for each
+            #       - fetch any new tasks
+            #   - the only point in updating a single query is to avoid
+            #     overhead for other huge ones. To allow the best case we'd
+            #     need to:
+            #       - re-run that query to get the set of "working tasks"
+            #       - go through recent changes and: (a) update task if
+            #         in "working tasks" and (b) *stage* updates to other
+            #         tasks
+            #     KISS. Not worth it for now. What is a worst case?
+            #       Only care about one query in repo. A number of other q's
+            #       get *lots* of updates.
+            # - hence the typical case in Komodo will be repo-updates
+            #   For 'tsk' the secondary q and task updates will just do
+            #   the minimal naive thing. The simple task update may be
+            #   useful in the Komodo UI: "just show me the latest for this
+            #   task, dammit".
+        tsk search ...
+        tsk daemon|monitor|d
+            # Starts process that monitors task changes, i.e. to simulate the
+            # updating done in Komodo.
+        tsk compact
+            # Or something like this to save space in the db. Drop tasks
+            # that aren't tied to any query.
+
+    #Dev Notes:
+    #- add canned queries?  do_addcannedquery
+    #  These need to be defined by the repositories.
+    #  E.g.:
+    #    - all mine [for $milestone]
+    #    - all $coworker's [for $milestone]
+    #    - all tasks to which you are cc'd [for $milestone]
+    #    - all tasks requesting a review [for $milestone]
+    #
+    #    See:
+    #    - http://wiki.eclipse.org/index.php/Mylyn_User_Guide#Query_setup
+    
+
+
+- planning
+
+
+# test suite
+

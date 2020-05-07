@@ -1,0 +1,286 @@
+<?xml version="1.0"?>
+<!DOCTYPE bindings SYSTEM "http://www.mozilla.org/xbl" [
+  <!ENTITY % invocationsDTD SYSTEM "chrome://komodo/locale/invocations.dtd">
+  %invocationsDTD;
+  <!ENTITY % invocationsDTD.TCL SYSTEM "chrome://komodo/locale/invocations-tcl.dtd">
+  %invocationsDTD.TCL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="base">
+        <content orient="vertical">
+            <children/>
+        </content>
+    </binding>
+
+    <binding id="perl" extends="chrome://komodo/content/pref/invocations/debugging-languages.xml#base">
+        <content orient="vertical">
+        </content>
+    </binding>
+
+    <binding id="perl-params" extends="chrome://komodo/content/pref/invocations/debugging-languages.xml#base">
+        <content orient="vertical">
+            <xul:button type="menu" id="shortcuts-menubutton"
+                    tooltiptext="&shortcuts.tooltiptext;"
+                    class="rightarrow-button">
+                <xul:menupopup>
+                    <xul:menuitem value="-I" label="Include Directory (-I&lt;DIR&gt;)"
+                                  oncommand="updateInterpreterArgumentsWithDir(this)"/>
+                    <xul:menuitem value="-w" label="&enableManyUsefulWarningsW.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="-W" label="&enableAllWarningsWNotRecommended.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="-T" label="&enableTaintCheckingT.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="-X" label="&disableAllWarningsX.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                </xul:menupopup>
+            </xul:button>
+        </content>
+    </binding>
+
+    <binding id="python" extends="chrome://komodo/content/pref/invocations/debugging-languages.xml#base">
+        <content orient="vertical">
+        </content>
+    </binding>
+
+    <binding id="python-params" extends="chrome://komodo/content/pref/invocations/debugging-languages.xml#base">
+        <content orient="vertical">
+            <xul:button type="menu" id="shortcuts-menubutton"
+                    tooltiptext="&shortcuts.tooltiptext;"
+                    class="rightarrow-button">
+                <xul:menupopup>
+                    <xul:menuitem value="-E" label="&ignoreEnvironmentVariablesSuchAsPYTHONPATHE.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="-i" label="&inspectInteractivelyAfterRunningScriptI.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="-O" label="&optimizeGeneratedBytecodeATadO.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="-S" label="&donTImplyImportSiteOnInitializationS.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="-u" label="&unbufferedBinaryStdoutAndStderrU.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                </xul:menupopup>
+            </xul:button>
+        </content>
+    </binding>
+
+    <binding id="php" extends="chrome://komodo/content/pref/invocations/debugging-languages.xml#base">
+        <content orient="vertical">
+            <xul:groupbox orient="vertical" flex="0">
+                <xul:caption label="&selectTheInterpreterToUseForDebugging.label;"/>
+                <xul:radiogroup id="interpreterType-group"
+                    pref="true" prefstring="phpInterpreterType"
+                    prefattribute="id"
+                    onselect="this.parentNode.parentNode.interpreterSelect(event);">
+                    <xul:radio id="php-cgi" group="interpreterType-group" label="&useTheCGIInterpreterPhpCgiOrPhp.label;"/>
+                    <xul:radio id="php-cli" group="interpreterType-group" label="&useTheCLIInterpreterPhpCliOrPhp.label;"/>
+                </xul:radiogroup>
+            </xul:groupbox>
+            <xul:checkbox id="disableOutputBuffering"
+                  label="&disableOutputBuffering.label;"
+                  pref="true" prefstring="disableOutputBuffering" />
+            <xul:checkbox id="enableImplicitFlush"
+                  label="&enableImplicitFlush.label;"
+                  pref="true" prefstring="enableImplicitFlush" />
+        </content>
+        <implementation>
+            <field name="_initialized">false</field>
+
+            <method name="getElement">
+                <parameter name="type"/>
+                <parameter name="id"/>
+                <body>
+                <![CDATA[
+                    //dump("looking for element "+type+" "+id+"\n");
+                    var v = document.getAnonymousNodes(this);
+                    var tree = null;
+                    for (var i = 0; i < v.length; i++) {
+                        try {
+                            var l = v[i].getElementsByTagNameNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", type);
+                            //dump("found "+l.length+" elements\n");
+                            for (var j = 0; j < l.length; j++) {
+                                if (l[j].getAttribute("id") == id) {
+                                    //dump("found element "+id+" at index "+j+"\n");
+                                    return l[j];
+                                }
+                            }
+                        } catch (e) {}
+                    }
+                    //dump("ERROR, could not find element!\n");
+                    return null;
+                ]]>
+                </body>
+            </method>
+
+            <method name="init">
+                <body>
+                <![CDATA[
+                try {
+                    if (!this._initialized) {
+                        this._initialized = true;
+                        var registryService = Components.classes['@activestate.com/koLanguageRegistryService;1'].
+                               getService(Components.interfaces.koILanguageRegistryService);
+                        var languageService = registryService.getLanguage('PHP');
+                        var phpAppInfoEx = languageService.getLanguageService(Components.interfaces.koIAppInfoEx);
+                        if (!phpAppInfoEx.cliExecutable) {
+                            this.getElement('radio','php-cli').disabled=true;
+                            this.getElement('radiogroup','interpreterType-group')
+                                    .selectedItem = this.getElement('radio','php-cgi');
+                        }
+                        if (!phpAppInfoEx.cgiExecutable) {
+                            var cgi = document.getElementById('debuggerRunAsCGI');
+                            if (cgi.getAttribute("checked")=="true") {
+                                cgi.setAttribute("checked", "false");
+                                toggleCGITabs();
+                            }
+                            this.getElement('radio','php-cgi').disabled=true;
+                            this.getElement('radiogroup','interpreterType-group')
+                                    .selectedItem = this.getElement('radio','php-cli');
+                        }
+                    }
+                } catch(e) {
+                    dump(e);
+                }
+                ]]>
+                </body>
+            </method>
+            <method name="interpreterSelect">
+                <parameter name="event"/>
+                <body>
+                <![CDATA[
+                this.init();
+                try {
+                    var rg = event.target;
+                    var type = rg.selectedItem.getAttribute("id");
+                    var registryService = Components.classes['@activestate.com/koLanguageRegistryService;1'].
+                           getService(Components.interfaces.koILanguageRegistryService);
+                    var languageService = registryService.getLanguage('PHP');
+                    var exeType = languageService.getLanguageService(Components.interfaces.koIAppInfoEx).sapi;
+                    var cgi = document.getElementById('debuggerRunAsCGI');
+                    if (type == "php-cli") {
+                        if (cgi.getAttribute("checked")=="true") {
+                            cgi.setAttribute("checked", "false");
+                            toggleCGITabs();
+                        }
+                        cgi.disabled = true;
+                    } else {
+                        if (cgi.getAttribute("checked")  == "false") {
+                            cgi.setAttribute("checked", "true");
+                            toggleCGITabs();
+                        }
+                        cgi.disabled = false;
+                    }
+                } catch(e) {
+                    dump(e);
+                }
+                ]]>
+                </body>
+            </method>
+        </implementation>
+    </binding>
+
+    <binding id="php-params" extends="chrome://komodo/content/pref/invocations/debugging-languages.xml#base">
+        <content orient="vertical">
+            <xul:button type="menu" id="shortcuts-menubutton"
+                    tooltiptext="&shortcuts.tooltiptext;"
+                    class="rightarrow-button">
+                <xul:menupopup>
+                    <xul:menuitem value="-c" label="&lookForPhpIniFileInThisDirectoryC.label;"
+                                  oncommand="updateInterpreterArgumentsWithDir(this)"/>
+                    <xul:menuitem value="-d" label="&defineINIEntryFooWithValueBarDFooBar.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="-q" label="&quietModeSuppressHTTPHeaderOutputQ.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                </xul:menupopup>
+            </xul:button>
+        </content>
+    </binding>
+
+    <binding id="ruby" extends="chrome://komodo/content/pref/invocations/debugging-languages.xml#base">
+        <content orient="vertical">
+        </content>
+    </binding>
+
+    <binding id="ruby-params" extends="chrome://komodo/content/pref/invocations/debugging-languages.xml#base">
+        <content orient="vertical">
+            <xul:button type="menu" id="shortcuts-menubutton"
+                    tooltiptext="&shortcuts.tooltiptext;"
+                    class="rightarrow-button">
+                <xul:menupopup>
+                    <xul:menuitem value="-I" label="Include Directory (-I&lt;DIR&gt;)"
+                                  oncommand="updateInterpreterArgumentsWithDir(this)"/>
+                    <xul:menuitem value="-w" label="&enableManyUsefulWarningsW.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="-W" label="&enableAllWarningsWNotRecommended.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="-T" label="&enableTaintCheckingT.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="-X" label="&disableAllWarningsX.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                </xul:menupopup>
+            </xul:button>
+        </content>
+    </binding>
+
+    <binding id="tcl" extends="chrome://komodo/content/pref/invocations/debugging-languages.xml#base">
+        <content orient="vertical">
+            <xul:groupbox orient="vertical" flex="0">
+                <xul:caption label="&selectTheInterpreterToUseForDebugging.label;"/>
+                <xul:radiogroup id="interpreterType-group"
+                    pref="true" prefstring="tclInterpreterType" prefattribute="id">
+                    <xul:radio id="tclsh" group="interpreterType-group" label="&useDefaultTclshInterpreterForConsoleApplications.label;"/>
+                    <xul:radio id="wish" group="interpreterType-group" label="&useDefaultWishInterpreterForGraphicalApplications.label;"/>
+                </xul:radiogroup>
+            </xul:groupbox>
+        </content>
+    </binding>
+
+    <binding id="tcl-params" extends="chrome://komodo/content/pref/invocations/debugging-languages.xml#base">
+        <content orient="vertical">
+        </content>
+    </binding>
+
+    <binding id="xslt" extends="chrome://komodo/content/pref/invocations/debugging-languages.xml#base">
+        <content orient="vertical">
+            <xul:label value="Select the input XML file" control="XMLinputfile" class="kopadded"/>
+            <xul:hbox align="center">
+                <xul:textbox id="XMLinputfile" wsm_persist="true"
+                    pref="true" prefstring="inputfile"
+                    flex="1" />
+                <xul:button label="&browse.label;" oncommand="doBrowseForXMLInputFile('XMLinputfile')" />
+            </xul:hbox>
+        </content>
+    </binding>
+
+    <binding id="xslt-params" extends="chrome://komodo/content/pref/invocations/debugging-languages.xml#base">
+        <content orient="vertical">
+            <xul:button type="menu" id="shortcuts-menubutton"
+                    tooltiptext="&shortcuts.tooltiptext;"
+                    class="rightarrow-button">
+                <xul:menupopup>
+                    <xul:menuitem value="--novalid" label="&skipTheDtdLoadingPhaseNovalid.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="--html" label="&theInputFileIsHTMLHtml.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="--param" label="&passAParameterValuePairParamNameValue.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="--nonet" label="&refuseToFetchDTDsOrEntitiesOverNetworkNonet.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="--catalogs" label="&useSGMLCatalogsFromSGMLCATALOGFILESEnvironmentVariableCatalogs.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                    <xul:menuitem value="--xinclude" label="&doXIncludeProcessingOnDocumentIntputXinclude.label;"
+                                  oncommand="updateInterpreterArguments(this)"/>
+                </xul:menupopup>
+            </xul:button>
+        </content>
+    </binding>
+
+</bindings>

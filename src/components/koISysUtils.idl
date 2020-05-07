@@ -1,0 +1,82 @@
+/* Copyright (c) 2000-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+
+// some useful system utilities
+[scriptable, uuid(6D9F47DE-ADC1-4a8e-8E7D-2F7B037239BF)]
+interface koISysUtils : nsISupports {
+    // Search for 'exeName' on the user's startup PATH.
+    // Returns the fullpath to the executable if found, the empty string
+    // otherwise.
+    wstring Which(in wstring exeName);
+    // Search for 'exeName' on the user's startup PATH.
+    // Returns a list of fullpaths if found, the empty string if not.
+    void WhichAll(in wstring exeName,
+        out unsigned long count,
+        [retval, array, size_is(count)] out wstring str);
+    // do a quick search if an executable with this name exists.
+    // designed to be fast, but *may* rarely return false when
+    // Which() would find something.
+    boolean FastCheckIfHaveExecutable(in wstring exeName);
+
+    // see similarly named functions in Python's os and os.path modules
+    boolean IsFile(in wstring filename);
+    boolean IsDir(in wstring dirname);
+    void Stat(in wstring filename,
+              out unsigned long st_mode,
+              out unsigned long st_ino,
+              out unsigned long st_dev,
+              out unsigned long st_nlink,
+              out unsigned long st_uid,
+              out unsigned long st_gid,
+              out unsigned long st_size,
+              out unsigned long st_atime,
+              out unsigned long st_mtime,
+              out unsigned long st_ctime);
+    // e.g. Access("myfile.txt", W_OK) to see if a file is read-only
+    boolean Access(in wstring filename, in unsigned long mode);
+    readonly attribute unsigned long F_OK;
+    readonly attribute unsigned long R_OK;
+    readonly attribute unsigned long W_OK;
+    readonly attribute unsigned long X_OK;
+
+    void Touch(in wstring filename);
+
+    // Used to flush the standard IO handles: "sys.stdout" and "sys.stderr". Used
+    // by the Komodo view error log to ensure the log file doesn't have pending
+    // write operations.
+    void FlushStdout();
+    void FlushStderr();
+    
+    // some os finder style utility functions
+    void MoveToTrash(in wstring filename);
+    void ShowFileInFileManager(in wstring filename);
+    void OpenFile(in wstring filename);
+    
+    wstring joinargv(in unsigned long count, [array, size_is(count)] in wstring args);
+
+    wstring diff_files(in wstring fname1, in wstring fname2);
+ 
+        /**
+         * Open the color picker dialog with the startingcolor.
+         * @param startingcolor - Color string, must use the format "#ABCDEF".
+         * @deprecated since Komodo 7.0b1 - QI to koIColorPickerAsync and use
+         *      pickColorAsync instead. See reasoning in koIColorPicker.idl.
+         */
+    [deprecated] AString pickColor(in AString startingcolor);
+        /**
+         * Open the color picker dialog with the startingcolor at position x,y.
+         * @param startingcolor - Color string, must use the format "#ABCDEF".
+         * @param screenX - the X screen position to open the dialog at.
+         * @param screenY - the Y screen position to open the dialog at.
+         * @deprecated since Komodo 7.0b1 - QI to koIColorPickerAsync and use
+         *      pickColorAsync instead. See reasoning in koIColorPicker.idl.
+         */
+    [deprecated] AString pickColorWithPositioning(in AString startingcolor,
+                                                  in long screenX,
+                                                  in long screenY);
+
+    long byteLength(in AString unicodestr);
+    long charIndexFromPosition(in AString unicodestr, in long bytePos);
+};

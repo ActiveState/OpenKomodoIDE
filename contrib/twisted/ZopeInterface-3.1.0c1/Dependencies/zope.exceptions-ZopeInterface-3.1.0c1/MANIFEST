@@ -1,0 +1,11 @@
+MANIFEST
+zope.exceptions/_notfounderror.py
+zope.exceptions/_duplicate.py
+zope.exceptions/DEPENDENCIES.cfg
+zope.exceptions/__init__.py
+zope.exceptions/interfaces.py
+zope.exceptions/exceptionformatter.py
+zope.exceptions/tests/__init__.py
+zope.exceptions/tests/test_exceptionformatter.py
+setup.py
+setup.cfg

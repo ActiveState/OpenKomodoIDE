@@ -1,0 +1,476 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl">
+
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xbl="http://www.mozilla.org/xbl"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <!--onclosetab is 4 parentnodes because the close button
+    is 2 nodes deep into tabs anonymous content-->
+<binding id="view-tabbed-list"
+    extends="chrome://komodo/content/bindings/views.xml#view-base">
+    <content>
+        <xul:tabbox type="draggable" class="native"
+            orient="vertical" flex="1" id='tabbed-view'
+            handleCtrlPageUpDown="false"
+            xbl:inherit="class,style,flex,orient">
+            <xul:tabs type="scrollable" xbl:inherit="orient"
+                onselect="document.getBindingParent(this).select(event);"
+                />
+            <xul:tabpanels flex="1"/>
+        </xul:tabbox>
+    </content>
+    <implementation name="viewtabbedlist" implements="nsIObserver, koIViewList">
+
+        <property name="tabbox" readonly="true"
+            onget="return document.getAnonymousNodes(this)[0];"/>
+
+        <property name="currentView"
+            onget="return this.tabbox.selectedTab?document.getElementById(this.tabbox.selectedTab.linkedPanel).firstChild:null;">
+            <setter>
+            <![CDATA[
+            if (val) {
+                try {
+                    if (this.tabbox.selectedTab != val.parentNode._tab) {
+                        this.tabbox.selectedTab = val.parentNode._tab;
+                    }
+                } catch(e) {
+                    this.tabbox.selectedTab = val.parentNode._tab;
+                }
+            }
+            ]]>
+            </setter>
+        </property>
+
+        <method name="setCurrentViewIndex">
+        <parameter name="index"/>  <!-- 0-based view index -->
+        <body>
+        <![CDATA[
+            try {
+                this.tabbox.selectedIndex = index;
+                ko.views.manager.currentView.setFocus();
+            } catch(e) {
+                this.log.debug(e);
+            }
+        ]]>
+        </body>
+        </method>
+        
+        <!--void makeNextViewCurrent();-->
+        <method name="makeNextViewCurrent">
+        <body>
+        <![CDATA[
+            try {
+                this.tabbox.tabs.advanceSelectedTab(1, true /* allow wrapping */);
+            } catch(e) {
+                this.log.debug(e);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <!--void makePreviousViewCurrent();-->
+        <method name="makePreviousViewCurrent">
+        <body>
+        <![CDATA[
+            try {
+                this.tabbox.tabs.advanceSelectedTab(-1, true /* allow wrapping */);
+            } catch(e) {
+                this.log.debug(e);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="createNewViewContainer">
+        <parameter name="index"/> <!-- optional index at which to insert view -->
+        <body>
+        <![CDATA[
+            if (typeof(index) == 'undefined' || index == null) index = -1;
+
+            this.setAttribute('collapsed','false');
+            var XUL_NS="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+            var tab = document.createElementNS(XUL_NS,'tab');
+            tab.setAttribute('type','file-tab');
+            tab.setAttribute('label','');
+            tab.setAttribute('onclick','this.parentNode.parentNode.parentNode.tabClicked(this,event);');
+            var _uuidGenerator = Components.classes["@mozilla.org/uuid-generator;1"].getService(Components.interfaces.nsIUUIDGenerator);
+            tab.setAttribute('id', _uuidGenerator.generateUUID()); // requires domutils.js
+            
+            var tabpanel = document.createElementNS(XUL_NS,'tabpanel');
+            tabpanel.setAttribute('flex','1');
+            tabpanel._tab = tab;
+            var uniqueId = _uuidGenerator.generateUUID();
+            tabpanel.id = uniqueId;
+            tab.linkedPanel = uniqueId;
+            
+            if (index >= 0 && index < this.tabbox.tabs.childNodes.length) {
+                this.tabbox.tabs.insertBefore(
+                    tab, this.tabbox.tabs.childNodes[index]);
+                this.tabbox.tabpanels.insertBefore(
+                    tabpanel, this.tabbox.tabpanels.childNodes[index]);
+            } else {
+                this.tabbox.tabs.appendChild(tab);
+                this.tabbox.tabpanels.appendChild(tabpanel);
+            }
+            this.tabbox.firstChild.removeAttribute('closedisabled');
+            this.tabbox.handleCtrlTab = "false";
+            return tabpanel;
+        ]]>
+        </body>
+        </method>
+
+        <method name="setContext">
+        <parameter name="view"/>
+        <parameter name="contextId"/>
+        <body>
+        <![CDATA[
+            view.parentNode._tab.setAttribute("context", contextId);
+        ]]>
+        </body>
+        </method>
+
+        <method name="tabClicked">
+        <parameter name="tab"/>
+        <parameter name="event"/>
+        <body>
+        <![CDATA[
+            // middle button closes
+            if (event.button == 1) {
+                event.preventDefault()
+                var panel = document.getElementById(tab.linkedPanel);
+                panel.firstChild.close()
+                return;
+            }
+            
+            // if the tab is already selected, and we're already focused,
+            // we don't want to reset the focus again, which would do a notify
+            // on current_view_changed
+            if (this.tabbox.tabs.selectedItem != tab) {
+                this.tabbox.tabs.selectedItem = tab;
+            } else if (this.tabbox.tabs.selectedItem == tab &&
+                     this.getAttribute('lastfocused')=='false') {
+                this.select(event);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="removeView">
+        <parameter name="view"/>
+        <body>
+        <![CDATA[
+            try {
+                var vi = this.getViewIndex(view); // just to make sure we have it
+                this.log.time("removeView-removeTab");
+                this.removeTab(view.parentNode._tab);
+                this.log.timeEnd("removeView-removeTab");
+                if (this.currentView) {
+                    this.log.time("removeView-makeCurrent");
+                    this.currentView.makeCurrent();
+                    this.log.timeEnd("removeView-makeCurrent");
+                }
+            } catch(e) {
+                this.log.exception(e);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="removeTab">
+        <parameter name="tab"/>
+        <body>
+        <![CDATA[
+        try {
+            var newTab = this.tabbox.tabs.selectedItem;
+            if (newTab) {
+                // Un-mark the currently selected tab as selected so that 1) we
+                // update the "beforeselected" attribute correctly, and 2)
+                // update the selectedPanel index after tab removal; see bug
+                // 92203.
+                newTab._selected = false;
+            }
+            
+            if (tab == newTab) {
+                if (tab.nextSibling) {
+                    newTab = tab.nextSibling;
+                } else {
+                    newTab = tab.previousSibling;
+                }
+            }
+
+            var tabpanel = this.tabbox.tabs.getRelatedElement(tab);
+            this.tabbox.tabs.removeChild(tab);
+            this.tabbox.tabpanels.removeChild(tabpanel);
+            if (newTab) {
+                this.tabbox.selectedTab = newTab;
+            }
+
+            if (this.tabbox.tabs.itemCount < 1) {
+                this.tabbox.tabs.setAttribute('closedisabled','true');
+                this.setAttribute('collapsed','true');
+                // this focus is required so that controllers continue
+                // to work correctly.  Before this, it is likely that embed
+                // has focus, and when we remove embed, moz is left in an
+                // undefined state regarding document.focusedElement which
+                // is used to get controllers.  (ie. this fixed mru)
+                this.focus();
+                this.currentView = null;
+                xtk.domutils.fireEvent(this, 'view_list_closed');
+            }
+        } catch (e) {
+            this.log.exception(e);
+        }
+        ]]>
+        </body>
+        </method>
+
+        <method name="close">
+        <body>
+        <![CDATA[
+            // XXX this is here to prevent any closure of this view sending
+            // a notification of 'view_closed'.  views.js decrements the number
+            // of views based on that, and close_all calls the close method on
+            // all views, regardless of type.
+            return true;
+        ]]>
+        </body>
+        </method>
+
+        <method name="updateLeafName">
+        <parameter name="view"/>
+        <body>
+        <![CDATA[
+            view.parentNode._tab.label = view.title;
+            if (view.koDoc) {
+                view.parentNode._tab.setAttribute('tooltiptext',view.koDoc.displayPath);
+                this.tabbox.firstChild.scrollBoxObject.ensureElementIsVisible(this.tabbox.firstChild.selectedItem);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="updateDirtyStatus">
+        <parameter name="view"/>
+        <body>
+        <![CDATA[
+            if (view.koDoc) {
+                view.parentNode._tab.setAttribute('clean',!view.koDoc.isDirty);
+                this.tabbox.firstChild.scrollBoxObject.ensureElementIsVisible(this.tabbox.firstChild.selectedItem);
+            }
+
+            // this needs to be present to properly update komodoFileSaveItems
+            // in several instances, such as closing a dirty file without
+            // saving it.
+            window.setTimeout(window.updateCommands, 1, 'dirty');
+        ]]>
+        </body>
+        </method>
+
+        <method name="updateFileStatus">
+        <parameter name="view"/>
+        <body>
+        <![CDATA[
+            let tab = view.parentNode._tab;
+            try {
+                ko.fileutils.setFileStatusAttributesFromView(tab, view);
+            } catch(ex) {
+                this.log.exception(ex, 'Unable to set file status attributes');
+            } finally {
+                let tabs = this.tabbox.firstChild;
+                tabs.scrollBoxObject.ensureElementIsVisible(tabs.selectedItem);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="select">
+        <parameter name="event"/>
+        <body>
+        <![CDATA[
+            this.log.debug('tab selection changed');
+            var panel = document.getElementById(this.tabbox.selectedTab.linkedPanel);
+            var view = panel.firstChild;
+            this.doSelectView(view);
+        ]]>
+        </body>
+        </method>
+
+        <method name="doSelectView">
+        <parameter name="view"/>
+        <body>
+        <![CDATA[
+            this.log.debug('view selection changed');
+            if (view.koDoc) {
+                xtk.domutils.fireEvent(view, 'current_view_changed');
+            }
+            if (!ko.views.manager.batchMode) {
+                // check for file changed status
+                view.reloadIfChanged();
+                // we need to update the dirty status for non-editor views,
+                // such as browsers, otherwise the save button
+                // may still be enabled
+                this.updateDirtyStatus(view);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="getOrdinalViews">
+        <parameter name="recursive"/>
+        <body><![CDATA[
+            var views = this.getViews(recursive);
+            // sort the views based on view.parentNode._tab.ordinal
+            var tabs = [];
+            for (var i=0; i < this.tabbox.tabs.childNodes.length; i++) {
+                tabs.push(this.tabbox.tabs.childNodes[i]);
+            }
+            function ordinalSort(a, b) {
+                if (tabs.indexOf(a.parentNode._tab) < tabs.indexOf(b.parentNode._tab))
+                    return -1
+                if (tabs.indexOf(a.parentNode._tab) > tabs.indexOf(b.parentNode._tab))
+                    return 1
+                return 0
+            }
+            views.sort(ordinalSort);
+            return views;
+        ]]></body>
+        </method>
+
+        <method name="getState">
+        <body>
+        <![CDATA[
+            var views = this.getOrdinalViews();
+            if (views.length == 0) return null; // persist nothing
+
+            var myState = Components.classes['@activestate.com/koPreferenceSet;1'].createInstance();
+            var viewPref, i, index=0;
+            var ordered = Components.classes['@activestate.com/koOrderedPreference;1'].createInstance();
+            ordered.id = 'view_prefs';
+            var someState = false;
+            for (i = 0; i < views.length; i++) {
+                if (views[i] == this.currentView) index = i;
+                viewPref = views[i].getState();
+                if (viewPref) {
+                    someState = true;
+                    ordered.appendPref(viewPref);
+                }
+            }
+            if (!someState) return null;
+
+            myState.setPref('view_prefs', ordered)
+            myState.setLongPref('current_view_index', index);
+            return myState;
+        ]]>
+        </body>
+        </method>
+
+        <method name="setState">
+        <parameter name="pref"/>
+        <body>
+        <![CDATA[
+            var viewPref;
+            var ordered = pref.getPref('view_prefs');
+            var fileOpenFailures = [];
+            var i;
+            ko.views.manager.batchMode = true;
+            try {
+                for (i = 0; i < ordered.length; i++) {
+                    viewPref = ordered.getPref(i);
+                    var viewType = viewPref.getStringPref('viewtype');
+                    var uri = viewPref.getStringPref('URI');
+                    var docSvc = Components.classes['@activestate.com/koDocumentService;1']
+                                .getService(Components.interfaces.koIDocumentService);
+                    // If the URI already exists, it was opened before we got here
+                    // don't open it again!
+                    var existingViews = ko.views.manager.topView.findViewsForURI(uri);
+                    if (existingViews.length > 0) {
+                        continue;
+                    }
+                    var koDoc = docSvc.findDocumentByURI(uri);
+                    if (!koDoc) {
+                        koDoc = docSvc.createNewDocumentFromURI(uri);
+                        if (koDoc.file.exists) {
+                            if (koDoc.haveAutoSave() &&
+                                ko.dialogs.yesNo("It appears the file '"+koDoc.file.displayPath+
+                                            "' was not properly saved, would you "+
+                                            "like to restore the backup?", "Yes") == "Yes") {
+                                koDoc.restoreAutoSave();
+                            } else {
+                                try {
+                                    koDoc.load();
+                                } catch (e) {
+                                    // This will catch remote file opening exceptions,
+                                    // which has already set the lastException value.
+                                    this.log.warn("Couldn't re-open file: " + koDoc.file.path);
+                                    var lastErrorSvc = Components.classes["@activestate.com/koLastErrorService;1"].
+                                                       getService(Components.interfaces.koILastErrorService);
+                                    fileOpenFailures.push("'" + koDoc.file.path + "' : " + lastErrorSvc.getLastErrorMessage());
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    if (koDoc.file.exists) {
+                        var view = this.newView(viewType);
+                        view.initWithDocument(koDoc);
+                        xtk.domutils.fireEvent(view, 'view_opened');
+                    } else {
+                        fileOpenFailures.push("'" + koDoc.file.path + "' : it does not exist.");
+                        this.log.warn("Couldn't re-open file: '" + koDoc.file.path + "', it does not exist.");
+                    }
+                }
+            } finally {
+                ko.views.manager.batchMode = false;
+            }
+            var views = this.getViews();
+            var currentView = null;
+            if (pref.hasPref('current_view_index')) {
+                var current_view_index = pref.getLongPref('current_view_index');
+                // It's possible the the view that was 'current' is not
+                // loaded -- either because it's gone, or because it was
+                // an untitled document.  Guard against that:
+                currentView = views[current_view_index];
+            }
+            if (!currentView && views) {
+                currentView = views[views.length -1];
+            }
+            if (currentView) {
+                // Need to notify that the view has changed (after batch mode
+                // has finished) so that the commands can be correctly
+                // enabled/disabled, bug 80942.
+                currentView.makeCurrent();
+                if (currentView == views[views.length -1]) {
+                    // Note: The makeCurrent() call will notify of
+                    // current_view_changed only when the view actually changes,
+                    // which is not what we need here. Force an update by
+                    // sending the the change notification manually.
+                    xtk.domutils.fireEvent(currentView, 'current_view_changed');
+                }
+            }
+            
+            // Show list of files Komodo was not able to re-open.
+            // Doing this synchronously results in a Komodo hang -- at least
+            // on Windows (bug 81363).
+            if (fileOpenFailures.length > 0) {
+                window.setTimeout(function (fileOpenFailures_) {
+                    ko.dialogs.alert(
+                        "Komodo was unable to re-open the following files:",   // Prompt
+                        fileOpenFailures_.join("\n"),          // text
+                        "Komodo startup: Open file error",    // title
+                        "startup_reopen_file_error_dialog");  // doNotAskPref
+                }, 0, fileOpenFailures);
+            }
+        ]]>
+        </body>
+        </method>
+    </implementation>
+    </binding>
+
+</bindings>
+

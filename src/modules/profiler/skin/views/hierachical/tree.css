@@ -1,0 +1,4 @@
+/* Profiling hierchical view. */
+profilerview[type="hierachical"] {
+    -moz-binding: url('chrome://profiler/content/views/hierachical/tree.xml#hierachical-view');
+}

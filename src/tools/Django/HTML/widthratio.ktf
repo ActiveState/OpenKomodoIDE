@@ -1,0 +1,9 @@
+// komodo tool: widthratio
+// =======================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// =======================
+<% /* widthratio */ %>
+{% widthratio [[%tabstop1:this_value]] [[%tabstop2:max_value]] [[%tabstop3:100]] %}

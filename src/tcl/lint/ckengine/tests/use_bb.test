@@ -1,0 +1,371 @@
+# use_bb.test --
+#
+#	This file contains Black Box tests that run tclchecker 
+#	with all possible values for the -use flag.
+#
+# result:
+#
+#	creates a file <::tcltest::temporaryDirectory>/*PermuteOut.txt for each *Permute.tcl file.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: use_bb.test,v 1.5 2000/05/30 22:25:05 wart Exp $
+
+if {[string compare test [info procs test]] == 1} {
+    lappend auto_path [file join [file dirname [info script]] ..]
+    package require protest
+    namespace import ::protest::*
+}
+
+set tclchecker [findExeFile tclchecker 1]
+
+set pkgList [lsort [list tcl tk incrTcl expect tclX]]
+foreach pkg $pkgList {
+    set tmp $::protest::prettyPkgName($pkg)
+    set versions($pkg) $::protest::supportedVersions($tmp)
+}
+set pkgCommaList {}
+set useValues {}
+
+set simpleFile [file join $::tcltest::temporaryDirectory simpleTclCode.tcl]
+makeFile {set x 1} $simpleFile
+
+#
+# Test the default -use value
+#
+
+set defaultPackages {}
+foreach pkg [lsort [array names versions]] {
+    lappend defaultPackages $pkg [lindex $versions($pkg) end]
+}
+
+set allPackages {}
+foreach pkg [lsort [concat $pkgList $::projectInfo::pcxPkgs]] {
+    set tmp $::protest::prettyPkgName($pkg)
+    lappend allPackages $pkg [lindex $::protest::supportedVersions($tmp) end]
+}
+
+test use-1.0 {test the -use parser} {
+    catch {
+	exec $tclchecker -v -n $simpleFile
+    } output
+    regsub {^.*-------} $output "" output
+    regsub {Number.*Number.*$} $output "" output
+    regsub {\[incr Tcl\]} $output "incrTcl" output
+    array set vers $output
+    set result {}
+    foreach pkg [lsort [array names vers]] {
+	lappend result $pkg $vers($pkg)
+    }
+    unset vers
+    set result
+} $allPackages
+
+#
+# Test the -use parser
+#
+
+test use-2.0 {test the -use parser} {
+    catch {
+	exec $tclchecker -v -n -use tcl8.0.4 $simpleFile
+    } output
+    set result {}
+    foreach line [split $output "\n"] {
+	if {[regexp {^tcl[ 	]+(.*)$} $line dummy result]} {
+	    break
+	}
+    }
+    set result
+} {8.0}
+test use-2.1 {test the -use parser} {
+    catch {
+	exec $tclchecker -v -n -use tcl8.0.4.5 $simpleFile
+    } output
+    set result {}
+    foreach line [split $output "\n"] {
+	if {[regexp {^tcl[ 	]+(.*)$} $line dummy result]} {
+	    break
+	}
+    }
+    set result
+} {8.0}
+test use-2.2 {test the -use parser} {
+    catch {
+	exec $tclchecker -v -n -use tcl8.0a4 $simpleFile
+    } output
+    set result {}
+    foreach line [split $output "\n"] {
+	if {[regexp {^tcl[ 	]+(.*)$} $line dummy result]} {
+	    break
+	}
+    }
+    set result
+} {8.0}
+test use-2.3 {test the -use parser} {
+    if {[catch {
+	exec $tclchecker -n -use \"\" $simpleFile
+    } msg]} {
+	set i [lsearch $msg invalid]
+	set result [lrange $msg $i [expr {$i + 2}]]
+    } else {
+	set result $msg
+    }
+} {invalid package {}}
+test use-2.4 {test the -use parser} {
+    if {[catch {
+	exec $tclchecker -n -use tclBad $simpleFile
+    } msg]} {
+	set i [lsearch $msg invalid]
+	set result [lrange $msg $i [expr {$i + 2}]]
+    } else {
+	set result $msg
+    }
+} {invalid package tclBad}
+test use-2.5 {test the -use parser} {
+    if {[catch {
+	exec $tclchecker -n -use tcl,8.0 $simpleFile
+    } msg]} {
+	set i [lsearch $msg invalid]
+	set result [lrange $msg $i [expr {$i + 2}]]
+    } else {
+	set result $msg
+    }
+} {invalid package tcl,}
+test use-2.6 {test the -use parser} {
+    if {[catch {
+	exec $tclchecker -n -use tcl.0.0 $simpleFile
+    } msg]} {
+	set i [lsearch $msg invalid]
+	set result [lrange $msg $i [expr {$i + 2}]]
+    } else {
+	set result $msg
+    }
+} {invalid package tcl.}
+test use-2.7 {test the -use parser} {
+    if {[catch {
+	exec $tclchecker -n -use tcl8 $simpleFile
+    } msg]} {
+	set i [lsearch $msg unsupported]
+	set result [lrange $msg $i [expr {$i + 3}]]
+    } else {
+	set result $msg
+    }
+} {unsupported tcl version 8,}
+test use-2.8 {test the -use parser} {
+    if {[catch {
+	exec $tclchecker -n -use tcl8a8 $simpleFile
+    } msg]} {
+	set i [lsearch $msg unsupported]
+	set result [lrange $msg $i [expr {$i + 3}]]
+    } else {
+	set result $msg
+    }
+} {unsupported tcl version 8a8,}
+test use-2.9 {test the -use parser} {
+    if {[catch {
+	exec $tclchecker -n -use tcl9.9.9 $simpleFile
+    } msg]} {
+	set i [lsearch $msg unsupported]
+	set result [lrange $msg $i [expr {$i + 3}]]
+    } else {
+	set result $msg
+    }
+} {unsupported tcl version 9.9.9,}
+test use-2.10 {test the -use parser} {
+    if {[catch {
+	exec $tclchecker -n -use tcl9.9.9 $simpleFile
+    } msg]} {
+	set i [lsearch $msg unsupported]
+	set result [lrange $msg $i [expr {$i + 3}]]
+    } else {
+	set result $msg
+    }
+} {unsupported tcl version 9.9.9,}
+
+file delete $simpleFile
+
+# Setup for the next set of automated tests.
+
+set last [expr [llength $pkgList] - 1]
+set index 0
+foreach package $pkgList {
+    if {$index == $last} {
+	lappend pkgCommaList "or" $package
+    } else {
+	lappend pkgCommaList "$package\,"
+    }
+    catch {file delete -force [file join $::tcltest::temporaryDirectory "${package}PermuteOut.txt"]}
+    set versionCommaList($package) {}
+    set versLast [expr [llength $versions($package)] - 1]
+    set versIndex 0    
+    foreach vers $versions($package) {
+	if {$versIndex == $versLast} {
+	    if {$versLast == 0} {
+		set versionCommaList($package) $vers
+	    } else {
+		lappend versionCommaList($package) "or" $vers
+	    }
+	} else {
+	    lappend versionCommaList($package) "$vers\,"
+	}
+	lappend useValues "$package$vers"
+	incr versIndex
+    }
+    incr index
+}
+
+set simpleFile [file join $::tcltest::temporaryDirectory simpleTclCode.tcl]
+makeFile {set x 1} $simpleFile
+set expectedResult "scanning: $simpleFile\nchecking: $simpleFile"
+set abnormal "\nchild process exited abnormally"
+
+#
+# Run tclchecker with -use <package name>Foo
+#
+
+set index 1
+foreach pkg $pkgList {
+    set useVal "${pkg}Foo"
+    test "3.${index}-badUseValue" [list bad -use value $useVal] {
+	# Run tclchecker with -use <package name>Foo
+	set catchResult [catch {
+	    exec $tclchecker -use $useVal -nologo $simpleFile
+	} tclcheckerOutput]
+	if {[regexp {invalid.*} $tclcheckerOutput out]} {
+		set tclcheckerOutput $out
+	}
+	set x "$catchResult\: $tclcheckerOutput"
+    } "1: invalid package \"$useVal\" must be $pkgCommaList$abnormal"
+    incr index
+}
+
+#
+# Run tclchecker with -use <package name>.foo
+#
+
+set index 1
+foreach pkg $pkgList {
+    set useVal "${pkg}.foo"
+    test "4.${index}-badUseValue" [list bad -use value $useVal] {
+	# Run tclchecker with -use <package name>.foo
+	set catchResult [catch {
+	    exec $tclchecker -use $useVal -nologo $simpleFile
+	} tclcheckerOutput]
+	if {[regexp {invalid.*} $tclcheckerOutput out]} {
+		set tclcheckerOutput $out
+	}
+	set x "$catchResult\: $tclcheckerOutput"
+    } "1: invalid package \"$useVal\" must be $pkgCommaList$abnormal"
+    incr index
+}
+
+#
+# Run tclchecker with -use <package name>0
+#
+
+set index 1
+foreach pkg $pkgList {
+    set useVal "${pkg}0"
+    test "5.${index}-badUseValue" [list bad -use value $useVal] {
+	# Run tclchecker with -use <package name>0
+	set catchResult [catch {
+	    exec $tclchecker -use $useVal -nologo $simpleFile
+	} tclcheckerOutput]
+	if {[regexp {unsupported.*} $tclcheckerOutput out]} {
+		set tclcheckerOutput $out
+	}
+	set x "$catchResult\: $tclcheckerOutput"
+    } "1: unsupported $pkg version 0, should be $versionCommaList($pkg)$abnormal"
+    incr index
+}
+
+#
+# Run tclchecker with -use <package name><version>.9
+#
+
+set index 1
+foreach pkg $pkgList {
+    set version [lindex $versions($pkg) 0]
+    set useVal "${pkg}${version}.9"
+    test "6.${index}-badUseValue" [list bad -use value $useVal] {
+	# Run tclchecker with -use <package name><version>.9
+	# The patchlevel should be ignored, and tclchecker should run successfully
+	set catchResult [catch {
+	    exec $tclchecker -use $useVal -nologo $simpleFile
+	} tclcheckerOutput]
+	set catchResult
+    } 0
+    incr index
+}
+
+#
+# Run tclchecker with -use <package name><version>.9
+#
+
+set index 1
+foreach pkg $pkgList {
+    set version [lindex $versions($pkg) 0]
+    set useVal "${pkg}${version}foo99"
+    test "7.${index}-badUseValue" [list bad -use value $useVal] {
+	# Run tclchecker with -use <package name><version>foo99
+	# The patchlevel should be ignored, and tclchecker should run successfully
+	set catchResult [catch {
+	    exec $tclchecker -use $useVal -nologo $simpleFile
+	} tclcheckerOutput]
+	set catchResult
+    } 0
+    incr index
+}
+
+#
+# Test each use package on a short file with no errors in it.
+# We can rely on the exit code to tell whether tclchecker failed.
+#
+
+set index 1
+foreach useVal $useValues {
+    test "8.${index}-use-${useVal}" "$useVal on good code file" {
+	set catchResult [catch {
+	    exec $tclchecker -use $useVal -nologo $simpleFile
+	} tclcheckerOutput]
+
+	set x "$catchResult [string match *$expectedResult $tclcheckerOutput]"
+    } "0 1"
+    incr index
+}
+
+#
+# Test each use package on each large code file--looking for checker
+# crashes.
+#
+
+set testNum 8
+foreach package [array names versions] {
+
+    set  inFile [file join $::tcltest::testsDirectory checker ${package}Permute.tcl]
+
+    set index 1
+
+    foreach useVal $useValues {
+
+	set execCmd "[file tail $tclchecker] -use $useVal -verbose [file tail $inFile]"
+
+	test "${testNum}.${index}-use-${useVal}" $useVal {
+	    catch {exec $tclchecker -use $useVal -verbose $inFile} tclcheckerOutput
+
+	    if {[regexp "tbcload" $tclcheckerOutput]} {
+	        set result "CRASHED when calling \"$execCmd\""
+	    } else {	
+	        set result "successfully called \"$execCmd\""
+	    }
+	    set result
+	} "successfully called \"$execCmd\""
+
+	incr index
+    }
+    incr testNum
+}
+
+# cleanup
+cleanupTests

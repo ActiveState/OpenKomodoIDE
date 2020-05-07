@@ -1,0 +1,121 @@
+@import url("chrome://komodo/skin/global/colors.less");
+@import url("resource://profile/colors.less");
+
+.notify-panel
+{
+    -moz-appearance: none !important;
+    transform: none !important;
+    transition: none !important;
+    -moz-binding: url("chrome://global/content/bindings/popup.xml#panel") !important;
+    padding: 6px;
+    color: @state-foreground;
+    background: @state-ok;
+    border-radius: 1px;
+    
+    &, *
+    {
+        -moz-user-focus: normal;
+    }
+
+    &.p-notification
+    {
+        background-color: @state-info;
+    }
+
+    &.p-warning
+    {
+        background-color: @state-warning;
+    }
+
+    &.p-error
+    {
+        background-color: @state-error;
+    }
+    
+    &.p-now
+    {
+        background-color: @state-ok;
+    }
+    
+    &.lint, &.generic
+    {
+        padding: 4px;
+        font-size: 0.9rem;
+        
+        description
+        {
+            max-width: 350px !important;
+        }
+    }
+    
+    &.lint
+    {
+        button.menu
+        {
+            visibility: collapse;
+        }
+    }
+
+    &.clickable description
+    {
+        cursor: pointer;
+        
+        &:hover
+        {
+            text-decoration: underline;
+        }
+    }
+
+    description
+    {
+        max-width: 500px;
+        margin-right: 25px;
+        color: @state-foreground;
+    }
+
+    button
+    {
+        -moz-appearance: none;
+        margin: 0 6px;
+        background: transparent;
+        border: 0 !important;
+        min-height: 0 !important;
+        min-width: 0 !important;
+        width: 14px;
+        height: 14px;
+        max-width: 14px;
+        cursor: pointer;
+        background-size: contain;
+        background-repeat: no-repeat;
+
+        dropmarker
+        {
+            visibility: collapse;
+        }
+
+        &:hover
+        {
+            opacity: 1.0;
+        }
+
+        &, &:hover
+        {
+            &.menu
+            {
+                background-image: url(koicon://ko-svg/chrome/icomoon/skin/cog2.svg?scheme-color=state-foreground) !important;
+            }
+    
+            &.undo
+            {
+                background-image: url(koicon://ko-svg/chrome/icomoon/skin/undo2.svg?scheme-color=state-foreground) !important;
+            }
+            
+            &.close
+            {
+                background-image: url(koicon://ko-svg/chrome/icomoon/skin/close2.svg?scheme-color=state-foreground) !important;
+            }
+        }
+    }
+
+
+}

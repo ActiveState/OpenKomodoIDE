@@ -1,0 +1,37 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2010 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'platform',
+    'build',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'productType',
+    'unsiloedPythonExe',
+    'buildFlavour',
+    'komodoPythonUtilsDir',
+    'mozVersion',
+    'sdkDir',
+    'mozSrc',
+    'supportDir',
+);
+
+# Toolbox2 items
+$cons->InstallPythonUtility('koToolbox2.py');
+$cons->InstallPythonUtility('sublime.py');
+$cons->InstallPythonUtility('koMigrateV5Toolboxes.py');
+$cons->Install($idlExportDir, 'koIToolbox2HTreeView.idl');
+$cons->BuildAndInstallXpt('koIToolbox2HTreeView.idl');
+$cons->InstallXpcomComponent('koToolbox2HTreeView.py');
+    
+$cons->BuildAndInstallXpt('koIToolbox2Components.idl');
+$cons->InstallXpcomComponent('koToolbox2Components.py');
+$cons->InstallXpcomComponent('koTools.py');
+
+$cons->Install("$supportDir/toolbox", 'koToolbox.sql');
+$cons->Install("$supportDir/toolbox", 'Restore Samples.komodotool');

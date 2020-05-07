@@ -1,0 +1,190 @@
+<!ENTITY CONNECT.label "CONNECT">
+<!ENTITY DELETE.label "DELETE">
+<!ENTITY GET.label "GET">
+<!ENTITY HEAD.label "HEAD">
+<!ENTITY HTTPInspector.title "HTTP Inspector">
+<!ENTITY HTTPInspectorBreakOnEveryRequest.desc "HTTP Inspector: Break on every Request">
+<!ENTITY HTTPInspectorBreakOnEveryResponse.desc "HTTP Inspector: Break on every Response">
+<!ENTITY HTTPInspectorClearProxyHistory.desc "HTTP Inspector: Clear proxy history">
+<!ENTITY HTTPInspectorDeleteTheRequestResponse.desc "HTTP Inspector: Delete the request/response">
+<!ENTITY HTTPInspectorEditTheRequest.desc "HTTP Inspector: Edit the request">
+<!ENTITY HTTPInspectorEditTheResponse.desc "HTTP Inspector: Edit the response">
+<!ENTITY HTTPInspectorHelp.desc "HTTP Inspector: Help...">
+<!ENTITY HTTPInspectorRenameTheRequestResponse.desc "HTTP Inspector: Rename the request/response">
+<!ENTITY HTTPInspectorRevertTheRequestToPreviousState.desc "HTTP Inspector: Revert the request to previous state">
+<!ENTITY HTTPInspectorRule.title "HTTP Inspector Rule">
+<!ENTITY HTTPInspectorRules.title "HTTP Inspector Rules">
+<!ENTITY HTTPInspectorRulesCreateANewRule.desc "HTTP Inspector Rules: Create a new rule">
+<!ENTITY HTTPInspectorRulesDeleteTheRule.desc "HTTP Inspector Rules: Delete the rule">
+<!ENTITY HTTPInspectorRulesEditTheRule.desc "HTTP Inspector Rules: Edit the rule">
+<!ENTITY HTTPInspectorRulesMoveTheRuleDownOnePosition.desc "HTTP Inspector Rules: Move the rule down one position">
+<!ENTITY HTTPInspectorRulesMoveTheRuleUpOnePosition.desc "HTTP Inspector Rules: Move the rule up one position">
+<!ENTITY HTTPInspectorSavesSubmitsTheRequestChanges.desc "HTTP Inspector: Saves/submits the request changes">
+<!ENTITY HTTPInspectorShowHideToolbarButtonText.desc "HTTP Inspector: Show/Hide Toolbar Button Text">
+<!ENTITY HTTPInspectorStartStopTheHttpInspector.desc "HTTP Inspector: Start/Stop the http inspector">
+<!ENTITY HTTPInspectorStartTheHttpInspector.desc "HTTP Inspector: Start the http inspector">
+<!ENTITY HTTPInspectorStopTheHttpInspector.desc "HTTP Inspector: Stop the http inspector">
+<!ENTITY HTTPInspectorTesting.desc "HTTP Inspector: Testing">
+<!ENTITY HTTPInspectorViewTheBodyOfTheResponse.desc "HTTP Inspector: View the body of the response">
+<!ENTITY OPTIONS.label "OPTIONS">
+<!ENTITY POST.label "POST">
+<!ENTITY PUT.label "PUT">
+<!ENTITY TRACE.label "TRACE">
+<!ENTITY URL.label "URL">
+<!ENTITY WWWAuthenticate.label "WWW-Authenticate">
+<!ENTITY accept.label "Accept">
+<!ENTITY acceptCharset.label "Accept-charset">
+<!ENTITY acceptEncoding.label "Accept-encoding">
+<!ENTITY acceptLanguage.label "Accept-language">
+<!ENTITY acceptRanges.label "Accept-ranges">
+<!ENTITY allow.label "Allow">
+<!ENTITY authorization.label "Authorization">
+<!ENTITY blankHeader.label "Blank header">
+<!ENTITY bothRequestAndResponseMessages.label "Both request and response messages">
+<!ENTITY break.label "Break">
+<!ENTITY breakOnEveryRequest.tooltiptext "Break on every Request">
+<!ENTITY breakOnEveryResponse.tooltiptext "Break on every Response">
+<!ENTITY breakOnRequest.label "Break on request">
+<!ENTITY breakOnResponse.label "Break on response">
+<!ENTITY breakState.tooltiptext "Break state">
+<!ENTITY buttonText.label "Button Text">
+<!ENTITY cacheControl.label "Cache-control">
+<!ENTITY clear.label "Clear">
+<!ENTITY clearHistory.label "Clear history">
+<!ENTITY clearHistoryOfRequestsAndResponses.tooltiptext "Clear history of requests and responses">
+<!ENTITY clientAddress.label "Client address">
+<!ENTITY clientIP.label "Client IP">
+<!ENTITY close.label "Close">
+<!ENTITY connection.label "Connection">
+<!ENTITY connectionLength.label "Connection-length">
+<!ENTITY connectionType.label "Connection-type">
+<!ENTITY contains.label "contains">
+<!ENTITY content.label "Content">
+<!ENTITY contentEncoding.label "Content-encoding">
+<!ENTITY contentLanguage.label "Content-language">
+<!ENTITY contentLength.label "Content-length">
+<!ENTITY contentType.label "Content-type">
+<!ENTITY cookie.label "Cookie">
+<!ENTITY cookie2.label "Cookie2">
+<!ENTITY data.label "Data">
+<!ENTITY date.label "Date">
+<!ENTITY delay.label "Delay">
+<!ENTITY delete.label "Delete">
+<!ENTITY description.label "Description">
+<!ENTITY duration.label "Duration">
+<!ENTITY edit.label "Edit...">
+<!ENTITY enabled.label "Enabled">
+<!ENTITY expires.label "Expires">
+<!ENTITY header.label "Header">
+<!ENTITY headerName.label "Header Name">
+<!ENTITY headerValue.label "Header Value">
+<!ENTITY help.label "Help">
+<!ENTITY help.tooltiptext "Help">
+<!ENTITY host.label "Host">
+<!ENTITY httpInspectorMenuDebugger.accesskey "I">
+<!ENTITY httpInspectorMenuDebuggerClear.accesskey "C">
+<!ENTITY httpInspectorMenuDebuggerInterceptRequests.accesskey "Q">
+<!ENTITY httpInspectorMenuDebuggerInterceptResponses.accesskey "P">
+<!ENTITY httpInspectorMenuDebuggerRuleset.accesskey "R">
+<!ENTITY httpInspectorMenuDebuggerStart.accesskey "S">
+<!ENTITY httpInspectorMenuDebuggerStop.accesskey "S">
+<!ENTITY httpInspectorMenuPreferences.accesskey "p">
+<!ENTITY id.label "Id">
+<!ENTITY ifModifiedSince.label "If-Modified-Since">
+<!ENTITY inspector.label "Inspector">
+<!ENTITY label.10 "1.0">
+<!ENTITY label.100 "100...">
+<!ENTITY label.100Continue "100 - Continue">
+<!ENTITY label.101SwitchingProtocols "101 - Switching Protocols">
+<!ENTITY label.11 "1.1">
+<!ENTITY label.200 "200...">
+<!ENTITY label.200OK "200 - OK">
+<!ENTITY label.201Created "201 - Created">
+<!ENTITY label.202Accepted "202 - Accepted">
+<!ENTITY label.203NonAuthoritativeInformation "203 - Non-Authoritative Information">
+<!ENTITY label.204NoContent "204 - No Content">
+<!ENTITY label.205ResetContent "205 - Reset Content">
+<!ENTITY label.206PartialContent "206 - Partial Content">
+<!ENTITY label.207MultiStatus "207 - Multi-Status">
+<!ENTITY label.300 "300...">
+<!ENTITY label.300MultipleChoices "300 - Multiple Choices">
+<!ENTITY label.301MovedPermanently "301 - Moved Permanently">
+<!ENTITY label.302Found "302 - Found">
+<!ENTITY label.303SeeOther "303 - See Other">
+<!ENTITY label.304NotModified "304 - Not Modified">
+<!ENTITY label.305UseProxy "305 - Use Proxy">
+<!ENTITY label.307TemporaryRedirect "307 - Temporary Redirect">
+<!ENTITY label.400 "400...">
+<!ENTITY label.400BadRequest "400 - Bad Request">
+<!ENTITY label.401Unauthorized "401 - Unauthorized">
+<!ENTITY label.402PaymentRequired "402 - Payment Required">
+<!ENTITY label.403Forbidden "403 - Forbidden">
+<!ENTITY label.404NotFound "404 - Not Found">
+<!ENTITY label.405MethodNotAllowed "405 - Method Not Allowed">
+<!ENTITY label.406NotAcceptable "406 - Not Acceptable">
+<!ENTITY label.407ProxyAuthenticationRequired "407 - Proxy Authentication Required">
+<!ENTITY label.408RequestTimeOut "408 - Request Time-out">
+<!ENTITY label.409Conflict "409 - Conflict">
+<!ENTITY label.410Gone "410 - Gone">
+<!ENTITY label.411LengthRequired "411 - Length Required">
+<!ENTITY label.412PreconditionFailed "412 - Precondition Failed">
+<!ENTITY label.413RequestEntityTooLarge "413 - Request Entity Too Large">
+<!ENTITY label.414RequestURITooLong "414 - Request-URI Too Long">
+<!ENTITY label.415UnsupportedMediaType "415 - Unsupported Media Type">
+<!ENTITY label.416RequestedRangeNotSatisfiable "416 - Requested Range not satisfiable">
+<!ENTITY label.417ExpectationFailed "417 - Expectation Failed">
+<!ENTITY label.500 "500...">
+<!ENTITY label.500InternalServerError "500 - Internal Server Error">
+<!ENTITY label.501NotImplemented "501 - Not Implemented">
+<!ENTITY label.502BadGateway "502 - Bad Gateway">
+<!ENTITY label.503ServiceUnavailable "503 - Service Unavailable">
+<!ENTITY label.504GatewayTimeOut "504 - Gateway Time-out">
+<!ENTITY label.505HTTPVersionNotSupported "505 - HTTP Version not supported">
+<!ENTITY label.507InsufficientStorageSpace "507 - Insufficient Storage Space">
+<!ENTITY label.510NotExtended "510 - Not Extended">
+<!ENTITY lastModified.label "Last-modified">
+<!ENTITY literal.label "literal">
+<!ENTITY location.label "Location">
+<!ENTITY matchOnAllOfTheFollowing.label "Match on all of the following">
+<!ENTITY matchOnAnyOfTheFollowing.label "Match on any of the following">
+<!ENTITY method.label "Method">
+<!ENTITY minus.label "-">
+<!ENTITY modify.label "Modify">
+<!ENTITY modifyField.label "Modify Field">
+<!ENTITY moveDown.label "Move Down">
+<!ENTITY moveUp.label "Move Up">
+<!ENTITY new.label "New...">
+<!ENTITY plus.label "+">
+<!ENTITY pragma.label "Pragma">
+<!ENTITY preferences.label "Preferences...">
+<!ENTITY random.label "random">
+<!ENTITY referer.label "Referer">
+<!ENTITY refresh.label "Refresh">
+<!ENTITY regex.label "regex">
+<!ENTITY removeHeader.label "Remove Header">
+<!ENTITY request.label "Break on Request">
+<!ENTITY requestMessage.label "Request message">
+<!ENTITY respondWith.label "Respond with...">
+<!ENTITY response.label "Break on Response">
+<!ENTITY responseMessage.label "Response message">
+<!ENTITY revert.label "Revert">
+<!ENTITY ruleName.label "Rule name">
+<!ENTITY rules.label "Modify Rules">
+<!ENTITY save.label "Save">
+<!ENTITY server.label "Server">
+<!ENTITY setCookie.label "Set-cookie">
+<!ENTITY setCookie2.label "Set-cookie2">
+<!ENTITY setHeader.label "Set Header">
+<!ENTITY showBreakAndModifyRules.tooltiptext "Show break and modify rules">
+<!ENTITY size.label "Size">
+<!ENTITY standardToolbar.tooltiptext "Standard Toolbar">
+<!ENTITY start.label "Start Proxy">
+<!ENTITY startStopTheHTTPInspector.tooltiptext "Start/Stop the HTTP Inspector">
+<!ENTITY state.label "State">
+<!ENTITY status.label "Status">
+<!ENTITY stop.label "Stop Proxy">
+<!ENTITY time.label "Time">
+<!ENTITY timeout.label "Timeout">
+<!ENTITY type.label "Type">
+<!ENTITY userAgent.label "User-agent">
+<!ENTITY version.label "Version">

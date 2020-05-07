@@ -1,0 +1,17 @@
+
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2009 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'mozChromeDir',
+);
+
+$cons->InstallInChrome('loader.js');
+$cons->InstallInChrome('hyperlinks.js');
+$cons->InstallInChrome('regexhandler.js');
+$cons->InstallInChrome('filehandler.js');
+$cons->InstallInChrome('csscolorpicker.js');
+

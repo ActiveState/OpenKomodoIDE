@@ -1,0 +1,32 @@
+<header>
+    <div class="outer">
+        
+        <div class="nav-wrap-global">
+            <div class="inner">
+                <a href="http://activestate.com/" class="as-link"><figure id="as-logo"></figure></a>
+                
+                <nav>
+                    <%= get_list(data.header.navigation_right, "unstyled right") %>
+                    <%= get_list(data.header.navigation_left, "unstyled left") %>
+                </nav>
+            </div>
+        </div>
+        
+        <div class="inner">
+            <div class="nav-wrap">
+                
+                <!-- Logo -->
+                <a href="/" class="logo-link"><figure id="header-logo"></figure></a>
+                
+                <span class="collapser button primary">
+                    <i class="icon icon-bars fa fa-bars"></i>
+                </span>
+                
+                <!-- Navigation -->
+                <nav>
+                    <%= get_list(data.header.navigation, "unstyled") %>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>

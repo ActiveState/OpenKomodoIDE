@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://extensiondev/locale/extensiondev.dtd">
+<window id="xuledit" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&xuledit.title;"
+onload="init()">
+<script type="application/x-javascript" src="xuledit.js"/>
+<script type="application/x-javascript" src="utils.js"/>
+<script type="application/x-javascript" src="loadsaveutils.js"/>
+<vbox flex="1">
+<textbox id="ta" multiline="true" wrap="true" flex="1" onkeydown="resetTimeout()"
+value='&lt;?xml version="1.0"?&gt;&#x0A;&lt;?xml-stylesheet href="chrome://global/skin/" type="text/css"?&gt;&#x0A;&lt;window id="yourwindow" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"&gt;&#x0A;&lt;script type="text/javascript"&gt;&#x0A;&lt;![CDATA[&#x0A;// put some js code here&#x0A;]]&gt;&#x0A;&lt;/script&gt;&#x0A;&lt;label value="&xuledit.yourXUL;"/&gt;&#x0A;&lt;/window&gt;'/>
+<splitter id="split"/>
+<browser id="content" src="about:blank" flex="1" style="border: 2px outset;"/>
+<hbox><button id="open" label="&xuledit.newWindow;" onclick="openwin()"/><spacer flex="1"/></hbox>
+<hbox><button label="Load File..." oncommand="load()"/><button label="Save As..." oncommand="save()"/></hbox>
+</vbox>
+</window>

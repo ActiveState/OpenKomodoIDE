@@ -1,0 +1,180 @@
+<!ENTITY F.accesskey "F">
+<!ENTITY HTML.label "HTML">
+<!ENTITY PHP.label "PHP">
+<!ENTITY XSLT.label "XSLT">
+<!ENTITY add.label "Add">
+<!ENTITY addEditBreakpoint.label "Add/Edit Breakpoint...">
+<!ENTITY addEditSpawnpoint.label "Add/Edit Spawnpoint...">
+<!ENTITY addSelectedVariable.desc "Debugger: Add Selected Expression to Watch Window">
+<!ENTITY addToWatch.label "Add to Watch">
+<!ENTITY break.label "Break">
+<!ENTITY breakNow.label "Break Now">
+<!ENTITY breakNow.tooltiptext "Pause the currently running application">
+<!ENTITY breakWhenHitCountIsAMultipleOf.label "Break when hit count is a multiple of">
+<!ENTITY breakWhenHitCountIsEqualTo.label "Break when hit count is equal to">
+<!ENTITY breakWhenHitCountIsGreaterThanOrEqualTo.label "Break when hit count is greater than or equal to">
+<!ENTITY breakpointManagerAddBreakpoint.desc "Breakpoint Manager: Add Breakpoint">
+<!ENTITY breakpointManagerAddTclSpawnpoint.desc "Breakpoint Manager: Add Tcl Spawnpoint">
+<!ENTITY breakpointManagerDeleteAllBreakpoints.desc "Breakpoint Manager: Delete All Breakpoints">
+<!ENTITY breakpointManagerDeleteBreakpoint.desc "Breakpoint Manager: Delete Breakpoint">
+<!ENTITY breakpointManagerEditBreakpoint.desc "Breakpoint Manager: Edit Breakpoint">
+<!ENTITY breakpointManagerEnableDisableAllBreakpoints.desc "Breakpoint Manager: Enable/Disable All Breakpoints">
+<!ENTITY breakpointManagerEnableDisableBreakpoint.desc "Breakpoint Manager: Enable/Disable Breakpoint">
+<!ENTITY breakpointManagerShowBreakpoint.desc "Breakpoint Manager: Show Breakpoint">
+<!ENTITY breakpointProperties.title "Breakpoint Properties">
+<!ENTITY breakpointProperties.tooltiptext "Show the breakpoint properties">
+<!ENTITY breakpointState.tooltiptext "Breakpoint State">
+<!ENTITY breakpoints.label "Breakpoints">
+<!ENTITY breakpointsAndTclSpawnPoints.tooltiptext "Breakpoints (and Tcl 'spawn' points)">
+<!ENTITY browseForFile.tooltiptext "Browse for file">
+<!ENTITY buttondbgBreakNow.accesskey "B">
+<!ENTITY buttondbgDetach.accesskey "d">
+<!ENTITY buttondbgGo.accesskey "G">
+<!ENTITY buttondbgNewSession.accesskey "N">
+<!ENTITY buttondbgStepCursor.accesskey "C">
+<!ENTITY buttondbgStepIn.accesskey "I">
+<!ENTITY buttondbgStepOut.accesskey "u">
+<!ENTITY buttondbgStepOver.accesskey "O">
+<!ENTITY buttondbgStop.accesskey "p">
+<!ENTITY callStack.label "Call Stack">
+<!ENTITY callStackLocation.label "Call Stack Location">
+<!ENTITY clearAllBreakpoints.label "Clear All Breakpoints">
+<!ENTITY clearInteractiveShellBuffer.tooltiptext "Clear the contents of the Interactive Shell editor">
+<!ENTITY closeDebuggerTab.tooltiptext "Remove this debugger tab">
+<!ENTITY collapseExpandPane.tooltiptext "Collapse/Expand Pane">
+<!ENTITY condition.label "Condition">
+<!ENTITY conditional.label "Conditional">
+<!ENTITY configure.label "Configure...">
+<!ENTITY copyValue.label "Copy Value(s)">
+<!ENTITY debug.label "Debug">
+<!ENTITY debugToolbar.label "Debug Toolbar">
+<!ENTITY debuggerAddEditBreakpoint.desc "Debugger: Add/Edit Breakpoint...">
+<!ENTITY debuggerAddEditSpawnpoint.desc "Debugger: Add/Edit Spawnpoint...">
+<!ENTITY debuggerAddWatchVariable.desc "Debugger: Add Watch Variable">
+<!ENTITY debuggerBreakNow.desc "Debugger: Break Now">
+<!ENTITY debuggerClearAllBreakpoints.desc "Debugger: Clear All Breakpoints">
+<!ENTITY debuggerCopyVariableValues.desc "Debugger: Copy Selected Variable Values">
+<!ENTITY debuggerDeleteSelectedVariable.desc "Debugger: Delete Selected Variable">
+<!ENTITY debuggerDetach.desc "Debugger: Detach">
+<!ENTITY debuggerDisableEnableBreakpoint.desc "Debugger: Disable/Enable/Delete Breakpoint">
+<!ENTITY debuggerEditSelectedVariableName.desc "Debugger: Edit Selected Variable Name">
+<!ENTITY debuggerEditSelectedVariableValue.desc "Debugger: Edit Selected Variable Value">
+<!ENTITY debuggerInspect.label "Inspect">
+<!ENTITY debuggerInspect.tooltiptext "Inspect (probe) the running application in a debugger shell">
+<!ENTITY debuggerInspect.desc "Debugger: Inspect (probe) the Application in a Debugger Shell">
+<!ENTITY debuggerInteractiveDebuggerShellClearBuffer.desc "Debugger: Interactive Debugger Shell Clear Buffer">
+<!ENTITY debuggerInteractiveStop.desc "Debugger: Stop the Interactive Debugger Shell">
+<!ENTITY debuggerListenForRemoteDebugger.desc "Debugger: Listen for Remote Debugger">
+<!ENTITY debuggerListener.title "Debugger Listener">
+<!ENTITY debuggerMakeSelectionAWatchedVariable.desc "Debugger: Make Selection a Watched Variable">
+<!ENTITY debuggerNewSession.desc "Debugger: New Session">
+<!ENTITY debuggerPrettyPrint.desc "Debugger: Pretty Print">
+<!ENTITY debuggerRunScript.desc "Debugger: Run Script">
+<!ENTITY debuggerRunToCursor.desc "Debugger: Run to Cursor">
+<!ENTITY debuggerShowCurrentStatement.desc "Debugger: Show Current Statement">
+<!ENTITY debuggerShowHiddenVariables.desc "Debugger: Show Hidden Variables">
+<!ENTITY debuggerStart.desc "Debugger: Go/Continue">
+<!ENTITY debuggerStartDefaultInteractiveShell.desc "Debugger: Start Default Interactive Shell">
+<!ENTITY debuggerStartFindHideDefaultInteractiveShell.desc "Debugger: Start/Find/Toggle Default Interactive Shell">
+<!ENTITY debuggerStartPerlInteractiveShell.desc "Debugger: Start Perl Interactive Shell">
+<!ENTITY debuggerStartPythonInteractiveShell.desc "Debugger: Start Python Interactive Shell">
+<!ENTITY debuggerStartPython3InteractiveShell.desc "Debugger: Start Python3 Interactive Shell">
+<!ENTITY debuggerStartRubyInteractiveShell.desc "Debugger: Start Ruby Interactive Shell">
+<!ENTITY debuggerStartSkipDialog.desc "Debugger: Go/Continue - skip the Options dialog">
+<!ENTITY debuggerStartTclInteractiveShell.desc "Debugger: Start Tcl Interactive Shell">
+<!ENTITY debuggerStepIn.desc "Debugger: Step In">
+<!ENTITY debuggerStepOut.desc "Debugger: Step Out">
+<!ENTITY debuggerStepOver.desc "Debugger: Step Over">
+<!ENTITY debuggerStop.desc "Debugger: Stop">
+<!ENTITY debuggerViewAsHex.desc "Debugger: View Variables As Hex">
+<!ENTITY delete.label "Delete">
+<!ENTITY deleteAllBreakpoints.tooltiptext "Delete all breakpoints">
+<!ENTITY deleteBreakpoint.tooltiptext "Delete breakpoint">
+<!ENTITY detach.label "Detach">
+<!ENTITY detach.tooltiptext "Runs the application to the end - all breakpoints will be ignored">
+<!ENTITY disableEnableAllBreakpoints.tooltiptext "Disable/Enable all breakpoints">
+<!ENTITY disableEnableBreakpoint.label "Disable/Enable/Delete Breakpoint">
+<!ENTITY edit.label "Edit...">
+<!ENTITY editWatchVariable.tooltiptext "Edit the watch variable expression">
+<!ENTITY editWatchExpression.label "Edit Watch Expression...">
+<!ENTITY ellipsis.accesskey ".">
+<!ENTITY ellipsis.label "...">
+<!ENTITY enable.label "Enable">
+<!ENTITY enableDisable.label "Enable/Disable">
+<!ENTITY enterAnExceptionNameEGUnicodeError.tooltiptext "Enter an exception name, e.g. 'UnicodeError'">
+<!ENTITY enterAnExpressionEGX1.tooltiptext "Enter an expression, e.g. 'x == 1'">
+<!ENTITY enterAnFunctionNameEGStringJoin.tooltiptext "Enter an function name, e.g. 'string.join'">
+<!ENTITY exception.label "Exception">
+<!ENTITY file.label "File">
+<!ENTITY functionCall.label "Function Call">
+<!ENTITY functionReturn.label "Function Return">
+<!ENTITY go.label "Go">
+<!ENTITY goContinue.label "Go/Continue">
+<!ENTITY goContinue.tooltiptext "Start or continue debugging">
+<!ENTITY goToTheSourceCode.tooltiptext "Go to the source code">
+<!ENTITY gotoSource.label "Goto Source">
+<!ENTITY hitCount.label "Hit Count">
+<!ENTITY interactiveShell.label "Interactive Shell">
+<!ENTITY interactiveShell.tooltiptext "Start an Interactive Shell">
+<!ENTITY interpretAsExpression.label "Interpret as Expression">
+<!ENTITY interpretAsString.label "Interpret as String">
+<!ENTITY language.label "Language">
+<!ENTITY listenForDebuggingConnections.label "Listen for Debugging Connections">
+<!ENTITY listenerStatus.label "Listener Status">
+<!ENTITY menuDbgAddSelectedVariableToWatchTable.accesskey "V">
+<!ENTITY menuDbgBreakpointAddOrEdit.accesskey "A">
+<!ENTITY menuDbgBreakpointToggle.accesskey "E">
+<!ENTITY menuDbgListen.accesskey "L">
+<!ENTITY menuDbgRun.accesskey "R">
+<!ENTITY menuDbgShowCurrentStatement.accesskey "h">
+<!ENTITY menuDbgSpawnpointAddOrEdit.accesskey "w">
+<!ENTITY menuDbgStatus.accesskey "S">
+<!ENTITY menuDebug.accesskey "D">
+<!ENTITY menuDebuggerInspect.accesskey "T">
+<!ENTITY menuInteractiveShell.accesskey "I">
+<!ENTITY n.accesskey "n">
+<!ENTITY name.label "Name">
+<!ENTITY new.label "New">
+<!ENTITY newWatchVariable.tooltiptext "Add a new variable to the watch list">
+<!ENTITY newBreakpoint.label "New Breakpoint">
+<!ENTITY newBreakpointOrTclSpawnpoint.tooltiptext "New Breakpoint (or Tcl Spawnpoint)">
+<!ENTITY newTclSpawnpoint.label "New Tcl Spawnpoint">
+<!ENTITY output.label "Output">
+<!ENTITY perl.label "Perl">
+<!ENTITY prettyPrint.label "Pretty Print">
+<!ENTITY properties.label "Properties">
+<!ENTITY python.label "Python">
+<!ENTITY python3.label "Python3">
+<!ENTITY removeWatch.label "Remove Watch">
+<!ENTITY removeWatch.tooltiptext "Remove variable from the watch list">
+<!ENTITY ruby.label "Ruby">
+<!ENTITY runToCursor.label "Run to Cursor">
+<!ENTITY runWithoutDebugging.label "Run Without Debugging">
+<!ENTITY shell.label "Shell">
+<!ENTITY showCurrentStatement.label "Show Current Statement">
+<!ENTITY showHiddenVariables.tooltiptext "Show Hidden Variables">
+<!ENTITY spawnpointProperties.title "Spawnpoint Properties">
+<!ENTITY startFindHideDefaultInteractiveShell.label "Start/Find/Toggle Default Interactive Shell">
+<!ENTITY startNewJavaScriptShell.label "Start New JavaScript Shell">
+<!ENTITY startNewPerlShell.label "Start New Perl Shell">
+<!ENTITY startNewPythonShell.label "Start New Python Shell">
+<!ENTITY startNewPython3Shell.label "Start New Python3 Shell">
+<!ENTITY startNewRubyShell.label "Start New Ruby Shell">
+<!ENTITY startNewSession.label "Start New Session">
+<!ENTITY startNewTclShell.label "Start New Tcl Shell">
+<!ENTITY state.accesskey "E">
+<!ENTITY stepIn.label "Step In">
+<!ENTITY stepIn.tooltiptext "Step into the code in the current line">
+<!ENTITY stepOut.label "Step Out">
+<!ENTITY stepOut.tooltiptext "Step outside of the current stack frame">
+<!ENTITY stepOver.label "Step Over">
+<!ENTITY stepOver.tooltiptext "Step over any code on the current line">
+<!ENTITY stop.label "Stop">
+<!ENTITY stop.tooltiptext "Stop debugging">
+<!ENTITY tcl.label "Tcl">
+<!ENTITY type.label "Type">
+<!ENTITY unknown.label "Unknown">
+<!ENTITY userInterfaceShowHideDebugToolbar.desc "User Interface: Show/Hide Debug Toolbar">
+<!ENTITY value.label "Value">
+<!ENTITY viewAsHex.label "View As Hex">
+<!ENTITY watch.label "Watch">

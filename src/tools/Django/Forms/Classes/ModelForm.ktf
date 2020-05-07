@@ -1,0 +1,17 @@
+# komodo tool: ModelForm
+# ======================
+# auto_abbreviation: true
+# indent_relative: false
+# language: Python
+# set_selection: false
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ======================
+<% /* ModelForm */ %>
+
+class [[%tabstop1:MODELNAME]]Form(forms.ModelForm):
+    class Meta:
+        model = [[%tabstop1:MODELNAME1]]
+        fields = ('[[%tabstop2:2]]',)
+    !@#_currentPos!@#_anchor

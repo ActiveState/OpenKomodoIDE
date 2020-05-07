@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+    %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+    %prefDTD.INTERNAL;
+  <!ENTITY % bindingsDTD SYSTEM "chrome://komodo/locale/bindings.dtd">
+    %bindingsDTD;
+  <!ENTITY % prefFormatterEditorDTD SYSTEM "chrome://komodo/locale/formatters/pref-formatter-editor.dtd">
+    %prefFormatterEditorDTD;
+]>
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<!--<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>-->
+
+<dialog id="formatter_prefs_editor_dialog"
+        title="&formatterEditor.title;"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        onload="PrefFormatterEditor_OnLoad();"
+        ondialogaccept="return PrefFormatterEditor_OnAccept();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/formatters/pref-formatter-editor.js" type="application/x-javascript;version=1.7"/>
+
+    <stringbundleset id="formatter_strbundles">
+        <stringbundle id="formatter_strings" src="chrome://komodo/locale/formatters/formatters.properties"/>
+    </stringbundleset>
+
+    <grid id="formatter_editor_grid">
+        <columns id="formatter_editor_grid_columns">
+            <column id="formatter_editor_grid_column1" />
+            <column id="formatter_editor_grid_column2" />
+        </columns>
+        <rows>
+            <row id="formatter_name_row"
+                 align="center">
+                <label id="formatter_name_label"
+                       value="&formatterName.label;" />
+                <textbox id="formatter_name_textbox" />
+            </row>
+            <row id="formatter_language_row"
+                 align="center">
+                <label id="formatter_language_label"
+                       value="&formatterLanguage.label;" />
+                <menulist id="formatter_language_menulist"
+                          label="-">
+                    <menupopup id="formatter_language_menupopup"/>
+                </menulist>
+            </row>
+            <row id="formatter_formatter_row"
+                 align="center">
+                <label id="formatter_for_language_label"
+                       value="&formatter.label;" />
+                <menulist id="formatters_for_language_menulist" flex="1">
+                    <menupopup id="formatters_for_language_menupopup"/>
+                </menulist>
+            </row>
+        </rows>
+    </grid>
+
+    <!-- A "formatter_options" element will be added to this vbox which has
+         the type attribute set to the name of the formatter:
+           <formatter_options id="options" type="generic" />
+         which can be used by a custom formatter to put in their own
+         custom options.
+    -->
+    <vbox id="formatter_editor_options_vbox" />
+
+</dialog>

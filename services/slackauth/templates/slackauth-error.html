@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Komodo Slacks Auth</title>
+    <style>
+        #key
+        {
+            visibility: hidden;
+            height: 0px;
+            width: 0px;
+        }
+        
+        #done
+        {
+            color: #bbb;
+            opacity: 0;
+            font-size: 1em;
+            margin: 80px auto;
+            position: relative;
+            animation: showDone 3s;
+            animation-delay: 1s;
+        }
+        @keyframes showDone {
+            100%
+            {
+                opacity: 1;
+            }
+        }
+        </style>
+</head>
+
+<body>
+
+<div id="denied">{{ message }}</div>
+<div id="done">Harsh</div>
+<div id="error">{{ error }}</h1>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!ENTITY cloneLocal.label "Local repository">
+<!ENTITY cloneLocal.tooltip "When the repository to clone from is on a local machine, this flag bypasses normal 'git aware' transport mechanism and clones the repository by making a copy of HEAD and everything under objects and refs directories. The files under .git/objects/ directory are hardlinked to save space when possible. This is now the default when the source repository is specified with /path/to/repo syntax, so it essentially is a no-op option. To force copying instead of hardlinking (which may be desirable if you are trying to make a back-up of your repository), but still avoid the usual 'git aware' transport mechanism, --no-hardlinks can be used.">
+<!ENTITY cloneNoCheckout.label "Do not perform a HEAD checkout after cloning.">
+<!ENTITY cloneBare.label "Make a bare GIT repository.">
+<!ENTITY cloneBare.tooltip "Make a bare GIT repository. That is, instead of creating &lt;directory&gt; and placing the administrative files in &lt;directory&gt;/.git, make the &lt;directory&gt; itself the $GIT_DIR. This obviously implies the 'no HEAD checkout' because there is nowhere to check out the working tree. Also the branch heads at the remote are copied directly to corresponding local branch heads, without mapping them to refs/remotes/origin/. When this option is used, neither remote-tracking branches nor the related configuration variables are created.">

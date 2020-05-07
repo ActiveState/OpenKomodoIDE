@@ -1,0 +1,6 @@
+MANIFEST
+zope/__init__.py
+zope/README.txt
+zope/PUBLICATION.cfg
+setup.py
+setup.cfg

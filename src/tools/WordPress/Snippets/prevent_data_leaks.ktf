@@ -1,0 +1,12 @@
+// komodo tool: prevent_data_leaks
+// ===============================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ===============================
+<% /* Prevent Data Leaks */ %>
+
+if ( ! defined( 'ABSPATH' ) ) { 
+    exit; // Exit if accessed directly
+}

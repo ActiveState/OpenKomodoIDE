@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://bazaar/locale/bazaar-prefs.dtd" >
+
+<overlay id="bzr_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <treechildren id="sourceCodeControlItemChildren">
+        <treeitem id="prefs_bzr_treeitem">
+            <treerow id="prefs_bzr_treecrow">
+                <treecell id="prefs_bzr_treecell"
+                          class="treecell-indent"
+                          url="chrome://bazaar/content/pref-scc-bzr.xul"
+                          label="&Bazaar.label;"
+                          helptag="scc.html"/>
+            </treerow>
+        </treeitem>
+    </treechildren>
+</overlay>

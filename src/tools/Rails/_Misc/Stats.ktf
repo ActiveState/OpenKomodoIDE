@@ -1,0 +1,21 @@
+// komodo tool: Stats
+// ==================
+// async: 0
+// icon: chrome://famfamfamsilk/skin/icons/sum.png
+// language: JavaScript
+// rank: 100
+// trigger: trigger_postopen
+// trigger_enabled: 0
+// type: macro
+// version: 1.0.12
+// ==================
+try {
+    var obj = {base: 'rake', ruby: null, rake:null, env:null};
+    ko.extensions.rails.setup_associated_paths_env(obj);
+    var options = {
+        env: obj.env
+    };
+    ko.extensions.rails.runCommand(window, obj.rake + ' stats', options);
+} catch(ex) {
+    alert(ex + "\n");
+}

@@ -1,0 +1,9 @@
+--- 
+Leopard gecko: !ruby/object:Entry 
+  descr: A very small lizard; 7 to 10 inches long. 
+  sci_name: Eublepharis macularius
+  time_mod: 2005-10-25 11:48:49.620527 -07:00
+Komodo dragon: !ruby/object:Entry 
+  descr: Largest lizard in the world; up to 10 feet long.
+  sci_name: Varanus komodoensis
+  time_mod: 2005-10-25 11:45:44.836758 -07:00

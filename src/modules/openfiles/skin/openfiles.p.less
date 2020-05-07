@@ -1,0 +1,119 @@
+#openfilesListbox
+{
+    richlistitem
+    {
+        margin-bottom: 2px;
+    }
+
+    richlistitem.file-item
+    {
+        label.file-title
+        {
+            margin-left: 3px;
+            margin-top: 0px;
+        }
+        
+        label.file-dirty
+        {
+            margin: 0;
+            padding: 0;
+        }
+        
+        label.file-path
+        {
+            visibility: collapse;
+            opacity: 0.7;
+            margin-top: 0px;
+        }
+        
+        &.duplicate-name label.file-path
+        {
+            visibility: visible;
+        }
+        
+        image.file-icon
+        {
+            margin-left: 2px;
+            height: 14px;
+            max-height: 14px;
+        }
+    }
+    
+    richlistitem.group-item
+    {
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        padding: 0;
+        margin: 0 5px 2px;
+
+        &.languageicon
+        {
+            //display: list-item;
+            //list-style-position: inside;
+        }
+        
+        &:not(:first-child)
+        {
+            margin-top: 5px;
+        }
+        
+        label
+        {
+            font-size: 90%;
+            font-weight: bold;
+            margin-left: 0;
+        }
+    }
+    
+    richlistitem
+    {
+        toolbarbutton.file-close-button
+        {
+            visibility: hidden;
+            margin: 0 16px 0 0 !important;
+            padding: 0;
+        }
+        
+        &:hover toolbarbutton.file-close-button
+        {
+            visibility: visible;
+        }
+    }
+    
+    richlistitem.split-item
+    {
+        height: 1px;
+        border-top: 1px dashed rgba(0,0,0,0.3);
+        margin: 10px 10px 0;
+        padding: 0 0 5px;
+        
+        &:first-child, & > *
+        {
+            display: none;
+        }
+    }
+}
+
+richlistitem:hover toolbarbutton.file-close-button
+{
+    opacity: 0.8;
+}
+
+#openfilesPrefHbox
+{
+    margin: 0;
+
+    .panel-label
+    {
+        padding-top: 4px;
+    }
+
+    *[kohidden="true"]
+    {
+        visibility: collapse;
+    }
+}
+
+#openFilesCloseAll
+{
+    opacity: 1 !important;
+}

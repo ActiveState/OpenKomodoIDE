@@ -1,0 +1,234 @@
+# flags_bb.test --
+#
+#	This file contains Black Box tests that excercise the Checker 
+#	command line flags.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: flags_bb.test,v 1.8 2000/05/30 22:24:50 wart Exp $
+
+if {[string compare test [info procs test]] == 1} {
+    lappend auto_path [file join [file dirname [info script]] ..]
+    package require protest
+    namespace import ::protest::*
+}
+
+set tclchecker [findExeFile tclchecker 1]
+set ::tcltest::testConstraints(skipIfWinBuild) \
+	[expr {![regexp {bat$} $tclchecker]}]
+
+set echo echo
+
+set errorFreeCode [file join $::tcltest::temporaryDirectory errorFreeCode.tcl]
+makeFile {
+    set x "error free tcl code"
+} $errorFreeCode
+
+set errorProneCode [file join $::tcltest::temporaryDirectory errorProneCode.tcl]
+makeFile {
+    set x y "error prone tcl code"
+} $errorProneCode
+
+set warningProneCode [file join $::tcltest::temporaryDirectory warningProneCode.tcl]
+makeFile {
+    file exists $a/$b
+} $warningProneCode
+
+# test -help
+
+test flags-1.1 {tclchecker -help} {
+    set result [catch {exec $tclchecker -help} msg]
+    list $result [regexp Usage $msg]
+} {0 1}
+test flags-1.2 {tclchecker -badflag} {
+    set result [catch {exec $tclchecker -badflag} msg]
+    list $result [regexp "Illegal option" $msg]
+} {1 1}
+test flags-1.3 {tclchecker -help -badflag} {
+    set result [catch {exec $tclchecker -help -badflag} msg]
+    list $result [regexp Usage $msg]
+} {0 1}
+test flags-1.4 {tclchecker badfile} {
+    set result [catch {exec $tclchecker badfile} msg]
+    set usage [regexp {warning:.*"badfile".*Usage} $msg]
+    list $result $usage
+} {1 1}
+test flags-1.5 {tclchecker -help badfile} {
+    set result [catch {exec $tclchecker -help badfile} msg]
+    list $result [regexp Usage $msg]
+} {0 1}
+
+# Test with and without -nologo flag.
+
+test flags-2.1 {test the logo} {skipIfWinBuild} {
+    # verify that logo appears when -nologo is not specified
+    catch {exec $echo "set x 1" | $tclchecker -nologo -q} result
+    set result
+} {}
+
+test flags-2.2 {test the logo} {
+    # verify that logo appears when -nologo is not specified, but -help is
+    set result [catch {exec $echo "set x 1" | $tclchecker -help} msg]
+    list $result [regexp "$::projectInfo::productName -- Version" $msg]
+} {0 1}
+
+set year [clock format [clock seconds] -format "%Y"]
+test flags-2.3 {test the logo} {skipIfWinBuild} {
+    # verify that logo appears when -nologo is not specified
+    set result [catch {exec $echo "set x 1" | $tclchecker -q} msg]
+    set lines [split $msg \n]
+    
+    # verify the version number in the logo
+    set line1 [lindex $lines 0]
+    regsub "$::projectInfo::productName -- Version " $line1 "" version
+    
+    # verify the copyright date in the logo
+    set line2 [lindex $lines 1]
+    regsub {Copyright \(C\) Ajuba Solutions } $line2 "" date
+    regsub {. All rights reserved.} $date "" date
+    
+    list $result $version $date
+} [list 0 $::projectInfo::patchLevel "1998-$year"]
+
+
+# check -verbose and -quiet
+
+test flags-3.1 {tclchecker errorFreeCode without -verbose or -quiet} {
+    set result [catch {exec $tclchecker $errorFreeCode} msg]
+    set quiet [regexp "scanning:.*errorFree.*checking:.*errorFree" $msg]
+    set verb [regexp "Number.*Errors.*0.*Number.*Warnings.*0" $msg]
+    list $result $quiet $verb
+} {0 1 0}
+test flags-3.2 {tclchecker errorFreeCode with -verbose} {
+    set result [catch {exec $tclchecker -v $errorFreeCode} msg]
+    set quiet [regexp "scanning:.*errorFree.*checking:.*errorFree" $msg]
+    set verb [regexp "Number.*Errors.*0.*Number.*Warnings.*0" $msg]
+    list $result $quiet $verb
+} {0 1 1}
+test flags-3.3 {tclchecker error and warning prone code with -verbose} {
+    set result [catch {exec $tclchecker -v $errorProneCode $warningProneCode} msg]
+    set quiet1 [regexp "scanning:.*errorProne.*scanning:.*warningProne" $msg]
+    set quiet2 [regexp "checking:.*errorProne.*checking:.*warningProne" $msg]
+    set verb [regexp "Number.*Errors.*1.*Number.*Warnings.*1" $msg]
+    list $result $quiet1 $quiet2 $verb
+} {1 1 1 1}
+test flags-3.4 {tclchecker errorFreeCode with -quiet} {
+    set result [catch {exec $tclchecker -q $errorFreeCode} msg]
+    set quiet [regexp "scanning:.*errorFree.*checking:.*errorFree" $msg]
+    set verb [regexp "Number.*Errors.*Number.*Warnings" $msg]
+    list $result $quiet $verb
+} {0 0 0}
+test flags-3.5 {tclchecker error and warning prone code with -quiet} {
+    set result [catch {exec $tclchecker -q $errorProneCode $warningProneCode} msg]
+    set quiet1 [regexp "scanning:.*errorProne.*scanning:.*warningProne" $msg]
+    set quiet2 [regexp "checking:.*errorProne.*checking:.*warningProne" $msg]
+    set verb [regexp "Number.*Errors.*Number.*Warnings" $msg]
+    list $result $quiet1 $quiet2 $verb
+} {1 0 0 0}
+test flags-3.6 {tclchecker errorFreeCode with -verbose} {
+    set result [catch {exec $tclchecker -q -v $errorFreeCode} msg]
+    set quiet [regexp "scanning:.*errorFree.*checking:.*errorFree" $msg]
+    set verb [regexp "Number.*Errors.*0.*Number.*Warnings.*0" $msg]
+    list $result $quiet $verb
+} {0 0 1}
+test flags-3.7 {tclchecker error and warning prone code with -verbose} {
+    set result [catch {exec $tclchecker -q -v $errorProneCode $warningProneCode} msg]
+    set quiet1 [regexp "scanning:.*errorProne.*scanning:.*warningProne" $msg]
+    set quiet2 [regexp "checking:.*errorProne.*checking:.*warningProne" $msg]
+    set verb [regexp "Number.*Errors.*1.*Number.*Warnings.*1" $msg]
+    list $result $quiet1 $quiet2 $verb
+} {1 0 0 1}
+
+# check simple files
+
+test flags-4.1 {tclchecker errorFreeCode} {
+    set result [catch {exec $tclchecker $errorFreeCode} msg]
+    set match [regexp "scanning:.*errorFree.*checking:.*errorFree" $msg]
+    list $result $match
+} {0 1}
+test flags-4.2 {tclchecker errorProneCode} {
+    set result [catch {exec $tclchecker $errorProneCode} msg]
+    set match [regexp "scanning:.*errorProne.*checking:.*errorProne" $msg]
+    list $result $match [regexp "numArgs" $msg]
+} {1 1 1}
+test flags-4.3 {tclchecker warningProneCode} {
+    set result [catch {exec $tclchecker $warningProneCode} msg]
+    set match [regexp "scanning:.*warningProne.*checking:.*warningProne" $msg]
+    list $result $match [regexp "nonPortFile" $msg]
+} {0 1 1}
+
+# check stdin
+
+set errorFreeCmd "set x {error free tcl code}"
+set errorProneCmd "set x y {error prone tcl code}"
+set warningProneCmd {file split warning/$prone/$tcl/code}
+
+test flags-5.1 {tclchecker stdin} {
+    set result [catch {exec $echo $errorFreeCmd | $tclchecker} msg]
+    set match [regexp "scanning:.*stdin.*checking:.*stdin" $msg]
+    list $result $match
+} {0 1}
+test flags-5.2 {tclchecker stdin} {
+    set result [catch {exec $echo $errorProneCmd | $tclchecker} msg]
+    set match [regexp "scanning:.*stdin.*checking:.*stdin" $msg]
+    list $result $match [regexp "numArgs" $msg]
+} {1 1 1}
+test flags-5.3 {tclchecker stdin} {
+    set result [catch {exec $echo $warningProneCmd | $tclchecker} msg]
+    set match [regexp "scanning:.*stdin.*checking:.*stdin" $msg]
+    list $result $match [regexp "nonPortFile" $msg]
+} {0 1 1}
+test flags-5.4 {ignore stdin if file pattern is specified} {
+    set result [catch {exec $echo $errorProneCmd | $tclchecker $errorFreeCode} msg]
+    set match [regexp "scanning:.*errorFreeCode.*checking:.*errorFreeCode" $msg]
+    list $result $match [regexp "stdin" $msg]
+} {0 1 0}
+test flags-5.5 {ignore stdin if file pattern is specified} {
+    set result [catch {exec $echo $errorProneCmd | $tclchecker badfile} msg]
+    set match [regexp {warning:.*"badfile".*Usage} $msg]
+    list $result $match [regexp "stdin" $msg]
+} {1 1 0}
+test flags-5.6 {tclchecker stdin -verbose} {
+    set result [catch {exec $echo $errorProneCmd | $tclchecker -v} msg]
+    set match [regexp "scanning:.*stdin.*checking:.*stdin" $msg]
+    set verb [regexp "Number.*Errors.*1.*Number.*Warnings.*0" $msg]
+    list $result $match $verb [regexp "numArgs" $msg]
+} {1 1 1 1}
+test flags-5.7 {tclchecker stdin -quiet} {
+    set result [catch {exec $echo $errorProneCmd | $tclchecker -q} msg]
+    set match [regexp "scanning:.*stdin.*checking:.*stdin" $msg]
+    set verb [regexp "Number.*Errors.*1.*Number.*Warnings.*0" $msg]
+    list $result $match $verb [regexp "numArgs" $msg]
+} {1 0 0 1}
+
+# check that itcl::* commands are recognized for itcl 2.0+ 
+
+set index 1
+foreach version {1.5 2.0 2.1 2.2 ""} {
+
+    foreach classCmd [list class ::class itcl_class itcl::class \
+	::itcl::class itcl::itcl_class] {
+
+	if {$classCmd == "itcl::itcl_class"} {
+	    set value 0
+	} elseif {$version == "1.5" && ![regexp {itcl_} $classCmd]} {
+	    set value 0
+	} else {
+	    set value 1
+	}
+
+	test flags-6.$index "test -use itcl$version with $classCmd" {
+	    set script "$classCmd foo {set}"
+	    set result [catch {
+		exec $echo $script | $tclchecker -n -v -use incrTcl$version
+	    } msg]
+	    list $result [regexp numArgs $msg] \
+		[regexp {called but never defined} $msg]
+	} [list $value $value [expr {!$value}]]
+	incr index
+    }
+}
+
+# cleanup
+cleanupTests

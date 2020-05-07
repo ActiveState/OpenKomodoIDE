@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+    <script>
+        (function() {
+            var listener = function(data)
+            {
+                document.open();
+                document.write(data);
+                document.close();
+            };
+            listener();
+
+            window.addEventListener("message", () => { alert("receive2"); });
+        })();
+    </script>
+</head>
+<body></body>
+</html>

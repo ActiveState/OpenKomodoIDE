@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2010 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % dbexplorerDTD SYSTEM "chrome://dbexplorer/locale/dbexplorer.dtd">
+  %dbexplorerDTD;
+]>
+
+<overlay id="dbexplorerOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <commandset id="allcommands">
+    <command id="cmd_dbexplorer_refreshConnection"
+             oncommand="ko.dbexplorer.viewManager.refreshConnection(event);" />
+  </commandset>
+
+  <ko-pane id="workspace_left_area">
+    <browser type="ko-widget" id="dbexplorer_viewbox"
+             insertafter="codebrowserviewbox"
+             label="&DBExplorerShort.label;" short-label="&DBExplorerShort.label.short;"
+             src="chrome://dbexplorer/content/pane.xul"
+             icon="koicon://ko-svg/chrome/icomoon/skin/ko_database.svg"/>
+  </ko-pane>
+    
+</overlay>

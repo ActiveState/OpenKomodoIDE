@@ -1,0 +1,114 @@
+/*
+
+    Name:       Base16 Bespin Dark
+    Author:     Jan T. Sott
+
+    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-chrome-devtools)
+    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+*/
+
+.cm-s-base16-bespin-dark.CodeMirror {background: #28211c; color: #9d9b97;}
+.cm-s-base16-bespin-dark div.CodeMirror-selected {background: #36312e !important;}
+.cm-s-base16-bespin-dark .CodeMirror-gutters {background: #28211c; border-right: 0px;}
+.cm-s-base16-bespin-dark .CodeMirror-linenumber {color: #666666;}
+.cm-s-base16-bespin-dark .CodeMirror-cursor {border-left: 1px solid #797977 !important;}
+
+.cm-s-base16-bespin-dark span.cm-header {color: #666666;}
+.cm-s-base16-bespin-dark span.cm-comment {color: #666666;}
+.cm-s-base16-bespin-dark span.cm-atom {color: #9b859d;}
+.cm-s-base16-bespin-dark span.cm-number {color: #cf7d34;}
+
+.cm-s-base16-bespin-dark span.cm-property {color: #9d9b97;}
+.cm-s-base16-bespin-dark span.cm-attribute {color: #cf7d34;}
+.cm-s-base16-bespin-dark span.cm-keyword {color: #9b859d;}
+.cm-s-base16-bespin-dark span.cm-string {color: #54be0d;}
+
+.cm-s-base16-bespin-dark span.cm-variable {color: #cf6a4c;}
+.cm-s-base16-bespin-dark span.cm-variable-2 {color: #5ea6ea;}
+.cm-s-base16-bespin-dark span.cm-def {color: #5ea6ea;}
+.cm-s-base16-bespin-dark span.cm-error {background: #cf6a4c; color: #797977;}
+.cm-s-base16-bespin-dark span.cm-bracket {color: #36312e;}
+.cm-s-base16-bespin-dark span.cm-tag {color: #cf6a4c;}
+.cm-s-base16-bespin-dark span.cm-link {color: #9b859d;}
+.cm-s-base16-bespin-dark span.cm-builtin {color: #9b859d;}
+
+.cm-s-base16-bespin-dark .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
+
+.cm-s-base16-bespin-dark .CodeMirror-activeline-background { background: #36312e !important; }
+
+
+
+body,
+textarea {
+  background: #28211c;
+  color: #8a8986;
+}
+
+#sidebar, .modal {
+  background: #36312e;
+  color: #9d9b97;
+}
+
+a, a:hover {
+    color: #937121;
+}
+
+a.option {
+    color: #937121 !important;
+}
+
+#logos {
+  background: #201a16;
+  color: #8a8986;
+}
+
+#buttons {
+  background: #36312e;
+  color: #797977;
+}
+
+#buttons .function.enabled:hover {
+  color: #9d9b97;
+}
+
+#buttonTips {
+  background: #937121;
+  color: #baae9e;
+}
+
+#pointer:after {
+    border-bottom-color: #937121 !important;
+}
+
+#linenos {
+  background: #36312e;
+  border-color: #5e5d5c !important;
+}
+
+#linenos a {
+    color: #797977 !important;
+}
+
+.option {
+    background: #28211c !important;
+    color: #797977 !important;
+}
+
+.option:hover {
+    background: #201a16 !important;
+}
+
+.dropdown:after {
+    border-top-color: #666666 !important;
+}
+
+#messages li {
+  background: #5ea6ea;
+  color: #baae9e;
+}
+
+#messages li.error {
+  background: #cf6a4c;
+  color: #baae9e;
+}

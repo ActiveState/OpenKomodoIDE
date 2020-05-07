@@ -1,0 +1,201 @@
+// komodo tool: Rails Setup
+// ========================
+// is_clean: true
+// type: tutorial
+// version: 1.1.5
+// ========================
+# Sample content, edit, delete, do whatever you like
+Description: Tutorial to quickly set up a Rails project in Komodo.
+Author: ActiveState
+Version: 1.0
+# Placement can be floating or docked
+Placement: docked
+Callouts:
+    placesWidget:
+        Element: "#placesViewbox"
+        Message: This is the Places widget.
+    projectCog:
+        Element: "#placesSubpanelProjectsTools_SPV"
+        Message: "This is the Project cog menu."
+    menuButton:
+        Element: "#unifiedMenuButton"
+        Message: "This is the Menu button."
+        Fail: "Enable the main toolbar using View > Toolbars > Show Toolbars"
+    uniMenuButton:
+        Element: "#unifiedMenuButton"
+        Message: Access Komodo menus in the Unified Menu.
+    toolboxWidget:
+        Element: "#toolbox2viewbox"
+        Message: "This is the Toolbox widget."
+        Fail: "Open Toolbox using View > Tabs & Sidebars > Toolbox or Ctrl + Shift + L"
+Steps:
+    -
+        Title: Before you begin
+        Summary: >
+            If you are new to the **Komodo IDE** you should complete the
+            **Getting Started** tutorial before continuing.  It is located
+            in the [toolbox][callout:toolboxWidget] in the Tutorials folder.
+            It teaches the basics of using Komodo.
+
+            For this tutorial we'll be following the [Getting Started with Rails tutorial](http://guides.rubyonrails.org/getting_started.html).
+
+            In this tutorial you will complete the following tasks:
+            - Install Rails using Komodo's **Commando** tool and `gem`
+            - Generate the Rails boilerplate code
+            - Create a Komodo project and import the Komodo Rails tools
+
+            ## Prerequisites
+
+            You must have the following items installed, and they must be on your system PATH:
+             - Ruby
+             - Ruby DevKit
+             - sqlite3
+
+            ### Installing the prerequisites
+
+            Download and run the following installers:
+
+             <% if (require("sdk/system").platform == "winnt") { %>
+             * [Download Ruby](http://rubyinstaller.org/downloads/)
+             <% } else { %>
+             * [Download Ruby](https://www.ruby-lang.org/en/downloads/)
+             <% } %>
+             * [Download SQLite3](https://www.sqlite.org/download.html)
+
+            #### Configuring the prerequisites
+
+            Complete the following steps to ensure that Komodo uses the correct versions of Ruby and SQLite3.
+
+            **NOTE** If Ruby is on your system path the Komodo configuation is completed automatically.
+
+            1. Configure Ruby:
+                1. Open the Preferences dialog box:
+                - Select <% if (require("sdk/system").platform == "darwin") { %>**Edit menu > <% } else { %> <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:uniMenuButton] > Edit <% } %>  Preferences > Languages**.
+                - Press `Ctrl + ,` (or `Cmd + ,` on Mac OS X)
+                1. Expand the **Languages** list in the sidebar, and select Ruby.
+                1. Click the **Browse** button next to the **Use this interpreter**
+                field, select your Ruby installation directory, and
+                select the Ruby interpreter binary file.
+            2. Configure SQLite3:
+                1. Expand the **Languages** list in the sidebar, and select Ruby > Rails.
+                1. Selct SQLite3 from the **Which type of database to use?** drop down list.
+                1. In the **Location of SQLite3** text box, enter the full path to sqlite3.dll.
+
+        #Validate: validPageOne -> isRubyFound && isVirtualenvFound
+
+    -
+        Title: Configuring Rails
+        Summary: >
+            You need to complete the following steps to install and configure Rails:
+             - Install Rails
+             - Configure Rails in Komodo
+             - Create your Rails project
+        Task: >
+            1. Press `Ctrl + Shift + O` (or `Cmd + Shift + O` on Mac OS X)
+            to open Go to Anything.
+            1. Press 8 to select the Shell scope.
+            1. Enter **gem > install > rails**. The output should finish with the following:
+            ```
+            Successfully installed rails-5.0.1
+            Parsing documentation for rails-5.0.1
+            Installing ri documentation for rails-5.0.1
+            Done installing documentation for rails after 1 seconds
+            1 gem installed
+            ```
+            1. Open the Preferences dialog box:
+            - Select <% if (require("sdk/system").platform == "darwin") { %>**Edit menu > <% } else { %> <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:uniMenuButton] > Edit <% } %>  Preferences > Languages**.
+            - Press `Ctrl + ,` (or `Cmd + ,` on Mac OS X)
+            1. Expand the **Languages** list in the sidebar, and select Ruby > Rails.
+            1. Click the **Browse** button next to the **Rails Location**
+            field, and select the Rails <% if (require("sdk/system").platform == "winnt") { %> batch <% } else { %> binary <% } %>file.  This is usually located in your Ruby install's `bin` folder.
+            1. Press `Ctrl + Shift + O` (or `Cmd + Shift + O` on Mac OS X)
+            to open Go to Anything.
+            1. Press 8 to select the Shell scope.
+            1. Enter `rails new ~/project/blog`. The output should be similar to the following:
+            ```
+            ...
+            Using web-console 3.4.0
+            Using rails 5.0.1
+            Using sass-rails 5.0.6
+            Bundle complete! 12 Gemfile dependencies, 56 gems now installed.
+            Use `bundle show [gemname]` to see where a bundled gem is installed.
+            ```
+        Tips:
+            - The output of commands in Go to Anything (Commando) tell you which executable was used at the start of the output.  You should verify that the expected executable is displayed.
+            - Commando supports tab completion for faster typing.
+
+    -
+
+        Title: Creating a Komodo project
+        Summary: >
+            Your first tasks are to create a Komodo project that provides the context for the
+            setup commands in this tutorial, and to import the Komodo Rails tools. All of these steps are completed in Komodo.
+        Task: >
+            1. Create a project, <% if (require("sdk/system").platform == "darwin") { %> **Project menu > <% } else { %> <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:uniMenuButton] > Project > <% } %> New Project**. Use the dialog to navigate to your new project folder, name the project file, and then click *Save*.
+            1. Import the Rails tools:
+                1. In the [toolbox][callout:toolboxWidget] click the <i class="icon icon-cog"></i> gear icon.
+                1. Navigate to **Import > Rails Tools**.
+                1. Click `OK` to install the tools into your projects toolbox.
+
+            In the toolbox you'll see a red toolbox icon with the same name as your project.  Click the toolbox and it will expand to show you the installed Rails tools.
+
+        Tips:
+            - You can specify a custom **Project Base URL** in the **Project Preferences** dialog box.  Right click your project and select **Project Preferences** and then enter the custom URL in the **Project Base Directory** text box.
+            - Komodo uses your system path to find installed tools.  You can also manually configure the location at the Global, Project, or File level preferences.  Komodo prioritizes preferences in the following hierarchy, File > Project > Global.
+            - <% if (require("sdk/system").platform == "winnt") { %>Use `where [exectuableName]` in Commando to see what Komodo will find on your path.  Example `where gem`<% } else { %>Use `which [exectuableName]` in Commando to see what Komodo will find on your path, for example, `which gem`<% } %>
+
+
+    -
+        Title: Starting Rails
+        Summary: >
+            You use the **Run Server** console command you created to start Rails.
+
+        Task: >
+            1. In the [Toolbox][callout:toolboxWidget] click your **[Project Name] toolbox** to expand it.
+            1. Open the `Run` folder.
+            1. Double click the `run server` console command.
+            It will open a terminal window with output that looks
+            similar to the following:
+            
+            ```
+            => Booting Puma
+            => Rails 5.0.1 application starting in development on http://localhost:3000
+            => Run 'rails server -h' for more startup options
+            SIGUSR2 not implemented, signal based restart unavailable!
+            SIGUSR1 not implemented, signal based restart unavailable!
+            SIGHUP not implemented, signal based logs reopening unavailable!
+            Puma starting in single mode...
+            Version 3.6.2 (ruby 2.3.3-p222), codename: Sleepy Sunday Serenity
+            Min threads: 5, max threads: 5
+            Environment: development
+            Listening on tcp://localhost:3000
+            Use Ctrl-C to stop
+            ```
+            Open your web browser and navigate to the URL listed in the
+            command output (e.g. http://localhost:3000) to see the site
+            running.
+
+            See the [Rails Docs](http://guides.rubyonrails.org/) for more information.
+// ========================
+// komodo meta: logic
+// ========================
+// Sample content, edit, delete, do whatever you like
+(function() {
+    var {Cc, Ci} = require("chrome");
+    var $ = require("ko/dom");
+    var w = require("ko/windows").getMain();
+    var ko = w.ko;
+    
+    this.start = function() {};
+    this.preStep = function() {};
+    this.step = function() {};
+    this.preClose = function() {};
+    this.close = function() {};
+
+    this.focusPlaces = function()
+    {
+        ko.uilayout.ensureTabShown('placesViewbox', true);
+        w.require("tutorials").logicCallout("placesWidget");
+    };
+    
+}).apply(module.exports);

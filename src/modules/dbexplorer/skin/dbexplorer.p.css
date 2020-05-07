@@ -1,0 +1,55 @@
+/* Copyright (c) 2003-2009 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+/*
+ * CSS for Database Explorer UI in Komodo:
+ */
+
+
+treechildren#dbexplorer-body::-moz-tree-image {
+  margin-right: 2px;
+}
+treechildren#dbexplorer-body::-moz-tree-cell-text(disabled) {
+  color: grey;
+}
+
+toolbarbutton.show-databaseAdd-icon {
+  list-style-image : url("chrome://dbexplorer/skin/database_add.png");
+}
+
+treechildren#dbexplorer-body::-moz-tree-image(dbx_busy) {
+  list-style-image : url("chrome://dbexplorer/skin/hourglass.png");
+}
+
+treechildren#dbexplorer-body::-moz-tree-image(dbx_database_connect) {
+  list-style-image : url("chrome://dbexplorer/skin/database_connect.png");
+}
+
+treechildren#dbexplorer-body::-moz-tree-image(dbx_database) {
+  list-style-image : url("chrome://dbexplorer/skin/database.png");
+}
+
+treechildren#dbexplorer-body::-moz-tree-image(dbx_text_columns) {
+  list-style-image : url("chrome://dbexplorer/skin/text_columns.png");
+}
+
+treechildren#dbexplorer-body::-moz-tree-image(dbx_table_gear) {
+  list-style-image : url("chrome://dbexplorer/skin/table_gear.png");
+}
+
+treechildren#dbexplorer-body::-moz-tree-image(dbx_table_lightning) {
+  list-style-image : url("chrome://dbexplorer/skin/table_lightning.png");
+}
+
+treechildren#dbexplorer-body::-moz-tree-image(dbx_database_table) {
+  list-style-image : url("chrome://dbexplorer/skin/database_table.png");
+}
+
+treechildren#dbexplorer-body::-moz-tree-image(dbx_exclamation) {
+  list-style-image : url("chrome://dbexplorer/skin/exclamation.png");
+}
+
+tree.dbxtree {
+    -moz-binding: url('chrome://dbexplorer/content/widgets-dbx.xml#dbxtree');
+}
+

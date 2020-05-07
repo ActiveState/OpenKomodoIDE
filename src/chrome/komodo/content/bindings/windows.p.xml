@@ -1,0 +1,658 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2015-2016 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % bindingsDTD SYSTEM "chrome://komodo/locale/bindings.dtd">
+  %bindingsDTD;
+]>
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="root-element"
+             extends="chrome://global/content/bindings/general.xml#root-element">
+    <implementation>
+      <constructor>
+        <![CDATA[
+          try
+          {
+            // Set os-name attribute for use in CSS
+            var sysInfo = Components.classes["@mozilla.org/system-info;1"].getService(Components.interfaces.nsIPropertyBag2);
+            document.documentElement.setAttribute("os-name", sysInfo.get("name"));
+
+            window.isActive = true;
+            window.addEventListener("activate", () => window.isActive = true);
+            window.addEventListener("deactivate", () => window.isActive = false);
+
+            require = this._getRequireMethod();
+            
+            if (typeof require == "undefined")
+                return;
+            
+            var w = require("ko/windows").getMain();
+            if ( ! w) return;
+
+            w.require("ko/windows").init();
+
+            var evt = new CustomEvent("window_opened", { detail: window });
+            w.dispatchEvent(evt);
+
+            this.loadVirtualStylesheets();
+          }
+          catch(e)
+          {
+            var {logging} = Components.utils.import("chrome://komodo/content/library/logging.js");
+            logging.getLogger("window-bindings").exception(e);
+          }
+        ]]>
+      </constructor>
+      <method name="_getRequireMethod">
+        <body>
+          <![CDATA[
+            if (typeof require == "undefined")
+            {
+                var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator);
+                var w = wm.getMostRecentWindow("Komodo");
+                if ( ! w) return;
+                return w.require;
+            }
+            
+            return require;
+          ]]>
+        </body>
+      </method>
+      <method name="loadVirtualStylesheets">
+        <body>
+        <![CDATA[
+          if (typeof require == "undefined")
+            return;
+          
+          var styleUtil = require("sdk/stylesheet/utils");
+          var styles = require("ko/prefs").getString("virtualStyles").split(",");
+          for (let styleUrl of styles) {
+            try
+            {
+              styleUtil.removeSheet(window, styleUrl, "agent");
+            } catch (e) {} // no need for an exception if its already removed
+            styleUtil.loadSheet(window, styleUrl, "agent");
+          }
+        ]]>
+        </body>
+      </method>
+    </implementation>
+    </binding>
+
+    <binding id="dialog"
+             extends="chrome://global/content/bindings/dialog.xml#dialog">
+    <implementation>
+      <constructor>
+        <![CDATA[
+          try
+          {
+            // Set os-name attribute for use in CSS
+            var sysInfo = Components.classes["@mozilla.org/system-info;1"].getService(Components.interfaces.nsIPropertyBag2);
+            document.documentElement.setAttribute("os-name", sysInfo.get("name"));
+            
+            require = this._getRequireMethod();
+
+            if (typeof require == "undefined")
+                return;
+            
+            var w = require("ko/windows").getMain();
+            if ( ! w) return;
+            
+            var evt = new CustomEvent("window_opened", { detail: window });
+            w.dispatchEvent(evt);
+            
+            this.loadVirtualStylesheets();
+            
+            var require = w.require;
+            var hideChrome = require("ko/prefs").getBoolean("ui.hide.chrome");
+            if (hideChrome)
+            {
+              window.addEventListener("load", function() {
+                setTimeout(function() {
+                  // Force the window to respect its minimum width, (yet another XUL bug)
+                  var width = window.innerWidth;
+                  window.innerWidth = 1000;
+                  window.innerWidth = width;
+                }, 100);
+              });
+            }
+    
+// #if PLATFORM == "win"
+          var borderFix = () =>
+          {
+            var h = window.innerHeight;
+            window.innerHeight = h+100;
+            window.innerHeight = h;
+          };
+          setTimeout(borderFix, 100);
+
+          window.addEventListener("load", function() {
+              setTimeout(borderFix, 100);
+          });
+// #endif
+// #if PLATFORM == "darwin"
+          this._sizeToContent();
+// #endif
+          }
+          catch(e)
+          {
+            var {logging} = Components.utils.import("chrome://komodo/content/library/logging.js");
+            logging.getLogger("window-bindings").exception(e);
+          }
+        ]]>
+      </constructor>
+<!--#if PLATFORM == "darwin"-->
+      <method name="_sizeToContent">
+        <body>
+          <![CDATA[
+            setTimeout(() => window.sizeToContent(), 250);
+          ]]>
+        </body>
+      </method>
+<!--#endif-->
+      <method name="_getRequireMethod">
+        <body>
+          <![CDATA[
+            if (typeof require == "undefined")
+            {
+                var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator);
+                var w = wm.getMostRecentWindow("Komodo");
+                if ( ! w) return;
+                return w.require;
+            }
+            
+            return require;
+          ]]>
+        </body>
+      </method>
+      <method name="loadVirtualStylesheets">
+        <body>
+        <![CDATA[
+          if (typeof require == "undefined")
+            return;
+          
+          var styleUtil = require("sdk/stylesheet/utils");
+          var styles = require("ko/prefs").getString("virtualStyles").split(",");
+          for (let styleUrl of styles) {
+            try
+            {
+              styleUtil.removeSheet(window, styleUrl, "agent");
+            } catch (e) {} // no need for an exception if its already removed
+            styleUtil.loadSheet(window, styleUrl, "agent");
+          }
+        ]]>
+        </body>
+      </method>
+    </implementation>
+    </binding>
+
+    <binding id="window-chromeless"
+             extends="chrome://komodo/content/bindings/windows.xml#root-element">
+    <content>
+        
+      <xul:hbox class="resizer-box">
+        <xul:resizer dir="topleft"/>
+        <xul:resizer dir="top" flex="1"   />
+        <xul:resizer dir="topright"/>
+      </xul:hbox>
+      <xul:hbox class="resizer-box" flex="1">
+        <xul:resizer dir="left"/>
+        <xul:vbox xbl:inherits="orient" class="window-wrapper" flex="1">
+            <xul:hbox id="titlebar" pack="center" align="center">
+                <xul:spacer id="windowButtonsSpacer"></xul:spacer>
+                
+                <xul:label xbl:inherits="value=title" flex="1" style="text-align: center"/>
+              
+                <xul:hbox id="windowButtons" align="center" pack="end">
+                    <xul:toolbarbutton buttonstyle="pictures" id="min" class="icon-minus-circle2" onclick="window.minimize();"/>
+                    <xul:toolbarbutton buttonstyle="pictures" id="max" class="icon-plus-circle2" onclick="window.windowState === 1 ? window.restore() : window.maximize();"/>
+                    <xul:toolbarbutton buttonstyle="pictures" id="close" class="icon-cancel-circle2" onclick="window.close();"/>
+                </xul:hbox>
+            </xul:hbox>
+            <children/>
+        </xul:vbox>
+        <xul:resizer dir="right"/>
+      </xul:hbox>
+      <xul:hbox class="resizer-box">
+        <xul:resizer dir="bottomleft"/>
+        <xul:resizer dir="bottom" flex="1"   />
+        <xul:resizer dir="bottomright"/>
+      </xul:hbox>
+    </content>
+    <implementation>
+      <field name="_draggable">true</field>
+      <field name="_tophandle">true</field>
+      <field name="initialWidth">null</field>
+      <field name="initialHeight">null</field>
+      <constructor>
+        <![CDATA[
+        require = this._getRequireMethod();
+        if ( ! require) return;
+
+        var d = document.documentElement;
+        this.initialWidth = d.getAttribute("width");
+        this.initialHeight = d.getAttribute("height");
+            
+        var hideChrome = require("ko/prefs").getBoolean("ui.hide.chrome");
+        
+        this._draggable = hideChrome;
+        if (!this._draggableStarted) {
+          this._draggableStarted = true;
+          try {
+            new require("ko/windows/draggable")(this);
+          } catch (e) {}
+        }
+        
+        if (hideChrome)
+        {
+            this.setAttribute("_hidechrome", true);
+// #if PLATFORM == "darwin"
+            this.setAttribute("drawintitlebar", true);
+// #elif PLATFORM == "win"
+            this.setAttribute("chromemargin", "0,0,0,0");
+// #else
+            this.setAttribute("hidechrome", true);
+// #endif
+            
+            if (window.parent == window || window.arguments)
+            {
+              if (document.readyState == "complete")
+                setTimeout(this.restorePosition.bind(this), 0);
+              else
+                window.addEventListener("load", () => { setTimeout(this.restorePosition.bind(this), 0); });
+              window.addEventListener("unload", this.savePosition.bind(this));
+            }
+        }
+        
+// #if PLATFORM == "win"
+        window.addEventListener("resize", this.onResizeConstraintChecker.bind(this));
+        this.onResizeConstraintChecker();
+        
+        if ("maximize" in window) {
+            window._maximize = window.maximize;
+            window.maximize = this.maximize.bind(this);
+        }
+        
+        if ("restore" in window) {
+            window._restore = window.restore;
+            window.restore = this.restore.bind(this);
+        }
+// #endif
+
+          if (hideChrome)
+          {
+            setTimeout(function() {
+              // Force the window to respect its minimum width, (yet another XUL bug)
+              var width = window.innerWidth;
+              window.innerWidth = 1000;
+              window.innerWidth = width;
+            });
+
+// #if PLATFORM == "win"
+          var borderFix = () =>
+          {
+            var h = window.innerHeight;
+            window.innerHeight = h+100;
+            window.innerHeight = h;
+          };
+          setTimeout(borderFix, 100);
+
+          window.addEventListener("load", function() {
+              setTimeout(borderFix, 100);
+          });
+// #endif
+          }
+// #if PLATFORM == "darwin"
+          this._sizeToContent();
+// #endif
+        ]]>
+      </constructor>
+<!--#if PLATFORM == "darwin"-->
+      <method name="_sizeToContent">
+        <body>
+          <![CDATA[
+            setTimeout(() => window.sizeToContent(), 250);
+          ]]>
+        </body>
+      </method>
+<!--#endif-->
+      <method name="_getRequireMethod">
+        <body>
+          <![CDATA[
+            if (typeof require == "undefined")
+            {
+                var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator);
+                var w = wm.getMostRecentWindow("Komodo");
+                if ( ! w) return;
+                return w.require;
+            }
+
+            return require;
+          ]]>
+        </body>
+      </method>
+<!-- #if PLATFORM == "win" -->
+      <method name="onResizeConstraintChecker">
+        <body>
+        <![CDATA[
+        if (typeof require == "undefined")
+          return;
+
+        var hideChrome = require("ko/prefs").getBoolean("ui.hide.chrome");
+        if ( ! hideChrome || document.documentElement.getAttribute("sizemode") != "maximized") return;
+
+        // If we didn't maximize store the state
+        if (window.outerHeight < window.screen.availHeight &&
+            window.outerWidth < window.screen.availWidth)
+          this.restoreState = [window.outerWidth, window.outerHeight, window.screenX, window.screenY];
+
+        if (window.outerHeight > window.screen.availHeight)
+          window.outerHeight = window.screen.availHeight;
+        
+        if (window.outerWidth > window.screen.availWidth)
+          window.outerWidth = window.screen.availWidth;
+        
+        setTimeout(function() {
+          if (window.outerWidth == window.screen.availWidth &&
+              window.outerHeight == window.screen.availHeight)
+          {
+            window.moveTo(window.screen.availLeft, window.screen.availTop);
+            document.documentElement.setAttribute("_sizeMode", "maximized");
+          }
+          else
+          {
+            document.documentElement.setAttribute("_sizeMode", "normal");
+          }
+        }, 0);
+        ]]>
+        </body>
+      </method>
+      <method name="maximize">
+        <body>
+        <![CDATA[
+        var require = this._getRequireMethod();
+        
+        if (typeof require == "undefined" || (window.parent != window && ! window.opener)) {
+            return window._maximize(); // not ready, or embedded
+        }
+        
+        var hideChrome = require("ko/prefs").getBoolean("ui.hide.chrome");
+        if ( ! hideChrome)
+          return window._maximize();
+        
+        var restore = document.documentElement.getAttribute("_sizeMode") == "maximized";
+        
+        // Restore state
+        if (restore) {
+          this.restore();
+        }
+        
+        // Maximize
+        else
+        {
+          this.restoreState = [window.outerWidth, window.outerHeight, window.screenX, window.screenY];
+          window.outerWidth = window.screen.availWidth;
+          window.outerHeight = window.screen.availHeight;
+          window.moveTo(window.screen.availLeft, window.screen.availTop);
+          document.documentElement.setAttribute("_sizeMode", "maximized");
+        }
+        
+        ]]>
+        </body>
+      </method>
+      <method name="restore">
+        <body>
+        <![CDATA[
+        var require = this._getRequireMethod();
+        
+        if (typeof require == "undefined" || (window.parent != window && ! window.opener)) {
+            return window._restore(); // not ready, or embedded
+        }
+        
+        var hideChrome = require("ko/prefs").getBoolean("ui.hide.chrome");
+        if ( ! hideChrome)
+          return window._restore();
+        
+        // Buggy XUL doesn't respect window dimensions unless we hammer it home a few times
+        // This is due to CSS calc() which we are committed to at this point so I have
+        // to work around XUL being a bugfest.
+        var c=0;
+        for (c=0;c<5;c++)
+        {
+          // No previous state, so just center the window
+          if ( ! this.restoreState) {
+            window.outerWidth = Math.round(window.screen.availWidth / 1.5);
+            window.outerHeight = Math.round(window.screen.availHeight / 1.5);
+            window.moveTo(window.screen.left + Math.round((window.screen.availWidth - window.outerWidth) / 2),
+                          window.screen.top + Math.round((window.screen.availHeight - window.outerHeight) / 2));
+          }
+          
+          // Restore previous state
+          else
+          {
+            var [w,h,x,y] = this.restoreState;
+            window.outerWidth = w;
+            window.outerHeight = h;
+            window.moveTo(x, y);
+          }
+        }
+        
+        document.documentElement.setAttribute("_sizeMode", "normal");
+        ]]>
+        </body>
+      </method>
+<!-- #endif -->
+      <method name="restorePosition">
+        <body>
+        <![CDATA[
+          var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator);
+          var _window = wm.getMostRecentWindow("Komodo");
+          if (_window)
+            _window = _window.require("ko/windows").getMain();
+
+          if ( ! _window)
+            return;
+          
+          var id = document.documentElement.id || window.location.href;
+          var dimensions =  _window ? _window.require("ko/prefs").getString("windowDimensions-v2-" + id, "").split(",") : [];
+          
+          var centerWindow = (w) =>  window.moveTo(_window.screen.left + Math.round((w.screen.availWidth - w.outerWidth) / 2),
+                                                   _window.screen.top + Math.round((w.screen.availHeight - w.outerHeight) / 2));
+          
+          if (dimensions.length != 4)
+          {
+            if (this.initialWidth)
+              window.outerWidth = parseInt(this.initialWidth);
+            if (this.initialHeight)
+              window.outerHeight = parseInt(this.initialHeight);
+
+            // If no dimensions were stored just center the window
+            centerWindow(window);
+            return;
+          }
+          
+          var [w,h,x,y] = dimensions;
+          w = parseInt(w); h = parseInt(h);
+          x = parseInt(x); y = parseInt(y);
+          
+          window.outerWidth = w;
+          window.outerHeight = h;
+          window.moveTo(x, y);
+          
+          // Detect if window is outside screen boundaries, if so - center it
+          setTimeout(function() {
+            var screenX = window.screen.left;
+            var screenY = window.screen.top;
+            if (x < screenX || y < screenY ||
+                (x - screenX + w) > window.screen.availWidth ||
+                (h - screenY + y) > window.screen.availHeight)
+            {
+              centerWindow(window);
+            }
+          }, 50);
+        ]]>
+        </body>
+      </method>
+      <method name="savePosition">
+        <body>
+          <![CDATA[
+          if (window.screenX <= 0) // don't save minimized windows
+            return;
+          
+          var dimensions = [window.outerWidth, window.outerHeight, window.screenX, window.screenY];
+
+          var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator);
+          var w = wm.getMostRecentWindow("Komodo").require("ko/windows").getMain();
+          
+          if ( ! w) return;
+          
+          var id = document.documentElement.id || window.location.href;
+          
+          w.ko.prefs.setString("windowDimensions-" + id, dimensions.join(","));
+          ]]>
+        </body>
+      </method>
+    </implementation>
+    </binding>
+    
+    
+    <binding id="dialog-chromeless"
+             extends="chrome://komodo/content/bindings/windows.xml#dialog">
+    <content>
+
+      <xul:hbox id="titlebar" pack="center" align="center">
+          <xul:spacer id="windowButtonsSpacer"></xul:spacer>
+          
+          <xul:label xbl:inherits="value=title" flex="1" style="text-align: center"/>
+        
+          <xul:hbox id="windowButtons" align="center" pack="end">
+              <xul:toolbarbutton buttonstyle="pictures" id="min" class="icon-minus-circle2" onclick="window.minimize();"/>
+              <xul:toolbarbutton buttonstyle="pictures" id="max" class="icon-plus-circle2" onclick="window.windowState === 1 ? window.restore() : window.maximize();"/>
+              <xul:toolbarbutton buttonstyle="pictures" id="close" class="icon-cancel-circle2" onclick="window.close();"/>
+          </xul:hbox>
+      </xul:hbox>
+      
+      <xul:vbox class="box-inherit dialog-content-box" flex="1">
+        <children/>
+      </xul:vbox>
+          
+      <xul:hbox class="dialog-button-box" anonid="buttons"
+                xbl:inherits="pack=buttonpack,align=buttonalign,dir=buttondir,orient=buttonorient"
+                >
+        <xul:button dlgtype="disclosure" class="dialog-button" hidden="true"/>
+        <xul:button dlgtype="help" class="dialog-button" hidden="true"/>
+        <xul:button dlgtype="extra2" class="dialog-button" hidden="true"/>
+        <xul:button dlgtype="extra1" class="dialog-button" hidden="true"/>
+        <xul:spacer anonid="spacer" flex="1"/>
+        <xul:button dlgtype="cancel" class="dialog-button"/>
+        <xul:button dlgtype="accept" class="dialog-button" xbl:inherits="disabled=buttondisabledaccept"/>
+      </xul:hbox>
+        
+    </content>
+    <implementation>
+      <field name="_draggable">true</field>
+      <constructor>
+        <![CDATA[
+        if (window.parent && ! window.opener)
+        {
+          this._draggable = false;
+          return;
+        }
+        
+        require = this._getRequireMethod();
+        if ( ! require) return;
+        
+        var hideChrome = require("ko/prefs").getBoolean("ui.hide.chrome");
+        
+        this._draggable = hideChrome;
+        if (!this._draggableStarted) {
+          this._draggableStarted = true;
+          try {
+            new require("ko/windows/draggable")(this);
+          } catch (e) {}
+        }
+        
+        if (hideChrome)
+        {
+            this.setAttribute("_hidechrome", true);
+// #if PLATFORM == "darwin"
+            this.setAttribute("drawintitlebar", true);
+// #elif PLATFORM == "win"
+            this.setAttribute("chromemargin", "0,0,0,0");
+// #else
+            this.setAttribute("hidechrome", true);
+// #endif
+
+// #if PLATFORM == "win"
+          var borderFix = () =>
+          {
+            var h = window.innerHeight;
+            window.innerHeight = h+100;
+            window.innerHeight = h;
+          };
+          setTimeout(borderFix, 100);
+          
+          var _sizeToContent = window.sizeToContent;
+          window.sizeToContent = () =>
+          {
+            var maxWidth = document.documentElement.style.maxWidth;
+            document.documentElement.style.maxWidth = window.innerWidth + "px";
+            _sizeToContent();
+            document.documentElement.style.maxWidth = maxWidth;
+          };
+// #endif
+
+          window.addEventListener("load", function() {
+            setTimeout(function() {
+// #if PLATFORM == "win"
+              setTimeout(borderFix, 100);
+// #endif
+              if (window.screenX !== 0 || window.screenY !== 0)
+                return;
+              var x = window.screen.left + Math.round((window.screen.availWidth - window.outerWidth) / 2);
+              var y = window.screen.top + Math.round((window.screen.availHeight - window.outerHeight) / 2);
+              window.moveTo(x,y);
+            }, 0);
+          });
+        }
+// #if PLATFORM == "darwin"
+        this._sizeToContent();
+// #endif
+        ]]>
+      </constructor>
+<!--#if PLATFORM == "darwin"-->
+      <method name="_sizeToContent">
+        <body>
+          <![CDATA[
+            setTimeout(() => window.sizeToContent(), 250);
+          ]]>
+        </body>
+      </method>
+<!--#endif-->
+      <method name="_getRequireMethod">
+        <body>
+          <![CDATA[
+            if (typeof require == "undefined")
+            {
+                var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator);
+                var w = wm.getMostRecentWindow("Komodo");
+                if ( ! w) return;
+                return w.require;
+            }
+
+            return require;
+          ]]>
+        </body>
+      </method>
+    </implementation>
+    </binding>
+    
+    
+</bindings>

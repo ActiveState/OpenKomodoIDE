@@ -1,0 +1,55 @@
+--- !ruby/object:Gem::Specification 
+rubygems_version: 0.9.2
+specification_version: 1
+name: ruby-debug-base
+version: !ruby/object:Gem::Version 
+  version: 0.9.1
+date: 2007-04-02 21:55:54 -04:00
+summary: Fast Ruby debugger
+require_paths: 
+- lib
+email: ksibilev@yahoo.com
+homepage: http://rubyforge.org/projects/ruby-debug/
+rubyforge_project: ruby-debug
+description: ruby-debug is a fast implementation of the standard Ruby debugger debug.rb. It's implemented by utilizing a new hook Ruby C API.
+autorequire: ruby-debug-base
+default_executable: 
+bindir: bin
+has_rdoc: true
+required_ruby_version: !ruby/object:Gem::Version::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: 1.8.2
+  version: 
+platform: ruby
+signing_key: 
+cert_chain: 
+post_install_message: 
+authors: 
+- Kent Sibilev
+files: 
+- README
+- LICENSE
+- CHANGES
+- AUTHORS
+- lib/ruby-debug-base.rb
+- ext/extconf.rb
+- ext/ruby_debug.c
+- ext/tags
+- ext/win32
+test_files: []
+
+rdoc_options: []
+
+extra_rdoc_files: 
+- README
+- ext/ruby_debug.c
+executables: []
+
+extensions: 
+- ext/extconf.rb
+requirements: []
+
+dependencies: []
+

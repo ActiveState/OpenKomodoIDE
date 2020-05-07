@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<EMAILCOMMENTS>
+
+    <EMAIL>
+
+	<HEADER>
+	    <ORIGADDRESS>gregs@isp.com</ORIGADDRESS>
+	    <DESTADDRESS>feedback@company.com</DESTADDRESS>
+	    <SUBJECT>Re: Comments</SUBJECT>
+	</HEADER>
+
+	<BODY>Greg S &lt;gregs@isp.com> writes:
+
+this is the first comment
+
+
+</BODY>
+
+    </EMAIL>
+
+    <EMAIL>
+
+	<HEADER>
+	    <ORIGADDRESS>joeb@isp.com</ORIGADDRESS>
+	    <DESTADDRESS>feedback@company.com</DESTADDRESS>
+	    <SUBJECT>Re: Comments</SUBJECT>
+	</HEADER>
+
+	<BODY>Joe B &lt;joeb@isp.com> writes:
+
+this is another comment
+
+
+</BODY>
+
+    </EMAIL>
+
+    <EMAIL>
+
+	<HEADER>
+	    <ORIGADDRESS>sallym@isp.com</ORIGADDRESS>
+	    <DESTADDRESS>feedback@company.com</DESTADDRESS>
+	    <SUBJECT>Re: Comments</SUBJECT>
+	</HEADER>
+
+	<BODY>Sally M &lt;sallym@isp.com> writes:
+
+this is a third comment
+
+
+</BODY>
+
+    </EMAIL>
+
+</EMAILCOMMENTS>

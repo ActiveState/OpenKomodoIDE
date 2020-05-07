@@ -1,0 +1,355 @@
+diff -u -r1.156 win32/ScintillaWin.cxx
+--- win32/ScintillaWin.cxx	12 May 2007 00:30:55 -0000	1.156
++++ win32/ScintillaWin.cxx	23 May 2007 21:27:33 -0000
+@@ -107,6 +107,8 @@ typedef BOOL (WINAPI *TrackMouseEventSig)(LPTRACKMOUSEEVENT);
+ typedef UINT_PTR (WINAPI *SetCoalescableTimerSig)(HWND hwnd, UINT_PTR nIDEvent,
+ 	UINT uElapse, TIMERPROC lpTimerFunc, ULONG uToleranceDelay);
+ 
++#define DISABLE_DRAG_DROP // KOMODO
++
+ // GCC has trouble with the standard COM ABI so do it the old C way with explicit vtables.
+ 
+ const TCHAR scintillaClassName[] = TEXT("Scintilla");
+@@ -149,6 +151,7 @@ public:
+ 	FormatEnumerator(int pos_, CLIPFORMAT formats_[], size_t formatsLen_);
+ };
+ 
++#ifndef DISABLE_DRAG_DROP
+ /**
+  */
+ class DropSource {
+@@ -175,6 +178,7 @@ public:
+ 	ScintillaWin *sci;
+ 	DropTarget();
+ };
++#endif
+ 
+ /**
+  */
+@@ -201,10 +205,11 @@ class ScintillaWin :
+ 	CLIPFORMAT cfVSLineTag;
+ 
+ 	HRESULT hrOle;
++#ifndef DISABLE_DRAG_DROP
+ 	DropSource ds;
+ 	DataObject dob;
+ 	DropTarget dt;
+-
++#endif
+ 	static HINSTANCE hInstance;
+ 	static ATOM scintillaClassAtom;
+ 	static ATOM callClassAtom;
+@@ -301,6 +306,7 @@ public:
+ 	// Public for benefit of Scintilla_DirectFunction
+ 	virtual sptr_t WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
+ 
++#ifndef DISABLE_DRAG_DROP
+ 	/// Implement IUnknown
+ 	STDMETHODIMP QueryInterface(REFIID riid, PVOID *ppv);
+ 	STDMETHODIMP_(ULONG)AddRef();
+@@ -316,17 +322,18 @@ public:
+ 
+ 	/// Implement important part of IDataObject
+ 	STDMETHODIMP GetData(FORMATETC *pFEIn, STGMEDIUM *pSTM);
+-
++#endif
+ 	static bool Register(HINSTANCE hInstance_);
+ 	static bool Unregister();
+ 
++#ifndef DISABLE_DRAG_DROP
+ 	friend class DropSource;
+ 	friend class DataObject;
+ 	friend class DropTarget;
+ 	bool DragIsRectangularOK(CLIPFORMAT fmt) const {
+ 		return drag.rectangular && (fmt == cfColumnSelect);
+ 	}
+-
++#endif
+ private:
+ 	// For use in creating a system caret
+ 	bool HasCaretSizeChanged() const;
+@@ -336,5 +343,10 @@ private:
+ 	int sysCaretWidth;
+ 	int sysCaretHeight;
++	
++	// XXX ActiveState drag scroll support
++	int scrollSpeed;
++	int scrollTicks;
++	void DragScroll();
+ };
+ 
+ HINSTANCE ScintillaWin::hInstance = 0;
+@@ -373,11 +385,11 @@ ScintillaWin::ScintillaWin(HWND hwnd) {
+ 	hrOle = E_FAIL;
+ 
+ 	wMain = hwnd;
+-
++#ifndef DISABLE_DRAG_DROP
+ 	dob.sci = this;
+ 	ds.sci = this;
+ 	dt.sci = this;
+-
++#endif
+ 	sysCaretBitmap = 0;
+ 	sysCaretWidth = 0;
+ 	sysCaretHeight = 0;
+@@ -536,6 +548,7 @@ bool ScintillaWin::DragThreshold(Point ptStart, Point ptNow) {
+ }
+ 
+ void ScintillaWin::StartDrag() {
++#ifndef DISABLE_DRAG_DROP
+ 	inDragDrop = ddDragging;
+ 	DWORD dwEffect = 0;
+ 	dropWentOutside = true;
+@@ -555,6 +568,7 @@ void ScintillaWin::StartDrag() {
+ 	}
+ 	inDragDrop = ddNone;
+ 	SetDragPosition(SelectionPosition(invalidPosition));
++#endif
+ }
+ 
+ // Avoid warnings everywhere for old style casts by concentrating them here
+@@ -971,7 +985,9 @@ sptr_t ScintillaWin::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam
+ 			ctrlID = ::GetDlgCtrlID(reinterpret_cast<HWND>(wMain.GetID()));
+ 			// Get Intellimouse scroll line parameters
+ 			GetIntelliMouseParameters();
++#ifndef DISABLE_DRAG_DROP
+ 			::RegisterDragDrop(MainHWND(), reinterpret_cast<IDropTarget *>(&dt));
++#endif
+ 			break;
+ 
+ 		case WM_COMMAND:
+@@ -1042,7 +1058,7 @@ sptr_t ScintillaWin::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam
+ 				else
+ 					wheelDelta = - (-wheelDelta % WHEEL_DELTA);
+ 
+-				if (wParam & MK_CONTROL) {
++				if ((wParam & MK_CONTROL) && !suppressZoomOnScrollWheel) {
+ 					// Zoom! We play with the font sizes in the styles.
+ 					// Number of steps/line is ignored, we just care if sizing up or down
+ 					if (linesToScroll < 0) {
+@@ -1062,6 +1078,7 @@ sptr_t ScintillaWin::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam
+ 				SendMessage(MainHWND(), SC_WIN_IDLE, 0, 1);
+ 			} else {
+ 				TickFor(static_cast<TickReason>(wParam - fineTimerStart));
++				DragScroll();
+ 			}
+ 			break;
+ 
+@@ -1103,7 +1120,11 @@ sptr_t ScintillaWin::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam
+ 			//	Platform::IsKeyDown(VK_SHIFT),
+ 			//	Platform::IsKeyDown(VK_CONTROL),
+ 			//	Platform::IsKeyDown(VK_MENU));
++#if 0
++/* when embeding in mozilla, this causes a focus on the main mozilla window
++    this is generaly bad because we do a lot of stuff there, see komodo.xul onfocus */
+ 			::SetFocus(MainHWND());
++#endif
+ 			ButtonDown(Point::FromLong(static_cast<long>(lParam)), ::GetMessageTime(),
+ 				(wParam & MK_SHIFT) != 0,
+ 				(wParam & MK_CONTROL) != 0,
+@@ -1347,7 +1347,13 @@ sptr_t ScintillaWin::WndProc(unsigned int iMessage, uptr_
+ 			return 1;   // Avoid any background erasure as whole window painted.
+ 
+ 		case WM_CAPTURECHANGED:
+-			capturedMouse = false;
++			// XXX
++			// This line is forcing captureMouse to false which breaks Editor::
++			// ButtonUp so it never hits FineTickerCancel(tickScroll)
++			// if (FineTickerAvailable()) {
++			//	   FineTickerCancel(tickScroll);
++			// }
++			//capturedMouse = false;
+ 			return 0;
+ 
+ 		case WM_IME_SETCONTEXT:
+@@ -1573,6 +1594,47 @@ bool ScintillaWin::PaintContains(PRectangle rc) {
+ 	return true;
+ }
+ 
++void ScintillaWin::DragScroll() {
++#define RESET_SCROLL_TIMER(lines) \
++  scrollSpeed = (lines); \
++  scrollTicks = 2000;
++
++    if (!posDrag.IsValid()) {
++        RESET_SCROLL_TIMER(1);
++        return;
++    }
++    int posDragPosition = posDrag.Position();
++    Point dragMouse = LocationFromPosition(posDragPosition);
++    int line = pdoc->LineFromPosition(posDragPosition);
++    int currentVisibleLine = cs.DisplayFromDoc(line);
++    int lastVisibleLine = Platform::Minimum(topLine + LinesOnScreen(), cs.LinesDisplayed()) - 1;
++    if (Wrapping()) {
++        for (int i = topLine; i < lastVisibleLine; i++) {
++            lastVisibleLine -= WrapCount(i) - 1;
++        }
++		lastVisibleLine--; // in-case the last line is wrapped
++    }
++
++    if (currentVisibleLine <= topLine && topLine > 0) {
++        ScrollTo( topLine - scrollSpeed );
++    } else if (currentVisibleLine >= lastVisibleLine) {
++        ScrollTo( topLine + scrollSpeed );
++    } else {
++        RESET_SCROLL_TIMER(1);
++        return;
++    }
++    if (scrollSpeed == 1) {
++        scrollTicks -= timer.tickSize;
++        if (scrollTicks <= 0) {
++            RESET_SCROLL_TIMER(5);
++        }
++    }
++
++    SetDragPosition(SelectionPosition(PositionFromLocation(dragMouse)));
++
++#undef RESET_SCROLL_TIMER
++}
++
+ void ScintillaWin::ScrollText(int /* linesToMove */) {
+ 	//Platform::DebugPrintf("ScintillaWin::ScrollText %d\n", linesToMove);
+ 	//::ScrollWindow(MainHWND(), 0,
+@@ -2034,6 +2090,7 @@ void ScintillaWin::ClaimSelection() {
+ 	// Windows does not have a primary selection
+ }
+ 
++#ifndef DISABLE_DRAG_DROP
+ /// Implement IUnknown
+ 
+ STDMETHODIMP_(ULONG)FormatEnumerator_AddRef(FormatEnumerator *fe);
+@@ -2338,6 +2395,7 @@ DropTarget::DropTarget() {
+ 	vtbl = vtDropTarget;
+ 	sci = 0;
+ }
++#endif
+ 
+ /**
+  * DBCS: support Input Method Editor (IME).
+@@ -2546,6 +2604,15 @@ void ScintillaWin::HorizontalScrollMessage(WPARAM wParam) {
+ 		break;
+ 	case SB_LINEDOWN:	// May move past the logical end
+ 		xPos += 20;
++                // ACTIVESTATE 
++		if (xPos > scrollWidth - rcText.Width()) {
++			// we are at the end according to the scroll bar.  We'll
++			// go faster since this is not really a 'scroll left by a bit'
++			// request but more a 'grow my scrollbar' request
++			xPos += 20;
++			scrollWidth = xPos + rcText.Width();
++			SetScrollBars();
++		}
+ 		break;
+ 	case SB_PAGEUP:
+ 		xPos -= pageWidth;
+@@ -2653,6 +2720,7 @@ DWORD ScintillaWin::EffectFromState(DWORD grfKeyState) const {
+ 	return dwEffect;
+ }
+ 
++#ifndef DISABLE_DRAG_DROP
+ /// Implement IUnknown
+ STDMETHODIMP ScintillaWin::QueryInterface(REFIID riid, PVOID *ppv) {
+ 	*ppv = NULL;
+@@ -2844,8 +2912,9 @@ STDMETHODIMP ScintillaWin::GetData(FORMATETC *pFEIn, STGMEDIUM *pSTM) {
+ 	pSTM->pUnkForRelease = 0;
+ 	return S_OK;
+ }
++#endif
+ 
+ bool ScintillaWin::Register(HINSTANCE hInstance_) {
+ 
+ 	hInstance = hInstance_;
+ 	bool result;
+@@ -3030,8 +3037,8 @@ bool ScintillaWin::Register(HINSTANCE hInstance_) {
+ 	bool result;
+ 
+ 	// Register the Scintilla class
+-	// Register Scintilla as a wide character window
+-	WNDCLASSEXW wndclass;
++	// Register Scintilla as a normal character window
++	WNDCLASSEX wndclass;
+ 	wndclass.cbSize = sizeof(wndclass);
+ 	wndclass.style = CS_GLOBALCLASS | CS_HREDRAW | CS_VREDRAW;
+ 	wndclass.lpfnWndProc = ScintillaWin::SWndProc;
+@@ -3042,9 +3049,9 @@ bool ScintillaWin::Register(HINSTANCE hInstance_) {
+ 	wndclass.hCursor = NULL;
+ 	wndclass.hbrBackground = NULL;
+ 	wndclass.lpszMenuName = NULL;
+-	wndclass.lpszClassName = L"Scintilla";
++	wndclass.lpszClassName = TEXT("Scintilla");
+ 	wndclass.hIconSm = 0;
+-	scintillaClassAtom = ::RegisterClassExW(&wndclass);
++	scintillaClassAtom = ::RegisterClassEx(&wndclass);
+ 	result = 0 != scintillaClassAtom;
+ 
+ 	if (result) {
+diff -r -du win32/scintilla.mak win32/scintilla.mak
+--- win32/scintilla.mak	2005-05-27 04:29:46.000000000 -0700
++++ win32/scintilla.mak	2007-05-01 17:00:17.000000000 -0700
+@@ -27,7 +27,7 @@
+ NAME=-Fo
+ LDFLAGS=-OPT:REF -LTCG -DEBUG
+ LDDEBUG=
+-LIBS=KERNEL32.lib USER32.lib GDI32.lib IMM32.lib OLE32.LIB OLEAUT32.LIB
++LIBS=KERNEL32.lib USER32.lib GDI32.lib IMM32.lib OLE32.LIB OLEAUT32.LIB libpcre.lib
+ NOLOGO=-nologo
+ 
+ !IFDEF QUIET
+@@ -171,7 +171,6 @@
+ 	$(DIR_O)\LexTACL.obj \
+ 	$(DIR_O)\LexTADS3.obj \
+ 	$(DIR_O)\LexTAL.obj \
+-	$(DIR_O)\LexTCL.obj \
+ 	$(DIR_O)\LexTCMD.obj \
+ 	$(DIR_O)\LexTeX.obj \
+ 	$(DIR_O)\LexTxt2tags.obj \
+@@ -180,6 +179,9 @@
+ 	$(DIR_O)\LexVHDL.obj \
+ 	$(DIR_O)\LexVisualProlog.obj \
+ 	$(DIR_O)\LexYAML.obj \
++	$(DIR_O)\LexTcl.obj \
++	$(DIR_O)\LexUDL.obj \
++	$(DIR_O)\LexXSLT.obj \
+ 
+ #--Autogenerated -- end of automatically generated section
+ 
+@@ -255,6 +257,14 @@
+ $(DIR_O)\ScintillaWinS.obj: ScintillaWin.cxx
+ 	$(CC) $(CXXFLAGS) -DSTATIC_BUILD -c $(NAME)$@ ScintillaWin.cxx
+ 
++# Generate header files from Scintilla.iface
++..\include\Scintilla_gen.h: ..\scripts\HFacer.py ..\scripts\Face.py ..\include\Scintilla.iface
++	cd ..\scripts && python HFacer.py
++..\include\SciLexer_gen.h: ..\scripts\HFacer.py ..\scripts\Face.py ..\include\Scintilla.iface
++	cd ..\scripts && python HFacer.py
++..\include\Scintilla.h: ..\include\Scintilla_gen.h
++..\include\SciLexer.h: ..\include\SciLexer_gen.h
++
+ # Dependencies
+ 
+ # All lexers depend on this set of headers
+@@ -468,8 +478,6 @@
+ 
+ $(DIR_O)\LexTAL.obj: ..\lexers\LexTAL.cxx $(LEX_HEADERS)
+ 
+-$(DIR_O)\LexTCL.obj: ..\lexers\LexTCL.cxx $(LEX_HEADERS)
+-
+ $(DIR_O)\LexTCMD.obj: ..\lexers\LexTCMD.cxx $(LEX_HEADERS)
+ 
+ $(DIR_O)\LexTeX.obj: ..\lexers\LexTeX.cxx $(LEX_HEADERS)
+@@ -486,7 +494,14 @@
+ 
+ $(DIR_O)\LexYAML.obj: ..\lexers\LexYAML.cxx $(LEX_HEADERS)
+ 
++$(DIR_O)\LexTcl.obj: ..\lexers\LexTcl.cxx $(LEX_HEADERS)
+ 
++$(DIR_O)\LexUDL.obj: ..\lexers\LexUDL.cxx $(LEX_HEADERS)
++
++$(DIR_O)\LexXSLT.obj: ..\lexers\LexXSLT.cxx $(LEX_HEADERS)
++
++
++
+ #--Autogenerated -- end of automatically generated section
+ 
+ $(DIR_O)\LexerBase.obj: ../lexlib/LexerBase.cxx ../lexlib/LexerBase.h

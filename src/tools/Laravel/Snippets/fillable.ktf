@@ -1,0 +1,16 @@
+// komodo tool: fillable
+// =====================
+// auto_abbreviation: true
+// indent_relative: false
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// =====================
+/**
+ * The attributes that are mass assignable.
+ *
+ * @var array
+ */
+protected $fillable = ['[[%tabstop:properties]]'];!@#_currentPos!@#_anchor

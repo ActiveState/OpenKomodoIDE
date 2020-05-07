@@ -1,0 +1,92 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'platform',
+    'mozChromeDir',
+    'mozResourcesDir',
+    'mozBin',
+    'mozExe',
+    'mozSrc',
+    'unsiloedPythonExe',
+    'productType',
+    'jarring',
+    'buildFlavour',
+    'komodoTitleBarName',
+    'komodoVersion',
+    'mozVersion',
+    'withSCC',
+    'withSharedSupport',
+    'withDebugging',
+    'withRx',
+    'withCodeBrowser',
+    'komodoDevDir',
+    'sdkDir',
+);
+
+$cons->Preprocess('komodo.p.manifest', "$mozChromeDir/komodo.manifest",
+                  {'WITH_JARRING' => $jarring}, 1);
+$cons->Command("komodo.manifest.landmark",
+               "$mozChromeDir/komodo.manifest",
+               "$mozBin/chrome.manifest",
+               "$sdkDir/pylib/chromereg.py",
+               "$mozExe",
+               qq(
+                 $unsiloedPythonExe %3 %2 %1 "chrome"
+                 touch %>
+               ));
+
+$cons->Preprocess('globals.p.js', 'globals.js',
+                  {'PP_KOMODO_VERSION' => "$komodoVersion"});
+$cons->InstallInChrome('globals.js');
+$cons->Preprocess('commandsOverlay.p.xul', 'commandsOverlay.xul');
+$cons->InstallInChrome('commandsOverlay.xul');
+$cons->InstallInChrome("keysOverlay.xul");
+$cons->Preprocess('komodo.p.xul', 'komodo.xul',
+                  {'PP_KO_TITLE_BAR_NAME' => "$komodoTitleBarName"});
+$cons->InstallInChrome('komodo.xul');
+$cons->Preprocess('komodo.p.js', 'komodo.js');
+$cons->InstallInChrome('komodo.js');
+$cons->InstallInChrome('browse.js');
+$cons->Preprocess('launch.p.js', 'launch.js');
+$cons->InstallInChrome('launch.js');
+$cons->Preprocess('views.p.js', 'views.js');
+$cons->InstallInChrome('views.js');
+$cons->Preprocess('workspace.p.js', 'workspace.js');
+$cons->InstallInChrome('workspace.js');
+$cons->InstallInChrome('workspace2.js');
+$cons->Preprocess('statusbar.p.js', 'statusbar.js');
+$cons->InstallInChrome('statusbar.js');
+$cons->InstallInChrome('editor.js');
+$cons->InstallInChrome('markers.js');
+$cons->InstallInChrome('jetpack.js');
+$cons->InstallInChrome('global.js');
+# $cons->Depends('komodo.unprocessed.xul', 'testmenu.xul');
+
+$cons->Preprocess('testkeys.p.xul', 'testkeys.xul');
+$cons->InstallInChrome("testkeys.xul");
+$cons->Preprocess('testkeys.p.js', 'testkeys.js');
+$cons->InstallInChrome("testkeys.js");
+$cons->InstallInChrome("testscintilla.xul");
+$cons->InstallInChrome("printPreview.xul");
+$cons->InstallInChrome("hiddenWindow.xul");
+
+$cons->InstallInChrome("quickstart.xml");
+$cons->InstallInChrome("empty.xul");
+$cons->InstallInChrome("empty_widget.xul");
+
+# "About" dialog files.
+$cons->Preprocess('about/credits.p.html', 'about/credits.html',
+    {'PP_CONTRIBUTORS_PATH' => "$komodoDevDir/CONTRIBUTORS.txt"});
+$cons->InstallInChrome("about/credits.html");
+$cons->Depends('about/credits.p.html', "$komodoDevDir/CONTRIBUTORS.txt");
+$cons->Preprocess('about/about.p.xul', 'about/about.xul');
+$cons->InstallInChrome("about/about.xul");
+$cons->InstallAs("$mozChromeDir/komodo/content/about/img/komodo.png",
+    "$komodoDevDir/src/main/komodo512.$productType.brand.png");
+$cons->InstallRecursive("$mozChromeDir/komodo/content/about",
+    cwd()."/src/chrome/komodo/content/about",
+    ('\.svn', 'about.p.xul', 'credits.p.html'));

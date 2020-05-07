@@ -1,0 +1,257 @@
+appLaunch.tcl:proc DbgNub_Main {} {
+
+block.tcl:proc blk::makeBlock {file} {
+block.tcl:proc blk::release {args} {
+block.tcl:proc blk::exists {blockNum} {
+block.tcl:proc blk::getSource {blockNum} {
+block.tcl:proc blk::getFile {blockNum} {
+block.tcl:proc blk::getLines {blockNum} {
+block.tcl:proc blk::getRanges {blockNum} {
+block.tcl:proc blk::Instrument {blockNum script} {
+block.tcl:proc blk::isInstrumented {blockNum} {
+block.tcl:proc blk::unmarkInstrumented {} {
+block.tcl:proc blk::getVersion {blockNum} {
+block.tcl:proc blk::getFiles {} {
+block.tcl:proc blk::SetSource {blockNum script} {
+block.tcl:proc blk::isDynamic {blockNum} {
+
+break.tcl:proc break::MakeBreakpoint {type location {test {}}} {
+break.tcl:proc break::Release {breakList} {
+break.tcl:proc break::getState {breakpoint} {
+break.tcl:proc break::getLocation {breakpoint} {
+break.tcl:proc break::getTest {breakpoint} {
+break.tcl:proc break::getType {breakpoint} {
+break.tcl:proc break::SetState {breakpoint state} {
+break.tcl:proc break::getData {breakpoint} {
+break.tcl:proc break::setData {breakpoint data} {
+break.tcl:proc break::GetLineBreakpoints {{location {}}} {
+break.tcl:proc break::GetVarBreakpoints {{handle {}}} {
+break.tcl:proc break::preserveBreakpoints {varName} {
+break.tcl:proc break::restoreBreakpoints {data} {
+
+dbg.tcl:proc dbg::start {application startDir script argList clientData} {
+dbg.tcl:proc dbg::kill {} {
+dbg.tcl:proc dbg::step {{level any}} {
+dbg.tcl:proc dbg::evaluate {level script} {
+dbg.tcl:proc dbg::run {{location {}}} {
+dbg.tcl:proc dbg::interrupt {} {
+dbg.tcl:proc dbg::register {event script} {
+dbg.tcl:proc dbg::unregister {event script} {
+dbg.tcl:proc dbg::DeliverEvent {event args} {
+dbg.tcl:proc dbg::getLevel {} {
+dbg.tcl:proc dbg::getPC {} {
+dbg.tcl:proc dbg::getStack {} {
+dbg.tcl:proc dbg::getProcs {} {
+dbg.tcl:proc dbg::getProcLocation {name} {
+dbg.tcl:proc dbg::getProcBody {loc} {
+dbg.tcl:proc dbg::uninstrumentProc {procName loc} {
+dbg.tcl:proc dbg::instrumentProc {procName loc} {
+dbg.tcl:proc dbg::getVariables {level {vars {}}} {
+dbg.tcl:proc dbg::getVar {level maxlen varList} {
+dbg.tcl:proc dbg::setVar {level var value} {
+dbg.tcl:proc dbg::getResult {maxlen} {
+dbg.tcl:proc dbg::addLineBreakpoint {location} {
+dbg.tcl:proc dbg::getLineBreakpoints {{location {}}} {
+dbg.tcl:proc dbg::validateBreakpoints {file blk} {
+dbg.tcl:proc dbg::binarySearch {ls elt} {
+dbg.tcl:proc dbg::addVarBreakpoint {level name} {
+dbg.tcl:proc dbg::getVarBreakpoints {{level {}} {name {}}} {
+dbg.tcl:proc dbg::removeBreakpoint {breakpoint} {
+dbg.tcl:proc dbg::moveLineBreakpoint {breakpoint newLoc} {
+dbg.tcl:proc dbg::disableBreakpoint {breakpoint} {
+dbg.tcl:proc dbg::enableBreakpoint {breakpoint} {
+dbg.tcl:proc dbg::initialize {{dir {}}} {
+dbg.tcl:proc dbg::setServerPort {port} {
+dbg.tcl:proc dbg::getServerPortStatus {} {
+dbg.tcl:proc dbg::closeServerSocket {} {
+dbg.tcl:proc dbg::quit {} {
+dbg.tcl:proc dbg::HandleClientExit {} {
+dbg.tcl:proc dbg::HandleConnect {sock host port} {
+dbg.tcl:proc dbg::SendMessage {args} {
+dbg.tcl:proc dbg::GetMessage {} {
+dbg.tcl:proc dbg::SendAsync {args} {
+dbg.tcl:proc dbg::Send {args} {
+dbg.tcl:proc dbg::HandleNubEvent {} {
+dbg.tcl:proc dbg::ignoreError {} {
+dbg.tcl:proc dbg::Instrument {file script} {
+dbg.tcl:proc dbg::Log {type message} {
+dbg.tcl:proc dbg::InitializeNub {nubVersion tclVersion clientData} {
+dbg.tcl:proc dbg::initInstrument {} {
+dbg.tcl:proc dbg::getAppVersion {} {
+dbg.tcl:proc dbg::isLocalhost {} {
+
+file.tcl:proc file::update {{hard 0}} {
+file.tcl:proc file::getOrderedBlocks {} {
+file.tcl:proc file::getUniqueFiles {} {
+file.tcl:proc file::getUniqueFile {block} {
+file.tcl:proc file::pushBlock {block} {
+file.tcl:proc file::getUntitledFile {dir name ext} {
+
+initdebug.tcl:proc debugger_init {{host 127.0.0.1} {port 2576}} {
+initdebug.tcl:proc debugger_eval {args} {
+initdebug.tcl:proc debugger_break {{str ""}} {
+initdebug.tcl:proc debugger_attached {} {
+initdebug.tcl:proc debugger_setCatchFlag {flag} {
+
+instrument.tcl:proc instrument::loadHandlers {extname version} {
+instrument.tcl:proc instrument::initialize {tclVersion} {
+instrument.tcl:proc instrument::extension {package op} {
+instrument.tcl:proc instrument::addExtension {ver desc} {
+instrument.tcl:proc instrument::addCommand {command action} {
+instrument.tcl:proc instrument::Init {block} {
+instrument.tcl:proc instrument::getLocation {} {
+instrument.tcl:proc instrument::setLocation {range} {
+instrument.tcl:proc instrument::pushContext {} {
+instrument.tcl:proc instrument::popContext {} {
+instrument.tcl:proc instrument::setAnchor {range} {
+instrument.tcl:proc instrument::resetAnchor {} {
+instrument.tcl:proc instrument::setCursor {range} {
+instrument.tcl:proc instrument::Flush {} {
+instrument.tcl:proc instrument::appendString {string} {
+instrument.tcl:proc instrument::beginCommand {cmdRange} {
+instrument.tcl:proc instrument::endCommand {cmdRange} {
+instrument.tcl:proc instrument::isLiteral {word} {
+instrument.tcl:proc instrument::getLiteral {word resultVar} {
+instrument.tcl:proc instrument::Instrument {block} {
+instrument.tcl:proc instrument::parseScript {{scriptRange {}}} {
+instrument.tcl:proc instrument::parseCommand {tokens index} {
+instrument.tcl:proc instrument::parseWord {tokens index} {
+instrument.tcl:proc instrument::parseBody {args} {
+instrument.tcl:proc instrument::parseOption {optionTable default tokens index} {
+instrument.tcl:proc instrument::parseSimpleArgs {min max argList tokens index} {
+instrument.tcl:proc instrument::parseTail {min argCmds tokens index} {
+instrument.tcl:proc instrument::parseSwitches {exact switches chainCmd tokens index} {
+instrument.tcl:proc instrument::wrapCommand {newName numArgs argList tokens index} {
+instrument.tcl:proc instrument::parseExpr {tokens index} {
+instrument.tcl:proc instrument::parseIncr22Class {range} {
+instrument.tcl:proc instrument::parseIncr22NSBody {tokens index} {
+instrument.tcl:proc instrument::parseItclBody {args} {
+instrument.tcl:proc instrument::parseMethod {range} {
+instrument.tcl:proc instrument::parseConfigure {range} {
+instrument.tcl:proc instrument::simpleControl {bodies tokens index} {
+instrument.tcl:proc instrument::itclProtection {tokens index} {
+instrument.tcl:proc instrument::pushHandlers {newList} {
+instrument.tcl:proc instrument::popHandlers {saveList} {
+instrument.tcl:proc instrument::leaveClass {args} {
+instrument.tcl:proc instrument::parseItclClass {tokens index} {
+instrument.tcl:proc instrument::parseReturnCmd {tokens index} {
+instrument.tcl:proc instrument::parseIfCmd {tokens index} {
+instrument.tcl:proc instrument::parseSwitchCmd {tokens index} {
+instrument.tcl:proc instrument::parseExpect {chainCmd tokens index} {
+instrument.tcl:proc instrument::parseExpRange {tokens index} {
+instrument.tcl:proc instrument::expMatch {keywords str minlen} {
+instrument.tcl:proc instrument::parseExpectTokens {tokens index} {
+instrument.tcl:proc instrument::parseInteractTokens {tokens index} {
+instrument.tcl:proc instrument::parseExpTrapCmd {tokens index} {
+
+location.tcl:proc loc::getBlock {location} {
+location.tcl:proc loc::getLine {location} {
+location.tcl:proc loc::getRange {location} {
+location.tcl:proc loc::makeLocation {block line {range {}}} {
+location.tcl:proc loc::match {pattern location} {
+
+nub.tcl:proc DbgNub_Startup {} {
+nub.tcl:proc DbgNub_Shutdown {} {
+nub.tcl:proc DbgNub_SendMessage {args} {
+nub.tcl:proc DbgNub_GetMessage {blocking} {
+nub.tcl:proc DbgNub_SocketEvent {} {
+nub.tcl:proc DbgNub_Do {subcommand location cmd} {
+nub.tcl:proc DbgNub_Break {level type args} {
+nub.tcl:proc DbgNub_Run {{op run}} {
+nub.tcl:proc DbgNub_CheckOver {location level} {
+nub.tcl:proc DbgNub_HandleError {message level} {
+nub.tcl:proc DbgNub_Instrument {file script} {
+nub.tcl:proc DbgNub_InstrumentReply {script} {
+nub.tcl:proc DbgNub_UninstrumentProc {procName body} {
+nub.tcl:proc DbgNub_InstrumentProc {procName script} {
+nub.tcl:proc DbgNub_ProcessMessages {blocking} {
+nub.tcl:proc DbgNub_Log {args} {
+nub.tcl:proc DbgNub_GetProcs {{namespace {}}} {
+nub.tcl:proc DbgNub_GetVariables {level vars} {
+nub.tcl:proc DbgNub_GetVar {level maxlen varList} {
+nub.tcl:proc DbgNub_SetVar {level var value} {
+nub.tcl:proc DbgNub_GetResult {maxlen} {
+nub.tcl:proc DbgNub_PushContext {level type args} {
+nub.tcl:proc DbgNub_PopContext {} {
+nub.tcl:proc DbgNub_PushStack {current {frame {}}} {
+nub.tcl:proc DbgNub_PopStack {marker} {
+nub.tcl:proc DbgNub_CollateStacks {} {
+nub.tcl:proc DbgNub_Proc {location name argList body} {
+nub.tcl:proc DbgNub_PushProcContext {level} {
+nub.tcl:proc DbgNub_WrapItclBody {args} {
+nub.tcl:proc DbgNub_WrapItclConfig {args} {
+nub.tcl:proc DbgNub_ItclConfig {body} {
+nub.tcl:proc DbgNub_Constructor {cmd argList args} {
+nub.tcl:proc DbgNub_ConstructorInit {body} {
+nub.tcl:proc DbgNub_Class {cmd name body} {
+nub.tcl:proc DbgNub_NamespaceEval {args} {
+nub.tcl:proc DbgNub_WrapCommands {} {
+nub.tcl:proc DbgNub_exitWrapper {args} {
+nub.tcl:proc DbgNub_catchWrapper {args} {
+nub.tcl:proc DbgNub_Return {args} {
+nub.tcl:proc DbgNub_UpdateReturnInfo {code} {
+nub.tcl:proc DbgNub_procWrapper {args} {
+nub.tcl:proc DbgNub_infoWrapper {args} {
+nub.tcl:proc DbgNub_sourceWrapper {args} {
+nub.tcl:proc DbgNub_vwaitWrapper {args} {
+nub.tcl:proc DbgNub_updateWrapper {args} {
+nub.tcl:proc DbgNub_uplevelWrapper {args} {
+nub.tcl:proc DbgNub_packageWrapper {args} {
+nub.tcl:proc DbgNub_renameWrapper {args} {
+nub.tcl:proc DbgNub_CheckLineBreakpoints {location level} {
+nub.tcl:proc DbgNub_GetVarTrace {level name} {
+nub.tcl:proc DbgNub_AddVarTrace {level name} {
+nub.tcl:proc DbgNub_RemoveVarTrace {handle} {
+nub.tcl:proc DbgNub_AddBreakpoint {type where {test {}}} {
+nub.tcl:proc DbgNub_RemoveBreakpoint {type where test} {
+nub.tcl:proc DbgNub_TraceVar {handle type name1 name2 op} {
+nub.tcl:proc DbgNub_Evaluate {id level script} {
+nub.tcl:proc DbgNub_BeginCoverage {} {
+nub.tcl:proc DbgNub_EndCoverage {} {
+nub.tcl:proc DbgNub_GetCoverage {} {
+nub.tcl:proc DbgNub_GetProcDef {name} {
+nub.tcl:proc DbgNub_Interrupt {} {
+nub.tcl:proc DbgNub_IgnoreError {} {
+nub.tcl:proc DbgNub_cleanErrorInfo {{result {}} {wrapCmd {}} {actualCmd {}}} {
+nub.tcl:proc DbgNub_cleanWrappers {} {
+nub.tcl:proc DbgNub_okToRename {name level} {
+
+pref.tcl:proc pref::groupNew {group {saveCmd {}} {restoreCmd {}}} {
+pref.tcl:proc pref::groupSave {group} {
+pref.tcl:proc pref::groupRestore {group} {
+pref.tcl:proc pref::groupUpdate {group} {
+pref.tcl:proc pref::groupInit {group prefSettings} {
+pref.tcl:proc pref::groupCopy {group1 group2} {
+pref.tcl:proc pref::groupApply {group1 group2} {
+pref.tcl:proc pref::groupDelete {group} {
+pref.tcl:proc pref::groupIsDirty {group} {
+pref.tcl:proc pref::groupSetDirty {group dirty} {
+pref.tcl:proc pref::groupExists {group} {
+pref.tcl:proc pref::groupPrint {group} {
+pref.tcl:proc pref::prefNew {group pref value update} {
+pref.tcl:proc pref::prefGet {pref {group {}}} {
+pref.tcl:proc pref::prefSet {group pref value} {
+pref.tcl:proc pref::prefExists {pref {group {}}} {
+pref.tcl:proc pref::prefVar {pref {group {}}} {
+pref.tcl:proc pref::setGroupOrder {groups} {
+pref.tcl:proc pref::getGroupOrder {} {
+pref.tcl:proc pref::GroupSetPrefs {group prefs} {
+pref.tcl:proc pref::GroupGetPrefs {group} {
+pref.tcl:proc pref::PrefLocateGroup {pref {groupOrder {}}} {
+pref.tcl:proc pref::PrefGetUpdateCmd {group pref} {
+pref.tcl:proc pref::SetSaveMsg {msg} {
+pref.tcl:proc pref::GetSaveMsg {} {
+pref.tcl:proc pref::SetRestoreMsg {msg} {
+pref.tcl:proc pref::GetRestoreMsg {} {
+
+util.tcl:proc lassign {valueList args} {
+util.tcl:proc matchKeyword {table str exact varName} {
+
+debugger.tcl.in:proc ::Source { path } {
+debugger.tcl.in:proc LicenseExit {{status 0}} {
+debugger.tcl.in:proc debugger::init {argv newParameters} {
+debugger.tcl.in:proc ExitDebugger {} {
+debugger.tcl.in:proc CleanExit {} {
+debugger.tcl.in:    proc ExitDebugger {} {}
+debugger.tcl.in:proc TestForSockets {} {
+debugger.tcl.in:    proc dummy {args} {error dummy}

@@ -1,0 +1,46 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'mozChromeDir',
+    'platform',
+    'productType',
+    'buildFlavour',
+    'unsiloedPythonExe',
+);
+
+# standard widgets
+$cons->InstallInChrome('koLookAndFeel.xul');
+$cons->InstallInChrome('button.xul');
+$cons->InstallInChrome('checkbox.xul');
+$cons->InstallInChrome('cropping.xul');
+$cons->InstallInChrome('colorpicker.xul');
+$cons->InstallInChrome('grid.xul');
+$cons->InstallInChrome('image.xul');
+$cons->InstallInChrome('label.xul');
+$cons->InstallInChrome('layout.xul');
+$cons->InstallInChrome('list.xul');
+$cons->InstallInChrome('menubar.xul');
+$cons->InstallInChrome('popup.xul');
+$cons->InstallInChrome('radio.xul');
+$cons->InstallInChrome('scrolling.xul');
+$cons->InstallInChrome('splitter.xul');
+$cons->InstallInChrome('tab.xul');
+$cons->InstallInChrome('textbox.xul');
+$cons->InstallInChrome('top.xul');
+$cons->InstallInChrome('tree-nested.xul');
+$cons->InstallInChrome('tree-simple.xul');
+$cons->InstallInChrome('simpleplugin.xul');
+$cons->InstallInChrome('working.xul');
+
+# komodo widgets
+$cons->InstallInChrome('komodo.xul');
+$cons->InstallInChrome('scrolltab.xul');
+$cons->InstallInChrome('koButtonBindings.xul');
+$cons->InstallInChrome('koColorPickerBindings.xul');
+$cons->InstallInChrome('koListbox.xul');
+$cons->InstallInChrome('koWidgets.xul');
+$cons->InstallInChrome('koToolbars.xul');

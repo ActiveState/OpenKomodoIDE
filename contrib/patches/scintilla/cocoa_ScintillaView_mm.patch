@@ -1,0 +1,88 @@
+Index: cocoa/ScintillaView.mm
+===================================================================
+--- cocoa/ScintillaView.mm	(revision 73437)
++++ cocoa/ScintillaView.mm	(working copy)
+@@ -315,6 +315,7 @@ static NSCursor *cursorFromEnum(Window::Cursor cursor)
+ - (BOOL) acceptsFirstMouse: (NSEvent *) theEvent
+ {
+ #pragma unused(theEvent)
++  return NO; // No, we want the child view to do this...
+   return YES;
+ }
+ 
+@@ -325,7 +326,10 @@ static NSCursor *cursorFromEnum(Window::Cursor cursor)
+  */
+ - (BOOL) acceptsFirstResponder
+ {
+-  return YES;
++#if defined(SCINTILLA_COCOA_DEBUG)
++  fprintf(stderr, ">> ScintillaView.mm:: InnerView:: acceptsFirstResponder\n");
++#endif
++  return NO; // No, we want the child view to do this...
+ }
+ 
+ //--------------------------------------------------------------------------------------------------
+@@ -335,6 +339,9 @@ static NSCursor *cursorFromEnum(Window::Cursor cursor)
+  */
+ - (NSMenu*) menuForEvent: (NSEvent*) theEvent
+ {
++#if defined(SCINTILLA_COCOA_DEBUG)
++  fprintf(stderr, "**** We don't want to see this: ScintillaView.mm:: InnerView:: menuForEvent\n");
++#endif
+   if (![mOwner respondsToSelector: @selector(menuForEvent:)])
+     return mOwner.backend->CreateContextMenu(theEvent);
+   else
+@@ -593,6 +600,9 @@ static NSCursor *cursorFromEnum(Window::Cursor cursor)
+  */
+ - (void) keyDown: (NSEvent *) theEvent
+ {
++#if defined(SCINTILLA_COCOA_DEBUG)
++  fprintf(stderr, "**************** >> ScintillaView.mm::InnerView::keyDown\n");
++#endif
+   if (mMarkedTextRange.length == 0)
+ 	mOwner.backend->KeyboardInput(theEvent);
+   NSArray* events = [NSArray arrayWithObject: theEvent];
+@@ -926,6 +936,9 @@ static NSCursor *cursorFromEnum(Window::Cursor cursor)
+  */
+ - (void) magnifyWithEvent: (NSEvent *) event
+ {
++  if ([self getGeneralProperty: SCI_GETSUPPRESSZOOMONSCROLLWHEEL] != 0) {
++	return; /* bug 105669 */
++  }
+ #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_5
+   zoomDelta += event.magnification * 10.0;
+ 
+@@ -1895,5 +1908,33 @@ static NSCursor *cursorFromEnum(Window::Cursor cursor)
+ 
+ //--------------------------------------------------------------------------------------------------
+ 
++// Try specifying these events for the scintillaView, not just
++// the InnerView
++
++/**
++ * Implement the "click through" behavior by telling the caller we accept the first mouse event too.
++ */
++- (BOOL) acceptsFirstMouse: (NSEvent *) theEvent
++{
++#pragma unused(theEvent)
++#if defined(SCINTILLA_COCOA_DEBUG)
++  fprintf(stderr, ">> ScintillaView.mm:: ScintillaView:: acceptsFirstMouse\n");
++#endif
++  return NO; // No, we want the child view to do this...
++}
++
++//--------------------------------------------------------------------------------------------------
++
++/**
++ * Make this view accepting events as first responder.
++ */
++- (BOOL) acceptsFirstResponder
++{
++#if defined(SCINTILLA_COCOA_DEBUG)
++  fprintf(stderr, ">> ScintillaView.mm:: ScintillaView:: acceptsFirstResponder\n");
++#endif
++  return NO; // No, we want the child view to do this...
++}
++
+ @end
+ 

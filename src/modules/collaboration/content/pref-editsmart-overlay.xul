@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % komobDTD SYSTEM "chrome://komob/locale/komob.dtd">
+  %komobDTD;
+]>
+
+<overlay id="collaboration_prefs_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <vbox id="editsmart-prefs-vbox">
+        <groupbox id="collaboration_groupbox"
+                  insertafter="highlightvariable_groupbox">
+            <caption label="&Collaboration;"/>
+            <checkbox id="collaboration_always_show_user_flags"
+                      label="&collaboration_always_show_user_flags.label;"
+                      pref="true"
+                      preftype="boolean"
+                      prefdefault="true"
+                      />
+        </groupbox>
+    </vbox>
+
+</overlay>

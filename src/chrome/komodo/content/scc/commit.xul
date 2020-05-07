@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % sccDTD SYSTEM "chrome://komodo/locale/scc.dtd">
+  %sccDTD;
+]>
+
+<!-- Copyright (c) 2003-2008 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!-- Source Code Control commit dialog. See commit.js for details. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="less://komodo/skin/commit_dialog.less" type="text/css"?>
+
+<window id="scc_commit_window"
+        title="Committing Changes"
+        class="dialog"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        minwidth="800"
+        width="800"
+        height="480"
+        persist="width height screenX screenY"
+    >
+
+    <script src="chrome://xtk/content/xtk.js"                  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js"   type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/prefs.js"     type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js"   type="application/x-javascript;version=1.7"/>
+    <script src="chrome://xtk/content/domutils.js"             type="application/x-javascript;version=1.7"/>
+
+        <!-- Necessary for directory browsing -->
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+        <!-- Necessary for diff functionlaity -->
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/scc/scc.js"           type="application/x-javascript;version=1.7"/>
+
+    <script src="chrome://komodo/content/scc/commit.js"        type="application/x-javascript;version=1.7"/>
+    
+    <popupset>
+        <menupopup id="context">
+            <menuitem id="toggle-selected" label="Toggle Selected"/>
+            <menuitem id="toggle-all" label="Toggle All"/>
+            <menuseparator/>
+            <menuitem id="open" label="Open File"/>
+            <menuseparator/>
+            <menuitem id="reload" label="Reload List"/>
+        </menupopup>
+    </popupset>
+    
+    <hbox id="wrapper" flex="1">
+        <vbox id="message-selection" width="500">
+            
+            <vbox flex="1">
+                <richlistbox id="selection" flex="1" seltype="multiple">
+                    
+                    <richlistitem class="group" disabled="true" name="staged">
+                        <label value="Committing"/>
+                    </richlistitem>
+                    <richlistitem disabled="true" id="staged-empty">
+                        <label value="- empty -"/>
+                    </richlistitem>
+                    
+                    <richlistitem class="group" disabled="true" name="dirty">
+                        <label value="Modified"/>
+                    </richlistitem>
+                    <richlistitem disabled="true" id="dirty-empty">
+                        <label value="- empty -"/>
+                    </richlistitem>
+                        
+                </richlistbox>
+                <description id="maxFilesWarning" class="state-warning" collapsed="true">
+                    Too many files have changed, individual selection and sorting
+                    has been disabled. Committing will commit all files listed.
+                </description>
+            </vbox>
+            
+            <vbox id="commit-message">
+                <hbox>
+                    <textbox id="commit-summary"
+                             placeholder="Commit Summary"
+                             multiline="true"
+                             rows="3"
+                             flex="1" />
+                    <vbox>
+                        <hbox class="quick-access-buttons">
+                            <button class="menu-history-icon"
+                                    orient="horizontal"
+                                    align="center"
+                                    tooltiptext="Message History"
+                                    flex="1"
+                                    type="menu">
+                                <menupopup id="recent"/>
+                            </button>
+                            <button id="open-dialog"
+                                    class="icon-external-link-square"
+                                    tooltiptext="Open Dialog"
+                                    oncommand="require('ko/windows').getMain().ko.commands.doCommand('cmd_SCCcommit')"
+                                    flex="1"/>
+                            <button class="reload-icon"
+                                    oncommand="window.reload();"
+                                    tooltiptext="Reload"
+                                    flex="1"/>
+                        </hbox>
+                        <button id="commit" label="Commit" accesskey="C" flex="1"/>
+                    </vbox>
+                </hbox>
+            </vbox>
+            
+        </vbox>
+        <splitter style="width: 5px"/>
+        <vbox id="preview" flex="1">
+            <browser id="diff" src="chrome://komodo/content/dialogs/diff.xul" flex="1"/>
+        </vbox>
+    </hbox>
+
+</window>

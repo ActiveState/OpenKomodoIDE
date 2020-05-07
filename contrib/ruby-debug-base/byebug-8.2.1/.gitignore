@@ -1,0 +1,19 @@
+#
+# Only generated files & Byebug specific files to be kept here.
+#
+tmp
+pkg
+doc
+.yardoc
+coverage
+
+.gdb_history
+.bundle
+.byebugrc
+.byebug_history
+
+lib/byebug/byebug.so
+lib/byebug/byebug.bundle
+.ruby-version
+.ruby-gemset
+.idea

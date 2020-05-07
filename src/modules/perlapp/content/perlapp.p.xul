@@ -1,0 +1,338 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="chrome://komodo/skin" type="text/css"?>
+
+<window id="perlapp-window"
+        windowtype="komodo_perlapp"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        title="Build Standalone Perl Application"
+        orient="vertical"
+        style="width: 45em; height: 55em; min-width: 45em; min-height: 51em;"
+        onload="onPerlAppLoad()"
+        onunload="onPerlAppUnload()">
+
+    <menupopup id="dialogTooltip" />
+
+    <script src="chrome://ascore/content/ascore.js" type="application/x-javascript"/>
+    <script type="application/x-javascript" src="chrome://komodo/content/library/trace.js"/>
+    <script type="application/x-javascript" src="chrome://komodo/content/library/logging.js"/>
+    <script type="application/x-javascript" src="chrome://komodo/content/library/uriparse.js"/>
+    <script type="application/x-javascript" src="chrome://komodo/content/library/filepickers.js"/>
+    <script type="application/x-javascript" src="chrome://komodo/content/library/dialogs.js"/>
+    <script type="application/x-javascript" src="chrome://komodo/content/library/windowManager.js"/>
+    <script type="application/x-javascript" src="chrome://perlapp/content/perlapp.js" />
+    <script type="application/x-javascript" src="chrome://komodo/content/pref/koPrefWindow.js"/>
+
+    <keyset id="perlappKeys">
+        <key keycode="VK_ESCAPE" modifiers="" oncommand="window.close();"/>
+    </keyset>
+
+    <tabbox orient="vertical" flex="1">
+        <tabs id="pTabbox" orient="horizontal">
+            <tab id="general" label="General" accesskey="G"/>
+            <tab id="modules" label="Modules" accesskey="M"/>
+            <tab id="files" label="Files" accesskey="F"/>
+            <tab id="version" label="Version" accesskey="V"/>
+            <tab id="lib" label="Library Paths" accesskey="L"/>
+            <tab id="extra" label="Extra" accesskey="E"/>
+        </tabs>
+        <tabpanels flex="1">
+
+            <!-- General Tab -->
+            <vbox tabindex="0" flex="1">
+                <label value="Enter the name of the script to build using the PDK" control="scriptname" class="kopadded"/>
+                <textbox id="scriptname"
+                         pref="true"
+                         tooltiptext="--script" tooltip="dialogTooltip"
+                         oninput="changeScriptname(true)"/>
+<!-- #if PLATFORM=="win" -->
+                <separator class="thin"/>
+                <label value="Build the script using" control="pdkType" class="kopadded"/>
+                <menulist id="pdkType" prefattribute="value" pref="true" oncommand="changePDKType(true)">
+                    <menupopup>
+                        <menuitem id="app" value="app" label="PerlApp - build executable from Perl scripts"/>
+                        <menuitem id="ctrl" value="ctrl" label="PerlCtrl - build ActiveX control from Perl scripts"/>
+                        <menuitem id="svc" value="svc" label="PerlSvc - build Windows service from Perl scripts"/>
+                        <menuitem id="net" value="net" label="PerlNET - build .NET Components from Perl scripts"/>
+                        <menuitem id="tray" value="tray" label="PerlTray - build Windows system tray applications from Perl scripts"/>
+                    </menupopup>
+                </menulist>
+<!-- #endif -->
+                <separator class="thin"/>
+                <label value="Enter the name of target executable or control" control="targetname" class="kopadded"/>
+                <textbox id="targetname"
+                         tooltiptext="--exe" tooltip="dialogTooltip"
+                         pref="true"
+                         oninput="updateCommandString()"/>
+                <separator class="thin"/>
+                <label value="Dependencies" control="dependencies" class="kopadded"/>
+                <menulist id="dependencies" prefattribute="value" pref="true" oncommand="updateCommandString()">
+                    <menupopup>
+                        <menuitem value="freestanding" label="None -- largest executables (--freestanding)"/>
+                        <menuitem value="freestanding_noperl56" label="Perl DLL required on target machine (--xclude)"/>
+                        <menuitem value="dependent" label="ActivePerl required on target machine -- smallest executables (--dependent)"/>
+                    </menupopup>
+                </menulist>
+                <separator class="thin"/>
+                <grid>
+                    <columns>
+                        <column flex="1"/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <checkbox id="verbose" pref="true"
+                                    tooltiptext="--verbose" tooltip="dialogTooltip"
+                                    oncommand="updateCommandString()" label="Verbose build information"/>
+                            <checkbox id="forceOverwrite"
+                                    tooltiptext="--force" tooltip="dialogTooltip"
+                                    pref="true" oncommand="updateCommandString();" label="Overwrite existing build"/>
+                        </row>
+                        <row>
+                            <checkbox id="hideConsole"
+                                tooltiptext="--gui" tooltip="dialogTooltip"
+                                pref="true" oncommand="updateCommandString()" label="Hide console (for GUI applications)"/>
+                            <checkbox id="clean"
+                                tooltiptext="--clean" tooltip="dialogTooltip"
+                                pref="true" oncommand="updateCommandString()" label="Delete temp files after each run"/>
+                        </row>
+                    </rows>
+                </grid>
+
+                <groupbox orient="vertical">
+                    <caption label="Debugging"/>
+                    <vbox flex="1">
+                        <menulist id="debugging" prefattribute="value" pref="true" oncommand="changeDebuggingType(true)">
+                            <menupopup>
+                                <menuitem value="none" label="No debugging"/>
+                                <menuitem value="localKomodo" label="Komodo debugging (--debug localhost:...)"/>
+                                <menuitem value="localPdk" label="Use local PDK debugger (--debug ...)"/>
+                                <menuitem value="other" label="Use other debugger (--debug &lt;host&gt;:&lt;:port&gt;)"/>
+                            </menupopup>
+                        </menulist>
+                        <separator class="thin"/>
+                        <hbox align="center">
+                            <label class="kopadded" value="Hostname" control="hostname"/>
+                            <textbox id="hostname"
+                                     pref="true"
+                                     tooltiptext="--debug &lt;host&gt;:..." tooltip="dialogTooltip"
+                                     oninput="updateCommandString()"/>
+                            <label class="kopadded" value="Port" control="port"/>
+                            <textbox id="port"
+                                     pref="true"
+                                     tooltiptext="--debug ...:&lt;port&gt;" tooltip="dialogTooltip"
+                                     oninput="updateCommandString()"/>
+                        </hbox>
+                    </vbox>
+                </groupbox>
+                <separator class="thin"/>
+                <hbox align="end" pack="end">
+                    <button id="genRestoreBtn" oncommand="restoreDefaultGeneral()" label="Restore Defaults"/>
+                </hbox>
+            </vbox>
+
+            <!-- Modules tab -->
+            <vbox flex="1">
+                <description>
+                    Specify any extra modules that your script requires.
+                </description>
+                <tree style="min-height: 20px;" id="extraModules" flex="1" onselect="gExtraModulesView.selectionChanged(true)">
+                    <treecols>
+                        <treecol id="name" label="Modules" flex="1"/>
+                    </treecols>
+                    <treechildren flex="1"/>
+                </tree>
+                <separator class="thin"/>
+                <label value='Module name (e.g. XML::Parser::Expat)' class="kopadded" control="moduleName"/>
+                <textbox id="moduleName" oninput="changeModuleName(true)"/>
+                <separator class="thin"/>
+                <hbox align="end">
+                    <button id="addModule" oncommand="addModule()" label="Add"
+                            tooltiptext="--add ..." tooltip="dialogTooltip"/>
+                    <button id="deleteModule" oncommand="deleteModule()" label="Delete"/>
+                    <spacer flex="1"/>
+                    <button id="modDeleteAllBtn" oncommand="deleteAllModules()" label="Delete All"/>
+                </hbox>
+                <description>
+                    Specify any modules you wish to trim from the package
+                </description>
+                <tree style="min-height: 20px;" id="trimModules" flex="1" onselect="gTrimModulesView.selectionChanged(true)">
+                    <treecols>
+                        <treecol id="name" label="Modules" flex="1"/>
+                    </treecols>
+                    <treechildren flex="1"/>
+                </tree>
+                <separator class="thin"/>
+                <label value='Module name (e.g. XML::Parser::Expat)' class="kopadded" control="moduleName"/>
+                <textbox id="trimmoduleName" oninput="changeTrimModuleName(true)"/>
+                <separator class="thin"/>
+                <hbox align="end">
+                    <button id="addTrimModule" oncommand="addTrimModule()" label="Add"
+                            tooltiptext="--trim ..." tooltip="dialogTooltip"/>
+                    <button id="deleteTrimModule" oncommand="deleteTrimModule()" label="Delete"/>
+                    <spacer flex="1"/>
+                    <button id="modTrimDeleteAllBtn" oncommand="deleteAllTrimModules()" label="Delete All"/>
+                </hbox>
+            </vbox>
+
+            <!-- Files tab -->
+            <vbox flex="1">
+                <description>
+                    Specify any data files that your script requires. When the script is built and run, these files will be extracted to a path relative to the executable.
+                </description>
+                <tree id="dataFiles" flex="1" onselect="gFilesView.selectionChanged(true)">
+                    <treecols>
+                        <treecol id="sourceColumn" label="Source file" flex="1"/>
+                        <treecol id="destinationColumn" label="Extracted file" flex="1"/>
+                    </treecols>
+                    <treechildren flex="1"/>
+                </tree>
+                <separator class="thin"/>
+                <hbox align="end">
+                    <button id="addFile" label="Add..." oncommand="addFile()"
+                            tooltiptext="--bind ..." tooltip="dialogTooltip"/>
+                    <button id="editFile" label="Edit..." oncommand="editFile()"/>
+                    <button id="deleteFile" label="Delete" oncommand="deleteFile()"/>
+                    <spacer flex="1"/>
+                    <button id="filesDeleteAllBtn" oncommand="deleteAllFiles()" label="Delete All"/>
+                </hbox>
+            </vbox>
+
+            <!-- Version tab -->
+            <vbox>
+                <description>
+                    Specify the version info for your script. The information will be assembled into a VERINFO resource and will be displayed to the user when they view the properties for your script in Windows Explorer.
+                </description>
+                <tree id="versionInfo" flex="1"  onselect="gVersionInfoView.selectionChanged(true)">
+                    <treecols>
+                        <treecol id="fieldColumn" label="Version field" flex="1"/>
+                        <treecol id="valueColumn" label="Value" flex="1"/>
+                    </treecols>
+                    <treechildren  flex="1"/>
+                </tree>
+                <separator class="thin"/>
+                <description id="versionFieldPrompt" />
+                <textbox id="versionInfoValue" oninput="updateCommandString(true)"/>
+                <separator class="thin"/>
+                <hbox align="end">
+                    <button id="updateVersionField" oncommand="updateVersionField()" label="Update"
+                            tooltiptext='--info "..."' tooltip="dialogTooltip"/>
+                    <button id="clearVersionField" oncommand="clearVersionField()" label="Use default"/>
+                    <spacer flex="1"/>
+                    <button id="versionRestoreBtn" oncommand="restoreDefaultVersionInfo()" label="Restore Defaults"/>
+                </hbox>
+            </vbox>
+
+            <!-- lib/blib tab -->
+            <vbox flex="1">
+                <vbox flex="1">
+                    <description>
+                        Specify lib directories to include
+                    </description>
+                    <tree id="libs" flex="1" onselect="gLibView.selectionChanged(true)">
+                        <treecols>
+                            <treecol id="path" label="Directory" flex="1"/>
+                        </treecols>
+                        <treechildren flex="1"/>
+                    </tree>
+                    <separator class="thin"/>
+                    <hbox align="end">
+                        <button id="addLib" label="Add..." oncommand="addFileOption(gLibsView, true)"
+                                tooltiptext="--lib ..." tooltip="dialogTooltip"/>
+                        <button id="deleteLib" label="Delete" oncommand="deleteFileOption(gLibsView)"/>
+                        <spacer flex="1"/>
+                        <button id="libDeleteAllBtn" oncommand="deleteAllFileOptions(gLibsView)" label="Delete All"/>
+                    </hbox>
+                    <description>
+                        Specify blib directories to include
+                    </description>
+                    <tree id="blibs" flex="1"  onselect="gBlibView.selectionChanged(true)">
+                        <treecols>
+                            <treecol id="path" label="Directory" flex="1"/>
+                        </treecols>
+                        <treechildren flex="1"/>
+                    </tree>
+                    <separator class="thin"/>
+                    <hbox align="end">
+                        <button id="addBlib" label="Add..." oncommand="addFileOption(gBlibsView, true)"
+                                tooltiptext="--blib ..." tooltip="dialogTooltip"/>
+                        <button id="deleteBlib" label="Delete" oncommand="deleteFileOption(gBlibsView)"/>
+                        <spacer flex="1"/>
+                        <button id="blibDeleteAllBtn" oncommand="deleteAllFileOptions(gBlibsView)" label="Delete All"/>
+                    </hbox>
+                </vbox>
+            </vbox>
+            <!-- extras tab -->
+            <vbox flex="1">
+                <vbox flex="1">
+                    <description>
+                        Specify icon files to use
+                    </description>
+                    <tree id="icons" flex="1" onselect="gIconsView.selectionChanged(true)">
+                        <treecols>
+                            <treecol id="path" label="Icon file" flex="1"/>
+                        </treecols>
+                        <treechildren flex="1"/>
+                    </tree>
+                    <separator class="thin"/>
+                    <hbox align="end">
+                        <button id="addIcon" label="Add..." oncommand="addFileOption(gIconsView, false)"
+                                tooltiptext="--icon ..." tooltip="dialogTooltip"/>
+                        <button id="deleteIcon" label="Delete" oncommand="deleteFileOption(gIconsView)"/>
+                        <spacer flex="1"/>
+                        <button id="iconsDeleteAllBtn" oncommand="deleteAllFileOptions(gIconsView)" label="Delete All"/>
+                    </hbox>
+                </vbox>
+                <separator class="thin"/>
+                <label value="Specify any additional command-line parameters" control="extras" class="kopadded"/>
+                <textbox id="extras" multiline="true" pref="true" style="height: 60px;" oninput="updateCommandString()"/>
+            </vbox>
+        </tabpanels>
+    </tabbox>
+
+    <separator class="thin"/>
+
+    <vbox flex=".5">
+        <label id="commandstringlabel" value="Command string" crop="center" class="kopadded" control="commandstring"/>
+        <iframe id="commandstring" type="content" flex="1" style="border: inset 1px; min-height: 30px;"/>
+    </vbox>
+
+    <separator />
+
+    <hbox>
+        <button id="addToToolboxBtn"
+                oncommand="addToToolbox()"
+                default="true"
+                tooltiptext="Add run command to Toolbox using current parameters"
+                tooltip="dialogTooltip"
+                label="Add to Toolbox"/>
+        <spacer flex="1"/>
+        <hbox pack="end" align="center">
+            <button id="buildBtn"
+                    oncommand="build()"
+                    default="true"
+                    tooltiptext="Launch build phase"
+                    tooltip="dialogTooltip"
+                    accesskey="B"
+                    label="Build"/>
+            <button id="debugBtn"
+                    oncommand="debug()"
+                    tooltiptext="Debug built application"
+                    tooltip="dialogTooltip"
+                    disabled="true"
+                    accesskey="D"
+                    label="Debug"/>
+            <button id="applyBtn" oncommand="apply()" label="Apply" accesskey="A"/>
+            <button id="closeBtn" oncommand="closecb()" label="Close" accesskey="C"/>
+        </hbox>
+    </hbox>
+    <separator />
+    <statusbar orient="horizontal" id="status-bar">
+        <statusbarpanel id="status" label="Status: Ready to build" crop="right"
+                        flex="1" tooltip="aTooltip" tooltiptext=""/>
+    </statusbar>
+</window>
+

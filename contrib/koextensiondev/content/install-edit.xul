@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://extensiondev/skin/" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://extensiondev/locale/extensiondev.dtd">
+<window id="install-edit" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&installEdit.title;" onload="doLoadManifest()">
+<script type="application/x-javascript" src="chrome://extensiondev/content/read-install-rdf.js"/>
+<script type="application/x-javascript" src="chrome://extensiondev/content/install-edit.js"/>
+<vbox style="overflow: auto;" flex="1">
+<grid flex="1">
+<columns>
+<column/>
+<column flex="1"/>
+<column/>
+</columns>
+<rows>
+<row>
+<label control="id" value="&guid.label;"/>
+<textbox id="id"/>
+</row>
+<row>
+<label control="name" value="&name.label;"/>
+<textbox id="name"/>
+</row>
+<row>
+<label control="version" value="&version.label;"/>
+<textbox id="version" value="0.1"/>
+</row>
+<row>
+<label control="creator" value="&creator.label;"/>
+<textbox id="creator"/>
+</row>
+<row>
+<label control="contributor-add" value="&contributors.label;"/>
+<textbox id="contributor-add"/>
+<button label="&add.button;" onclick="addContributor()"/>
+</row>
+<row>
+<spacer/>
+<listbox id="contributors" flex="1" rows="4" seltype="multiple" onselect="contributorSelect()"/>
+<vbox flex="0">
+<button label="&remove.button;" id="remove-contributor" disabled="true" onclick="removeContributor()"/>
+</vbox>
+</row>
+<row>
+<label control="description" value="&description.label;"/>
+<textbox id="description"/>
+</row>
+<row>
+<label control="homepageURL" value="&homepage.label;"/>
+<textbox id="homepageURL"/>
+</row>
+<row>
+<label control="optionsURL" value="&options.label;"/>
+<textbox id="optionsURL"/>
+</row>
+<row>
+<label control="aboutURL" value="&about.label;"/>
+<textbox id="aboutURL"/>
+</row>
+<row>
+<label control="iconURL" value="&icon.label;"/>
+<textbox id="iconURL"/>
+</row>
+<row>
+<label control="updateURL" value="&updateURL.label;"/>
+<textbox id="updateURL"/>
+</row>
+<row>
+<label value="&files.label;"/>
+<hbox>
+
+<button label="&add.button;" onclick="addChromePath(addFile());"/>
+</hbox>
+</row>
+</rows>
+</grid>
+
+<vbox flex="1" style="display: none;" id="files-spare">
+<grid style="border: 2px inset; padding: 5px; margin: 2px;">
+<columns>
+<column flex="1"/>
+<column flex="1"/>
+<column/>
+</columns>
+<rows>
+<row>
+<label value="&jarfile.label;"/>
+<textbox/>
+<toolbarbutton class="closebutton" tooltiptext="Remove File" onclick="removeFile(this)"/>
+</row>
+<row>
+<label value="&chromepaths.label;"/>
+<hbox><button label="&add.button;" onclick="addChromePath(this.parentNode.parentNode.parentNode.parentNode)"/></hbox>
+</row>
+<row>
+</row>
+</rows>
+</grid>
+</vbox>
+
+<grid id="paths-spare" style="display: none;">
+<rows>
+<row>
+<menulist oncommand="setDefaultChromePath(this)">
+  <menupopup>
+    <menuitem label="package" selected="true"/>
+    <menuitem label="skin"/>
+    <menuitem label="locale"/>
+  </menupopup>
+</menulist>
+<textbox value="content/"/>
+<toolbarbutton class="closebutton" tooltiptext="Remove Path" onclick="removeChromePath(this)"/>
+</row>
+</rows>
+</grid>
+
+<vbox flex="1" id="files-box">
+</vbox>
+
+<grid flex="1" id="target-applications">
+<columns>
+<column/>
+<column/>
+<column flex="1"/>
+<column/>
+<column flex="1"/>
+</columns>
+<rows>
+<row>
+<label value="&targetApp.label;"/>
+</row>
+<row>
+<checkbox id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}" label="&firefox.label;"/>
+<label control="firefox-minver" value="&minver.label;"/>
+<textbox id="firefox-minver" cols="4" size="4"/>
+<label control="firefox-maxver" value="&maxver.label;"/>
+<textbox id="firefox-maxver" cols="4" size="4"/>
+</row>
+<row>
+<checkbox id="{3550f703-e582-4d05-9a08-453d09bdfdc6}" label="&thunderbird.label;"/>
+<label control="thunderbird-minver" value="&minver.label;"/>
+<textbox id="thunderbird-minver" cols="4" size="4"/>
+<label control="thunderbird-maxver" value="&maxver.label;"/>
+<textbox id="thunderbird-maxver" cols="4" size="4"/>
+</row>
+<row>
+<checkbox id="{86c18b42-e466-45a9-ae7a-9b95ba6f5640}" label="&seamonkey.label;"/>
+<label control="seamonkey-minver" value="&minver.label;"/>
+<textbox id="seamonkey-minver" cols="4" size="4"/>
+<label control="seamonkey-maxver" value="&maxver.label;"/>
+<textbox id="seamonkey-maxver" cols="4" size="4"/>
+</row>
+</rows>
+</grid>
+</vbox>
+<hbox style="border-top: 1px outset; padding: 3px;">
+<button label="&save.button;" onclick="doSaveManifest()"/><button label="&close.button;" onclick="doClose()"/>
+</hbox>
+</window>

@@ -1,0 +1,26 @@
+{
+  "name": "wp_admin_notice", 
+  "language": "PHP", 
+  "value": [
+    "", 
+    "[[%tabstop6:placeholder 6]]:// Put this into your __construct function", 
+    "add_action('admin_notices', array($this, '[[%tabstop1:admin_notice]]'));}", 
+    "", 
+    "public function [[%tabstop1:admin_notice]]() {", 
+    "\t$class          = '[[%tabstop2:success|warning|error]]';", 
+    "\t$message        = '[[%tabstop3:message]]';", 
+    "\t$is_dismissible = [[%tabstop4:true|false]];", 
+    "\t", 
+    "\tprintf(", 
+    "\t\t'<div class=\"notice notice-%s %s\"><p>%s</p></div>',", 
+    "\t\t$class,", 
+    "\t\t$message,", 
+    "\t\t$is_dismissible ? 'is-dismissible' : ''", 
+    "\t);", 
+    "}"
+  ], 
+  "version": "1.1.5", 
+  "type": "snippet", 
+  "treat_as_ejs": "true", 
+  "auto_abbreviation": "true"
+}

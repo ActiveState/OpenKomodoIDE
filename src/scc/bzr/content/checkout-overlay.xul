@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<?xml-stylesheet href="chrome://bazaar/skin/bzr.css" type="text/css"?>
+
+<overlay id="bzr_checkout_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+</overlay>

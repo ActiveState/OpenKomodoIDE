@@ -1,0 +1,82 @@
+$font-base: "Open Sans", sans-serif;
+$font-header-nav: "Open Sans", sans-serif;
+$font-impact: "Open Sans", sans serif;
+$font-mono: Monaco, Consolas, "Lucida Console", monospace;
+
+*
+{
+    /* Fix bold looking text on OSX */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+%button
+{
+    font-size: 9.5pt !important;
+    font-weight: bold;
+    padding: 8px;
+    color: #FFF;
+    border: 0;
+    cursor: pointer;
+    display: inline-block;
+    @include transition(box-shadow 0.1s ease-in-out, color 0.2s ease-in-out);
+    border-radius: 2px;
+    text-align: center;
+    
+    p
+    {
+        font-size: 8pt !important;
+        margin: 0 !important;
+        font-weight: normal !important;
+    }
+
+    &:hover
+    {
+        box-shadow: inset 0 0 0 500px rgba(0,0,0,0.1);
+        text-decoration: none;
+    }
+
+    &.big
+    {
+        font-family: $font-impact;
+        font-size: 14pt !important;
+        padding: 15px 20px;
+        
+        p
+        {
+            font-size: 10pt !important;
+        }
+    }
+
+    &.small
+    {
+        padding: 4px;
+    }
+    &[disabled],
+    &.disabled
+    {
+        opacity: 0.5;
+        cursor: default;
+    }
+}
+
+%button-green
+{
+    @extend %button;
+    color: #FFF !important;
+    @include gradient-green;
+}
+
+%button-grey
+{
+    @extend %button;
+    color: #FFF !important;
+    @include gradient-grey;
+}
+
+%ellipsis
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

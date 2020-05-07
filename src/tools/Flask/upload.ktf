@@ -1,0 +1,15 @@
+// komodo tool: upload
+// ===================
+// auto_abbreviation: true
+// indent_relative: false
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.0.12
+// ===================
+@app.route('[[%tabstop1:/upload]]', methods=['GET', 'POST'])
+def [[%tabstop2:upload_file]]():
+    if request.method == 'POST':
+        [[%tabstop3:f]] = request.files['[[%tabstop4:the_file]]']
+        [[%tabstop3:f]].save('[[%tabstop6:/path/to/save/]][[%tabstop4:the_file]].[[%tabstop5:txt]]')
+[[%tabstop7:7]]!@#_currentPos!@#_anchor

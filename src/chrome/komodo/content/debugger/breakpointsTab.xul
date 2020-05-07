@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2011 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE window PUBLIC "-//MOZILLA//DTD XUL V1.0//EN"
+          "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % debuggerDTD SYSTEM "chrome://komodo/locale/debugger.dtd">
+  %debuggerDTD;
+]>
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/debugger.css" type="text/css"?>
+
+<!-- Breakpoints pane content -->
+<page id="breakpointsPane"
+      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://komodo/content/debugger/breakpointsTab.js"
+            type="application/x-javascript;version=1.7"/>
+
+    <commandset id="cmdset_breakPointsTab"/>
+
+    <tree id="breakpoints-tree" flex="1"
+          class="bg_transparent no-border"
+          seltype="single"
+          onselect="ko.dbg.bpManager.onSelect();"
+          onclick="ko.dbg.bpManager.onClick(event);"
+          onkeypress="return ko.dbg.bpManager.onKeyPress(event);">
+        <treecols>
+            <!-- Note: this hardcoded width must be kept in sync
+                 with value in BreakpointsTabManager.onClick() -->
+            <treecol id="breakpoints-type-and-state" cycler="true"
+                     class="treecol-image threadColumnHeader"
+                     tooltiptext="&breakpointState.tooltiptext;"
+                     display="State"
+                     style="width: 22px"/>
+            <treecol id="breakpoints-name"
+                     label="&name.label;" flex="4"
+                     persist="width"/>
+            <splitter class="tree-splitter"/>
+            <treecol id="breakpoints-language"
+                     label="&language.label;"
+                     style="width: 6em;"
+                     persist="width"/>
+            <splitter class="tree-splitter"/>
+            <treecol id="breakpoints-condition"
+                     label="&condition.label;" flex="2"
+                     persist="width"/>
+            <splitter class="tree-splitter"/>
+            <treecol id="breakpoints-hit-count"
+                     persist="width"
+                     style="width: 20em;"
+                     label="&hitCount.label;" flex="1"/>
+            <splitter class="tree-splitter"/>
+            <treecol id="breakpoints-file"
+                     persist="width"
+                     label="&file.label;" flex="5"/>
+            <splitter class="tree-splitter"/>
+        </treecols>
+        <treechildren id="breakpoints-body" flex="1"
+            context="breakpointManagerContext"/>
+    </tree>
+
+    <box id="breakpoints-tabpanel-hbox" class="widgetToolbarWrap">
+        <toolbar class="widgetToolbar">
+            <toolbarbutton id="breakpoints-new-button"
+                           tooltiptext="&newBreakpointOrTclSpawnpoint.tooltiptext;"
+                           orient="horizontal"
+                           class="breakpoint-new-icon"
+                           label="&new.label;"
+                           observes="cmd_breakpoint_add"
+                           buttonstyle="pictures"
+                           type="menu-button">
+                <menupopup>
+                    <menuitem observes="cmd_breakpoint_add"
+                              class="menuitem-iconic breakpoint-new-icon"
+                              label="&newBreakpoint.label;"/>
+                    <menuitem observes="cmd_spawnpoint_add"
+                              class="menuitem-iconic spawnpoint-new-icon"
+                              label="&newTclSpawnpoint.label;"/>
+                </menupopup>
+            </toolbarbutton>
+            <toolbarseparator style="width: 5px;"/>
+            <toolbarbutton id="breakpoints-delete-button"
+                           class="breakpoint-delete-icon"
+                           tooltiptext="&deleteBreakpoint.tooltiptext;"
+                           observes="cmd_breakpoint_delete"/>
+            <toolbarbutton id="breakpoints-toggle-state-button"
+                           class="breakpoint-toggle-state-icon"
+                           tooltiptext="&disableEnableAllBreakpoints.tooltiptext;"
+                           observes="cmd_breakpoint_toggle_all"/>
+            <toolbarbutton id="breakpoints-go-to-source-code-button"
+                           class="breakpoint-go-to-source-code-icon"
+                           tooltiptext="&goToTheSourceCode.tooltiptext;"
+                           observes="cmd_breakpoint_goto"/>
+            <toolbarseparator style="width: 5px;"/>
+            <toolbarbutton id="breakpoints-delete-all-button"
+                           class="breakpoint-delete-all-icon"
+                           tooltiptext="&deleteAllBreakpoints.tooltiptext;"
+                           observes="cmd_breakpoint_delete_all"/>
+            <toolbarbutton id="breakpoints-properties-button"
+                           class="breakpoint-properties-icon"
+                           tooltiptext="&breakpointProperties.tooltiptext;"
+                           observes="cmd_breakpoint_properties"/>
+        </toolbar>
+    </box>
+	
+</page>

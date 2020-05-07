@@ -1,0 +1,7 @@
+/* Copyright (c) 2000-2008 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+treechildren::-moz-tree-checkbox(checked)
+{
+    list-style-image: url("chrome://komodo/skin/images/asterisk_small.png");
+}

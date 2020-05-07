@@ -1,0 +1,15 @@
+{
+  "name": "jquery-visible",
+  "homepage": "https://github.com/teamdf/jquery-visible",
+  "version": "1.1.0",
+  "_release": "1.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.1.0",
+    "commit": "dc07ec3bd8eaf31184d9aec54a2beb27ec0ce51b"
+  },
+  "_source": "https://github.com/teamdf/jquery-visible.git",
+  "_target": "~1.1.0",
+  "_originalSource": "https://github.com/teamdf/jquery-visible.git",
+  "_direct": true
+}

@@ -1,0 +1,71 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'build',
+    'platform',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozChromeDir',
+    'mozIdlIncludePath',
+    'mozVersion',
+    'idlExportDir',
+    'productType',
+    'unsiloedPythonExe',
+    'buildFlavour',
+    'withSCC',
+    'withSharedSupport',
+);
+
+$cons->Preprocess('projectManager.p.js', 'projectManager.js');
+$cons->InstallInChrome('projectManager.js');
+
+$cons->InstallInChrome('partutils.js');
+
+$cons->Preprocess('projectExtensionManager.p.js', 'projectExtensionManager.js');
+$cons->InstallInChrome('projectExtensionManager.js');
+$cons->InstallInChrome('baseManager.js');
+$cons->Preprocess('toolboxManager.p.js', 'toolboxManager.js');
+$cons->InstallInChrome('toolboxManager.js');
+$cons->InstallInChrome('renamePart.xul');
+$cons->InstallInChrome('macroProperties.xul');
+$cons->InstallInChrome('macroProperties.js');
+$cons->InstallInChrome('snippetProperties.js');
+$cons->InstallInChrome('snippetProperties.xul');
+$cons->InstallInChrome('printdebugProperties.js');
+$cons->InstallInChrome('printdebugProperties.xul');
+$cons->InstallInChrome('simplePartProperties.xul');
+$cons->InstallInChrome('simplePartProperties.js');
+$cons->InstallInChrome('customMenuProperties.xul');
+$cons->InstallInChrome('customMenuProperties.js');
+$cons->InstallInChrome('tutorialProperties.js');
+$cons->InstallInChrome('tutorialProperties.xul');
+$cons->InstallInChrome('templateProperties.js');
+$cons->InstallInChrome('templateProperties.xul');
+$cons->InstallInChrome('folderTemplateProperties.js');
+$cons->InstallInChrome('folderTemplateProperties.xul');
+
+$cons->Preprocess('peFile.p.js', 'peFile.js');
+$cons->InstallInChrome('peFile.js');
+$cons->Preprocess('peFolder.p.js', 'peFolder.js');
+$cons->InstallInChrome('peFolder.js');
+$cons->InstallInChrome('peSnippet.js');
+$cons->InstallInChrome('peCommand.js');
+$cons->InstallInChrome('peURL.js');
+$cons->InstallInChrome('peMacro.js');
+$cons->InstallInChrome('peMenu.js');
+$cons->InstallInChrome('peTutorial.js');
+$cons->InstallInChrome('peTemplate.js');
+$cons->InstallInChrome('peFolderTemplate.js');
+$cons->InstallInChrome('pePrintdebug.js');
+
+$cons->InstallInChrome('tutorialLogicTemplate.js');
+$cons->InstallInChrome('tutorialMetaTemplate.yaml');
+
+if ($withSCC) {
+    $cons->Preprocess('peSCC.p.js', 'peSCC.js');
+    $cons->InstallInChrome('peSCC.js');
+}

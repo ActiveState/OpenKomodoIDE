@@ -1,0 +1,54 @@
+@import url("chrome://komodo/skin/global/colors.less");
+@import url("resource://profile/colors.less");
+
+richlistbox
+{
+    .group
+    {
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    
+    richlistitem[disabled]:not(.group)
+    {
+        opacity: 0.4;
+    }
+    
+    richlistitem
+    {
+        outline: 0 !important;
+    }
+}
+
+textbox
+{
+    margin: 2px 0 !important;
+}
+
+button
+{
+    margin: 2px 1px !important;
+}
+
+#commit-summary
+{
+    margin-right: 2px !important;
+    height: @size;
+}
+
+#open-dialog,
+button.reload-icon,
+button.menu-history-icon
+{
+    padding: 4px !important;
+}
+
+.quick-access-buttons button
+{
+    text-align: center;
+    
+    menupopup
+    {
+        text-align: left;
+    }
+}

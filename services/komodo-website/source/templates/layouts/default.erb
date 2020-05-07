@@ -1,0 +1,28 @@
+<% wrap_layout :layout do %>
+    <div id="content" class="document-<%= meta('basenameOrig') || get_basename() %>
+                             <%= 'sidebar' if meta('sidebar') %>
+                             <%= meta('classNames') || '' %>
+                             <%= defined?(post) && post.date.year < 2014 ? "drupal-import" : "" %>
+                             <%= page_classes %>">
+        <section role="main">
+            <article class="<%= 'normalize' unless meta('dontNormalize') %>">
+                <%= yield %>
+                <% if meta('comments') %>
+                  <%= partial('comments') %>
+                <% end %>
+            </article>
+        </section>
+        <% if meta('sidebar') %>
+            <aside class="sidebar-<%= meta('sidebar') %> normalize">
+                <div id="side-border"></div>
+                <button id="side-collapse" class="button big">
+                    <i class="icon icon-chevron-left"></i>
+                    <i class="icon icon-chevron-right"></i>
+                </button>
+                <div class="inner">
+                    <%= partial('sidebars/' + meta('sidebar'), :locals => { :post => defined?(post) ? post : false } ) %>
+                </div>
+            </aside>
+        <% end %>
+    </div>
+<% end %>

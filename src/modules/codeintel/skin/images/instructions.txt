@@ -1,0 +1,20 @@
+global (top level) - circle
+children - square
+builtin - triangle
+arguments - diamond
+types - hexagon
+
+class, module, imports, nodes, numbers, events - orange
+functions, methods, booleans - blue
+arguments, attributes, builtins, namespaces, arrays - red
+properties, structures, constants, objects - purple
+variables, strings - green
+
+
+palette used:
+
+green: 009960
+purple: 5438DC
+red: D62828
+blue: 0496FF
+orange: F17105

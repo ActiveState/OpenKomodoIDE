@@ -1,0 +1,252 @@
+#windowButtons
+{
+    .icon-minus-circle2:before { color: @window-button-minimize; }
+    .icon-plus-circle2:before { color: @window-button-maximize; }
+    .icon-cancel-circle2:before { color: @window-button-close; }
+    
+    & > toolbarbutton:hover
+    {
+        transform: scale(1.1);
+    }
+}
+
+/* Dialogs with hidden chrome */
+
+.dialog:root[_hidechrome="true"]:not(.embedded),
+dialog:root[_hidechrome="true"]:not(.embedded)
+{
+    overflow: -moz-hidden-unscrollable !important;
+
+    &:not(.dialog)
+    {
+        border: 2px solid @border;
+    }
+    
+    .window-wrapper,
+    .dialog-content-box,
+    .dialog-button-box
+    {
+        padding: 6px;
+    }
+    
+    &,
+    .window-wrapper,
+    .dialog-content-box,
+    .dialog-button-box,
+    .resizer-box,
+    {
+        overflow: -moz-hidden-unscrollable;
+    }
+    
+    #titlebar
+    {
+        padding-bottom: 6px;
+        min-height: 1.5rem;
+        
+        & > spacer, #windowButtons
+        {
+            toolbarbutton
+            {
+                font-size: 12px;
+            }
+            
+            width: 90px;
+        }
+    }
+    
+    &[_sizemode="maximized"],
+    &[sizemode="maximized"]
+    {
+        resizer
+        {
+            visibility: collapse;
+        }
+    }
+
+    resizer
+    {
+        background: @border !important;
+    }
+}
+
+dialog #windowButtons .icon-plus-circle2,
+dialog #windowButtons .icon-minus-circle2
+{
+    visibility: collapse;
+}
+
+/* Dialogs with default chrome */
+
+.dialog:not([_hidechrome="true"]):not(.embedded),
+dialog:not([_hidechrome="true"]):not(.embedded)
+{
+    padding: 6px;
+    
+    #titlebar,
+    resizer
+    {
+        visibility: collapse;
+    }
+}
+
+/* Main window with hidden chrome */
+
+#komodo_main[_hidechrome="true"][os-name="Windows_NT"][sizemode="maximized"],
+#komodo_main[_hidechrome="true"][os-name="Windows_NT"][_sizemode="maximized"]
+{
+    #toolbox_main
+    {
+        /* For some reason windows seems to eat up approx 6 pixels of the window top */
+        padding-top: 8px;
+    }
+}
+
+#komodo_main[_hidechrome="true"]
+{
+    &:not([sizemode="maximized"]):not([_sizemode="maximized"]) #toolbox_main #main-toolboxrow-wrapper
+    {
+        padding-top: 0;
+    }
+    
+    &:not([show-toolbar="false"])
+    {
+        #titlebar
+        {
+            visibility: collapse;
+        }
+    }
+    
+    &[show-toolbar="false"] 
+    {
+        #titlebar
+        {
+            visibility: visible;
+            
+            toolbarbutton.sdk-button .toolbarbutton-text
+            {
+                visibility: collapse;
+                display: none;
+            }
+            
+            & > spacer, #windowButtons
+            {
+                width: 90px;
+                
+                toolbarbutton, .toolbarbutton-text
+                {
+                    font-size: 12px !important;
+                }
+            }
+        }
+    }
+    
+    /* Main window resizers */
+
+    resizer
+    {
+        background: @border !important;
+    }
+    
+    &[_sizemode="maximized"],
+    &[sizemode="maximized"]
+    {
+        resizer
+        {
+            visibility: collapse;
+        }
+    }
+    
+    /**
+     * Top resizer. We do not support top left or top right.
+     */
+    #toolbox_main
+    {
+        resizer
+        {
+            &[dir="top"], &[dir="topleft"], &[dir="topright"]
+            {
+                height: 4px;
+            }
+
+            background: @special !important;
+        }
+    }
+    
+    
+    /* account for resizer taking up space */
+    #toolbox_side
+    {
+        width: 46px;
+    }
+}
+
+/* Main window with default chrome */
+
+#komodo_main:not([_hidechrome="true"]) 
+{
+    #titlebar,
+    #windowButtons,
+    resizer
+    {
+        visibility: collapse;
+    }
+}
+
+
+/* Resize handlers */
+
+resizer[dir="left"], resizer[dir="right"], resizer[dir="topleft"], resizer[dir="topright"],
+resizer[dir="bottomleft"], resizer[dir="bottomright"]
+{
+    width: 2px;
+}
+
+resizer[dir="top"], resizer[dir="bottom"], resizer[dir="topleft"], resizer[dir="topright"],
+resizer[dir="bottomleft"], resizer[dir="bottomright"]
+{
+    height: 2px;
+}
+
+resizer[dir="left"] { cursor: e-resize; }
+resizer[dir="right"] { cursor: e-resize; }
+resizer[dir="top"] { cursor: n-resize; }
+resizer[dir="bottom"] { cursor: s-resize; }
+resizer[dir="topleft"] { cursor: nw-resize; }
+resizer[dir="topright"] { cursor: ne-resize; }
+resizer[dir="bottomleft"] { cursor: sw-resize; }
+resizer[dir="bottomright"] { cursor: se-resize; -moz-appearance:none; }
+
+resizer
+{
+    background: @contrast;
+}
+
+/* On OSX we use the native window buttons, because drawInTitlebar SORT OF works
+   there (and nothing else does quite as well) */
+:root[os-name="Darwin"]
+{
+    #titlebar > spacer
+    {
+        visibility: collapse;
+    }
+    
+    #windowButtons,
+    {
+        width: 60px;
+        
+        & > *
+        {
+            visibility: collapse;
+        }
+    }
+    
+    #main-toolboxrow-wrapper
+    {
+        padding-top: 5px !important;
+    }
+    
+    resizer
+    {
+        visibility: collapse;
+    }
+}

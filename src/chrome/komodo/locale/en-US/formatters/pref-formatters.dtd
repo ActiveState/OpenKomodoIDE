@@ -1,0 +1,19 @@
+<!ENTITY formattersOverview.description "You can configure one or more formatters for any language. Each language will have one default formatter, which is the one used by the Format Code or Text ('cmd_format') function.">
+<!ENTITY formatterDefaultColumnHeader.label "Default">
+<!ENTITY formatterDefaultColumnHeader.tooltiptext "Whether this formatting configuration is the default used for the language.">
+<!ENTITY formatterFormatterNameColumnHeader.label "Formatter">
+<!ENTITY formatterFormatterNameColumnHeader.tooltiptext "The formatter instance that does the actual formatting.">
+<!ENTITY formatterLanguageColumnHeader.label "Language">
+<!ENTITY formatterLanguageColumnHeader.tooltiptext "The language the formatter configuration will work with.">
+<!ENTITY formatterNameColumnHeader.label "Name">
+<!ENTITY formatterNameColumnHeader.tooltiptext "The name given to the formatter configuration.">
+<!ENTITY formatterLanguage.label "Language:">
+<!ENTITY formattersContextMenuEdit.label "Edit">
+<!ENTITY formattersContextMenuDelete.label "Delete">
+<!ENTITY formattersContextMenuMakeDefault.label "Make Default">
+<!ENTITY formattersContextMenuMakeDefault.tooltiptext "Make this the default formatter used for the given language.">
+<!ENTITY formatterPreferencesGroupbox.caption "Configured Formatters">
+<!ENTITY Formatters.label "Formatters">
+<!ENTITY addFormatter.tooltiptext "Create a new formatter...">
+<!ENTITY deleteFormatter.tooltiptext "Delete the selected formatter">
+<!ENTITY editFormatter.tooltiptext "Edit the selected formatter...">

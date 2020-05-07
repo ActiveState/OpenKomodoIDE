@@ -1,0 +1,35 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'build',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'komodoPythonUtilsDir',
+    'platform',
+    'buildFlavour',
+    'mozVersion',
+    'productType',
+    'unsiloedPythonExe',
+    'withDebugging',
+    'sdkDir',
+    'mozSrc',
+);
+
+$cons->Install($idlExportDir, 'koIRunService.idl');
+$cons->BuildAndInstallXpt('koIRunService.idl');
+$cons->Preprocess('koRunService.p.py', 'koRunService.py');
+$cons->InstallXpcomComponent('koRunService.py');
+$cons->Preprocess('koRunTerminal.p.py', 'koRunTerminal.py');
+$cons->InstallXpcomComponent('koRunTerminal.py');
+$cons->InstallPythonUtility('runutils.py');
+
+$cons->Install($idlExportDir, 'koIAsyncOperations.idl');
+$cons->BuildAndInstallXpt('koIAsyncOperations.idl');
+$cons->InstallXpcomComponent('koAsyncOperations.py');
+$cons->InstallPythonUtility('koAsyncOperationUtils.py');

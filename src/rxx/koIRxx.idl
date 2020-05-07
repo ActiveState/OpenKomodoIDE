@@ -1,0 +1,205 @@
+/* Copyright (c) 2003-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "nsIObserver.idl"
+#include "nsITreeView.idl"
+#include "ISciMoz.idl"
+
+
+[scriptable, uuid(09AB5FBE-3DBA-4dc9-9623-0FEB63F1F64A)]
+interface koIRxxMatchResultsTreeView : nsITreeView {
+    // Set the match/split/replace results.
+    // - Called via an unwrapped python object to allow, for now, passing
+    //   of Python regex Match objects. This will not scale to the other
+    //   regex syntaxes.
+    //void setMatches(in <list of Python RegexMatch> objects);
+
+    void ignoreNextToggleOpenState();
+
+    // The following attributes will raise an error if there is no
+    // current match selection.
+    //XXX Maybe change these to currentResult* (as per SplitResultsTreeView).
+    attribute wstring currentMatchGroupName; // may be null if the group is not named
+    attribute long currentMatchStart;
+    attribute long currentMatchEnd;
+    attribute wstring currentMatchValue;
+};
+
+
+[scriptable, uuid(282717FA-B688-48C6-98D2-48A5E0F259F2)]
+interface koIRxxSplitResultsTreeView : nsITreeView {
+    // Set the match/split/replace results.
+    void setSplitResults(in unsigned long count,
+                         [array, size_is(count)] in wstring results,
+                         in wstring searchText);
+
+    // The following attributes will raise an error if there is no
+    // current match selection.
+    attribute long currentResultStart;
+    attribute long currentResultEnd;
+};
+
+
+// JS-implemented class so match results UI can be controlled from
+// Python code.
+[scriptable, uuid(0529AEF0-DCE2-4b1f-A1E7-16B1B3C2F41B)]
+interface koIRxxResultsManager : nsISupports {
+
+    // Different UI states while pattern-matching and update of results
+    // is taking place.
+    const long MATCHING_DONE = 0;
+    const long MATCHING_DONE_ON_ERROR = 1;
+    const long MATCHING_IN_PATTERN_MATCH = 2;
+    const long MATCHING_UPDATING_RESULTS = 3;
+
+    attribute nsITreeView matchResultsView;
+    attribute nsITreeView splitResultsView;
+
+    // Indicates that the given pattern matched in the given search text.
+    //
+    //  "numResults" is the number of places in the search text in which
+    //      a match was found.
+    //
+    void matchSuccess(in unsigned long numResults);
+
+    // Indicates that the given pattern did not match in the given
+    // search text.
+    //
+    //  "message" is an optional message to display to user, explaining
+    //      the failure.
+    //
+    void matchFailure(in wstring message);
+
+    // Indicates that there was an error attempting to match with the given
+    // regex pattern (or to replace with the given replacement template).
+    // Generally this means there was a syntax error in the regex (or
+    // replacement template).
+    //
+    //  "message" is an optional message to display to user, explaining
+    //      the failure.
+    //
+    void matchError(in wstring message);
+    void replaceError(in wstring message);
+
+    // The regex lexer can also provide useful error messages (for Python
+    // at least these messages are more useful than from re.compile()).
+    void lexSuccess();
+    void lexError(in wstring message);
+
+    void updateInProgressUI(in long matchingStatus);
+    
+    // Style the two results fields, using setTimeout slices
+    void styleSearchText(in AString responseString,
+                         in ISciMoz searchScimoz,
+                         in unsigned long highlightStyleNum);
+    void styleSearchAndReplacedText(in AString responseString,
+                                    in ISciMoz searchScimoz,
+                                    in ISciMoz replacedTextScimoz,
+                                    in unsigned long highlightStyleNum);
+};
+
+
+[scriptable, uuid(EE802360-30AC-402c-8F16-2774C4118FB3)]
+interface koIRxxRegexOptions : nsISupports {
+    attribute boolean i; // ignoreCase
+    attribute boolean m; // multiLine
+    attribute boolean s; // singleLine
+    attribute boolean x; // verbose
+    attribute boolean u; // unicode
+    attribute boolean l; // locale
+
+    // Return a string representation of the current options, as
+    // appropriate for the given syntax.
+    wstring repr(in string language);
+
+    attribute wstring openDelimiter;
+    attribute wstring closeDelimiter;
+    attribute boolean usesDelimiters;
+    
+    void restoreFromPrefs();
+    void saveToPrefs();
+};
+
+
+// An RxxHandler is a component that handles matching/splitting/replacing or
+// with regexes of a specific language/syntax. There is one implementation
+// for each regex language/syntax supported by Rxx.
+interface koIRxxResponseHandler;
+[scriptable, uuid(79CCEE94-9870-4fde-8A2A-8227DCF7283C)]
+interface koIRxxHandler : nsISupports {
+    // The Regex "language" or syntax which this koIRxxHandler
+    // implementation handles.
+    readonly attribute string language;
+
+    // Reference to the koIRxxHandler object that talks back to the UI.
+    attribute koIRxxResponseHandler manager;
+    
+    // The follow method use these arguments:
+    //  "pattern" is the regular expression pattern to match with
+    //  "options" is a set of regular expression options
+    //  "searchTextSciMoz" is the SciMoz widget holding the search text
+    //  "resultsManager" is an object on which results are reported
+    //
+    // Match the first occurrence of the given pattern and update the results
+    // manager and "Search Text" styling with the result.
+    void match(in wstring pattern,
+               in koIRxxRegexOptions options,
+               in ISciMoz searchTextSciMoz);
+    // Match all occurrences of the given pattern and update the results
+    // manager and "Search Text" styling with the results.
+    void matchAll(in wstring pattern,
+                  in koIRxxRegexOptions options,
+                  in ISciMoz searchTextSciMoz);
+    // Split the search text with the given pattern and update with the
+    // results.
+    void split(in wstring pattern,
+               in koIRxxRegexOptions options,
+               in ISciMoz searchTextSciMoz);
+    // Replace the first occurrence of the given pattern and update the
+    // results manager, "Replaced Text" and "Search Text" styling with the
+    // result.
+    void replace(in wstring pattern,
+                 in wstring replacement,
+                 in koIRxxRegexOptions options,
+                 in ISciMoz searchTextSciMoz);
+    // Replace all occurrences of the given pattern and update the results
+    // manager, "Replaced Text" and "Search Text" styling with the results.
+    void replaceAll(in wstring pattern,
+                    in wstring replacement,
+                    in koIRxxRegexOptions options,
+                    in ISciMoz searchTextSciMoz);
+    
+    // Stop a running process
+    void stop();
+
+};
+
+
+[scriptable, uuid(aa0429fa-95a5-4b2d-8de0-84eb2486ca11)]
+interface koIRxxResponseHandler : nsIObserver {
+    void initialize(in koIRxxResultsManager resultsManager,
+                    in ISciMoz searchTextSciMoz,
+                    in ISciMoz replacedTextSciMoz);
+
+    // Call this when about to close the window.
+    void shutdown();
+
+    // Information on the last match.
+    long getLastNumGroups();
+    void getLastGroupNames(out unsigned long count,
+                           [array, size_is(count)] out wstring groupNames);
+
+    // Style the regex pattern (or replacement template) in the given Scimoz.
+    //
+    //  "scimoz" is the regex SciMoz window to style
+    //  "options" is a set of regular expression options
+    //  "resultsManager" is an object on which results are reported
+    void styleRegex(in ISciMoz scimoz,
+                    in koIRxxRegexOptions options,
+                    in koIRxxResultsManager resultsManager);
+    void styleReplacement(in ISciMoz scimoz,
+                          in koIRxxResultsManager resultsManager);
+};
+
+

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>SciMoz</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.ActiveState.Scintilla</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>BRPL</string>
+	<key>CFBundleSignature</key>
+	<string>MOST</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>WebPluginName</key>
+	<string>Komodo Editor</string>
+	<key>WebPluginDescription</key>
+	<string>The ActiveState Komodo Editor - do not disable</string>
+	<key>WebPluginMIMETypes</key>
+	<dict>
+		<key>application/x-scimoz-plugin</key>
+		<dict>
+		  <key>WebPluginTypeDescription</key>
+		  <string>The ActiveState Komodo Editor - do not disable</string>
+		</dict>
+	</dict>
+	<key>CFPlugInUnloadFunction</key>
+	<string></string>
+</dict>
+</plist>

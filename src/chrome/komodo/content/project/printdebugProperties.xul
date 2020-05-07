@@ -1,0 +1,287 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % projectDTD SYSTEM "chrome://komodo/locale/project.dtd">
+  %projectDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+
+<!--For the rightarrow-button-->
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<!--For the keybinding tab-->
+<?xml-stylesheet href="chrome://komodo/skin/bindings/keybinding.css" type="text/css"?>
+<?xul-overlay href="chrome://komodo/content/bindings/scintilla-overlay.xul"?>
+
+<dialog xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="dialog-printdebugproperties"
+        windowtype="komodo_printdebugProperties"
+        style="min-width: 40em;"
+        orient="vertical"
+        onload="onLoad(event)"
+        onunload="onUnload()"
+        persist="width height screenX screenY"
+        buttons="accept,extra1,cancel,help"
+        ondialogaccept="return OK()"
+        ondialogcancel="return Cancel()"
+        ondialogextra1="return Apply()"
+        ondialoghelp="legacy.help.open('printdebugging.html');">
+
+    <script src="chrome://xtk/content/xtk.js"                          type="application/x-javascript;version=1.7"/>
+    <script src="chrome://global/content/fullScreen.js"                type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js"           type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/run/interpolate.js"           type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/library/uriparse.js"          type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/library/dialogs.js"           type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/library/tabstops.js"          type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/launch.js"                    type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/project/printdebugProperties.js" type="application/x-javascript;version=1.7" />
+
+    <hbox id="scintillaOverlayXul"/>
+
+    <menupopup id="bufferContextMenu" type="buffercontext" />
+
+    <tabbox id="printdebugProperties" orient="vertical" flex="1">
+        <tabs id="tabs" orient="horizontal">
+            <tab id="printdebug_tab" label="&printdebug.label;"/>
+            <tab id="shortcut_tab" label="&keyBinding.label;"
+                 onfocus="printdebugnamelabel.value=printdebugname.value;"/>
+        </tabs>
+        <tabpanels flex="1">
+            <vbox id="printdebug_tabpanel" flex="1">
+                <!-- header -->
+                <menupopup id = "token-context-menu"/>
+                <spacer height="5" id="spacer" context="token-context-menu"/>
+                <hbox style="height:27px;">
+                    <spacer width="5"/>
+                    <hbox style="width: 22px;">
+                        <vbox>
+                            <spring flex="1"/>
+                            <image src="koicon://ko-svg/chrome/icomoon/skin/bug.svg?color=orange"
+                                   style="max-width: 22px; max-height:16px"
+                                   id="main_icon"/>
+                            <spring flex="1"/>
+                        </vbox>
+                    </hbox>
+                    <spacer width="5"/>
+                    <textbox id="nameText" flex="1"
+                             value="&unnamedCommand.label;"/>
+                    <spacer width="5"/>
+                    <langlist id="languageList"
+                              default="Pick a Language"/>
+                    <checkbox id="set_as_active"
+                              tooltiptext="&active.hover;"
+                              label="&active.label;"
+                              checked="false"/>
+                </hbox>
+                <separator class="groovy-thin"/>
+
+                <hbox id="printStateSection" flex="1" align="center">
+                    <label value="&printStatement.label;"/>
+                    <textbox flex="1"
+                             id="printstatementText"
+                             placeholder="&printStatementplaceholder.text;"></textbox>
+                    <button type="menu" id="shortcuts-menubutton"
+                            tooltiptext="&shortcuts.tooltiptext;" tooltip="dialogTooltip"
+                            class="rightarrow-button">
+                        <menupopup position="end_before">
+                            <menuitem label="&tabstopTabStopReplace.label;"
+                                      shortcut="[[%tabstop:DEFAULT]]"
+                                      select="DEFAULT"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&softCharTabStopReplace.label;"
+                                      shortcut="[[%soft:SOFTCHARS]]"
+                                      select="SOFTCHARS"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&fFileBaseName.label;"
+                                      shortcut="[[%f]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&FFilePath.label;"
+                                      shortcut="[[%F]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&dDirectoryBaseNameOfFile.label;"
+                                      shortcut="[[%d]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&DDirectoryPathOfFile.label;"
+                                      shortcut="[[%D]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&bFileBaseNameWithoutExtension.label;"
+                                      shortcut="[[%b]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&projectBaseDirectory.label;"
+                                      shortcut="[[%i]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&PPathOfTheActiveProject.label;"
+                                      shortcut="[[%P]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&pDirectoryPathOfTheActiveProject.label;"
+                                      shortcut="[[%p]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&LCurrentLineNumber.label;"
+                                      shortcut="[[%L]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&LCurrentLineText.label;"
+                                      shortcut="[[%l]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&sSelection.label;"
+                                      shortcut="[[%s]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&SURLEscapedSelection.label;"
+                                      shortcut="[[%S]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&currentLineOrSelEscaped.label;"
+                                      shortcut="[[%t]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&wSelectionOrWordUnderCursor.label;"
+                                      shortcut="[[%w]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&WURLEscapedSelectionOrWordUnderCursor.label;"
+                                      shortcut="[[%W]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&guidANewGUID.label;"
+                                      shortcut="[[%guid]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&dateCurrentDate.label;"
+                                      shortcut="[[%date]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuseparator/>
+                            <menuitem label="&askAskForUserInput.label;"
+                                      shortcut="[[%ask:QUESTION:DEFAULT]]"
+                                      select="QUESTION"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuitem label="&askpassAskForPassword.label;"
+                                      shortcut="[[%askpass:Password]]"
+                                      oncommand="InsertShortcutPrintStatement(this);"/>
+                            <menuseparator/>
+                            <menuitem label="&helpOnShortcuts.label;"
+                                      oncommand="ko.help.open('shortcuts.html');"/>
+                        </menupopup>
+                    </button>
+                </hbox>
+                <label tooltiptext="&printStatement.desc;" crop="end" value="&printStatement.desc;"/>
+                <separator class="groovy-thin"/>
+                <label value="JavaScript Logic:"/>
+                <hbox flex="1">
+                    <view id="logicView"
+                          flex="1"
+                          type="buffer"
+                          height="200"
+                          onmousedown="scintillaFocus()"
+                          onblur="scintillaBlur()"
+                          onfocus="scintillaFocus()"
+                          pluginPaintHack="true"
+                          />
+                    <vbox>
+                    <button type="menu" id="shortcuts-menubutton"
+                            tooltiptext="&shortcuts.tooltiptext;" tooltip="dialogTooltip"
+                            class="rightarrow-button">
+                        <menupopup position="end_before">
+                            <menuitem label="&tabstopTabStopReplace.label;"
+                                      shortcut="[[%tabstop:DEFAULT]]"
+                                      select="DEFAULT"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&softCharTabStopReplace.label;"
+                                      shortcut="[[%soft:SOFTCHARS]]"
+                                      select="SOFTCHARS"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&fFileBaseName.label;"
+                                      shortcut="[[%f]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&FFilePath.label;"
+                                      shortcut="[[%F]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&dDirectoryBaseNameOfFile.label;"
+                                      shortcut="[[%d]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&DDirectoryPathOfFile.label;"
+                                      shortcut="[[%D]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&bFileBaseNameWithoutExtension.label;"
+                                      shortcut="[[%b]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&projectBaseDirectory.label;"
+                                      shortcut="[[%i]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&PPathOfTheActiveProject.label;"
+                                      shortcut="[[%P]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&pDirectoryPathOfTheActiveProject.label;"
+                                      shortcut="[[%p]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&LCurrentLineNumber.label;"
+                                      shortcut="[[%L]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&LCurrentLineText.label;"
+                                      shortcut="[[%l]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&sSelection.label;"
+                                      shortcut="[[%s]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&SURLEscapedSelection.label;"
+                                      shortcut="[[%S]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&currentLineOrSelEscaped.label;"
+                                      shortcut="[[%t]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&wSelectionOrWordUnderCursor.label;"
+                                      shortcut="[[%w]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&WURLEscapedSelectionOrWordUnderCursor.label;"
+                                      shortcut="[[%W]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&guidANewGUID.label;"
+                                      shortcut="[[%guid]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&dateCurrentDate.label;"
+                                      shortcut="[[%date]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuseparator/>
+                            <menuitem label="&askAskForUserInput.label;"
+                                      shortcut="[[%ask:QUESTION:DEFAULT]]"
+                                      select="QUESTION"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuitem label="&askpassAskForPassword.label;"
+                                      shortcut="[[%askpass:Password]]"
+                                      oncommand="InsertShortcutScintilla(this);"/>
+                            <menuseparator/>
+                            <menuitem label="&helpOnShortcuts.label;"
+                                      oncommand="ko.help.open('shortcuts.html');"/>
+                        </menupopup>
+                    </button>
+                    </vbox>
+                </hbox>
+            </vbox>
+            <vbox id="shortcut_tabpanel">
+                <!-- header -->
+                <spacer height="5"/>
+                <hbox style="height:27px;">
+                    <spacer width="5"/>
+                    <hbox style="width: 22px;">
+                        <vbox>
+                            <spring flex="1"/>
+                            <image src="koicon://ko-svg/chrome/icomoon/skin/bug.svg?color=#orange"
+                                   style="max-width: 22px; max-height:16px"
+                                   id="keybindingtab_icon"/>
+                            <spring flex="1"/>
+                        </vbox>
+                    </hbox>
+                    <spacer width="5"/>
+                    <label id="nameLabel" style="height:25px; padding-left: 2px; padding-top: 4px;"
+                           value="" flex="1"/>
+                </hbox>
+                <spacer height="10"/>
+                <separator class="groovy-thin"/>
+                <spacer height="10"/>
+                <editkeybinding id="keybindings" applycb="updateOK()"
+                                commandId="cmd_callPart"/>
+                <spacer height="10"/>
+            </vbox>
+        </tabpanels>
+    </tabbox>
+</dialog>
+

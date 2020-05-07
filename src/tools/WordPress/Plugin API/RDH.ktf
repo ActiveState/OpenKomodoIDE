@@ -1,0 +1,11 @@
+// komodo tool: RDH
+// ================
+// auto_abbreviation: true
+// indent_relative: false
+// language: Text
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// ================
+register_deactivation_hook( __FILE__, '[[%tabstop:myplugin_deactivate]]' );!@#_currentPos!@#_anchor

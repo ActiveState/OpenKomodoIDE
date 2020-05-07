@@ -1,0 +1,11 @@
+# komodo tool: Django 1.10.6
+# ==========================
+# author: Django Software Foundation
+# is_clean: true
+# language: Python
+# license: BSD
+# type: folder_template
+# version: 1.1.5
+# website: https://www.djangoproject.com/
+# ==========================
+https://github.com/django/django/archive/1.10.6.zip

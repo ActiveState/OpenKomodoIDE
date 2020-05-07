@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Images"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript;version=1.7"
+	  src="chrome://global/content/dialogOverlay.js" />
+
+<html:h1>XUL Images</html:h1>
+
+<vbox flex="1" style="overflow: auto">
+
+<groupbox>
+  <caption label="The Blind Chicken" />
+  <hbox>
+    <vbox align="center">
+      <image style="width: 20px; height: 20px" src="images/BC-R.jpg" />
+      <label value="smaller image" />
+    </vbox>
+
+    <vbox align="center">
+      <image src="images/BC-R.jpg" />
+      <label value="natural-sized image" />
+    </vbox>
+
+    <vbox align="center">
+      <image style="width: 200px; height: 200px" src="images/BC-R.jpg" />
+      <label value="enlarged image" />
+    </vbox>
+  </hbox>
+</groupbox>
+
+<groupbox>
+  <caption label="Betty Boop" />
+  <hbox>
+    <vbox align="center">
+      <image src="images/betty_boop.xbm" />
+      <label value="natural-sized image" />
+    </vbox>
+
+    <vbox align="center">
+      <image style="width: 200px; height: 200px" src="images/betty_boop.xbm" />
+      <label value="enlarged image" />
+    </vbox>
+  </hbox>
+</groupbox>
+</vbox>
+
+</window>

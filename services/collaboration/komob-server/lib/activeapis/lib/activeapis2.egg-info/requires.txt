@@ -1,0 +1,3 @@
+distribute
+httplib2
+simplejson

@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % sccCvsDTD SYSTEM "chrome://komodo/locale/scc-cvs.dtd">
+  %sccCvsDTD;
+]>
+
+<bindings id="koCvsCheckoutBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="cvs_checkout">
+        <content>
+            <children>
+                <xul:vbox anonid="checkout_vbox" flex="1">
+                    <xul:label anonid="required_fields_label"
+                               class="required_fields_label"
+                               xbl:inherits="crop,disabled"
+                               crop="right"
+                               value="&required.fields.label;"/>
+
+                    <xul:hbox anonid="checkout_module_hbox"
+                              xbl:inherits="disabled"
+                              align="center">
+                        <xul:label anonid="checkout_module_label"
+                                   class="checkout_module_label"
+                                   xbl:inherits="crop,disabled"
+                                   crop="right"
+                                   value="&checkout.module.label;"/>
+                        <xul:textbox anonid="checkout_module_textbox"
+                                 flex="1"
+                                 style="min-height: 16px;"
+                                 class="checkout_module_textbox"
+                                 maxrows="10"
+                                 size="30"
+                                 tooltiptext="&checkout.module.tooltip;"
+                                 type="autocomplete"
+                                 autocompletesearch="mru"
+                                 autocompletesearchparam="mru: scc_module_textbox_mru"
+                                 autocompletepopup="popupTextboxAutoComplete"
+                                 enablehistory="true"
+                                 tabscrolling="true"
+                                 completeselectedindex="true"
+                                 ontextentered="this.focus();
+                                                this.setSelectionRange(this.textLength, this.textLength);"
+                                 />
+                    </xul:hbox>
+
+                    <xul:hbox anonid="checkout_revision_hbox"
+                              xbl:inherits="disabled"
+                              align="center">
+                        <xul:label anonid="checkout_revision_label"
+                                   class="checkout_revision_label"
+                                   xbl:inherits="crop,disabled"
+                                   crop="right"
+                                   value="&checkout.revision.label;"/>
+                        <xul:textbox anonid="checkout_revision_textbox"
+                                     class="checkout_revision_textbox"
+                                     xbl:inherits="disabled"
+                                     tooltiptext="&checkout.revision.tooltip;"
+                                     flex="1"/>
+                    </xul:hbox>
+
+                    <xul:hbox anonid="checkout_date_hbox"
+                              xbl:inherits="disabled"
+                              align="center">
+                        <xul:label anonid="checkout_date_label"
+                                   class="checkout_date_label"
+                                   xbl:inherits="crop,disabled"
+                                   crop="right"
+                                   value="&checkout.date.label;"/>
+                        <xul:textbox anonid="checkout_date_textbox"
+                                     class="checkout_date_textbox"
+                                     xbl:inherits="disabled"
+                                     tooltiptext="&checkout.date.tooltip;"
+                                     flex="1"/>
+                    </xul:hbox>
+
+                    <xul:groupbox anonid="checkout_type_groupbox"
+                              xbl:inherits="disabled">
+                        <xul:caption anonid="checkout_type_groupbox_caption"
+                                     label="&checkout.type.groupbox.caption;"/>
+                        <xul:radiogroup anonid="checkout_type_radiogroup"
+                                        xbl:inherits="disabled"
+                                        value="normal">
+                            <xul:radio anonid="checkout_type_normal_radio"
+                                       label="&checkout.type.normal.radio.label;"
+                                       value="normal"
+                                       selected="true"/>
+                            <xul:radio anonid="checkout_type_export_radio"
+                                       label="&checkout.type.export.radio.label;"
+                                       value="export"/>
+                        </xul:radiogroup>
+                    </xul:groupbox>
+                </xul:vbox>
+            </children>
+        </content>
+
+        <implementation>
+            <constructor>
+            <![CDATA[
+            try {
+            } catch (e) {
+                log.exception(e);
+            }
+            ]]>
+            </constructor>
+
+            <method name="getCheckoutArguments">
+            <body>
+            <![CDATA[
+                // Must return an array of parameters to be used by the
+                // command line cvs checkout.
+                var moduleTextbox = document.getAnonymousElementByAttribute(this, "anonid", "checkout_module_textbox");
+                var revTextbox = document.getAnonymousElementByAttribute(this, "anonid", "checkout_revision_textbox");
+                var dateTextbox = document.getAnonymousElementByAttribute(this, "anonid", "checkout_date_textbox");
+                var typeRadiogroup = document.getAnonymousElementByAttribute(this, "anonid", "checkout_type_radiogroup");
+                var commandline_args = [];
+                if (moduleTextbox.value) {
+                    commandline_args.push("--module");
+                    var module = moduleTextbox.value;
+                    dump("module: " + module + "\n");
+                    if (module.substr(0, 2) == "-d")
+                        module = module.substr(2);
+                    commandline_args.push(module);
+                }
+                if (revTextbox.value) {
+                    commandline_args.push("-r");
+                    commandline_args.push(revTextbox.value);
+                }
+                if (dateTextbox.value) {
+                    commandline_args.push("-D");
+                    commandline_args.push(dateTextbox.value);
+                }
+                if (typeRadiogroup.value == "export") {
+                    commandline_args.push("--export");
+                }
+                return commandline_args.join(" ");
+            ]]>
+            </body>
+            </method>
+
+            <method name="validate">
+            <body>
+            <![CDATA[
+                // Return true if the settings are valid, false otherwise.
+                var moduleTextbox = document.getAnonymousElementByAttribute(this, "anonid", "checkout_module_textbox");
+                if (!moduleTextbox.value) {
+                    alert("You must specify the module you wish to checkout.");
+                    return false;
+                }
+                ko.mru.addFromACTextbox(moduleTextbox);
+                return true;
+            ]]>
+            </body>
+            </method>
+
+        </implementation>
+
+    </binding>
+
+</bindings>

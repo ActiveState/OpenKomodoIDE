@@ -1,0 +1,16 @@
+# #if MODE == "dev"
+content refactoring content/
+skin refactoring classic/1.0 skin/
+locale refactoring en-US locale/en-US/
+# #else
+content refactoring jar:refactoring.jar!/content/
+skin refactoring classic/1.0 jar:refactoring.jar!/skin/
+locale refactoring en-US jar:refactoring.jar!/locale/en-US/
+# #endif
+
+overlay chrome://komodo/content/komodo.xul chrome://refactoring/content/overlay_refactoring.xul
+# CITODO: Add to new pref screen?
+#overlay chrome://komodo/content/pref/pref-codeintel.xul chrome://refactoring/content/pref_overlay_refactoring.xul
+
+manifest components/component.manifest
+

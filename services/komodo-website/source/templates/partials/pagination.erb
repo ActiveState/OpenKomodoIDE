@@ -1,0 +1,15 @@
+<% if pagination.total_page_num > 1 %>
+<!-- Page Listing -->
+<div class="pagination">
+    <ul>
+        <!-- Previous Page Button -->
+        <% if pagination.prev_page %>
+            <li><%= link_to "Prev page", pagination.prev_page.url %></li>
+        <% end %>
+
+        <% if pagination.next_page %>
+          <li><%= link_to "Next page", pagination.next_page.url %></li>
+        <% end %>
+    </ul>
+</div>
+<% end %>

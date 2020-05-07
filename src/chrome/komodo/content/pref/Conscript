@@ -1,0 +1,176 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'platform',
+    'mozChromeDir',
+    'productType',
+    'unsiloedPythonExe',
+    'buildFlavour',
+    'mozVersion',
+    'withSCC',
+    'withSharedSupport',
+    'withDebugging',
+);
+
+$cons->InstallInChrome('prefs.js');
+
+$cons->InstallInChrome('koPrefUtils.js');
+$cons->InstallInChrome('koPrefWindow.js');
+$cons->InstallInChrome('koFilteredPrefTree.js');
+
+$cons->Preprocess('pref.p.xul', 'pref.xul');
+$cons->InstallInChrome('pref.xul');
+$cons->InstallInChrome('pref.js');
+
+$cons->Preprocess('project.p.xul', 'project.xul');
+$cons->InstallInChrome('project.xul');
+
+$cons->InstallInChrome('pref-languages.xul');
+$cons->InstallInChrome('pref-languages.js');
+
+$cons->InstallInChrome('koPrefWidgets.xml');
+$cons->InstallInChrome('editenvironvar.xul');
+$cons->InstallInChrome('editenvironvar.js');
+
+$cons->InstallInChrome('pref-xml-catalog.xul');
+
+$cons->InstallInChrome('pref-editor.xul');
+$cons->InstallInChrome('pref-indentation.xul');
+$cons->InstallInChrome('pref-editsmart.xul');
+$cons->InstallInChrome('pref-save.xul');
+if ($withDebugging) {
+    $cons->InstallInChrome('pref-debugger.xul');
+    $cons->InstallInChrome('pref-project-debugging-properties.xul');
+    $cons->InstallInChrome('pref-project-debugging-properties.js');
+    $cons->InstallInChrome('pref-debugger-connection.xul');
+    $cons->InstallInChrome('pref-debugger-advanced.xul');
+    $cons->InstallInChrome('pref-ishell.xul');
+    $cons->InstallInChrome('pref-tcl-debug.xul');
+    $cons->InstallInChrome('pref-tcl-debug.js');
+}
+
+$cons->InstallInChrome('pref-association.xul');
+$cons->InstallInChrome('pref-association.js');
+
+$cons->InstallInChrome('pref-find.xul');
+
+$cons->InstallInChrome('pref-python.xul');
+$cons->InstallInChrome('pref-python.js');
+$cons->InstallInChrome('pref-python3.xul');
+$cons->InstallInChrome('pref-python3.js');
+
+$cons->Preprocess('pref-javascript.p.xul', 'pref-javascript.xul');
+$cons->InstallInChrome('pref-javascript.xul');
+$cons->InstallInChrome('pref-javascript.js');
+
+$cons->InstallInChrome('pref-nodejs.xul');
+$cons->InstallInChrome('pref-nodejs.js');
+
+$cons->InstallInChrome('pref-tcl.xul');
+$cons->InstallInChrome('pref-tcl.js');
+$cons->InstallInChrome('pref-tcl-lint.xul');
+$cons->InstallInChrome('pref-tcl-lint.js');
+
+$cons->Preprocess('pref-perl.p.xul', 'pref-perl.xul');
+$cons->InstallInChrome('pref-perl.xul');
+$cons->InstallInChrome('pref-perl.js');
+
+$cons->Preprocess('pref-ruby.p.xul', 'pref-ruby.xul');
+$cons->InstallInChrome('pref-ruby.xul');
+$cons->InstallInChrome('pref-ruby.js');
+
+$cons->Preprocess('pref-newfiles.p.xul', 'pref-newfiles.xul');
+$cons->InstallInChrome('pref-newfiles.xul');
+$cons->Preprocess('pref-newfiles.p.js', 'pref-newfiles.js');
+$cons->InstallInChrome('pref-newfiles.js');
+
+$cons->InstallInChrome('pref-intl.xul');
+$cons->InstallInChrome('pref-intl.js');
+
+$cons->Preprocess('pref-ui.p.xul', 'pref-ui.xul');
+$cons->InstallInChrome('pref-ui.xul');
+
+$cons->InstallInChrome('pref-ui.js');
+
+$cons->InstallInChrome('pref-printing.xul');
+
+$cons->InstallInChrome('pref-proxies.xul');
+$cons->InstallInChrome('pref-proxies.js');
+
+$cons->InstallInChrome('pref-servers.js');
+$cons->Preprocess('pref-servers.p.xul', 'pref-servers.xul');
+$cons->InstallInChrome('pref-servers.xul');
+
+$cons->Preprocess('pref-php.p.xul', 'pref-php.xul');
+$cons->InstallInChrome('pref-php.xul');
+$cons->Preprocess('pref-php.p.js', 'pref-php.js');
+$cons->InstallInChrome('pref-php.js');
+
+$cons->InstallInChrome('pref-alllangfonts.xul');
+$cons->InstallInChrome('pref-alllangfonts.js');
+
+$cons->InstallInChrome('pref-web.xul');
+$cons->Preprocess('pref-web.p.js', 'pref-web.js');
+$cons->InstallInChrome('pref-web.js');
+
+if ($platform eq "win") {
+    $cons->InstallInChrome('pref-winInteg.xul');
+    $cons->InstallInChrome('pref-winInteg.js');
+    $cons->InstallInChrome('setupFileAssociations.xul');
+    $cons->InstallInChrome('setupFileAssociations.js');
+}
+$cons->InstallInChrome('pref-environ.xul');
+$cons->InstallInChrome('pref-environ.js');
+
+$cons->Preprocess('pref-keys.p.xul', 'pref-keys.xul');
+$cons->InstallInChrome('pref-keys.xul');
+$cons->InstallInChrome('pref-keys.js');
+
+$cons->InstallInChrome('pref-projects.xul');
+
+$cons->Preprocess('pref-helplang.p.xul', 'pref-helplang.xul');
+$cons->InstallInChrome('pref-helplang.xul');
+$cons->Preprocess('pref-helplang.p.js', 'pref-helplang.js');
+$cons->InstallInChrome('pref-helplang.js');
+
+if ($withSCC) {
+    $cons->InstallInChrome('pref-scc.xul');
+    $cons->InstallInChrome('pref-scc-cvs.xul');
+    $cons->Preprocess('pref-scc-cvs.p.js', 'pref-scc-cvs.js');
+    $cons->InstallInChrome('pref-scc-cvs.js');
+    $cons->InstallInChrome('pref-scc-perforce.xul');
+    $cons->Preprocess('pref-scc-perforce.p.js', 'pref-scc-perforce.js');
+    $cons->InstallInChrome('pref-scc-perforce.js');
+    $cons->InstallInChrome('pref-scc-svn.xul');
+    $cons->Preprocess('pref-scc-svn.p.js', 'pref-scc-svn.js');
+    $cons->InstallInChrome('pref-scc-svn.js');
+}
+
+if ($withSharedSupport) {
+    $cons->InstallInChrome('pref-sharedSupport.xul');
+    $cons->InstallInChrome('pref-sharedSupport.js');
+}
+
+$cons->InstallInChrome('pref-html.xul');
+
+$cons->InstallInChrome('pref-mappeduri.xul');
+
+$cons->InstallInChrome('pref-folderImport.xul');
+$cons->InstallInChrome('project-folderImport.js');
+
+$cons->Preprocess('file-properties.p.xul', 'file-properties.xul');
+$cons->Preprocess('file-properties.p.js', 'file-properties.js');
+$cons->InstallInChrome('file-advanced-properties.xul');
+$cons->InstallInChrome('file-advanced-properties.js');
+$cons->InstallInChrome('file-properties.xul');
+$cons->InstallInChrome('file-properties.js');
+$cons->InstallInChrome('file-permissions.xul');
+$cons->InstallInChrome('scc-properties.xul');
+$cons->InstallInChrome('pref-syntax-checking.xul');
+$cons->InstallInChrome('pref-syntax-checking.js');
+$cons->InstallInChrome('preview-properties.js');
+$cons->InstallInChrome('preview-properties.xul');

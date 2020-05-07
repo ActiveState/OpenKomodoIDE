@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2007-2008 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % sccGitDTD SYSTEM "chrome://git/locale/git.dtd">
+  %sccGitDTD;
+]>
+
+<bindings id="koGitCheckoutBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="git_checkout">
+        <content>
+            <children>
+                <xul:vbox anonid="checkout_vbox" flex="1">
+                    <xul:checkbox anonid="clone_local_checkbox"
+                                  class="clone_local_checkbox"
+                                  xbl:inherits="crop,disabled"
+                                  label="&cloneLocal.label;"
+                                  tooltiptext="&cloneLocal.tooltip;"
+                                  checked="false"/>
+                    <xul:checkbox anonid="clone_no_checkout_checkbox"
+                                  class="clone_no_checkout_checkbox"
+                                  xbl:inherits="crop,disabled"
+                                  label="&cloneNoCheckout.label;"
+                                  checked="false"/>
+                    <xul:checkbox anonid="clone_bare_checkbox"
+                                  class="clone_bare_checkbox"
+                                  xbl:inherits="crop,disabled"
+                                  label="&cloneBare.label;"
+                                  tooltiptext="&cloneBare.tooltip;"
+                                  checked="false"/>
+                </xul:vbox>
+            </children>
+        </content>
+
+        <implementation>
+            <constructor>
+            <![CDATA[
+            try {
+            } catch (e) {
+                log.exception(e);
+            }
+            ]]>
+            </constructor>
+
+            <method name="getCheckoutArguments">
+            <body>
+            <![CDATA[
+                // Must return an array of parameters to be used by the
+                // command line svn checkout.
+                var cloneLocalCheckbox = document.getAnonymousElementByAttribute(this, "anonid", "clone_local_checkbox");
+                var noHeadCheckoutCheckbox = document.getAnonymousElementByAttribute(this, "anonid", "clone_no_checkout_checkbox");
+                var bareCheckbox = document.getAnonymousElementByAttribute(this, "anonid", "clone_bare_checkbox");
+                var commandline_args = [];
+                if (cloneLocalCheckbox.checked) {
+                    commandline_args.push("--local");
+                }
+                if (noHeadCheckoutCheckbox.checked) {
+                    commandline_args.push("--no-checkout");
+                }
+                if (bareCheckbox.checked) {
+                    commandline_args.push("--bare");
+                }
+                return commandline_args.join(" ");
+            ]]>
+            </body>
+            </method>
+
+        </implementation>
+
+    </binding>
+
+</bindings>

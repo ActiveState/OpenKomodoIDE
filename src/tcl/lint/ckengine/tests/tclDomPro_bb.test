@@ -1,0 +1,64 @@
+# tclDomPro_bb.test --
+#
+#	This file contains Black Box tests that run tclchecker on 
+#	TclDomPro code that will produce all possible error and warning
+#	messages that are specific to TclDomPro.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+#
+# RCS: @(#) $Id: tclDomPro_bb.test,v 1.6 2000/05/30 22:25:03 wart Exp $
+
+if {[string compare test [info procs test]] == 1} {
+    lappend auto_path [file join [file dirname [info script]] ..]
+    package require protest
+    namespace import ::protest::*
+}
+
+set tclchecker [findExeFile tclchecker 1]
+
+set echo echo
+
+set pcxDir $::protest::sourceDirectory
+
+# Test for -verbose package name.
+
+test tclDomPro-1.1 {Test for -verbose package name} {
+    set script {superclass $a}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -v} msg]
+    set i [lsearch -exact $msg tclDomPro]
+    if {$i != -1} {
+	set msg [lindex $msg [expr {$i + 1}]]
+    }
+    list $result $msg 
+} [list 0 $::protest::supportedVersions(TclDomPro)]
+
+# Test to see if bodies of control structures are scanned for
+# user--defined procs.
+
+test tclDomPro-2.1 {test scanCmds: DOMImplementation} {
+    set script {DOMImplementation parse a -progresscommand {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+test tclDomPro-2.2 {test scanCmds: DOMImplementation} {
+    set script {dom::DOMImplementation parse a -progresscommand {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+# Run code that trigers tclDomPro-specific message IDs.
+# Currently, there are no such message IDs.
+
+# cleanup
+cleanupTests
+

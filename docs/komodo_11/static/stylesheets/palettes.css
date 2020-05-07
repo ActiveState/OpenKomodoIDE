@@ -1,0 +1,98 @@
+@supports (-webkit-appearance:none) {
+    .palette-primary-red {
+        background: #c32d1b; /* ActiveState RED */
+    }
+}
+
+.palette-primary-red .footer,.palette-primary-red .header {
+    background: #c32d1b;
+}
+
+.palette-primary-red .drawer .toc a.current,.palette-primary-red .drawer .toc a:focus,.palette-primary-red .drawer .toc a:hover {
+     color: #c32d1b;
+}
+
+.palette-primary-red .drawer .anchor a {
+    border-left: 2px solid #c32d1b;
+}
+
+.ios.standalone .palette-primary-red .article {
+    background: -webkit-linear-gradient(top,#fff 50%,#c32d1b; 0);
+    background: linear-gradient(180deg,#fff 50%,#c32d1b; 0);
+}
+
+.palette-primary-red .article a,.palette-primary-red .article code,.palette-primary-red .article h1,.palette-primary-red .article h2 {
+    color: #c32d1b;
+}
+
+.palette-primary-red .article .headerlink {
+    color: rgba(0,0,0,.26)
+}
+
+.palette-primary-red .article table th {
+    background: #bcbec0;
+}
+
+.palette-primary-red .results .meta {
+    background: #c32d1b;
+}
+
+@supports (-webkit-appearance:none) {
+    .palette-primary-grey {
+        background: #333333;
+    }
+}
+
+.palette-primary-grey .footer,.palette-primary-grey .header {
+    background: white;
+    color: #333333;
+}
+
+.palette-primary-grey .drawer .toc a.current,.palette-primary-grey .drawer .toc a:focus,.palette-primary-grey .drawer .toc a:hover {
+    color: #333333;
+}
+
+.palette-primary-grey .drawer .anchor a {
+    border-left: 2px solid #333333;
+}
+
+.ios.standalone .palette-primary-grey .article {
+    background: -webkit-linear-gradient(top,#fff 50%,#333333 0);
+    background: linear-gradient(180deg,#fff 50%,#333333 0)
+}
+
+.palette-primary-grey .article a,.palette-primary-grey .article code,.palette-primary-grey .article h1{
+    color: #333333
+}
+
+.palette-primary-grey .article h2 {
+    color: #c32d1b;
+}
+
+
+.palette-primary-grey .article .headerlink {
+    color: rgba(0,0,0,.26)
+}
+
+.palette-primary-grey .article table th {
+    background:  #bcbec0;
+}
+
+.palette-primary-grey .results .meta {
+    background: #c32d1b;
+}
+
+@media only screen and (max-width:959px) {
+    .palette-primary-red .project {
+        background: #333333;
+    }
+    
+    
+.palette-accent-red .article a:focus,.palette-accent-red .article a:hover {
+    color: #c32d1b;
+}
+
+.palette-accent-red .repo a {
+    background: #c32d1b;
+}
+}

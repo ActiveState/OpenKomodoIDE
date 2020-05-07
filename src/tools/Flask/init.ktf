@@ -1,0 +1,16 @@
+// komodo tool: init
+// =================
+// auto_abbreviation: true
+// indent_relative: false
+// set_selection: false
+// treat_as_ejs: true
+// type: snippet
+// version: 1.0.12
+// =================
+<% // Flask Snippets  %>
+"""Initialize the Flask Object."""
+
+from flask import Flask
+
+app = Flask(__name__)
+!@#_currentPos!@#_anchor

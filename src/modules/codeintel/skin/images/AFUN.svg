@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="14"
+   height="14"
+   viewBox="0 0 14 14"
+   id="svg2"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="AFUN.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1319"
+     inkscape:window-height="822"
+     id="namedview12"
+     showgrid="true"
+     inkscape:zoom="41.7193"
+     inkscape:cx="4.5385823"
+     inkscape:cy="5.3882481"
+     inkscape:window-x="1957"
+     inkscape:window-y="184"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4140" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata13">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs11">
+    <linearGradient
+       id="linearGradient5254">
+      <stop
+         id="stop5256"
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0" />
+    </linearGradient>
+  </defs>
+  <path
+     d="m 6.9596303,1.001683 c -3.3060687,0 -5.9865435,2.6804748 -5.9865435,5.9865433 0,3.3060687 2.6804748,5.9865437 5.9865435,5.9865437 3.3060687,0 5.9865437,-2.680475 5.9865437,-5.9865437 0,-3.3060685 -2.680475,-5.9865433 -5.9865437,-5.9865433 z"
+     id="path7-3"
+     inkscape:connector-curvature="0"
+     style="fill:#0496ff;fill-opacity:1"
+     sodipodi:nodetypes="sssss" />
+  <g
+     id="icomoon-ignore"
+     transform="translate(-1.0169492,-1.0169492)">
+    <line
+       id="line5"
+       y2="0"
+       x2="0"
+       y1="0"
+       x1="0"
+       style="stroke:#449fdb;stroke-width:1" />
+  </g>
+  <g
+     aria-label="F"
+     transform="matrix(1.4489249,0,0,0.91550243,-0.11812024,0.55301559)"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Ubuntu Sans Mono';-inkscape-font-specification:'Ubuntu Sans Mono';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none"
+     id="text4140">
+    <path
+       d="m 3.5323572,3.7651286 2.7606675,0 V 4.857425 l -2.0705006,0 v 2.1845928 l 1.3803337,0 v 1.0922964 l -1.3803337,0 V 10.318907 H 3.5323572 Z"
+       style="font-size:8.93671513px;line-height:1.25;fill:#ffffff;fill-opacity:1"
+       id="path830"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccc" />
+  </g>
+</svg>

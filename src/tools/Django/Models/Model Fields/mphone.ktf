@@ -1,0 +1,10 @@
+# komodo tool: mphone
+# ===================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ===================
+<% /* PhoneNumberField (mphone) */ %>
+[[%tabstop1:FIELDNAME]] = models.PhoneNumberField([[%tabstop2:2]])

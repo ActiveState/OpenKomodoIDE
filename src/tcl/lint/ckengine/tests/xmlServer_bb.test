@@ -1,0 +1,44 @@
+# xmlServer_bb.test --
+#
+#	This file contains Black Box tests that run tclchecker on 
+#	xmld code that will produce all possible error and warning
+#	messages that are specific to xmld.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+#
+# RCS: @(#) $Id: xmlServer_bb.test,v 1.4 2000/05/30 22:25:11 wart Exp $
+
+if {[string compare test [info procs test]] == 1} {
+    lappend auto_path [file join [file dirname [info script]] ..]
+    package require protest
+    namespace import ::protest::*
+}
+
+set tclchecker [findExeFile tclchecker 1]
+
+set echo echo
+
+set pcxDir $::protest::sourceDirectory
+
+# Test for -verbose package name.
+
+test xmlServer-1.1 {Test for -verbose package name} {
+    set script {redirect -internal $a}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -v} msg]
+    set i [lsearch -exact $msg xmlServer]
+    if {$i != -1} {
+	set msg [lindex $msg [expr {$i + 1}]]
+    }
+    list $result $msg 
+} [list 0 $::protest::supportedVersions(XmlServer)]
+
+# Test to see if bodies of control structures are scanned for
+# user--defined procs.  Currently, there are no such procs.
+
+# Run code that trigers xmlServer-specific message IDs.
+# Currently, there are no such message IDs.
+
+# cleanup
+cleanupTests
+

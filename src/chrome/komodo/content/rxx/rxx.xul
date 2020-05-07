@@ -1,0 +1,348 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % rxxDTD SYSTEM "chrome://komodo/locale/rxx.dtd">
+  %rxxDTD;
+]>
+
+<!-- Copyright (c) 2000-2011 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!-- The new new Rx dialog. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/rxx/rxx.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+
+<!-- for stop button -->
+<?xml-stylesheet href="chrome://komodo/skin/debugger.css" type="text/css"?>
+
+<?xul-overlay href="chrome://komodo/content/bindings/scintilla-overlay.xul"?>
+
+
+<window id="komodo_rxx"
+        windowtype="komodo_rxx"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="OnLoad()"
+        onunload="OnUnload()"
+        orient="vertical"
+        flex="1"
+        title="&rxToolkit.title;"
+        screenX="40" screenY="40"
+        width="768" height="600"
+        class="dialog"
+        persist="screenX screenY width height">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <!--globalOverlay.js contains application shutdown and controller code-->
+<!--    <script src="chrome://global/content/globalOverlay.js"  type="application/x-javascript;version=1.7"/>-->
+
+    <!--nsDragAndDrop/nsTransferable used for Drag&Drop-->
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/browse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/library/open.js" type="application/x-javascript;version=1.7" />
+
+    <!-- Scintilla overlay - required files. -->
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/timers.js"       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/stringutils.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/commands.js"     type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dragdrop.js"     type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/markers.js"              type="application/x-javascript;version=1.7"/>
+
+    <script src="chrome://komodo/content/rxx/rxx.js" type="application/x-javascript;version=1.7"/>
+
+    <keyset id="rxxKeys">
+        <key keycode="VK_ESCAPE" modifiers="" oncommand="window.close();"/>
+    </keyset>
+
+
+    <hbox id="scintillaOverlayXul"/>
+    
+    <hbox id="button-box" align="center" pack="center">
+        <hbox align="center" pack="center">
+            <button type="radio" group="mode" class="button-toolbar-rx"
+                    id="match-mode-button"
+                    oncommand="Rxx_SetMode('match');"
+                    label="&match.label;"/>
+            <button type="radio" group="mode" class="button-toolbar-rx"
+                    id="match-all-mode-button"
+                    oncommand="Rxx_SetMode('match-all');"
+                    label="&matchAll.label;"/>
+            <button type="radio" group="mode" class="button-toolbar-rx"
+                    id="split-mode-button"
+                    oncommand="Rxx_SetMode('split');"
+                    label="&split.label;"/>
+            <button type="radio" group="mode" class="button-toolbar-rx"
+                    id="replace-mode-button"
+                    oncommand="Rxx_SetMode('replace');"
+                    label="&replace.label;"/>
+            <button type="radio" group="mode" class="button-toolbar-rx"
+                    id="replace-all-mode-button"
+                    oncommand="Rxx_SetMode('replace-all');"
+                    label="&replaceAll.label;"/>
+        </hbox>
+    </hbox>
+
+    <grid id="input-grid" flex="2" Xdebug="true">
+        <columns>
+            <column id="search-column" flex="5"/>
+            <column />
+            <column id="replace-column" flex="4"/>
+        </columns>
+        <rows flex="1">
+            <row id="pattern-row" flex="1" style="min-height: 50px">
+
+                <!-- REGEX AREA -->
+                <!-- regex view gutter/toolbar -->
+                <groupbox class="regex-area" flex="1">
+                    <caption label="Regular Expression" control="regex-view"
+                           accesskey="&regexHeaderLabel.accesskey;" id="regex-header-label"
+                           style="font-weight: bold"/>
+
+                    <hbox flex="1">
+                        <view id="regex-view" type="buffer" flex="1"
+                              onclick="return RxxRegex_OnClick(event);"
+                              pluginPaintHack="true"
+                              class="rxx-view" />
+                        <vbox align="center" pack="center">
+                            <hbox align="center" pack="center" id="modifiers">
+                                <label value="/" style="font-weight: bold"/>
+                                <checkbox label="i" accesskey="&regexOptionICheckbox.accesskey;"
+                                          id="regex-option-i-checkbox" class="label-only"
+                                          oncommand="RxxRegex_UpdateOption('i');"
+                                          tooltiptext="&doCaseInsensitivePatternMatching.tooltiptext;"/>
+                                <checkbox label="m" accesskey="&regexOptionMCheckbox.accesskey;"
+                                          id="regex-option-m-checkbox" class="label-only"
+                                          oncommand="RxxRegex_UpdateOption('m');"
+                                          tooltiptext="&treatSearchTextAsMultipleLinesChangesMeaningOfAnd.tooltiptext;"/>
+                                <checkbox label="s" accesskey="&regexOptionSCheckbox.accesskey;"
+                                          id="regex-option-s-checkbox" class="label-only"
+                                          oncommand="RxxRegex_UpdateOption('s');"
+                                          tooltiptext="&treatSearchTextAsSingleLineIEWillMatchNewlinesInAdditionToAnythingElse.tooltiptext;"/>
+                                <checkbox label="x" accesskey="&regexOptionXCheckbox.accesskey;"
+                                          id="regex-option-x-checkbox" class="label-only"
+                                          oncommand="RxxRegex_UpdateOption('x');"
+                                          tooltiptext="&permitWhitespaceAndCommentsInRegularExpression.tooltiptext;"/>
+                                <checkbox label="u" accesskey="&regexOptionUCheckbox.accesskey;"
+                                          id="regex-option-u-checkbox" class="label-only"
+                                          oncommand="RxxRegex_UpdateOption('u');"
+                                          tooltiptext="&makeWWBAndBDependentOnUnicodeCharacterPropertiesPythonOnly.tooltiptext;"/>
+                                <checkbox label="l" accesskey="&regexOptionLCheckbox.accesskey;"
+                                          id="regex-option-l-checkbox" class="label-only"
+                                          oncommand="RxxRegex_UpdateOption('l');"
+                                          tooltiptext="&makeWWBAndBDependentOnTheCurrentLocalePythonOnly.tooltiptext;"/>
+                            
+                                <toolbarbutton class="help-icon" type="menu"
+                                               align="center" orient="horizontal"
+                                               tooltiptext="&regularExpressionHelp.tooltiptext;">
+                                    <menupopup>
+                                        <menuitem label="&rxToolkitHelp.label;"
+                                                  oncommand="Rxx_MainHelp('regular_expressions');"/>
+                                        <menuseparator/>
+                                        <menuitem label="&jsRegularExpressionQuickStartGuideWeb.label;"
+                                                  oncommand="Rxx_WebHelp('http://developer.mozilla.org/en/JavaScript/Guide/Regular_Expressions');"/>
+                                        <menuitem label="&perlRegularExpressionQuickStartGuideWeb.label;"
+                                                  oncommand="Rxx_WebHelp('http://perldoc.perl.org/perlrequick.html');"/>
+                                        <menuitem label="&pythonRegularExpressionReferenceWeb.label;"
+                                                  oncommand="Rxx_WebHelp('http://docs.python.org/library/re.html');"/>
+                                        <menuitem label="&PHPRegularExpressionReferenceWeb.label;"
+                                                  oncommand="Rxx_WebHelp('http://www.php.net/manual/en/reference.pcre.pattern.syntax.php');"/>
+                                        <menuitem label="&rubyRegularExpressionHelpWeb.label;"
+                                                  oncommand="Rxx_WebHelp('http://www.ruby-doc.org/docs/UsersGuide/rg/regexp.html');"/>
+                                        <menuitem label="&rubyRegularExpressionReferenceWeb.label;"
+                                                  oncommand="Rxx_WebHelp('http://www.ruby-doc.org/core/classes/Regexp.html');"/>
+                                        <menuitem label="&tclRegularExpressionHelpWeb.label;"
+                                                  oncommand="Rxx_WebHelp('http://www.tcl.tk/doc/howto/regexp81.tml');"/>
+                                        <menuitem label="&tclRegularExpressionSyntaxWeb.label;"
+                                                  oncommand="Rxx_WebHelp('http://www.tcl.tk/man/tcl/TclCmd/re_syntax.htm');"/>
+                                        <!-- XXX Tcl sub menu? -->
+                                        <!--http://tcl.activestate.com/man/tcl8.2.3/TclCmd/regexp.htm-->
+                                        <!--http://tcl.activestate.com/man/tcl8.2.3/TclCmd/regsub.htm-->
+                                        <menuseparator/>
+                                        <menuitem label="&loadSampleRegexAndSearchText.label;"
+                                                  oncommand="Rxx_LoadSample();"/>
+                                        <!-- XXX for debugging: -->
+                                        <!--<menuitem label="Dump Dimensions"-->
+                                        <!--          oncommand="Rxx_DumpDimensions();"/>-->
+                                    </menupopup>
+                                </toolbarbutton>
+                            </hbox>
+                            <hbox align="center" pack="center">
+                                <toolbarbutton class="regex-shortcuts-button"
+                                               orient="horizontal"
+                                               align="center"
+                                               type="menu"
+                                               tooltiptext="&selectARegexShortcutToInsertIntoYourRegex.tooltiptext;">
+                                    <menupopup onpopupshowing="RxxRegex_ShortcutsShowing(this);"/>
+                                </toolbarbutton>
+                                <toolbarbutton align="center" orient="horizontal" type="menu"
+                                               tooltiptext="Regular Expression Language/Syntax"
+                                               id="languages_list_tbbutton" >
+                                    <menupopup id="languages_list"
+                                               onpopupshowing="RxxRegex_updateLanguageList();"/>
+                                </toolbarbutton>
+                                <toolbarbutton class="regex-delimiters-button"
+                                               tooltiptext="&setDelimiters.tooltiptext;"
+                                               id="regex_delimiters_launch"
+                                               oncommand="RxxRegex_launchDelimiterPicker();"
+                                               />
+                            </hbox>
+                        </vbox>
+                    </hbox>
+                </groupbox>
+
+                <splitter id="column-splitter-pattern"
+                          class="rxx-pane-splitter column-splitter"
+                          orient="horizontal" />
+
+                <!-- REPLACEMENT AREA -->
+                <vbox id="replacement-area" flex="1">
+                    <hbox align="center" class="rxx-box-header">
+                        <!-- XXX find an accesskey for this -->
+                        <caption label="Replacement" control="replacement-view"
+                               accesskey="&p.accesskey;" style="font-weight: bold"/>
+                        <spacer flex="1"/>
+                        <toolbarbutton class="regex-shortcuts-button"
+                                       align="center"
+                                       orient="horizontal"
+                                       type="menu"
+                                       tooltiptext="&selectAShortcutToInsertIntoYourReplacementPattern.tooltiptext;">
+                            <menupopup onpopupshowing="RxxReplacement_ShortcutsShowing(this);"/>
+                        </toolbarbutton>
+                    </hbox>
+                    <view id="replacement-view" type="buffer" flex="1"
+                          pluginPaintHack="true"
+                          onclick="return RxxReplacement_OnClick(event);"
+                          class="rxx-view" />
+                </vbox>
+
+            </row>
+
+            <splitter class="rxx-pane-splitter row-splitter"
+                      orient="vertical" />
+
+            <row id="text-row" flex="2" style="min-height: 150px">
+
+                <!-- SEARCH TEXT AREA -->
+                <vbox id="search-text-area" flex="5">
+                    <hbox align="center"
+                          class="rxx-box-header">
+                        <caption label="Search Text" control="search-text-view"
+                               accesskey="&T.accesskey;"/>
+                        <spacer flex="1"/>
+                        <toolbarbutton class="native_open_icon"
+                                       label="&open.label;"
+                                       align="center"
+                                       style="-moz-box-orient: horizontal;"
+                                       oncommand="RxxSearchText_Open();"
+                                       tooltiptext="&openAFileToUseAsSearchText.tooltiptext;"/>
+                    </hbox>
+                    <view id="search-text-view" type="buffer" flex="1"
+                          onclick="return RxxSearchText_OnClick(event);"
+                          pluginPaintHack="true"
+                          class="rxx-view" />
+                </vbox>
+
+                <splitter id="column-splitter-text"
+                          class="rxx-pane-splitter column-splitter"
+                          orient="horizontal" />
+
+                <!-- REPLACED TEXT AREA -->
+                <vbox id="replaced-text-area" flex="5">
+                    <hbox align="center" class="rxx-box-header">
+                        <caption label="Replaced Text" control="replaced-text-view"
+                               accesskey="&c.accesskey;"
+                               style="font-weight: bold"/>
+                        <spacer flex="1"/>
+                    </hbox>
+                    <view id="replaced-text-view" type="buffer" flex="1"
+                          onclick="return RxxReplacedText_OnClick(event);"
+                          pluginPaintHack="true"
+                          class="rxx-view" />
+                </vbox>
+
+            </row>
+        </rows>
+    </grid>
+
+    <splitter class="rxx-pane-splitter row-splitter" orient="vertical" />
+
+    <!-- match/split/replace results area -->
+    <vbox id="results-area" flex="1" style="min-height: 50px">
+        <hbox align="center" id="results-titlebar"
+              class="rxx-box-header">
+            <caption id="results-label"
+                   control="results-deck" accesskey="&resultsLabel.accesskey;"
+                   style="font-weight: bold"/>
+            <spacer flex="1"/>
+            <image id="rxx-eval-in-progress-image"
+                   collapsed="true"
+                   src="chrome://global/skin/icons/loading_16.png"
+    />
+            <toolbarbutton class="debug-stop-icon"
+                           id="rxx-stop-button"
+                           buttonstyle="pictures"
+                           persist="buttonstyle"
+                           oncommand="Rxx_Stop();"
+                           disabled="true"
+                           tooltiptext="&stop.label;"/>
+        </hbox>
+        <groupbox flex="1">
+            <deck flex="1" selectedIndex="0"
+                  id="results-deck"
+                  onclick="return RxxResults_OnClick(event);"
+                  onkeypress="return RxxResults_OnKeyPress(event);"
+                  ondblclick="RxxResults_OnDblClick(event);">
+                <hbox align="center" flex="1">
+                    <vbox align="left" flex="1">
+                        <description flex="1" id="results-message">No current data.</description>
+                        <description flex="1" id="results-lex-error-message"/>
+                    </vbox>
+                </hbox>
+                <tree id="match-results-tree" seltype="single"
+                      flex="1" hidecolumnpicker="true"
+                      class="cbtree">
+                    <treecols>
+                        <treecol primary="true"
+                                 id="match-results-tree-group"
+                                 label="&group.label;"
+                                 style="width: 15em;"
+                                 persist="width"/>
+                        <splitter class="tree-splitter"/>
+                        <treecol id="match-results-tree-span"
+                                 label="&span.label;"
+                                 style="width: 6em;"
+                                 persist="width"/>
+                        <splitter class="tree-splitter"/>
+                        <treecol id="match-results-tree-value"
+                                 label="&value.label;"
+                                 crop="center"
+                                 persist="width"
+                                 flex="3"/>
+                        <splitter class="tree-splitter"/>
+                        <treecol id="match-results-tree-replacement"
+                                 label="&replacement.label;"
+                                 crop="center"
+                                 persist="width"
+                                 flex="3"/>
+                    </treecols>
+                    <treechildren id="match-results-tree-body" flex="1"/>
+                </tree>
+                <tree id="split-results-tree" seltype="single"
+                      flex="1" hidecolumnpicker="true"
+                      style="margin: 0px;">
+                    <treecols>
+                        <treecol id="split-results-tree-value"
+                                 hideheader="true" flex="1"/>
+                    </treecols>
+                    <treechildren id="split-results-tree-body" flex="1"/>
+                </tree>
+            </deck>
+        </groupbox>
+    </vbox>
+</window>
+

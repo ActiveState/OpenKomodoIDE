@@ -1,0 +1,746 @@
+#komodo_main {
+
+/* Komodo Toolbox */
+
+#toolbox_main
+{
+    border: 0;
+    
+    #toolbar-menubar
+    {
+        toolbaritem
+        {
+            margin: 0;
+            padding: 0;
+            border-radius: 0;
+        }
+    }
+    
+    #unifiedMenuButton .toolbarbutton-text
+    {
+        color: @foreground-special;
+    }
+    
+    #titlebar
+    {
+        padding: 0 4px 4px;
+        color: @foreground-special;
+        background: @special;
+    }
+    
+    #main-toolboxrow-wrapper
+    {
+        padding: 4px;
+        color: @foreground-special;
+        background: @special;
+    }
+    
+    #unifiedMenuButton .toolbarbutton-text:before
+    {
+        color: @icons-special;
+    }
+    
+    toolbar toolbaritem
+    {
+        background: @contrast-special;
+        border-radius: 1px;
+        margin: 5px;
+        padding: 0;
+        
+        & > toolbarbutton,
+        .toolbaritem > toolbarbutton,
+        {
+            min-width: 18px;
+            margin: 0;
+            padding: 5px;
+            border-radius: 1px;
+            
+            &:before,
+            dropmarker:before
+            {
+                color: @icons-special;
+            }
+            
+            .toolbarbutton-text
+            {
+                color: @foreground-special;
+            }
+            
+            &:hover
+            {
+                background: darken(@contrast-special, 10%);
+            }
+            
+            &[checked="true"]
+            {
+                background: darken(@contrast-special, 10%);
+            }
+        }
+    }
+    
+    toolbar
+    {
+        width: auto;
+        padding: 0;
+    }
+    
+    toolboxrow [overflown="true"] {
+      visibility: collapse;
+    }
+    
+    .overflow-toolbarbutton > label:before
+    {
+        color: @icons-special;
+    }
+    
+    .overflow-toolbarbutton > .toolbarbutton-menu-dropmarker {
+      /* the dropmarker on the toolboxrow overflow button */
+      visibility: collapse;
+    }
+}
+
+#toolbox_main, #toolbox_side
+{
+    .overflows
+    {
+        visibility: collapse;
+    }
+    
+    /**
+     * Force 16px icons
+     */
+    toolbarbutton
+    {
+        font-size: 16px !important;
+        
+        &[class$='-icon'] image, [class$='-icon'] image,
+        &[class$='_icon'] image, [class$='_icon'] image,
+        image[class$='-icon'], image[class$='-icon'],
+        image[class$='_icon'], image[class$='_icon']
+        {
+            &:not(.autorepeatbutton-icon)
+            {
+                max-width: 16px;
+            }
+        }
+        
+        dropmarker
+        {
+            font-size: 16px;
+        }
+        
+        label.toolbarbutton-text
+        {
+            font-size: 0.9rem;
+        }
+    }
+    
+    /* Because we are using toolbaritem > toolbarbutton the text mode is bugged
+       and we have to work around the issue */
+    toolbar[_mode="text"]
+    {
+        toolbarbutton
+        {
+            min-height: 20px;
+        }
+        
+        toolbarbutton:before, toolbarbutton > .toolbarbutton-icon:before
+        {
+            visibility: hidden;
+            font-size: 0.001px;
+            width: 0;
+            height: 0;
+            max-width: 0;
+            max-height: 0;
+            overflow: hidden;
+        }
+    }
+    
+    .overflow-toolbarbutton
+    {
+        height: 26px;
+    }
+    
+    toolbar[_mode="full"]
+    {
+        label.toolbarbutton-text
+        {
+            margin-left: 4px;
+        }
+    }
+}
+
+#toolbox_side
+{
+    // Color the dynamic button icons
+    .dynamic-button toolbarbutton:before,
+    .dynamic-button dropmarker:before,
+    toolbaritem > toolbarbutton:before,
+    toolbaritem > toolbarbutton > toolbarbutton:before,
+    toolbaritem > dropmarker:before
+    {
+        color: @foreground !important;
+    }
+
+    #side-top-toolbar toolbaritem
+    {
+        &:not(#dynamicBtnGrp-add)
+        {
+            background: @background;
+        }
+
+        &:not(:last-child)
+        {
+            margin-bottom: 6px;
+        }
+    }
+
+    #side-bottom-toolbar toolbaritem
+    {
+        background: @background;
+
+        -moz-box-align: center;
+    }
+}
+
+&[os-name="Darwin"]
+{
+    #main-toolboxrow,
+    #second-toolboxrow
+    {
+        width: ~"calc(50vw - 240px)";
+    }   
+}
+
+&:not([os-name="Darwin"])
+{   
+    #main-toolboxrow,
+    #second-toolboxrow
+    {
+        width: ~"calc(50vw - 270px)";
+    }    
+}
+
+#second-toolboxrow 
+{
+    -moz-box-direction: reverse;
+    & > hbox
+    {
+        -moz-box-pack: end;
+    }
+}
+
+#middle-toolboxrow
+{
+    -moz-box-pack: center;
+    -moz-box-flex: 1;
+}
+
+#notification-widget #notification-widget-textbox
+{
+    margin: 0 12px;
+    padding: 0 8px;
+    height: 32px;
+    border: 0;
+    border-radius: 2px;
+
+    &:not(.faded_loader) {
+        background: @textbox-special;
+    }
+    
+    .notification-icon:before
+    {
+        color: @textbox-foreground-special;
+    }
+    
+    label[anonid="notification-widget-text"]
+    {
+        margin: 0 8px;
+        font-size: 1.2rem;
+        text-align: center;
+        color: @textbox-foreground-special;
+        
+        &.small
+        {
+            font-size: 0.9rem;
+        }
+    }
+
+    .state-info label {
+        color: @state-info !important;
+    }
+
+    .state-warning label {
+        color: @state-warning !important;
+    }
+
+    .state-error label {
+        color: @state-error !important;
+        font-weight: bold;
+    }
+    
+    button
+    {
+        background: transparent;
+        color: @textbox-foreground-special;
+        margin: 0 2px;
+        padding: 0;
+        min-width: 0;
+    }
+    
+    .p-error > label, .p-error > .notification-icon:before { color: @state-error; }
+    .p-warning > label, .p-warning > .notification-icon:before { color: @state-warning; }
+    .p-notification > label, .p-notification > .notification-icon:before { color: @state-info; }
+    .p-info > label, .p-info > .notification-icon:before { color: @state-info; }
+    
+    .clickable > label
+    {
+        cursor: pointer;
+        
+        &:hover
+        {
+            text-decoration: underline;
+        }
+    }
+}
+
+/* Side Toolbar */
+
+#toolbox_side
+{
+    width: 48px;
+    background: @contrast;
+    border-right: 1px solid @border;
+    -moz-box-orient: vertical;
+    
+    toolbar
+    {
+        -moz-box-orient: vertical;
+    }
+
+    toolbaritem
+    {
+        -moz-box-orient: vertical;
+        
+        & > toolbarbutton
+        {
+            margin: 5px 0;
+            
+            &:before,
+            toolbarbutton:before,
+            dropmarker:before
+            {
+                color: @icons-special;
+            }
+            
+            .toolbarbutton-text
+            {
+                font-size: 0.7rem;
+            }
+            
+            &:hover
+            {
+                background: @background;
+                border-radius: 2px;
+            }
+            
+            dropmarker
+            {
+                opacity: 0.4;
+            }
+        }
+    }
+    
+    toolbaritem > toolbarbutton dropmarker.toolbarbutton-menubutton-dropmarker
+    {
+        width: 12px;
+        margin-right: -10px;
+        margin-left: -2px;
+    }
+    
+    #side-top-toolbar toolbarbutton[disabled="true"]
+    {
+        visibility: collapse;
+    }
+    
+    toolbarbutton[type="menu-button"].dynamic-button:before,
+    toolbarbutton[type="menu"].dynamic-button:before,
+    .dynamic-button label.toolbarbutton-counter:not([value])
+    {
+        visibility: collapse;
+        display: none;
+    }
+    
+    .dynamic-button
+    {
+        min-width: 24px;
+    }
+    
+    .dynamic-button toolbarbutton.box-inherit:before
+    {
+        color: @icons-special;
+    }
+    
+    .dynamic-button[type="menu-button"]:before
+    {
+        content: none !important; /* Remove icon from main element, it's added to a sub element */
+    }
+    
+    .dynamic-button.show-label .toolbarbutton-text[value]
+    {
+        display: inherit;
+        text-align: center;
+        padding: 4px 0;
+    }
+    
+    .dynamic-button label.toolbarbutton-counter
+    {
+        color: @state-foreground; 
+        background: @state-info;
+        border-radius: 12px;
+        padding: 1px;
+        width: 16px;
+        max-width: 16px;
+        margin-left: -24px;
+        text-align: center;
+        font-size: 10px;
+        font-weight: bold;
+    }
+    
+    
+    toolbarbutton[type="menu"].dynamic-button 
+    {
+        box[anonid="toolbarbutton-icon-box"]
+        {
+            font-size: 16px !important;
+        }
+        
+        label.toolbarbutton-counter
+        {
+            margin: 4px 10px 0 -10px;
+        }
+    }
+    
+    toolbar[_mode="text"]
+    {
+        .dynamic-button label.toolbarbutton-counter
+        {
+            margin-left: 0;
+        }
+    }
+    
+    .dynamic-button.error label.toolbarbutton-counter { background: @state-error; }
+    .dynamic-button.warning label.toolbarbutton-counter { background: @state-warning; }
+    .dynamic-button.info label.toolbarbutton-counter { background: @state-info; }
+    .dynamic-button.ok label.toolbarbutton-counter { background: @state-ok; }
+    
+    // Set a max width for all dynamic menupopups
+    menupopup
+    {
+        max-width: 320px;
+    }
+}
+
+/* Statusbar */
+
+statusbar
+{
+    height: 28px;
+    border-bottom: 1px solid @background;
+    background: @contrast !important;
+
+    statusbarpanel > label
+    {
+        margin: 2px;
+        padding: 3px;
+    }
+    
+    statusbarpanel > label,
+    .toolbarbutton-text,
+    label[anonid="section-label"]
+    {
+        opacity: 0.6;
+    }
+    
+    statusbarpanel[anonid="statusbar-pos-info"]
+    {
+        min-width: 200px;
+    }
+
+    hbox[anonid="statusbar-message-deck-default"]
+    {
+        overflow: hidden;
+    }
+}
+
+&[classic-statusbar="true"]
+{
+    view[type="editor"] scintilla
+    {
+        -moz-box-ordinal-group: 1;
+    }
+    
+    statusbar
+    {
+        -moz-box-ordinal-group: 2;
+        border-top: 1px solid @background;
+        padding-bottom: 0;
+        border-bottom: 0;
+        height: 30px;
+    }
+}
+
+/* View Spliter */
+
+
+#multiview-splitter
+{
+    position: relative;
+    z-index: 999;
+    background-color: transparent;
+    
+    &[orient="horizontal"]
+    {
+        width: 5px;
+        border-right: 1px solid @contrast;
+        margin-left: -4px;
+    }
+    
+    &[orient="vertical"]
+    {
+        height: 5px;
+        border-bottom: 1px solid @contrast;
+        margin-top: -4px;
+    }
+}
+
+/* Workspace splitter */
+
+splitter
+{
+    &.workspace_splitter
+    {
+        position: relative;
+        z-index: 100;
+
+        &[orient="horizontal"]
+        {
+            min-width: 5px;
+            width: 5px;
+        }
+
+        &[orient="vertical"]
+        {
+            min-height: 5px;
+            height: 5px;
+        }
+    }
+
+    &#workspace_left_splitter
+    {
+        border-right: 1px solid @border;
+        margin-left: -4px;
+    }
+
+    &#workspace_right_splitter
+    {
+        border-left: 1px solid @border;
+        margin-right: -4px;
+    }
+
+    &#bottom_splitter
+    {
+        border-top: 1px solid @border;
+        margin-bottom: -4px;
+    }
+}
+
+/* Panels */
+
+ko-pane:not([customizing]) .pane-drop-target
+{
+    display: none;
+}
+
+.pane-container tabs .tabstrip-box 
+{
+    /* Don't show buttons on pane tab bar */
+    & > toolbarbutton:not([anonid="panel-close-button"])
+    {
+        visibility: collapse;
+    }
+}
+
+ko-pane[type="icons"] tab
+{
+    padding: 6px;
+    -moz-box-flex: 1;
+    
+    .tab-icon
+    {
+        margin-right: 0;
+    }
+}
+
+#workspace_left_area,
+#workspace_right_area
+{
+    .tabs-closebutton
+    {
+        visibility: collapse;
+    }
+}
+
+#workspace_left_area:not([type="icons"]) tab:before,
+#workspace_right_area:not([type="icons"]) tab:before
+{
+    display: none;
+    visibility: collapse;
+    content: "";
+}
+
+/* Vertical Tabs */
+ko-pane[type="vertical"]
+{
+    .tabs-vertical-label
+    {
+        visibility: collapse;
+    }
+    
+    tabs
+    {
+        background: @contrast;
+    }
+    
+    tab
+    {
+        border-bottom: 0 !important;
+        padding: 4px 0;
+    }
+    
+    tab .tab-text
+    {
+        margin-left: 0;
+        padding-left: 2px;
+    }
+    
+    &#workspace_left_area 
+    {
+        tabs
+        {
+            border-right: 1px solid @border;
+        }
+        
+        tab[selected]
+        {
+            border-right: 2px solid @secondary-special;
+            
+            .tab-text
+            {
+                margin-right: -1px;
+            }
+        }
+    }
+    
+    &#workspace_right_area 
+    {
+        tabs
+        {
+            border-left: 1px solid @border;
+        }
+        
+        tab[selected]
+        {
+            border-left: 2px solid @secondary-special;
+            
+            .tab-text
+            {
+                margin-left: -1px;
+            }
+        }
+    }
+}
+
+/* Quicklaunch */
+
+#quicklaunch :not(button) > button
+{
+    width: 200px;
+    height: 25px;
+}
+
+/* Quick Start */
+
+vbox[anonid="quickstart"] .inner > button
+{
+    width: 210px;
+    height: 25px;
+    padding: 4px 6px;
+    
+    .box-inherit
+    {
+        width: 165px; 
+    }
+    
+    label
+    {
+        padding-left: 14px; // width of dropmarker
+    }
+}
+
+.go-to-bookmark[disabled="true"]
+{
+    display: none;
+}        
+
+/* Browser Preview */
+
+view[type="browser"]
+{
+    #nav-bar > button
+    {
+        margin-right: 6px;
+    }
+}
+
+/* New Tab */
+#popup_mruProjectsQL .menu-file-status-image-box
+{
+    display: none;
+    visibility: collapse;
+} 
+
+/* Minimap */
+
+minimap
+{
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+  border-left: 1px solid @border;
+}
+
+}
+
+/* Dynamic Button Menu */
+
+#dynamicBtn-Add
+{
+    menu
+    {
+        padding-top: 4px;
+        padding-bottom: 4px;
+
+        &:before
+        {
+            font-size: 16px;
+        }
+
+        & > label
+        {
+            margin-left: 4px;
+            margin-right: 4px;
+            -moz-box-flex: 1;
+        }
+    }
+}

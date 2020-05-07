@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Copyright (c) 2000-2009 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE overlay SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % profilerOverlayDTD SYSTEM "chrome://profiler/locale/profiler.dtd">
+  %profilerOverlayDTD;
+]>
+
+<!--
+
+  Main Komodo UI overlay for the profiler (adds menu's and commands).
+
+-->
+
+<overlay id="profiler_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://profiler/content/profiler-overlay.js" type="application/x-javascript;version=1.7"/>
+
+    <commandset id="allcommands">
+        <command id="cmd_openProfiler"
+                 oncommand="ko.commands.doCommandAsync('cmd_openProfiler', event)"
+                 desc="&cmd_openProfiler.description;" />
+        <command id="cmd_openSavedProfile"
+                 oncommand="ko.profiler.openSavedProfile()"
+                 desc="&cmd_profiler_open.tooltiptext;"/>
+    </commandset>
+    <commandset id="cmdset_debuggability_state_or_view_changed">
+        <command id="cmd_dbgProfile"
+                 oncommand="ko.commands.doCommandAsync('cmd_dbgProfile', event)"
+                 desc="&cmd_startProfiling.description;" />
+    </commandset>
+
+    <menupopup id="popup_debug"
+               onpopupshowing="ko.dbg.manager.handlePopupDebugShowing(this);" >
+        <menuitem id="menu_dbgProfile"
+                  label="&menuitem_debug_runProfiler.label;"
+                  accesskey="&menuitem_debug_runProfiler.accesskey;"
+                  insertafter="menu_dbgRun"
+                  observes="cmd_dbgProfile"
+                  />
+    </menupopup>
+
+    <menupopup id="popup_tools">
+        <menuitem id="menu_openProfiler"
+                  label="&menuitem_openProfiler.label;"
+                  accesskey="&menuitem_openProfiler.accesskey;"
+                  observes="cmd_openProfiler" />
+    </menupopup>
+    
+    <toolbaritem id="toolsToolbarGroup">
+        <toolbarbutton 
+            tooltiptext="&sidetoolbar_openProfiler.tooltip;"
+            type="menu-button"
+            persist="buttonstyle"
+            buttonstyle="pictures"
+            class="profiler-icon"
+            customizable="true"
+            insertafter="buttonInteractiveShell"
+            observes="cmd_openProfiler"
+            label="&sidetoolbar_openProfiler.label;">
+            <menupopup>
+                <menuitem
+                    label="&sidetoolbar_openProfile.label;"
+                    tooltiptext="&cmd_profiler_open.tooltiptext;"
+                    command="cmd_openSavedProfile"
+                    />
+                <menuitem
+                    label="&menuitem_debug_runProfiler.label;"
+                    tooltiptext="&menuitem_debug_runProfiler.label;"
+                    command="cmd_dbgProfile"
+                    />
+            </menupopup>
+        </toolbarbutton>
+    </toolbaritem>
+
+</overlay>
+

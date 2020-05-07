@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Nested Trees"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script>
+<![CDATA[
+
+function setText(treeID,textID,val)
+{
+  var tree = document.getElementById(treeID);
+  var selection = tree.contentView.getItemAtIndex(tree.currentIndex);
+  var text = selection.firstChild.firstChild.getAttribute("label");
+  document.getElementById(textID).value = text;
+}
+
+]]>
+</script>
+
+<html:h1>XUL Nested Trees</html:h1>
+
+<hbox flex="1">
+  <groupbox flex="2">
+    <tree id="tree1" flex="1" >
+      <treecols>
+	<treecol id="sex1"   flex="1" label="Name" primary="true" />
+	<treecol id="color1" flex="1" label="Color" />
+	<treecol id="attr1"  flex="1" label="Attribute" />
+      </treecols>
+      <treechildren>
+	<treeitem  container="true" open="true">
+	  <treerow>
+	    <treecell label="Female" />
+	  </treerow>
+	  <treechildren>
+	    <treeitem>
+	      <treerow>
+		<treecell label="Pearl" />
+		<treecell label="Gray" />
+	        <treecell label="Frumpy" />
+	      </treerow>
+	    </treeitem>
+	    <treeitem>
+	      <treerow>
+		<treecell label="Cosmo" />
+		<treecell label="White" />
+	        <treecell label="Round" />
+	      </treerow>
+	    </treeitem>
+            <treeitem>
+             <treerow>
+ 	      <treecell label="Tribble" />
+ 	      <treecell label="Orange" />
+	      <treecell label="Frumpy" />
+             </treerow>
+            </treeitem>
+	  </treechildren>
+	</treeitem>
+	<treeitem  container="true" open="true">
+	  <treerow>
+	    <treecell label="Male" />
+	  </treerow>
+	  <treechildren>
+	    <treeitem>
+	      <treerow>
+		<treecell label="Aramis" />
+		<treecell label="Black" />
+	        <treecell label="Cute" />
+	      </treerow>
+	    </treeitem>
+	    <treeitem>
+	      <treerow>
+		<treecell label="Yakima" />
+		<treecell label="Holstein" />
+	        <treecell label="Handsome" />
+	      </treerow>
+	    </treeitem>
+	    <treeitem>
+	      <treerow>
+		<treecell label="Fergus" />
+		<treecell label="Black" />
+	        <treecell label="Long" />
+	      </treerow>
+	    </treeitem>
+	    <treeitem>
+	      <treerow>
+		<treecell label="Clint" />
+		<treecell label="Black" />
+	        <treecell label="Young" />
+	      </treerow>
+	    </treeitem>
+            <treeitem>
+             <treerow>
+ 	      <treecell label="Zippy" />
+	      <treecell label="Orange" />
+	      <treecell label="Playful" />
+             </treerow>
+            </treeitem>
+            <treeitem>
+             <treerow>
+	      <treecell label="Feathers" />
+	      <treecell label="Tabby" />
+	      <treecell label="Patiarchal" />
+             </treerow>
+            </treeitem>
+            <treeitem>
+             <treerow>
+ 	      <treecell label="Butter" />
+	      <treecell label="Orange" />
+	      <treecell label="Old" />
+             </treerow>
+            </treeitem>
+	  </treechildren>
+	</treeitem>
+      </treechildren>
+    </tree>
+  </groupbox>
+
+  <groupbox flex="1">
+    <tree id="tree2" flex="1" hidecolumnpicker="true" >
+      <treecols>
+	<treecol id="sex2"   flex="1" label="Cats" primary="true" />
+      </treecols>
+      <treechildren>
+
+	<treeitem  container="true" open="true">
+	  <treerow>
+	    <treecell label="Female" />
+	  </treerow>
+	  <treechildren>
+
+	    <treeitem container="true" open="true">
+	      <treerow>
+		<treecell label="Gray" />
+	      </treerow>
+	      <treechildren>
+	        <treeitem>
+	          <treerow>
+		    <treecell label="Pearl" />
+	          </treerow>
+	        </treeitem>
+              </treechildren>
+	    </treeitem>
+
+	    <treeitem container="true" open="true">
+	      <treerow>
+		<treecell label="White" />
+	      </treerow>
+	      <treechildren>
+	        <treeitem>
+	          <treerow>
+		    <treecell label="Cosmo" />
+	          </treerow>
+	        </treeitem>
+              </treechildren>
+	    </treeitem>
+
+	    <treeitem container="true" open="true">
+	      <treerow>
+		<treecell label="Orange" />
+	      </treerow>
+	      <treechildren>
+	        <treeitem>
+	          <treerow>
+		    <treecell label="Tribble" />
+	          </treerow>
+	        </treeitem>
+              </treechildren>
+	    </treeitem>
+
+	  </treechildren>
+	</treeitem>
+
+	<treeitem  container="true" open="true">
+	  <treerow>
+	    <treecell label="Male" />
+	  </treerow>
+	  <treechildren>
+
+	    <treeitem container="true" open="true">
+	      <treerow>
+		<treecell label="Black" />
+	      </treerow>
+	      <treechildren>
+	        <treeitem>
+	          <treerow>
+		    <treecell label="Aramis" />
+	          </treerow>
+	        </treeitem>
+	        <treeitem>
+	          <treerow>
+		    <treecell label="Fergus" />
+	          </treerow>
+	        </treeitem>
+	        <treeitem>
+	          <treerow>
+		    <treecell label="Clint" />
+	          </treerow>
+	        </treeitem>
+              </treechildren>
+	    </treeitem>
+
+	    <treeitem container="true" open="true">
+	      <treerow>
+		<treecell label="Orange" />
+	      </treerow>
+	      <treechildren>
+	        <treeitem>
+	          <treerow>
+		    <treecell label="Butter" />
+	          </treerow>
+	        </treeitem>
+	        <treeitem>
+	          <treerow>
+		    <treecell label="Zippy" />
+	          </treerow>
+	        </treeitem>
+              </treechildren>
+	    </treeitem>
+
+	    <treeitem container="true" open="true">
+	      <treerow>
+		<treecell label="Tabby" />
+	      </treerow>
+	      <treechildren>
+	        <treeitem>
+	          <treerow>
+		    <treecell label="Feathers" />
+	          </treerow>
+	        </treeitem>
+              </treechildren>
+	    </treeitem>
+
+	    <treeitem container="true" open="true">
+	      <treerow>
+		<treecell label="Holstein" />
+	      </treerow>
+	      <treechildren>
+	        <treeitem>
+	          <treerow>
+		    <treecell label="Yakima" />
+	          </treerow>
+	        </treeitem>
+              </treechildren>
+	    </treeitem>
+
+	  </treechildren>
+	</treeitem>
+      </treechildren>
+    </tree>
+  </groupbox>
+</hbox>
+
+
+</window>

@@ -1,0 +1,114 @@
+/*
+
+    Name:       Base16 Google Dark
+    Author:     Seth Wright (http://sethawright.com)
+
+    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-chrome-devtools)
+    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+*/
+
+.cm-s-base16-google-dark.CodeMirror {background: #1d1f21; color: #e0e0e0;}
+.cm-s-base16-google-dark div.CodeMirror-selected {background: #282a2e !important;}
+.cm-s-base16-google-dark .CodeMirror-gutters {background: #1d1f21; border-right: 0px;}
+.cm-s-base16-google-dark .CodeMirror-linenumber {color: #969896;}
+.cm-s-base16-google-dark .CodeMirror-cursor {border-left: 1px solid #b4b7b4 !important;}
+
+.cm-s-base16-google-dark span.cm-header {color: #969896;}
+.cm-s-base16-google-dark span.cm-comment {color: #969896;}
+.cm-s-base16-google-dark span.cm-atom {color: #A36AC7;}
+.cm-s-base16-google-dark span.cm-number {color: #F96A38;}
+
+.cm-s-base16-google-dark span.cm-property {color: #e0e0e0;}
+.cm-s-base16-google-dark span.cm-attribute {color: #F96A38;}
+.cm-s-base16-google-dark span.cm-keyword {color: #A36AC7;}
+.cm-s-base16-google-dark span.cm-string {color: #198844;}
+
+.cm-s-base16-google-dark span.cm-variable {color: #CC342B;}
+.cm-s-base16-google-dark span.cm-variable-2 {color: #3971ED;}
+.cm-s-base16-google-dark span.cm-def {color: #3971ED;}
+.cm-s-base16-google-dark span.cm-error {background: #CC342B; color: #b4b7b4;}
+.cm-s-base16-google-dark span.cm-bracket {color: #282a2e;}
+.cm-s-base16-google-dark span.cm-tag {color: #CC342B;}
+.cm-s-base16-google-dark span.cm-link {color: #A36AC7;}
+.cm-s-base16-google-dark span.cm-builtin {color: #A36AC7;}
+
+.cm-s-base16-google-dark .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
+
+.cm-s-base16-google-dark .CodeMirror-activeline-background { background: #282a2e !important; }
+
+
+
+body,
+textarea {
+  background: #1d1f21;
+  color: #c5c8c6;
+}
+
+#sidebar, .modal {
+  background: #282a2e;
+  color: #e0e0e0;
+}
+
+a, a:hover {
+    color: #3971ED;
+}
+
+a.option {
+    color: #3971ED !important;
+}
+
+#logos {
+  background: #17191a;
+  color: #c5c8c6;
+}
+
+#buttons {
+  background: #282a2e;
+  color: #b4b7b4;
+}
+
+#buttons .function.enabled:hover {
+  color: #e0e0e0;
+}
+
+#buttonTips {
+  background: #3971ED;
+  color: #ffffff;
+}
+
+#pointer:after {
+    border-bottom-color: #3971ED !important;
+}
+
+#linenos {
+  background: #282a2e;
+  border-color: #373b41 !important;
+}
+
+#linenos a {
+    color: #b4b7b4 !important;
+}
+
+.option {
+    background: #1d1f21 !important;
+    color: #b4b7b4 !important;
+}
+
+.option:hover {
+    background: #17191a !important;
+}
+
+.dropdown:after {
+    border-top-color: #969896 !important;
+}
+
+#messages li {
+  background: #3971ED;
+  color: #ffffff;
+}
+
+#messages li.error {
+  background: #CC342B;
+  color: #ffffff;
+}

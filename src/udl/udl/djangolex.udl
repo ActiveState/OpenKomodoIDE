@@ -1,0 +1,164 @@
+# Lexer for Django -- a python-based (sort of) template language
+
+
+# How to transition from HTML to Django
+
+# {% tag %}
+
+# {{ variables/values (in Django) }}
+# -- could occur in attribute strings as well
+
+family tpl
+sublanguage Django
+
+start_style TPL_DEFAULT
+end_style TPL_VARIABLE
+
+keyword_style TPL_IDENTIFIER => TPL_WORD
+
+keywords [and
+as
+autoescape
+block
+blocktrans
+by
+comment
+cycle
+debug
+elif
+else
+empty
+extends
+filter
+firstof
+for
+if
+ifchanged
+ifequal
+ifnotequal
+in
+'include'
+load
+lorem
+not
+now
+or
+regroup
+reversed
+spaceless
+ssi
+templatetag
+url
+verbatim
+widthratio
+with
+
+# end tags
+
+endautoescape
+endblock
+endblocktrans
+endcomment
+endfilter
+endfor
+endif
+endifchanged
+endifequal
+endifnotequal
+endspaceless
+endverbatim
+endwith
+
+# Escape keywords
+
+openblock
+closeblock
+openvariable
+closevariable
+openbrace
+closebrace
+
+# These are default filter names in django
+
+add
+addslashes
+capfirst
+center
+cut
+date
+default
+default_if_none
+dictsort
+dictsortreversed
+divisibleby
+escape
+escapejs
+filesizeformat
+first
+floatformat
+force_escape
+get_digit
+iriencode
+join
+last
+length
+length_is
+linebreaks
+linebreaksbr
+linenumbers
+ljust
+lower
+make_list
+phone2numeric
+pluralize
+pprint
+random
+removetags
+rjust
+safe
+safeseq
+slice
+slugify
+stringformat
+striptags
+time
+timesince
+timeuntil
+title
+truncatechars
+truncatechars_html
+truncatewords
+truncatewords_html
+unordered_list
+upper
+urlencode
+urlize
+urlizetrunc
+wordcount
+wordwrap
+yesno
+]
+
+include "django-twig-template.udl"
+
+################ Folding Directives ################
+
+fold "comment" TPL_WORD +
+fold "{#" TPL_OPERATOR +
+fold "filter" TPL_WORD +
+fold "for" TPL_WORD +
+fold "if" TPL_WORD +
+fold "ifchanged" TPL_WORD +
+fold "ifequal" TPL_WORD +
+fold "ifnotequal" TPL_WORD +
+fold "spaceless" TPL_WORD +
+
+fold "endcomment" TPL_WORD -
+fold "#}" TPL_OPERATOR -
+fold "endfilter" TPL_WORD -
+fold "endfor" TPL_WORD -
+fold "endif" TPL_WORD -
+fold "endifchanged" TPL_WORD -
+fold "endifequal" TPL_WORD -
+fold "endifnotequal" TPL_WORD -
+fold "endspaceless" TPL_WORD -

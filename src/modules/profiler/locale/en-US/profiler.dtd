@@ -1,0 +1,18 @@
+<!ENTITY profiler.window.title "Komodo Code Profiler">
+<!ENTITY cmd_openProfiler.description "Code Profiling: Open the Profiler window">
+<!ENTITY cmd_startProfiling.description "Code Profiling: Launch Code Profiling">
+<!ENTITY menuitem_openProfiler.label "Code Profiler">
+<!ENTITY sidetoolbar_openProfiler.label "Code Profiler">
+<!ENTITY sidetoolbar_openProfiler.tooltip "Open Code Profiler interface">
+<!ENTITY sidetoolbar_openProfile.label "Open Profile">
+<!ENTITY menuitem_openProfiler.accesskey "P">
+<!ENTITY menuitem_debug_runProfiler.label "Start Code Profiling">
+<!ENTITY menuitem_debug_runProfiler.accesskey "P">
+<!ENTITY buttonText.label "Button Text">
+<!ENTITY cmd_profiler_open.tooltiptext "Open an existing code profile data file.">
+<!ENTITY profiler_open_button.accesskey "O">
+<!ENTITY profiler_open_button.label "Open">
+<!ENTITY cmd_profiler_save.tooltiptext "Save the code profile data to a file.">
+<!ENTITY profiler_save_button.accesskey "S">
+<!ENTITY profiler_save_button.label "Save">
+<!ENTITY profiler_layout.label "Layout:">

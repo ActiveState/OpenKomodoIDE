@@ -1,0 +1,122 @@
+/*
+
+    Name:       Base16 Atelier Forest Light
+    Author:     Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/forest)
+
+    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-chrome-devtools)
+    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+*/
+
+.cm-s-base16-atelierforest-light.CodeMirror {background: #f1efee; color: #2c2421;}
+.cm-s-base16-atelierforest-light div.CodeMirror-selected {background: #e6e2e0 !important;}
+.cm-s-base16-atelierforest-light .CodeMirror-gutters {background: #f1efee; border-right: 0px;}
+.cm-s-base16-atelierforest-light .CodeMirror-linenumber {color: #9c9491;}
+.cm-s-base16-atelierforest-light .CodeMirror-cursor {border-left: 1px solid #766e6b !important;}
+
+.cm-s-base16-atelierforest-dark span.cm-header {color: #766e6b;}
+.cm-s-base16-atelierforest-light span.cm-comment {color: #766e6b;}
+.cm-s-base16-atelierforest-light span.cm-atom {color: #6666ea;}
+.cm-s-base16-atelierforest-light span.cm-number {color: #df5320;}
+
+.cm-s-base16-atelierforest-light span.cm-property {color: #2c2421;}
+.cm-s-base16-atelierforest-light span.cm-attribute {color: #df5320;}
+.cm-s-base16-atelierforest-light span.cm-keyword {color: #6666ea;}
+.cm-s-base16-atelierforest-light span.cm-string {color: #5ab738;}
+
+.cm-s-base16-atelierforest-light span.cm-variable {color: #f22c40;}
+.cm-s-base16-atelierforest-light span.cm-variable-2 {color: #407ee7;}
+.cm-s-base16-atelierforest-light span.cm-def {color: #407ee7;}
+.cm-s-base16-atelierforest-light span.cm-error {background: #f22c40; color: #766e6b;}
+.cm-s-base16-atelierforest-light span.cm-bracket {color: #2c2421;}
+.cm-s-base16-atelierforest-light span.cm-tag {color: #f22c40;}
+.cm-s-base16-atelierforest-light span.cm-link {color: #6666ea;}
+.cm-s-base16-atelierforest-light span.cm-builtin {color: #6666ea;}
+
+.cm-s-base16-atelierforest-light .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
+
+.cm-s-base16-atelierforest-dark .CodeMirror-activeline-background { background: #e6e2e0 !important; }
+
+
+
+body,
+textarea {
+  background: #f1efee;
+  color: #68615e;
+}
+
+#sidebar, .modal {
+  background: #a8a19f;
+  color: #2c2421;
+}
+
+a, a:hover {
+    color: #c33ff3;
+}
+
+a.option {
+    color: #c33ff3 !important;
+}
+
+#logos {
+  background: #9c9491;
+  color: #68615e;
+}
+
+#buttons {
+  background: #a8a19f;
+  color: #766e6b;
+}
+
+#buttons .function.enabled:hover {
+  color: #2c2421;
+}
+
+#buttonTips {
+  background: #c33ff3;
+  color: #f1efee;
+}
+
+#pointer:after {
+    border-bottom-color: #c33ff3 !important;
+}
+
+#linenos {
+  background: #e6e2e0;
+  border-color: #a8a19f !important;
+}
+
+#linenos a {
+    color: #766e6b !important;
+}
+
+.option {
+    background: #9c9491 !important;
+    color: #68615e !important;
+}
+
+.option:hover {
+    background: #8c8583 !important;
+}
+
+.dropdown:after {
+    border-top-color: #766e6b !important;
+}
+
+#logo-kopy {
+    background: url(../../img/pastebin-logo-dark.png) no-repeat !important;
+}
+
+#logo-komodo {
+    background: url(../../img/komodo-logo-dark.png) no-repeat !important;
+}
+
+#messages li {
+  background: #407ee7;
+  color: #f1efee;
+}
+
+#messages li.error {
+  background: #f22c40;
+  color: #f1efee;
+}

@@ -1,0 +1,196 @@
+// komodo tool: Catalyst Setup
+// ===========================
+// is_clean: true
+// type: tutorial
+// version: 1.1.5
+// ===========================
+# Sample content, edit, delete, do whatever you like
+Description: Tutorial to quickly set up a Catalyst project in Komodo.
+Author: ActiveState
+Version: 1.0
+# Placement can be floating or docked
+Placement: docked
+Callouts:
+    placesWidget:
+        Element: "#placesViewbox"
+        Message: This is the Places widget.
+    projectCog:
+        Element: "#placesSubpanelProjectsTools_SPV"
+        Message: "This is the Project cog menu."
+    menuButton:
+        Element: "#unifiedMenuButton"
+        Message: "This is the Menu button."
+        Fail: "Enable the main toolbar using View > Toolbars > Show Toolbars"
+    uniMenuButton:
+        Element: "#unifiedMenuButton"
+        Message: Access Komodo menus in the Unified Menu.
+    toolboxWidget:
+        Element: "#toolbox2viewbox"
+        Message: "This is the Toolbox widget."
+        Fail: "Open Toolbox using View > Tabs & Sidebars > Toolbox or Ctrl + Shift + L"
+Steps:
+    -
+        Title: Before you begin
+        Summary: >
+            If you are new to the **Komodo IDE** you should complete the
+            **Getting Started** tutorial before continuing.  It is located
+            in the [toolbox][callout:toolboxWidget] in the Tutorials folder.
+            It teaches the basics of using Komodo.
+
+            This tutorial is based on the
+            [Catalyst Tutorial found on CPAN](http://search.cpan.org/~ether/Catalyst-Manual-5.9009/lib/Catalyst/Manual/Tutorial.pod),
+            with specific instructions for configuring Komodo.
+
+            In this tutorial you will learn how to:
+            - Create a Komodo project
+            - Install Catalystm, and the `catalyst-devel` development tools using Komodo's **Go to Anything** tool (also called **Commando**).
+            - Generate the Catalyst boilerplate code using `catalyst.pl`
+            - Create a custom Toolbox command to start the Catalyst server
+
+            ## Prerequisite
+
+            You must have Perl installed and it must be on your system PATH.
+
+            ### Perl
+
+            We recommend that you use ActiveState's ActivePerl distribution to complete this tutorial.
+            It includes additional packages and tools that simplify the setup. However, this tutorial
+            should work for most, if not all, Perl distributions. You need to download and install Perl
+            if it's not already installed:
+
+            **Note** This tutorial uses ActiveState's Perl Package Management (PPM) tool to install
+            Catalyst.  You can use CPAN to complete this configuraiton if you prefer, but if may change
+            the directories where files are installed:
+
+             * [Download ActivePerl](http://downloads.activestate.com/ActivePerl/releases/)
+
+            #### Configuring Perl
+
+            **NOTE** If Perl is on your system path the Komodo configuation is completed automatically.
+
+             1. Open the Preferences dialog box:
+                - Select <% if (require("sdk/system").platform == "darwin") { %>**Edit menu > <% } else { %> <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:uniMenuButton] > Edit <% } %>  Preferences > Languages**.
+                - Press `Ctrl + ,` (or `Cmd + ,` on Mac OS X)
+             1. Expand the **Languages** list in the sidebar, and select Perl.
+             1. Click the **Browse** button next to the **Use this interpreter**
+             field, select your Perl installation directory, and
+             select the Perl interpreter binary file.
+             1. Click the **Browse** button next to the **PPM Location** field
+             and select the PPM binary file installed in the folder for your Perl installation.
+
+        #Validate: validPageOne -> isPerlFound && isVirtualenvFound
+
+    -
+        Title: Creating a Komodo project
+        Summary: >
+            Your first task is to create a Komodo project that provides the context for the
+            setup commands in this tutorial. All of these steps are completed in Komodo..
+        Task: >
+            1. Select <% if (require("sdk/system").platform == "darwin") { %>
+            **Project menu >
+            <% } else { %>
+            <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:uniMenuButton] > Project >
+            <% } %>
+            New Project**.
+            1. Use the dialog box to navigate to your project folder and name the project file,
+            and then click *Save*.
+
+        Tips:
+            - You can specify a custom **Project Base URL** in the **Project Preferences** dialog box.  Right click your project and select **Project Preferences** and then enter the custom URL in the **Project Base Directory** text box.
+            - Komodo uses your system path to find installed tools.  You can also manually configure the location at the Global, Project, or File level preferences.  Komodo prioritizes preferences in the following hierarchy, File > Project > Global.
+            - <% if (require("sdk/system").platform == "winnt") { %>Use `where [exectuableName]` in **Commando** to see what Komodo will find on your path.  Example `where ppm`<% } else { %>Use `which [exectuableName]` in **Commando** to see what Komodo will find on your path.  Example `which ppm`<% } %>
+
+    -
+        Title: Configuring Catalyst
+        Summary: >
+            You need to complete the following steps to install and configure Catalyst.
+             - Install Catalyst
+             - Create your Catalyst project
+        Task: >
+            1. Press `Ctrl + Shift + O` (or `Cmd + Shift + O` on Mac OS X)
+            to open Go to Anything.
+            1. Press 8 to select the Shell scope.
+            1. Enter **PPM > install > catalyst-devel**.
+            This command may take several minutes to run because it installs many dependent packages.  To see more output use your computers terminal.  Successful output should look similar to the following:
+            ```
+            39 files installed
+            ```
+            1. Press `Ctrl + Shift + O` (or `Cmd + Shift + O` on Mac OS X) and then press 8.
+            1. Run the following `<% if (require("sdk/system").platform == "winnt") { %>
+            catalyst
+            <% } else { %>
+            catalyst.pl
+            <% } %> Hello`
+            ```
+            ...
+            created "Hello\script\hello_create.pl"
+            Change to application directory and
+            Run "perl Makefile.PL" to make sure your
+            install is complete.
+            ```
+            The last command requires that the package install location for your Perl
+            modules is on your system PATH, so check this configuration if the command fails.
+            1. Run `perl Makefile.PL` in your Catalyst project folder to make sure your install
+            is complete, and install any missing dependencies that are identified.
+
+        Tips:
+            - The output of commands in Go to Anything (Commando) tell you which executable was used at the start of the output.  You should verify that the expected executable is displayed.
+    -
+        Title: Starting Catalyst
+        Summary: >
+            You need to do the following steps to start Catalyst:
+            - Create a Toolbox Command to start the server.
+            - Navigate to your site in your web browser.
+
+            **NOTE**: You will be saving the tool in your Project toolbox.  Locate the red toolbox icon with the same name as your project at the bottom of the [Toolbox][callout:toolboxWidget].
+        Task: >
+            1. In the [Toolbox][callout:toolboxWidget] right click your project toolbox and select **Add > New Command**.
+            1. Name the tool `Start Catalyst Server`.
+            1. Enter the following into the command field: `<% if (require("sdk/system").platform == "winnt") { %>
+            script\hello_server.pl -r
+            <% } else { %>
+            script/hello_server.pl -r
+            <% } %>`
+            1. Click the **Advanced Options** tab.
+            1. In the **Start in** field, enter `<% if (require("sdk/system").platform == "winnt") { %>
+            %i/Hello
+            <% } else { %>
+            i%/Hello
+            <% } %>`  ("*%i*" is the current projects base directory).
+            1. From the `Run in` drop down list select `New Console`.
+            1. Click `OK`.
+            1. Double click the Start Catalyst toolbox command and
+            it will open a terminal window with output that looks
+            similar to the following:
+            ```
+            [info] Hello powered by Catalyst 5.90002
+            HTTP::Server::PSGI: Accepting connections at http://0:3000/
+            ```
+            Open your web browser and navigate to the URL listed in the
+            command output (e.g. http://localhost:3000) to see the site
+            running.
+
+            See the [Catalyst Docs](http://search.cpan.org/~ether/Catalyst-Manual-5.9009/lib/Catalyst/Manual/Tutorial/02_CatalystBasics.pod) for more information.
+// ===========================
+// komodo meta: logic
+// ===========================
+// Sample content, edit, delete, do whatever you like
+(function() {
+    var {Cc, Ci} = require("chrome");
+    var $ = require("ko/dom");
+    var w = require("ko/windows").getMain();
+    var ko = w.ko;
+    
+    this.start = function() {};
+    this.preStep = function() {};
+    this.step = function() {};
+    this.preClose = function() {};
+    this.close = function() {};
+
+    this.focusPlaces = function()
+    {
+        ko.uilayout.ensureTabShown('placesViewbox', true);
+        w.require("tutorials").logicCallout("placesWidget");
+    };
+    
+}).apply(module.exports);

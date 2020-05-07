@@ -1,0 +1,5 @@
+# #if MODE == "dev"
+content scope-shell-grunt content/
+# #else
+content scope-shell-grunt jar:scope-shell-grunt.jar!/content/
+# #endif

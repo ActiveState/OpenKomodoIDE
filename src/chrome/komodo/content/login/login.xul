@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<!--
+This hidden window is only used on the Mac, see bug 85838.
+
+It's used to allow keyboard commands when using the File open dialog.
+
+This hiddenWindow is only used when the "browser.hiddenWindowChromeURL" pref is
+set to a chrome URL.
+-->
+
+<!--<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>-->
+<?xml-stylesheet href="less://komodo/skin/dialogs/login.less" type="text/css"?>
+
+<window id="login-dialog"
+        title="Komodo IDE - ActiveState Account login"
+        class="dialog"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        width="600"
+        height="400"
+        buttonalign="horizontal"
+        buttonorient="horizontal">
+    <script>
+        if (typeof JetPack == "undefined")
+        {
+            Components.utils.import("chrome://komodo/content/sdk/console.js");
+            Components.utils.import("chrome://komodo/content/jetpack.js");
+        }
+    </script>
+    
+    <script src="chrome://komodo/content/login/login.js" type="application/x-javascript;version=1.7"/>
+    <vbox id="login-box" class="login-box"></vbox>
+</window>

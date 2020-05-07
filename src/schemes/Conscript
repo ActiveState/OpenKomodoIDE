@@ -1,0 +1,88 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'build',
+    'platform',
+    'productType',
+    'buildFlavour',
+    'buildType',
+    'unsiloedPythonExe',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'supportDir',
+    'komodoPythonUtilsDir',
+    'mozVersion',
+    'withSCC',
+    'withCodeBrowser',
+    'sdkDir',
+    'mozSrc',
+);
+
+$cons->InstallPythonUtility('styles.py');
+$cons->Preprocess('factoryStyleSettings.p.py',
+                  'factoryStyleSettings.py');
+$cons->InstallPythonUtility('factoryStyleSettings.py');
+$cons->InstallPythonUtility('schemebase.py');
+$cons->InstallPythonUtility('userStyleSettings.py');
+$cons->Install($idlExportDir, 'koIScintillaSchemeService.idl');
+$cons->BuildAndInstallXpt('koIScintillaSchemeService.idl');
+$cons->Preprocess('koScintillaSchemeService.p.py',
+                  'koScintillaSchemeService.py');
+$cons->InstallXpcomComponent('koScintillaSchemeService.py');
+
+$cons->BuildAndInstallXpt('koIKeybindingSchemeService.idl');
+$cons->InstallXpcomComponent('koKeybindingSchemeService.py');
+if ($platform eq "darwin") {
+    $cons->Preprocess('Default.p.kkf', 'Windows.kkf');
+    $cons->Install("$supportDir/schemes", 'Windows.kkf');
+    $cons->Preprocess('IntelliJ-mac.p.kkf', 'IntelliJ.kkf');
+    $cons->Install("$supportDir/schemes", 'IntelliJ.kkf');
+    $cons->Preprocess('Sublime-mac.p.kkf', 'Sublime.kkf');
+    $cons->Install("$supportDir/schemes", 'Sublime.kkf');
+    $cons->Preprocess('Atom-mac.p.kkf', 'Atom.kkf');
+    $cons->Install("$supportDir/schemes", 'Atom.kkf');
+    $cons->Preprocess('Mac.p.kkf', 'Default.kkf');
+    $cons->Install("$supportDir/schemes", 'Default.kkf');
+    $cons->Preprocess('Eclipse-mac.p.kkf', 'Eclipse.kkf');
+    $cons->Install("$supportDir/schemes", 'Eclipse.kkf');
+    $cons->Preprocess('VSCode-mac.p.kkf', 'VSCode.kkf');
+    $cons->Install("$supportDir/schemes", 'VSCode.kkf');
+    $cons->Preprocess('Legacy-mac.p.kkf', 'Legacy.kkf');
+    $cons->Install("$supportDir/schemes", 'Legacy.kkf');
+} else {
+    $cons->Preprocess('Default.p.kkf', 'Default.kkf');
+    $cons->Install("$supportDir/schemes", 'Default.kkf');
+    $cons->Preprocess('IntelliJ.p.kkf', 'IntelliJ.kkf');
+    $cons->Install("$supportDir/schemes", 'IntelliJ.kkf');
+    $cons->Preprocess('Sublime.p.kkf', 'Sublime.kkf');
+    $cons->Install("$supportDir/schemes", 'Sublime.kkf');
+    $cons->Preprocess('Atom.p.kkf', 'Atom.kkf');
+    $cons->Install("$supportDir/schemes", 'Atom.kkf');
+    $cons->Preprocess('Eclipse.p.kkf', 'Eclipse.kkf');
+    $cons->Install("$supportDir/schemes", 'Eclipse.kkf');
+    $cons->Preprocess('VSCode.p.kkf', 'VSCode.kkf');
+    $cons->Install("$supportDir/schemes", 'VSCode.kkf');
+    $cons->Preprocess('Legacy.p.kkf', 'Legacy.kkf');
+    $cons->Install("$supportDir/schemes", 'Legacy.kkf');
+}
+$cons->Preprocess('Emacs.p.kkf', 'Emacs.kkf');
+$cons->Install("$supportDir/schemes", 'Emacs.kkf');
+
+$cons->BuildAndInstallXpt('koIViCommandDetail.idl');
+$cons->InstallXpcomComponent('koViCommandDetail.py');
+
+$cons->Preprocess("_vi.p.kkf", "_vi.kkf");
+$cons->Install("$supportDir/schemes", '_vi.kkf');
+$cons->Depends("_vi.kkf", "Default.kkf");
+
+$cons->Preprocess("Vi.p.kkf", "Vi.kkf");
+$cons->Install("$supportDir/schemes", 'Vi.kkf');
+$cons->Depends("Vi.kkf", "_vi.kkf");
+
+$cons->InstallRecursive("$supportDir/schemes", cwd()."/src/schemes/color_schemes", ('\.consign','.git','.gitignore'));

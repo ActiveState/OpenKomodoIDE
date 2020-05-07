@@ -1,0 +1,15 @@
+
+.klintTreeChildren::-moz-tree-image(error) {
+  padding-right: 4px;
+  list-style-image: url("koicon://ko-svg/chrome/fontawesome/skin/exclamation-triangle.svg?scheme-name=widget&scheme-color=state-error");
+}
+
+.klintTreeChildren::-moz-tree-image(warning) {
+  padding-right: 4px;
+  list-style-image: url("koicon://ko-svg/chrome/fontawesome/skin/exclamation-circle.svg?scheme-name=widget&scheme-color=state-warning");
+}
+
+.klintTreeChildren::-moz-tree-image(info) {
+  padding-right: 4px;
+  list-style-image: url("koicon://ko-svg/chrome/fontawesome/skin/check-circle.svg?scheme-name=widget&scheme-color=state-ok");
+}

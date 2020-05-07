@@ -1,0 +1,84 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2008 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+Import(
+    'cons',
+    'build',
+    'mozChromeDir',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'komodoPythonUtilsDir',
+    'unsiloedPythonExe',
+    'jarring',
+    'mozBin',
+    'supportDir',
+    'buildFlavour',
+    'buildAbsDir',
+    'buildType',
+    'platform',
+    'productType',
+    'mozVersion',
+    'mozExtensionDir',
+);
+
+# The Plan:
+# - dev builds: Install the spellcheck extension with*out* jarring.
+# - full (i.e. installer) builds: Install with jarring.
+
+my $ext_name = "git";
+my $ext_dir = "$mozExtensionDir/$ext_name\@ActiveState.com";
+
+
+if ($buildFlavour eq "full") {
+    $cons->Command(
+        ["$ext_name.xpi", "$ext_name.jar"],
+        "install.rdf",
+        "chrome.manifest",
+        "content/checkout-overlay.xul",
+        "content/pref-scc-git.js",
+        "content/pref-scc-git.xul",
+        "content/pref-scc-git-overlay.xul",
+        "content/bindings/git_checkout.xml",
+        "locale/en-US/git.dtd",
+        "locale/en-US/git-prefs.dtd",
+        "skin/git.css",
+        "skin/git-logo.png",
+        "components/koGit.py",
+        "pylib/gitlib.py",
+        qq(
+           $unsiloedPythonExe bin/run-in-dir.py %1:d zip -X -Dr $ext_name.jar content locale skin
+           $unsiloedPythonExe bin/run-in-dir.py %1:d zip -X -Dr $ext_name.xpi $ext_name.jar install.rdf chrome.manifest components pylib
+        )
+    );
+
+    $cons->Install($ext_dir, "$ext_name.jar");
+    $cons->Install($ext_dir, 'install.rdf');
+    $cons->Install($ext_dir, 'chrome.manifest');
+    $cons->Install("$ext_dir/components", "components/koGit.py");
+    $cons->Install("$ext_dir/pylib", "pylib/gitlib.py");
+}
+
+else { # dev builds
+    $cons->InstallAs("$ext_dir/chrome.manifest", 'devbuild.manifest');
+    $cons->Install($ext_dir, 'install.rdf');
+
+    my @content_files = (
+        "content/checkout-overlay.xul",
+        "content/pref-scc-git.js",
+        "content/pref-scc-git.xul",
+        "content/pref-scc-git-overlay.xul",
+    );
+    foreach my $file (@content_files) {
+        $cons->Install("$ext_dir/content", $file);
+    }
+    $cons->Install("$ext_dir/content/bindings", "content/bindings/git_checkout.xml");
+    $cons->Install("$ext_dir/locale/en-US", "locale/en-US/git.dtd");
+    $cons->Install("$ext_dir/locale/en-US", "locale/en-US/git-prefs.dtd");
+    $cons->Install("$ext_dir/skin", "skin/git.css");
+    $cons->Install("$ext_dir/skin", "skin/git-logo.png");
+    $cons->Install("$ext_dir/components", "components/koGit.py");
+    $cons->Install("$ext_dir/pylib", "pylib/gitlib.py");
+}

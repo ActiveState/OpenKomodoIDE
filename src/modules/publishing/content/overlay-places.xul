@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2009-2010 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % publishingDTD SYSTEM "chrome://publishing/locale/publishing.dtd">
+  %publishingDTD;
+]>
+
+<overlay id="overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <commandset id="allcommands">
+        <commandset id="publishing_places_commandset"
+                    oncommandupdate="ko.commands.updateCommandset(this)"
+                    commandupdater="true"
+                    events="current_place_changed"
+                    >
+            <command id="cmd_publishingPlacesDiffFile"
+                     key="key_cmd_publishingPlacesDiffFile"
+                     oncommand="ko.commands.doCommandAsync('cmd_publishingPlacesDiffFile', event)"
+                     disabled="true"
+                     desc="&commandPublishingPlacesDiffFile.desc;" />
+            <command id="cmd_publishingPlacesPushFile"
+                     key="key_cmd_publishingPlacesPushFile"
+                     oncommand="ko.commands.doCommandAsync('cmd_publishingPlacesPushFile', event)"
+                     disabled="true"
+                     desc="&commandPublishingPlacesPushFile.desc;" />
+            <command id="cmd_publishingPlacesForcePushFile"
+                     key="key_cmd_publishingPlacesForcePushFile"
+                     oncommand="ko.commands.doCommandAsync('cmd_publishingPlacesForcePushFile', event)"
+                     disabled="true"
+                     desc="&commandPublishingPlacesForcePushFile.desc;" />
+            <command id="cmd_publishingPlacesPullFile"
+                     key="key_cmd_publishingPlacesPullFile"
+                     oncommand="ko.commands.doCommandAsync('cmd_publishingPlacesPullFile', event)"
+                     disabled="true"
+                     desc="&commandPublishingPlacesPullFile.desc;" />
+            <command id="cmd_publishingPlacesForcePullFile"
+                     key="key_cmd_publishingPlacesForcePullFile"
+                     oncommand="ko.commands.doCommandAsync('cmd_publishingPlacesForcePullFile', event)"
+                     disabled="true"
+                     desc="&commandPublishingPlacesForcePullFile.desc;" />
+        </commandset>
+    </commandset>
+
+</overlay>

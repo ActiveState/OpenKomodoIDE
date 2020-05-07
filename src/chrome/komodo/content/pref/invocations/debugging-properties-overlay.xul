@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % invocationsDTD SYSTEM "chrome://komodo/locale/invocations.dtd">
+  %invocationsDTD;
+]>
+
+<overlay id="debuggerPropertiesOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/uriparse.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/filepickers.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/dialogs.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/launch.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/pref/invocations/debugging-properties.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/pref/koPrefWindow.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/windowManager.js"/>
+
+    <vbox id="contentOverlay">
+    <groupbox id="panelFrame" name="panelFrame" orient="vertical">
+        <caption label="&debugConfiguration.label;" class="kopadded"/>
+        <grid>
+            <columns>
+                <column flex="1"/>
+                <column/>
+                <column/>
+            </columns>
+            <rows>
+                <row align="center">
+                <menulist id="invocation-configuration" flex="1"
+                            oncommand="ChangeInvocation(this);">
+                    <menupopup id="invocation-configuration-popup"/>
+                </menulist>
+                <button id="newButton" label="&new.label;" oncommand="doSaveNewInvocation()" />
+                <button id="deleteButton" label="&delete.label;" oncommand="doDeleteInvocation()" />
+                </row>
+            </rows>
+        </grid>
+    </groupbox>
+
+    <tabbox orient="vertical" flex="1">
+        <tabs id="pTabbox" orient="horizontal">
+            <tab id="tab-generalProperties" label="&general.label;"/>
+            <tab id="tab-systemEnvironment" label="&environment.label;"/>
+            <tab id="tab-cgiEnvironment" label="&CGIEnvironment.label;"/>
+            <tab id="tab-cgiInput" label="&CGIInput.label;"/>
+        </tabs>
+        <tabpanels flex="1">
+            <tabpanel id="generalProperties" orient="vertical" flex="1">
+                <grid>
+                    <columns>
+                        <column/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row align="center">
+                            <label value="Script"
+                                   accesskey="&S.accesskey;"
+                                   control="filename"
+                                   class="kopadded"
+                                   tooltiptext="&scriptToBeExecuted.tooltiptext;"/>
+                            <hbox align="center">
+                                <textbox id="filename" pref="true" flex="1"
+                                         tooltiptext="&scriptToBeExecuted.tooltiptext;"
+                                         maxrows="10"
+                                         type="autocomplete"
+                                         autocompletesearch="filepath"
+                                         autocompletepopup="popupTextboxAutoComplete"
+                                         enablehistory="true"
+                                         completeselectedindex="true"
+                                         tabscrolling="true"
+                                         ontextentered="this.focus();"/>
+                                <button label="&browse.label;"
+                                        id="browseForFilename"
+					accesskey="&browse.accesskey;"
+                                        oncommand="doBrowseForLanguageFile('filename')" />
+                            </hbox>
+                        </row>
+                        <row align="center">
+                            <label value="Script Arguments"
+                                   control="params"
+                                   class="kopadded"
+                                   accesskey="&A.accesskey;"
+                                   tooltiptext="&scriptCommandLineArguments.tooltiptext;"/>
+                            <textbox id="params" pref="true"
+                                        tooltiptext="&scriptCommandLineArguments.tooltiptext;"/>
+                        </row>
+                        <row align="center">
+                            <label value="Directory"
+                                   control="cwd"
+                                   class="kopadded"
+                                   accesskey="&c.accesskey;"
+                                   tooltiptext="&startInThisDirectoryDefaultsToDirectoryOfTheScript.tooltiptext;"/>
+                            <hbox align="center">
+                                <textbox id="cwd" pref="true" flex="1"
+                                         tooltiptext="&startInThisDirectoryIfYouDoNotSpecifyADebuggingDirectoryDebuggingWillStartInTheDirectoryWhereTheProgramResides.tooltiptext;"
+                                         maxrows="10"
+                                         type="autocomplete"
+                                         autocompletesearch="dirpath"
+                                         autocompletepopup="popupTextboxAutoComplete"
+                                         enablehistory="true"
+                                         completeselectedindex="true"
+                                         tabscrolling="true"
+                                         ontextentered="this.focus();"/>
+                                <button accesskey="&browse.accesskey;"
+                                        id="browseForCwd"
+					label="&browse.label;"
+                                        oncommand="doBrowseForDir()" />
+                            </hbox>
+                        </row>
+						<row align="center">
+							<spacer/>
+							<checkbox id="debuggerRunAsCGI"
+								label="&simulateCGIEnvironment.label;"
+								pref="true" prefstring="sim-cgi"
+								oncommand="toggleCGITabs();" />
+						</row>
+						<row align="center">
+							<spacer/>
+							<checkbox id="debuggerRunInConsole"
+								label="&debugInSeparateConsole.label;"
+								pref="true" prefstring="use-console" />
+						</row>
+                    </rows>
+                </grid>
+                <separator class="groovy-thin"
+                           style="margin-top: 10px; margin-bottom: 10px;"/>
+		<description id="projectConfigNotice">
+		    Project configurations cannot be edited directly.  To change
+		    this setting, create an editable document configuration based
+		    on this one by pressing the "New" button.
+		</description>
+            </tabpanel>
+            <tabpanel orient="vertical" flex="1">
+				<hbox align="center">
+					<label value="Interpreter Arguments"
+						   accesskey="&I.accesskey;"
+						   control="executable-params"
+						   class="kopadded"
+						   tooltiptext="&interpreterCommandLineArguments.tooltiptext;"/>
+					<hbox align="center" id="interpparams" flex="1">
+						<textbox id="executable-params"
+								 pref="true"
+								 flex="1"
+								 tooltiptext="&interpreterCommandLineArguments.tooltiptext;"/>
+					</hbox>
+				</hbox>
+                <label value="Default Environment Variables" control="env-prefs" class="kopadded"/>
+                <EnvPrefs id="env-prefs" editable="false"
+                    prefwidget="true" pref="true"
+                    prefstring="systemEnvironment" flex="1"/>
+                <label value="User Environment Variables (override defaults)" control="user-env-prefs" class="kopadded"/>
+                <EnvPrefs id="user-env-prefs" editable="true"
+                    prefwidget="true" pref="true"
+                    prefstring="userEnvironment" flex="1"/>
+            </tabpanel>
+            <!-- CGI Environment Tab-->
+            <tabpanel orient="vertical" flex="1">
+                <text value="Default CGI Environment Variables" class="kopadded"/>
+                <EnvPrefs id="cgi-env-prefs" editable="false"
+                    prefwidget="true" pref="true"
+                    prefstring="CGIEnvironment" flex="1"/>
+                <label value="User CGI Environment Variables (override defaults)" control="user-cgi-env-prefs" class="kopadded"/>
+                <EnvPrefs id="user-cgi-env-prefs" editable="true"
+                    prefwidget="true" pref="true"
+                    prefstring="userCGIEnvironment" flex="1"/>
+            </tabpanel>
+
+            <!-- CGI Input Tab-->
+            <tabpanel orient="vertical" flex="1">
+                <CGIPrefs id="cgi-prefs" prefwidget="true" flex="1"/>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+    </vbox>
+</overlay>

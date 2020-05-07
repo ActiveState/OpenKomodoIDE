@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"[
+  <!ENTITY % dbxDTD SYSTEM "chrome://dbexplorer/locale/dbexplorer.dtd">
+  %dbxDTD;
+]>
+
+<!-- Copyright (c) 2003-2009 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!-- Database Explorer indexDisplay.  See indexDisplay.js for details -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://dbexplorer/skin/dbexplorer.css" type="text/css"?>
+
+<window id="dbexplorer_indexDisplay"
+        windowtype="dbexplorer_indexDisplay"
+        title="&DBExplorer.label;"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        width="600"
+        height="400"
+        screenX="20"
+        screenY="20"
+        persist="screenX screenY width height"
+        onload="onLoad();"
+        >
+  <script src="chrome://komodo/content/library/logging.js"   type="application/x-javascript;version=1.7"/>
+  <script src="chrome://komodo/content/library/trace.js"     type="application/x-javascript;version=1.7"/>
+  <script src="chrome://komodo/content/library/uriparse.js"     type="application/x-javascript;version=1.7"/>
+  <script src="chrome://xtk/content/xtk.js"     type="application/x-javascript;version=1.7"/>
+
+  <script src="chrome://dbexplorer/content/indexDisplay.js"        type="application/x-javascript;version=1.7"/>
+  
+  <vbox class="dbx-indexDisplay-vbox" flex="1" style="margin: 10px 5px" caption="Index">
+    <hbox>
+        <label value="Index name" />
+        <textbox id="indexName" rows='1' flex="4" />
+    </hbox>
+    <hbox>
+        <label value="Table name" />
+        <textbox id="tableName" rows='1' flex="4" />
+    </hbox>
+    <textbox rows="10" cols="70" flex="1" id="dbx-indexDisplay" />
+  </vbox>
+</window>
+    

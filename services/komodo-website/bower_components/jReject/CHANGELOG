@@ -1,0 +1,56 @@
+Version 1.0.2
+	- Fix safari version detection for Chrome 23 on iOS
+
+Version 1.0.1
+	- Supports not showing the browser download links (useless on iOS)
+	- Passes JSLint
+
+Version 1.0.0:
+	- Same as 1.0-RC2
+
+Version 1.0-RC2:
+	- Cleanup code to support updated coding standards
+	- Merge browser plugin into main source
+	- Move CSS definitions to external file
+
+Version 1.0-RC1:
+	- Fix issues with double-digit version numbers in browser agents.
+	  Thanks to Akkuma for the fix. Now using a custom version of Browser plugin.
+	- BREAKING CHANGE: Default image dir now ./images/, instead of /images/.
+	  Could potentially break some legacy installations.
+	- Update Browser Versions
+
+Version 0.7-Beta:
+	- Improve Cookie Management; add cookie option with path and expiration settings
+	- Update default browser versions and links
+	- New: Fades in on load (with new opts.fadeInTime)
+	- Bug Fix: Force browser focus to modal window (fixes ESC Key issues with frames/forms)
+	- Bug Fix: Fix conflict with multiple rejections on a single page, and then closing window with ESC Key
+
+Version 0.6.1-Beta:
+	- Make icons clickable to same URL as text links
+	- Links now generate random popup names instead of just '_new'
+	- Default browser display settings are now passed to options.beforeReject() event method
+	- Code/comments cleanup
+
+Version 0.6-Beta:
+	- Add opts.closeCookie and functionality to remmember closes
+	- Allow closing of window via ESC key via opts.closeESC
+	- Added parameters to event functions
+	- Add opts.overlayBgColor and opts.overlayOpacity
+	- Rename #jr_bg to #jr_overlay
+	- Make popup position static; move with scroll/window resizing
+	- Remove "return" requirement for click events; removed from demos
+	- Hide/show "embed, object, select, applet" elements because they show above overlay
+	- Remove opts.width/opts.height (now determined dynamically)
+	- Improve issues with included CSS files affecting display
+	- Fix opts.closeURL issues with default option ('#')
+	- Add options to browserInfo to allow display restrictions
+	- Add 'all' to browser reject options
+	- Make browser display settings "cascade"
+	- Improve DOM/CSS traversing efficiency
+	- Fix display bugs in IE
+	- Other Misc. Bug Fixes / Efficiency improvements
+
+Version 0.5-Beta:
+	- Initial Version

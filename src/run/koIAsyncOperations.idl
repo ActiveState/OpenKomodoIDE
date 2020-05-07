@@ -1,0 +1,104 @@
+/* Copyright (c) 2000-2007 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "nsIVariant.idl"
+
+[function, scriptable, uuid(efa88a1b-34f0-48b1-8e11-f0e5b6eb32bf)]
+interface koIAsyncCallback: nsISupports {
+        // Results for the callback function call
+    const long RESULT_SUCCESSFUL = 0;
+    const long RESULT_STOPPED = 1;
+    const long RESULT_ERROR = 2;
+        // result must be one of the values above
+        //   successful - data contains the operation return data
+        //   stopped - cancelled before operation could finish, data may be null
+        //   error? use data to pass back an error message?
+    void callback(in long result, in nsIVariant data);
+};
+
+[scriptable, uuid(7e1b0acb-32e5-4738-bda1-fb55a77c977c)]
+interface koIAsyncCallbackWithProgress: koIAsyncCallback {
+        /**
+         * Notify that progress has been made.
+         * @param label - The type of progress.
+         * @param value - The overall progress value (0-100)
+         */
+    void onProgress(in AString label, in long value);
+};
+
+/**
+ * Only Python code should be creating and running koIAsyncOperation's,
+ * this is because the code has to run in a separate thread to be properly
+ * asynchronous, and multi-threaded JS code will cause runtime crashes.
+ * The koIAsyncService will unwrap this object into a python instance and
+ * call the instance's run() method.
+ */
+[scriptable, uuid(d1894983-db75-48ae-be35-02d8e265c164)]
+interface koIAsyncOperation: nsISupports {
+
+        // Running means the operation has started and is working to complete
+        // it's tasks.
+    const long STATUS_RUNNING = 0;
+        // Stopping means a request to stop() was called that made this
+        // operation try to stop before it was fully completed.
+        // Note: There still may be valid results returned.
+    const long STATUS_STOPPING = 1;
+
+        // status can be one of the states above
+    attribute long status;
+
+        // Data is an arbitrary object that can be used for additional context.
+    attribute nsIVariant data;
+
+        // stop the asynchronous command. Does not have to be implemented,
+        // which by default will raise an exception "Cannot be stopped"
+    void stop();
+
+        // Method will be called through a koIAsyncService.run() call.
+        // If a callback was supplied then this run method *must* always return
+        // XPCOM compatible objects or None (as the results will get passed to
+        // koIAsyncCallback.callback()). XPCOM compatible objects are XPCOM
+        // instances, numbers, booleans, strings  and lists of these previous
+        // items.
+    void run(out nsIVariant data);
+};
+
+
+[scriptable, uuid(3425ecdd-b439-43e6-8ef2-0271fd2938bf)]
+interface koIAsyncService: nsISupports {
+        // Return the list of running koIAsyncOperation's
+    void getRunningOperations(out unsigned long count,
+                              [array, size_is(count), retval] out koIAsyncOperation async_ops);
+
+        // Return whether the uri is has a pending asynchronous operation.
+    boolean uriHasPendingOperation(in wstring uri);
+
+        // Return whether the uri is locked by a pending asynchronous operation.
+    boolean uriIsLocked(in wstring uri);
+
+        // Return the list of uris that have a running asynchronous operation.
+    void getAllRunningUris(out unsigned long count,
+                           [array, size_is(count), retval] out wstring uris);
+
+        // Return the list of uris that have a running asynchronous operation
+        // and are marked as locked.
+    void getAllLockedUris(out unsigned long count,
+                          [array, size_is(count), retval] out wstring uris);
+
+        // The "aOp" koIAsyncOperation must be implemented in Python, otherwise
+        // this call will raise an exception.
+        // If the aOpCallback is defined, this objects "callback" method will
+        // automatically called when the koIAsyncOperation run finishes, either
+        // through normal operation, cancellation or an unexpected error.
+    void run(in wstring name,
+             in koIAsyncOperation aOp,
+             in koIAsyncCallback aOpCallback,
+             in unsigned long count,
+             [array, size_is(count)] in wstring affected_uris,
+             in boolean lock_these_uris,
+             in boolean update_status);
+
+        // This is for the icon that gets shown by the asynchronous widgets.
+    readonly attribute wstring asynchronous_icon_url;
+};

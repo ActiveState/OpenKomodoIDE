@@ -1,0 +1,10 @@
+# komodo tool: mbool
+# ==================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ==================
+<% /* BooleanField (mbool) */ %>
+[[%tabstop1:FIELDNAME]] = models.BooleanField([[%tabstop2:2]])

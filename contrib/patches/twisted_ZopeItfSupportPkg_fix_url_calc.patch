@@ -1,0 +1,45 @@
+Fix problem with the url handling in Twisted, affected due to changes in the
+Python urllib core (Python 2.6.4 v's 2.6.3), see:
+
+http://listserv3.activestate.com/pipermail/dev-komodo/2010-January/033069.html
+
+Index: twisted/ZopeInterface-3.1.0c1/Support/zpkgsetup/package.py
+===================================================================
+--- twisted/ZopeInterface-3.1.0c1/Support/zpkgsetup/package.py	(revision 38910)
++++ twisted/ZopeInterface-3.1.0c1/Support/zpkgsetup/package.py	(working copy)
+@@ -132,24 +132,34 @@
+ 
+     :Parameters:
+       - `directory`: Directory containing the collection's files.
+       - `reldir`: Relative directory path with which file names from
+         the information file will be joined.  This should be in POSIX
+         notation.  It will not be used to locate files.  It may be
+         omitted or None; if so, filenames are not 'relocated' relative
+         to where they are found.
+ 
+     """
++    """ urlutils:
++     package.py...
++     
++     path: C:\Users\ericp\svn\apps\komodo\...\ZopeInterface\SETUP.cfg
++     
++     urllib.pathname2url(path): ///C|/Users/ericp/.../ZopeInterface/SETUP.cfg
++     
++     urlutils.file_url(...): file:///C%7C/Users/ericp/.../ZopeInterface/SETUP.cfg
++
++    """
+     path = os.path.join(directory, PACKAGE_CONF)
+     if os.path.exists(path):
+         path = os.path.realpath(path)
+-        url = urlutils.file_url(urllib.pathname2url(path))
++        url = urlutils.file_url(path)
+         f = open(path)
+     else:
+         # Initialize using the cfgparser so we still get a package
+         # data object with the right attributes:
+         url = "<no file>"
+         f = StringIO("")
+     try:
+         pkginfo, _ = cfgparser.loadConfigFile(get_schema(), f, url)
+     finally:
+         f.close()

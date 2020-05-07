@@ -1,0 +1,237 @@
+@import "_modules/depend/variables";
+
+@import "bourbon";
+@import "neat";
+@import "font-awesome";
+
+/* Include it again, cause Bourbon overrides some of our variables, grrr */
+@import "_modules/depend/variables";
+
+$nav-reduce: max-width 9999px;
+$nav-reduce-further: max-width 1000px;
+$nav-collapse: max-width 900px;
+
+@import "_modules/depend/helpers";
+@import "_modules/depend/colors";
+@import "_modules/depend/cosmetic";
+
+@import "_modules/header";
+
+*
+{
+    box-sizing: inherit;
+}
+
+html, body
+{
+    background: lighten($color-base-background, 2%) !important;
+}
+
+a,
+a:visited
+{
+
+    &:not(.badge-category)
+    {
+        color: $color-base-link;
+
+        &:hover
+        {
+            color: $color-base-link-hover;
+        }
+    }
+}
+
+#topic-list.categories a.title:visited:not(.badge-notification)
+{
+    color: lighten($color-base-link, 10%) !important;
+}
+
+.btn:not(.btn-primary):not(.btn-danger):not(.btn-social):not(.ok):not(.cancel),
+.category-breadcrumb li.has-drop
+{
+    &, & > a.home
+    {
+        background: darken($color-base-background, 4%) !important;
+    }
+
+    &:hover, &:hover > a.home
+    {
+        color: #FFF !important;
+        background: $color-base-link-hover !important;
+    }
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li > a.active,
+.btn-primary,
+nav.post-controls button.create,
+.site-settings-nav li a.active,
+.nav-stacked .active > a,
+.nav-stacked .active .fa-chevron-right
+{
+    background: $color-base-link !important;
+    color: #FFF !important;
+}
+
+nav.post-controls button .read-icon.last-read
+{
+    color: $color-base-link !important;
+}
+
+.nav-pills > li > a
+{
+    color: $color-base-link;
+    @include transition(none);
+}
+
+.nav-pills > li > a:hover,
+.btn-primary:hover,
+nav.post-controls button.create:hover
+{
+    background-color: $color-base-link-hover !important;
+    color: #FFF !important;
+    text-decoration: none !important;
+}
+
+.nav-wrap .badge
+{
+    border-radius: 2px;
+    color: #FFF;
+    font-weight: bold;
+    background: $promo-button-color !important;
+}
+
+a[name]:not([href])
+{
+    &, &:hover
+    {
+        color: $color-base-text !important;
+        border: 0 !important;
+    }
+}
+
+.staff a
+{
+    color: $color-base-link !important;
+    background: none !important;
+}
+
+h1
+{
+    font-size: 21pt;
+    font-weight: bold;
+}
+
+h2
+{
+    font-size: 16pt;
+    font-weight: 400;
+}
+
+h3
+{
+    font-size: 12pt;
+    font-weight: 400;
+}
+
+p, strong, em
+{
+    line-height: 1.5;
+}
+
+ul, ol
+{
+    line-height: 1.4;
+}
+
+strong
+{
+    font-weight: bold;
+}
+
+/* Layout */
+
+#container header
+{
+    margin-bottom: 0 !important;
+
+    .inner
+    {
+        max-width: 1110px !important;
+    }
+
+    .collapser
+    {
+        @extend %button-green;
+    }
+
+    nav.expanded
+    {
+        z-index: 9999;
+    }
+
+    li.has-sub ul
+    {
+        top: 35px;
+        list-style: none;
+        margin: 0;
+        z-index: 9999;
+    }
+}
+
+.d-header
+{
+    color: $color-header-base;
+    background: $color-base-background !important;
+
+    .username a
+    {
+        @include link-forced($color-forum-header-link, $color-forum-header-link-hover);
+        font-weight: 700;
+    }
+
+    &.d-header .icons .icon
+    {
+        @include link-forced($color-forum-header-link, $color-forum-header-link-hover);
+    }
+}
+
+#topic-list.categories th .toggle-admin
+{
+    right: 0;
+    top: 80px;
+}
+
+/*
+.category
+{
+    .featured-users + .clearfix,
+    .featured-users
+    {
+        display: none;
+    }
+
+    .badge-category
+    {
+        margin-right: 5px;
+    }
+
+    .category-description
+    {
+        margin-top: 0 !important;
+        padding-left: 130px;
+    }
+
+    .badge-category
+    {
+        text-align: center;
+        min-width: 100px;
+    }
+}
+*/
+
+.profiler-results
+{
+    display: none;
+}

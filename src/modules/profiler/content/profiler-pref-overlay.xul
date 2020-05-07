@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % profilerPrefOverlayDTD SYSTEM "chrome://profiler/locale/profiler-pref-overlay.dtd">
+  %profilerPrefOverlayDTD;
+]>
+
+<!--
+
+  Main pref UI overlay for the profiler (adds to the Debugger pref panel).
+
+-->
+
+<overlay id="profiler_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <vbox id="debugger-prefs-vbox">
+
+        <groupbox orient="vertical">
+            <caption label="&profilingCaption.label;"/>
+                <label value="&profilingUponRequest.label;" />
+                <menulist pref="true" prefattribute="data"
+                          prefstrings="donotask_allow_remote_profiling,donotask_action_allow_remote_profiling">
+                    <menupopup>
+                        <menuitem data="false," label="&askMeToAllowProfilingRequests.label;"/>
+                        <menuitem data="true,Yes" label="&allowProfilingRequests.label;"/>
+                        <menuitem data="true,No" label="&refuseProfilingRequests.label;"/>
+                    </menupopup>
+                </menulist>
+        </groupbox>
+    
+    </vbox>
+
+</overlay>
+

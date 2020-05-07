@@ -1,0 +1,12 @@
+- The current cla.txt is closer to a corporate one. Compare to the quite
+  different commiter's agreement for Mozilla. Take the dafi example though:
+  if not given commit access, this would fall under our using the Mozilla
+  clause of identifying the commiter (e.g. "code from Davide Fianco") then
+  we'd have a list of contributors (and a list of commiters with agreements)
+  in the internal Komodo src/cla directory with contact information.
+- Figure the above out, write up drafts and suggestions.
+- Vet it.
+- Get approval.
+- Blog it and update wiki.openkomodo.com. Find a place for this info. On
+  www.activestate.com? komodo.org? openkomodo.com?
+

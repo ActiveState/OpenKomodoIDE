@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Labels"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript;version=1.7"
+	  src="chrome://global/content/dialogOverlay.js" />
+
+
+<html:h1>XUL Labels</html:h1>
+
+<vbox flex="1" style="overflow: auto">
+ <groupbox>
+  <!--description
+      disabled="true"
+      value="This text should be portrayed as disabled." /-->
+
+  <spacer flex="1" />
+  <description>
+     This is a multi-line description.
+     It should wrap if there isn't enough room to put it in one line.
+     Let's put in another sentence for good measure.
+  </description>
+
+   <description disabled="true">
+      This description would be portrayed as disabled if it were possible to disable a description.
+   </description>>
+
+ </groupbox>
+
+
+ <groupbox>
+   <label>
+     This is a multi-line label.
+     It should wrap if there isn't enough room to put it in one line.
+     Let's put in another sentence for good measure.
+   </label>
+
+   <label disabled="true">
+      This label should be portrayed as disabled.
+   </label>
+ </groupbox>
+</vbox>
+</window>

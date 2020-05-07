@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/listbox.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        class="kodialog"
+        orient="vertical"
+        onload="PrefJavaScript_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/pref-javascript.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="javascript-prefs-vbox" flex="1" class="autoscroll">
+        
+<!-- #if WITH_DEBUGGING -->
+        <separator class="thin"/>
+        <groupbox orient="vertical" id="chromeDebuggingGroupbox">
+            <caption label="&remoteDebugging.label;"/>
+            <text value="&filePrefChromeUseThisExecutable.label;"/>
+            <hbox align="center">
+                <menulist id="javaScriptChromeExecutable"
+                    flex="1"
+                    pref="true"
+                    prefstring="javaScriptChromeExecutable"
+                          >
+                    <menupopup id="avail-interp-list"/>
+                </menulist>
+                <button label="&browse.label;" oncommand="loadChromeExecutable();"/>
+            </hbox>
+            <description>
+                It is recommended that you use a chrome executable that only Komodo uses
+            </description>
+            <vbox flex="1" align="center" id="no-avail-exes-message" collapsed="true">
+                <description style="font-weight: bold; text-align: center;" class="state-warning">
+                    &noChromeExecutable.description;
+                </description>
+            </vbox>
+        </groupbox>
+<!-- #endif -->
+                
+        <groupbox orient="vertical" >
+            <caption label="&javaScriptDirectories.label;"/>
+            <description>
+                &javascriptFolder.description;
+            </description>
+            <pathlist id="javascriptExtraPaths"
+                      flex="1"
+                      seltype="multiple"
+                      rows="4"
+                      pref="true"
+                      prefwidget="true"
+                      prefstring="javascriptExtraPaths"/>
+            <vbox collapsed="true">
+              <!-- https://github.com/Komodo/KomodoEdit/issues/3000 -->
+              <description>
+                  &javascriptExcludeFolder.description;
+              </description>
+              <pathlist id="javascriptExcludePaths"
+                        flex="1"
+                        seltype="multiple"
+                        rows="4"
+                        pref="true"
+                        prefwidget="true"
+                        prefstring="javascriptExcludePaths"/>
+            </vbox>
+        </groupbox>
+        
+        <groupbox orient="vertical" >
+            <caption label="&javascriptNamespaceMapping.label;"/>
+            <description>
+                &javascriptNamespaceMapping.description;
+            </description>
+            <mappededitor id="mappings"
+                    column1="Namespace"
+                    column2="Path"
+                    local="true"
+                    pref="true" prefwidget="true"
+                    prefstring="javascriptNamespaceMapping" flex="1"/>
+        </groupbox>
+
+    </vbox>
+
+</window>
+

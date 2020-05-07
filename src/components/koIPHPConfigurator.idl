@@ -1,0 +1,21 @@
+/* Copyright (c) 2000-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+
+interface koIPHPInfoEx;
+
+[scriptable, uuid(D48C96CF-BC77-44f3-A350-6F1450D7B05C)]
+interface koIPHPConfigurator : nsISupports {
+    /* all these functions return an error string, it is empty if
+       the function succeeds */
+    wstring configureDebugger(in wstring executable, 
+                              in wstring oldini,
+                              in wstring inipath,
+                              in wstring extensiondir);
+    wstring configureDebuggerEx(in koIPHPInfoEx phpInfoEx,
+                              in wstring inipath,
+                              in wstring extensiondir);
+    wstring autoConfigure(in koIPHPInfoEx phpInfoEx);
+};
+

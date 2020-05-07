@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="less://komodo/skin/global/global.less"?>
+<?xml-stylesheet href="chrome://services/skin/setup.css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://services/locale/sso.dtd">
+<dialog id="komodo-services-setup-dialog"
+        windowtype="KomodoServices:AccountSetup"
+        buttons="accept"
+        persist="height,width,screenX,screenY"
+        defaultButton="accept"
+        ondialogaccept="setupWindow.doLogin();return false"
+        buttonlabelaccept="Login"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml">
+    <script src="chrome://services/content/setup.js"
+            type="application/javascript"/>
+
+    <vbox class="setup-content-vbox" flex="1">
+        <vbox align="center">
+          <label class="setup-header">&account_setup_header;</label>
+        </vbox>
+        <grid flex="1">
+          <columns>
+            <column/>
+            <column flex="1" style="-moz-margin-end: 2px"/>
+          </columns>
+          <rows>
+            <row id="account-data-row" align="center">
+              <label id="email-label"
+                     value="Email Address"/>
+              <textbox id="email-field"/>
+            </row>
+            <row id="account-feedback-row" align="center" hidden="true">
+              <spacer/>
+              <hbox>
+                <image class="statusIcon"/>
+                <label class="status" value=" "/>
+              </hbox>
+            </row>
+            <row id="password-row" align="center">
+              <label id="password-label"
+                     value="Password"/>
+              <textbox id="password-field"
+                       type="password"/>
+            </row>
+            <row id="password-feedback-row"  align="center" hidden="true">
+              <hbox>
+                <image class="statusIcon"/>
+                <label class="status" value=" "/>
+              </hbox>
+            </row>
+            <row id="login-feedback-row">
+              <spacer/>
+              <hbox>
+                <label id="label-login-status" />
+                <image id="throbber-login-status" src="chrome://global/skin/icons/loading_16.png"/>
+            </hbox>
+            </row>
+          </rows>
+        </grid>
+        <vbox align="center" style="padding-top:1em;" flex="1">
+            <description style="text-align:center;width:500px;">
+              &setup_enter_data_label;
+              &setup_no_account_label;
+              <span class="text-link" style="display:inline" onclick="window.openUILinkIn('https://account.activestate.com/settings/')">&setup_create_account_label;</span>
+              &setup_forgot_password_label;
+              <span class="text-link" style="display:inline" onclick="window.openUILinkIn('https://account.activestate.com/settings/')">&setup_reset_password_label;</span>
+            </description>
+        </vbox>
+    </vbox>
+    <hbox class="buttons-hbox" pack="center">
+        <button id="button-login"
+                label="&setup_login;"
+                dlgtype="accept"
+                disabled="true"/>
+        <button id="button-reset"
+                label="&setup_reset;"
+                hidden="true"
+                oncommand="setupWindow.doResetSSO()"/>
+        <button id="button-close"
+                label="&setup_close;"
+                oncommand="window.close()"/>
+    </hbox>
+</dialog>

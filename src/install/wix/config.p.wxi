@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <!-- Conditional values (i.e. upon which WiX preprocessor conditional
+       statements key) -->
+  <!-- Is this a final or a pre-release version of Komodo: "yes" or "no" -->
+  <?define IsPreReleaseVersion = "PP_MSI_IS_PRE_RELEASE_VERSION" ?>
+  <?define ProductType = "PRODUCT_TYPE" ?> <!-- e.g., ide -->
+  <?define ProductTagLine = "PP_PRODUCT_TAG_LINE" ?>
+  <?define MozMajorVersion = "PP_MOZ_MAJOR_VERSION" ?> <!-- string, e.g. "17" -->
+  <?define KomodoMajorVersion = "PP_VER_MAJOR" ?> <!-- string, e.g. "8" -->
+  <?define KomodoUpdateChannel = "PP_UPDATE_CHANNEL" ?> <!-- string, e.g. "nightly" -->
+
+  <?define WithHTTPInspector = "PP_MSI_AVEC_HTTP_INSPECTOR" ?> <!-- yes|no -->
+  <?define WithCodeBrowser = "PP_MSI_AVEC_CODE_BROWSER" ?> <!-- yes|no -->
+  <?define WithAPIBrowser = "PP_MSI_AVEC_API_BROWSER" ?> <!-- yes|no -->
+  <?define WithDebugging = "PP_MSI_AVEC_DEBUGGING" ?> <!-- yes|no -->
+  <?define WithProfiling = "PP_MSI_AVEC_PROFILING" ?> <!-- yes|no -->
+  <?define WithProjectManager = "PP_MSI_AVEC_PROJECT_MANAGER" ?> <!-- yes|no -->
+  <?define WithSCC = "PP_MSI_AVEC_SCC" ?> <!-- yes|no -->
+  <?define WithRx = "PP_MSI_AVEC_RX" ?> <!-- yes|no -->
+  <?define WithSharedSupport = "PP_MSI_AVEC_SHARED_SUPPORT" ?> <!-- yes|no -->
+  <?define WithPDKIntegration = "PP_MSI_AVEC_PDK_INTEGRATION" ?> <!-- yes|no -->
+  <?define WithTDKIntegration = "PP_MSI_AVEC_TDK_INTEGRATION" ?> <!-- yes|no -->
+  <?define WithDatabaseExplorer = "PP_MSI_AVEC_DATABASE_EXPLORER" ?> <!-- yes|no -->
+  <?define WithPublishing = "PP_MSI_AVEC_PUBLISHING" ?> <!-- yes|no -->
+  <?define WithSSO = "PP_MSI_AVEC_SSO" ?> <!-- yes|no -->
+  <?define WithCollaboration = "PP_MSI_AVEC_COLLABORATION" ?> <!-- yes|no -->
+  <?define WithStackato = "PP_MSI_AVEC_STACKATO" ?> <!-- yes|no -->
+  <?define WithWatchdogFSNotifications = "PP_MSI_AVEC_WATCHDOG_FS_NOTIFICATIONS" ?> <!-- yes|no -->
+
+  <!-- Basic configuration data -->
+  <?define ProductName = "PP_MSI_PRODUCT_NAME" ?>
+  <?define InstallName = "PP_MSI_INSTALL_NAME" ?>
+  <?define KomodoPrettyId = "PP_MSI_KOMODO_PRETTY_ID" ?>
+  <?define KomodoId = "PP_MSI_KOMODO_ID" ?>
+  <?define KomodoVersion = "PP_MSI_KOMODO_VERSION" ?>
+  <?define KomodoRegistryId = "PP_MSI_REGISTRY_ID" ?>
+  <?if $(var.ProductType) = "edit" ?>
+    <?define ProductURL = "https://www.activestate.com/komodo-edit" ?>
+  <?else ?>
+    <?define ProductURL = "https://www.activestate.com/komodo-ide" ?>
+  <?endif ?>
+  <?define UninstallText = "Modify or Uninstall Komodo" ?>
+  <?define VccrtMsmPath = "PP_MSI_VCCRT_MSM_PATH" ?>
+  <?define VccrtPolicyMsmPath = "PP_MSI_VCCRT_POLICY_MSM_PATH" ?>
+
+  <?if $(var.IsPreReleaseVersion) = "yes" ?>
+    <?define InstallLevel = "500" ?>  <!-- skip some features by default -->
+  <?else ?>
+    <?define InstallLevel = "1000" ?> <!-- install everything by default -->
+  <?endif ?>
+</Include>
+

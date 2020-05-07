@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<overlay id="PDKPrefsOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <treeitem id="perlItem" container="true"> 
+        <treechildren id="perlItemChildren" flex="1">
+            <treeitem container="false" id="PDKSettings">
+                <treerow>
+                    <treecell class="treecell-indent"
+                              url="chrome://perldevkit/content/prefs.xul"
+                              label="PDK"/>
+                </treerow>
+            </treeitem>
+        </treechildren>
+    </treeitem>
+</overlay>

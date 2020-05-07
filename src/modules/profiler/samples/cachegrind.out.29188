@@ -1,0 +1,4674 @@
+desc: I1 cache:         32768 B, 64 B, 8-way associative
+desc: D1 cache:         32768 B, 64 B, 8-way associative
+desc: L2 cache:         2097152 B, 64 B, 8-way associative
+cmd: pypy-c-49349-generation ./translate.py --batch targetrpystonedalone
+events: Ir I1mr I2mr Dr D1mr D2mr Dw D1mw D2mw
+fl=???
+fn=(below main)
+0 64 6 5 19 0 0 26 0 0
+fn=::pypy_g_LL_stack_too_big_(void)
+0 67671140 0 0 16917785 0 0 16917785 0 0
+fn=::pypy_g_get_errno_(void)
+0 22492 643 16 5623 0 0 5623 0 0
+fn=???
+0 3258169 26220 3013 2444509 21271 4679 174193 2844 590
+fn=LL_stack_too_big
+0 287602365 281 38 101506712 5164 14 33835581 0 0
+fn=LL_strtod_formatd
+0 68 6 3 24 2 1 24 0 0
+fn=PyObject_Free
+0 677877 5830 46 230198 3795 85 151622 74 8
+fn=PyObject_Malloc
+0 637966 5234 94 192134 5912 322 194586 978 74
+fn=RPyString_FromString
+0 100 0 0 24 0 0 48 0 0
+fn=RPyThreadTLS_Create
+0 13 1 1 3 0 0 4 0 0
+fn=RPython_StartupCode
+0 7 1 1 2 0 0 2 0 0
+fn=_Exit
+0 3 1 1 2 0 0 1 0 0
+fn=_IO_default_xsputn
+0 72 6 3 24 0 0 20 0 0
+fn=_IO_setb
+0 48 4 2 20 0 0 12 0 0
+fn=_LL_stack_growing_direction
+0 21 0 0 6 0 0 4 0 0
+fn=_RPyRaiseSimpleException
+0 2674 37 6 764 0 0 1337 0 0
+fn=__close_nocancel
+0 10248 1191 170 3843 332 0 1281 0 0
+fn=__cxa_atexit
+0 27 2 2 8 0 0 9 0 0
+fn=__cxa_finalize
+0 304 4 4 104 0 0 72 0 0
+fn=__default_morecore
+0 33 2 2 9 0 0 9 0 0
+fn=__errno_location
+0 53504 475 54 26752 763 98 13376 0 0
+fn=__fxstat64
+0 102 6 4 36 0 0 24 0 0
+fn=__libc_csu_init
+0 21 1 1 5 0 0 6 0 0
+fn=__libc_dl_error_tsd
+0 8 1 1 4 1 0 2 0 0
+fn=__libc_memalign
+0 2311 4 4 691 0 0 533 6 6
+fn=__libc_pthread_init
+0 397 3 3 112 4 0 65 6 6
+fn=__libc_sigaction
+0 236 11 11 64 2 1 52 0 0
+fn=__lxstat64
+0 974 114 17 343 39 0 229 1 0
+fn=__printf_fp
+0 1593 125 63 568 15 8 283 13 0
+fn=__pthread_initialize_minimal
+0 170 14 14 32 6 1 68 8 2
+fn=__pthread_mutex_unlock_usercnt
+0 663 12 12 221 4 2 136 1 0
+fn=__read_nocancel
+0 17690 932 103 10614 395 0 3538 0 0
+fn=__register_atfork
+0 100 3 3 27 4 2 22 0 0
+fn=__write_nocancel
+0 950 93 49 570 28 0 190 0 0
+fn=__xstat64
+0 139052 1549 35 44778 1114 16 31726 454 0
+fn=_dl_addr
+0 63039 12 12 25719 752 546 4494 1 0
+fn=_dl_allocate_tls_init
+0 93 8 8 35 4 0 26 1 0
+fn=_dl_debug_state
+0 8 1 1 4 0 0 2 0 0
+fn=_dl_get_tls_static_info
+0 12 1 1 5 0 0 5 0 0
+fn=_pthread_cleanup_pop_restore
+0 17 1 1 7 0 0 3 0 0
+fn=_pthread_cleanup_push_defer
+0 21 2 2 8 1 1 7 0 0
+fn=_setjmp
+0 16 2 2 5 0 0 7 0 0
+fn=brk
+0 57 2 2 18 1 0 15 1 0
+fn=calloc
+0 624 2 2 168 0 0 168 1 1
+fn=close
+0 2610 1200 97 1299 282 0 6 0 0
+fn=closedir
+0 114 12 8 30 0 0 42 0 0
+fn=dcgettext
+0 740 74 10 222 0 0 370 0 0
+fn=exit
+0 55 4 4 14 3 3 13 0 0
+fn=exp
+0 34 2 2 11 4 2 9 0 0
+fn=fcntl
+0 192 12 8 60 2 0 42 0 0
+fn=finite
+0 3612 213 80 1204 0 0 0 0 0
+fn=free
+0 46041 1334 45 13919 2483 37 9632 15 0
+fn=frexp
+0 1974 225 96 470 0 0 188 0 0
+fn=get_environ
+0 5 0 0 3 0 0 1 0 0
+fn=get_errno
+0 43099 738 41 18471 0 0 12314 0 0
+fn=getcwd
+0 105 9 6 30 2 0 21 0 0
+fn=getenv
+0 11523 156 23 4699 578 116 550 0 0
+fn=getpagesize
+0 22 1 1 8 1 0 4 0 0
+fn=getpid
+0 10 2 2 4 2 0 0 0 0
+fn=getrlimit
+0 17 2 2 6 0 0 4 0 0
+fn=gettimeofday
+0 18 2 2 8 2 0 2 0 0
+fn=hypot
+0 1512 112 40 504 112 56 616 0 0
+fn=ioctl
+0 1140 228 74 684 91 0 228 0 0
+fn=isatty
+0 2394 266 82 532 0 0 798 0 0
+fn=isinf
+0 38 2 1 10 0 0 4 0 0
+fn=isnan
+0 34 4 2 12 0 0 4 0 0
+fn=ldexp
+0 11004 124 51 2320 0 0 3264 0 0
+fn=localeconv
+0 202 14 7 126 8 4 54 2 1
+fn=log
+0 62 2 2 18 0 0 18 0 0
+fn=log10
+0 1500 82 18 450 48 16 450 0 0
+fn=main
+0 105 4 4 22 2 1 43 0 0
+fn=malloc
+0 50697 1318 52 15415 3363 73 9038 1 1
+fn=memcpy
+0 49470788 1485 446 30012858 874943 499263 20283893 1268511 1267750
+fn=mempcpy
+0 585 39 6 195 0 0 39 0 0
+fn=memset
+0 164012 4 4 24 1 0 163940 10241 10241
+fn=mkdir
+0 9 2 2 4 1 0 1 0 0
+fn=mmap
+0 161 6 6 84 3 0 35 3 1
+fn=modf
+0 4864 492 176 1206 0 0 2000 5 0
+fn=munmap
+0 27 2 2 12 1 1 3 0 0
+fn=op_int_overflowed
+0 1337 39 6 382 0 0 573 0 0
+fn=open
+0 60 6 5 36 4 0 12 0 0
+fn=open64
+0 43836 3132 147 12881 1609 18 10336 4 4
+fn=opendir
+0 210 18 12 42 0 0 78 0 0
+fn=pow
+0 47 5 5 13 0 0 15 0 0
+fn=pthread_getspecific
+0 21 2 2 7 1 0 4 0 0
+fn=pthread_key_create
+0 40 3 3 11 1 0 11 0 0
+fn=pthread_mutex_lock
+0 680 14 14 255 4 3 136 0 0
+fn=pthread_mutex_unlock
+0 102 2 2 34 0 0 17 0 0
+fn=pthread_rwlock_rdlock
+0 1628 102 12 666 51 8 148 0 0
+fn=pthread_rwlock_unlock
+0 1850 74 12 740 0 0 222 0 0
+fn=pthread_setspecific
+0 30 3 3 10 0 0 8 1 0
+fn=pypy_g_ASTVisitor_default
+0 627459 403 62 263883 2692 0 181788 0 0
+fn=pypy_g_ASTVisitor_visitName
+0 16159 248 21 6215 0 0 3729 0 0
+fn=pypy_g_ASTVisitor_visitSlice
+0 240 9 4 88 0 0 72 0 0
+fn=pypy_g_ASTVisitor_visitSubscript
+0 338 14 6 130 0 0 78 0 0
+fn=pypy_g_AbstractArguments_match_signature
+0 26428212 697174 90 9305442 257635 3315 8960796 85 0
+fn=pypy_g_AbstractArguments_parse
+0 11717964 130989 26 4480398 12 1 4825044 11 0
+fn=pypy_g_AbstractArguments_parse_into_scope
+0 10794902 496668 75 4280737 53804 1470 4280737 0 0
+fn=pypy_g_AbstractClassCode___init__
+0 2255 90 46 827 1 0 901 9 0
+fn=pypy_g_AbstractClassCode_get_module
+0 360 22 6 240 0 0 60 0 0
+fn=pypy_g_AbstractFunctionCode___init__
+0 124368 5343 513 47820 231 0 42611 334 28
+fn=pypy_g_AbstractFunctionCode_finish
+0 10851 598 46 3948 0 0 3780 62 2
+fn=pypy_g_AbstractFunctionCode_generateArgUnpack
+0 12342 756 87 5499 0 0 2314 6 0
+fn=pypy_g_AbstractFunctionCode_get_module
+0 1002 144 10 668 1 0 167 0 0
+fn=pypy_g_AbstractFunctionCode_unpackSequence
+0 2660 79 29 1064 0 0 741 6 0
+fn=pypy_g_Add_accept
+0 1122 22 15 396 0 0 319 0 0
+fn=pypy_g_Add_getChildNodes
+0 2376 23 15 759 11 0 957 17 0
+fn=pypy_g_AddressLinkedList_enlarge
+0 212 12 12 76 20 3 67 0 0
+fn=pypy_g_AddressLinkedList_shrink
+0 96 4 4 56 5 0 32 0 0
+fn=pypy_g_Alternative__match
+0 6661228 2339 206 2619577 6269 163 2240992 9087 0
+fn=pypy_g_And___init__
+0 133 14 6 56 0 0 49 0 0
+fn=pypy_g_And_accept
+0 525 45 13 182 0 0 133 0 0
+fn=pypy_g_And_getChildNodes
+0 903 27 13 273 2 0 315 6 0
+fn=pypy_g_ArgumentsFromValuestack__match_signature
+0 31948836 953883 411 15858908 128274 2855 5201717 6238 445
+fn=pypy_g_ArgumentsFromValuestack_fixedunpack
+0 4121196 210373 141 1733342 14 0 1086055 7063 0
+fn=pypy_g_ArgumentsFromValuestack_popfirst
+0 26796 2030 31 8526 0 0 8120 247 77
+fn=pypy_g_ArgumentsFromValuestack_unpack
+0 401525 36806 702 127148 6 0 147228 4194 176
+fn=pypy_g_ArgumentsPrepended__match_signature
+0 21965719 564059 87 10091564 182664 4264 7208260 0 0
+fn=pypy_g_Arguments__match_signature
+0 38495175 1564811 1497 17512677 32214 732 10038659 55774 3029
+fn=pypy_g_Arguments__unpack
+0 4224522 248239 605 1349594 517 51 1679486 4469 303
+fn=pypy_g_Arguments_firstarg
+0 3234 152 2 1540 0 0 616 0 0
+fn=pypy_g_Arguments_fixedunpack
+0 37419 2901 229 9836 0 0 14730 0 0
+fn=pypy_g_Arguments_popfirst
+0 783237 50809 369 240996 0 0 301245 6504 319
+fn=pypy_g_AssAttr_accept
+0 2040 53 30 696 2 1 528 0 0
+fn=pypy_g_AssAttr_getChildNodes
+0 2928 32 24 816 3 0 1200 19 0
+fn=pypy_g_AssName_accept
+0 12051 106 14 5562 97 8 4635 0 0
+fn=pypy_g_AssName_getChildNodes
+0 20536 244 43 4832 0 0 6040 403 42
+fn=pypy_g_AssTuple_accept
+0 1029 81 48 350 5 3 219 0 0
+fn=pypy_g_AssTuple_getArgNames
+0 2489 83 30 1007 19 0 513 23 0
+fn=pypy_g_AssTuple_getChildNodes
+0 3655 58 37 1105 4 0 1275 22 0
+fn=pypy_g_Assert_accept
+0 100 10 5 35 0 0 27 0 0
+fn=pypy_g_Assert_getChildNodes
+0 249 16 6 84 3 0 75 1 0
+fn=pypy_g_Assign_accept
+0 14752 340 48 5058 10 0 4041 0 0
+fn=pypy_g_Assign_getChildNodes
+0 21780 128 30 7920 84 0 7260 152 2
+fn=pypy_g_AstBuilder___init__
+0 14478 1016 124 4064 0 0 6096 128 20
+fn=pypy_g_AstBuilder_alternative
+0 971441 756 48 275196 2525 0 404388 2 0
+fn=pypy_g_AstBuilder_eval_number
+0 68933 762 30 22013 1202 5 22638 0 0
+fn=pypy_g_AstBuilder_is_basestring_const
+0 563 63 15 183 49 0 80 0 0
+fn=pypy_g_AstBuilder_push_rule
+0 4183039 2121 59 1700319 101 0 1489508 72929 2711
+fn=pypy_g_AstBuilder_push_tok
+0 859751 802 96 348304 64 0 322731 11769 591
+fn=pypy_g_AstBuilder_sequence
+0 3646668 506 49 1224284 12 0 1376488 0 0
+fn=pypy_g_AugAssign_accept
+0 297 27 19 102 0 0 81 0 0
+fn=pypy_g_AugAssign_getChildNodes
+0 438 18 12 138 2 0 174 3 1
+fn=pypy_g_AugLoadVisitor_visitName
+0 39 3 2 18 1 0 15 0 0
+fn=pypy_g_AugStoreVisitor_visitName
+0 42 6 4 21 0 0 15 0 0
+fn=pypy_g_BINARY_POWER_star2
+0 500 41 12 180 0 0 180 0 0
+fn=pypy_g_BUILD_CLASS_star2
+0 78516 3951 89 26803 565 2 32566 199 1
+fn=pypy_g_BUILD_SLICE_star1
+0 653751 38826 87 209846 0 0 201775 2999 137
+fn=pypy_g_BadFutureParser_visitFrom
+0 160 4 4 60 11 0 20 0 0
+fn=pypy_g_BadFutureParser_visitModule
+0 13150 620 61 4703 65 0 2743 0 0
+fn=pypy_g_BaseStringFormatter_format_float
+0 234 14 7 54 10 5 50 0 0
+fn=pypy_g_BaseStringFormatter_nextinputvalue
+0 63918 1758 37 31959 0 0 10653 0 0
+fn=pypy_g_BaseStringFormatter_std_wp_int
+0 11970 214 18 3990 107 21 2793 0 0
+fn=pypy_g_Block___init__
+0 238634 2343 209 72311 140 14 99174 3129 210
+fn=pypy_g_Block_addNext
+0 37948 529 39 17184 23 0 11456 0 0
+fn=pypy_g_Block_emit
+0 610331 963 127 216214 178 17 191483 1790 91
+fn=pypy_g_Block_get_children
+0 140181 739 70 56624 1022 0 41499 0 0
+fn=pypy_g_BufferingInputStream_close
+0 11946 1078 39 4887 467 24 3258 0 0
+fn=pypy_g_BufferingInputStream_read
+0 203154 6492 392 69804 1417 7 70942 1785 45
+fn=pypy_g_BufferingInputStream_readall
+0 66481 3602 274 24036 1249 5 24603 390 10
+fn=pypy_g_BufferingInputStream_readline
+0 430 34 17 140 2 0 136 0 0
+fn=pypy_g_BufferingInputStream_try_to_find_file_descriptor
+0 1342 122 14 549 57 6 366 0 0
+fn=pypy_g_BufferingOutputStream_close
+0 1248 72 23 504 41 2 384 0 0
+fn=pypy_g_BufferingOutputStream_flush
+0 28 3 3 11 2 1 4 0 0
+fn=pypy_g_BufferingOutputStream_try_to_find_file_descripto
+0 506 46 7 207 23 5 138 0 0
+fn=pypy_g_BufferingOutputStream_write
+0 35305 1416 26 14480 151 6 9963 2 0
+fn=pypy_g_BuiltinActivation_UwS_ClassMethod_ObjSpace_W_Roo
+0 50966 4411 113 19487 0 0 17988 0 0
+fn=pypy_g_BuiltinActivation_UwS_Module_W_Root_W_Root__run_
+0 102 9 6 39 0 0 36 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root_W_Root(long double,  __restrict)
+0 671604 25596 11 391769 0 0 167901 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root_W_Root_W_R
+0 1765020 65563 18 1059012 3 0 588340 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root_W_Root_W_R_1
+0 424439 10254 23 249670 1 0 149802 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root_W_Root_W_R_2
+0 6140 584 15 3070 0 0 2456 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root_W_Root_W_R_3
+0 2496 128 28 988 0 0 936 26 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root_W_Root_W_R_4
+0 3068 248 21 1416 102 1 1062 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root_W_Root_w_a
+0 13552 965 1 6776 0 0 4840 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root__run_UWS_O
+0 16110 1346 1 9666 0 0 3222 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root_int_W_Root_1
+0 7980 687 224 3306 67 32 2508 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root_int_int_in
+0 19152 1071 212 8316 107 0 7686 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root_int_int_in_1
+0 120848 7968 18 50464 2142 7 37184 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root_str__run_U
+0 920 69 21 345 0 0 253 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_W_Root_str_str_in
+0 14012 868 63 5704 253 12 5208 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace__run_UWS_ObjSpace
+0 12 2 2 6 0 0 2 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_int_W_Root__run_U
+0 92 4 4 36 3 1 22 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_int__run_UWS_ObjS
+0 3264 272 77 1496 138 29 680 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_int_int__run_UWS_
+0 1512 64 7 672 22 1 392 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_int_str_int__run_
+0 74 5 5 28 1 0 23 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_str_W_Root_W_Root
+0 481 41 13 182 1 1 156 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_str__run_UWS_ObjS
+0 4940 492 21 1976 0 0 1235 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_str_args_w__run_U
+0 48 4 4 16 0 0 16 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_str_int__run_UWS_
+0 58 4 4 23 0 0 17 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_str_int_int__run_
+0 198 14 7 72 4 1 62 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_str_str_W_Root(long double)
+0 348 22 20 138 0 0 114 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_str_str__run_UWS_
+0 5967 468 173 2223 0 0 1872 0 0
+fn=pypy_g_BuiltinActivation_UwS_ObjSpace_str_str_int__run_
+0 6192 518 81 2322 103 13 2150 0 0
+fn=pypy_g_BuiltinActivation_UwS_W_MD5__run_UWS_W_MD5
+0 1242 115 11 345 0 0 345 12 2
+fn=pypy_g_BuiltinActivation_UwS_W_Property_ObjSpace_W_Root_1
+0 30314 2865 25 10544 0 0 7249 0 0
+fn=pypy_g_BuiltinActivation_UwS_W_Random_ObjSpace_W_Root__
+0 80 8 2 30 0 0 24 0 0
+fn=pypy_g_BuiltinActivation_UwS_W_Random_ObjSpace__run_UWS
+0 432 7 6 126 1 1 120 1 0
+fn=pypy_g_BuiltinActivation_UwS_W_State_int__run_UWS_W_Sta
+0 73040 3984 12 26560 2658 2 22576 0 0
+fn=pypy_g_BuiltinActivation_UwS_W_Stream_ObjSpace__run_UWS
+0 9600 619 110 4000 2 0 2800 0 0
+fn=pypy_g_BuiltinActivation_UwS_W_Stream_ObjSpace_str__run
+0 45872 1470 168 15616 0 0 15616 0 0
+fn=pypy_g_BuiltinActivation_UwS_W_Super_ObjSpace_str__run_
+0 1784543 109730 250 581014 0 0 622515 0 0
+fn=pypy_g_BuiltinActivation_UwS_W_Weakref__run_UWS_W_Weakr
+0 28 2 2 12 1 0 6 0 0
+fn=pypy_g_BuiltinCode0_fastcall_0
+0 28460 1136 55 9961 62 11 5692 0 0
+fn=pypy_g_BuiltinCode1_fastcall_1
+0 144194963 252243 60 49875071 164361 700 47047341 24673 24
+fn=pypy_g_BuiltinCode2_fastcall_2
+0 259956547 268356 82 92566935 222730 893 91600016 71549 216
+fn=pypy_g_BuiltinCode3_fastcall_3
+0 99155219 22910 99 36805681 27428 223 36813713 201820 548
+fn=pypy_g_BuiltinCode4_fastcall_4
+0 352518 17433 33 135500 5021 55 135660 476 43
+fn=pypy_g_BuiltinCodePassThroughArguments0_funcrun
+0 2827545 57720 27 1050231 17314 186 807870 0 0
+fn=pypy_g_BuiltinCodePassThroughArguments1_funcrun
+0 41304088 242629 176 16079298 26999 71 15463902 11598 4
+fn=pypy_g_BuiltinCode_funcrun
+0 17539322 223800 223 6760550 218811 2339 6519000 811 3
+fn=pypy_g_BuiltinFunction_descr_function_repr
+0 2412 180 25 576 0 0 1008 13 1
+fn=pypy_g_CALL_FUNCTION_star1
+0 25727745 471813 87 7410220 34049 34 7263953 35296 40
+fn=pypy_g_CALL_LIKELY_BUILTIN_star1
+0 52033523 999497 297 18454761 331891 1436 10263289 3414 0
+fn=pypy_g_CALL_METHOD_star1
+0 26678798 677674 90 8014059 82779 284 7824172 76437 263
+fn=pypy_g_COMPARE_OP_star1
+0 36707065 860897 247 12920990 4431 7 11080447 895 0
+fn=pypy_g_CallFunc_accept
+0 40752 477 44 14150 9 4 9622 0 0
+fn=pypy_g_CallFunc_getChildNodes
+0 156756 729 56 52662 541 0 52170 604 40
+fn=pypy_g_CheckSignalAction_perform
+0 4107175 223216 26 1478583 0 0 1314296 130 0
+fn=pypy_g_ClassCodeGenerator___init__
+0 6871 368 131 2513 6 0 2696 27 0
+fn=pypy_g_ClassMethod_descr_classmethod__new__
+0 1508 40 25 416 0 0 546 8 0
+fn=pypy_g_ClassMethod_descr_classmethod_get
+0 59960 4494 106 19487 0 0 19487 727 42
+fn=pypy_g_Class_accept
+0 1624 115 53 574 1 0 468 0 0
+fn=pypy_g_Class_getChildNodes
+0 3314 66 23 1166 2 0 1074 21 0
+fn=pypy_g_CodeGenerator___init__
+0 25071 851 97 8571 269 29 8880 167 19
+fn=pypy_g_CodeGenerator__implicitNameOp
+0 360 9 8 120 0 0 132 2 0
+fn=pypy_g_CodeGenerator__nameOp
+0 165199 1666 206 54458 137 14 57435 628 32
+fn=pypy_g_CodeGenerator__resolveDots
+0 510 15 6 204 0 0 170 0 0
+fn=pypy_g_CodeGenerator__visitAssSequence
+0 1365 52 24 563 0 0 423 3 0
+fn=pypy_g_CodeGenerator__visitFuncOrLambda
+0 50730 2837 317 17406 101 0 19183 352 25
+fn=pypy_g_CodeGenerator__visitListCompFor
+0 1116 76 72 426 3 0 476 6 0
+fn=pypy_g_CodeGenerator__visitSlice
+0 1181 47 36 362 8 0 441 0 0
+fn=pypy_g_CodeGenerator__visitSubscript
+0 1780 83 25 702 33 0 598 0 0
+fn=pypy_g_CodeGenerator__visitTest
+0 4340 155 78 1752 10 0 1820 14 0
+fn=pypy_g_CodeGenerator_binaryOp
+0 1525 58 21 650 37 0 575 0 0
+fn=pypy_g_CodeGenerator_check_simple_call_args
+0 27088 355 26 9921 830 0 2283 0 0
+fn=pypy_g_CodeGenerator_delName
+0 305 11 6 85 0 0 115 0 0
+fn=pypy_g_CodeGenerator_emit_builtin_call
+0 28657 409 86 10050 268 0 8828 23 0
+fn=pypy_g_CodeGenerator_emit_method_call
+0 27592 373 155 10257 105 0 7747 64 1
+fn=pypy_g_CodeGenerator_getCode
+0 889 160 16 381 0 0 254 0 0
+fn=pypy_g_CodeGenerator_storeName
+0 10189 125 17 3101 0 0 4430 0 0
+fn=pypy_g_CodeGenerator_visitAssAttr
+0 2168 108 43 748 39 1 672 11 0
+fn=pypy_g_CodeGenerator_visitAssName
+0 3992 66 16 1646 19 0 1327 1 0
+fn=pypy_g_CodeGenerator_visitAssert
+0 625 40 39 231 3 0 260 4 0
+fn=pypy_g_CodeGenerator_visitAssign
+0 25668 448 67 10092 303 0 8412 80 1
+fn=pypy_g_CodeGenerator_visitAugAssign
+0 594 39 32 210 2 0 228 7 1
+fn=pypy_g_CodeGenerator_visitCallFunc
+0 89870 1377 131 33189 237 10 27134 220 15
+fn=pypy_g_CodeGenerator_visitClass
+0 14380 651 365 5023 36 0 5706 101 0
+fn=pypy_g_CodeGenerator_visitCompare
+0 5772 137 62 2236 57 0 2210 35 0
+fn=pypy_g_CodeGenerator_visitConst
+0 41834 158 46 14254 409 0 15850 221 1
+fn=pypy_g_CodeGenerator_visitContinue
+0 360 30 30 126 0 0 130 2 0
+fn=pypy_g_CodeGenerator_visitDict
+0 1602 33 20 651 17 0 624 2 0
+fn=pypy_g_CodeGenerator_visitDiscard
+0 19319 233 41 6844 202 0 6235 104 0
+fn=pypy_g_CodeGenerator_visitExpression
+0 636 45 30 219 0 0 255 3 0
+fn=pypy_g_CodeGenerator_visitFor
+0 5154 330 200 2084 18 2 2205 23 0
+fn=pypy_g_CodeGenerator_visitFrom
+0 6027 137 57 2166 34 0 2206 31 0
+fn=pypy_g_CodeGenerator_visitFunction
+0 7234 567 34 2800 8 0 2955 1 0
+fn=pypy_g_CodeGenerator_visitGetattr
+0 21627 734 83 7743 88 0 7476 107 11
+fn=pypy_g_CodeGenerator_visitIf
+0 65280 2066 438 26421 279 0 27569 250 2
+fn=pypy_g_CodeGenerator_visitImport
+0 3150 124 64 1180 14 0 1246 10 0
+fn=pypy_g_CodeGenerator_visitKeyword
+0 5922 139 27 2079 33 0 2268 43 1
+fn=pypy_g_CodeGenerator_visitList
+0 2370 46 27 1002 54 0 707 12 0
+fn=pypy_g_CodeGenerator_visitListComp
+0 1330 98 98 502 10 0 540 8 0
+fn=pypy_g_CodeGenerator_visitModule
+0 32547 2127 361 10938 33 0 13195 235 26
+fn=pypy_g_CodeGenerator_visitName
+0 34578 317 49 12665 210 0 10540 26 2
+fn=pypy_g_CodeGenerator_visitPrintnl
+0 426 11 11 159 6 0 129 2 0
+fn=pypy_g_CodeGenerator_visitRaise
+0 1626 110 39 533 15 0 533 16 2
+fn=pypy_g_CodeGenerator_visitReturn
+0 15254 710 99 5249 50 0 5257 100 7
+fn=pypy_g_CodeGenerator_visitSlice
+0 225 5 3 81 0 0 90 0 0
+fn=pypy_g_CodeGenerator_visitSubscript
+0 650 18 10 234 0 0 260 0 0
+fn=pypy_g_CodeGenerator_visitTryExcept
+0 21847 1039 406 9038 70 0 9533 137 2
+fn=pypy_g_CodeGenerator_visitTryFinally
+0 676 46 44 260 4 0 275 3 0
+fn=pypy_g_CodeGenerator_visitTuple
+0 1475 52 30 620 32 0 451 5 0
+fn=pypy_g_Compare_accept
+0 1872 66 15 650 0 0 442 0 0
+fn=pypy_g_Compare_getChildNodes
+0 7566 58 24 2886 132 0 2184 38 0
+fn=pypy_g_Const_accept
+0 30086 65 20 10374 18 5 6224 0 0
+fn=pypy_g_Const_getChildNodes
+0 26469 44 15 6228 0 0 7785 447 0
+fn=pypy_g_Continue_accept
+0 172 17 10 60 0 0 44 0 0
+fn=pypy_g_Continue_getChildNodes
+0 96 8 4 24 0 0 30 4 0
+fn=pypy_g_DELETE_ATTR_star1
+0 140686 7652 48 70343 2572 0 37877 0 0
+fn=pypy_g_DELETE_FAST_star1
+0 308850 18513 68 117150 2111 1 53250 0 0
+fn=pypy_g_DELETE_NAME_star1
+0 2432 133 51 1088 13 0 768 0 0
+fn=pypy_g_DFA_recognize
+0 4867958 1165 124 1421676 824 84 2285986 11396 2015
+fn=pypy_g_Dict_accept
+0 300 22 10 105 0 0 81 0 0
+fn=pypy_g_Dict_getChildNodes
+0 2163 15 14 951 22 0 615 6 0
+fn=pypy_g_Discard_accept
+0 13744 93 15 4664 2 0 3420 0 0
+fn=pypy_g_Discard_getChildNodes
+0 36966 72 20 10302 252 0 15150 156 0
+fn=pypy_g_DiskFile_close
+0 3969 464 9 1701 0 0 1134 0 0
+fn=pypy_g_DiskFile_read
+0 7371 310 42 3159 0 0 2106 0 0
+fn=pypy_g_DiskFile_try_to_find_file_descriptor
+0 504 84 11 336 0 0 84 0 0
+fn=pypy_g_DiskFile_write
+0 5415 380 117 1615 1 1 1520 0 0
+fn=pypy_g_EXEC_STMT_star2
+0 24130 1987 161 7768 195 2 9026 149 1
+fn=pypy_g_EmptyDictImplementation_get
+0 366451 27019 54 102246 30 1 88316 64 0
+fn=pypy_g_EmptyDictImplementation_setitem
+0 5078868 228374 298 1692657 10523 0 2266217 21189 1011
+fn=pypy_g_EmptyDictImplementation_setitem_str
+0 161226 8538 182 52364 267 0 71656 522 34
+fn=pypy_g_EmptyIteratorImplementation_next_entry
+0 25550 4908 3 10220 0 0 5110 0 0
+fn=pypy_g_ExceptBlock_really_handle
+0 1366148 66212 127 558543 9441 28 419734 75 2
+fn=pypy_g_ExecutionContext___init__
+0 84 6 6 24 0 0 33 2 2
+fn=pypy_g_ExecutionContext__trace
+0 41210695 413369 39 18166782 53126 298 7714313 22 1
+fn=pypy_g_ExecutionContext_bytecode_trace
+0 334159158 149444 65 133236517 7377 56 67686124 25 0
+fn=pypy_g_ExecutionContext_call_trace
+0 7079488 99659 17 2178304 0 0 3812032 0 0
+fn=pypy_g_ExecutionContext_enter
+0 22785246 314435 84 10332628 69804 187 5423292 6713 4
+fn=pypy_g_ExecutionContext_return_trace
+0 7285068 60581 18 2601810 0 0 3642534 0 0
+fn=pypy_g_ExecutionContext_sys_exc_info
+0 55231 1890 50 15258 748 0 2835 0 0
+fn=pypy_g_ExpressionCodeGenerator___init__
+0 327 24 16 111 0 0 141 2 0
+fn=pypy_g_ExpressionCodeGenerator_get_module
+0 15 3 2 9 0 0 3 0 0
+fn=pypy_g_Expression_accept
+0 198 18 12 66 6 3 54 0 0
+fn=pypy_g_Expression_getChildNodes
+0 186 15 6 51 0 0 75 1 0
+fn=pypy_g_FOR_ITER_star0
+0 18076638 398684 88 7066902 4034 4 5964909 1728 0
+fn=pypy_g_FinallyBlock_cleanup
+0 33408 1833 27 14848 192 0 9280 1 0
+fn=pypy_g_FinallyBlock_really_handle
+0 118960 7811 37 47952 193 2 32608 10 2
+fn=pypy_g_FlowGraph___init__
+0 60230 2161 168 18386 0 0 24726 949 116
+fn=pypy_g_FlowGraph_emit
+0 63161 708 67 20621 55 0 24349 620 37
+fn=pypy_g_FlowGraph_emitop_block
+0 19388 372 41 7074 68 5 6812 113 2
+fn=pypy_g_FlowGraph_fixupOrderForward
+0 306313 5878 514 139018 173 14 101687 890 88
+fn=pypy_g_FlowGraph_fixupOrderHonorNext
+0 50084 1512 106 20714 70 0 12679 15 0
+fn=pypy_g_FlowGraph_getBlocksInOrder
+0 72621 1908 170 24789 61 0 22459 113 8
+fn=pypy_g_For_accept
+0 462 31 20 158 0 0 126 0 0
+fn=pypy_g_For_getChildNodes
+0 990 24 17 370 4 0 300 4 0
+fn=pypy_g_Frame_fast2locals
+0 266481 1585 93 96212 194 8 82173 865 65
+fn=pypy_g_Frame_locals2fast
+0 32610 2265 72 11821 28 0 11057 96 9
+fn=pypy_g_From_accept
+0 485 8 4 150 0 0 100 0 0
+fn=pypy_g_From_getChildNodes
+0 170 2 2 40 0 0 50 2 0
+fn=pypy_g_FunctionCodeGenerator___init__
+0 19305 1289 83 7590 40 0 6930 14 0
+fn=pypy_g_FunctionScope__use_var
+0 5598 161 24 2146 12 5 280 0 0
+fn=pypy_g_FunctionScope_add_param
+0 17425 453 47 5525 0 0 7225 0 0
+fn=pypy_g_Function___init__
+0 8118 595 38 3280 0 0 2706 95 9
+fn=pypy_g_Function_accept
+0 12173 619 46 4105 14 6 3236 0 0
+fn=pypy_g_Function_call_args
+0 2342592 89639 30 1171296 55071 326 878472 0 0
+fn=pypy_g_Function_descr_method__new__
+0 148192 9974 226 60016 370 34 57907 140 3
+fn=pypy_g_Function_fget_func_closure
+0 38252 2787 90 13879 10 0 11179 337 16
+fn=pypy_g_Function_fget_func_doc
+0 2222 228 108 840 226 117 344 0 0
+fn=pypy_g_Function_funccall_obj_valuestack
+0 28740969 1264156 541 10433140 411947 9944 8234076 94768 5394
+fn=pypy_g_Function_funccall_valuestack
+0 40587433 961152 669 16014967 360246 4525 9779071 26944 1319
+fn=pypy_g_Function_getChildNodes
+0 30008 1019 100 10536 31 0 9900 145 9
+fn=pypy_g_Function_getdict
+0 88845 6494 77 36920 1059 132 20924 0 0
+fn=pypy_g_Function_getweakref
+0 9012 117 5 6008 0 0 1502 0 0
+fn=pypy_g_Function_setdict
+0 6930 504 19 2268 0 0 2394 0 0
+fn=pypy_g_Function_setweakref
+0 3104 0 0 1232 11 3 1168 0 0
+fn=pypy_g_FutureAutomaton_consumeComment
+0 1092 6 3 477 2 0 143 0 0
+fn=pypy_g_FutureAutomaton_consumeDocstring
+0 18788 8 8 6850 0 0 1710 0 0
+fn=pypy_g_FutureAutomaton_consumeEmptyLine
+0 335 9 6 126 2 0 58 0 0
+fn=pypy_g_FutureAutomaton_start
+0 4805 256 37 1865 132 17 945 0 0
+fn=pypy_g_FutureFlags_get_flag_names
+0 9568 636 77 3701 1 0 2172 32 3
+fn=pypy_g_FutureParser_check_stmt
+0 7110 129 15 3210 146 0 1289 3 0
+fn=pypy_g_FutureParser_visitModule
+0 14634 496 63 5464 20 0 3954 0 0
+fn=pypy_g_GET_ITER_star2
+0 3532836 185460 103 1429826 2 0 1177796 0 0
+fn=pypy_g_GenerationGC_collect_nursery
+0 32006 2114 50 10642 3156 21 11408 290 1
+fn=pypy_g_GenerationGC_collect_oldrefs_to_nursery
+0 296803 1402 91 45012 16940 453 84400 71 0
+fn=pypy_g_GenerationGC_collect_roots_in_nursery
+0 3017103 1402 101 777427 2 0 803496 89 0
+fn=pypy_g_GenerationGC_invalidate_young_weakrefs
+0 256629 1164 64 120416 11655 91 24163 623 366
+fn=pypy_g_GenerationGC_malloc_fixedsize_clear
+0 409280 9211 47 161652 8477 1 88104 4424 216
+fn=pypy_g_GenerationGC_malloc_varsize_clear
+0 255233444 111512 132 82014996 582 11 56115732 1186326 77097
+fn=pypy_g_GenerationGC_remember_young_pointer
+0 4259862 2247 6 2737842 41 1 446460 0 0
+fn=pypy_g_GenerationGC_reset_young_gcflags
+0 2189 16 12 362 141 1 346 0 0
+fn=pypy_g_GenerationGC_scan_objects_just_copied_out_of_nur
+0 6157175 4 3 619514 111 0 3689667 1 0
+fn=pypy_g_GenerationGC_setup
+0 38 3 3 8 1 1 18 0 0
+fn=pypy_g_GenerationGC_trace_and_drag_out_of_nursery
+0 271142108 3483 153 137184938 727885 95061 20178369 303 1
+fn=pypy_g_GenerationGC_weakrefs_grow_older
+0 1103 24 24 460 27 1 155 7 3
+fn=pypy_g_GeneratorIterator_descr_next
+0 616673 75860 130 212695 6505 25 217934 1125 115
+fn=pypy_g_GetSetProperty_descr_property_get
+0 11052969 175316 37 4215151 6 0 3267956 24372 73
+fn=pypy_g_GetSetProperty_descr_property_set
+0 16926 1296 30 6510 0 0 6076 0 0
+fn=pypy_g_Getattr_accept
+0 36475 615 66 11673 1 1 8955 0 0
+fn=pypy_g_Getattr_getChildNodes
+0 66612 488 64 18564 127 0 27300 382 19
+fn=pypy_g_GrammarElement_match
+0 10678151 1466 138 3481830 3861 31 3045397 4350 208
+fn=pypy_g_GrammarElement_match_first_set
+0 43418783 646 60 14478618 137741 3783 10484959 3667 112
+fn=pypy_g_IMPORT_FROM_star1
+0 270538 13292 52 122260 1168 201 82160 39 4
+fn=pypy_g_IMPORT_NAME_star1
+0 1035022 57559 310 370495 7324 671 367666 3107 272
+fn=pypy_g_IMPORT_STAR_star2
+0 781 89 53 264 27 0 272 6 0
+fn=pypy_g_If_accept
+0 7770 156 61 2724 16 5 2106 0 0
+fn=pypy_g_If_getChildNodes
+0 30390 258 69 12324 245 0 9267 128 0
+fn=pypy_g_ImportRLock_acquire_lock
+0 201019 8643 66 68920 4167 38 40360 0 0
+fn=pypy_g_ImportRLock_release_lock
+0 163644 10746 83 54128 364 4 31077 0 0
+fn=pypy_g_Import_accept
+0 386 27 14 134 2 0 88 0 0
+fn=pypy_g_Import_getChildNodes
+0 340 6 3 80 0 0 100 9 0
+fn=pypy_g_IteratorImplementation_next
+0 3441204 67985 186 1339908 23396 121 589528 141 1
+fn=pypy_g_Keyword_accept
+0 4536 176 24 1575 0 0 1071 0 0
+fn=pypy_g_Keyword_getChildNodes
+0 11718 90 19 3213 44 0 4725 53 0
+fn=pypy_g_KleeneStar__match
+0 1013311 4020 295 372873 6287 231 340761 4081 25
+fn=pypy_g_LOAD_ATTR_star1
+0 50969021 353720 49 22981533 313976 9996 14996713 3683 4
+fn=pypy_g_LOAD_CLOSURE_star1
+0 509714 10743 77 239856 146 0 89962 24 1
+fn=pypy_g_LOAD_DEREF_star1
+0 4850509 43978 48 2359566 15962 386 1180015 13 0
+fn=pypy_g_LOAD_FAST_star1
+0 131589278 41717 132 57562640 45067 104 28802974 2851 8
+fn=pypy_g_LOAD_GLOBAL_star0
+0 899864 5920 22 408838 1471 36 266115 69 2
+fn=pypy_g_LOAD_GLOBAL_star1
+0 51637746 133451 35 23468225 479002 10274 15261091 2233 4
+fn=pypy_g_LOAD_NAME_star1
+0 463766 5447 31 192495 465 13 141362 8 0
+fn=pypy_g_LOOKUP_METHOD_star1
+0 19554130 452480 38 8817101 146485 4969 5753086 33 1
+fn=pypy_g_LambdaScope___init__
+0 84 5 5 24 1 1 39 0 0
+fn=pypy_g_Lambda___init__
+0 296 12 3 112 0 0 104 4 0
+fn=pypy_g_Lambda_accept
+0 88 9 5 30 0 0 24 0 0
+fn=pypy_g_Lambda_getChildNodes
+0 198 5 5 64 0 0 68 2 0
+fn=pypy_g_LineAddrTable_addCode3
+0 208587 1703 88 106404 171 3 53304 63 4
+fn=pypy_g_LineAddrTable_getTable
+0 70752 1356 86 23178 70 0 18312 167 11
+fn=pypy_g_LineAddrTable_nextLine
+0 65740 978 75 26564 138 2 15969 55 1
+fn=pypy_g_ListCompFor_accept
+0 120 8 7 44 0 0 36 0 0
+fn=pypy_g_ListCompFor_getChildNodes
+0 576 15 13 204 0 0 198 2 0
+fn=pypy_g_ListComp_accept
+0 200 25 10 70 0 0 54 0 0
+fn=pypy_g_ListComp_getChildNodes
+0 474 21 13 162 5 0 168 0 0
+fn=pypy_g_ListSlice_copyitems
+0 480 20 20 144 0 0 168 3 0
+fn=pypy_g_ListSlice_reverse
+0 1200 57 27 460 0 0 280 0 0
+fn=pypy_g_List_accept
+0 2000 44 19 700 3 1 540 0 0
+fn=pypy_g_List_getChildNodes
+0 2580 15 15 780 13 0 900 14 0
+fn=pypy_g_LoopBlock_really_handle
+0 119435 10705 139 49612 2955 25 20212 0 0
+fn=pypy_g_MAKE_CLOSURE_star1
+0 2791962 100249 610 1039328 19026 1864 1026482 16450 887
+fn=pypy_g_MAKE_FUNCTION_star1
+0 715927 16049 102 231167 99 0 305781 6615 295
+fn=pypy_g_Marshaller_atom_str
+0 343 5 5 126 1 1 105 0 0
+fn=pypy_g_Marshaller_atom_strlist
+0 239 5 5 88 0 0 72 0 0
+fn=pypy_g_Marshaller_put_list_w
+0 90 7 7 37 0 0 25 0 0
+fn=pypy_g_Marshaller_put_w_obj
+0 37 2 2 15 1 1 10 0 0
+fn=pypy_g_Marshaller_start
+0 88 4 4 22 1 1 40 1 0
+fn=pypy_g_MatchContext_push_new_context
+0 6040907 10650 38 2295143 14 0 2176517 68178 688
+fn=pypy_g_Member_descr_member_get
+0 11378360 98006 113 4188578 9491 2 3593062 1320 10
+fn=pypy_g_Member_typecheck
+0 21378240 184895 47 7811280 25386 31 7811280 21146 74
+fn=pypy_g_Method_call_args
+0 1283470 84278 141 441928 2 0 463778 8198 534
+fn=pypy_g_Method_descr_method_eq
+0 218 14 4 70 2 0 28 0 0
+fn=pypy_g_Method_descr_method_get
+0 54372 3940 180 17336 298 43 18912 0 0
+fn=pypy_g_Method_descr_method_getattribute
+0 67991 3035 236 18675 363 37 24509 17 0
+fn=pypy_g_Method_getweakref
+0 96 8 0 64 0 0 16 0 0
+fn=pypy_g_Method_setweakref
+0 38 4 2 14 0 0 16 0 0
+fn=pypy_g_MixedModule_get
+0 7297850 46936 38 2390675 13591 63 2264850 33746 1739
+fn=pypy_g_MixedModule_getdict
+0 756 119 0 504 0 0 126 0 0
+fn=pypy_g_MixedModule_getdictvalue
+0 762321 12534 9 326709 1517 45 217806 0 0
+fn=pypy_g_Mod_accept
+0 975 30 12 338 0 0 247 0 0
+fn=pypy_g_Mod_getChildNodes
+0 2847 20 18 897 8 0 1131 20 0
+fn=pypy_g_ModuleCodeGenerator___init__
+0 15068 996 138 5483 17 0 6348 71 11
+fn=pypy_g_ModuleCodeGenerator_get_module
+0 1385 145 12 831 0 0 277 0 0
+fn=pypy_g_Module___init__
+0 13697 1048 90 3930 0 0 4590 0 0
+fn=pypy_g_Module_accept
+0 12400 248 27 4960 496 47 3968 0 0
+fn=pypy_g_Module_descr_module__init__
+0 177 12 8 54 0 0 72 0 0
+fn=pypy_g_Module_descr_module__new__
+0 651 63 4 168 0 0 210 0 0
+fn=pypy_g_Module_getChildNodes
+0 7564 496 55 2108 0 0 3100 32 4
+fn=pypy_g_Module_getdict
+0 467328 22989 4 311552 0 0 77888 0 0
+fn=pypy_g_Module_getdictvalue
+0 1010269 14769 123 346444 480 30 275810 27 0
+fn=pypy_g_Module_startup
+0 116 9 8 27 0 0 52 1 0
+fn=pypy_g_MovingGCBase__compute_id
+0 13580264 37822 446 4649976 207389 32728 3345279 2177 73
+fn=pypy_g_MovingGCBase_id
+0 1623156 17733 55 701904 9103 10 394823 168 0
+fn=pypy_g_Mul_accept
+0 103 5 5 36 0 0 29 0 0
+fn=pypy_g_Mul_getChildNodes
+0 219 6 6 69 0 0 87 1 0
+fn=pypy_g_NameToken_match
+0 370576 1198 99 132924 901 2 96672 2057 124
+fn=pypy_g_Name_accept
+0 36880 139 22 18440 16 9 11064 0 0
+fn=pypy_g_Name_getChildNodes
+0 42313 254 44 9956 0 0 12445 702 41
+fn=pypy_g_Node_flatten
+0 6593 100 29 2166 2 0 2014 28 0
+fn=pypy_g_NonGreedyDFA_recognize
+0 176219 60 45 48597 7 6 78869 352 28
+fn=pypy_g_Not_accept
+0 1235 37 15 455 8 0 338 0 0
+fn=pypy_g_Not_getChildNodes
+0 2418 18 15 663 10 0 975 13 0
+fn=pypy_g_NumberStringParser___init__
+0 58922 1885 74 24374 1022 13 13206 343 27
+fn=pypy_g_NumberStringParser_error
+0 154 12 6 42 0 0 68 2 0
+fn=pypy_g_NumberStringParser_next_digit
+0 65498 2318 38 24452 0 0 8152 0 0
+fn=pypy_g_ObjSpace_abstract_getclass
+0 2021328 105128 18 748640 0 0 748640 0 0
+fn=pypy_g_ObjSpace_abstract_isclass
+0 3105039 81735 119 1001876 0 0 1149058 1 0
+fn=pypy_g_ObjSpace_abstract_isinstance
+0 614854 37131 36 238008 0 0 238008 0 0
+fn=pypy_g_ObjSpace_call_valuestack
+0 49742934 465590 255 16303525 422864 3633 13131950 92844 6475
+fn=pypy_g_ObjSpace_getindex_w
+0 55505073 292810 125 23735637 5115 112 18574081 61329 143
+fn=pypy_g_ObjSpace_unpackiterable
+0 75719623 578981 280 27240527 6414 0 24732779 95802 2917
+fn=pypy_g_OperationError_normalize_exception
+0 9988913 299816 857 3158220 20220 125 3907888 460 26
+fn=pypy_g_Or_accept
+0 103 13 5 36 0 0 29 0 0
+fn=pypy_g_Or_getChildNodes
+0 129 3 2 39 0 0 45 2 0
+fn=pypy_g_PRINT_ITEM_TO_star2
+0 11180 322 4 3440 0 0 3870 0 0
+fn=pypy_g_PRINT_NEWLINE_TO_star2
+0 9160 547 5 2748 6 0 2290 0 0
+fn=pypy_g_PackFormatIterator_align
+0 19 2 2 9 0 0 5 0 0
+fn=pypy_g_Pass_accept
+0 284 15 14 100 3 0 84 1 0
+fn=pypy_g_Pass_getChildNodes
+0 96 2 2 24 0 0 30 3 0
+fn=pypy_g_Printnl_accept
+0 216 8 4 75 0 0 51 0 0
+fn=pypy_g_Printnl_getChildNodes
+0 513 9 5 162 3 0 171 3 0
+fn=pypy_g_PyCode___init__
+0 4217254 12338 436 1923182 433 8 1344809 7702 354
+fn=pypy_g_PyCode__compute_fastcall
+0 189954 663 71 68574 119 0 40124 0 0
+fn=pypy_g_PyCode_descr_code__hash__
+0 387108 3207 165 126244 1206 1 90425 187 19
+fn=pypy_g_PyCode_descr_code__new__
+0 21483 1449 199 8946 0 0 9450 0 0
+fn=pypy_g_PyCode_fastcall_2
+0 11001448 207683 64 4902211 193437 3984 3546460 2908 2
+fn=pypy_g_PyCode_fastcall_3
+0 1971400 128000 120 903993 37785 1903 669039 8 0
+fn=pypy_g_PyCode_fastcall_4
+0 734295 30604 70 331207 15343 486 270873 6 0
+fn=pypy_g_PyCode_fget_co_cellvars
+0 6545 714 236 2142 132 53 2142 57 3
+fn=pypy_g_PyCode_fget_co_freevars
+0 6545 540 132 2142 111 39 2142 53 6
+fn=pypy_g_PyCode_fget_co_varnames
+0 34643 1537 435 12322 293 148 10724 287 28
+fn=pypy_g_PyCode_funcrun
+0 15075660 529651 130 5769694 48850 1375 5955817 64 0
+fn=pypy_g_PyFlowGraph___init__
+0 72971 3430 253 23432 0 0 26259 494 54
+fn=pypy_g_PyFlowGraph__convert_COMPARE_OP
+0 1900 55 12 570 0 0 532 20 0
+fn=pypy_g_PyFlowGraph__convert_DEREF
+0 3040 27 6 988 2 0 1064 14 0
+fn=pypy_g_PyFlowGraph__convert_LOAD_CLOSURE
+0 434 9 4 140 0 0 133 2 0
+fn=pypy_g_PyFlowGraph__convert_LOAD_CONST
+0 76009 1358 72 24160 332 5 23237 420 14
+fn=pypy_g_PyFlowGraph__convert_LOAD_FAST
+0 57200 817 52 18590 3 0 20020 311 30
+fn=pypy_g_PyFlowGraph__convert_NAME
+0 83448 608 49 27360 40 0 25992 584 29
+fn=pypy_g_PyFlowGraph__lookupConst
+0 226422 3475 175 74601 426 1 100962 423 25
+fn=pypy_g_PyFlowGraph__lookupName
+0 436728 935 54 143717 2361 7 54116 9 0
+fn=pypy_g_PyFlowGraph__max_depth
+0 166133 1785 198 59069 33 0 65281 2 0
+fn=pypy_g_PyFlowGraph_computeStackDepth
+0 101266 2449 218 32941 611 0 42932 81 2
+fn=pypy_g_PyFlowGraph_convertArgs
+0 258276 1566 122 110376 4166 15 79617 102 0
+fn=pypy_g_PyFlowGraph_flattenGraph
+0 674828 9840 721 276448 3284 6 177951 1382 128
+fn=pypy_g_PyFlowGraph_getCode
+0 24092 1913 95 6974 110 0 7291 136 0
+fn=pypy_g_PyFlowGraph_getConsts
+0 125094 2444 130 48560 163 0 43889 12 0
+fn=pypy_g_PyFlowGraph_makeByteCode
+0 484774 4286 240 189879 1783 0 139093 452 45
+fn=pypy_g_PyFlowGraph_newCodeObject
+0 153523 4008 179 39556 33 0 43931 687 57
+fn=pypy_g_PyFlowGraph_setconst
+0 132625 3231 167 41379 254 1 57294 968 50
+fn=pypy_g_PyFlowGraph_sort_cellvars
+0 53502 2783 162 17484 244 0 19757 411 42
+fn=pypy_g_PyFrame___init__
+0 96934059 919820 147 26582081 135210 4279 30859700 383705 25702
+fn=pypy_g_PyFrame__load_global
+0 43550257 381294 66 15116013 71526 15 13720977 144 1
+fn=pypy_g_PyFrame_call_function
+0 7271480 367489 231 2520995 12405 81 2844340 39448 1853
+fn=pypy_g_PyFrame_dispatch
+0 29834704 257095 147 10962637 47542 107 12230793 32958 120
+fn=pypy_g_PyFrame_dispatch_bytecode
+0 1240676044 4728220 4174 468605916 1710104 34341 432895080 201325 3552
+fn=pypy_g_PyFrame_dupvalues
+0 560 30 7 230 0 0 110 0 0
+fn=pypy_g_PyFrame_end_finally
+0 266546 16732 27 70065 2615 46 62280 0 0
+fn=pypy_g_PyFrame_execute_frame
+0 64528181 454880 222 20601763 33017 53 25963982 37289 157
+fn=pypy_g_PyFrame_execute_generator_frame
+0 119673 18295 124 53188 5155 38 26594 0 0
+fn=pypy_g_PyFrame_fast2locals
+0 17480 827 34 6460 18 0 5700 18 1
+fn=pypy_g_PyFrame_handle_bytecode
+0 38132595 456718 123 8513634 43527 83 19816035 49832 98
+fn=pypy_g_PyFrame_handle_operation_error
+0 5459348 155732 431 1782151 39839 102 2159167 31315 2099
+fn=pypy_g_PyFrame_init_cells
+0 3376237 283375 235 1490884 4340 148 832851 1100 83
+fn=pypy_g_PyFrame_initialize_frame_scopes
+0 18453646 406553 363 8467197 791863 23167 3909558 17576 907
+fn=pypy_g_PyFrame_locals2fast
+0 17986 1127 26 6647 4 0 5865 0 0
+fn=pypy_g_PyFrame_popstrdictvalues
+0 4599358 239784 215 1280084 17 0 1851678 8212 486
+fn=pypy_g_PyFrame_popvalues
+0 14693219 179134 47 5477092 18 2 4181369 139 1
+fn=pypy_g_PyFrame_pushrevvalues
+0 3709539 62835 21 1828092 25 0 749414 409 1
+fn=pypy_g_PyFrame_slice
+0 1236672 53166 50 510786 19 0 430164 3 0
+fn=pypy_g_PyFrame_unrollstack
+0 12482245 104588 92 5449857 77112 147 3101480 2283 3
+fn=pypy_g_PyFrame_unrollstack_and_jump
+0 176400 10040 143 58800 6872 49 51450 0 0
+fn=pypy_g_PyString_DecodeEscape
+0 10814 49 25 3715 10 2 3778 28 0
+fn=pypy_g_PyUnicode_DecodeUTF8_1
+0 504 39 35 126 0 0 210 2 1
+fn=pypy_g_PyUnicode_DecodeUTF8_star1_1
+0 702 45 45 168 0 0 306 6 2
+fn=pypy_g_PythonAstCompiler_compile
+0 41280 3096 301 13996 426 4 18034 483 42
+fn=pypy_g_PythonParser_parse_lines
+0 203494 2161 267 75184 800 67 80931 126 17
+fn=pypy_g_PythonParser_parse_source
+0 456439 2783 329 203058 511 13 179330 329 28
+fn=pypy_g_PythonSource_next
+0 7418858 254 27 3340960 8182 7 2372228 6713 188
+fn=pypy_g_PythonSource_peek
+0 3344943 941 25 1114981 1 0 955698 3924 139
+fn=pypy_g_RAISE_VARARGS_star1
+0 327734 20867 337 95657 858 61 111611 1395 95
+fn=pypy_g_RDictImplementation_delitem
+0 60840 4112 31 22020 0 0 14680 0 0
+fn=pypy_g_RDictImplementation_items
+0 161463 5925 450 53239 0 0 66182 800 54
+fn=pypy_g_RDictImplementation_setitem
+0 1798082 41777 20 760727 23 0 622413 0 0
+fn=pypy_g_RDictItemIteratorImplementation_next_entry
+0 74831 2240 140 22787 0 0 29530 395 26
+fn=pypy_g_RDictKeyIteratorImplementation_next_entry
+0 296592 4423 18 117350 0 0 80378 1 0
+fn=pypy_g_ROT_THREE_star2
+0 498545 14495 136 166175 0 0 183693 0 0
+fn=pypy_g_ROT_TWO_star2
+0 107027 6323 114 39824 0 0 39824 0 0
+fn=pypy_g_RPyExceptionOccurred
+0 42 4 4 18 0 0 6 0 0
+fn=pypy_g_RPyRaiseException
+0 24473384 56444 33 12236692 0 0 9177519 0 0
+fn=pypy_g_RPyString_New__Signed
+0 16 1 1 4 0 0 4 0 0
+fn=pypy_g_Raise_accept
+0 936 50 12 325 0 0 221 0 0
+fn=pypy_g_Raise_getChildNodes
+0 2910 40 27 963 14 0 837 23 0
+fn=pypy_g_Random_genrand32
+0 10089 23 8 2651 38 0 853 1 0
+fn=pypy_g_Random_init_by_array
+0 147348 28 6 37488 2 0 15036 0 0
+fn=pypy_g_Random_init_genrand
+0 24972 4 1 2516 0 0 2512 78 0
+fn=pypy_g_RepeatContext___init__
+0 1183 91 42 429 0 0 442 17 0
+fn=pypy_g_Return_accept
+0 14365 624 62 4901 95 4 3718 0 0
+fn=pypy_g_Return_getChildNodes
+0 22192 556 64 6394 38 0 6390 157 18
+fn=pypy_g_SETUP_EXCEPT_star0
+0 5051940 174691 111 1970241 15931 3 1711956 30443 2348
+fn=pypy_g_SETUP_FINALLY_star0
+0 281379 16087 96 112945 285 0 90769 1940 184
+fn=pypy_g_SETUP_LOOP_star0
+0 5777531 195449 156 2288899 15698 1 1817460 40327 2573
+fn=pypy_g_STORE_ATTR_star1
+0 9948819 141114 56 4033305 85953 2686 2957757 0 0
+fn=pypy_g_STORE_GLOBAL_star1
+0 310 20 17 130 9 2 100 0 0
+fn=pypy_g_STORE_NAME_star1
+0 929116 9460 33 402272 5636 246 272944 0 0
+fn=pypy_g_STORE_SUBSCR_star2
+0 2949520 140146 45 842720 0 0 1095536 0 0
+fn=pypy_g_Scope___init__
+0 53963 1738 208 15998 4 0 22675 513 52
+fn=pypy_g_Scope_add_def
+0 25932 620 56 7817 138 23 9275 0 0
+fn=pypy_g_Scope_add_use
+0 51938 411 53 16551 19 10 16348 0 0
+fn=pypy_g_Scope_build_var_scopes
+0 158837 2827 359 55979 172 20 58989 482 58
+fn=pypy_g_Scope_get_cell_vars
+0 18572 785 87 9529 7 0 3462 54 6
+fn=pypy_g_Scope_get_free_vars_in_parent
+0 13718 1071 114 4137 1 0 5101 103 8
+fn=pypy_g_Scope_get_free_vars_in_scope
+0 13664 1028 138 4110 6 0 5073 136 12
+fn=pypy_g_Scope_mangle
+0 153638 479 40 55682 13 0 26654 16 0
+fn=pypy_g_SemiSpaceGC_collect_roots
+0 7935980 16 16 793630 0 0 4761540 42 6
+fn=pypy_g_SemiSpaceGC_copy
+0 93646640 1362 75 36835699 1563196 615742 32167508 487 4
+fn=pypy_g_SemiSpaceGC_deal_with_objects_with_finalizers
+0 20100 39 39 8671 636 595 3158 51 51
+fn=pypy_g_SemiSpaceGC_double_space_size
+0 65 4 4 13 1 1 34 2 1
+fn=pypy_g_SemiSpaceGC_execute_finalizers
+0 3875 32 32 1817 112 1 619 0 0
+fn=pypy_g_SemiSpaceGC_get_size
+0 69292352 701 74 34646176 137423 81324 9540112 0 0
+fn=pypy_g_SemiSpaceGC_invalidate_weakrefs
+0 411778 40 32 165186 21849 15962 44271 607 394
+fn=pypy_g_SemiSpaceGC_malloc_fixedsize_clear
+0 23940 1592 110 10640 1352 50 5320 1027 145
+fn=pypy_g_SemiSpaceGC_malloc_varsize_clear
+0 50 5 5 20 1 0 10 1 0
+fn=pypy_g_SemiSpaceGC_obtain_free_space
+0 160 16 16 56 1 1 40 1 0
+fn=pypy_g_SemiSpaceGC_scan_copied
+0 14642916 16 16 2662414 301570 73936 7986954 1 0
+fn=pypy_g_SemiSpaceGC_semispace_collect
+0 683 54 54 215 69 53 213 8 6
+fn=pypy_g_SemiSpaceGC_setup
+0 93 6 6 16 2 2 47 3 2
+fn=pypy_g_SemiSpaceGC_trace_and_copy
+0 220299669 32 32 100807894 416729 115058 31704140 8 3
+fn=pypy_g_SemiSpaceGC_try_obtain_free_space
+0 297 24 24 89 5 5 96 0 0
+fn=pypy_g_Sequence__match
+0 17301322 9735 394 6884293 49991 1185 5830845 74153 2044
+fn=pypy_g_ShadowDetectingDictImplementation_setitem
+0 107407 2266 70 40417 139 0 39344 3 0
+fn=pypy_g_ShadowDetectingDictImplementation_setitem_str
+0 11019690 337334 95 4170101 0 0 3973492 2131 9
+fn=pypy_g_Slice_accept
+0 650 7 6 260 0 0 208 0 0
+fn=pypy_g_Slice_getChildNodes
+0 1548 18 18 554 7 0 464 6 0
+fn=pypy_g_StackDepthTracker_findDepth
+0 1237317 1667 208 458526 5252 48 390575 2469 146
+fn=pypy_g_StackRootIterator_pop
+0 22566784 48 18 10939622 325391 227000 2932473 0 0
+fn=pypy_g_StaticMethod_descr_staticmethod__new__
+0 5174 411 56 1592 0 0 1791 75 5
+fn=pypy_g_Stmt_accept
+0 16367 125 12 6295 364 36 3777 0 0
+fn=pypy_g_Stmt_getChildNodes
+0 72240 571 32 22360 81 0 25800 636 51
+fn=pypy_g_StrDictImplementation__as_rdict
+0 175 14 13 54 0 0 64 1 0
+fn=pypy_g_StrDictImplementation_delitem
+0 279967 16915 206 100187 0 0 89641 0 0
+fn=pypy_g_StrDictImplementation_get
+0 93255414 72602 72 33675602 506926 4987 36265722 6229 39
+fn=pypy_g_StrDictImplementation_items
+0 1294117 12316 752 424921 39 0 521933 7262 632
+fn=pypy_g_StrDictImplementation_keys
+0 959060 11948 371 293808 423 0 318524 6334 240
+fn=pypy_g_StrDictImplementation_setitem
+0 1152528 15262 19 531931 11 0 487605 62 0
+fn=pypy_g_StrDictImplementation_setitem_str
+0 3858000 91966 47 1446750 4 0 1446750 45 1
+fn=pypy_g_StrItemIteratorImplementation_next_entry
+0 2693675 50789 390 796840 0 0 1044271 17758 878
+fn=pypy_g_StrKeyIteratorImplementation_next_entry
+0 755171 24951 126 219415 46 1 219415 5899 316
+fn=pypy_g_Stream_readall
+0 434 21 21 166 12 0 137 3 1
+fn=pypy_g_StringFormatter_fmt_s
+0 319875 9498 109 93830 359 13 127950 0 0
+fn=pypy_g_StringFormatter_format
+0 1492578 37425 1122 417480 4194 282 390776 2791 405
+fn=pypy_g_StringFormatter_getmappingkey
+0 216280 2085 81 48572 173 3 28064 680 192
+fn=pypy_g_StringFormatter_getmappingvalue
+0 71914 1251 34 21048 0 0 21048 488 145
+fn=pypy_g_StringFormatter_parse_fmt
+0 441681 12015 157 156821 2 2 115664 0 0
+fn=pypy_g_StringFormatter_peel_flags
+0 101807 6598 74 37521 50 5 32118 0 0
+fn=pypy_g_StringFormatter_peel_num
+0 117782 4893 49 42858 0 0 10713 0 0
+fn=pypy_g_StringFormatter_std_wp_number
+0 38520 766 89 14046 204 15 11232 0 0
+fn=pypy_g_StringMarshaller___init__
+0 88 7 7 25 0 0 40 1 0
+fn=pypy_g_StringMarshaller_atom_int
+0 541 4 4 261 0 0 141 0 0
+fn=pypy_g_StringMarshaller_get_value
+0 1312 5 5 225 0 0 234 3 0
+fn=pypy_g_StringMarshaller_put
+0 1413 2 2 629 1 1 191 0 0
+fn=pypy_g_StringMarshaller_put_int
+0 246 2 2 114 0 0 60 0 0
+fn=pypy_g_StringUnmarshaller___init__
+0 15535 1195 63 5258 63 0 6214 153 7
+fn=pypy_g_StringUnmarshaller_get
+0 4359866 974 94 1491531 6 0 1491533 28751 1322
+fn=pypy_g_StringUnmarshaller_get_int
+0 1363986 831 49 454662 1899 0 174870 89 1
+fn=pypy_g_StringUnmarshaller_get_lng
+0 4256417 485 44 1761276 8555 0 587092 0 0
+fn=pypy_g_Subscript_accept
+0 1950 45 11 780 5 0 624 1 0
+fn=pypy_g_Subscript_getChildNodes
+0 3796 42 29 1196 16 0 1508 19 0
+fn=pypy_g_SymbolVisitor__do_args
+0 21236 697 67 8690 52 0 4757 0 0
+fn=pypy_g_SymbolVisitor_visitAssAttr
+0 1296 24 18 576 14 0 360 0 0
+fn=pypy_g_SymbolVisitor_visitAssign
+0 13387 190 36 6353 228 0 3548 0 0
+fn=pypy_g_SymbolVisitor_visitAugAssign
+0 313 22 14 123 3 0 86 0 0
+fn=pypy_g_SymbolVisitor_visitClass
+0 5465 168 97 2166 18 0 1961 18 1
+fn=pypy_g_SymbolVisitor_visitExpression
+0 621 45 30 219 0 0 264 2 1
+fn=pypy_g_SymbolVisitor_visitFor
+0 565 27 19 250 9 0 185 0 0
+fn=pypy_g_SymbolVisitor_visitFrom
+0 844 6 6 322 40 1 160 0 0
+fn=pypy_g_SymbolVisitor_visitFunction
+0 27956 1250 134 10901 87 0 10774 125 15
+fn=pypy_g_SymbolVisitor_visitImport
+0 950 30 19 366 34 0 146 0 0
+fn=pypy_g_SymbolVisitor_visitLambda
+0 150 12 12 60 1 0 57 0 0
+fn=pypy_g_SymbolVisitor_visitModule
+0 25926 1614 169 8432 8 0 10920 94 9
+fn=pypy_g_SymbolVisitor_visitName
+0 27478 130 15 17486 477 0 6245 0 0
+fn=pypy_g_SymbolVisitor_visitReturn
+0 6114 333 27 2844 112 4 1154 0 0
+fn=pypy_g_SymbolVisitor_visitSlice
+0 743 17 17 297 7 0 205 0 0
+fn=pypy_g_SymbolVisitor_visitSubscript
+0 1974 37 19 840 24 0 607 1 0
+fn=pypy_g_TextInputFilter_close
+0 198 18 3 81 7 0 54 0 0
+fn=pypy_g_TextInputFilter_read
+0 322048 210 18 47230 42 0 2553 0 0
+fn=pypy_g_TextInputFilter_readline
+0 72753 324 9 12821 272 0 2809 5 1
+fn=pypy_g_TextInputFilter_try_to_find_file_descriptor
+0 198 18 6 81 9 0 54 0 0
+fn=pypy_g_TimSort_binarysort
+0 1757582 2454 233 685512 559 0 361603 10 0
+fn=pypy_g_TimSort_count_run
+0 39717 2312 348 12755 2 0 10729 94 9
+fn=pypy_g_TimSort_merge_at
+0 1244 50 48 486 3 0 402 3 1
+fn=pypy_g_TimSort_merge_collapse
+0 3061 340 36 1432 1 0 711 0 0
+fn=pypy_g_TimSort_merge_force_collapse
+0 2568 497 43 1185 1 0 519 0 0
+fn=pypy_g_TimSort_merge_hi
+0 34362 195 76 14430 11 0 8691 15 0
+fn=pypy_g_TimSort_merge_lo
+0 14053 56 54 6137 0 0 2869 0 0
+fn=pypy_g_TimSort_sort
+0 51303 3752 345 18850 5 0 16841 262 22
+fn=pypy_g_TokenObject_get_name
+0 126 9 6 48 0 0 51 0 0
+fn=pypy_g_Token___init__
+0 1968058 1143 125 631541 0 0 807785 12843 1634
+fn=pypy_g_Token_match
+0 1343184 4214 146 465326 3899 108 339052 6943 312
+fn=pypy_g_Token_match_token
+0 31700500 721 65 13064813 12582 261 5066522 13040 573
+fn=pypy_g_TryExcept_accept
+0 1200 57 15 420 4 0 324 0 0
+fn=pypy_g_TryExcept_getChildNodes
+0 4776 78 36 1935 51 0 1221 21 0
+fn=pypy_g_TryFinally_accept
+0 100 12 5 35 0 0 27 0 0
+fn=pypy_g_TryFinally_getChildNodes
+0 219 13 6 69 3 0 87 1 0
+fn=pypy_g_Tuple___init__
+0 114 11 4 48 0 0 42 0 0
+fn=pypy_g_Tuple_accept
+0 1200 49 22 420 2 0 324 0 0
+fn=pypy_g_Tuple_getChildNodes
+0 1548 19 17 468 5 0 540 9 0
+fn=pypy_g_UNPACK_SEQUENCE_star1
+0 2795689 77922 239 926855 1 0 1145888 483 25
+fn=pypy_g_UnarySub_accept
+0 285 19 10 105 4 0 78 0 0
+fn=pypy_g_UnarySub_getChildNodes
+0 558 12 10 153 4 0 225 4 0
+fn=pypy_g_Unmarshaller_get_list_w
+0 2142965 2182 202 773115 1622 43 596704 709 0
+fn=pypy_g_Unmarshaller_get_pascal
+0 2813 140 26 1164 2 0 582 0 0
+fn=pypy_g_Unmarshaller_get_short
+0 16629 27 12 5784 0 0 2892 0 0
+fn=pypy_g_Unmarshaller_get_str
+0 3645216 1077 107 1366956 3 0 1139130 293 5
+fn=pypy_g_Unmarshaller_get_w_obj
+0 6404076 1255 88 2337996 2496 45 1626432 334 5
+fn=pypy_g_UnpackFormatIterator_interpret
+0 79 10 10 23 2 2 8 0 0
+fn=pypy_g_UnpackFormatIterator_interpret_1
+0 23443 980 397 6065 142 34 4688 0 0
+fn=pypy_g_UnpackFormatIterator_interpret_2
+0 86 10 10 27 2 2 20 0 0
+fn=pypy_g_UnpackFormatIterator_read
+0 27420 690 225 9140 1 1 9140 141 20
+fn=pypy_g_UserNoDictModule_getclass
+0 14106 772 38 9404 273 18 2351 0 0
+fn=pypy_g_UserNoDictW_DictMultiObject_getclass
+0 7854 235 13 5236 16 0 1309 0 0
+fn=pypy_g_UserNoDictW_IntObject_getclass
+0 12 1 1 8 0 0 2 0 0
+fn=pypy_g_UserNoDictW_LongObject_getclass
+0 1013802 27831 42 675868 439 0 168967 0 0
+fn=pypy_g_UserNoDictW_ObjectObject_getclass
+0 31325730 27228 18 20883820 44691 1639 5220955 0 0
+fn=pypy_g_UserNoDictW_Random_getclass
+0 624 8 1 416 0 0 104 0 0
+fn=pypy_g_UserNoDictW_StringObject_getclass
+0 312 15 7 208 0 0 52 0 0
+fn=pypy_g_UserNoDictW_TupleObject_getclass
+0 139830 56 0 93220 0 0 23305 0 0
+fn=pypy_g_UserNoDictW_TypeObject_getclass
+0 619596 21177 12 413064 22042 625 103266 0 0
+fn=pypy_g_UserNoDictW_Weakref_getclass
+0 258 7 1 172 0 0 43 0 0
+fn=pypy_g_UserNoDictWithSlotsW_ObjectObject_getslotvalue
+0 2315960 55963 8 1736970 86094 4896 289495 0 0
+fn=pypy_g_UserNoDictWithSlotsW_ObjectObject_setslotvalue
+0 1929214 51437 27 1010394 2372 98 469756 1618 43
+fn=pypy_g_UserNoDictWithSlotsW_Weakref_setslotvalue
+0 119 14 2 63 0 0 28 0 0
+fn=pypy_g_UserNoDictWithSlotsWeakrefableW_ObjectObject_get
+0 84 7 0 56 1 0 14 0 0
+fn=pypy_g_UserNoDictWithSlotsWeakrefableW_ObjectObject_set
+0 210 14 1 98 1 0 56 0 0
+fn=pypy_g_UserW_DictMultiObject_getdictvalue_attr_is_in_cl
+0 2622 228 8 1482 147 2 228 0 0
+fn=pypy_g_UserW_DictMultiObject_user_setup
+0 21760 1008 85 7552 0 0 8448 110 14
+fn=pypy_g_UserW_IntObject_user_setup
+0 172 14 14 59 0 0 66 1 0
+fn=pypy_g_UserW_LongObject_getdictvalue_attr_is_in_class
+0 488129 25281 146 275899 8508 0 42446 0 0
+fn=pypy_g_UserW_LongObject_user_setup
+0 2768148 186068 375 955092 1 0 1068408 14166 1012
+fn=pypy_g_UserW_ObjectObject_getdict
+0 4070802 26358 14 2713868 0 0 678467 0 0
+fn=pypy_g_UserW_ObjectObject_getdictvalue_attr_is_in_class
+0 4642515 136590 53 2427689 124085 2669 596334 0 0
+fn=pypy_g_UserW_ObjectObject_setclass
+0 44 4 2 22 0 0 10 0 0
+fn=pypy_g_UserW_ObjectObject_setdict
+0 183 12 8 60 0 0 57 0 0
+fn=pypy_g_UserW_ObjectObject_user_setup
+0 13644238 605076 532 4573641 101 0 5513895 75353 4875
+fn=pypy_g_UserW_Random_getdict
+0 24 0 0 16 0 0 4 0 0
+fn=pypy_g_UserW_Random_getdictvalue_attr_is_in_class
+0 690 23 3 390 1 0 60 0 0
+fn=pypy_g_UserW_Random_user_setup
+0 342 30 15 118 0 0 132 2 0
+fn=pypy_g_UserW_StringObject_getdict
+0 66 0 0 44 0 0 11 0 0
+fn=pypy_g_UserW_StringObject_user_setup
+0 2580 210 70 885 0 0 990 13 1
+fn=pypy_g_UserW_TupleObject_getdictvalue_attr_is_in_class
+0 49660 4868 20 22347 699 0 9932 0 0
+fn=pypy_g_UserW_TupleObject_setdict
+0 11400 760 40 3800 18 0 3610 0 0
+fn=pypy_g_UserW_TupleObject_user_setup
+0 438876 31450 288 152424 0 0 170820 2297 153
+fn=pypy_g_UserWeakrefableW_ObjectObject_getweakref
+0 1926 162 2 1284 14 2 321 0 0
+fn=pypy_g_UserWeakrefableW_ObjectObject_setweakref
+0 253 15 6 105 1 1 88 0 0
+fn=pypy_g_UserWithSlotsW_ObjectObject_getslotvalue
+0 72168 7163 21 54126 6219 223 9021 0 0
+fn=pypy_g_UserWithSlotsW_ObjectObject_setslotvalue
+0 5659 662 121 2979 162 0 1356 29 0
+fn=pypy_g_UserWithSlotsWeakrefableW_ObjectObject_getweakre
+0 12 1 0 8 0 0 2 0 0
+fn=pypy_g_UserWithSlotsWeakrefableW_ObjectObject_setweakre
+0 19 2 2 7 0 0 8 0 0
+fn=pypy_g_UserWithSlotsWithDelW_ObjectObject___del__
+0 2322 22 18 860 0 0 860 0 0
+fn=pypy_g_W_DictMultiObject_initialize_content
+0 508550 2622 94 246807 370 0 144634 0 0
+fn=pypy_g_W_DictMultiObject_missing_method
+0 244940 13216 63 97974 2 0 65319 66 0
+fn=pypy_g_W_LongObject_tofloat
+0 2134 187 28 679 7 4 582 0 0
+fn=pypy_g_W_LongObject_toint
+0 679 24 10 291 0 0 194 0 0
+fn=pypy_g_W_MD5___new__
+0 1449 92 25 391 0 0 644 0 0
+fn=pypy_g_W_MD5__finalize
+0 7688 322 56 1564 0 0 2474 10 0
+fn=pypy_g_W_MD5__transform
+0 163236 713 78 30988 0 0 8052 0 0
+fn=pypy_g_W_MD5_update
+0 10308 322 58 2940 5 0 3845 11 3
+fn=pypy_g_W_Random_seed
+0 2672 116 28 940 10 2 1076 4 0
+fn=pypy_g_W_Root_getclass
+0 165997888 144 10 124498416 1095782 1628 20749736 0 0
+fn=pypy_g_W_Root_getdict
+0 2043655 8022 0 817462 0 0 408731 0 0
+fn=pypy_g_W_Root_getdictvalue
+0 27119119 69769 18 9584681 0 0 7440893 0 0
+fn=pypy_g_W_Root_getdictvalue_attr_is_in_class
+0 2790403 58066 8 1594516 0 0 398629 0 0
+fn=pypy_g_W_Root_getname
+0 2513586 95242 51 793764 1 0 970156 140 0
+fn=pypy_g_W_Root_getrepr
+0 1178348 2176 295 316169 47 0 409417 1081 101
+fn=pypy_g_W_Root_getweakref
+0 925 185 32 370 0 0 185 0 0
+fn=pypy_g_W_Root_setweakref
+0 17575 1480 295 4255 0 0 8140 138 10
+fn=pypy_g_W_SliceObject_indices3
+0 2285016 147992 492 617212 0 0 612868 14777 845
+fn=pypy_g_W_SliceObject_indices4
+0 2457076 88019 75 660608 1 0 588851 14887 922
+fn=pypy_g_W_State___init__
+0 86320 6640 22 30544 1323 3 26560 0 0
+fn=pypy_g_W_State_create_regs
+0 1564348 19919 45 599817 358 0 434258 8750 82
+fn=pypy_g_W_State_marks_pop_keep
+0 2045623 1328 3 884304 141 0 608495 2 0
+fn=pypy_g_W_State_marks_push
+0 1897226 7968 19 704326 1351 1 654417 6946 71
+fn=pypy_g_W_State_reset
+0 107568 9296 31 31872 0 0 39840 1009 11
+fn=pypy_g_W_State_set_mark
+0 2015951 6640 18 447059 1 0 589575 6992 74
+fn=pypy_g_W_State_w_create_regs
+0 4367816 27889 104 1467444 1315 0 1715788 30995 283
+fn=pypy_g_W_Stream_descr_unlock
+0 1445 85 12 595 0 0 340 0 0
+fn=pypy_g_W_Super_getattribute
+0 3569762 161230 155 1037559 49 0 996024 1 0
+fn=pypy_g_W_TypeObject___init__
+0 482965 34697 1051 155672 1113 117 163814 1088 62
+fn=pypy_g_W_TypeObject__lookup_where
+0 115786568 453238 53 50911792 677015 9113 30102729 277896 18207
+fn=pypy_g_W_TypeObject_add_subclass
+0 477002 5928 201 144270 17496 2721 33202 241 21
+fn=pypy_g_W_TypeObject_check_user_subclass
+0 8120986 313691 53 2800340 10056 63 2380289 4 0
+fn=pypy_g_W_TypeObject_ensure_static__new__
+0 17987 2361 91 5948 2 0 6013 4 0
+fn=pypy_g_W_TypeObject_get_layout
+0 376 6 2 158 12 4 60 0 0
+fn=pypy_g_W_TypeObject_get_module
+0 71591 7469 97 23845 1125 165 21944 1 0
+fn=pypy_g_W_TypeObject_get_subclasses
+0 13899 1310 96 5085 231 13 4407 82 8
+fn=pypy_g_W_TypeObject_getdict
+0 1225872 9958 389 446710 603 26 411827 8790 558
+fn=pypy_g_W_TypeObject_getweakref
+0 20928 1299 19 13952 97 16 3488 0 0
+fn=pypy_g_W_TypeObject_lookup_starting_at
+0 2976810 98307 170 1671276 25018 90 498724 0 0
+fn=pypy_g_W_TypeObject_lookup_where_with_method_cache
+0 184439087 274870 180 78748541 5813165 14000 31559465 217740 1963
+fn=pypy_g_W_TypeObject_mutated
+0 33789 3717 224 12552 261 8 8227 97 13
+fn=pypy_g_W_TypeObject_ready
+0 67521 2322 37 23768 1 0 14780 0 0
+fn=pypy_g_W_TypeObject_setweakref
+0 924 50 19 364 5 1 352 0 0
+fn=pypy_g_W_XRangeIterator_descr_next
+0 7226 5 5 2578 0 0 1810 72 0
+fn=pypy_g_W_XRange_descr_new
+0 158 10 10 42 0 0 46 0 0
+fn=pypy_g_WaryDictImplementation_delitem
+0 2916 120 57 918 0 0 1134 0 0
+fn=pypy_g_WaryDictImplementation_setitem_str
+0 577955 7492 115 196290 4 0 228997 136 0
+fn=pypy_g_WeakrefLifeline___del__
+0 1819 4 4 856 28 0 428 0 0
+fn=pypy_g_WeakrefLifeline_get_or_make_weakref
+0 337486 25093 515 132678 13302 1476 101457 377 45
+fn=pypy_g__AsLong
+0 559926 43993 56 166709 1805 0 60696 0 0
+fn=pypy_g__AsScaledDouble
+0 6871 218 36 1606 24 7 1033 43 1
+fn=pypy_g__RPyListOfString_New__Signed
+0 4 1 1 1 0 0 1 0 0
+fn=pypy_g__RPyListOfString_SetItem__listPtr_Signed_rpy_str
+0 16 1 1 4 0 0 4 0 0
+fn=pypy_g___init__
+0 7025529 296623 127 1916050 9 1 3019236 50642 3225
+fn=pypy_g___init___1
+0 4760 311 50 1320 0 0 2040 39 13
+fn=pypy_g___init___10
+0 390 28 13 114 0 0 158 0 0
+fn=pypy_g___init___3
+0 244 24 11 66 0 0 102 2 0
+fn=pypy_g___init___4
+0 26266 1756 135 7423 0 0 10278 0 0
+fn=pypy_g___init___8
+0 11662 716 108 3340 0 0 5098 3 0
+fn=pypy_g___iter___1
+0 2855 793 19 1713 0 0 571 0 0
+fn=pypy_g___mm_float_w_W_FloatObject
+0 3495 117 21 1398 13 3 233 0 0
+fn=pypy_g___mm_id_perform_call
+0 1403808 27798 60 570297 6663 47 438690 46 0
+fn=pypy_g___mm_int_w_0_perform_call
+0 26100970 79101 6 13050485 50311 7 2610097 0 0
+fn=pypy_g___mm_int_w_W_BoolObject
+0 3990 228 53 1482 0 0 1026 0 0
+fn=pypy_g___mm_int_w_W_IntObject
+0 46705140 121881 10 18682056 6219 37 3113676 0 0
+fn=pypy_g___mm_int_w_W_LongObject
+0 355674 41844 65 125532 0 0 94149 0 0
+fn=pypy_g___mm_issubtype_W_TypeObject_W_TypeObject
+0 93186945 289607 39 33408272 1023837 2846 4903910 0 0
+fn=pypy_g___mm_issubtype_perform_call
+0 95980899 106807 320 44237853 262586 501 32027854 35049 251
+fn=pypy_g___mm_marshal_w_PyCode
+0 39 2 2 14 0 0 12 0 0
+fn=pypy_g___mm_marshal_w_W_NoneObject
+0 39 4 3 14 0 0 12 0 0
+fn=pypy_g___mm_ord_W_StringObject
+0 688466 33636 46 242988 0 0 182241 0 0
+fn=pypy_g___mm_ord_perform_call
+0 688500 22030 74 263250 20131 469 202500 0 0
+fn=pypy_g___mm_str_w_0_perform_call
+0 109278519 17869 119 46012008 958156 18185 5751501 0 0
+fn=pypy_g___mm_uint_w_W_IntObject
+0 43752288 5312 14 15441984 0 0 11581488 0 0
+fn=pypy_g___mm_uint_w_W_LongObject
+0 45492 2664 9 16056 0 0 12042 0 0
+fn=pypy_g__absolute_import
+0 2692409 99236 1366 999542 5360 97 1086688 2340 245
+fn=pypy_g__bitwise___
+0 3461996 250870 489 1308534 52730 174 925704 5089 387
+fn=pypy_g__bitwise____2
+0 8951 364 13 4427 34 0 1700 5 0
+fn=pypy_g__check
+0 838368 29541 16 314388 0 0 52398 0 0
+fn=pypy_g__check_for_encoding
+0 53513 1095 109 9001 5 0 4217 45 4
+fn=pypy_g__check_line_for_encoding
+0 7455 254 24 2313 0 0 1161 0 0
+fn=pypy_g__classdir
+0 63883 6249 268 17542 54 0 27009 112 0
+fn=pypy_g__cmp
+0 2753330 78641 220 922334 1840 29 790567 105 0
+fn=pypy_g__code_new_w
+0 670980 1617 148 265860 27 0 303840 8739 421
+fn=pypy_g__conv_descriptor
+0 14022 1026 481 3306 0 0 5472 0 0
+fn=pypy_g__conv_descriptor_1
+0 9918 798 301 2622 0 0 3762 34 3
+fn=pypy_g__convert_idx_params_1
+0 2146182 68692 182 715394 1654 412 799558 7803 927
+fn=pypy_g__convertenviron
+0 2764 7 7 945 0 0 909 19 19
+fn=pypy_g__decimalstr_to_bigint
+0 28126 373 54 7912 21 5 6300 0 0
+fn=pypy_g__del_slice
+0 3200 211 106 896 0 0 1152 18 4
+fn=pypy_g__divrem
+0 5966 399 129 2102 0 0 1850 22 0
+fn=pypy_g__divrem1
+0 5376 380 79 1680 0 0 1932 20 1
+fn=pypy_g__floordiv
+0 12650 567 95 3300 0 0 2200 79 4
+fn=pypy_g__get_encoding_and_errors
+0 38 3 3 11 0 0 10 0 0
+fn=pypy_g__get_long
+0 20118 243 30 8622 0 0 1916 0 0
+fn=pypy_g__getframe
+0 20172 2294 83 7380 326 12 2952 0 0
+fn=pypy_g__hash
+0 182 14 2 70 11 7 21 0 0
+fn=pypy_g__hash_float
+0 2238 68 19 807 15 3 502 12 0
+fn=pypy_g__identity
+0 8810 881 19 5286 0 0 1762 0 0
+fn=pypy_g__impl_int_int_pow
+0 1639 102 33 300 0 0 311 13 0
+fn=pypy_g__initialize_set
+0 1520 80 15 570 0 0 418 0 0
+fn=pypy_g__inplace_divrem1
+0 15282 168 21 4407 0 0 1110 0 0
+fn=pypy_g__is_generic___lambda__3
+0 25246 888 14 6260 294 12 1947 0 0
+fn=pypy_g__issubclass
+0 35287872 442115 364 11230025 61722 292 13807959 3183 14
+fn=pypy_g__k_mul
+0 80949 1097 97 26184 0 0 17616 37 5
+fn=pypy_g__ll_compute_size__Signed_Signed_Signed
+0 164369 3106 152 60557 0 0 8651 0 0
+fn=pypy_g__ll_list_resize_really__listPtr_Signed
+0 182699742 332197 85 77674507 16261 14 40542435 614402 8628
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_1
+0 1715698 59771 74 563740 88 1 475518 3737 349
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_10
+0 138 12 12 36 0 0 42 0 0
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_11
+0 77792412 9368 129 19485923 799 32 10981773 550058 5412
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_12
+0 63216 135 23 15440 0 0 17648 182 49
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_13
+0 952 64 18 252 0 0 294 0 0
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_14
+0 1794 102 18 468 0 0 546 0 0
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_15
+0 2351 170 30 612 0 0 718 0 0
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_16
+0 884 69 20 234 0 0 273 0 0
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_17
+0 865861 9296 21 308096 0 0 239044 2337 21
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_18
+0 470465 643 82 182148 1210 1 100618 2591 544
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_19
+0 7952 302 45 2471 0 0 2268 15 0
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_2
+0 419056 4250 173 141343 4 0 118484 1065 44
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_21
+0 246240 9296 39 74368 0 0 72160 314 5
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_3
+0 2890 57 17 940 0 0 794 5 5
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_4
+0 127246053 35864 320 37541403 28178 401 37583662 573227 31559
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_5
+0 101038 4771 141 25874 3 0 31513 2 0
+fn=pypy_g__ll_list_resize_really__listPtr_Signed_7
+0 428189 5062 303 163696 1945 19 94224 2273 87
+fn=pypy_g__ll_malloc_varsize_no_length__Signed_Signed_Sign
+0 181671 2549 139 51906 0 0 60557 33 0
+fn=pypy_g__log_any
+0 168 9 9 44 1 0 54 1 0
+fn=pypy_g__mangle
+0 1351 50 20 610 20 6 248 1 0
+fn=pypy_g__mm___init___dictS0_perform_call
+0 70092 4095 48 27258 1894 31 23364 0 0
+fn=pypy_g__mm___init___listS0_perform_call
+0 426388 53655 86 161336 11213 17 149812 9 0
+fn=pypy_g__mm___init___setS0_perform_call
+0 1368 64 10 532 19 5 456 0 0
+fn=pypy_g__mm_abs_complexS0_perform_call
+0 1792 280 48 728 56 19 560 0 0
+fn=pypy_g__mm_abs_intS0_W_IntObject
+0 68 6 4 24 0 0 18 0 0
+fn=pypy_g__mm_abs_intS0_perform_call
+0 66 6 3 26 2 1 22 0 0
+fn=pypy_g__mm_abs_longS0_perform_call
+0 64 6 3 26 2 1 20 0 0
+fn=pypy_g__mm_add_complexS0_W_ComplexObject_W_ComplexObjec
+0 1400 168 115 392 0 0 168 0 0
+fn=pypy_g__mm_add_complexS0_perform_call
+0 1736 168 85 840 56 21 504 0 0
+fn=pypy_g__mm_add_floatS0_W_FloatObject_W_FloatObject
+0 246280 174 50 86198 1 0 43099 2395 252
+fn=pypy_g__mm_add_floatS0_perform_call
+0 190867 174 92 92355 58 32 55413 0 0
+fn=pypy_g__mm_add_intS0_0_fail
+0 105 15 6 25 0 0 45 3 0
+fn=pypy_g__mm_add_intS0_W_IntObject_W_BoolObject
+0 170560 9184 91 55104 0 0 52480 0 0
+fn=pypy_g__mm_add_intS0_W_IntObject_W_IntObject
+0 4052641 56279 78 1379072 0 0 1035316 70 0
+fn=pypy_g__mm_add_intS0_perform_call
+0 3107640 44637 105 1420618 12679 26 976693 7 0
+fn=pypy_g__mm_add_listS0_W_ListObject_W_ListObject
+0 263364 25067 131 82624 1 0 56804 1276 114
+fn=pypy_g__mm_add_listS0_perform_call
+0 180740 20577 108 82624 9516 27 56804 0 0
+fn=pypy_g__mm_add_longS0_W_LongObject_W_IntObject
+0 42432 1302 10 13104 0 0 10608 155 0
+fn=pypy_g__mm_add_longS0_W_LongObject_W_LongObject
+0 565437 47233 132 177392 1 0 121957 2775 188
+fn=pypy_g__mm_add_longS0_perform_call
+0 374752 32830 96 175665 5887 39 117110 0 0
+fn=pypy_g__mm_add_longS1_W_IntObject_W_LongObject
+0 340 25 10 105 0 0 85 1 0
+fn=pypy_g__mm_add_longS1_perform_call
+0 160 20 8 75 10 4 50 0 0
+fn=pypy_g__mm_add_strS0_W_StringObject_W_StringObject
+0 923712 26529 59 307904 4 0 250172 1 0
+fn=pypy_g__mm_add_strS0_perform_call
+0 692784 17951 32 307904 6746 28 230928 8 0
+fn=pypy_g__mm_add_tupleS0_W_TupleObject_W_TupleObject
+0 6222 487 113 1952 0 0 1342 32 1
+fn=pypy_g__mm_add_tupleS0_perform_call
+0 4392 476 121 1952 76 49 1464 0 0
+fn=pypy_g__mm_and__intS0_0_fail
+0 116984 11140 79 27852 1 0 50134 2070 143
+fn=pypy_g__mm_and__intS0_W_IntObject_W_IntObject
+0 664440 10953 59 221480 1 0 110740 3997 340
+fn=pypy_g__mm_and__intS0_perform_call
+0 815490 31494 162 353380 9326 21 263140 1 0
+fn=pypy_g__mm_and__longS0_W_LongObject_W_LongObject
+0 756762 71751 212 232849 2 0 174638 3643 270
+fn=pypy_g__mm_and__longS0_perform_call
+0 465696 57774 148 218295 10923 49 145530 0 0
+fn=pypy_g__mm_and__longS1_W_IntObject_W_LongObject
+0 384330 33420 257 116970 1 0 100260 1367 108
+fn=pypy_g__mm_and__longS1_perform_call
+0 178240 22280 128 83550 10779 50 55700 0 0
+fn=pypy_g__mm_call_typeS0_perform_call
+0 13437817 399156 160 4702754 60373 19 4032309 3683 0
+fn=pypy_g__mm_contains_dictS0_W_DictMultiObject_W_Root
+0 4882412 150871 107 1475947 60943 683 646867 56 4
+fn=pypy_g__mm_contains_dictS0_perform_call
+0 6079920 197333 40 2487240 60849 503 1796340 89 0
+fn=pypy_g__mm_contains_listS0_perform_call
+0 125840 6772 59 51480 2851 156 37180 7 0
+fn=pypy_g__mm_contains_setS0_W_SetObject_W_Root
+0 3039 125 14 870 0 0 348 0 0
+fn=pypy_g__mm_contains_setS0_perform_call
+0 3480 90 10 1566 68 5 1044 0 0
+fn=pypy_g__mm_contains_strS0_W_StringObject_W_StringObject
+0 1913616 35531 96 637872 0 0 518271 724 20
+fn=pypy_g__mm_contains_strS0_perform_call
+0 1754148 41977 73 717606 26715 485 518271 27 0
+fn=pypy_g__mm_contains_tupleS0_perform_call
+0 341172 9822 58 157464 4192 109 113724 6 0
+fn=pypy_g__mm_delattr_typeS0_perform_call
+0 6150 600 36 2700 277 8 2100 0 0
+fn=pypy_g__mm_delitem_dictS0_perform_call
+0 299754 13068 36 128466 4393 29 92781 0 0
+fn=pypy_g__mm_delitem_listS0_W_ListObject_W_Root
+0 28246 1508 99 8766 0 0 3896 0 0
+fn=pypy_g__mm_delitem_listS0_W_ListObject_W_SliceObject
+0 2068 120 66 704 0 0 528 0 0
+fn=pypy_g__mm_delitem_listS0_perform_call
+0 43762 1370 49 18324 596 55 12216 0 0
+fn=pypy_g__mm_div_floatS0_W_FloatObject_W_FloatObject
+0 92 8 8 28 0 0 14 2 0
+fn=pypy_g__mm_div_floatS0_W_FloatObject_W_IntObject
+0 8084 288 109 2580 0 0 1204 63 9
+fn=pypy_g__mm_div_floatS0_perform_call
+0 5394 177 101 2610 80 43 1566 0 0
+fn=pypy_g__mm_div_floatS1_W_IntObject_W_FloatObject
+0 5763 339 92 1808 0 0 904 46 5
+fn=pypy_g__mm_div_floatS1_perform_call
+0 3503 226 99 1695 226 37 1017 0 0
+fn=pypy_g__mm_div_intS0_0_fail
+0 2373 226 91 565 0 0 1017 37 5
+fn=pypy_g__mm_div_intS0_W_IntObject_W_IntObject
+0 12878 524 118 4384 0 0 3288 0 0
+fn=pypy_g__mm_div_intS0_perform_call
+0 14901 747 128 6418 294 102 4822 0 0
+fn=pypy_g__mm_eq_dictS0_W_DictMultiObject_W_DictMultiObjec
+0 304355 25097 170 94455 2 0 41980 0 0
+fn=pypy_g__mm_eq_dictS0_perform_call
+0 367325 25366 114 167920 12814 3 115445 3 0
+fn=pypy_g__mm_eq_intS0_0_fail
+0 9492 210 21 2260 0 0 4068 181 6
+fn=pypy_g__mm_eq_intS0_W_BoolObject_W_BoolObject
+0 82831 5850 88 29520 0 0 2952 0 0
+fn=pypy_g__mm_eq_intS0_W_BoolObject_W_IntObject
+0 573 33 14 200 0 0 20 0 0
+fn=pypy_g__mm_eq_intS0_W_IntObject_W_BoolObject
+0 2853 198 41 990 0 0 99 0 0
+fn=pypy_g__mm_eq_intS0_W_IntObject_W_IntObject
+0 3692983 55834 43 1284930 73 4 128493 0 0
+fn=pypy_g__mm_eq_intS0_perform_call
+0 4625984 58230 64 2113160 36544 78 1454436 963 0
+fn=pypy_g__mm_eq_listS0_0_fail
+0 13650 1300 29 3250 0 0 5850 238 12
+fn=pypy_g__mm_eq_listS0_W_ListObject_W_ListObject
+0 122853 11881 15 43593 1 0 15852 0 0
+fn=pypy_g__mm_eq_listS0_perform_call
+0 169255 17957 90 75108 7494 42 53993 1 0
+fn=pypy_g__mm_eq_longS0_W_LongObject_W_IntObject
+0 2062 36 12 684 0 0 504 0 0
+fn=pypy_g__mm_eq_longS0_W_LongObject_W_LongObject
+0 32 4 4 10 0 0 4 0 0
+fn=pypy_g__mm_eq_longS0_perform_call
+0 1147 24 8 555 6 2 333 0 0
+fn=pypy_g__mm_eq_strS0_W_StringObject_W_StringObject
+0 2688717 40770 70 931660 25940 1220 171570 0 0
+fn=pypy_g__mm_eq_strS0_perform_call
+0 2508888 44500 60 1083808 11135 11 845672 137 0
+fn=pypy_g__mm_eq_tupleS0_W_TupleObject_W_TupleObject
+0 566950 19050 17 172550 0 0 24650 0 0
+fn=pypy_g__mm_eq_tupleS0_perform_call
+0 887400 54357 39 394400 19963 24 295800 130 1
+fn=pypy_g__mm_float_floatS0_perform_call
+0 5472 230 22 2223 104 36 1710 0 0
+fn=pypy_g__mm_float_intS0_perform_call
+0 3762 171 125 1482 57 49 1254 0 0
+fn=pypy_g__mm_float_longS0_perform_call
+0 64 4 4 26 1 1 20 0 0
+fn=pypy_g__mm_floordiv_intS0_W_IntObject_W_IntObject
+0 47 5 5 16 0 0 12 0 0
+fn=pypy_g__mm_floordiv_intS0_perform_call
+0 35 4 4 16 1 1 11 0 0
+fn=pypy_g__mm_ge_floatS0_W_FloatObject_W_IntObject
+0 3640 336 222 1176 0 0 1120 0 0
+fn=pypy_g__mm_ge_floatS0_perform_call
+0 1736 224 193 840 56 47 504 0 0
+fn=pypy_g__mm_ge_intS0_W_IntObject_W_IntObject
+0 616019 33321 27 218270 0 0 21827 0 0
+fn=pypy_g__mm_ge_intS0_perform_call
+0 763945 53980 86 349232 20428 15 240097 1 0
+fn=pypy_g__mm_ge_longS0_W_LongObject_W_LongObject
+0 196700 19670 150 62944 0 0 47208 0 0
+fn=pypy_g__mm_ge_longS0_perform_call
+0 121954 11802 36 59010 3934 43 35406 0 0
+fn=pypy_g__mm_ge_strS0_W_StringObject_W_StringObject
+0 33 3 3 10 0 0 4 0 0
+fn=pypy_g__mm_ge_strS0_perform_call
+0 36 3 3 16 1 1 12 0 0
+fn=pypy_g__mm_ge_tupleS0_W_TupleObject_W_TupleObject
+0 864 14 9 220 0 0 132 0 0
+fn=pypy_g__mm_ge_tupleS0_perform_call
+0 792 18 12 352 3 3 264 0 0
+fn=pypy_g__mm_getattr_typeS0_perform_call
+0 16678568 310581 175 6817768 173307 527 4935972 34229 52
+fn=pypy_g__mm_getitem_dictS0_perform_call
+0 7962156 241773 48 3209746 64209 742 2441517 2235 13
+fn=pypy_g__mm_getitem_listS0_W_ListObject_W_Root
+0 45317406 229304 18 13792254 0 0 1970322 0 0
+fn=pypy_g__mm_getitem_listS0_W_ListObject_W_SliceObject
+0 802055 41611 92 273040 2 0 204780 1 0
+fn=pypy_g__mm_getitem_listS0_perform_call
+0 87113221 381842 37 36048896 78802 179 25090329 7855 76
+fn=pypy_g__mm_getitem_strS0_W_StringObject_W_Root
+0 761507 30341 37 231763 0 0 33109 0 0
+fn=pypy_g__mm_getitem_strS0_W_StringObject_W_SliceObject
+0 413036 7109 56 140608 0 0 105456 0 0
+fn=pypy_g__mm_getitem_strS0_perform_call
+0 1635190 53658 164 754288 18802 37 545300 7 0
+fn=pypy_g__mm_getitem_tupleS0_W_TupleObject_W_Root
+0 11853763 70825 10 3607667 0 0 515381 0 0
+fn=pypy_g__mm_getitem_tupleS0_W_TupleObject_W_SliceObject
+0 422154 25516 98 143712 0 0 107784 1 0
+fn=pypy_g__mm_getitem_tupleS0_perform_call
+0 25010253 361361 40 9567072 103045 276 8369386 10177 23
+fn=pypy_g__mm_gt_intS0_0_fail
+0 110922 202 8 26410 0 0 47538 1852 2
+fn=pypy_g__mm_gt_intS0_W_IntObject_W_IntObject
+0 577573 25171 45 199880 0 0 19988 0 0
+fn=pypy_g__mm_gt_intS0_perform_call
+0 947834 23631 67 414884 12671 22 304380 4 0
+fn=pypy_g__mm_gt_longS0_W_LongObject_W_IntObject
+0 32882 2792 30 10224 0 0 7952 0 0
+fn=pypy_g__mm_gt_longS0_W_LongObject_W_LongObject
+0 11616 88 8 3520 0 0 1408 0 0
+fn=pypy_g__mm_gt_longS0_perform_call
+0 28520 2477 24 13800 220 8 8280 0 0
+fn=pypy_g__mm_gt_strS0_W_StringObject_W_StringObject
+0 33 2 2 10 0 0 4 0 0
+fn=pypy_g__mm_gt_strS0_perform_call
+0 36 3 3 16 1 1 12 0 0
+fn=pypy_g__mm_hash_floatS0_W_FloatObject
+0 1404 59 15 390 0 0 312 10 0
+fn=pypy_g__mm_hash_floatS0_perform_call
+0 1287 64 24 507 15 3 429 1 0
+fn=pypy_g__mm_hash_intS0_W_BoolObject
+0 122226 8506 147 34474 12 0 28206 1393 105
+fn=pypy_g__mm_hash_intS0_perform_call
+0 637408 22727 36 258947 6500 19 199190 1600 20
+fn=pypy_g__mm_hash_longS0_W_LongObject
+0 224 28 20 63 0 0 56 2 0
+fn=pypy_g__mm_hash_longS0_perform_call
+0 224 28 4 91 7 1 70 0 0
+fn=pypy_g__mm_hash_strS0_W_StringObject
+0 2298431 12543 83 369227 5621 288 86995 3049 185
+fn=pypy_g__mm_hash_strS0_perform_call
+0 394432 7551 67 160238 2614 10 123260 518 0
+fn=pypy_g__mm_hash_tupleS0_perform_call
+0 1564689 59569 157 634551 28096 24 489795 4891 0
+fn=pypy_g__mm_hash_unicodeS0_W_UnicodeObject
+0 129 12 8 36 2 1 22 1 0
+fn=pypy_g__mm_hash_unicodeS0_perform_call
+0 96 12 8 39 3 2 30 0 0
+fn=pypy_g__mm_index_intS0_W_BoolObject
+0 36822 1088 36 10659 0 0 8721 245 70
+fn=pypy_g__mm_index_intS0_perform_call
+0 31008 2907 42 12597 950 28 9690 0 0
+fn=pypy_g__mm_index_longS0_perform_call
+0 334752 31383 38 135993 7489 33 104610 0 0
+fn=pypy_g__mm_inplace_add_listS0_W_ListObject_W_ListObject
+0 47564 2424 159 16192 0 0 12144 0 0
+fn=pypy_g__mm_inplace_add_listS0_W_ListObject_W_Root
+0 467704 31203 216 147630 379 0 130264 0 0
+fn=pypy_g__mm_inplace_add_listS0_perform_call
+0 281470 26609 186 128672 5321 239 88462 0 0
+fn=pypy_g__mm_int_floatS0_W_FloatObject
+0 2976 238 178 930 0 0 806 21 5
+fn=pypy_g__mm_int_floatS0_perform_call
+0 2170 233 65 806 57 26 682 0 0
+fn=pypy_g__mm_int_intS0_perform_call
+0 12768 214 19 5187 60 19 3990 8 0
+fn=pypy_g__mm_int_longS0_W_LongObject
+0 187572 13398 140 62524 0 0 49126 1 0
+fn=pypy_g__mm_int_longS0_perform_call
+0 142912 13398 81 58058 4125 46 44660 0 0
+fn=pypy_g__mm_invert_intS0_perform_call
+0 56760 5288 113 22360 1261 26 18920 0 0
+fn=pypy_g__mm_iter_dictS0_perform_call
+0 681836 50951 41 239564 13146 17 184280 998 0
+fn=pypy_g__mm_iter_dictionaryiteratorS0_perform_call
+0 1632 183 62 663 42 15 510 0 0
+fn=pypy_g__mm_iter_listS0_W_RangeListObject
+0 297636 15556 36 105048 0 0 78786 0 0
+fn=pypy_g__mm_iter_listS0_perform_call
+0 5837083 100496 23 2050867 36046 16 1577590 2462 3
+fn=pypy_g__mm_iter_sequenceiteratorS0_perform_call
+0 28192 2643 93 11453 837 18 8810 0 0
+fn=pypy_g__mm_iter_strS0_perform_call
+0 2343 207 104 923 67 25 781 0 0
+fn=pypy_g__mm_iter_tupleS0_perform_call
+0 5659264 196318 25 2299076 51306 25 1768520 1367 5
+fn=pypy_g__mm_le_intS0_W_IntObject_W_IntObject
+0 225597 10069 36 77890 0 0 7789 0 0
+fn=pypy_g__mm_le_intS0_perform_call
+0 272615 16438 174 124624 4741 25 85679 0 0
+fn=pypy_g__mm_le_strS0_W_StringObject_W_StringObject
+0 179990 6064 77 55860 0 0 22344 0 0
+fn=pypy_g__mm_le_strS0_perform_call
+0 201096 7386 214 89376 2968 58 67032 0 0
+fn=pypy_g__mm_len_dictS0_W_DictMultiObject
+0 401977 23762 202 131283 2598 46 62738 2573 150
+fn=pypy_g__mm_len_dictS0_perform_call
+0 386872 13083 59 135928 5511 20 104560 5 0
+fn=pypy_g__mm_len_listS0_perform_call
+0 3531280 62995 26 1240720 28361 21 954400 2138 0
+fn=pypy_g__mm_len_strS0_perform_call
+0 450752 11508 53 183118 5078 21 140860 1 0
+fn=pypy_g__mm_len_tupleS0_perform_call
+0 1430240 49545 28 581035 22253 24 446950 442 4
+fn=pypy_g__mm_len_unicodeS0_perform_call
+0 64 8 4 26 2 1 20 0 0
+fn=pypy_g__mm_long_intS0_W_IntObject
+0 434240 32214 104 130272 0 0 108560 2742 199
+fn=pypy_g__mm_long_intS0_perform_call
+0 358248 43188 89 141128 6859 58 119416 2 0
+fn=pypy_g__mm_lshift_intS0_W_IntObject_W_IntObject
+0 154160 13056 69 52480 0 0 39360 0 0
+fn=pypy_g__mm_lshift_intS0_perform_call
+0 114800 13056 94 52480 6096 15 36080 0 0
+fn=pypy_g__mm_lshift_longS0_W_LongObject_W_IntObject
+0 126 5 5 36 0 0 34 1 0
+fn=pypy_g__mm_lshift_longS0_perform_call
+0 64 4 4 30 1 1 20 0 0
+fn=pypy_g__mm_lt_intS0_0_fail
+0 420 22 8 100 0 0 180 5 0
+fn=pypy_g__mm_lt_intS0_W_IntObject_W_IntObject
+0 1590374 39464 29 559720 120 3 55972 0 0
+fn=pypy_g__mm_lt_intS0_perform_call
+0 1959960 29418 93 895912 14171 19 616012 220 0
+fn=pypy_g__mm_lt_longS0_W_LongObject_W_IntObject
+0 306356 322 28 95076 0 0 73948 0 0
+fn=pypy_g__mm_lt_longS0_W_LongObject_W_LongObject
+0 1904 224 103 560 0 0 224 0 0
+fn=pypy_g__mm_lt_longS0_perform_call
+0 165478 227 135 80070 82 60 48042 0 0
+fn=pypy_g__mm_lt_strS0_W_StringObject_W_StringObject
+0 475608 336 31 146240 0 0 58496 6 0
+fn=pypy_g__mm_lt_strS0_perform_call
+0 526464 336 30 233984 234 20 175488 4 0
+fn=pypy_g__mm_lt_tupleS0_W_TupleObject_W_TupleObject
+0 25750 490 22 7210 0 0 3090 0 0
+fn=pypy_g__mm_lt_tupleS0_perform_call
+0 37080 690 21 16480 74 9 12360 5 0
+fn=pypy_g__mm_mod_strS0_perform_call
+0 113436 6529 131 50416 2148 107 37812 0 0
+fn=pypy_g__mm_mul_complexS0_W_ComplexObject_W_ComplexObjec
+0 1400 168 45 392 0 0 168 0 0
+fn=pypy_g__mm_mul_complexS0_perform_call
+0 1736 224 59 840 85 42 504 0 0
+fn=pypy_g__mm_mul_floatS0_W_FloatObject_W_FloatObject
+0 2360 177 36 826 1 1 413 24 5
+fn=pypy_g__mm_mul_floatS0_W_FloatObject_W_IntObject
+0 251080 175 78 87878 0 0 43939 2291 202
+fn=pypy_g__mm_mul_floatS0_perform_call
+0 196416 193 96 95040 123 51 57024 0 0
+fn=pypy_g__mm_mul_floatS1_W_IntObject_W_FloatObject
+0 40 3 3 14 0 0 7 0 0
+fn=pypy_g__mm_mul_floatS1_perform_call
+0 31 4 4 15 2 2 9 0 0
+fn=pypy_g__mm_mul_intS0_0_fail
+0 567 54 4 135 0 0 243 10 0
+fn=pypy_g__mm_mul_intS0_W_IntObject_W_IntObject
+0 11905 374 94 4034 0 0 3060 0 0
+fn=pypy_g__mm_mul_intS0_perform_call
+0 10054 533 141 4502 175 22 3193 0 0
+fn=pypy_g__mm_mul_listS0_perform_call
+0 195300 16230 36 86800 4800 5 65100 0 0
+fn=pypy_g__mm_mul_longS0_W_LongObject_W_IntObject
+0 21172 714 18 6700 0 0 5896 74 0
+fn=pypy_g__mm_mul_longS0_W_LongObject_W_LongObject
+0 4224 10 5 1408 0 0 1088 16 0
+fn=pypy_g__mm_mul_longS0_perform_call
+0 10624 634 18 4980 121 4 3320 0 0
+fn=pypy_g__mm_mul_longS1_W_IntObject_W_LongObject
+0 2054 156 6 650 0 0 572 5 1
+fn=pypy_g__mm_mul_longS1_perform_call
+0 832 104 4 390 52 2 260 0 0
+fn=pypy_g__mm_mul_strS0_perform_call
+0 47844 1559 190 21264 574 74 15948 0 0
+fn=pypy_g__mm_ne_dictS0_W_DictMultiObject_W_DictMultiObjec
+0 3192 84 13 840 0 0 504 0 0
+fn=pypy_g__mm_ne_dictS0_perform_call
+0 2940 63 20 1344 30 8 924 0 0
+fn=pypy_g__mm_ne_intS0_W_BoolObject_W_BoolObject
+0 227 16 4 80 0 0 8 0 0
+fn=pypy_g__mm_ne_intS0_W_IntObject_W_IntObject
+0 10556 738 136 3710 0 0 371 0 0
+fn=pypy_g__mm_ne_intS0_perform_call
+0 13265 736 88 6064 435 28 4169 0 0
+fn=pypy_g__mm_ne_listS0_0_fail
+0 13650 1300 50 3250 0 0 5850 237 8
+fn=pypy_g__mm_ne_listS0_W_ListObject_W_ListObject
+0 32488 2589 42 9636 0 0 4818 0 0
+fn=pypy_g__mm_ne_listS0_perform_call
+0 58655 4357 167 24548 1944 54 19233 0 0
+fn=pypy_g__mm_ne_strS0_W_StringObject_W_StringObject
+0 508524 11779 160 157112 4074 254 22893 0 0
+fn=pypy_g__mm_ne_strS0_perform_call
+0 274812 5447 227 122132 2989 31 91606 6 0
+fn=pypy_g__mm_ne_tupleS0_W_TupleObject_W_TupleObject
+0 2398 118 7 610 0 0 366 0 0
+fn=pypy_g__mm_ne_tupleS0_perform_call
+0 2196 236 25 976 66 6 732 0 0
+fn=pypy_g__mm_neg_floatS0_perform_call
+0 264 8 6 104 2 2 88 0 0
+fn=pypy_g__mm_neg_intS0_W_IntObject
+0 1775140 62498 44 626520 5 0 469890 0 0
+fn=pypy_g__mm_neg_intS0_perform_call
+0 1670720 62978 38 678730 16592 22 522100 4 0
+fn=pypy_g__mm_neg_longS0_perform_call
+0 128 9 9 52 3 3 40 0 0
+fn=pypy_g__mm_next_dictionaryiteratorS0_W_DictMultiIterObj
+0 1567202 52599 40 429805 0 0 334617 8809 486
+fn=pypy_g__mm_next_dictionaryiteratorS0_perform_call
+0 2166790 77889 120 748071 13676 11 709006 6 0
+fn=pypy_g__mm_next_sequenceiteratorS0_perform_call
+0 90515460 438555 61 31208580 38789 9 25993572 75 0
+fn=pypy_g__mm_nonzero_floatS0_perform_call
+0 33 3 3 13 1 1 11 0 0
+fn=pypy_g__mm_nonzero_intS0_perform_call
+0 1901824 14105 44 772616 5141 16 594320 14 0
+fn=pypy_g__mm_nonzero_longS0_perform_call
+0 320 6 3 130 2 1 100 0 0
+fn=pypy_g__mm_or__boolS0_W_BoolObject_W_BoolObject
+0 6736 404 53 2290 0 0 229 0 0
+fn=pypy_g__mm_or__boolS0_perform_call
+0 8244 570 73 3664 256 13 2748 0 0
+fn=pypy_g__mm_or__intS0_W_IntObject_W_IntObject
+0 140238 9965 64 46746 1 1 23373 855 56
+fn=pypy_g__mm_or__intS0_perform_call
+0 116865 13284 98 53424 3322 12 36729 0 0
+fn=pypy_g__mm_pow_intS0_W_IntObject_W_IntObject_W_NoneObje
+0 1190 92 25 374 0 0 379 0 0
+fn=pypy_g__mm_pow_intS0_perform_call
+0 574 56 23 280 36 5 182 0 0
+fn=pypy_g__mm_repr_NoneTypeS0_perform_call
+0 3201 291 42 1261 97 19 1067 0 0
+fn=pypy_g__mm_repr_boolS0_perform_call
+0 2145 195 61 845 65 16 715 0 0
+fn=pypy_g__mm_repr_dictS0_perform_call
+0 4340 496 61 1612 131 7 1364 124 0
+fn=pypy_g__mm_repr_intS0_W_IntObject
+0 70907 1014 36 19788 0 0 16490 382 31
+fn=pypy_g__mm_repr_intS0_perform_call
+0 54417 378 56 21437 153 19 18139 0 0
+fn=pypy_g__mm_repr_listS0_W_RangeListObject
+0 2340 260 100 780 1 0 585 0 0
+fn=pypy_g__mm_repr_listS0_perform_call
+0 2275 195 39 845 66 5 715 0 0
+fn=pypy_g__mm_repr_strS0_perform_call
+0 151932 774 97 59852 167 28 50644 0 0
+fn=pypy_g__mm_repr_tupleS0_perform_call
+0 4410 380 95 1638 126 43 1386 124 0
+fn=pypy_g__mm_repr_typeS0_perform_call
+0 32406 1320 64 12766 105 24 10802 0 0
+fn=pypy_g__mm_rshift_intS0_W_IntObject_W_IntObject
+0 243915 1075 57 74235 0 0 10605 0 0
+fn=pypy_g__mm_rshift_intS0_perform_call
+0 371175 1949 54 169680 500 11 116655 0 0
+fn=pypy_g__mm_rshift_longS0_W_LongObject_W_IntObject
+0 756 20 15 216 0 0 204 1 0
+fn=pypy_g__mm_rshift_longS0_perform_call
+0 384 16 13 180 6 3 120 0 0
+fn=pypy_g__mm_setattr_typeS0_perform_call
+0 75990 3228 149 34270 818 50 26820 81 1
+fn=pypy_g__mm_setitem_dictS0_W_DictMultiObject_W_Root_W_Ro
+0 6367929 172159 29 2418267 73410 314 1651869 2124 0
+fn=pypy_g__mm_setitem_dictS0_perform_call
+0 7397052 195114 45 3271773 78219 3450 2418267 1707 14
+fn=pypy_g__mm_setitem_listS0_W_ListObject_W_Root_W_Root
+0 390042 13043 43 125820 0 0 62910 1 0
+fn=pypy_g__mm_setitem_listS0_W_ListObject_W_SliceObject_W__2
+0 293820 13168 124 97940 0 0 73455 0 0
+fn=pypy_g__mm_setitem_listS0_perform_call
+0 926387 28054 68 402017 41353 141 279664 3 0
+fn=pypy_g__mm_str_boolS0_perform_call
+0 33 3 3 13 1 1 11 0 0
+fn=pypy_g__mm_str_intS0_W_IntObject
+0 2838 198 109 792 0 0 660 14 1
+fn=pypy_g__mm_str_intS0_perform_call
+0 2178 198 144 858 66 32 726 0 0
+fn=pypy_g__mm_str_strS0_W_StringObject
+0 80768 2769 26 25240 0 0 5048 0 0
+fn=pypy_g__mm_str_strS0_perform_call
+0 161536 8113 72 65624 2150 61 50480 87 0
+fn=pypy_g__mm_sub_floatS0_W_FloatObject_W_FloatObject
+0 2360 116 43 826 0 0 413 24 3
+fn=pypy_g__mm_sub_floatS0_perform_call
+0 1829 176 159 885 58 30 531 0 0
+fn=pypy_g__mm_sub_floatS1_W_IntObject_W_FloatObject
+0 2280 171 128 798 0 0 399 21 1
+fn=pypy_g__mm_sub_floatS1_perform_call
+0 1767 228 199 855 68 50 513 0 0
+fn=pypy_g__mm_sub_intS0_0_fail
+0 1197 114 44 285 0 0 513 19 4
+fn=pypy_g__mm_sub_intS0_W_IntObject_W_IntObject
+0 696117 23301 55 236976 1 0 177732 134 0
+fn=pypy_g__mm_sub_intS0_perform_call
+0 521064 21026 112 238002 8747 27 163833 0 0
+fn=pypy_g__mm_sub_longS0_W_LongObject_W_IntObject
+0 816 77 24 252 0 0 204 2 0
+fn=pypy_g__mm_sub_longS0_W_LongObject_W_LongObject
+0 153 12 4 48 0 0 33 2 0
+fn=pypy_g__mm_sub_longS0_perform_call
+0 480 56 20 225 17 5 150 0 0
+fn=pypy_g__mm_xor_boolS0_W_BoolObject_W_BoolObject
+0 8870 474 9 3160 0 0 316 0 0
+fn=pypy_g__mm_xor_boolS0_perform_call
+0 11376 632 16 5056 158 3 3792 0 0
+fn=pypy_g__mm_xor_intS0_W_IntObject_W_IntObject
+0 234864 604 60 78288 0 0 39144 1452 110
+fn=pypy_g__mm_xor_intS0_perform_call
+0 195720 713 56 89472 404 18 61512 193 0
+fn=pypy_g__mm_xor_longS0_W_LongObject_W_IntObject
+0 2277 140 5 693 0 0 594 6 0
+fn=pypy_g__mm_xor_longS0_perform_call
+0 1056 112 4 495 53 1 330 0 0
+fn=pypy_g__muladd1
+0 56132 373 109 20112 0 0 14102 113 5
+fn=pypy_g__normalize_encoding
+0 2159 127 14 762 0 0 508 0 0
+fn=pypy_g__precheck_for_new
+0 2234856 91823 34 823368 38 0 352872 0 0
+fn=pypy_g__prepare_module
+0 36577 2229 280 10827 1 0 15586 96 3
+fn=pypy_g__prod
+0 2072 168 138 784 0 0 504 23 3
+fn=pypy_g__r_long
+0 13412 243 33 4790 519 5 4790 89 0
+fn=pypy_g__setitem_slice_helper
+0 1222139 29688 279 499429 2604 8 297669 38 0
+fn=pypy_g__state2hexstring
+0 10488 391 71 2461 23 3 2760 23 4
+fn=pypy_g__string2uintlist
+0 159430 161 30 65434 23 5 39160 314 67
+fn=pypy_g__strip_1
+0 88491 5620 85 29888 587 34 18617 376 66
+fn=pypy_g__strip_none_1
+0 83372 4423 300 24355 108 47 15824 320 24
+fn=pypy_g__toint
+0 112 4 4 40 0 0 36 0 0
+fn=pypy_g__w2t
+0 13440 224 188 4256 2 0 4704 83 13
+fn=pypy_g__x_add
+0 1772755 129158 773 656021 1422 2 505219 3005 179
+fn=pypy_g__x_divrem
+0 76950 619 159 31312 0 0 9583 16 1
+fn=pypy_g__x_mul
+0 402636 4018 228 157081 3 1 103261 573 23
+fn=pypy_g__x_sub
+0 9988 706 154 3586 0 0 2715 15 0
+fn=pypy_g_abs
+0 224 56 15 56 0 0 56 0 0
+fn=pypy_g_abs(i_xx_t)
+0 42 4 2 16 0 0 10 0 0
+fn=pypy_g_abs__Complex
+0 3584 280 174 1064 0 0 1288 15 2
+fn=pypy_g_abstract_issubclass
+0 2350019 61956 309 865629 2 0 924738 1 0
+fn=pypy_g_add
+0 28 14 2 7 0 0 7 0 0
+fn=pypy_g_add__Complex_Complex
+0 3360 168 115 1176 0 0 1120 32 4
+fn=pypy_g_add__Int_Int
+0 2399253 44998 110 889062 0 0 535338 22424 821
+fn=pypy_g_add__String_String
+0 1347080 35284 133 423368 37 11 558076 7483 841
+fn=pypy_g_add_ovr__Int_Int
+0 11616 396 8 3520 0 0 3872 51 0
+fn=pypy_g_allocate_instance__Function
+0 8289 614 21 2456 0 0 2763 324 15
+fn=pypy_g_allocate_instance__Module
+0 1306 133 9 415 4 2 263 0 0
+fn=pypy_g_allocate_instance__PyCode
+0 1701 126 20 504 0 0 567 86 5
+fn=pypy_g_allocate_instance__W_ComplexObject
+0 2825 226 31 904 0 0 791 32 4
+fn=pypy_g_allocate_instance__W_DictMultiObject
+0 54435 4130 81 17240 202 18 14909 424 21
+fn=pypy_g_allocate_instance__W_FloatObject
+0 2425 69 22 776 0 0 679 20 1
+fn=pypy_g_allocate_instance__W_IntObject
+0 70 6 6 21 2 2 17 0 0
+fn=pypy_g_allocate_instance__W_ListObject
+0 288100 20947 26 92192 0 0 80668 2846 176
+fn=pypy_g_allocate_instance__W_LongObject
+0 1496716 107396 141 456285 13261 177 376992 3636 267
+fn=pypy_g_allocate_instance__W_MD5
+0 598 46 9 184 0 0 184 18 2
+fn=pypy_g_allocate_instance__W_ObjectObject
+0 9270846 498161 174 2858239 30892 135 2429601 5606 455
+fn=pypy_g_allocate_instance__W_Random
+0 140 16 7 42 4 2 34 0 0
+fn=pypy_g_allocate_instance__W_SetObject
+0 988 58 10 304 0 0 304 9 1
+fn=pypy_g_allocate_instance__W_StringObject
+0 1050 105 35 315 30 10 255 0 0
+fn=pypy_g_allocate_instance__W_TupleObject
+0 884871 53442 205 272469 4536 105 234798 6731 383
+fn=pypy_g_allocate_instance__W_TypeObject
+0 100035 10771 432 16668 235 13 58227 3498 133
+fn=pypy_g_allocate_instance__W_UnicodeObject
+0 25 2 2 8 0 0 7 1 0
+fn=pypy_g_allocate_instance__W_Weakref
+0 33024 2666 133 10545 14 2 9240 316 37
+fn=pypy_g_allocate_instance__W_XRange
+0 52 4 4 16 0 0 16 1 0
+fn=pypy_g_args_from_rarith_int__r_longlong
+0 24542 519 36 6845 0 0 7424 267 14
+fn=pypy_g_base10_num_helper
+0 24512 491 54 6128 0 0 11107 0 0
+fn=pypy_g_base16_num_helper
+0 1056 112 7 256 0 0 480 0 0
+fn=pypy_g_binop_add_impl
+0 9805824 253768 278 3534136 113430 943 3488777 113 0
+fn=pypy_g_binop_and_impl
+0 2646216 122872 360 957846 62885 384 924426 14 0
+fn=pypy_g_binop_div_impl
+0 53066 2116 302 19919 1205 219 18494 0 0
+fn=pypy_g_binop_floordiv_impl
+0 69 6 6 24 4 1 20 0 0
+fn=pypy_g_binop_lshift_impl
+0 226564 19593 131 78808 7878 7 65680 0 0
+fn=pypy_g_binop_mod_impl
+0 341221 13970 306 125664 7639 254 113060 0 0
+fn=pypy_g_binop_mul_impl
+0 1666593 49676 183 649216 29679 222 583016 0 0
+fn=pypy_g_binop_or_impl
+0 246192 21121 129 85632 5372 22 71360 0 0
+fn=pypy_g_binop_rshift_impl
+0 669555 1518 129 255084 1420 45 201963 0 0
+fn=pypy_g_binop_sub_impl
+0 931342 44798 317 330677 26128 308 330332 1 0
+fn=pypy_g_binop_xor_impl
+0 370322 1855 89 131527 374 6 131362 0 0
+fn=pypy_g_boundmethod_float_w_star1
+0 20 1 0 10 0 0 2 0 0
+fn=pypy_g_boundmethod_int_w_star1
+0 382070 1168 0 191035 10506 180 38207 0 0
+fn=pypy_g_boundmethod_issubtype_star2
+0 2825280 19702 0 706320 0 0 706320 0 0
+fn=pypy_g_boundmethod_str_w_star1
+0 3115772 41967 19 983928 0 0 983928 0 0
+fn=pypy_g_break_up_float
+0 77122 902 234 24240 61 23 23726 138 7
+fn=pypy_g_build_and_expr
+0 47388 285 24 17232 0 0 21540 0 0
+fn=pypy_g_build_and_test
+0 46739 0 0 16996 0 0 21245 0 0
+fn=pypy_g_build_arglist
+0 58800 1417 57 21840 47 0 21840 487 27
+fn=pypy_g_build_arith_expr
+0 226096 458 83 95534 0 0 65322 24 0
+fn=pypy_g_build_assert_stmt
+0 81 5 5 31 0 0 29 1 0
+fn=pypy_g_build_atom
+0 639664 2833 268 230516 26 0 190631 4985 187
+fn=pypy_g_build_binary_expr
+0 861945 496 71 377063 30 10 233542 12 0
+fn=pypy_g_build_classdef
+0 5238 274 96 1860 23 0 1791 44 1
+fn=pypy_g_build_comp_op
+0 1423 61 17 589 0 0 395 3 0
+fn=pypy_g_build_comparison
+0 204545 440 66 86812 23 3 56992 45 2
+fn=pypy_g_build_continue_stmt
+0 134 10 10 50 0 0 48 1 0
+fn=pypy_g_build_del_stmt
+0 174 12 8 69 0 0 60 0 0
+fn=pypy_g_build_eval_input
+0 219 15 9 78 0 0 78 2 1
+fn=pypy_g_build_expr
+0 47388 163 12 17232 0 0 21540 0 0
+fn=pypy_g_build_expr_stmt
+0 53100 1074 106 19329 54 0 17769 442 2
+fn=pypy_g_build_exprlist
+0 1366 72 39 560 0 0 391 4 0
+fn=pypy_g_build_factor
+0 211064 1755 62 87935 0 0 61577 5 0
+fn=pypy_g_build_file_input
+0 44032 2205 182 16471 46 0 11828 251 35
+fn=pypy_g_build_for_stmt
+0 605 40 24 225 0 0 230 5 0
+fn=pypy_g_build_funcdef
+0 51719 3221 261 18666 492 0 17508 240 18
+fn=pypy_g_build_if_stmt
+0 16894 633 117 6212 147 4 5669 125 0
+fn=pypy_g_build_import_from
+0 4094 116 52 1549 4 0 1386 17 0
+fn=pypy_g_build_import_name
+0 2656 127 59 976 9 2 968 16 2
+fn=pypy_g_build_lambdef
+0 1024 36 9 360 0 0 392 9 0
+fn=pypy_g_build_listmaker
+0 6212 144 52 2495 22 0 1804 40 0
+fn=pypy_g_build_not_test
+0 196953 419 47 85551 0 0 55722 13 0
+fn=pypy_g_build_pass_stmt
+0 138 10 10 52 0 0 48 2 0
+fn=pypy_g_build_power
+0 228067 1524 78 96052 146 0 64108 0 0
+fn=pypy_g_build_print_stmt
+0 528 13 12 213 0 0 171 3 0
+fn=pypy_g_build_raise_stmt
+0 1144 65 21 403 1 0 403 13 0
+fn=pypy_g_build_return_stmt
+0 13343 711 51 4897 20 0 4561 148 13
+fn=pypy_g_build_shift_expr
+0 224021 382 39 90468 1 0 64624 1 0
+fn=pypy_g_build_simple_stmt
+0 94982 1817 106 34602 1 0 30461 729 27
+fn=pypy_g_build_stat_result
+0 83527 1733 92 38401 436 25 36482 1181 46
+fn=pypy_g_build_stat_result_1
+0 198360 13300 766 71630 157 0 78280 1233 75
+fn=pypy_g_build_subscript
+0 3194 196 57 1276 0 0 897 10 2
+fn=pypy_g_build_suite
+0 46763 1447 188 17385 36 0 13567 163 5
+fn=pypy_g_build_term
+0 221619 511 93 88560 1 0 62362 42 0
+fn=pypy_g_build_test
+0 212936 625 63 89424 1 0 59634 2 0
+fn=pypy_g_build_testlist
+0 8184 0 0 2976 0 0 3720 0 0
+fn=pypy_g_build_testlist_gexp
+0 22736 435 110 9048 52 0 6124 123 2
+fn=pypy_g_build_trailer
+0 134038 2420 176 56940 171 0 37149 598 20
+fn=pypy_g_build_try_stmt
+0 4522 219 102 1692 45 1 1365 26 0
+fn=pypy_g_build_xor_expr
+0 47388 285 24 17232 0 0 21540 0 0
+fn=pypy_g_calcsize
+0 57 6 6 16 0 0 21 0 0
+fn=pypy_g_call
+0 60 4 4 17 0 0 25 0 0
+fn=pypy_g_call__Type
+0 44572995 883848 297 13711851 56566 743 18445740 101974 6737
+fn=pypy_g_call_args
+0 36187138 317494 56 12407264 403437 3308 11659812 8 0
+fn=pypy_g_call_finish
+0 7 2 0 2 0 0 2 0 0
+fn=pypy_g_call_function_star0
+0 7984641 136237 133 2305395 252 3 2615801 36279 2224
+fn=pypy_g_call_function_star1
+0 12717456 180761 248 4060414 3752 186 3627881 24511 1520
+fn=pypy_g_call_function_star2
+0 3412173 158909 412 1183321 9392 83 1029640 777 26
+fn=pypy_g_call_function_star3
+0 148029 10760 180 47520 30 4 56352 844 33
+fn=pypy_g_call_function_star4
+0 377580 26762 50 144739 5251 60 119567 0 0
+fn=pypy_g_call_function_star5
+0 6760 416 20 2704 104 4 2288 0 0
+fn=pypy_g_call_method_star0
+0 228 16 14 70 3 3 80 0 0
+fn=pypy_g_call_method_star1
+0 33340 2195 140 10858 243 4 12574 68 5
+fn=pypy_g_call_method_star2
+0 119817 6188 239 40668 481 27 47382 306 10
+fn=pypy_g_call_star3
+0 68 4 4 20 0 0 30 0 0
+fn=pypy_g_call_startup
+0 7 2 1 2 0 0 2 0 0
+fn=pypy_g_callable
+0 22752 3765 39 7584 0 0 5688 0 0
+fn=pypy_g_callable_1
+0 87546 8548 247 25974 0 0 29826 0 0
+fn=pypy_g_charp2str
+0 243849 353 44 67053 197 69 53782 454 250
+fn=pypy_g_check_charset
+0 2147615 3984 10 681715 2710 8 452580 1227 0
+fn=pypy_g_check_compiled_module
+0 25279 1689 155 7222 85 0 9630 47 2
+fn=pypy_g_checkattrname
+0 1716918 90582 62 531427 27078 1096 613185 1025 0
+fn=pypy_g_checkdir
+0 67 2 1 23 0 0 15 0 0
+fn=pypy_g_chr
+0 109504 28 18 24544 0 0 47200 728 25
+fn=pypy_g_clear_large_memory_chunk
+0 32130 1408 42 4998 0 0 9996 0 0
+fn=pypy_g_close
+0 3740 249 31 1360 61 1 850 0 0
+fn=pypy_g_cmp
+0 61360 1169 12 16902 149 0 20658 0 0
+fn=pypy_g_cmp_1
+0 2504 134 2 626 0 0 626 0 0
+fn=pypy_g_comparison_eq_impl
+0 20523866 382709 222 7476397 272488 4316 7347096 1233 0
+fn=pypy_g_comparison_ge_impl
+0 1734976 86481 240 621784 45503 350 621392 0 0
+fn=pypy_g_comparison_gt_impl
+0 2275189 55798 109 828378 13917 101 798698 0 0
+fn=pypy_g_comparison_le_impl
+0 896125 32249 79 321000 12420 32 321000 0 0
+fn=pypy_g_comparison_lt_impl
+0 4868284 76888 94 1744636 41041 366 1742664 22 0
+fn=pypy_g_comparison_ne_impl
+0 2265262 113243 495 845145 31804 648 823375 82 0
+fn=pypy_g_compile
+0 12953 808 92 3971 169 3 4699 0 0
+fn=pypy_g_compute_C3_mro
+0 1373365 27755 1038 542067 857 26 360568 578 31
+fn=pypy_g_construct_stream_tower
+0 47895 1672 223 12375 0 0 14643 495 31
+fn=pypy_g_contains
+0 6830856 206994 29 2276952 18 0 2846190 3 0
+fn=pypy_g_contains__List_ANY
+0 739961 11164 320 217070 689 9 218790 0 0
+fn=pypy_g_contains__String_String
+0 919332 19842 23 318936 6803 458 239202 1109 4
+fn=pypy_g_contains__Tuple_ANY
+0 948431 10206 46 293308 4188 177 266795 7 0
+fn=pypy_g_count_repetitions
+0 1501718 6640 17 541184 10 0 403358 99 0
+fn=pypy_g_cpython_code_signature
+0 658967 3643 176 189261 4 0 228142 5470 289
+fn=pypy_g_createexecutioncontext
+0 43132 12 11 6171 0 0 6201 384 384
+fn=pypy_g_createframe
+0 32616280 553857 123 9624410 144 0 16040704 806376 53379
+fn=pypy_g_decode_mode
+0 48127 1661 95 11379 415 15 14234 280 12
+fn=pypy_g_default_identity_hash
+0 9944502 169946 50 3107649 7683 20 2796894 112088 5152
+fn=pypy_g_delattr
+0 156919 7652 47 48699 0 0 64932 0 0
+fn=pypy_g_delattr__Type_ANY
+0 13200 1050 52 4650 58 0 5100 0 0
+fn=pypy_g_delegate_Bool2IntObject
+0 62974 2852 18 19166 0 0 16428 684 48
+fn=pypy_g_delegate_Int2Long
+0 190144 1977 166 59420 0 0 59420 1499 5
+fn=pypy_g_delete
+0 17284 1192 78 5364 0 0 7152 0 0
+fn=pypy_g_delitem
+0 236495 9721 44 73395 0 0 97860 0 0
+fn=pypy_g_delitem__List_ANY
+0 37012 1635 153 11688 0 0 13636 0 0
+fn=pypy_g_delitem__List_Slice
+0 2012 132 80 768 0 0 600 0 0
+fn=pypy_g_delslice
+0 2816 165 83 836 0 0 1100 17 4
+fn=pypy_g_depth_BUILD_LIST
+0 132 9 1 66 0 0 22 0 0
+fn=pypy_g_depth_BUILD_TUPLE
+0 222 39 12 111 0 0 37 0 0
+fn=pypy_g_depth_CALL_FUNCTION
+0 11075 152 9 1772 0 0 886 0 0
+fn=pypy_g_depth_CALL_FUNCTION_VAR
+0 738 82 2 246 0 0 246 0 0
+fn=pypy_g_depth_MAKE_CLOSURE
+0 18 1 0 9 0 0 3 0 0
+fn=pypy_g_depth_MAKE_FUNCTION
+0 1122 133 8 561 0 0 187 0 0
+fn=pypy_g_depth_UNPACK_SEQUENCE
+0 150 33 2 75 0 0 25 0 0
+fn=pypy_g_descr__class__
+0 1607221 96604 10 918412 0 0 229603 0 0
+fn=pypy_g_descr__delattr__
+0 586642 28425 205 204480 572 0 227908 0 0
+fn=pypy_g_descr__doc
+0 627 57 6 114 0 0 247 0 0
+fn=pypy_g_descr__getattribute__
+0 159255384 806306 125 53433058 444479 3317 61811192 26121 79
+fn=pypy_g_descr__hash__unhashable
+0 21825 1800 260 5400 0 0 9900 171 16
+fn=pypy_g_descr__init__
+0 675775 38084 5 270310 0 0 135155 0 0
+fn=pypy_g_descr__new__
+0 13602 924 53 4635 2 0 3789 0 0
+fn=pypy_g_descr__new___1
+0 1689176 39235 158 502740 1140 0 502140 0 0
+fn=pypy_g_descr__new___10
+0 2577367 126766 433 860859 229 0 730853 0 0
+fn=pypy_g_descr__new___11
+0 45991 3503 448 14238 282 129 17854 28 3
+fn=pypy_g_descr__new___12
+0 2698 70 30 760 0 0 1178 10 1
+fn=pypy_g_descr__new___2
+0 122305 7882 17 35703 0 0 35703 0 0
+fn=pypy_g_descr__new___3
+0 775676 66528 473 236647 27 0 248509 1303 41
+fn=pypy_g_descr__new___4
+0 5493736 167976 83 1869283 51765 612 1989271 2 0
+fn=pypy_g_descr__new___5
+0 472484 34118 44 138288 0 0 149812 2886 185
+fn=pypy_g_descr__new___6
+0 29205 3786 54 7788 0 0 7788 0 0
+fn=pypy_g_descr__new___7
+0 957674 24753 595 373158 190 6 413235 184 7
+fn=pypy_g_descr__new___8
+0 14048 780 244 4254 57 50 5443 9 0
+fn=pypy_g_descr__new___9
+0 128 10 10 43 1 1 41 0 0
+fn=pypy_g_descr__new__weakref
+0 191665 11316 323 71365 215 0 78375 222 130
+fn=pypy_g_descr__repr__
+0 45540 2016 177 12144 1 0 20746 68 4
+fn=pypy_g_descr__setattr__
+0 30789656 504481 112 11371814 73640 136 12557771 5106 40
+fn=pypy_g_descr__str__
+0 36 9 3 9 0 0 9 0 0
+fn=pypy_g_descr_function_get
+0 26540354 348693 193 8803744 66 1 9428783 309533 21822
+fn=pypy_g_descr_get__bases__
+0 34544 2513 105 10160 52 10 11176 278 15
+fn=pypy_g_descr_get__module
+0 32149 3164 35 7419 0 0 12365 1 0
+fn=pypy_g_descr_get__mro__
+0 15640 561 53 4600 35 5 5060 103 11
+fn=pypy_g_descr_get__name__
+0 1765794 80996 84 477241 4396 256 524966 13615 914
+fn=pypy_g_descr_get_dict
+0 754380 19945 31 276606 649 2 201168 4614 0
+fn=pypy_g_descr_get_weakref
+0 216 36 3 90 0 0 54 0 0
+fn=pypy_g_descr_mro
+0 22755 1845 63 6150 0 0 7995 192 14
+fn=pypy_g_descr_new__
+0 5210 20 10 60 0 0 1340 80 2
+fn=pypy_g_descr_new_super
+0 5775953 246351 297 1912488 38 1 2369186 20851 1419
+fn=pypy_g_descr_set___class__
+0 178 14 7 72 2 0 58 0 0
+fn=pypy_g_descr_set__name__
+0 4196 368 14 1365 0 0 1373 0 0
+fn=pypy_g_descr_set_dict
+0 1351 1 0 772 0 0 193 0 0
+fn=pypy_g_descr_typecheck_descr_get_dict
+0 10374 588 18 2184 0 0 1092 0 0
+fn=pypy_g_descr_typecheck_descr_get_dict_1
+0 6935 365 101 1460 0 0 365 0 0
+fn=pypy_g_descr_typecheck_descr_set_dict
+0 2898 252 13 882 0 0 504 0 0
+fn=pypy_g_descr_typecheck_fget_10
+0 7056 504 117 1848 0 0 1344 39 3
+fn=pypy_g_descr_typecheck_fget_11
+0 4756 348 164 1276 19 0 928 33 0
+fn=pypy_g_descr_typecheck_fget_12
+0 4879 357 149 1309 1 0 952 33 1
+fn=pypy_g_descr_typecheck_fget_13
+0 9471 462 42 2583 6 0 1722 72 9
+fn=pypy_g_descr_typecheck_fget_14
+0 4165 357 113 1071 22 1 714 34 2
+fn=pypy_g_descr_typecheck_fget_15
+0 3927 240 106 1071 19 0 714 26 1
+fn=pypy_g_descr_typecheck_fget_16
+0 11022 617 68 3006 35 16 2004 86 7
+fn=pypy_g_descr_typecheck_fget_2
+0 8712 782 59 2178 15 0 363 0 0
+fn=pypy_g_descr_typecheck_fget_24
+0 2467 142 21 576 0 0 96 0 0
+fn=pypy_g_descr_typecheck_fget_25
+0 5520 460 25 1380 0 0 230 0 0
+fn=pypy_g_descr_typecheck_fget_26
+0 1080 45 7 270 0 0 45 0 0
+fn=pypy_g_descr_typecheck_fget_3
+0 4584 336 29 1146 0 0 191 0 0
+fn=pypy_g_descr_typecheck_fget_33
+0 45152 3984 12 11952 0 0 7968 350 5
+fn=pypy_g_descr_typecheck_fget_34
+0 33200 2656 6 7968 6 0 1328 0 0
+fn=pypy_g_descr_typecheck_fget_35
+0 45152 2656 7 11952 0 0 7968 337 3
+fn=pypy_g_descr_typecheck_fget_36
+0 43824 3984 14 11952 0 0 7968 344 7
+fn=pypy_g_descr_typecheck_fget_8
+0 5544 504 71 1512 14 0 1008 46 1
+fn=pypy_g_descr_typecheck_fget_9
+0 4879 357 117 1309 1 0 952 31 2
+fn=pypy_g_descr_typecheck_fget___module__
+0 3757 252 39 1247 26 0 509 0 0
+fn=pypy_g_descr_typecheck_fget_co_cellvars
+0 3094 182 58 714 0 0 357 0 0
+fn=pypy_g_descr_typecheck_fget_co_consts
+0 4879 353 153 1309 31 0 952 41 3
+fn=pypy_g_descr_typecheck_fget_co_freevars
+0 3094 301 85 714 0 0 357 0 0
+fn=pypy_g_descr_typecheck_fget_co_names
+0 4760 357 120 1309 12 0 952 30 1
+fn=pypy_g_descr_typecheck_fget_co_varnames
+0 4550 287 69 1050 0 0 525 0 0
+fn=pypy_g_descr_typecheck_fget_code
+0 275 22 14 77 0 0 11 0 0
+fn=pypy_g_descr_typecheck_fget_f_lineno
+0 473 44 16 121 0 0 99 4 0
+fn=pypy_g_descr_typecheck_fget_func_closure
+0 9801 726 45 2178 0 0 1089 0 0
+fn=pypy_g_descr_typecheck_fget_func_code
+0 13872 1131 83 3468 49 1 578 0 0
+fn=pypy_g_descr_typecheck_fget_func_defaults
+0 10583 1512 91 2963 106 26 461 2 0
+fn=pypy_g_descr_typecheck_fget_func_doc
+0 1064 168 43 224 0 0 112 0 0
+fn=pypy_g_descr_typecheck_fget_func_name
+0 7749 546 59 2079 11 0 1512 46 3
+fn=pypy_g_descr_typecheck_fget_getdictscope
+0 12240 291 66 3740 0 0 2040 8 0
+fn=pypy_g_descr_typecheck_fset_func_name
+0 990 110 4 308 0 0 242 5 0
+fn=pypy_g_dfs_postorder
+0 175963 1980 210 60089 16 0 64546 587 64
+fn=pypy_g_dict_get__DictMulti_ANY_ANY
+0 710165 25765 116 249648 5330 95 165178 0 0
+fn=pypy_g_dict_items__DictMulti
+0 55491 6034 233 17370 786 4 14902 511 30
+fn=pypy_g_dict_iteritems__DictMulti
+0 1800 142 44 600 42 0 600 18 0
+fn=pypy_g_dict_itervalues__DictMulti
+0 36 3 3 12 2 0 12 0 0
+fn=pypy_g_dict_mth_mm_clear_perform_call
+0 37 2 2 13 1 1 10 0 0
+fn=pypy_g_dict_mth_mm_copy_perform_call
+0 16416 1414 81 5928 336 22 4560 0 0
+fn=pypy_g_dict_mth_mm_get_W_DictMultiObject_W_Root_W_Root
+0 743336 13759 70 270304 0 0 253410 1 0
+fn=pypy_g_dict_mth_mm_get_perform_call
+0 861594 14923 134 388562 18042 290 253410 3 0
+fn=pypy_g_dict_mth_mm_has_key_W_DictMultiObject_W_Root
+0 44475 584 12 13980 443 0 5592 0 0
+fn=pypy_g_dict_mth_mm_has_key_perform_call
+0 60114 706 13 25164 731 6 18174 0 0
+fn=pypy_g_dict_mth_mm_items_perform_call
+0 51012 4207 62 18421 1348 35 14170 0 0
+fn=pypy_g_dict_mth_mm_iteritems_W_DictMultiObject
+0 1850 221 53 600 0 0 450 0 0
+fn=pypy_g_dict_mth_mm_iteritems_perform_call
+0 1800 130 44 650 41 12 500 0 0
+fn=pypy_g_dict_mth_mm_itervalues_W_DictMultiObject
+0 37 4 4 12 0 0 9 0 0
+fn=pypy_g_dict_mth_mm_itervalues_perform_call
+0 36 3 3 13 1 1 10 0 0
+fn=pypy_g_dict_mth_mm_keys_W_DictMultiObject
+0 382832 38783 322 116884 3533 31 80860 2219 140
+fn=pypy_g_dict_mth_mm_keys_perform_call
+0 292226 15639 43 102674 7312 32 78980 0 0
+fn=pypy_g_dict_mth_mm_pop_W_DictMultiObject_W_Root
+0 42592 2898 141 15488 0 0 14520 0 0
+fn=pypy_g_dict_mth_mm_pop_perform_call
+0 44528 2898 129 18392 1790 73 13552 0 0
+fn=pypy_g_dict_mth_mm_popitem_perform_call
+0 14948 808 99 5252 396 31 4040 0 0
+fn=pypy_g_dict_mth_mm_setdefault_perform_call
+0 538203 37194 134 242719 17357 242 158295 5 0
+fn=pypy_g_dict_mth_mm_update_perform_call
+0 151281 18400 123 54306 4598 86 46548 0 0
+fn=pypy_g_dict_mth_mm_values_W_DictMultiObject
+0 2336 177 53 720 33 11 506 12 5
+fn=pypy_g_dict_mth_mm_values_perform_call
+0 1776 108 36 624 40 15 480 0 0
+fn=pypy_g_dict_pop__DictMulti_ANY
+0 70894 5743 178 24385 222 13 19595 0 0
+fn=pypy_g_dictrepr
+0 1373938 7487 883 485376 72 0 648656 289 27
+fn=pypy_g_dictrepr_star2
+0 15748 1488 300 4092 0 0 6696 145 19
+fn=pypy_g_digits_from_nonneg_long__r_longlong
+0 45288 894 39 12616 190 5 11325 265 17
+fn=pypy_g_dir
+0 11832 1088 129 3264 0 0 4624 124 1
+fn=pypy_g_dir_1
+0 132844 10052 662 38544 76 0 58334 718 5
+fn=pypy_g_dispatch_loop
+0 7940792 5312 18 2796380 5421 15 1366176 0 0
+fn=pypy_g_dispatcher
+0 34408256 93489 123 9832708 0 0 7383864 1099 74
+fn=pypy_g_dispatcher_1
+0 478404 34817 67 159468 0 0 119601 0 0
+fn=pypy_g_dispatcher_100
+0 7389448 180539 28 2015304 0 0 1007652 0 0
+fn=pypy_g_dispatcher_101
+0 3450 600 47 900 0 0 450 0 0
+fn=pypy_g_dispatcher_102
+0 8328936 131213 19 2271528 0 0 1135764 0 0
+fn=pypy_g_dispatcher_103
+0 19640 1820 74 4910 0 0 1964 0 0
+fn=pypy_g_dispatcher_104
+0 40230 3894 217 11920 0 0 7450 0 0
+fn=pypy_g_dispatcher_105
+0 146475 10813 39 43400 0 0 21700 1 0
+fn=pypy_g_dispatcher_107
+0 1236002 119989 781 388198 438 76 356260 13312 746
+fn=pypy_g_dispatcher_109
+0 2037 194 50 582 0 0 97 0 0
+fn=pypy_g_dispatcher_11
+0 192456 9586 63 52488 0 0 26244 0 0
+fn=pypy_g_dispatcher_111
+0 4788 345 122 1368 0 0 684 0 0
+fn=pypy_g_dispatcher_112
+0 468 77 16 117 0 0 78 0 0
+fn=pypy_g_dispatcher_113
+0 744 233 154 186 0 0 124 0 0
+fn=pypy_g_dispatcher_115
+0 272 12 8 88 0 0 48 4 0
+fn=pypy_g_dispatcher_116
+0 31 3 3 7 0 0 1 0 0
+fn=pypy_g_dispatcher_12
+0 345100 57319 41 98600 0 0 73950 0 0
+fn=pypy_g_dispatcher_121
+0 24519366 158803 36 7958359 24 0 6121141 152385 10074
+fn=pypy_g_dispatcher_126
+0 36 9 6 9 0 0 6 0 0
+fn=pypy_g_dispatcher_127
+0 70 6 3 22 2 0 12 0 0
+fn=pypy_g_dispatcher_13
+0 6310320 193046 21 2097452 0 0 1573089 0 0
+fn=pypy_g_dispatcher_131
+0 1101051 129652 59 293140 0 0 219855 0 0
+fn=pypy_g_dispatcher_132
+0 1992 328 74 581 0 0 249 0 0
+fn=pypy_g_dispatcher_133
+0 338125 32862 62 81150 0 0 40575 0 0
+fn=pypy_g_dispatcher_134
+0 4374 324 68 1296 1 0 648 0 0
+fn=pypy_g_dispatcher_135
+0 2119572 85972 41 706524 0 0 529893 0 0
+fn=pypy_g_dispatcher_136
+0 44166 1259 48 15588 0 0 10392 0 0
+fn=pypy_g_dispatcher_138
+0 22236 2616 207 6540 0 0 3924 0 0
+fn=pypy_g_dispatcher_14
+0 975540 71645 74 243885 0 0 97554 0 0
+fn=pypy_g_dispatcher_140
+0 194 18 8 64 0 0 50 1 0
+fn=pypy_g_dispatcher_141
+0 82 4 3 26 0 0 18 0 0
+fn=pypy_g_dispatcher_142
+0 84 28 4 21 0 0 14 0 0
+fn=pypy_g_dispatcher_144
+0 491667 41844 29 146454 0 0 115071 2659 195
+fn=pypy_g_dispatcher_145
+0 53592 8927 79 13398 0 0 8932 0 0
+fn=pypy_g_dispatcher_148
+0 380 24 24 120 0 0 100 0 0
+fn=pypy_g_dispatcher_149
+0 254 6 4 80 0 0 10 0 0
+fn=pypy_g_dispatcher_15
+0 7074098 408816 52 1945375 3 0 1768526 70254 4186
+fn=pypy_g_dispatcher_154
+0 17620 1762 49 5286 0 0 881 0 0
+fn=pypy_g_dispatcher_156
+0 54583974 218823 49 11897610 0 0 4759044 0 0
+fn=pypy_g_dispatcher_157
+0 429874 45999 631 138685 7 0 127144 4371 226
+fn=pypy_g_dispatcher_158
+0 287198 16877 61 101364 0 0 84470 0 0
+fn=pypy_g_dispatcher_159
+0 77580 15038 207 23274 0 0 11637 0 0
+fn=pypy_g_dispatcher_16
+0 1564331 83647 52 491646 13154 953 268172 11373 705
+fn=pypy_g_dispatcher_160
+0 19572 645 10 5592 0 0 4194 0 0
+fn=pypy_g_dispatcher_161
+0 500 85 25 150 0 0 100 0 0
+fn=pypy_g_dispatcher_162
+0 24624 2973 173 6840 127 0 6840 120 4
+fn=pypy_g_dispatcher_163
+0 263825 13606 60 84424 0 0 52765 0 0
+fn=pypy_g_dispatcher_165
+0 31174 5460 200 9919 1 0 4251 0 0
+fn=pypy_g_dispatcher_166
+0 21 3 3 6 0 0 2 0 0
+fn=pypy_g_dispatcher_167
+0 480 62 21 144 0 0 96 0 0
+fn=pypy_g_dispatcher_169
+0 10 2 2 3 0 0 2 0 0
+fn=pypy_g_dispatcher_17
+0 2520 252 71 630 0 0 252 0 0
+fn=pypy_g_dispatcher_170
+0 7272 808 27 2020 0 0 808 0 0
+fn=pypy_g_dispatcher_18
+0 269416 18003 60 76976 0 0 57732 0 0
+fn=pypy_g_dispatcher_181
+0 1120 112 104 280 0 0 112 0 0
+fn=pypy_g_dispatcher_19
+0 14 2 2 4 0 0 3 0 0
+fn=pypy_g_dispatcher_191
+0 1044 146 14 348 0 0 261 0 0
+fn=pypy_g_dispatcher_194
+0 836 114 13 228 0 0 114 0 0
+fn=pypy_g_dispatcher_2
+0 1044436 31219 35 303768 0 0 255954 3524 454
+fn=pypy_g_dispatcher_20
+0 14 3 3 4 0 0 3 0 0
+fn=pypy_g_dispatcher_201
+0 1020 130 43 306 0 0 51 0 0
+fn=pypy_g_dispatcher_203
+0 673476 51086 54 168369 0 0 112246 0 0
+fn=pypy_g_dispatcher_21
+0 78204 12128 161 22344 0 0 16758 0 0
+fn=pypy_g_dispatcher_22
+0 204736 337 35 58496 0 0 43872 0 0
+fn=pypy_g_dispatcher_220
+0 197839 21808 107 46844 0 0 35133 0 0
+fn=pypy_g_dispatcher_221
+0 218295 40042 125 58212 0 0 43659 0 0
+fn=pypy_g_dispatcher_226
+0 30 2 2 8 0 0 6 0 0
+fn=pypy_g_dispatcher_228
+0 4788 630 12 1328 0 0 996 0 0
+fn=pypy_g_dispatcher_23
+0 72473 5865 327 18906 0 0 12604 0 0
+fn=pypy_g_dispatcher_230
+0 85 15 6 20 0 0 15 0 0
+fn=pypy_g_dispatcher_231
+0 83550 10235 36 22280 0 0 16710 0 0
+fn=pypy_g_dispatcher_237
+0 442 26 1 104 0 0 78 0 0
+fn=pypy_g_dispatcher_24
+0 29238 4540 173 7974 0 0 3987 0 0
+fn=pypy_g_dispatcher_240
+0 204 8 7 48 0 0 36 0 0
+fn=pypy_g_dispatcher_244
+0 261 43 15 60 0 0 45 0 0
+fn=pypy_g_dispatcher_246
+0 495 28 1 132 0 0 99 0 0
+fn=pypy_g_dispatcher_25
+0 106886 10942 194 30540 0 0 22911 0 0
+fn=pypy_g_dispatcher_28
+0 28 4 3 6 0 0 4 0 0
+fn=pypy_g_dispatcher_29
+0 4446 171 115 1254 0 0 798 39 5
+fn=pypy_g_dispatcher_3
+0 568982 35244 54 167588 0 0 125691 0 0
+fn=pypy_g_dispatcher_30
+0 510722 33923 55 146816 0 0 76542 2021 20
+fn=pypy_g_dispatcher_303
+0 49 6 6 13 0 0 12 1 0
+fn=pypy_g_dispatcher_304
+0 202510 15572 22 60752 0 0 40500 0 0
+fn=pypy_g_dispatcher_32
+0 12597 1892 38 3876 0 0 2907 0 0
+fn=pypy_g_dispatcher_324
+0 2100 144 18 675 0 0 300 0 0
+fn=pypy_g_dispatcher_33
+0 11172 329 38 3192 0 0 1596 7 0
+fn=pypy_g_dispatcher_331
+0 21296 2904 189 5808 0 0 4840 0 0
+fn=pypy_g_dispatcher_333
+0 3119 208 23 1110 8 0 645 0 0
+fn=pypy_g_dispatcher_334
+0 850 170 114 227 0 0 58 0 0
+fn=pypy_g_dispatcher_335
+0 455 105 6 105 0 0 70 0 0
+fn=pypy_g_dispatcher_338
+0 13888 36 11 3968 0 0 3472 0 0
+fn=pypy_g_dispatcher_339
+0 18459 515 68 6672 48 0 3669 0 0
+fn=pypy_g_dispatcher_34
+0 60200 6832 128 17200 0 0 10320 419 32
+fn=pypy_g_dispatcher_35
+0 151984 14990 44 32568 0 0 21712 0 0
+fn=pypy_g_dispatcher_36
+0 626520 74357 59 156630 0 0 104420 0 0
+fn=pypy_g_dispatcher_4
+0 147912 11348 78 36978 0 0 24652 0 0
+fn=pypy_g_dispatcher_40
+0 1495 130 28 455 0 0 65 0 0
+fn=pypy_g_dispatcher_41
+0 22 2 2 7 0 0 1 0 0
+fn=pypy_g_dispatcher_42
+0 1541342 12649 72 416024 0 0 59432 0 0
+fn=pypy_g_dispatcher_43
+0 19788 252 26 4947 0 0 3298 0 0
+fn=pypy_g_dispatcher_44
+0 924 132 47 198 0 0 132 0 0
+fn=pypy_g_dispatcher_45
+0 1708 347 87 488 0 0 366 0 0
+fn=pypy_g_dispatcher_46
+0 308 8 6 88 0 0 66 0 0
+fn=pypy_g_dispatcher_49
+0 14420 270 14 4120 0 0 3090 0 0
+fn=pypy_g_dispatcher_5
+0 2840 280 83 781 0 0 710 46 7
+fn=pypy_g_dispatcher_51
+0 854 169 18 244 0 0 183 0 0
+fn=pypy_g_dispatcher_54
+0 68640 6653 90 22880 0 0 11440 5 0
+fn=pypy_g_dispatcher_56
+0 253528 33816 37 69144 0 0 34572 0 0
+fn=pypy_g_dispatcher_57
+0 5776016 174019 67 1665321 9 0 1507566 60352 4056
+fn=pypy_g_dispatcher_58
+0 3435852 109717 88 1049842 26331 1075 572644 25901 1479
+fn=pypy_g_dispatcher_59
+0 975 130 27 325 0 0 260 0 0
+fn=pypy_g_dispatcher_6
+0 493016 23813 106 154947 2718 192 84518 3579 433
+fn=pypy_g_dispatcher_61
+0 3206 368 41 916 0 0 687 0 0
+fn=pypy_g_dispatcher_65
+0 4424 474 10 1264 0 0 948 0 0
+fn=pypy_g_dispatcher_66
+0 2210880 66186 14 552720 0 0 414540 0 0
+fn=pypy_g_dispatcher_67
+0 398739 17280 56 148263 3246 26 129147 0 0
+fn=pypy_g_dispatcher_68
+0 3530100 125950 22 1059030 0 0 529515 0 0
+fn=pypy_g_dispatcher_69
+0 42834 5707 191 11682 0 0 5841 0 0
+fn=pypy_g_dispatcher_7
+0 92080 908 79 23020 0 0 9208 0 0
+fn=pypy_g_dispatcher_70
+0 866116 84470 216 276420 7869 93 221136 7557 406
+fn=pypy_g_dispatcher_71
+0 104560 15135 47 31368 0 0 20912 0 0
+fn=pypy_g_dispatcher_72
+0 2232 372 61 620 0 0 248 0 0
+fn=pypy_g_dispatcher_73
+0 2418267 77817 27 853506 0 0 711255 0 0
+fn=pypy_g_dispatcher_74
+0 78980 15048 47 23694 0 0 15796 0 0
+fn=pypy_g_dispatcher_75
+0 8015630 358283 108 2977904 0 0 2791785 0 0
+fn=pypy_g_dispatcher_76
+0 1360 120 4 340 0 0 136 0 0
+fn=pypy_g_dispatcher_77
+0 228 38 17 76 0 0 57 0 0
+fn=pypy_g_dispatcher_78
+0 7546 638 10 2058 0 0 1029 0 0
+fn=pypy_g_dispatcher_8
+0 15699426 274391 55 6026967 35336 207 4761597 134 0
+fn=pypy_g_dispatcher_87
+0 81675 18130 172 24200 0 0 15125 0 0
+fn=pypy_g_dispatcher_88
+0 12980 1534 21 3245 0 0 1298 0 0
+fn=pypy_g_dispatcher_9
+0 60576 9653 113 15144 0 0 10096 0 0
+fn=pypy_g_dispatcher_92
+0 160 16 2 40 0 0 16 0 0
+fn=pypy_g_dispatcher_93
+0 40656 4546 145 11088 0 0 5544 0 0
+fn=pypy_g_dispatcher_95
+0 84 8 2 32 0 0 28 0 0
+fn=pypy_g_dispatcher_97
+0 20 5 5 5 0 0 2 0 0
+fn=pypy_g_dispatcher_99
+0 1403808 39789 54 350952 206 0 394821 11277 799
+fn=pypy_g_div
+0 16 4 3 4 0 0 4 0 0
+fn=pypy_g_div__Int_Int
+0 1096 56 0 274 0 0 274 0 0
+fn=pypy_g_dumps
+0 104 7 7 30 1 0 36 2 0
+fn=pypy_g_entry_point
+0 305 18 16 105 2 1 110 2 1
+fn=pypy_g_eq
+0 48 12 10 12 0 0 12 0 0
+fn=pypy_g_eq__DictMulti_DictMulti
+0 2203370 67537 485 685531 9955 1069 740469 2 0
+fn=pypy_g_eq__Tuple_Tuple
+0 1511299 101671 88 694430 37579 2839 246822 3 0
+fn=pypy_g_equal_wrappeditems
+0 231701 15848 49 109772 6001 312 37823 3 0
+fn=pypy_g_eval
+0 717 69 39 234 17 0 261 8 0
+fn=pypy_g_exc_info
+0 106704 9360 514 31824 442 0 39312 563 52
+fn=pypy_g_exception_match
+0 15828450 225601 134 5996613 7 0 4454910 0 0
+fn=pypy_g_fastfunc_descr__eq___2
+0 3479 157 32 1065 52 16 1136 0 0
+fn=pypy_g_fastfunc_descr__iter___1
+0 66560 3219 13 16640 0 0 3328 0 0
+fn=pypy_g_fastfunc_descr_code__hash___1
+0 8970 474 21 2070 0 0 3450 1 0
+fn=pypy_g_fastfunc_descr_function_repr_1
+0 69423 767 110 18069 148 12 26628 122 12
+fn=pypy_g_fastfunc_descr_function_repr_1_1
+0 612 72 8 180 0 0 216 0 0
+fn=pypy_g_fastfunc_descr_hash_1
+0 111691 14097 217 36379 31 2 31182 0 0
+fn=pypy_g_fastfunc_descr_iter_1
+0 72 6 4 24 0 0 28 2 0
+fn=pypy_g_fastfunc_descr_lock_1
+0 2670 255 26 850 0 0 623 0 0
+fn=pypy_g_fastfunc_descr_member_del_2
+0 28608 1254 40 9536 24 0 11324 0 0
+fn=pypy_g_fastfunc_descr_member_get_3
+0 8077914 142546 31 2692638 0 0 3291002 2283 14
+fn=pypy_g_fastfunc_descr_member_set_3
+0 6160440 94796 56 2240160 508 0 2464176 6298 25
+fn=pypy_g_fastfunc_descr_method_eq_2
+0 168 14 3 49 0 0 63 0 0
+fn=pypy_g_fastfunc_descr_method_get_3
+0 21276 2364 131 7092 0 0 8668 0 0
+fn=pypy_g_fastfunc_descr_method_getattribute_2
+0 21024 1037 58 6132 0 0 7884 0 0
+fn=pypy_g_fastfunc_descr_method_hash_1
+0 6710 466 34 1898 15 0 2200 8 0
+fn=pypy_g_fastfunc_descr_next_1
+0 265940 16806 22 53188 93 0 26594 0 0
+fn=pypy_g_fastfunc_descr_next_1_1
+0 3354 2 2 774 0 0 1290 0 0
+fn=pypy_g_fastfunc_descr_property_get_3
+0 8711469 165477 39 2903823 0 0 3549117 7626 31
+fn=pypy_g_fastfunc_descr_property_set_3
+0 12586 516 15 4340 0 0 5208 0 0
+fn=pypy_g_fastfunc_descr_staticmethod_get_3
+0 4593450 36827 10 1531150 34235 16 1224920 12530 39
+fn=pypy_g_fastfunc_descr_unlock_1
+0 1275 82 6 340 0 0 510 0 0
+fn=pypy_g_fastfunc_exp_1
+0 20 2 2 8 1 1 5 0 0
+fn=pypy_g_fastfunc_importhook_4
+0 208494 10783 48 75816 0 0 82134 66 1
+fn=pypy_g_fastfunc_pypy_initial_path_1
+0 36 2 1 9 0 0 12 0 0
+fn=pypy_g_fastfunc_sqrt_1
+0 20 2 2 8 0 0 5 0 0
+fn=pypy_g_fdopen_as_stream
+0 83 7 6 24 0 0 31 1 0
+fn=pypy_g_fget
+0 17010 2156 67 4860 0 0 3240 0 0
+fn=pypy_g_fget_1
+0 88830 831 23 25380 0 0 16920 0 0
+fn=pypy_g_fget_5
+0 11634 831 29 3324 0 0 2216 0 0
+fn=pypy_g_fget_7
+0 882 120 34 252 0 0 168 0 0
+fn=pypy_g_fget_8
+0 483 32 12 138 0 0 92 0 0
+fn=pypy_g_filter
+0 438196 21288 193 128207 129 0 176275 367 86
+fn=pypy_g_find_futures
+0 17360 1240 135 5208 8 0 7192 186 17
+fn=pypy_g_find_metaclass
+0 162160 7698 409 48165 0 0 67355 0 0
+fn=pypy_g_find_metaclass_star4
+0 142593 9182 146 42108 0 0 60291 1250 55
+fn=pypy_g_find_module_1
+0 1115451 30648 858 400019 92 0 503238 438 9
+fn=pypy_g_find_module_star2
+0 81250 5229 165 21450 0 0 35100 728 39
+fn=pypy_g_finditem
+0 70543904 231256 90 29188152 563613 7140 17026422 2119 7
+fn=pypy_g_finish
+0 125 9 8 30 0 0 45 1 0
+fn=pypy_g_float
+0 19516 696 137 5453 0 0 7175 0 0
+fn=pypy_g_flush
+0 3080 171 116 969 59 50 970 0 0
+fn=pypy_g_flushable
+0 4568 256 33 1445 54 2 1106 0 0
+fn=pypy_g_format
+0 2189792 19236 171 408029 25 0 467899 8135 937
+fn=pypy_g_formatd_overflow
+0 224 16 8 56 2 1 94 1 0
+fn=pypy_g_frameworkgc_setup
+0 19 2 2 3 1 0 12 1 1
+fn=pypy_g_fromfloat
+0 1736 112 104 504 0 0 560 18 2
+fn=pypy_g_fromfloat_1
+0 10248 784 569 2464 0 0 2464 15 2
+fn=pypy_g_fromint
+0 2380902 143570 1055 550882 1 0 583583 6373 303
+fn=pypy_g_fromshape
+0 145370 10573 547 45812 2 0 58150 1549 84
+fn=pypy_g_funccall_star0
+0 65 5 4 21 4 3 16 0 0
+fn=pypy_g_funccall_star1
+0 163214674 313102 286 54751092 370458 1368 43771504 170 6
+fn=pypy_g_funccall_star2
+0 289216853 344573 271 100637646 552658 2478 106183634 40541 2514
+fn=pypy_g_funccall_star3
+0 119553848 235184 393 42696265 357831 429 49098336 2769 210
+fn=pypy_g_funccall_star4
+0 415278 26935 97 144739 9061 45 182447 309 40
+fn=pypy_g_funccall_star5
+0 15496 1040 50 5512 104 5 6448 121 22
+fn=pypy_g_gallop__False
+0 1889 97 66 682 12 0 465 1 0
+fn=pypy_g_gallop__True
+0 2791 107 71 1011 2 0 731 8 0
+fn=pypy_g_ge
+0 8 2 0 2 0 0 2 0 0
+fn=pypy_g_ge__Float_Long
+0 1288 112 88 336 0 0 336 0 0
+fn=pypy_g_general_op_in
+0 1702498 9296 26 613723 2699 2 358501 857 0
+fn=pypy_g_generate_tokens
+0 9509659 24700 3302 3380725 3660 77 3258689 23055 3104
+fn=pypy_g_get
+0 97950036 156822 38 34173702 132 0 38739556 5440 30
+fn=pypy_g_getFutures
+0 6223 508 63 1905 0 0 2540 71 10
+fn=pypy_g_get_2
+0 104 2 2 36 4 0 12 0 0
+fn=pypy_g_get_and_call_args
+0 31201436 302805 52 10800482 428183 3503 9600444 305652 20454
+fn=pypy_g_get_and_call_function_star0
+0 139170280 146120 72 45230341 344600 1201 38271827 7150 10
+fn=pypy_g_get_and_call_function_star1
+0 254432744 22302 317 86699490 523857 2025 75257158 30903 256
+fn=pypy_g_get_and_call_function_star2
+0 100102272 143466 35 35452888 290241 264 31281960 22884 75
+fn=pypy_g_get_atoms
+0 11370069 1016 140 3997394 16856 221 3470922 19468 711
+fn=pypy_g_get_docstring
+0 11220 556 44 4335 87 0 1198 0 0
+fn=pypy_g_get_list_index
+0 19703220 233598 13 5910966 0 0 9851610 6137 37
+fn=pypy_g_getattr
+0 113807927 364390 119 34908563 248 3 43951333 8495 28
+fn=pypy_g_getattr_1
+0 616807 40073 146 213487 1 0 246150 340 0
+fn=pypy_g_getattr__Type_ANY
+0 34364750 491880 327 10890458 168518 932 13682600 42672 196
+fn=pypy_g_getcwd
+0 111 9 4 30 0 0 33 0 0
+fn=pypy_g_getenv
+0 38 3 3 10 0 0 12 0 0
+fn=pypy_g_getexecutioncontext
+0 9471 574 29 3444 5 0 1722 0 0
+fn=pypy_g_getinitialpath
+0 462 31 23 153 0 0 185 0 0
+fn=pypy_g_getitem
+0 79358703 291929 30 24628563 134 0 32838084 3009 12
+fn=pypy_g_getitem_1
+0 1984 992 25 496 0 0 496 0 0
+fn=pypy_g_getitem__DictMulti_ANY
+0 7832426 228478 179 2672086 75092 833 2129348 8323 530
+fn=pypy_g_getitem__List_ANY
+0 73442652 292515 45 27584510 199764 6547 18974587 59645 3364
+fn=pypy_g_getitem__List_Slice
+0 1484661 69629 169 494886 6381 94 477822 8650 708
+fn=pypy_g_getitem__String_ANY
+0 1029466 47691 148 397663 29321 676 265937 19 2
+fn=pypy_g_getitem__String_Slice
+0 764262 16541 102 245998 1037 1 245962 4457 141
+fn=pypy_g_getitem__Tuple_ANY
+0 17905255 300907 37 6313114 46768 2261 5279898 54905 2885
+fn=pypy_g_getitem__Tuple_Slice
+0 937569 50647 60 377095 8266 318 275339 2317 112
+fn=pypy_g_getpid
+0 52 4 4 14 0 0 16 0 0
+fn=pypy_g_getsignal
+0 46 2 2 14 0 0 14 0 0
+fn=pypy_g_getslice
+0 1719917 67046 78 510896 1 0 672075 10345 650
+fn=pypy_g_globals
+0 3300 284 22 660 0 0 1650 0 0
+fn=pypy_g_gt
+0 2756 689 42 689 0 0 689 0 0
+fn=pypy_g_hasattr
+0 1562936 87903 185 425252 1 0 568842 531 0
+fn=pypy_g_hash
+0 26483430 248881 134 7333686 7055 52 9777798 3983 7
+fn=pypy_g_hash_1
+0 106404 23958 14 26601 0 0 26601 0 0
+fn=pypy_g_hash__Tuple
+0 6827728 136847 140 2445014 18447 1031 1793514 16416 918
+fn=pypy_g_hashfunction_for_BuiltinFunction
+0 63444 1520 28 22392 1212 670 3732 0 0
+fn=pypy_g_hashfunction_for_Function
+0 87985 3636 69 30864 1312 499 5323 0 0
+fn=pypy_g_hashfunction_for_GetSetProperty
+0 272 32 8 96 8 5 16 0 0
+fn=pypy_g_hashfunction_for_Module
+0 516 60 12 180 0 0 32 0 0
+fn=pypy_g_hashfunction_for_UCD
+0 17 2 2 6 0 0 1 0 0
+fn=pypy_g_hashfunction_for_W_NoneObject
+0 373524 15111 22 131832 0 0 21972 0 0
+fn=pypy_g_hashfunction_for_W_ObjectObject
+0 3714950 84670 17 1299462 0 0 227624 0 0
+fn=pypy_g_hashfunction_for_W_Stream
+0 2550 186 20 810 5 0 220 0 0
+fn=pypy_g_hashfunction_for_W_TypeObject
+0 1073960 41341 21 378942 12755 352 63254 0 0
+fn=pypy_g_id
+0 109272 6387 19 36424 47 0 27318 0 0
+fn=pypy_g_import_all_from
+0 129169 293 212 45144 2 0 57496 0 0
+fn=pypy_g_import_all_from_star2
+0 1548 132 97 396 0 0 648 14 0
+fn=pypy_g_importhook
+0 2435947 145140 1472 715657 4260 414 1007165 2397 168
+fn=pypy_g_index
+0 1122453 65787 195 311319 0 0 421743 0 0
+fn=pypy_g_info_modtype
+0 217611 4944 209 56231 94 0 93507 512 18
+fn=pypy_g_init__DictMulti
+0 550088 33788 1160 169428 326 0 233283 2196 136
+fn=pypy_g_init__List
+0 2108927 145500 379 599250 19 0 933467 10140 682
+fn=pypy_g_init__Set
+0 8626 385 74 2546 0 0 3838 51 3
+fn=pypy_g_inplace_add__List_List
+0 35420 1212 94 14168 0 0 11132 0 0
+fn=pypy_g_instantiate_pypy_interpreter_astcompiler_ast_And
+0 112 14 6 28 0 0 35 5 0
+fn=pypy_g_instantiate_pypy_interpreter_astcompiler_ast_Tup
+0 96 11 4 24 0 0 30 5 0
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserNoDictW_18
+0 323 37 2 76 0 0 114 11 0
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserNoDictW_4
+0 61514 8552 421 2462 1 0 54739 3940 304
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserNoDictW_44
+0 112 14 2 28 0 0 35 4 0
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserNoDictW_7
+0 515308 31027 37 121247 2 0 181872 11332 812
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserNoDictW_8
+0 2304 142 5 512 0 0 896 75 8
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserWeakref
+0 240 30 20 60 0 0 75 6 0
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserWeakref_1
+0 44676 5066 30 10512 0 0 13140 1331 107
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserWeakref_14
+0 34 4 2 8 0 0 12 0 0
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserWeakref_2
+0 16 2 2 4 0 0 5 1 0
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserWeakref_3
+0 1451546 92741 30 341537 2 0 512308 42635 2722
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserWeakref_5
+0 2048 170 18 512 0 0 640 64 8
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserWeakref_8
+0 259015 32376 40 64753 0 0 80942 8065 594
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserWithSlo_2
+0 1827 261 30 174 0 0 1044 30 30
+fn=pypy_g_instantiate_pypy_interpreter_typedef_UserWithSlo_7
+0 9684 1549 132 2152 0 0 3766 276 24
+fn=pypy_g_instantiate_pypy_module__sre_interp_sre_W_String
+0 21248 2656 8 5312 0 0 6640 1328 14
+fn=pypy_g_instantiate_pypy_objspace_std_listobject_SimpleS
+0 8560 1070 95 2140 0 0 2140 159 15
+fn=pypy_g_int
+0 335036 22827 131 93613 399 0 123175 0 0
+fn=pypy_g_int_w__Long
+0 177837 31383 14 73227 0 0 52305 0 0
+fn=pypy_g_intern
+0 3439775 9281 215 1132240 2618 179 1266778 101 2
+fn=pypy_g_interp_string_to_float
+0 66505 2947 605 20579 22 9 25258 194 4
+fn=pypy_g_interp_w(...)(long, long) const
+0 371736 10471 52 108423 5790 25 46467 0 0
+fn=pypy_g_interp_w__BuiltinFunction
+0 828 36 5 252 0 0 108 0 0
+fn=pypy_g_interp_w__ClassMethod
+0 35976 2996 61 10493 2 0 4497 0 0
+fn=pypy_g_interp_w__Code
+0 9821 838 43 2989 16 1 1281 0 0
+fn=pypy_g_interp_w__GetSetProperty
+0 7753944 179049 20 2261567 0 0 969243 0 0
+fn=pypy_g_interp_w__Member
+0 9471078 58135 33 2882502 0 0 1235358 0 0
+fn=pypy_g_interp_w__Method
+0 45475 1347 15 12733 0 0 5457 0 0
+fn=pypy_g_interp_w__Module
+0 75 6 4 21 0 0 9 0 0
+fn=pypy_g_interp_w__PyCode
+0 399441 7967 17 121569 15605 1845 52101 0 0
+fn=pypy_g_interp_w__StaticMethod
+0 7043290 164211 14 2143610 4 0 918690 0 0
+fn=pypy_g_interp_w__W_MD5
+0 1058 46 4 322 23 7 138 0 0
+fn=pypy_g_interp_w__W_Property
+0 15157 1304 10 4613 0 0 1977 0 0
+fn=pypy_g_interp_w__W_Random
+0 240 15 2 70 0 0 30 0 0
+fn=pypy_g_interp_w__W_State
+0 61088 490 6 18592 1142 3 7968 0 0
+fn=pypy_g_interp_w__W_Stream
+0 37104 1935 136 10822 0 0 4638 0 0
+fn=pypy_g_interp_w__W_Super
+0 996024 56191 58 290507 5 0 124503 0 0
+fn=pypy_g_interp_w__W_Weakref
+0 93449 4433 50 28441 0 0 12189 0 0
+fn=pypy_g_interp_w__W_XRange
+0 48 4 4 14 0 0 6 0 0
+fn=pypy_g_interp_w__W_XRangeIterator
+0 6192 4 4 1806 0 0 774 0 0
+fn=pypy_g_ioctl
+0 10830 1026 297 3078 2 0 3762 32 2
+fn=pypy_g_is_
+0 1401 155 32 620 0 0 155 0 0
+fn=pypy_g_is_digit
+0 88049 1328 4 27092 1379 21 6773 0 0
+fn=pypy_g_is_mode_ok
+0 2088 174 18 783 87 15 609 0 0
+fn=pypy_g_is_true
+0 58228894 161710 75 21844654 122080 1634 4965920 13 0
+fn=pypy_g_is_true_1
+0 5964486 199311 94 1494100 5639 3 1782651 1 0
+fn=pypy_g_is_word
+0 45180 496 9 12048 1107 13 3012 0 0
+fn=pypy_g_isatty
+0 1729 266 76 399 0 0 399 0 0
+fn=pypy_g_isinstance
+0 297555 15806 3 119022 47 0 119022 0 0
+fn=pypy_g_isinstance_1
+0 11041432 169587 117 4054401 100474 4149 4401897 1183 3
+fn=pypy_g_issubclass
+0 167264 12074 75 48186 8 0 48186 0 0
+fn=pypy_g_iter
+0 8608639 324819 42 2510312 4 0 3586690 477 0
+fn=pypy_g_iter_1
+0 1242 276 28 414 0 0 276 0 0
+fn=pypy_g_iter__RangeList
+0 236358 21526 67 70032 0 0 87540 3226 167
+fn=pypy_g_le
+0 12 3 1 3 0 0 3 0 0
+fn=pypy_g_len
+0 397560 33510 13 99390 0 0 99390 0 0
+fn=pypy_g_list_extend__List_List
+0 40825 2687 197 15946 18 1 13297 1 0
+fn=pypy_g_list_index__List_ANY_ANY_ANY
+0 3217091 2356 91 1001893 263 0 1007657 346 0
+fn=pypy_g_list_insert__List_ANY_ANY
+0 30084 1962 199 11118 144 0 7848 0 0
+fn=pypy_g_list_mth_mm_append_W_ListObject_W_Root
+0 7669846 178628 109 3084975 20126 127 1675607 2539 71
+fn=pypy_g_list_mth_mm_append_perform_call
+0 7595133 136590 121 3179358 92920 1050 2119572 0 0
+fn=pypy_g_list_mth_mm_extend_W_ListObject_W_ListObject
+0 53533 2949 153 18224 0 0 13668 1 0
+fn=pypy_g_list_mth_mm_extend_W_ListObject_W_Root
+0 12130 675 158 3801 1 0 3442 0 0
+fn=pypy_g_list_mth_mm_extend_perform_call
+0 55440 3949 242 23760 1711 65 15840 1 0
+fn=pypy_g_list_mth_mm_index_perform_call
+0 80256 635 45 37864 446 9 26225 0 0
+fn=pypy_g_list_mth_mm_insert_perform_call
+0 33354 2616 100 15042 2185 104 10464 0 0
+fn=pypy_g_list_mth_mm_pop_perform_call
+0 581575 38747 179 243450 17608 69 162300 0 0
+fn=pypy_g_list_mth_mm_remove_perform_call
+0 6966 647 41 2916 195 6 2106 0 0
+fn=pypy_g_list_mth_mm_reverse_perform_call
+0 2988 249 65 1079 83 22 830 0 0
+fn=pypy_g_list_mth_mm_sort_W_ListObject_W_Root_W_Root_W_Ro
+0 13375 1051 123 4815 0 0 3210 0 0
+fn=pypy_g_list_mth_mm_sort_perform_call
+0 31565 2059 96 15515 1594 42 9095 1 0
+fn=pypy_g_list_pop__List_ANY
+0 595100 33536 51 229925 2833 1 175825 0 0
+fn=pypy_g_list_remove__List_ANY
+0 9357 724 58 3231 297 0 2369 0 0
+fn=pypy_g_list_sort__List_ANY_ANY_ANY
+0 79186 4706 153 31566 508 19 26219 258 19
+fn=pypy_g_listdir
+0 22281 54 36 8456 2 0 6714 150 70
+fn=pypy_g_ll_alloc_and_set__GcStruct_listLlT_Signed_Char
+0 953 4 4 143 0 0 149 3 0
+fn=pypy_g_ll_alloc_and_set__GcStruct_listLlT_Signed_Signed
+0 3738809 96921 110 795170 9 0 1269294 17501 1050
+fn=pypy_g_ll_alloc_and_set__GcStruct_listLlT_Signed_object
+0 110898773 254498 120 34451623 81 4 35826223 515854 34208
+fn=pypy_g_ll_alloc_and_set__GcStruct_listLlT_Signed_rpy_st
+0 2494436 1637 124 785455 7 0 734421 10652 525
+fn=pypy_g_ll_arena_round_up_for_allocation
+0 30215808 68827 22 12949632 0 0 4316544 0 0
+fn=pypy_g_ll_arena_round_up_for_allocation_1
+0 7 1 1 3 0 0 1 0 0
+fn=pypy_g_ll_arena_round_up_for_allocation_2
+0 12299952 701 222 5271408 0 0 1757136 0 0
+fn=pypy_g_ll_call_destructor__funcPtr_pypy_interpreter_typ
+0 1376 12 12 602 0 0 430 4 4
+fn=pypy_g_ll_call_destructor__funcPtr_pypy_module__weakref
+0 1712 4 4 749 0 0 535 2 2
+fn=pypy_g_ll_concat__GcArray_Ptr_GcStruct_objectLlT_arrayP
+0 211374 1081 59 61959 1 0 67092 87 0
+fn=pypy_g_ll_concat__GcArray_Ptr_GcStruct_rpy_strin_arrayP
+0 458378 22582 170 148136 0 0 131292 768 52
+fn=pypy_g_ll_concat__GcArray_Ptr_GcStruct_rpy_strin_listPt
+0 40863 2823 93 11565 80 2 14649 15 1
+fn=pypy_g_ll_concat__GcArray_Ptr_GcStruct_rpy_strin_listPt_1
+0 1166988 27176 85 392562 0 0 361624 1702 87
+fn=pypy_g_ll_concat__GcStruct_listLlT_arrayPtr_listPtr
+0 564032 39395 409 199430 1 0 182014 1873 77
+fn=pypy_g_ll_concat__GcStruct_listLlT_listPtr_arrayPtr
+0 26080 962 87 7660 0 0 9524 94 11
+fn=pypy_g_ll_concat__GcStruct_listLlT_listPtr_listPtr
+0 6315170 162189 245 2299457 7185 240 2013554 20147 1009
+fn=pypy_g_ll_concat__GcStruct_listLlT_listPtr_listPtr_1
+0 26201 1294 74 7719 43 0 9551 93 8
+fn=pypy_g_ll_construct_restart_positions__rpy_stringPtr_Si
+0 76484 865 70 26092 79 78 12408 382 15
+fn=pypy_g_ll_contains__dicttablePtr_pypy_interpreter_astco
+0 38242 450 21 11272 54 0 8454 0 0
+fn=pypy_g_ll_contains__dicttablePtr_pypy_interpreter_baseo
+0 6108 183 19 2094 1 0 2001 0 0
+fn=pypy_g_ll_contains__dicttablePtr_rpy_stringPtr
+0 145143 606 31 59945 1781 165 43487 0 0
+fn=pypy_g_ll_contains__dicttablePtr_rpy_stringPtr_1
+0 2391099 45476 88 882726 29067 1233 685544 0 0
+fn=pypy_g_ll_contains__dicttablePtr_rpy_stringPtr_2
+0 250595 5876 110 96070 1432 41 76856 9 0
+fn=pypy_g_ll_contains__dicttablePtr_rpy_stringPtr_3
+0 1346306 254 31 373213 0 0 247025 0 0
+fn=pypy_g_ll_contains__dicttablePtr_rpy_stringPtr_4
+0 128436 524 23 45474 101 0 33331 0 0
+fn=pypy_g_ll_contains__dicttablePtr_rpy_stringPtr_5
+0 80345 254 33 32015 0 0 25120 0 0
+fn=pypy_g_ll_contains__dicttablePtr_rpy_stringPtr_6
+0 223310 373 21 88500 2 0 70800 0 0
+fn=pypy_g_ll_contains__dicttablePtr_rpy_stringPtr_7
+0 3501447 797 46 1028328 252 17 739592 0 0
+fn=pypy_g_ll_contains__dicttablePtr_rpy_stringPtr_8
+0 46137 254 22 16710 1409 12 13368 0 0
+fn=pypy_g_ll_copy__GcStruct_listLlT_arrayPtr
+0 562986 2992 143 188284 6 0 194728 2108 90
+fn=pypy_g_ll_copy__GcStruct_listLlT_listPtr
+0 4404805 100543 108 1179793 9 0 1605209 25307 1394
+fn=pypy_g_ll_copy__GcStruct_listLlT_listPtr_1
+0 183539 5805 136 74881 1987 313 51182 792 54
+fn=pypy_g_ll_copy__GcStruct_listLlT_listPtr_2
+0 37535 899 78 11416 0 0 14076 165 20
+fn=pypy_g_ll_copy__dicttablePtr
+0 8893304 149504 120 3830498 7775 417 1998390 63854 3172
+fn=pypy_g_ll_copy__dicttablePtr_2
+0 41280 791 74 19030 16 3 11455 201 19
+fn=pypy_g_ll_count__LLHelpersConst_rpy_stringPtr_rpy_strin
+0 1973773 12 4 536980 2800 1 20 0 0
+fn=pypy_g_ll_delitem__dum_checkidxConst_listPtr_Signed
+0 12662 838 38 3896 62 0 2922 0 0
+fn=pypy_g_ll_delitem_nonneg__dum_nocheckConst_listPtr_Sign
+0 4743555 15072 56 1859341 480 5 1129933 301 11
+fn=pypy_g_ll_delitem_nonneg__dum_nocheckConst_listPtr_Sign_1
+0 67834 2322 59 26090 0 0 15654 0 0
+fn=pypy_g_ll_delitem_nonneg__dum_nocheckConst_listPtr_Sign_3
+0 366075 32908 58 146430 0 0 73215 0 0
+fn=pypy_g_ll_dict_delitem__dicttablePtr_Signed_1
+0 7506 331 26 2502 0 0 2224 0 0
+fn=pypy_g_ll_dict_delitem__dicttablePtr_pypy_interpreter_b
+0 144921 5527 66 50687 5 0 45925 2 0
+fn=pypy_g_ll_dict_delitem__dicttablePtr_rpy_stringPtr
+0 190767 11051 49 69049 204 9 54773 997 4
+fn=pypy_g_ll_dict_delitem__dicttablePtr_rpy_stringPtr_1
+0 871564 61700 51 323712 0 0 248996 0 0
+fn=pypy_g_ll_dict_getitem__dicttablePtr_Address
+0 966954 19745 18 341275 0 0 278415 128 5
+fn=pypy_g_ll_dict_getitem__dicttablePtr_Signed_3
+0 2540 254 23 889 0 0 762 0 0
+fn=pypy_g_ll_dict_getitem__dicttablePtr_Signed_5
+0 1431496 1710 26 520544 0 0 390408 67 7
+fn=pypy_g_ll_dict_getitem__dicttablePtr_Signed_6
+0 26680 181 14 10440 0 0 6960 0 0
+fn=pypy_g_ll_dict_getitem__dicttablePtr_pypy_interpreter_a
+0 36801 441 46 11421 28 0 7614 0 0
+fn=pypy_g_ll_dict_getitem__dicttablePtr_rpy_stringPtr
+0 12131947 42682 213 3272869 7742 163 1515598 80 7
+fn=pypy_g_ll_dict_getitem__dicttablePtr_rpy_stringPtr_1
+0 45994 1813 133 17446 144 9 12688 0 0
+fn=pypy_g_ll_dict_getitem__dicttablePtr_rpy_stringPtr_2
+0 1247010 1010 34 498804 10312 147 332536 0 0
+fn=pypy_g_ll_dict_getitem__dicttablePtr_rpy_stringPtr_4
+0 3770 260 30 1430 6 1 1040 1 0
+fn=pypy_g_ll_dict_getitem__dicttablePtr_rpy_stringPtr_5
+0 2251200 879 40 688254 408 35 424606 0 0
+fn=pypy_g_ll_dict_getitem__dicttablePtr_tuple2Ptr
+0 15960 675 65 6270 0 0 3420 0 0
+fn=pypy_g_ll_dict_insertclean__dicttablePtr_Address_Signed
+0 9058608 1072 61 3832488 0 0 3135672 25497 1591
+fn=pypy_g_ll_dict_insertclean__dicttablePtr_Signed_Signed_
+0 9698 24 10 4103 0 0 3357 19 0
+fn=pypy_g_ll_dict_insertclean__dicttablePtr_Signed_objectP
+0 20628 25 3 9932 0 0 6876 12 0
+fn=pypy_g_ll_dict_insertclean__dicttablePtr_pypy_interpret
+0 2367038 8104 38 1023584 0 0 703714 7186 328
+fn=pypy_g_ll_dict_insertclean__dicttablePtr_pypy_interpret_1
+0 2139 16 4 897 0 0 690 5 0
+fn=pypy_g_ll_dict_insertclean__dicttablePtr_pypy_interpret_2
+0 48320 85 9 21140 0 0 15100 82 3
+fn=pypy_g_ll_dict_insertclean__dicttablePtr_rpy_stringPtr_
+0 635094 431 19 265407 0 0 206302 1837 882
+fn=pypy_g_ll_dict_insertclean__dicttablePtr_rpy_stringPtr__1
+0 2967300 14304 21 1428700 0 0 989100 8515 520
+fn=pypy_g_ll_dict_insertclean__dicttablePtr_rpy_stringPtr__2
+0 128778 254 23 59436 0 0 44577 111 17
+fn=pypy_g_ll_dict_insertclean__dicttablePtr_rpy_stringPtr__3
+0 11658 44 14 5628 0 0 4020 21 1
+fn=pypy_g_ll_dict_insertclean__dicttablePtr_rpy_stringPtr__4
+0 11016 22 7 5304 0 0 3672 22 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_Address_Signed
+0 26121755 56543 54 8676708 146465 709 2298265 67 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_Char_Signed
+0 7891 624 51 3035 423 45 1479 0 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_Signed_Signed
+0 100 1 1 44 3 3 16 0 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_Signed_Signed_1
+0 190 3 3 82 3 1 28 0 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_Signed_Signed_11
+0 1952040 911 16 845884 11309 214 260272 109 7
+fn=pypy_g_ll_dict_lookup__dicttablePtr_Signed_Signed_3
+0 826 21 10 350 73 18 128 0 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_Signed_Signed_4
+0 60622 430 47 25125 191 18 8729 0 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_Signed_Signed_9
+0 156528 470 25 66086 1158 75 25085 0 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_pypy_interpreter_as
+0 312009 267 24 96006 1110 127 35933 0 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_pypy_interpreter_ba
+0 18562668 344062 282 6711833 336814 12691 2675704 19 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_pypy_interpreter_ba_1
+0 6059 204 18 2384 148 1 1072 0 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_rpy_stringPtr_Signe
+0 148411 599 52 61753 1388 159 28305 2 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_rpy_stringPtr_Signe_1
+0 276751254 426741 171 115601919 4979023 78369 51313202 122122 361
+fn=pypy_g_ll_dict_lookup__dicttablePtr_rpy_stringPtr_Signe_10
+0 166067 614 61 71282 299 7 21256 0 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_rpy_stringPtr_Signe_11
+0 2206011 509 51 902108 16342 367 372340 84 7
+fn=pypy_g_ll_dict_lookup__dicttablePtr_rpy_stringPtr_Signe_12
+0 98945 409 41 38985 679 85 15613 0 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_rpy_stringPtr_Signe_2
+0 31189962 128200 160 10946656 192052 21665 2672344 530 41
+fn=pypy_g_ll_dict_lookup__dicttablePtr_rpy_stringPtr_Signe_3
+0 6834390 12133 216 2911319 30697 2275 1075333 150 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_rpy_stringPtr_Signe_4
+0 1851721 2277 75 761312 16546 388 284087 98 2
+fn=pypy_g_ll_dict_lookup__dicttablePtr_rpy_stringPtr_Signe_6
+0 1267819 592 106 503258 3799 356 197389 6 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_rpy_stringPtr_Signe_7
+0 313583 647 94 131366 1328 30 47152 0 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_rpy_stringPtr_Signe_8
+0 308180 1123 41 127389 1283 105 56578 0 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_rpy_stringPtr_Signe_9
+0 295835 1247 56 103932 1684 121 34427 1 0
+fn=pypy_g_ll_dict_lookup__dicttablePtr_tuple2Ptr_Signed
+0 22800 1333 25 10260 1690 43 2850 0 0
+fn=pypy_g_ll_dict_lookup_clean__dicttablePtr_Signed
+0 419103 215 8 187482 16436 6151 60987 0 0
+fn=pypy_g_ll_dict_lookup_clean__dicttablePtr_Signed_1
+0 2155474 8188 70 715748 35040 1771 255896 0 0
+fn=pypy_g_ll_dict_lookup_clean__dicttablePtr_Signed_10
+0 7936 22 5 3733 107 0 1224 0 0
+fn=pypy_g_ll_dict_lookup_clean__dicttablePtr_Signed_2
+0 2191637 8328 14 1012370 27499 1722 329700 0 0
+fn=pypy_g_ll_dict_lookup_clean__dicttablePtr_Signed_3
+0 11256296 522 39 3932995 175854 9251 1393632 0 0
+fn=pypy_g_ll_dict_lookup_clean__dicttablePtr_Signed_4
+0 1333 16 5 624 27 2 207 0 0
+fn=pypy_g_ll_dict_lookup_clean__dicttablePtr_Signed_5
+0 8222 13 4 3732 94 2 1492 0 0
+fn=pypy_g_ll_dict_lookup_clean__dicttablePtr_Signed_6
+0 92202 254 23 45593 1619 248 14859 0 0
+fn=pypy_g_ll_dict_lookup_clean__dicttablePtr_Signed_7
+0 13850 70 6 6890 158 2 2292 0 0
+fn=pypy_g_ll_dict_lookup_clean__dicttablePtr_Signed_8
+0 52235 34 6 17045 700 11 6040 0 0
+fn=pypy_g_ll_dict_lookup_clean__dicttablePtr_Signed_9
+0 7948 22 5 3694 112 0 1206 0 0
+fn=pypy_g_ll_dict_resize__dicttablePtr
+0 430162 1074 40 125751 21159 13752 106541 0 0
+fn=pypy_g_ll_dict_resize__dicttablePtr_1
+0 1656399 24715 97 460058 7734 293 429648 0 0
+fn=pypy_g_ll_dict_resize__dicttablePtr_10
+0 10539 111 33 2785 0 0 3118 0 0
+fn=pypy_g_ll_dict_resize__dicttablePtr_2
+0 2781815 37945 76 733294 13302 1130 814020 1 0
+fn=pypy_g_ll_dict_resize__dicttablePtr_3
+0 7282973 3180 450 1780434 21723 6 1799146 37 0
+fn=pypy_g_ll_dict_resize__dicttablePtr_4
+0 1709 40 16 458 8 0 456 0 0
+fn=pypy_g_ll_dict_resize__dicttablePtr_5
+0 9280 61 15 2311 3 0 2532 0 0
+fn=pypy_g_ll_dict_resize__dicttablePtr_6
+0 104775 508 48 30607 0 0 28194 0 0
+fn=pypy_g_ll_dict_resize__dicttablePtr_7
+0 18977 191 22 5792 13 1 5227 0 0
+fn=pypy_g_ll_dict_resize__dicttablePtr_8
+0 39822 135 28 9379 0 0 10287 1 0
+fn=pypy_g_ll_dict_resize__dicttablePtr_9
+0 10370 132 31 2740 7 0 3066 0 0
+fn=pypy_g_ll_dict_setitem__dicttablePtr_Address_Signed
+0 11934707 5924 49 4035778 0 0 3710568 3081 71
+fn=pypy_g_ll_dict_setitem__dicttablePtr_Signed_Signed
+0 42323 771 44 14069 0 0 13120 11 0
+fn=pypy_g_ll_dict_setitem__dicttablePtr_Signed_objectPtr
+0 156897 582 39 62053 0 0 45006 0 0
+fn=pypy_g_ll_dict_setitem__dicttablePtr_Signed_objectPtr_1
+0 124 3 3 40 0 0 40 0 0
+fn=pypy_g_ll_dict_setitem__dicttablePtr_pypy_interpreter_a
+0 263713 510 82 93124 156 0 70074 24 0
+fn=pypy_g_ll_dict_setitem__dicttablePtr_pypy_interpreter_b
+0 9910916 226303 129 3459356 6349 99 3187938 6307 308
+fn=pypy_g_ll_dict_setitem__dicttablePtr_pypy_interpreter_b_1
+0 7589 237 26 2543 0 0 2337 4 0
+fn=pypy_g_ll_dict_setitem__dicttablePtr_rpy_stringPtr_Bool
+0 385 3 3 154 0 0 98 0 0
+fn=pypy_g_ll_dict_setitem__dicttablePtr_rpy_stringPtr_Char
+0 68333 405 49 27007 0 0 18090 1 0
+fn=pypy_g_ll_dict_setitem__dicttablePtr_rpy_stringPtr_None
+0 180848 381 36 65913 0 0 48260 0 0
+fn=pypy_g_ll_dict_setitem__dicttablePtr_rpy_stringPtr_Sign
+0 91007 639 47 35987 0 0 24089 41 5
+fn=pypy_g_ll_dict_setitem__dicttablePtr_rpy_stringPtr_Sign_1
+0 354 8 4 126 6 0 90 0 0
+fn=pypy_g_ll_dict_setitem__dicttablePtr_rpy_stringPtr_obje
+0 3897409 124180 128 1357195 16877 910 983119 4936 274
+fn=pypy_g_ll_dict_setitem__dicttablePtr_rpy_stringPtr_obje_1
+0 19474834 331769 80 7337846 19509 850 4771861 13233 424
+fn=pypy_g_ll_dictnext__dictiterPtr_dum_itemsConst_Ptr_GcSt
+0 144862 2697 82 42006 642 128 24700 492 41
+fn=pypy_g_ll_dictnext__dictiterPtr_dum_itemsConst_Ptr_GcSt_1
+0 2049131 21818 294 685722 9092 740 415483 7418 465
+fn=pypy_g_ll_dictnext__dictiterPtr_dum_keysConst_NoneConst
+0 2089476 29669 59 767518 2436 176 297765 801 4
+fn=pypy_g_ll_dictnext__dictiterPtr_dum_keysConst_NoneConst_1
+0 1141852 12568 50 401920 9081 2009 155772 3 0
+fn=pypy_g_ll_dictnext__dictiterPtr_dum_keysConst_NoneConst_3
+0 31464 510 32 6586 126 4 2716 0 0
+fn=pypy_g_ll_extend__listPtr_arrayPtr
+0 182828 14922 100 77886 286 0 44944 12 0
+fn=pypy_g_ll_extend__listPtr_arrayPtr_2
+0 1634402 5312 15 548610 1 0 297006 6221 59
+fn=pypy_g_ll_extend__listPtr_listPtr
+0 2145187 98053 120 965566 11278 512 501809 2810 111
+fn=pypy_g_ll_extend_with_str_slice_startonly__listPtr_rpy_
+0 3627315 9226 104 1462155 2232 69 437245 4505 445
+fn=pypy_g_ll_finalizer__Address_101
+0 963 2 2 321 0 0 428 0 0
+fn=pypy_g_ll_finalizer__Address_93
+0 774 6 6 258 0 0 344 0 0
+fn=pypy_g_ll_find__LLHelpersConst_rpy_stringPtr_rpy_string
+0 6227499 49426 119 1927720 23969 431 517210 176 5
+fn=pypy_g_ll_get__dicttablePtr_Signed_rpy_stringPtr
+0 623 27 13 241 0 0 192 0 0
+fn=pypy_g_ll_get__dicttablePtr_pypy_interpreter_baseobjspa
+0 14278510 347540 106 5370390 6711 0 4810293 183 0
+fn=pypy_g_ll_get__dicttablePtr_rpy_stringPtr_Char
+0 16221 248 23 6147 423 6 4440 0 0
+fn=pypy_g_ll_get__dicttablePtr_rpy_stringPtr_Signed
+0 714051 6216 132 258355 2755 227 181381 54 0
+fn=pypy_g_ll_get__dicttablePtr_rpy_stringPtr_funcPtr
+0 163327 269 31 62876 587 11 45728 0 0
+fn=pypy_g_ll_get__dicttablePtr_rpy_stringPtr_funcPtr_1
+0 1944398 256 24 776995 1710 22 520544 0 0
+fn=pypy_g_ll_get__dicttablePtr_rpy_stringPtr_funcPtr_2
+0 69651 329 42 27500 37 12 20000 0 0
+fn=pypy_g_ll_get__dicttablePtr_rpy_stringPtr_objectPtr
+0 188307344 133125 49 72200022 826098 8854 52337890 9255 37
+fn=pypy_g_ll_get__dicttablePtr_rpy_stringPtr_objectPtr_1
+0 1756836 983 26 715748 8796 195 520544 0 0
+fn=pypy_g_ll_inplace_mul__listPtr_Signed_1
+0 1082 4 4 275 0 0 139 2 0
+fn=pypy_g_ll_insert_nonneg__listPtr_Signed_objectPtr
+0 33629 2503 81 13960 27 1 9671 0 0
+fn=pypy_g_ll_int2dec__Signed
+0 427460 12894 197 65548 0 0 130593 531 61
+fn=pypy_g_ll_int2hex__Signed_Bool
+0 1544 112 7 271 15 0 480 0 0
+fn=pypy_g_ll_issubclass__object_vtablePtr_object_vtablePtr
+0 86093757 0 0 44850244 299227 191 6922425 0 0
+fn=pypy_g_ll_join__rpy_stringPtr_Signed_arrayPtr
+0 12421589 94863 204 3274692 13455 141 2747637 34133 2416
+fn=pypy_g_ll_join_strs__Signed_arrayPtr
+0 22950415 146904 116 5195241 80721 1015 3314214 35486 2597
+fn=pypy_g_ll_join_strs__Signed_arrayPtr_1
+0 15735535 66558 443 6467344 50812 1049 5225801 72969 5973
+fn=pypy_g_ll_join_strs__Signed_arrayPtr_2
+0 162 10 10 44 0 0 44 0 0
+fn=pypy_g_ll_kvi__dicttablePtr_GcArray_Ptr_GcStruct_object_1
+0 502862 713 37 153506 662 2 73197 180 15
+fn=pypy_g_ll_kvi__dicttablePtr_GcArray_Ptr_GcStruct_rpy_st_1
+0 37472 909 68 9540 111 14 5718 0 0
+fn=pypy_g_ll_kvi__dicttablePtr_GcArray_Ptr_GcStruct_tuple2
+0 845619 3834 202 310032 3446 79 209451 4336 264
+fn=pypy_g_ll_kvi__dicttablePtr_GcArray_Ptr_GcStruct_tuple2_1
+0 4324521 90846 226 1505385 1934 77 1055061 7440 452
+fn=pypy_g_ll_kvi__dicttablePtr_GcArray_Ptr_GcStruct_tuple2_2
+0 78167 831 83 26371 480 26 21331 367 39
+fn=pypy_g_ll_kvi__dicttablePtr_GcArray_Ptr_GcStruct_tuple2_3
+0 81504 886 85 27566 65 0 21989 383 29
+fn=pypy_g_ll_kvi__dicttablePtr_GcStruct_listLlT_dum_keysCo
+0 1199344 32176 104 356839 8665 286 189791 2481 118
+fn=pypy_g_ll_kvi__dicttablePtr_GcStruct_listLlT_dum_keysCo_1
+0 18600 620 82 5704 21 3 3472 24 4
+fn=pypy_g_ll_kvi__dicttablePtr_GcStruct_listLlT_dum_values
+0 11720 84 18 3831 136 29 1189 25 3
+fn=pypy_g_ll_kvi__dicttablePtr_GcStruct_listLlT_dum_values_1
+0 13955 126 55 5153 179 38 2699 27 1
+fn=pypy_g_ll_listcontains__arrayPtr_rpy_stringPtr_ll_streq
+0 2213719 1696 21 815996 3100 19 387519 0 0
+fn=pypy_g_ll_listcontains__listPtr_rpy_stringPtr_ll_streqC
+0 18 1 1 8 0 0 4 0 0
+fn=pypy_g_ll_listdelslice__listPtr_slicePtr
+0 1472 60 28 544 1 0 272 0 0
+fn=pypy_g_ll_listdelslice_startonly__listPtr_Signed
+0 86853 659 50 25163 1 0 16220 8 0
+fn=pypy_g_ll_listindex__arrayPtr_rpy_stringPtr_ll_streqCon
+0 5614 42 11 1924 128 15 190 0 0
+fn=pypy_g_ll_listsetslice__listPtr_slicePtr_listPtr
+0 8142 752 21 4072 0 0 2027 0 0
+fn=pypy_g_ll_listslice__GcArray_CharLlT_arrayPtr_slicePtr
+0 1097299 1022 39 157731 0 0 171543 1560 147
+fn=pypy_g_ll_listslice__GcArray_CharLlT_listPtr_slicePtr
+0 2126 4 3 429 0 0 224 3 0
+fn=pypy_g_ll_listslice__GcArray_Ptr_GcStruct_rpy_strin_lis
+0 2604562 70274 81 1094128 16022 546 837990 2954 46
+fn=pypy_g_ll_listslice__GcStruct_listLlT_arrayPtr_slicePtr
+0 95148 6167 309 36121 0 0 29954 312 19
+fn=pypy_g_ll_listslice__GcStruct_listLlT_listPtr_slicePtr
+0 2095943 72523 131 927253 5638 157 554208 6999 516
+fn=pypy_g_ll_listslice_minusone__GcArray_Ptr_GcStruct_obje
+0 480 24 20 156 10 0 156 0 0
+fn=pypy_g_ll_listslice_minusone__GcArray_Ptr_GcStruct_tupl
+0 1118 54 11 312 12 0 468 0 0
+fn=pypy_g_ll_listslice_minusone__GcStruct_listLlT_listPtr
+0 16356 150 34 4133 1 0 5540 77 1
+fn=pypy_g_ll_listslice_startonly__GcArray_Ptr_GcStruct_obj
+0 1586998 4706 69 682443 1 0 408787 2781 176
+fn=pypy_g_ll_listslice_startonly__GcArray_Ptr_GcStruct_rpy
+0 87 4 3 40 0 0 22 0 0
+fn=pypy_g_ll_listslice_startonly__GcArray_SignedLlT_listPt
+0 6667 381 41 1642 4 0 2167 1 0
+fn=pypy_g_ll_listslice_startonly__GcStruct_listLlT_listPtr
+0 2421209 179271 94 862642 5 1 823858 12953 831
+fn=pypy_g_ll_listslice_startonly__GcStruct_listLlT_listPtr_1
+0 17925163 7148 22 6688903 40 0 3310068 106558 1107
+fn=pypy_g_ll_listslice_startonly__GcStruct_listLlT_listPtr_2
+0 201 18 11 60 0 0 78 1 0
+fn=pypy_g_ll_math_ll_math_ceil
+0 1150 26 16 400 0 0 400 0 0
+fn=pypy_g_ll_math_ll_math_exp
+0 17 2 2 5 0 0 8 0 0
+fn=pypy_g_ll_math_ll_math_floor
+0 1288 112 94 448 0 0 448 0 0
+fn=pypy_g_ll_math_ll_math_frexp
+0 3666 197 117 940 0 0 1692 27 0
+fn=pypy_g_ll_math_ll_math_hypot
+0 1176 112 76 392 0 0 560 0 0
+fn=pypy_g_ll_math_ll_math_ldexp
+0 5852 274 104 1848 0 0 2772 0 0
+fn=pypy_g_ll_math_ll_math_log
+0 34 2 2 10 0 0 16 0 0
+fn=pypy_g_ll_math_ll_math_log10
+0 850 75 14 250 0 0 400 0 0
+fn=pypy_g_ll_math_ll_math_modf
+0 3978 187 94 1020 0 0 1836 52 0
+fn=pypy_g_ll_math_ll_math_pow
+0 21 2 2 7 0 0 10 0 0
+fn=pypy_g_ll_math_ll_math_sqrt
+0 23 3 3 5 0 0 6 0 0
+fn=pypy_g_ll_mul__GcStruct_listLlT_listPtr_Signed
+0 1922314 30864 196 909445 0 0 286029 5211 211
+fn=pypy_g_ll_newlist__GcStruct_listLlT_Signed
+0 50 4 4 12 0 0 21 2 0
+fn=pypy_g_ll_os_ll_os_close
+0 7371 529 12 2268 0 0 2268 0 0
+fn=pypy_g_ll_os_ll_os_envitems
+0 6660 11 11 1641 5 1 1564 17 17
+fn=pypy_g_ll_os_ll_os_getcwd
+0 105 9 4 18 0 0 45 0 0
+fn=pypy_g_ll_os_ll_os_getenv
+0 60 3 1 14 0 0 22 0 0
+fn=pypy_g_ll_os_ll_os_getpid
+0 22 2 2 6 0 0 6 0 0
+fn=pypy_g_ll_os_ll_os_isatty
+0 1463 0 0 399 0 0 399 0 0
+fn=pypy_g_ll_os_ll_os_listdir
+0 26122 60 40 7083 13 0 6341 8 2
+fn=pypy_g_ll_os_ll_os_lstat
+0 228 57 7 57 0 0 57 0 0
+fn=pypy_g_ll_os_ll_os_mkdir
+0 28 2 2 7 0 0 10 0 0
+fn=pypy_g_ll_os_ll_os_open
+0 17752 663 30 4577 0 0 6305 0 0
+fn=pypy_g_ll_os_ll_os_read
+0 74011284 6171 247 32809610 80518 8130 16859162 139926 7787
+fn=pypy_g_ll_os_ll_os_rmdir
+0 26 2 2 6 0 0 9 0 0
+fn=pypy_g_ll_os_ll_os_stat
+0 8152 2 0 2038 0 0 2038 0 0
+fn=pypy_g_ll_os_ll_os_stat_1
+0 16304 650 30 4076 0 0 4076 0 0
+fn=pypy_g_ll_os_ll_os_stat_2
+0 660 0 0 165 0 0 165 0 0
+fn=pypy_g_ll_os_ll_os_strerror
+0 407 37 5 74 0 0 148 0 0
+fn=pypy_g_ll_os_ll_os_symlink
+0 80 4 2 18 0 0 30 0 0
+fn=pypy_g_ll_os_ll_os_unlink
+0 442 34 6 102 0 0 153 0 0
+fn=pypy_g_ll_os_ll_os_write
+0 131396 283 125 32754 35 0 17327 212 41
+fn=pypy_g_ll_os_path_ll_join
+0 369737 4605 141 113788 2559 150 93437 1051 40
+fn=pypy_g_ll_pop__dum_checkidxConst_listPtr_Signed
+0 483682 16716 20 175825 2636 2 121725 0 0
+fn=pypy_g_ll_pop_default__dum_nocheckConst_listPtr
+0 18542964 137231 31 6953543 50819 56 3863460 0 0
+fn=pypy_g_ll_pop_default__dum_nocheckConst_listPtr_2
+0 2880 236 26 1080 0 0 600 0 0
+fn=pypy_g_ll_pop_default__dum_nocheckConst_listPtr_3
+0 456 30 6 171 1 0 95 0 0
+fn=pypy_g_ll_pop_default__dum_nocheckConst_listPtr_4
+0 549720 2656 6 206145 1 0 114525 0 0
+fn=pypy_g_ll_pop_zero__dum_nocheckConst_listPtr
+0 10119 529 10 4080 0 0 2545 0 0
+fn=pypy_g_ll_pop_zero__dum_nocheckConst_listPtr_1
+0 3395470 403 57 1413370 0 0 852252 0 0
+fn=pypy_g_ll_prepend__listPtr_tuple3Ptr
+0 94 8 7 36 0 0 26 0 0
+fn=pypy_g_ll_reverse__listPtr
+0 1676005 10233 49 694942 3 0 402847 0 0
+fn=pypy_g_ll_rfind__LLHelpersConst_rpy_stringPtr_rpy_strin
+0 99688 2591 45 32084 529 275 7028 0 0
+fn=pypy_g_ll_setitem_nonneg__dum_nocheckConst_listPtr_Sign
+0 68 0 0 36 0 0 16 0 0
+fn=pypy_g_ll_split_chr__GcArray_Ptr_GcStruct_rpy_strin_rpy
+0 10116670 68338 477 3472710 5392 403 1549776 6451 587
+fn=pypy_g_ll_split_chr__GcStruct_listLlT_rpy_stringPtr_Cha
+0 283534 3052 54 117620 36 0 48628 235 2
+fn=pypy_g_ll_str2unicode__rpy_stringPtr
+0 39 4 4 10 0 0 17 0 0
+fn=pypy_g_ll_strcmp__rpy_stringPtr_rpy_stringPtr
+0 993832 5076 114 391693 1533 26 128777 3 0
+fn=pypy_g_ll_strconcat__rpy_stringPtr_rpy_stringPtr
+0 7718068 10764 262 2282210 5571 104 2182166 28607 3515
+fn=pypy_g_ll_stringslice__rpy_stringPtr_slicePtr
+0 21149486 45944 273 7275403 33924 124 6262900 52848 3312
+fn=pypy_g_ll_stringslice_startonly__rpy_stringPtr_Signed
+0 16923474 15077 264 6388832 1989 2 5790663 83939 4758
+fn=pypy_g_ll_strtod_ll_strtod_formatd
+0 58 4 2 14 0 0 24 0 0
+fn=pypy_g_ll_time_ll_time_time
+0 66 4 4 16 4 4 20 0 0
+fn=pypy_g_ll_type__objectPtr
+0 1146 37 5 764 38 5 191 0 0
+fn=pypy_g_ll_update__dicttablePtr_dicttablePtr
+0 3154 8 4 646 24 0 152 0 0
+fn=pypy_g_ll_update__dicttablePtr_dicttablePtr_1
+0 26777 339 31 12103 0 0 4942 0 0
+fn=pypy_g_load_compiled_module
+0 28443 2088 170 9082 225 39 11472 6 0
+fn=pypy_g_load_part
+0 3190696 81886 731 1042918 667 66 1412582 4992 306
+fn=pypy_g_load_source_module
+0 332 26 22 112 3 0 141 0 0
+fn=pypy_g_loads
+0 10516 970 46 2868 76 0 4063 59 1
+fn=pypy_g_locals
+0 6300 127 37 1260 0 0 3150 0 0
+fn=pypy_g_log
+0 46 3 3 14 0 0 12 0 0
+fn=pypy_g_long
+0 1118168 86140 234 303968 0 0 412528 0 0
+fn=pypy_g_lookup____abs__
+0 720 120 114 420 0 0 180 0 0
+fn=pypy_g_lookup____call__
+0 4161204 5065 2 2379046 24198 80 1053480 2 0
+fn=pypy_g_lookup____cmp__
+0 7512 134 2 4382 88 0 1878 0 0
+fn=pypy_g_lookup____contains__
+0 2277488 42233 17 1328289 67846 867 569439 0 0
+fn=pypy_g_lookup____del__
+0 1548 15 12 688 17 10 516 1 1
+fn=pypy_g_lookup____delattr__
+0 108204 7650 21 43286 7176 67 32460 0 0
+fn=pypy_g_lookup____delete__
+0 7152 596 37 4172 25 0 1788 0 0
+fn=pypy_g_lookup____delitem__
+0 97860 4673 19 57085 4555 39 24465 0 0
+fn=pypy_g_lookup____delslice__
+0 528 41 12 264 0 0 132 0 0
+fn=pypy_g_lookup____float__
+0 3444 116 12 2009 61 1 861 0 0
+fn=pypy_g_lookup____get__
+0 18760612 32041 12 10884899 254808 951 4706187 4601 10
+fn=pypy_g_lookup____getattr__
+0 589494 26711 26 275434 6733 4 176343 0 0
+fn=pypy_g_lookup____getattribute__
+0 35585480 24186 33 16256740 902596 7997 10124040 4025 2
+fn=pypy_g_lookup____getitem__
+0 32966268 65495 19 19178700 225533 1514 8255646 772 3
+fn=pypy_g_lookup____getslice__
+0 323310 14524 18 161536 14211 104 81006 0 0
+fn=pypy_g_lookup____hash__
+0 6778856 68806 58 3089443 151519 1286 1930593 2159 0
+fn=pypy_g_lookup____iadd__
+0 565712 26995 25 303078 13801 15 148770 0 0
+fn=pypy_g_lookup____iand__
+0 47208 3934 22 27538 0 0 11802 0 0
+fn=pypy_g_lookup____imul__
+0 744 1 1 434 7 1 186 0 0
+fn=pypy_g_lookup____index__
+0 220848 21891 76 90471 8529 11 65673 0 0
+fn=pypy_g_lookup____init__
+0 4252856 150941 21 1983431 61008 231 1198869 0 0
+fn=pypy_g_lookup____int__
+0 59124 4638 18 34489 706 30 14781 0 0
+fn=pypy_g_lookup____invert__
+0 20640 2644 25 12040 1733 15 5160 0 0
+fn=pypy_g_lookup____ior__
+0 2244 128 31 1309 208 1 561 0 0
+fn=pypy_g_lookup____isub__
+0 33120 1136 26 19320 1199 1 8280 0 0
+fn=pypy_g_lookup____iter__
+0 4327548 71394 9 2511874 156658 2460 1085304 302 2
+fn=pypy_g_lookup____ixor__
+0 60 5 1 35 5 1 15 0 0
+fn=pypy_g_lookup____len__
+0 2127296 92903 38 1221130 76062 1248 537222 784 0
+fn=pypy_g_lookup____long__
+0 130272 21476 87 75992 10639 1 32568 0 0
+fn=pypy_g_lookup____missing__
+0 18 2 1 8 0 0 6 0 0
+fn=pypy_g_lookup____neg__
+0 626664 26070 17 365554 51602 529 156666 0 0
+fn=pypy_g_lookup____nonzero__
+0 1432920 32198 14 817104 52534 137 363348 0 0
+fn=pypy_g_lookup____repr__
+0 111268 269 6 64536 5096 296 27918 0 0
+fn=pypy_g_lookup____set__
+0 21459712 60653 17 12487831 1233040 8240 5373201 517 1
+fn=pypy_g_lookup____setattr__
+0 6710440 111811 38 2688477 97269 557 2011959 3 0
+fn=pypy_g_lookup____setitem__
+0 1930956 58197 10 1122431 69305 253 483819 3 0
+fn=pypy_g_lookup____setslice__
+0 58764 3292 13 29382 4235 0 14691 0 0
+fn=pypy_g_lookup____str__
+0 61968 2827 43 36060 1417 24 15516 0 0
+fn=pypy_g_lookup__mro
+0 12300 1172 45 4920 2 0 3690 0 0
+fn=pypy_g_lookup__next
+0 28733712 82843 30 16752499 208848 169 7185837 0 0
+fn=pypy_g_lshift__Int_Int
+0 83888 13152 136 32904 0 0 16608 20 2
+fn=pypy_g_lshift__Long_Long
+0 3692 356 64 1144 0 0 1404 12 0
+fn=pypy_g_lstat
+0 1276 115 17 403 0 0 466 0 0
+fn=pypy_g_lstat__arrayPtr_statPtr_2
+0 627 57 6 228 0 0 285 0 0
+fn=pypy_g_lt
+0 784 196 3 196 0 0 196 0 0
+fn=pypy_g_lt__Float_Long
+0 3360 280 262 952 56 46 896 0 0
+fn=pypy_g_lt__Tuple_Tuple
+0 82886 756 66 33255 218 28 23064 12 0
+fn=pypy_g_make_setdata_from_w_iterable
+0 4522 249 39 1178 0 0 1824 5 0
+fn=pypy_g_make_state
+0 102256 7968 21 30544 148 0 37184 0 0
+fn=pypy_g_mallocstr__Signed
+0 84 1 1 12 0 0 44 0 0
+fn=pypy_g_mangle
+0 17998 28 24 8044 542 6 3044 6 0
+fn=pypy_g_map
+0 3364 271 81 928 5 0 1479 29 1
+fn=pypy_g_map_1
+0 31966 477 166 9378 7 0 13823 16 0
+fn=pypy_g_marshal_w__None
+0 29 3 3 14 0 0 7 0 0
+fn=pypy_g_marshal_w_pycode
+0 523 30 30 185 0 0 202 0 0
+fn=pypy_g_match
+0 4554240 17264 39 1460692 3504 1 969716 2662 28
+fn=pypy_g_match_encoding_declaration
+0 3672 206 19 1188 0 0 1296 0 0
+fn=pypy_g_math1(...)(long long,  *)
+0 30 4 4 9 0 0 10 0 0
+fn=pypy_g_math1__sqrt
+0 30 4 4 9 0 0 10 0 0
+fn=pypy_g_max
+0 16704 1728 22 4608 0 0 6528 170 37
+fn=pypy_g_max_1
+0 33984 2880 45 8640 0 0 16704 118 25
+fn=pypy_g_min
+0 59943 6619 458 16536 11 0 23426 593 8
+fn=pypy_g_min_1
+0 121953 9923 568 31005 0 0 59943 427 8
+fn=pypy_g_min_max
+0 107482 8810 317 29073 37 0 46693 871 50
+fn=pypy_g_min_max_1
+0 425019 25539 667 146623 2 0 188534 2 0
+fn=pypy_g_mkdir
+0 24 3 3 9 0 0 8 0 0
+fn=pypy_g_mod_format
+0 384495 21329 673 115827 147 0 164316 365 83
+fn=pypy_g_mro_blockinglist
+0 939011 4532 136 300024 0 0 202424 0 0
+fn=pypy_g_mul
+0 40 10 1 10 0 0 10 0 0
+fn=pypy_g_mul__Complex_Complex
+0 3472 280 183 1064 0 0 1232 27 3
+fn=pypy_g_mul__Int_Int
+0 6843 510 158 2552 0 0 1596 78 5
+fn=pypy_g_mul_list_times
+0 303800 19996 78 92225 0 0 113925 1413 93
+fn=pypy_g_mul_ovr__Int_Int
+0 456 30 10 144 0 0 162 2 0
+fn=pypy_g_mul_string_times
+0 276439 7654 390 80692 71 47 68905 1683 152
+fn=pypy_g_neg(i_xx_t)
+0 1409688 81005 92 417683 11 0 313266 13950 872
+fn=pypy_g_newdict
+0 1609782 86552 175 503990 0 0 509492 16212 978
+fn=pypy_g_newfloat
+0 38 2 2 12 0 0 12 0 0
+fn=pypy_g_newint
+0 75922 8932 53 22330 0 0 22330 1128 74
+fn=pypy_g_newlist
+0 50 4 2 16 0 0 16 2 2
+fn=pypy_g_newtuple
+0 30051 443 37 8904 0 0 8904 256 7
+fn=pypy_g_next
+0 62214620 265763 44 16750090 812 1 23928700 1 0
+fn=pypy_g_next_2
+0 469179 19065 982 129231 0 0 199116 1017 56
+fn=pypy_g_next__RangeIter
+0 2159040 44355 75 780748 1339 7 476196 3104 166
+fn=pypy_g_next__SeqIter
+0 123625818 491044 90 41496047 2130 1 47559264 102574 6304
+fn=pypy_g_offset2lineno
+0 4462606 26592 32 1429209 34309 284 160912 3649 9
+fn=pypy_g_old_slice_range
+0 18326 1345 24 5117 0 0 6783 49 0
+fn=pypy_g_op_1
+0 118020 11802 43 35406 0 0 31472 0 0
+fn=pypy_g_op_branch
+0 6273872 14609 38 2408744 111 0 1855942 12046 115
+fn=pypy_g_op_in
+0 241950 1328 4 72585 0 0 96780 0 0
+fn=pypy_g_op_jump
+0 74822 2656 6 39380 1 0 15752 0 0
+fn=pypy_g_op_literal
+0 966288 5312 31 437304 17 0 91680 0 0
+fn=pypy_g_op_mark
+0 817417 3984 12 358866 3 0 219307 0 0
+fn=pypy_g_op_max_until
+0 6760 416 32 2782 0 0 2080 10 0
+fn=pypy_g_op_repeat
+0 1287 65 7 494 0 0 377 3 0
+fn=pypy_g_op_repeat_one
+0 2988507 25232 61 1218161 15 0 811757 4457 28
+fn=pypy_g_op_success
+0 13280 2656 7 6640 0 0 3984 0 0
+fn=pypy_g_opcode_impl_for_add_star2
+0 4724196 112569 69 1771376 1980 0 1673449 316 0
+fn=pypy_g_opcode_impl_for_and__star2
+0 976518 56804 147 366183 15 0 345867 3 0
+fn=pypy_g_opcode_impl_for_div_star2
+0 26736 950 172 10026 0 0 9469 0 0
+fn=pypy_g_opcode_impl_for_floordiv_star2
+0 49 4 4 18 0 0 17 0 0
+fn=pypy_g_opcode_impl_for_getitem_star2
+0 10365638 290074 62 3873905 155 0 3682712 126 0
+fn=pypy_g_opcode_impl_for_inplace_add_star2
+0 2900766 74266 136 913042 4439 0 1034305 412 0
+fn=pypy_g_opcode_impl_for_inplace_and_star2
+0 302918 19670 127 98350 0 0 102284 0 0
+fn=pypy_g_opcode_impl_for_inplace_mul_star2
+0 4774 7 7 1550 0 0 1612 0 0
+fn=pypy_g_opcode_impl_for_inplace_or_star2
+0 14399 767 240 4675 0 0 4862 0 0
+fn=pypy_g_opcode_impl_for_inplace_sub_star2
+0 193200 4838 88 60720 0 0 69000 0 0
+fn=pypy_g_opcode_impl_for_inplace_xor_star2
+0 385 25 5 125 0 0 130 0 0
+fn=pypy_g_opcode_impl_for_invert_star2
+0 73960 4738 41 29240 0 0 24080 0 0
+fn=pypy_g_opcode_impl_for_lshift_star2
+0 160818 13060 113 59076 0 0 55794 0 0
+fn=pypy_g_opcode_impl_for_mod_star2
+0 151314 6003 94 56729 179 0 53611 55 0
+fn=pypy_g_opcode_impl_for_mul_star2
+0 653766 17444 59 245161 0 0 231544 0 0
+fn=pypy_g_opcode_impl_for_neg_star2
+0 2193600 117370 97 887820 4 0 731292 2 0
+fn=pypy_g_opcode_impl_for_not__star2
+0 3240188 122735 97 1184092 0 0 1017262 0 0
+fn=pypy_g_opcode_impl_for_or__star2
+0 165669 13518 69 60858 0 0 57477 0 0
+fn=pypy_g_opcode_impl_for_rshift_star2
+0 19992 1488 67 7344 0 0 6936 0 0
+fn=pypy_g_opcode_impl_for_sub_star2
+0 584130 32123 83 219035 3 0 206900 0 0
+fn=pypy_g_opcode_impl_for_xor_star2
+0 16512 744 16 6192 0 0 5848 0 0
+fn=pypy_g_open_file_as_stream
+0 37491 1315 48 12503 0 0 14195 142 4
+fn=pypy_g_open_file_as_stream_1
+0 5420 346 48 1546 0 0 2322 40 4
+fn=pypy_g_operate___pypy_module_struct_formatiter_10
+0 15048 342 90 4560 0 0 3648 0 0
+fn=pypy_g_operate___pypy_module_struct_formatiter_24
+0 33 3 3 10 0 0 8 0 0
+fn=pypy_g_operate___pypy_module_struct_formatiter_36
+0 33 2 2 10 0 0 8 0 0
+fn=pypy_g_ord
+0 243000 11060 16 81000 0 0 60750 0 0
+fn=pypy_g_ord__String
+0 566972 22260 51 202490 13568 413 141743 5143 310
+fn=pypy_g_ord__Unicode
+0 24 4 4 9 1 0 6 0 0
+fn=pypy_g_os_lstat_llimpl
+0 2349 172 22 457 0 0 975 1 0
+fn=pypy_g_os_stat_llimpl
+0 336838 3097 125 57830 0 0 144674 1568 62
+fn=pypy_g_ovfcheck_float_to_int
+0 2016 116 105 693 60 53 378 0 0
+fn=pypy_g_pack
+0 144 10 10 37 0 0 53 0 0
+fn=pypy_g_pack_float
+0 143 7 7 64 4 1 40 0 0
+fn=pypy_g_parse_arglist
+0 84266 3548 283 31529 130 0 24970 469 55
+fn=pypy_g_parse_argument
+0 123526 3027 150 49211 31 0 32733 691 26
+fn=pypy_g_parse_attraccess
+0 118619 1805 119 43973 82 0 33408 1056 49
+fn=pypy_g_parse_dotted_names
+0 2707 64 23 917 0 0 654 3 0
+fn=pypy_g_parse_except_clause
+0 1778 66 30 659 23 0 278 8 0
+fn=pypy_g_parse_fpdef
+0 7163 234 62 2641 9 0 2261 54 0
+fn=pypy_g_parse_listcomp
+0 1910 61 61 705 0 0 705 6 0
+fn=pypy_g_parse_source_module
+0 142 12 10 36 0 0 54 3 1
+fn=pypy_g_parsestr
+0 230285 1886 68 52331 702 1 35378 957 16
+fn=pypy_g_perform_actions
+0 9528646 218629 37 3614314 334739 67 1807157 113 0
+fn=pypy_g_popitem
+0 70296 4848 120 18988 0 0 29492 239 24
+fn=pypy_g_popitem_star1
+0 46460 3868 190 11312 0 0 20604 405 41
+fn=pypy_g_pow
+0 1022 98 21 364 39 2 308 0 0
+fn=pypy_g_pow__Float_Float_ANY
+0 53 6 6 15 0 0 12 0 0
+fn=pypy_g_pow__Int_Int_None
+0 154 28 7 70 0 0 56 0 0
+fn=pypy_g_pow__Long_Long_None
+0 7049 473 64 2242 0 0 2565 26 0
+fn=pypy_g_pow_neg__Int_Int_None
+0 64 3 3 21 0 0 24 1 0
+fn=pypy_g_pow_ovr__Int_Int_None
+0 930 70 19 290 0 0 360 3 0
+fn=pypy_g_prepare_exec
+0 79390 5445 494 27604 121 7 34883 252 9
+fn=pypy_g_prepare_exec_star7
+0 22656 1534 149 7434 0 0 9322 168 29
+fn=pypy_g_print_item_to
+0 108400 4271 53 30840 0 0 44530 0 0
+fn=pypy_g_print_item_to_star2
+0 54610 1617 15 14190 0 0 23220 480 99
+fn=pypy_g_print_newline_to
+0 28396 2098 20 7786 2 0 11908 0 0
+fn=pypy_g_print_newline_to_star1
+0 53586 2642 11 12824 2 0 23358 465 98
+fn=pypy_g_pypy_initial_path
+0 421 15 11 145 0 0 138 2 2
+fn=pypy_g_raiseattrerror
+0 4420994 241931 117 1161447 2 0 1948234 33374 2449
+fn=pypy_g_range
+0 926235 56701 216 288994 0 0 332211 4445 224
+fn=pypy_g_rbigint__count_bits
+0 5070 125 15 841 0 0 194 0 0
+fn=pypy_g_rbigint__normalize
+0 1662640 105842 304 639470 0 0 277441 0 0
+fn=pypy_g_rbigint_add
+0 397184 44183 228 132372 2114 1 108306 1 0
+fn=pypy_g_rbigint_divmod
+0 2900 130 29 1050 0 0 900 10 0
+fn=pypy_g_rbigint_eq
+0 1227 7 3 590 1 0 111 0 0
+fn=pypy_g_rbigint_floordiv
+0 700 100 19 300 0 0 200 0 0
+fn=pypy_g_rbigint_invert
+0 159 17 17 45 0 0 58 1 0
+fn=pypy_g_rbigint_lshift
+0 9293 515 102 2948 3 0 2375 13 1
+fn=pypy_g_rbigint_lt
+0 248342 13812 42 126850 10501 63 31347 0 0
+fn=pypy_g_rbigint_pow
+0 80234 1320 210 29260 0 0 25338 47 0
+fn=pypy_g_rbigint_rshift
+0 31883 703 155 14387 5 4 6135 25 0
+fn=pypy_g_rbigint_sub
+0 499 42 15 167 0 0 135 0 0
+fn=pypy_g_rbigint_tofloat
+0 42 2 2 12 0 0 12 0 0
+fn=pypy_g_rbigint_toint
+0 59708 10770 13 14927 0 0 14927 0 0
+fn=pypy_g_rbigint_touint
+0 72208 2664 8 16052 3984 9 4014 0 0
+fn=pypy_g_read_1
+0 84 6 3 24 0 0 26 1 0
+fn=pypy_g_read__Signed_arrayPtr_Unsigned_3
+0 4220 312 13 1055 0 0 1055 0 0
+fn=pypy_g_read_compiled_module
+0 29875 1925 173 8126 481 4 10755 134 4
+fn=pypy_g_readall
+0 2646 216 27 918 19 0 810 11 0
+fn=pypy_g_readline
+0 1865 140 8 560 53 0 570 0 0
+fn=pypy_g_reduce
+0 122854 10105 358 33231 2 0 53371 981 69
+fn=pypy_g_reduce_1
+0 169537 13357 169 50575 1 0 68387 1 0
+fn=pypy_g_reduce_slice
+0 477 16 9 180 0 0 180 9 2
+fn=pypy_g_remove_1
+0 330 45 6 120 0 0 105 0 0
+fn=pypy_g_repr
+0 644350 3119 219 184100 342 1 239330 84 0
+fn=pypy_g_repr_1
+0 28 7 5 7 0 0 7 0 0
+fn=pypy_g_repr__DictMulti
+0 3348 496 109 1488 166 0 744 0 0
+fn=pypy_g_repr__RangeList
+0 16190 715 226 4680 2 0 5139 39 9
+fn=pypy_g_repr__String
+0 4991175 5876 202 585375 5250 823 771558 9816 796
+fn=pypy_g_repr__Tuple
+0 39086 2620 404 10206 21 0 15810 114 9
+fn=pypy_g_repr__Tuple_star1
+0 14742 1258 301 3528 124 0 6426 140 27
+fn=pypy_g_repr__Type
+0 161048 1474 316 42226 360 34 59902 621 78
+fn=pypy_g_return_one
+0 26595 643 31 11820 0 0 7683 0 0
+fn=pypy_g_rmdir
+0 22 4 4 8 0 0 7 0 0
+fn=pypy_g_rshift__Int_Int
+0 287990 1372 157 95445 0 0 50832 1009 71
+fn=pypy_g_rshift__Long_Long
+0 6958 329 64 2156 0 0 2646 24 1
+fn=pypy_g_set
+0 4023972 107290 79 1341324 0 0 1676655 795 7
+fn=pypy_g_set_category
+0 354302 1328 4 146775 3159 23 48925 0 0
+fn=pypy_g_set_charset
+0 190569 2656 8 74043 4 0 31920 0 0
+fn=pypy_g_set_failure
+0 138488 1328 4 79136 0 0 19784 0 0
+fn=pypy_g_set_filename
+0 344900 1150 136 99603 4542 259 110807 379 9
+fn=pypy_g_set_literal
+0 367762 1328 3 176952 0 0 73322 0 0
+fn=pypy_g_set_mth_mm_add_perform_call
+0 3000 107 8 1350 33 3 900 0 0
+fn=pypy_g_set_negate
+0 312 0 0 195 0 0 39 0 0
+fn=pypy_g_set_range
+0 36360 2656 6 16568 0 0 6640 0 0
+fn=pypy_g_setattr
+0 12106944 153960 23 4035648 6 0 5044560 0 0
+fn=pypy_g_setattr_1
+0 126852 2614 192 45012 0 0 45012 0 0
+fn=pypy_g_setattr__Type_ANY_ANY
+0 121402 4552 312 42231 406 19 45690 82 1
+fn=pypy_g_setdefault
+0 1572403 90211 213 422121 4 0 738712 10483 1034
+fn=pypy_g_setdefault_1
+0 642978 27313 46 214326 4 0 252078 0 0
+fn=pypy_g_setdefault_star3
+0 1456314 61829 235 401014 0 0 612074 11858 1156
+fn=pypy_g_setitem
+0 9291194 184630 40 3203860 74 0 3844632 21 0
+fn=pypy_g_setitem_2
+0 1456 224 47 560 0 0 560 0 0
+fn=pypy_g_setitem__List_ANY_ANY
+0 568753 28657 69 213894 2728 0 165426 409 2
+fn=pypy_g_setitem__List_Slice_List
+0 73455 3292 35 34279 755 9 29382 0 0
+fn=pypy_g_setrecursionlimit
+0 19 2 2 7 1 1 4 0 0
+fn=pypy_g_setslice
+0 352584 18083 110 112631 0 0 142013 1815 148
+fn=pypy_g_signal
+0 321 12 12 89 0 0 122 0 0
+fn=pypy_g_stack_check___
+0 135342280 137 15 33835570 0 0 33835570 33239 107
+fn=pypy_g_startup
+0 3345 17 10 925 97 87 969 1 0
+fn=pypy_g_stat
+0 4188 361 14 1279 0 0 1630 0 0
+fn=pypy_g_stat__arrayPtr_statPtr_2
+0 71786 818 13 26104 0 0 32630 0 0
+fn=pypy_g_std_wp__str
+0 208014 6730 106 84184 1736 130 64400 0 0
+fn=pypy_g_str
+0 360360 10738 106 102960 8 0 133848 0 0
+fn=pypy_g_str2charp
+0 1832027 6490 211 506664 230 4 506664 402 8
+fn=pypy_g_str_count__String_String_ANY_ANY
+0 184 12 3 60 12 0 64 5 0
+fn=pypy_g_str_decode_utf_8
+0 388 41 41 132 2 2 134 1 1
+fn=pypy_g_str_endswith__String_String_ANY_ANY
+0 70903 3116 66 24079 0 0 24079 0 0
+fn=pypy_g_str_expandtabs__String_ANY
+0 26968 1800 25 9037 102 0 8189 88 2
+fn=pypy_g_str_find__String_String_ANY_ANY
+0 1104 32 4 360 0 0 384 7 0
+fn=pypy_g_str_index__String_String_ANY_ANY
+0 192 12 6 60 8 0 64 4 0
+fn=pypy_g_str_islower__String
+0 74 3 3 12 0 0 4 0 0
+fn=pypy_g_str_join__String_ANY
+0 1360715 22151 873 546533 4377 46 528126 1643 387
+fn=pypy_g_str_lower__String
+0 1784 64 8 272 2 0 432 4 0
+fn=pypy_g_str_lstrip__String_None
+0 3430 614 3 1029 0 0 1715 0 0
+fn=pypy_g_str_lstrip__String_String
+0 396 66 1 132 0 0 198 0 0
+fn=pypy_g_str_mth_mm_count_W_StringObject_W_StringObject_W
+0 228 20 5 80 12 0 72 0 0
+fn=pypy_g_str_mth_mm_count_perform_call
+0 236 20 5 116 24 2 80 4 0
+fn=pypy_g_str_mth_mm_endswith_W_StringObject_W_StringObjec
+0 129151 7131 213 43780 0 0 39402 0 0
+fn=pypy_g_str_mth_mm_endswith_perform_call
+0 131340 7248 110 63481 9276 102 39402 0 0
+fn=pypy_g_str_mth_mm_expandtabs_perform_call
+0 13720 852 14 6174 292 4 4802 0 0
+fn=pypy_g_str_mth_mm_find_W_StringObject_W_StringObject_W_
+0 1368 40 5 480 0 0 432 0 0
+fn=pypy_g_str_mth_mm_find_perform_call
+0 1392 48 6 696 24 2 480 0 0
+fn=pypy_g_str_mth_mm_index_W_StringObject_W_StringObject_W
+0 228 16 4 80 12 0 72 4 0
+fn=pypy_g_str_mth_mm_index_perform_call
+0 232 20 8 116 20 4 80 4 0
+fn=pypy_g_str_mth_mm_islower_perform_call
+0 33 4 4 13 1 1 11 0 0
+fn=pypy_g_str_mth_mm_isspace_perform_call
+0 20768 1034 14 8437 266 5 6490 0 0
+fn=pypy_g_str_mth_mm_join_perform_call
+0 81312 5315 98 33264 1776 74 24024 4 0
+fn=pypy_g_str_mth_mm_lower_perform_call
+0 264 32 4 104 8 1 88 0 0
+fn=pypy_g_str_mth_mm_lstrip_W_StringObject_W_NoneObject
+0 15435 957 12 5145 0 0 3773 0 0
+fn=pypy_g_str_mth_mm_lstrip_W_StringObject_W_StringObject
+0 1551 132 12 528 0 0 396 0 0
+fn=pypy_g_str_mth_mm_lstrip_perform_call
+0 15416 1283 29 6768 546 9 4888 0 0
+fn=pypy_g_str_mth_mm_replace_W_StringObject_W_StringObject
+0 27755 580 187 9394 0 0 7686 0 0
+fn=pypy_g_str_mth_mm_replace_perform_call
+0 24766 1212 284 12383 780 287 8540 0 0
+fn=pypy_g_str_mth_mm_rfind_W_StringObject_W_StringObject_W
+0 100149 4588 83 35140 0 0 31626 0 0
+fn=pypy_g_str_mth_mm_rfind_perform_call
+0 105420 3543 34 50953 1133 35 31626 0 0
+fn=pypy_g_str_mth_mm_rstrip_W_StringObject_W_NoneObject
+0 4410 292 188 1470 0 0 1078 0 0
+fn=pypy_g_str_mth_mm_rstrip_W_StringObject_W_StringObject
+0 15698 995 17 5344 0 0 4008 0 0
+fn=pypy_g_str_mth_mm_rstrip_perform_call
+0 18576 1723 122 7776 440 37 5184 0 0
+fn=pypy_g_str_mth_mm_split_W_StringObject_W_NoneObject_W_R
+0 2184 190 62 756 0 0 630 0 0
+fn=pypy_g_str_mth_mm_split_W_StringObject_W_StringObject_W
+0 149032 6183 129 51588 0 0 42990 0 0
+fn=pypy_g_str_mth_mm_split_perform_call
+0 154124 6330 118 66884 5064 122 46528 0 0
+fn=pypy_g_str_mth_mm_splitlines_W_StringObject_W_Root
+0 798 95 38 266 0 0 228 0 0
+fn=pypy_g_str_mth_mm_splitlines_perform_call
+0 760 76 21 342 38 7 266 0 0
+fn=pypy_g_str_mth_mm_startswith_W_StringObject_W_StringObj
+0 1006717 30058 196 341260 0 0 307134 0 0
+fn=pypy_g_str_mth_mm_startswith_perform_call
+0 1023780 33303 105 494827 38312 111 307134 0 0
+fn=pypy_g_str_mth_mm_strip_W_StringObject_W_NoneObject
+0 11115 667 63 3705 0 0 2717 0 0
+fn=pypy_g_str_mth_mm_strip_W_StringObject_W_StringObject
+0 17813 1512 35 6064 0 0 4548 0 0
+fn=pypy_g_str_mth_mm_strip_perform_call
+0 25666 2066 54 11268 517 17 8138 0 0
+fn=pypy_g_str_mth_mm_translate_perform_call
+0 151250 10224 72 69575 4672 64 54450 0 0
+fn=pypy_g_str_mth_mm_upper_perform_call
+0 2244 168 6 884 48 2 748 0 0
+fn=pypy_g_str_replace__String_String_String_ANY
+0 94037 3143 428 31822 531 85 31955 229 19
+fn=pypy_g_str_rfind__String_String_ANY_ANY
+0 79065 3921 44 26355 0 0 28112 462 75
+fn=pypy_g_str_rstrip__String_None
+0 980 64 0 294 0 0 490 0 0
+fn=pypy_g_str_rstrip__String_String
+0 4008 668 11 1336 0 0 2004 0 0
+fn=pypy_g_str_split__String_None_ANY
+0 41424 621 229 12371 52 19 7390 130 6
+fn=pypy_g_str_split__String_String_ANY
+0 1755566 37420 780 582543 3091 74 635873 8688 2373
+fn=pypy_g_str_splitlines__String_ANY
+0 39317 285 106 10470 4 0 5502 108 7
+fn=pypy_g_str_startswith__String_String_ANY_ANY
+0 561642 22472 43 187693 0 0 187693 0 0
+fn=pypy_g_str_strip__String_None
+0 2470 164 16 741 0 0 1235 0 0
+fn=pypy_g_str_strip__String_String
+0 4548 378 9 1516 0 0 2274 0 0
+fn=pypy_g_str_translate__String_ANY_ANY
+0 1984566 33050 674 742217 11860 353 697737 2294 178
+fn=pypy_g_str_upper__String
+0 17249 485 28 2504 32 0 3960 32 0
+fn=pypy_g_strerror
+0 120 9 6 33 0 0 36 1 1
+fn=pypy_g_string_to_int
+0 137238 1803 68 35128 0 0 36192 225 20
+fn=pypy_g_string_to_w_long
+0 6438 34 17 1768 4 0 2548 18 0
+fn=pypy_g_stringendswith
+0 84205 2975 45 31969 1746 67 6567 0 0
+fn=pypy_g_stringstartswith
+0 364165 24500 159 182681 3784 63 51189 0 0
+fn=pypy_g_strip_spaces
+0 124452 1592 65 32227 900 16 16665 254 16
+fn=pypy_g_sub
+0 40 10 0 10 0 0 10 0 0
+fn=pypy_g_sub__Int_Int
+0 399903 17776 41 148111 2 0 88868 3916 254
+fn=pypy_g_sum
+0 149 13 13 39 0 0 68 1 0
+fn=pypy_g_sum_1
+0 8577 10 10 2342 1 0 3377 0 0
+fn=pypy_g_symlink
+0 50 6 3 18 0 0 18 0 0
+fn=pypy_g_time
+0 44 4 4 12 0 0 14 0 0
+fn=pypy_g_to_lvalue
+0 11520 435 78 3961 47 0 3813 155 2
+fn=pypy_g_try_import_mod
+0 200245 8362 584 73108 1049 52 78839 1584 62
+fn=pypy_g_try_to_find_file_descriptor
+0 5040 336 38 1680 84 6 1596 17 3
+fn=pypy_g_twobyte
+0 185850 816 22 35400 0 0 35400 1355 83
+fn=pypy_g_typeerrormsg
+0 905307 47892 688 301768 1735 0 348434 2872 210
+fn=pypy_g_uint_w(i_xx_t)
+0 14155152 1328 4 5147328 0 0 1286832 0 0
+fn=pypy_g_uint_w__Long
+0 22746 3996 15 9366 0 0 6690 0 0
+fn=pypy_g_unaryop_abs_impl
+0 1560 120 46 420 0 0 600 0 0
+fn=pypy_g_unaryop_invert_impl
+0 44720 2644 35 12040 0 0 17200 0 0
+fn=pypy_g_unaryop_len_impl
+0 3045146 75476 41 819847 1 0 1171210 253 0
+fn=pypy_g_unaryop_neg_impl
+0 1357772 78043 48 365554 1 0 522220 0 0
+fn=pypy_g_unicode_from_string
+0 63 6 6 18 0 0 22 0 0
+fn=pypy_g_unlink
+0 44 4 4 16 0 0 14 0 0
+fn=pypy_g_unmarshal_Float
+0 7178 299 67 1940 0 0 2619 24 0
+fn=pypy_g_unmarshal_Int
+0 91710 621 61 27513 0 0 24456 744 51
+fn=pypy_g_unmarshal_Long
+0 53853 124 68 13950 0 0 16008 141 1
+fn=pypy_g_unmarshal_None
+0 30265 35 1 12106 0 0 6053 0 0
+fn=pypy_g_unmarshal_String
+0 880390 807 84 226386 0 0 251540 6756 337
+fn=pypy_g_unmarshal_Tuple
+0 54450 700 86 15730 0 0 16940 304 18
+fn=pypy_g_unmarshal_Unicode
+0 204 18 14 48 0 0 66 2 1
+fn=pypy_g_unmarshal_interned
+0 8414540 2183 170 2599915 260 1 2954965 27030 1157
+fn=pypy_g_unmarshal_pycode
+0 2886480 8721 688 1063440 286 0 1209030 1735 8
+fn=pypy_g_unmarshal_str
+0 2738151 549 46 912717 6 0 1014130 138 5
+fn=pypy_g_unmarshal_strlist
+0 3825244 2147 234 1368620 400 0 1127047 54 0
+fn=pypy_g_unpack
+0 11040 920 277 3220 0 0 4140 115 11
+fn=pypy_g_unpack_int_5
+0 34314 798 222 11514 0 0 10374 115 15
+fn=pypy_g_unpack_int_6
+0 100 7 7 33 0 0 29 0 0
+fn=pypy_g_unpack_str_tuple
+0 32192 567 81 11517 49 0 9896 118 1
+fn=pypy_g_unpacktuple
+0 109257 3431 26 43679 69 0 17424 5 0
+fn=pypy_g_update1
+0 2598234 63778 402 745138 200 0 1099331 19 0
+fn=pypy_g_update1_star2
+0 90805 6028 329 23595 0 0 38610 763 34
+fn=pypy_g_update_1
+0 469359 41284 486 128007 2072 0 197829 3313 154
+fn=pypy_g_update_2
+0 480996 25802 383 155160 535 0 190071 62 0
+fn=pypy_g_update_star2
+0 564143 47444 811 148853 2997 0 230845 3081 140
+fn=pypy_g_userdel
+0 2236 19 12 602 0 0 860 0 0
+fn=pypy_g_w_getlower
+0 716 27 3 182 0 0 156 7 0
+fn=pypy_g_w_match
+0 57514352 13280 38 26000912 164706 388 15773984 81553 752
+fn=pypy_g_wrap__int
+0 41973923 216066 38 11659373 19 0 11659426 660847 22817
+fn=pypy_g_wrap__str
+0 21812 419 32 6232 4 0 6232 187 1
+fn=pypy_g_wrap_decoder_1
+0 948 63 60 276 4 3 366 9 2
+fn=pypy_g_wrap_oserror__w_OSError
+0 2912 224 35 768 3 0 1088 32 16
+fn=pypy_g_wrap_oserror_as_ioerror
+0 190 19 10 48 0 0 68 2 0
+fn=pypy_g_wrapint
+0 802480 6394 0 240744 0 0 240744 10422 758
+fn=pypy_g_write
+0 50378 906 164 18544 889 74 16217 2 0
+fn=pypy_g_write__Signed_arrayPtr_Unsigned_3
+0 380 0 0 95 0 0 95 0 0
+fn=pypy_g_write_compiled_module
+0 130 10 9 34 0 0 56 1 0
+fn=pypy_g_zip
+0 483756 46280 156 138216 209 0 186060 4636 292
+fn=pypy_g_zip_1
+0 14007332 349078 674 4441715 210 0 6197195 23172 1301
+fn=pypysig_ignore
+0 19 2 1 4 0 0 10 0 0
+fn=pypysig_poll
+0 1478583 85434 12 492861 19 1 164287 0 0
+fn=pypysig_setflag
+0 19 2 2 4 0 0 10 0 0
+fn=read
+0 3538 945 123 1769 1 0 0 0 0
+fn=readdir64
+0 20348 24 16 8774 72 26 3709 0 0
+fn=rindex
+0 125 7 7 12 1 0 2 0 0
+fn=rmdir
+0 8 1 1 3 0 0 1 0 0
+fn=sbrk
+0 89 6 6 29 4 3 21 0 0
+fn=scalbn
+0 1180 41 9 708 0 0 0 0 0
+fn=set_errno
+0 4248 125 35 1593 0 0 1593 0 0
+fn=sigaction
+0 40 2 2 12 0 0 14 0 0
+fn=sigemptyset
+0 36 2 2 8 0 0 14 0 0
+fn=snprintf
+0 40 4 2 12 0 0 18 0 0
+fn=stpcpy
+0 2183 74 11 555 0 0 444 0 0
+fn=strerror
+0 777 74 8 222 0 0 333 0 0
+fn=strerror_r
+0 1110 111 13 333 51 11 333 0 0
+fn=strlen
+0 7846 125 15 1430 233 40 0 0 0
+fn=strncmp
+0 1666 119 14 581 1 0 165 0 0
+fn=strstr
+0 85 4 4 24 2 2 11 0 0
+fn=symlink
+0 18 2 1 8 0 0 2 0 0
+fn=sysconf
+0 37 5 5 7 1 1 6 0 0
+fn=tcgetattr
+0 8113 532 109 2660 132 0 3059 0 0
+fn=tfind
+0 703 73 12 259 0 0 111 0 0
+fn=uname
+0 8 1 1 3 0 0 1 0 0
+fn=unlink
+0 136 17 3 51 16 0 17 0 0
+fn=vfprintf
+0 542 62 31 192 16 5 152 6 0
+fn=vsnprintf
+0 106 8 4 26 0 0 52 2 1
+fn=write
+0 190 93 63 95 69 1 0 0 0
+fl=crti.S
+fn=???
+12 1 1 1 0 0 0 1 0 0
+13 1 0 0 0 0 0 0 0 0
+14 1 0 0 0 0 0 1 0 0
+15 2 0 0 0 0 0 1 0 0
+16 2 0 0 0 0 0 0 0 0
+17 1 0 0 0 0 0 1 0 0
+18 1 0 0 0 0 0 0 0 0
+19 2 1 1 0 0 0 0 0 0
+20 1 0 0 1 1 0 0 0 0
+21 1 0 0 0 0 0 0 0 0
+22 2 0 0 0 0 0 0 0 0
+23 1 0 0 1 0 0 0 0 0
+24 1 0 0 0 0 0 0 0 0
+25 2 0 0 1 0 0 0 0 0
+26 1 0 0 1 0 0 0 0 0
+27 1 0 0 1 0 0 0 0 0
+28 1 0 0 1 0 0 0 0 0
+36 1 1 0 0 0 0 1 0 0
+37 1 0 0 0 0 0 0 0 0
+38 1 0 0 0 0 0 0 0 0
+39 1 0 0 0 0 0 1 0 0
+41 1 1 1 0 0 0 1 0 0
+42 1 0 0 0 0 0 0 0 0
+43 1 0 0 0 0 0 1 0 0
+44 1 0 0 0 0 0 0 0 0
+45 1 0 0 0 0 0 0 0 0
+48 1 0 0 0 0 0 0 0 0
+52 1 1 1 0 0 0 1 0 0
+53 1 0 0 0 0 0 0 0 0
+54 1 0 0 0 0 0 1 0 0
+55 1 0 0 0 0 0 0 0 0
+56 1 0 0 0 0 0 0 0 0
+59 1 0 0 0 0 0 0 0 0
+fl=crtn.S
+fn=???
+10 2 0 0 2 0 0 0 0 0
+11 2 0 0 2 0 0 0 0 0
+12 1 0 0 1 0 0 0 0 0
+13 1 0 0 1 0 0 0 0 0
+19 1 0 0 1 0 0 0 0 0
+20 1 0 0 1 0 0 0 0 0
+21 2 0 0 2 0 0 0 0 0
+22 2 0 0 2 0 0 0 0 0
+23 1 0 0 1 0 0 0 0 0
+24 1 0 0 1 0 0 0 0 0
+summary: 11768169540 74018102 203816 4464089548 43873705 2278288 3204240455 12931515 1826371

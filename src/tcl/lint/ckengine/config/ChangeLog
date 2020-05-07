@@ -1,0 +1,36 @@
+2001-03-15    Karl Lehenbauer <karl@procplace.com>
+
+	* installFile.tcl: Added updating of the modification time of
+	  the target file whether we overwrote it or decided that it
+	  hadn't changed.  This was necessary for us to be able to
+	  determine whether or not a module install touched the file.
+
+2001-03-08    Karl Lehenbauer <karl@procplace.com>
+
+	* installFile.tcl: Added support for converting new-style (1.1+) 
+	  Cygnus drive paths to Tcl-style.
+
+2001-01-15    <brent.welch@interwoven.com>
+
+        * tcl.m4: Added FreeBSD clause.
+
+2001-01-03    <brent.welch@interwoven.com>
+
+        * tcl.m4: Fixed typo in SC_LIB_SPEC where it is checking
+	for exec-prefix.
+
+2000-12-01    <brent.welch@interwoven.com>
+
+        * tcl.m4: Concatenated most of the Ajuba acsite.m4 file
+	so we don't need to modify the autoconf installation.
+	* config.guess:
+	* config.sub:
+	* installFile.tcl:
+	Added files from the itcl config subdirectory,
+	which should go away.
+
+2000-7-29    <welch@ajubasolutions.com>
+
+        * Fixed the use of TCL_SRC_DIR and TK_SRC_DIR within TCL_PRIVATE_INCLUDES
+	and TK_PRIVATE_INCLUDES to match their recent change from $(srcdir)
+	to $(srcdir)/..

@@ -1,0 +1,22 @@
+format  {TclDevKit Project File}
+fmtver  2.0
+fmttool {TclDevKit TclApp PackageDefinition} 2.6
+
+########
+#####
+###
+##
+#
+
+Package  {tcldebugger_attach 1.4}
+Base     @TAP_DIR@
+Path     attach.tcl
+Path     pkgIndex.tcl
+Platform *
+Desc     {API for applications to use for attaching themselves to a "tcldebugger" instance}
+
+#
+##
+###
+#####
+########

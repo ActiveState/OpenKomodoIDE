@@ -1,0 +1,10 @@
+# komodo tool: mbigint
+# ====================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ====================
+<% /* BigIntegerField (mbigint) */ %>
+[[%tabstop1:FIELDNAME]] = models.BigIntegerField([[%tabstop2:2]])

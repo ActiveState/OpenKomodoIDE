@@ -1,0 +1,20 @@
+# TODO later
+
+[x] double-click and return in tree view
+[x] arrow keys in tree view
+[x] save & restore open nodes, selected node
+
+[x] save list of hidden fields for each table
+
+[x] show schema table
+[x] splitter
+
+[] filter
+
+- versions (Sqlite3 vs. Sqlite, MySQL 5 vs 4, old password vs new, ?
+
+
+
+
+
+

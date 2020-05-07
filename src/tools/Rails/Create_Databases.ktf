@@ -1,0 +1,22 @@
+// komodo tool: Create Databases
+// =============================
+// async: 0
+// icon: chrome://famfamfamsilk/skin/icons/database_add.png
+// language: JavaScript
+// rank: 100
+// trigger: trigger_postopen
+// trigger_enabled: 0
+// type: macro
+// version: 1.0.12
+// =============================
+(function() {
+    try {
+        ko.extensions.rails.manageDatabases(window, 'create', 'creation');
+    } catch(ex) {
+	if (ex.message == "You cancelled.") {
+	    return;
+	}
+        var msg = ex + "\n";
+        alert(msg);
+    }
+})();

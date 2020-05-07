@@ -1,0 +1,122 @@
+/*
+
+    Name:       Base16 Embers Light
+    Author:     Jannik Siebert (https://github.com/janniks)
+
+    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-chrome-devtools)
+    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+*/
+
+.cm-s-base16-embers-light.CodeMirror {background: #DBD6D1; color: #2C2620;}
+.cm-s-base16-embers-light div.CodeMirror-selected {background: #BEB6AE !important;}
+.cm-s-base16-embers-light .CodeMirror-gutters {background: #DBD6D1; border-right: 0px;}
+.cm-s-base16-embers-light .CodeMirror-linenumber {color: #8A8075;}
+.cm-s-base16-embers-light .CodeMirror-cursor {border-left: 1px solid #5A5047 !important;}
+
+.cm-s-base16-embers-dark span.cm-header {color: #5A5047;}
+.cm-s-base16-embers-light span.cm-comment {color: #5A5047;}
+.cm-s-base16-embers-light span.cm-atom {color: #82576D;}
+.cm-s-base16-embers-light span.cm-number {color: #828257;}
+
+.cm-s-base16-embers-light span.cm-property {color: #2C2620;}
+.cm-s-base16-embers-light span.cm-attribute {color: #828257;}
+.cm-s-base16-embers-light span.cm-keyword {color: #82576D;}
+.cm-s-base16-embers-light span.cm-string {color: #57826D;}
+
+.cm-s-base16-embers-light span.cm-variable {color: #826D57;}
+.cm-s-base16-embers-light span.cm-variable-2 {color: #6D5782;}
+.cm-s-base16-embers-light span.cm-def {color: #6D5782;}
+.cm-s-base16-embers-light span.cm-error {background: #826D57; color: #5A5047;}
+.cm-s-base16-embers-light span.cm-bracket {color: #2C2620;}
+.cm-s-base16-embers-light span.cm-tag {color: #826D57;}
+.cm-s-base16-embers-light span.cm-link {color: #82576D;}
+.cm-s-base16-embers-light span.cm-builtin {color: #82576D;}
+
+.cm-s-base16-embers-light .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
+
+.cm-s-base16-embers-dark .CodeMirror-activeline-background { background: #BEB6AE !important; }
+
+
+
+body,
+textarea {
+  background: #DBD6D1;
+  color: #433B32;
+}
+
+#sidebar, .modal {
+  background: #A39A90;
+  color: #2C2620;
+}
+
+a, a:hover {
+    color: #825757;
+}
+
+a.option {
+    color: #825757 !important;
+}
+
+#logos {
+  background: #8A8075;
+  color: #433B32;
+}
+
+#buttons {
+  background: #A39A90;
+  color: #5A5047;
+}
+
+#buttons .function.enabled:hover {
+  color: #2C2620;
+}
+
+#buttonTips {
+  background: #825757;
+  color: #DBD6D1;
+}
+
+#pointer:after {
+    border-bottom-color: #825757 !important;
+}
+
+#linenos {
+  background: #BEB6AE;
+  border-color: #A39A90 !important;
+}
+
+#linenos a {
+    color: #5A5047 !important;
+}
+
+.option {
+    background: #8A8075 !important;
+    color: #433B32 !important;
+}
+
+.option:hover {
+    background: #7c7369 !important;
+}
+
+.dropdown:after {
+    border-top-color: #5A5047 !important;
+}
+
+#logo-kopy {
+    background: url(../../img/pastebin-logo-dark.png) no-repeat !important;
+}
+
+#logo-komodo {
+    background: url(../../img/komodo-logo-dark.png) no-repeat !important;
+}
+
+#messages li {
+  background: #6D5782;
+  color: #DBD6D1;
+}
+
+#messages li.error {
+  background: #826D57;
+  color: #DBD6D1;
+}

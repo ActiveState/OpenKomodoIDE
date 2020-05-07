@@ -1,0 +1,15 @@
+// komodo tool: sidebar
+// ====================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ====================
+<% /* Sidebar Template */ %>
+
+<?php // Dynamic Sidebar
+if ( ! function_exists( 'dynamic_sidebar' ) || ! dynamic_sidebar( '${1:Sidebar Name}' ) ) : ?>
+
+	${0:<!-- Sidebar fallback content -->}
+
+<?php endif; // End Dynamic Sidebar $1 ?>

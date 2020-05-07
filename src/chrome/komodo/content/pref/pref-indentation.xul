@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        class="kodialog pref-window"
+        orient="vertical"
+        onload="MyOnload();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+    <script type="application/x-javascript;version=1.7">
+    <![CDATA[
+var log = ko.logging.getLogger("pref-indent");
+var langData = {};
+var curLang = null;
+var g_prefset = null;
+
+function MyOnload() {
+        // register with preferences
+        parent.hPrefWindow.onpageload();
+    
+}
+function OnPreferencePageInitalize(prefset) {
+    log.info("OnPreferencePageInitalize");
+    g_prefset = prefset;
+    if (parent.prefInvokeType != "global") {
+        return;
+    }
+    try {
+        var langToUse;
+        var view = getKoObject('views').manager.currentView;
+        if (view)
+            langToUse = view.koDoc.language;
+        else   // default
+            langToUse = "Text";
+
+        changeNewLanguage(null, langToUse);
+    } catch(ex) {
+        log.error(ex);
+    }
+}
+function OnPreferencePageOK(prefset)  {
+    log.info("OnPreferencePageOK");
+    if (parent.prefInvokeType != "global") {
+        return true;
+    }
+    // save any updated prefs
+    try {
+        changeNewLanguage(null,null);
+        for (var language in langData) {
+            var o = langData[language];
+            var prefix = 'languages/' + language + '/';
+            if (o.useTabs != o.defaults.useTabs)
+                prefset.setBoolean(prefix+'useTabs', o.useTabs);
+            if (o.tabWidth != o.defaults.tabWidth)
+                prefset.setLong(prefix+'tabWidth', o.tabWidth);
+            if (o.indentWidth != o.defaults.indentWidth)
+                prefset.setLong(prefix+'indentWidth', o.indentWidth);
+        }
+        return true;
+    } catch(e) {
+        log.exception(e);
+        return ignorePrefPageOKFailure(prefset,
+                                       "Trying to save global indentation settings triggered an exception",
+                                       e.toString());
+    }
+}
+
+function getPrefsForLanguage(name) {
+    if (name in langData) {
+        return langData[name];
+    }
+    var prefix = 'languages/' + name + '/';
+    var o = {};
+    o.name = name;
+    // get the defaults
+    o.defaults = {};
+    o.useTabs = o.defaults.useTabs =
+        g_prefset.getBoolean(prefix+'useTabs', g_prefset.getBoolean('useTabs', false));
+    o.tabWidth = o.defaults.tabWidth =
+        g_prefset.getLong(prefix+'tabWidth', g_prefset.getLong('tabWidth', false));
+    o.indentWidth = o.defaults.indentWidth =
+        g_prefset.getLong(prefix+'indentWidth', g_prefset.getLong('indentWidth', false));
+    langData[name] = o;
+    return o;
+}
+function changeNewLanguage(item, name)  {
+    var langlist = document.getElementById("langList");
+
+    if (!name) name = langlist.selection;
+    else if (item == null) langlist.selection = name;
+
+    // store old data
+    if (curLang) {
+        curLang.useTabs = document.getElementById('useTabsLang').checked;
+        curLang.tabWidth = document.getElementById('tabWidthLang').value;
+        curLang.indentWidth = document.getElementById('indentWidthLang').value;
+    }
+    curLang = getPrefsForLanguage(name);
+
+    // set new data
+    document.getElementById('useTabsLang').checked = curLang.useTabs;
+    document.getElementById('tabWidthLang').value = curLang.tabWidth;
+    document.getElementById('indentWidthLang').value = curLang.indentWidth;
+}
+
+]]>
+    </script>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="indentation-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical">
+            <caption label="&indentationGlobalSettings.label;"
+                  class="load-context-check" showIfLoadContext="global"/>
+            <caption label="&indentation.label;"
+                  class="load-context-check" hideIfLoadContext="global"/>
+      
+            <hbox align="center"
+                  class="load-context-check" showIfLoadContext="global">
+              <label value="&autoIndentStyle.label;"/>
+              <menulist id="editAutoIndentStyle" pref="true" prefattribute="data">
+                  <menupopup>
+                      <menuitem data="smart" label="&useSmartIndent.label;"/>
+                      <menuitem data="smart_no_lineup" label="&useSmartIndentNoLineUp.label;"/>
+                      <menuitem data="plain" label="&indentToFirstNonEmptyColumn.label;"/>
+                      <menuitem data="none" label="&donTAutoIndent.label;"/>
+                  </menupopup>
+              </menulist>
+            </hbox>
+      
+            <checkbox id="editElectricBrace" label="&autoAdjustClosingBraces.label;" pref="true"
+                        prefstring="editElectricBrace" prefattribute="checked"/>
+      
+                  <checkbox id="showIndentationGuides" label="&showIndentationGuides.label;"
+                           pref="true" prefstring="showIndentationGuides"
+                           prefattribute="checked"/>
+      
+                  <checkbox id="useSmartTabs" label="&allowFileContentsToOverrideTabSettings.label;"
+                      pref="true" prefstring="useSmartTabs"
+                      prefattribute="checked"/>
+		  
+            <!-- space helps re-inforce "smart-tabs" may override the rest -->
+                  <checkbox id="indentStringsAfterParens" label="&indentStringsAfterParens.label;"
+                      pref="true" prefstring="indentStringsAfterParens"
+                      prefattribute="checked"
+                      class="load-context-check advanced" showIfLoadContext="global"/>
+      
+                  <checkbox id="dedentOnColon" label="&dedentOnColon.label;"
+                      pref="true" prefstring="dedentOnColon"
+                      prefattribute="checked"
+                      class="load-context-check advanced" showIfLoadContext="global"/>
+      
+            <checkbox id="useTabs"
+                      label="&preferTabCharactersOverSpaces.label;"
+                      pref="true"
+                      prefstring="useTabs"
+                      prefattribute="checked"/>
+      
+            <hbox align="center">
+                <textbox id="indentWidth" size="3" wsm_persist="true"
+                           pref="true" prefstring="indentWidth"
+                           prefattribute="value"/>
+                <text value="&filePrefIndentationSpacePerIndent.label;"/>
+            </hbox>
+            <hbox align="center">
+                <textbox id="tabWidth" size="3" wsm_persist="true"
+                           pref="true" prefstring="tabWidth"
+                           prefattribute="value"/>
+                <text value="&filePrefIndentationWhidtTabChar.label;"/>
+      
+            </hbox>
+      
+      
+            <checkbox id="editBackspaceDedents" label="&backspaceDecreasesIndentationInLeadingWhitespace.label;" pref="true"
+                      prefstring="editBackspaceDedents" prefattribute="checked"/>
+                      
+            <checkbox id="enableElasticTabstops" label="&enableElasticTabstops.label;" pref="true"
+                      prefstring="enableElasticTabstops" prefattribute="checked"/>
+      
+        </groupbox>
+      
+        <groupbox orient="vertical"
+                  class="load-context-check advanced" showIfLoadContext="global">
+            <caption label="&indentation-per-language.label;"/>
+            <langlist id="langList" class="lang-menulist"
+                      oncommand="changeNewLanguage(this, null)"/>
+            <checkbox id="useTabsLang"
+                      label="&preferTabCharactersOverSpaces.label;"/>
+            <hbox align="center">
+                <textbox id="indentWidthLang" size="3"/>
+                <text value="&filePrefIndentationSpacePerIndent.label;"/>
+            </hbox>
+            <hbox align="center">
+                <textbox id="tabWidthLang" size="3"/>
+                <text value="&filePrefIndentationWhidtTabChar.label;"/>
+            </hbox>
+            <description id="indentation-per-language-reload-notice">
+                &indentation-per-language-reload-notice.descr;
+            </description>
+        </groupbox>
+
+    </vbox>
+
+</window>

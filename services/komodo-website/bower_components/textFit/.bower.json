@@ -1,0 +1,36 @@
+{
+  "name": "textFit",
+  "version": "2.1.0",
+  "homepage": "https://github.com/STRML/jquery.textFit",
+  "authors": [
+    "Samuel Reed <sam@tixelated.com>"
+  ],
+  "description": "A fast, jQuery-free text sizing component that quickly fits single and multi-line text to the width (and optionally height) of its container.",
+  "main": "textFit.js",
+  "keywords": [
+    "text fit",
+    "box fit",
+    "fit text",
+    "fit to container",
+    "fit",
+    "text"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "2.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.1.0",
+    "commit": "525a265c4dd9d78fc2be19c20d318854799bc230"
+  },
+  "_source": "git://github.com/STRML/textFit.git",
+  "_target": "~2.1.0",
+  "_originalSource": "textFit",
+  "_direct": true
+}

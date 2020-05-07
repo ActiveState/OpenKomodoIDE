@@ -1,0 +1,69 @@
+/* Copyright (c) 2009-2010 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "koIPrefs.idl"
+#include "koIRemoteTransfer.idl"
+#include "koIRemoteFileInfo.idl"
+
+// Komodo file publishing settings.
+
+[scriptable, uuid(74149899-cb6e-4c80-8449-44df8d136d66)]
+interface koIPublishingSettings : koIPreferenceSerializer {
+        // The internal unique id assigned to this synchronization setting.
+    attribute AString id;
+        // The name the user has given to this synchronization setting.
+    attribute AString name;
+        // Where to synchronize to locally.
+    attribute AString local_uri;
+        // Where to synchronize to remotely.
+    attribute AString remote_uri;
+        // Customizable includes/excludes.
+    attribute AString includes;
+    attribute AString excludes;
+    attribute boolean autopush_on_save;
+        /**
+         * The sync_data will hold information pertaining to individual files
+         * that have been synchronized before - such as path, timestamp, stats
+         * and file hashes. It's not accessable through XPCOM, you'll need to
+         * be using Python and unwrap the object to access this data.
+         *
+         * The sync_data is dict object that looks like:
+         *    {
+         *       'version': 1,
+         *       'local': {},    # A dictionay of local file info.
+         *       'remote': {},   # A dictionay of remote file info.
+         *    }
+         * The keys to local and remote are the full paths of the files (not
+         * uris) and the values are SyncInfo instances.
+         */
+    //attribute dict sync_data;
+
+        /**
+         * Update the stored sync data information from the file transfer
+         * operation.
+         */
+    void updateDownloadSyncData(in koIRemoteTransferOperation transferOperation);
+        /**
+         * Update the stored sync data information from the file transfer
+         * operation.
+         */
+    void updateUploadSyncData(in koIRemoteTransferOperation transferOperation);
+
+    void addLocalSyncData(in AString localpath, in AString md5hash);
+    void addRemoteSyncData(in AString remotepath, in koIRemoteFileInfo rfInfo);
+    void saveSyncData();
+
+        /**
+         * Check to see if this uri is handled by these publishing settings.
+         *
+         * @returns boolean - True when the settings match this uri.
+         */
+    boolean matchesUri(in AString uri);
+
+        /**
+         * Helper methods to get the matching path for the other side.
+         */
+    AString matchingRemoteUriFromLocalUri(in AString localUri);
+    AString matchingLocalUriFromRemoteUri(in AString remoteUri);
+};

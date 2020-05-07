@@ -1,0 +1,31 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2008 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'build',
+    'platform',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'komodoPythonUtilsDir',
+    'supportDir',
+    'unsiloedPythonExe',
+    'productType',
+    'buildFlavour',
+    'mozVersion',
+    'sdkDir',
+    'mozSrc',
+);
+
+# Examples
+#$cons->Preprocess('URIlib.unprocessed.py', 'URIlib.py');
+#$cons->InstallPythonUtility('URIlib.py');
+
+$cons->Install($idlExportDir, 'koIFormatters.idl');
+$cons->BuildAndInstallXpt('koIFormatters.idl');
+$cons->InstallXpcomComponent('koFormatterContext.py');
+$cons->InstallXpcomComponent('koFormatterService.py');

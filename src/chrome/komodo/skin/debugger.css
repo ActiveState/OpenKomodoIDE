@@ -1,0 +1,25 @@
+/* Copyright (c) 2003-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+/*
+ * CSS for debugging-related UI in Komodo:
+ *  - the debug session tabs
+ *  - perhaps the breakpoint manager window?
+ */
+
+
+/* Breakpoint-related images
+ * - XXX Add images for these.
+ * - XXX Perhaps this CSS does not belong in this file, but in a separate
+ *   breakpoint(s).css.
+ */
+
+#viewer-splitter {
+  background-image: none !important;
+  margin: 0 1px;
+}
+
+#varViewers[collapsed="true"] + #viewer-splitter {
+  visibility: collapse;
+}
+

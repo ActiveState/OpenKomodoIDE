@@ -1,0 +1,37 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'build',
+    'platform',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'komodoPythonUtilsDir',
+    'supportDir',
+    'unsiloedPythonExe',
+    'productType',
+    'buildFlavour',
+    'mozVersion',
+    'sdkDir',
+    'mozSrc',
+);
+
+
+$cons->Install($idlExportDir, 'koIViewController.idl');
+$cons->BuildAndInstallXpt('koIViewController.idl');
+
+$cons->InstallXpcomComponent('koTclCompletion.py');
+
+$cons->Preprocess('koLanguageCommandHandler.p.py','koLanguageCommandHandler.py');
+$cons->InstallXpcomComponent('koLanguageCommandHandler.py');
+
+$cons->InstallPythonUtility('scimozindent.py');
+
+$cons->Install("$supportDir/tcl", 'tcl-core.tip');
+$cons->Install("$supportDir/tcl", 'tk-core.tip');
+

@@ -1,0 +1,74 @@
+.TH TRIAL "1" "January 2003" "" ""
+.SH NAME
+trial \- run unit tests
+.SH SYNOPSIS
+.B trial
+[-b] [-v|-o|-j] [--coverage \fIcoverdir\fR] [-r \fIreactor\fR] [-l \fIlogfile\fR] [-m \fImodule\fR [-m \fImodule\fR ... ]] [-p \fIpackage\fR [-p \fIpackage\fR ... ]] \fIfile\fR|\fImodule\fR|\fIpackage\fR|\fITestCase\fR|\fItestMethod ...
+.PP
+.B trial --help
+.SH DESCRIPTION
+.PP
+trial loads and executes a suite of unit tests, obtained from modules and
+packages listed on the command line.
+The \fB\--help\fR option prints out a usage message to standard output.
+.TP
+\fB-s\fR, \fB--summary\fR
+Print out just a machine-parseable summary of the results.
+.TP
+\fB-v\fR, \fB--verbose\fR
+Be more verbose. Without this option, trial prints out a single character
+for each test. (e.g. An 'F' for a failure, a '.' for a success, a 'S' for
+skipped test, a 'T' for a todo and '!' for unexpected success). With this
+option, trial prints a single line for each test. This is especially useful
+for gauging how long each test takes.
+.TP
+\fB-o\fR, \fB--bwverbose\fR
+Be verbose, but do not attempt to use colors (more log-file friendly)
+.TP
+\fB-j\fR, \fB--jelly\fR
+Report results in a machine-readable jelly stream.
+.TP
+\fB--timing\fR
+Report results with timing information for each test.
+.TP
+\fB--tbformat\fR <format>
+Format to display tracebacks with. Valid values are 'plain' and 'emacs',
+default being 'plain'.
+.TP
+\fB-m\fR, \fB--module\fR <module>
+Module containing test cases.
+.TP
+\fB--testmodule\fR <module>
+Find the test case for a named file
+.TP
+\fB-p\fR, \fB--package\fR <package>
+Package containing modules that contain test cases.
+trial loads modules named 'test_' within the given package.
+.TP
+\fB-l\fR, \fB--logfile\fR <logfile>
+Log exceptions (and other things) to the given logfile.
+.TP
+\fB-r\fR, \fB--reactor\fR <reactor>
+Use this reactor for running the tests. The reactor names are the same as
+those accepted by twistd: c, qt, gtk2, and so on.
+.TP
+\fB--coverage\fR <coverdir>
+Generate coverage information in the given directory (relative to 
+_trial_temp). Requires Python 2.3.3.
+.TP
+\fB-b\fR, \fB--debug\fR
+Run the tests in the Python debugger. Also does post-mortem
+debugging on exceptions.
+.TP
+\fB-R\fR, \fB--recurse\fR
+Recursively search the specified packages for test modules.
+
+.SH AUTHOR
+Written by Jonathan M. Lange
+.SH "REPORTING BUGS"
+To report a bug, visit \fIhttp://twistedmatrix.com/bugs/\fR
+.SH COPYRIGHT
+Copyright \(co 2003 Matthew W. Lefkowitz
+.br
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.

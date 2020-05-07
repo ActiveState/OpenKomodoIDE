@@ -1,0 +1,146 @@
+base:
+  errors:
+    no_suspended_thread: "There is no thread suspended at the time and therefore no context to execute '{input}'"
+    command_unavailable: "Command is unavailable"
+    unknown_command: "Unknown command: {input}"
+
+breakpoints:
+  errors:
+    if: "Expecting 'if' in breakpoint condition; got: {expr}"
+    location: "Invalid breakpoint location: {expr}"
+    state: "We are not in a state that has an associated file"
+    class: "Unknown class {file}"
+    far_line: "There are only {lines} lines in file '{file}'"
+    source: "No source file named {file}"
+    state_add: "We are not in a state we can add breakpoints"
+    state_delete: "We are not in a state we can delete breakpoints"
+    expression: "Expression '{expr}' syntactically incorrect; breakpoint disabled"
+    no_breakpoint: "No breakpoint number {id}"
+  confirmations:
+    set_breakpoint: "Set breakpoint anyway?"
+    delete_all: "Delete all breakpoints?"
+
+condition:
+  errors:
+    syntax: "'condition' must be followed a breakpoint number and expression"
+    no_breakpoints: "No breakpoints have been set"
+
+continue:
+  errors:
+    unstopped_line: "Line {line} is not a stopping point in file '{file}'"
+
+display:
+  confirmations:
+    clear_all: "Clear all expressions?"
+  errors:
+    undefined: "Display expression {expr} is not defined"
+
+edit:
+  errors:
+    state: "We are not in a state that has an associated file"
+    file_line: "Invalid file/line number specification: {file_line}"
+    not_readable: "File '{file}' is not readable"
+
+frame:
+  errors:
+    too_low: "Adjusting would put us beyond the oldest (initial) frame"
+    too_high: "Adjusting would put us beyond the newest (innermost) frame"
+
+jump:
+  errors:
+    no_line_number: "'jump' must be followed by a line number"
+    bad_line_number: "Bad line number: {line}"
+    not_possible: "Not possible to jump from here"
+    no_frame: "Couldn't find debugged frame"
+    no_active_code: "Couldn't find active code at {file}:{line}"
+
+quit:
+  confirmations:
+    really: "Really quit?"
+
+reload:
+  messages:
+    done: "Source code is reloaded. Automatic reloading is {source_reloading}"
+
+restart:
+  errors:
+    undefined: "Don't know name of debugged program"
+    not_exist: "Ruby program {prog} doesn't exist"
+    no_args: "Arguments have not been set. Use 'set args' to set them"
+    not_available: "Restart command is not available at this time"
+  debug:
+    outset: "Debugger was not called from the outset..."
+    change_initial_dir: "Failed to change initial directory {dir}"
+    not_executable: "Ruby program {prog} doesn't seem to be executable...\nWe'll add a call to Ruby"
+
+save:
+  messages:
+    done: "Saved to '{path}'"
+
+set:
+  errors:
+    invalid_call_style: "Invalid call style {style}. Should be one of: 'short' or 'last'"
+    wrong_history_arg: "Invalid history parameter {arg}. Should be 'filename', 'save' or 'size'"
+    wrong_history_args_number: "Need two parameters for 'set history'; got {size}"
+    unknown_setting: "Unknown setting {setting}"
+    unknown_subcommand: "Unknown set command {subcmd}"
+
+show:
+  messages:
+    annotation: "Annotation level is {level}"
+    args: "Argument list to give program being debugged when it is started is '{args}'"
+    general: "{setting} is {status}"
+    call_style: "Frame call-display style is {style}"
+    debuggertesting: "Currently testing the debugger is {status}"
+    fullpath: "Displaying frame's full file names is {status}"
+    history:
+      filename: "{prefix}The filename in which to record the command history is '{filename}'"
+      save: "{prefix}Saving of history save is {status}"
+      size: "{prefix}Debugger history size is {size}"
+    tracing_plus:
+      'on': "line tracing style is different consecutive lines"
+      'off': "line tracing style is every line"
+    listsize: "Number of source lines to list by default is {size}"
+    port: "server port is {port}"
+    version: "ruby-debug {version}"
+  errors:
+    no_readline: "No readline support"
+    unknown_subcommand: "Unknown show subcommand {name}"
+    unknown: "Unknown show command {name}"
+
+skip:
+  messages:
+    ok: "ok"
+
+source:
+  errors:
+    not_found: "Command file '{file}' is not found"
+
+thread:
+  errors:
+    no_number: "'{subcmd}' needs a thread number"
+    no_thread: "No such thread"
+    current_thread: "It's the current thread"
+    wrong_action: "Can't {subcmd} to the debugger thread {arg}"
+    already_running: "Already running"
+    debug_trace: "DebuggerThread are not supposed to be traced ({thread})"
+
+toggle:
+  errors:
+    no_breakpoints: "No breakpoints have been set"
+    no_display: "No display expressions have been set"
+    syntax: "'{toggle}' must be followed 'display', 'breakpoints' or breakpoint numbers"
+    expression: "Expression '{expr}' syntactically incorrect; breakpoint remains disabled"
+
+parse:
+  errors:
+    int:
+      too_low: "{cmd} argument '{str}' needs to at least {min}"
+      too_high: "{cmd} argument '{str}' needs to at most {max}"
+      not_number: "{cmd} argument '{str}' needs to be a number"
+    onoff:
+      syntax: "Expecting 'on', 1, 'off', or 0. Got {arg}"
+
+variable:
+  errors:
+    not_class_module: "Should be Class/Module: {object}"

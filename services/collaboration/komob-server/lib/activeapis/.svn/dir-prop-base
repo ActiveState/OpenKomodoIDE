@@ -1,0 +1,13 @@
+K 10
+svn:ignore
+V 43
+svnmerge-commit-message.txt
+tmp
+*.pyc
+dist
+
+K 19
+svnmerge-integrated
+V 39
+/webops/activeapis/branches/two:1-35225
+END

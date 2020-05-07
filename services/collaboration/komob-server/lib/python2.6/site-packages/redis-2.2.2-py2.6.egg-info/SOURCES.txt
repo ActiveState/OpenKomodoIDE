@@ -1,0 +1,14 @@
+CHANGES
+INSTALL
+LICENSE
+MANIFEST.in
+README.md
+setup.cfg
+setup.py
+redis/__init__.py
+redis/client.py
+redis/exceptions.py
+redis.egg-info/PKG-INFO
+redis.egg-info/SOURCES.txt
+redis.egg-info/dependency_links.txt
+redis.egg-info/top_level.txt

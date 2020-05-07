@@ -1,0 +1,175 @@
+/* Copyright (c) 2000-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "koIFileEx.idl"
+
+
+interface koISCC; // forward decl to work around build prob from include koISCC.idl
+
+
+// Provide a file status service that continously updates status information
+[scriptable, uuid(47c3c314-dc8e-4615-9386-cf3cd16b6d4f)]
+interface koIFileStatusChecker : nsISupports {
+    attribute wstring type;               // "disk" or "scc"
+    attribute wstring name;               // unique name of the checker
+
+    // To control the order in which the status checkers will be run. The
+    // checker with the lowest ranking weight will be run first. The expected
+    // range will be from 0 to 100. Checkers that will be relatively quick and
+    // inexpensive to run should be below 50, whilst slower checkers have weight
+    // values above 50.
+    attribute long ranking_weight;
+
+    attribute koISCC  svc;                // koISCC service for this checker
+
+    // Used to see if the checker is enabled
+    boolean isActive();
+
+    // Use to see if the checker supports background status checking, if the
+    // checker supports this, then the file status service will call the
+    // updateFileStatus() method for all urls every "background" value minutes.
+    // Some services, like the disk service have no need of periodic background
+    // checking, since all changes will be already monitored by the file
+    // notification system and these events already feed back to the file
+    // status service.
+    boolean isBackgroundCheckingEnabled();
+
+    // Once a checker is added, this is called to initialize the service.
+    void initialize();
+
+    // Call when the checker is removed or Komodo is shutting down.
+    void shutdown();
+
+    /**
+     * Check if this file needs it status updated.This function is called
+     * by the file status service and when this returns true, the file status
+     * service will then later call the updateFileStatus method. In the case of
+     * the file needs it's status ipdated, this method should remove all cached
+     * information so that the updateFileStatus works correctly.
+     * @param file         - The file to be updated.
+     * @param updateReason - Why this file is being checked for updates.
+     * @returns {boolean}  - True when the status has changed, false otherwise.
+     */
+    boolean needsToReCheckFileStatus(in koIFileEx file, in long updateReason);
+
+    /**
+     * Check and update the file status. This function is called by the file
+     * status service and when this returns true, a 'file_status_changed'
+     * notification event will be sent by the file status service in order
+     * to update other parts of Komodo.
+     * @param file         - The file to be updated.
+     * @param updateReason - Why this file is being checked for updates.
+     * @returns {boolean}  - True when the status has changed, false otherwise.
+     */
+    boolean updateFileStatus(in koIFileEx file, in long updateReason);
+
+    /**
+     * The reasons for performing an updateFileStatus check.
+     */
+
+        /**
+         * Periodic check, the handling needs to work with the scc preference
+         * setttings, "check for status changes every X minutes"
+         */
+    const long REASON_BACKGROUND_CHECK = 1;
+        /**
+         * On focus, scc status may have changed outside of Komodo.
+         */
+    const long REASON_ONFOCUS_CHECK = 2;
+        /**
+         * The file changed, the scc status may have changed.
+         */
+    const long REASON_FILE_CHANGED = 3;
+        /**
+         * The user wants the most update-to-date information as possible,
+         * this should *always* contact the hosted repository to check for
+         * the up-to-date status.
+         */
+    const long REASON_FORCED_CHECK = 4;
+};
+
+
+// This is implemented in run's JavaScript code.
+[scriptable, uuid(d714f6ad-3362-405d-ad66-b30febf0b9c9)]
+interface koIFileStatusCallback: nsISupports {
+    void notifyDone();
+};
+
+/**
+ * Provide a file status service that continously updates status information.
+ * 
+ * The file status service periodically obtains the list of currently
+ * opened koIFile xpcom objects (correstponding to opened files/projects)
+ * which it obtains status information for and then monitors for file
+ * changes. Files can also be checked on demand by sending a notification
+ * of file_added.
+ *
+ * When a monitored file changes (or received file_added) the status
+ * service will perform an immediate status check for this particular file,
+ * querying each of the registered status checkers for updated information.
+ *
+ * A forced check can also be made on demand, to take into account changes
+ * that are made outside of the Komodo environment. This is particularly
+ * common for SCC, such as a commit from a command terminal that changes
+ * the scc status of files, but does not change the file attributes (i.e.
+ * the file itself did not change, but it's scc status did).
+ *
+ * This service does not check anything on it's own, xpcom status checker
+ * classes must be added. These xpcom classes must register themselves
+ * with the specific 'category-komodo-file-status' category, which will be
+ * queried by this service at startup, in order to then create the checker
+ * xpcom instances. The background thread will call on each status checker
+ * to gather information about the file then it will send a notification of
+ * 'file_status' with the url. At the end of an update run.
+ */
+[scriptable, uuid(607513C6-32D3-444d-8A07-84EE150B4B4E)]
+interface koIFileStatusService : nsISupports {
+        /**
+         * Unload call is made automatically by Komodo at shutdown.
+         */
+    void unload();
+    
+        /**
+         * Asynchronously causes a status check on all opened/referenced files
+         * in Komodo. The updateReason will influence how each individual
+         * status checkers will actually do.
+         * @since Komodo 4.3.0
+         * 
+         * @param updateReason {long}
+         *        Particular reasoning for why the update is occuring. Must be
+         *        on the defined koIFileStatusChecker.REASON_XXX values.
+         */
+    void updateStatusForAllFiles(in long updateReason);
+
+        /**
+         * Asynchronously checks the file status and fills in koIFileEx
+         * attributes.
+         * @since Komodo 4.3.0
+         * 
+         * @param files {Array}
+         *        List of koIFileEx file items to check SCC status on.
+         * @param forceRefresh {boolean}
+         *        forces server contact for the information, this is notably
+         *        used for Subversion.
+         */
+    void updateStatusForFiles(in unsigned long count,
+                              [array, size_is(count)] in koIFileEx files,
+                              in boolean forceRefresh,
+                              in koIFileStatusCallback callback);
+
+        /**
+         * Same as updateStatusForFiles, except service finds the file and then
+         * does the same check as the updateStatusForFiles call.
+         * @since Komodo 4.3.0
+         * 
+         * @param uris {Array}
+         *        List of file uris to check SCC status on.
+         * @param forceRefresh {boolean}
+         *        forces server contact for the information, this is notably
+         *        used for Subversion.
+         */
+    void updateStatusForUris(in unsigned long count,
+                             [array, size_is(count)] in wstring uris,
+                             [optional] in boolean forceRefresh);
+};

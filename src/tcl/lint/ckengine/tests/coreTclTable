@@ -1,0 +1,3664 @@
+# coreTclTable --
+#
+#	This file contains the table of commands used to check coreTcl.
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on TclX commands.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: coreTclTable,v 1.14 2000/10/24 22:54:26 hershey Exp $
+
+set checkCoreTcl7.3 {
+
+{after}				{1 {0 5} warnUndefProc {0 5} after}
+{binary}			{1 {0 6} warnUndefProc {0 6} binary}
+{clock}				{1 {0 5} warnUndefProc {0 5} clock}
+{fblocked}			{1 {0 8} warnUndefProc {0 8} fblocked}
+{fconfigure}			{1 {0 10} warnUndefProc {0 10} fconfigure}
+{fcopy}				{1 {0 5} warnUndefProc {0 5} fcopy}
+{fileevent}			{1 {0 9} warnUndefProc {0 9} fileevent}
+{interp}			{1 {0 6} warnUndefProc {0 6} interp}
+{load}				{1 {0 4} warnUndefProc {0 4} load}
+{namespace}			{1 {0 9} warnUndefProc {0 9} namespace}
+{package}			{1 {0 7} warnUndefProc {0 7} package}
+{pkg_mkIndex}			{1 {0 11} warnUndefProc {0 11} pkg_mkIndex}
+{registry}			{1 {0 8} warnUndefProc {0 8} registry}
+{resource}			{1 {0 8} warnUndefProc {0 8} resource}
+{socket}			{1 {0 6} warnUndefProc {0 6} socket}
+{subst}				{1 {0 5} warnUndefProc {0 5} subst}
+{update}			{1 {0 6} warnUndefProc {0 6} update}
+{variable}			{1 {0 8} warnUndefProc {0 8} variable}
+{vwait}				{1 {0 5} warnUndefProc {0 5} vwait}
+
+
+{append a 1}				 {ok}
+{append a 1 2}				 {ok}
+{append a 1 2 3}			 {ok}
+{append}				 {1 {0 6} numArgs {} {}}
+{append a}				 {1 {0 8} numArgs {} {}}
+{append $A a}				 {1 {0 11} warnVarRef {7 2} {}}
+
+
+{array $a a}				 {ok}
+{array $a a a}				 {ok}
+{array}					 {1 {0 5} numArgs {} {}}
+{array $a a a a}			 {1 {0 14} numArgs {} {}}
+{array foo a}				 {1 {0 11} badOption {6 3} {{anymore donesearch names nextelement size startsearch} foo}}
+{array [set] a}				 {1 {7 3} numArgs {} {}}
+
+{array get a}				 {1 {0 11} badOption {6 3} {{anymore donesearch names nextelement size startsearch} get}}
+{array set a}				 {1 {0 11} badOption {6 3} {{anymore donesearch names nextelement size startsearch} set}}
+{array exists a}			 {1 {0 14} badOption {6 6} {{anymore donesearch names nextelement size startsearch} exists}}
+
+{array anymore a a}			 {ok}
+{array anymore}				 {1 {0 13} numArgs {} {}}
+{array anymore a}			 {1 {0 15} numArgs {} {}}
+{array anymore a a a}			 {1 {0 19} numArgs {} {}}
+{array anymore $A a}			 {1 {0 18} warnVarRef {14 2} {}}
+{array anymore a [set]}			 {1 {17 3} numArgs {} {}}
+
+{array donesearch a a}			 {ok}
+{array donesearch}			 {1 {0 16} numArgs {} {}}
+{array donesearch a}			 {1 {0 18} numArgs {} {}}
+{array donesearch a a a}		 {1 {0 22} numArgs {} {}}
+{array donesearch $A a}			 {1 {0 21} warnVarRef {17 2} {}}
+{array donesearch a [set]}		 {1 {20 3} numArgs {} {}}
+
+{array names a}				 {ok}
+{array names}				 {1 {0 11} numArgs {} {}}
+{array names a a}			 {1 {0 15} numArgs {} {}}
+{array names a a a}			 {1 {0 17} numArgs {} {}}
+{array names $A}			 {1 {0 14} warnVarRef {12 2} {}}
+
+{array nextelement a a}			 {ok}
+{array nextelement}			 {1 {0 17} numArgs {} {}}
+{array nextelement a}			 {1 {0 19} numArgs {} {}}
+{array nextelement a a a}		 {1 {0 23} numArgs {} {}}
+{array nextelement $A a}		 {1 {0 22} warnVarRef {18 2} {}}
+{array nextelement a [set]}		 {1 {21 3} numArgs {} {}}
+
+{array size a}				 {ok}
+{array size}				 {1 {0 10} numArgs {} {}}
+{array size a a}			 {1 {0 14} numArgs {} {}}
+{array size $A}				 {1 {0 13} warnVarRef {11 2} {}}
+
+{array startsearch a}			 {ok}
+{array startsearch}			 {1 {0 17} numArgs {} {}}
+{array startsearch a a}			 {1 {0 21} numArgs {} {}}
+{array startsearch $A}			 {1 {0 20} warnVarRef {18 2} {}}
+
+
+{auto_execok a}				 {ok}
+{auto_execok}				 {1 {0 11} numArgs {} {}}
+{auto_execok a a}			 {1 {0 15} numArgs {} {}}
+{auto_execok $a/a}			 {1 {0 16} nonPortFile {12 4} {}}
+
+
+{auto_load a}				 {ok}
+{auto_load}				 {1 {0 9} numArgs {} {}}
+{auto_load a a}				 {1 {0 13} numArgs {} {}}
+{auto_load [set]}			 {1 {11 3} numArgs {} {}}
+
+{auto_mkindex a}			 {ok}
+{auto_mkindex a a}			 {ok}
+{auto_mkindex}				 {1 {0 12} numArgs {} {}}
+{auto_mkindex $a/a}			 {1 {0 17} nonPortFile {13 4} {}}
+{auto_mkindex a a[pwd]*}		 {1 {0 22} warnPattern {15 7} {}}
+{auto_mkindex a a a[pwd]*}		 {1 {0 24} warnPattern {17 7} {}}
+
+
+{auto_reset}				 {ok}
+{auto_reset a}				 {1 {0 12} numArgs {} {}}
+
+
+{break}					 {ok}
+{break a}				 {1 {0 7} numArgs {} {}}
+
+{case a $a}				 {1 {0 9} warnDeprecated {} switch}
+{case a {a pwd}}			 {1 {0 14} warnDeprecated {} switch}
+{case a in $a}				 {1 {0 12} warnDeprecated {} switch}
+{case a in {a pwd}}			 {1 {0 17} warnDeprecated {} switch}
+{case a {a {pwd}}}			 {1 {0 16} warnDeprecated {} switch}
+{case a {a pwd a [pwd]}}		 {1 {0 22} warnDeprecated {} switch}
+{case a {a pwd a {pwd}}}		 {1 {0 22} warnDeprecated {} switch}
+{case a {a - a pwd}}			 {1 {0 18} warnDeprecated {} switch}
+{case a {a - a {pwd}}}			 {1 {0 20} warnDeprecated {} switch}
+{case a a pwd}				 {1 {0 12} warnDeprecated {} switch}
+{case a a {pwd}}			 {1 {0 14} warnDeprecated {} switch}
+{case a a pwd a pwd}			 {1 {0 18} warnDeprecated {} switch}
+{case a a pwd a {pwd}}			 {1 {0 20} warnDeprecated {} switch}
+{case a a - a pwd}			 {1 {0 16} warnDeprecated {} switch}
+{case a a - a {pwd}}			 {1 {0 18} warnDeprecated {} switch}
+{case}					 {1 {0 4} warnDeprecated {} switch 1 {0 4} numArgs {} {}}
+{case a}				 {1 {0 6} warnDeprecated {} switch 1 {0 6} numArgs {} {}}
+{case a a}				 {1 {0 8} warnDeprecated {} switch 1 {0 8} noScript {} {}}
+{case a {a}}				 {1 {0 10} warnDeprecated {} switch 1 {0 10} noScript {} {}}
+{case [set] {a pwd}}			 {1 {0 18} warnDeprecated {} switch 1 {6 3} numArgs {} {}}
+{case a {a [set]}}			 {1 {0 16} warnDeprecated {} switch 1 {11 3} numArgs {} {}}
+{case a {a {set}}}			 {1 {0 16} warnDeprecated {} switch 1 {11 3} numArgs {} {}}
+{case a {a pwd a [set]}}		 {1 {0 22} warnDeprecated {} switch 1 {17 3} numArgs {} {}}
+{case a {a pwd a {set}}}		 {1 {0 22} warnDeprecated {} switch 1 {17 3} numArgs {} {}}
+{case [set] a pwd}			 {1 {0 16} warnDeprecated {} switch 1 {6 3} numArgs {} {}}
+{case a [set] pwd}			 {1 {0 16} warnDeprecated {} switch 1 {8 3} numArgs {} {}}
+{case a a [set]}			 {1 {0 14} warnDeprecated {} switch 1 {10 3} numArgs {} {}}
+{case a a {set}}			 {1 {0 14} warnDeprecated {} switch 1 {10 3} numArgs {} {}}
+{case a a pwd [set] pwd}		 {1 {0 22} warnDeprecated {} switch 1 {14 3} numArgs {} {}}
+{case a a pwd a [set]}			 {1 {0 20} warnDeprecated {} switch 1 {16 3} numArgs {} {}}
+{case a a pwd a {set}}			 {1 {0 20} warnDeprecated {} switch 1 {16 3} numArgs {} {}}
+{case a {{a} {testScanCmd}}}		 {1 {0 26} warnDeprecated {} switch 1 {13 11} procNumArgs {} testScanCmd}
+
+{catch pwd}				 {ok}
+{catch pwd a}				 {ok}
+{catch}					 {1 {0 5} numArgs {} {}}
+{catch a a a}				 {1 {0 11} numArgs {} {}}
+{catch {set}}				 {1 {7 3} numArgs {} {}}
+{catch pwd $A}				 {1 {0 12} warnVarRef {10 2} {}}
+{catch {testScanCmd}}			 {1 {7 11} procNumArgs {} testScanCmd}
+
+{cd}					 {ok}
+{cd a}					 {ok}
+{cd a a}				 {1 {0 6} numArgs {} {}}
+{cd $a/a}				 {1 {0 7} nonPortFile {3 4} {}}
+
+
+{close a}				 {ok}
+{close}					 {1 {0 5} numArgs {} {}}
+{close a a}				 {1 {0 9} numArgs {} {}}
+{close file0}				 {1 {0 11} nonPortChannel {6 5} stdin}
+
+
+{concat}				 {ok}
+{concat a}				 {ok}
+{concat a a}				 {ok}
+{concat a a $a}				 {ok}
+{concat [set]}				 {1 {8 3} numArgs {} {}}
+
+
+{continue}				 {ok}
+{continue a}				 {1 {0 10} numArgs {} {}}
+{continue a a}				 {1 {0 12} numArgs {} {}}
+
+
+{eof a}					 {ok}
+{eof}					 {1 {0 3} numArgs {} {}}
+{eof a a}				 {1 {0 7} numArgs {} {}}
+{eof file0}				 {1 {0 9} nonPortChannel {4 5} stdin}
+
+
+{error a}				 {ok}
+{error a a}				 {ok}
+{error a a a}				 {ok}
+{error a a a a}				 {1 {0 13} numArgs {} {}}
+{error [set]}				 {1 {7 3} numArgs {} {}}
+
+
+{eval pwd}				 {ok}
+{eval set a}				 {ok}
+{eval {set a 1}}			 {ok}
+{eval}					 {1 {0 4} numArgs {} {}}
+{eval {set}}				 {1 {6 3} numArgs {} {}}
+{eval {testScanCmd}}			 {1 {6 11} procNumArgs {} testScanCmd}
+{eval {testScanCmd} a}			 {ok}
+
+
+{exec a}				 {ok}
+{exec a a a}  				 {ok}
+{exec -keepnewline a}			 {ok}
+{exec -keepnewline -- a}		 {ok}
+{exec -keepnewline -- a a}		 {ok}
+{exec -- a}				 {ok}
+{exec}					 {1 {0 4} numArgs {} {}}
+{exec -keepnewline}			 {1 {0 17} numArgs {} {}}
+{exec -keepnewline --}			 {1 {0 20} numArgs {} {}}
+{exec -keep a}				 {1 {0 12} badSwitch {5 5} -keep}
+{exec -foo a}				 {1 {0 11} badSwitch {5 4} -foo}
+{exec - keepnewline a}			 {1 {0 20} badSwitch {5 1} -}
+{exec [set]}				 {1 {6 3} numArgs {} {}}
+
+
+{exit}					 {ok}
+{exit 0}				 {ok}
+{exit 1 a}				 {1 {0 8} numArgs {} {}}
+{exit a}				 {1 {0 6} badInt {5 1} {}}
+
+
+{expr 1}				 {ok}
+{expr {1 + 1}}				 {ok}
+{expr {[set x 1]}}			 {ok}
+{expr 1 + 1}				 {ok}
+{expr}					 {1 {0 4} numArgs {} {}}
+{expr [set x 1]}			 {1 {0 14} warnExpr {5 9} {}}
+{expr a}				 {1 {0 6} parse {5 1} {{PARSE syntax 5 {syntax error in expression "a"}}}}
+
+
+{file $a}				 {ok}
+{file $a a}				 {ok}
+{file $a a a}				 {ok}
+{file $a a a a}				 {ok}
+{file}					 {1 {0 4} numArgs {} {}}
+{file [set]}				 {1 {6 3} numArgs {} {}}
+{file foo}				 {1 {0 8} badOption {5 3} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} foo}}
+
+{file copy}				 {1 {0 9} badOption {5 4} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} copy}}
+{file delete}				 {1 {0 11} badOption {5 6} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} delete}}
+{file join}				 {1 {0 9} badOption {5 4} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} join}}
+{file mkdir}				 {1 {0 10} badOption {5 5} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} mkdir}}
+{file nativename}			 {1 {0 15} badOption {5 10} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} nativename}}
+{file pathtype}				 {1 {0 13} badOption {5 8} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} pathtype}}
+{file rename}				 {1 {0 11} badOption {5 6} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} rename}}
+{file split}				 {1 {0 10} badOption {5 5} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} split}}
+{file a a}				 {1 {0 8} badOption {5 1} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} a}}
+
+{file atime a}				 {ok}
+{file atime}				 {1 {0 10} numArgs {} {}}
+{file atime a a}			 {1 {0 14} numArgs {} {}}
+{file atime $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file attributes a}			 {ok}
+{file attributes}			 {1 {0 15} numArgs {} {}}
+{file attributes a a}			 {1 {0 19} badSwitch {18 1} a}
+{file attributes $a/a}			 {1 {0 20} nonPortFile {16 4} {}}
+{file att a -bad}			 {1 {0 15} badSwitch {11 4} -bad}
+{file att a -group}			 {ok}
+{file att a -owner}			 {ok}
+{file att a -permissions}		 {ok}
+{file att a -archive}			 {ok}
+{file att a -hidden}			 {ok}
+{file att a -longname}			 {ok}
+{file att a -readonly}			 {ok}
+{file att a -shortname}			 {ok}
+{file att a -system}			 {ok}
+{file att a -creator}			 {ok}
+{file att a -type}			 {ok}
+{file att a -group b}			 {1 {0 19} nonPortCmd {11 6} {{}}}
+{file att a -owner b}			 {1 {0 19} nonPortCmd {11 6} {{}}}
+{file att a -permissions b}		 {1 {0 25} nonPortCmd {11 12} {{}}}
+{file att a -archive b}			 {1 {0 21} nonPortCmd {11 8} {{}}}
+{file att a -hidden b}			 {1 {0 20} nonPortCmd {11 7} {{}}}
+{file att a -longname b}		 {1 {0 22} nonPortCmd {11 9} {{}}}
+{file att a -readonly b}		 {1 {0 22} nonPortCmd {11 9} {{}}}
+{file att a -shortname b}		 {1 {0 23} nonPortCmd {11 10} {{}}}
+{file att a -system b}			 {1 {0 20} nonPortCmd {11 7} {{}}}
+{file att a -creator b}			 {1 {0 21} nonPortCmd {11 8} {{}}}
+{file att a -type b}		 	 {1 {0 18} nonPortCmd {11 5} {{}}}
+{file att a -type b -creator}	 	 {1 {0 27} nonPortCmd {11 5} {{}} 1 {0 27} noSwitchArg {19 8} -creator}
+{file att a -type b -creator b}	 	 {1 {0 29} nonPortCmd {11 5} {{}} 1 {0 29} nonPortCmd {19 8} {{}}}
+
+{file dirname a}			 {ok}
+{file dirname}				 {1 {0 12} numArgs {} {}}
+{file dirname a a}			 {1 {0 16} numArgs {} {}}
+{file dirname $a/a}			 {1 {0 17} nonPortFile {13 4} {}}
+
+{file executable a}			 {ok}
+{file executable}			 {1 {0 15} numArgs {} {}}
+{file executable a a}			 {1 {0 19} numArgs {} {}}
+{file executable $a/a}			 {1 {0 20} nonPortFile {16 4} {}}
+
+{file exists a}				 {ok}
+{file exists}				 {1 {0 11} numArgs {} {}}
+{file exists a a}			 {1 {0 15} numArgs {} {}}
+{file exists $a/a}			 {1 {0 16} nonPortFile {12 4} {}}
+
+{file extension a}			 {ok}
+{file extension}			 {1 {0 14} numArgs {} {}}
+{file extension a a}			 {1 {0 18} numArgs {} {}}
+{file extension $a/a}			 {1 {0 19} nonPortFile {15 4} {}}
+
+{file isdirectory a}			 {ok}
+{file isdirectory}			 {1 {0 16} numArgs {} {}}
+{file isdirectory a a}			 {1 {0 20} numArgs {} {}}
+{file isdirectory $a/a}			 {1 {0 21} nonPortFile {17 4} {}}
+
+{file isfile a}				 {ok}
+{file isfile}				 {1 {0 11} numArgs {} {}}
+{file isfile a a}			 {1 {0 15} numArgs {} {}}
+{file isfile $a/a}			 {1 {0 16} nonPortFile {12 4} {}}
+
+{file lstat a a}			 {ok}
+{file lstat}				 {1 {0 10} numArgs {} {}}
+{file lstat a}				 {1 {0 12} numArgs {} {}}
+{file lstat a a a}			 {1 {0 16} numArgs {} {}}
+{file lstat $a/a a}			 {1 {0 17} nonPortFile {11 4} {}}
+{file lstat a $A}			 {1 {0 15} warnVarRef {13 2} {}}
+
+{file mtime a}				 {ok}
+{file mtime}				 {1 {0 10} numArgs {} {}}
+{file mtime a a}			 {1 {0 14} numArgs {} {}}
+{file mtime $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file owned a}				 {ok}
+{file owned}				 {1 {0 10} numArgs {} {}}
+{file owned a a}			 {1 {0 14} numArgs {} {}}
+{file owned $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file readable a}			 {ok}
+{file readable}				 {1 {0 13} numArgs {} {}}
+{file readable a a}			 {1 {0 17} numArgs {} {}}
+{file readable $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+{file readlink a}			 {ok}
+{file readlink}				 {1 {0 13} numArgs {} {}}
+{file readlink a a}			 {1 {0 17} numArgs {} {}}
+{file readlink $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+{file rootname a}			 {ok}
+{file rootname}				 {1 {0 13} numArgs {} {}}
+{file rootname a a}			 {1 {0 17} numArgs {} {}}
+{file rootname $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+{file size a}				 {ok}
+{file size}				 {1 {0 9} numArgs {} {}}
+{file size a a}				 {1 {0 13} numArgs {} {}}
+{file size $a/a}			 {1 {0 14} nonPortFile {10 4} {}}
+
+{file stat a a}				 {ok}
+{file stat}				 {1 {0 9} numArgs {} {}}
+{file stat a}				 {1 {0 11} numArgs {} {}}
+{file stat a a a}			 {1 {0 15} numArgs {} {}}
+{file stat $a/a a}			 {1 {0 16} nonPortFile {10 4} {}}
+{file stat a $A}			 {1 {0 14} warnVarRef {12 2} {}}
+
+{file tail a}				 {ok}
+{file tail}				 {1 {0 9} numArgs {} {}}
+{file tail a a}				 {1 {0 13} numArgs {} {}}
+{file tail $a/a}			 {1 {0 14} nonPortFile {10 4} {}}
+
+{file type a}				 {ok}
+{file type}				 {1 {0 9} numArgs {} {}}
+{file type a a}				 {1 {0 13} numArgs {} {}}
+{file type $a/a}			 {1 {0 14} nonPortFile {10 4} {}}
+
+{file volume}				 {ok}
+{file volume a}				 {1 {0 13} numArgs {} {}}
+
+{file writable a}			 {ok}
+{file writable}				 {1 {0 13} numArgs {} {}}
+{file writable a a}			 {1 {0 17} numArgs {} {}}
+{file writable $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+
+{flush a}				 {ok}
+{flush $a}				 {ok}
+{flush}					 {1 {0 5} numArgs {} {}}
+{flush a a}				 {1 {0 9} numArgs {} {}}
+{flush file0}				 {1 {0 11} nonPortChannel {6 5} stdin}
+
+
+{for pwd 1 pwd pwd}			 {ok}
+{for {set b} {1 < 1} {set b} {set b}}	 {ok}
+{for "set b" {1 < 1} "set b" "set b"}	 {ok}
+{for}					 {1 {0 3} numArgs {} {}}
+{for a}					 {1 {0 5} numArgs {} {}}
+{for a a}				 {1 {0 7} numArgs {} {}}
+{for a a a}				 {1 {0 9} numArgs {} {}}
+{for a a a a a}				 {1 {0 13} numArgs {} {}}
+{for {set} a $a $a}			 {1 {5 3} numArgs {} {} 1 {0 17} parse {10 1} {{PARSE syntax 10 {syntax error in expression "a"}}}}
+{for $a {a = b} $a $a}			 {1 {0 20} parse {7 7} {{PARSE syntax 10 {syntax error in expression "a = b"}}}}
+{for $a a {set} $a}			 {1 {0 17} parse {7 1} {{PARSE syntax 7 {syntax error in expression "a"}}} 1 {10 3} numArgs {} {}}
+{for $a a $a {set}}			 {1 {0 17} parse {7 1} {{PARSE syntax 7 {syntax error in expression "a"}}} 1 {13 3} numArgs {} {}}
+{for {testScanCmd} {1} {$a} {$a}}	 {1 {5 11} procNumArgs {} testScanCmd}
+{for {$a} {[testScanCmd]} {} {$a}}	 {1 {11 11} procNumArgs {} testScanCmd}
+{for {$a} {[testScanCmd] != 1} {$a} {$a}} {1 {11 11} procNumArgs {} testScanCmd}
+{for {$a} {1} {} {testScanCmd}}		 {1 {17 11} procNumArgs {} testScanCmd}
+
+
+{foreach a a $a}			 {ok}
+{foreach a {a a a} {}}			 {ok}
+{foreach a [foo] {}}			 {1 {11 3} warnUndefProc {11 3} foo}
+{foreach a a ""}			 {ok}
+{foreach {a b} {a a} {}}		 {ok}
+{foreach {a b} {a a} {a b} {a a} {}}	 {ok}
+{foreach $A a $a}			 {1 {0 15} warnVarRef {8 2} {}}
+{foreach a $a a $b a $c $x}		 {ok}
+{foreach $a a $b a $c a $x}		 {1 {0 25} warnVarRef {8 2} {} 1 {0 25} warnVarRef {13 2} {} 1 {0 25} warnVarRef {18 2} {}}
+{foreach {$a $b} {a a} {$a $b} {a a} {}} {1 {0 38} warnVarRef {9 2} {} 1 {0 38} warnVarRef {12 2} {} 1 {0 38} warnVarRef {23 2} {} 1 {0 38} warnVarRef {26 2} {}}
+{foreach}				 {1 {0 7} numArgs {} {}}
+{foreach a}				 {1 {0 9} numArgs {} {}}
+{foreach a a}				 {1 {0 11} numArgs {} {}}
+{foreach a a $a a}			 {1 {0 16} numArgs {} {}}
+{foreach {}a a a}			 {1 {0 15} parse {10 5} {{extra characters after close-brace}}}
+{foreach a {}a a}			 {1 {0 15} parse {12 3} {{extra characters after close-brace}}}
+{foreach a a {set}}			 {1 {13 3} numArgs {} {}}
+{foreach {}a a a}			 {1 {0 15} parse {10 5} {{extra characters after close-brace}}}
+{foreach a a {testScanCmd}}		 {1 {13 11} procNumArgs {} testScanCmd}
+
+
+{format %s}			 	 {ok}
+{format {%s}}				 {ok}
+{format "%s"}				 {ok}
+{format %s a}				 {ok}
+{format %s a a a}			 {ok}
+{format}			 	 {1 {0 6} numArgs {} {}}
+
+
+{gets a}				 {ok}
+{gets a a}				 {ok}
+{gets}					 {1 {0 4} numArgs {} {}}
+{gets a a a}				 {1 {0 10} numArgs {} {}}
+{gets file0}				 {1 {0 10} nonPortChannel {5 5} stdin}
+{gets a $A}				 {1 {0 9} warnVarRef {7 2} {}}
+
+
+{glob a}				 {ok}
+{glob a a}				 {ok}
+{glob -nocomplain a}			 {ok}
+{glob -- a}				 {ok}
+{glob -nocomplain -- a}			 {ok}
+{glob -nocomplain -- a a}		 {ok}
+{glob}					 {1 {0 4} numArgs {} {}}
+{glob -no a}				 {1 {0 10} badSwitch {5 3} -no}
+{glob -a a}				 {1 {0 9} badSwitch {5 2} -a}
+{glob - a}				 {1 {0 8} badSwitch {5 1} -}
+{glob a[pwd]*}				 {1 {0 12} warnPattern {5 7} {}}
+
+
+{global a}				 {ok}
+{global a a}				 {ok}
+{global}				 {1 {0 6} numArgs {} {}}
+{global $A}				 {1 {0 9} warnVarRef {7 2} {}}
+
+
+{history}				 {ok}
+{history $a}				 {ok}
+{history $a a}				 {ok}
+{history $a a a}			 {ok}
+{history $a a a a}			 {1 {0 16} numArgs {} {}}
+{history [set]}				 {1 {9 3} numArgs {} {}}
+{history foo}				 {1 {0 11} badOption {8 3} {{add change event info keep nextid redo} foo}}
+
+{history add pwd}			 {ok}
+{history add pwd exec}			 {ok}
+{history add pwd e}			 {ok}
+{history add}				 {1 {0 11} numArgs {} {}}
+{history add a exec a}			 {1 {0 20} numArgs {} {}}
+{history add $a a}			 {1 {0 16} badKey {15 1} {exec a}}
+{history add {set}}			 {1 {13 3} numArgs {} {}}
+{history add {testScanCmd}}		 {1 {13 11} procNumArgs {} testScanCmd}
+
+{history change a}			 {ok}
+{history change a a}			 {ok}
+{history change}			 {1 {0 14} numArgs {} {}}
+{history change a a a}			 {1 {0 20} numArgs {} {}}
+{history change [set]}			 {1 {16 3} numArgs {} {}}
+
+{history event}			 	 {ok}
+{history event a}		 	 {ok}
+{history event a a}			 {1 {0 17} numArgs {} {}}
+{history event [set]}		 	 {1 {15 3} numArgs {} {}}
+
+{history info}				 {ok}
+{history info 1}			 {ok}
+{history info a a}			 {1 {0 16} numArgs {} {}}
+{history info a}			 {1 {0 14} badInt {13 1} {}}
+
+{history keep}				 {ok}
+{history keep 1}			 {ok}
+{history keep a a}			 {1 {0 16} numArgs {} {}}
+{history keep a}			 {1 {0 14} badInt {13 1} {}}
+
+{history nextid}			 {ok}
+{history nextid a}			 {1 {0 16} numArgs {} {}}
+
+{history redo}			 	 {ok}
+{history redo a}		 	 {ok}
+{history redo a a}			 {1 {0 16} numArgs {} {}}
+{history redo [set]}			 {1 {14 3} numArgs {} {}}
+
+
+{if {1} {}}				 {ok}
+{if {1} then {}}			 {ok}
+{if {1} {} else {}}			 {ok}
+{if {1} {} elseif {1} {}}		 {ok}
+{if {1} {} elseif {1} {} elseif {1} {}}	 {ok}
+{if {1} {} elseif {1} then {}}		 {ok}
+{if {1} then {} elseif {1} then {}}	 {ok}
+{if {1} then {} elseif {1} then {} else {}}	 {ok}
+{if {1} {} elseif {1} {} elseif {1} {} else {}}	 {ok}
+{if 1 {}}				 {ok}
+{if {1 + 1} {}}				 {ok}
+{if 1 {} elseif 1 {}}			 {ok}
+{if {1} $a $a}				 {1 {0 12} warnIfKeyword {9 1} {}}
+{if}					 {1 {0 2} noExpr {2 1} if}
+{if {1}}				 {1 {0 6} noScript {6 1} if}
+{if a a}				 {1 {0 6} parse {3 1} {{PARSE syntax 3 {syntax error in expression "a"}}}}
+{if {1} {set}}				 {1 {8 3} numArgs {} {}}
+{if {1} {} elseif {1 + 1} {set}}	 {1 {26 3} numArgs {} {}}
+{if {1} {} else}			 {1 {0 14} noScript {14 1} else}
+{if {1} {} elseif {1} {set}}		 {1 {22 3} numArgs {} {}}
+{if {1} {} elseif {1} {} else {set}}	 {1 {30 3} numArgs {} {}}
+{if {1} then}				 {1 {0 11} noScript {11 1} if}
+{if {1} else if {set} set}		 {1 {7 4} warnUndefProc {7 4} else 1 {0 24} warnIfKeyword {11 1} {} 1 {12 2} noExpr {14 1} if}
+{if {[testScanCmd]} {a}}		 {1 {5 11} procNumArgs {} testScanCmd}
+{if {[testScanCmd] != 1} {a}}		 {1 {5 11} procNumArgs {} testScanCmd}
+{if {1} {testScanCmd}}			 {1 {8 11} procNumArgs {} testScanCmd}
+{if {1} {} elseif {[testScanCmd]} {}}	 {1 {19 11} procNumArgs {} testScanCmd}
+{if {1} {} elseif {[testScanCmd] != 1} {}}	 {1 {19 11} procNumArgs {} testScanCmd}
+{if {1} {} elseif {1} {testScanCmd}}		 {1 {22 11} procNumArgs {} testScanCmd}
+{if {1} {} elseif {1} {a} else {testScanCmd}}	 {1 {31 11} procNumArgs {} testScanCmd}
+{if {1} {} elseif {1} {a} elseif {1} {a} else {testScanCmd}}	 {1 {46 11} procNumArgs {} testScanCmd}
+
+
+{incr a}				 {ok}
+{incr a 1}				 {ok}
+{incr}					 {1 {0 4} numArgs {} {}}
+{incr a a a}				 {1 {0 10} numArgs {} {}}
+{incr $A}				 {1 {0 7} warnVarRef {5 2} {}}
+{incr a a}				 {1 {0 8} badInt {7 1} {}}
+
+
+{info $a}				 {ok}
+{info $a a}				 {ok}
+{info $a a a}				 {ok}
+{info $a a a a}				 {ok}
+{info $a a a a a}			 {1 {0 15} numArgs {} {}}
+{info}					 {1 {0 4} numArgs {} {}}
+{info [set]}				 {1 {6 3} numArgs {} {}}
+{info foo}				 {1 {0 8} badOption {5 3} {{args body cmdcount commands complete default exists globals level library loaded locals patchlevel procs script tclversion vars} foo}}
+
+{info sharedlibextension}		 {1 {0 23} badOption {5 18} {{args body cmdcount commands complete default exists globals level library loaded locals patchlevel procs script tclversion vars} sharedlibextension}}
+{info nameofexecutable}			 {1 {0 21} badOption {5 16} {{args body cmdcount commands complete default exists globals level library loaded locals patchlevel procs script tclversion vars} nameofexecutable}}
+{info hostname}				 {1 {0 13} badOption {5 8} {{args body cmdcount commands complete default exists globals level library loaded locals patchlevel procs script tclversion vars} hostname}}
+
+{info args a}				 {ok}
+{info args}				 {1 {0 9} numArgs {} {}}
+{info args a a}				 {1 {0 13} numArgs {} {}}
+{info args [set]}			 {1 {11 3} numArgs {} {}}
+
+{info body a}				 {ok}
+{info body}				 {1 {0 9} numArgs {} {}}
+{info body a a}				 {1 {0 13} numArgs {} {}}
+{info body [set]}			 {1 {11 3} numArgs {} {}}
+
+{info cmdcount}				 {ok}
+{info cmdcount a}			 {1 {0 15} numArgs {} {}}
+
+{info commands}				 {ok}
+{info commands a}			 {ok}
+{info commands a a}			 {1 {0 17} numArgs {} {}}
+{info commands a[pwd]*}			 {1 {0 21} warnPattern {14 7} {}}
+
+{info complete a}			 {ok}
+{info complete}				 {1 {0 13} numArgs {} {}}
+{info complete a a}			 {1 {0 17} numArgs {} {}}
+{info complete [set]}			 {1 {15 3} numArgs {} {}}
+
+{info default a a a}			 {ok}
+{info default}				 {1 {0 12} numArgs {} {}}
+{info default a}			 {1 {0 14} numArgs {} {}}
+{info default a a}			 {1 {0 16} numArgs {} {}}
+{info default a a a a}			 {1 {0 20} numArgs {} {}}
+{info default [set] a a}		 {1 {14 3} numArgs {} {}}
+{info default a [set] a}		 {1 {16 3} numArgs {} {}}
+{info default a a $A}			 {1 {0 19} warnVarRef {17 2} {}}
+
+{info exists a}				 {ok}
+{info exists}				 {1 {0 11} numArgs {} {}}
+{info exists a a}			 {1 {0 15} numArgs {} {}}
+{info exists $A}			 {1 {0 14} warnVarRef {12 2} {}}
+
+{info globals}				 {ok}
+{info globals a}			 {ok}
+{info globals a a}			 {1 {0 16} numArgs {} {}}
+{info globals a[pwd]*}			 {1 {0 20} warnPattern {13 7} {}}
+
+{info level}				 {ok}
+{info level 0}				 {ok}
+{info level 0 a}			 {1 {0 14} numArgs {} {}}
+{info level a}				 {1 {0 12} badInt {11 1} {}}
+
+{info library}				 {ok}
+{info library a}			 {1 {0 14} numArgs {} {}}
+
+{info loaded}				 {ok}
+{info loaded a}				 {ok}
+{info loaded a a}			 {1 {0 15} numArgs {} {}}
+{info loaded {}a}			 {1 {0 15} parse {14 1} {{extra characters after close-brace}}}
+
+{info locals}				 {ok}
+{info locals a}				 {ok}
+{info locals a a}			 {1 {0 15} numArgs {} {}}
+{info locals a[pwd]*}			 {1 {0 19} warnPattern {12 7} {}}
+
+{info patchlevel}			 {ok}
+{info patchlevel a}			 {1 {0 17} numArgs {} {}}
+
+{info procs}				 {ok}
+{info procs a}				 {ok}
+{info procs a a}			 {1 {0 14} numArgs {} {}}
+{info procs a[pwd]*}			 {1 {0 18} warnPattern {11 7} {}}
+
+{info script}				 {ok}
+{info script a}				 {1 {0 13} numArgs {} {}}
+
+{info tclversion}			 {ok}
+{info tclversion a}			 {1 {0 17} numArgs {} {}}
+
+{info vars}				 {ok}
+{info vars a}				 {ok}
+{info vars a a}				 {1 {0 13} numArgs {} {}}
+{info vars a[pwd]*}			 {1 {0 17} warnPattern {10 7} {}}
+
+
+{join a}				 {ok}
+{join a a}				 {ok}
+{join}					 {1 {0 4} numArgs {} {}}
+{join a a a}				 {1 {0 10} numArgs {} {}}
+{join {{}a}}				 {1 {0 10} badList {6 1} {{list element in braces followed by "a" instead of space}}}
+{join a [set]}				 {1 {8 3} numArgs {} {}}
+
+
+{lappend a a a}				 {ok}
+{lappend}				 {1 {0 7} numArgs {} {}}
+{lappend a}				 {1 {0 9} numArgs {} {}}
+{lappend $A a}				 {1 {0 12} warnVarRef {8 2} {}}
+{lappend a [set]}			 {1 {11 3} numArgs {} {}}
+{lappend a a [set]}			 {1 {13 3} numArgs {} {}}
+
+
+{lindex a 0}				 {ok}
+{lindex}				 {1 {0 6} numArgs {} {}}
+{lindex a}				 {1 {0 8} numArgs {} {}}
+{lindex a 1 a}				 {1 {0 12} numArgs {} {}}
+{lindex {{}a} 0}			 {1 {0 14} badList {8 1} {{list element in braces followed by "a" instead of space}}}
+{lindex a a}				 {1 {0 10} badInt {9 1} {}}
+{lindex a end}				 {1 {0 12} badInt {9 3} {}}
+
+
+{linsert a 0 a}				 {ok}
+{linsert a 0 a a a}			 {ok}
+{linsert}				 {1 {0 7} numArgs {} {}}
+{linsert a}				 {1 {0 9} numArgs {} {}}
+{linsert a 0}				 {1 {0 11} numArgs {} {}}
+{linsert {{}a} 0 a}			 {1 {0 17} badList {9 1} {{list element in braces followed by "a" instead of space}}}
+{linsert a a a}				 {1 {0 13} badInt {10 1} {}}
+{linsert a end a}			 {1 {0 15} badInt {10 3} {}}
+{linsert a 0 [set]}			 {1 {13 3} numArgs {} {}}
+{linsert a 0 a [set]}			 {1 {15 3} numArgs {} {}}
+
+
+{list}					 {ok}
+{list a}				 {ok}
+{list a a}				 {ok}
+{list a a a}				 {ok}
+{list {}a}				 {1 {0 8} parse {7 1} {{extra characters after close-brace}}}
+
+
+{llength a}				 {ok}
+{llength {a a}}				 {ok}
+{llength}				 {1 {0 7} numArgs {} {}}
+{llength a a}				 {1 {0 11} numArgs {} {}}
+{llength {{}a}}				 {1 {0 13} badList {9 1} {{list element in braces followed by "a" instead of space}}}
+
+
+{lrange a 0 0}				 {ok}
+{lrange {a a} 0 0}			 {ok}
+{lrange $a 0 0}				 {ok}
+{lrange}				 {1 {0 6} numArgs {} {}}
+{lrange a}				 {1 {0 8} numArgs {} {}}
+{lrange a 0}				 {1 {0 10} numArgs {} {}}
+{lrange a 0 0 a}			 {1 {0 14} numArgs {} {}}
+{lrange {{}a} 0 0}			 {1 {0 16} badList {8 1} {{list element in braces followed by "a" instead of space}}}
+{lrange a a 0}				 {1 {0 12} badInt {9 1} {}}
+{lrange a 0 a}				 {1 {0 12} badInt {11 1} {}}
+{lrange a end 0}			 {1 {0 14} badInt {9 3} {}}
+{lrange a 0 end}			 {1 {0 14} badInt {11 3} {}}
+
+
+{lreplace a 0 0}			 {ok}
+{lreplace a 0 0 a}			 {ok}
+{lreplace a 0 0 a a}			 {ok}
+{lreplace}				 {1 {0 8} numArgs {} {}}
+{lreplace a}				 {1 {0 10} numArgs {} {}}
+{lreplace a 0}				 {1 {0 12} numArgs {} {}}
+{lreplace {{}a} 0 0 a}			 {1 {0 20} badList {10 1} {{list element in braces followed by "a" instead of space}}}
+{lreplace a a 0 a}			 {1 {0 16} badInt {11 1} {}}
+{lreplace a 0 a a}			 {1 {0 16} badInt {13 1} {}}
+{lreplace a end 0 a}			 {1 {0 18} badInt {11 3} {}}
+{lreplace a 0 end a}			 {1 {0 18} badInt {13 3} {}}
+{lreplace a 0 0 [set]}			 {1 {16 3} numArgs {} {}}
+{lreplace a 0 0 a [set]}		 {1 {18 3} numArgs {} {}}
+
+
+{lsearch a a}				 {ok}
+{lsearch -exact a a}			 {ok}
+{lsearch -glob a a}			 {ok}
+{lsearch -regexp a a}			 {ok}
+{lsearch -e a a}			 {ok}
+{lsearch -g a a}			 {ok}
+{lsearch -r a a}			 {ok}
+{lsearch -e -g -r a a}			 {ok}
+{lsearch -e a}				 {ok}
+{lsearch -g a}				 {ok}
+{lsearch -r a}				 {ok}
+{lsearch -e -g -r a}			 {ok}
+{lsearch -o -o}				 {ok}
+{lsearch -exact {-o -t} -o}		 {ok}
+{lsearch}				 {1 {0 7} numArgs {} {}}
+{lsearch a}				 {1 {0 9} numArgs {} {}}
+{lsearch a a a}				 {1 {0 13} numArgs {} {}}
+{lsearch -e}				 {1 {0 10} numArgs {} {}}
+{lsearch -g}				 {1 {0 10} numArgs {} {}}
+{lsearch -r}				 {1 {0 10} numArgs {} {}}
+{lsearch -zz a a}			 {1 {0 15} badSwitch {8 3} -zz}
+{lsearch {{}a} a}			 {1 {0 15} badList {9 1} {{list element in braces followed by "a" instead of space}}}
+{lsearch a a[pwd]*}			 {1 {0 17} warnPattern {10 7} {}}
+{lsearch -foo {-o -t} -o}		 {1 {0 23} badSwitch {8 4} -foo}
+
+
+{lsort a}				 {ok}
+{lsort -ascii a}			 {ok}
+{lsort -decreasing a}			 {ok}
+{lsort -real a}				 {ok}
+{lsort -command {set} a}		 {ok}
+{lsort -increasing a}			 {ok}
+{lsort -integer a}			 {ok}
+{lsort -a a}				 {ok}
+{lsort -r a}				 {ok}
+{lsort -c {set} a}			 {ok}
+{lsort -inc a}				 {ok}
+{lsort -int a}				 {ok}
+{lsort -dec a}				 {ok}
+{lsort -a -r -c {set} a}		 {ok}
+{lsort $opt $foo}			 {ok}
+{lsort $opt -x}				 {ok}
+{lsort $opt -ascii -x}			 {ok}
+{lsort -ascii $opt -x}			 {ok}
+{lsort}					 {1 {0 5} numArgs {} {}}
+{lsort a a}				 {1 {0 9} numArgs {} {}}
+{lsort a a a}				 {1 {0 11} numArgs {} {}}
+{lsort -a a a}				 {1 {0 12} numArgs {} {}}
+{lsort -c $a}				 {1 {0 11} numArgs {} {}}
+{lsort -c badProc1 a}			 {1 {0 19} warnUndefProc {9 8} badProc1}
+{lsort -dictionary a}			 {1 {0 19} badSwitch {6 11} -dictionary}
+{lsort -index a}			 {1 {0 14} badSwitch {6 6} -index}
+{lsort -i a}				 {1 {0 10} badSwitch {6 2} -i}
+{lsort -aa a}				 {1 {0 11} badSwitch {6 3} -aa}
+{lsort {{}a}}				 {1 {0 11} badList {7 1} {{list element in braces followed by "a" instead of space}}}
+{lsort -ascii -foo $opt -ascii -x}	 {1 {0 32} badSwitch {13 4} -foo}
+
+
+{open a}				 {ok}
+{open a r}				 {ok}
+{open a r 1}				 {ok}
+{open a r+ 1}				 {ok}
+{open a w 1}				 {ok}
+{open a w+ 1}				 {ok}
+{open a a 1}				 {ok}
+{open a a+ 1}				 {ok}
+{open a RDONLY 1}			 {ok}
+{open a WRONLY 1}			 {ok}
+{open a RDWR 1}				 {ok}
+{open a {RDONLY APPEND} 1}		 {ok}
+{open a {RDONLY CREAT} 1}		 {ok}
+{open a {RDONLY EXCL} 1}		 {ok}
+{open a {RDONLY NOCTTY} 1}		 {ok}
+{open a {RDONLY NONBLOCK} 1}		 {ok}
+{open a {RDONLY TRUNC} 1}		 {ok}
+{open}					 {1 {0 4} numArgs {} {}}
+{open a r 1 a}				 {1 {0 12} numArgs {} {}}
+{open $a/a}				 {1 {0 9} nonPortFile {5 4} {}}
+{open a RDO}				 {1 {0 10} badKey {7 3} {{RDONLY WRONLY RDWR APPEND CREAT EXCL NOCTTY NONBLOCK TRUNC} RDO} 1 {0 10} badMode {7 3} {}}
+{open a AA}				 {1 {0 9} badKey {7 2} {{RDONLY WRONLY RDWR APPEND CREAT EXCL NOCTTY NONBLOCK TRUNC} AA} 1 {0 9} badMode {7 2} {}}
+{open a APPEND 1}			 {1 {0 15} badMode {7 6} {}}
+{open a CREAT 1}			 {1 {0 14} badMode {7 5} {}}
+{open a EXCL 1}				 {1 {0 13} badMode {7 4} {}}
+{open a NOCTTY 1}			 {1 {0 15} badMode {7 6} {}}
+{open a NONBLOCK 1}			 {1 {0 17} badMode {7 8} {}}
+{open a TRUNC 1}			 {1 {0 14} badMode {7 5} {}}
+{open a z}				 {1 {0 8} badKey {7 1} {{r r+ w w+ a a+} z}}
+{open a r a}				 {1 {0 10} badInt {9 1} {}}
+
+
+{parray a}				 {ok}
+{parray a a}				 {1 {0 10} numArgs {} {}}
+{parray}				 {1 {0 6} numArgs {} {}}
+{parray $A}				 {1 {0 9} warnVarRef {7 2} {}}
+
+
+{pid}					 {ok}
+{pid a}					 {ok}
+{pid a a}				 {1 {0 7} numArgs {} {}}
+{pid file0}				 {1 {0 9} nonPortChannel {4 5} stdin}
+
+
+{proc a a a}				 {ok}
+{proc a {a a} {a}}			 {ok}
+{proc}					 {1 {0 4} numArgs {} {}}
+{proc a}				 {1 {0 6} numArgs {} {}}
+{proc a a}				 {1 {0 8} numArgs {} {}}
+{proc a a a a}				 {1 {0 12} numArgs {} {}}
+{proc [set] a a}			 {1 {6 3} numArgs {} {}}
+{proc a {{}a} a}			 {1 {0 14} badList {8 1} {{list element in braces followed by "a" instead of space}}}
+{proc a a {set}}			 {1 {10 3} numArgs {} {}}
+
+
+{puts a}				 {ok}
+{puts a a}				 {ok}
+{puts -nonewline a}			 {ok}
+{puts -nonewline a a}			 {ok}
+{puts -no a}				 {ok}
+{puts -a a}				 {ok}
+{puts}					 {1 {0 4} numArgs {} {}}
+{puts a a a}				 {1 {0 10} badKey {9 1} {nonewline a}}
+{puts -nonewline a a a}			 {1 {0 21} badKey {20 1} {nonewline a}}
+{puts file0 a}				 {1 {0 12} nonPortChannel {5 5} stdin}
+{puts [set]}				 {1 {6 3} numArgs {} {}}
+
+
+{pwd}					 {ok}
+{pwd a}					 {1 {0 5} numArgs {} {}}
+
+
+{read a}				 {ok}
+{read -nonewline a}			 {ok}
+{read a 0}				 {ok}
+{read}					 {1 {0 4} numArgs {} {}}
+{read -nonewline a a}			 {1 {0 19} numArgs {} {}}
+{read a a a}				 {1 {0 10} numArgs {} {}}
+{read file0}				 {1 {0 10} nonPortChannel {5 5} stdin}
+{read -nonewline file0}			 {1 {0 21} nonPortChannel {16 5} stdin}
+{read -no a}				 {1 {0 10} badInt {9 1} {}}
+{read -a a}				 {1 {0 9} badInt {8 1} {}}
+{read file0 0}				 {1 {0 12} nonPortChannel {5 5} stdin}
+{read a a}				 {1 {0 8} badInt {7 1} {}}
+
+
+{regexp a a}				 {ok}
+{regexp a a a}				 {ok}
+{regexp a a a a}			 {ok}
+{regexp -nocase a a}			 {ok}
+{regexp -indices a a}			 {ok}
+{regexp -- a a}				 {ok}
+{regexp -nocase -indices -- a a}	 {ok}
+{regexp -nocase -indices -- a a a}	 {ok}
+{regexp}				 {1 {0 6} numArgs {} {}}
+{regexp a}				 {1 {0 8} numArgs {} {}}
+{regexp -n a a}				 {1 {0 13} badSwitch {7 2} -n}
+{regexp -a a a}				 {1 {0 13} badSwitch {7 2} -a}
+{regexp - a a}				 {1 {0 12} badSwitch {7 1} -}
+{regexp [set] a}			 {1 {8 3} numArgs {} {}}
+{regexp a [set]}			 {1 {10 3} numArgs {} {}}
+{regexp a a $A}				 {1 {0 13} warnVarRef {11 2} {}}
+{regexp a a a $A}			 {1 {0 15} warnVarRef {13 2} {}}
+
+{regexp $a a}				 {ok}
+{regexp [a] a}				 {ok}
+{regexp {a} a}				 {ok}
+{regexp {\\a} a}			 {ok}
+{regexp {\\A} a}			 {ok}
+{regexp {\\b} a}			 {ok}
+{regexp {\\B} a}			 {ok}
+{regexp {\\c} a}			 {ok}
+{regexp {\\d} a}			 {ok}
+{regexp {\\D} a}			 {ok}
+{regexp {\\e} a}			 {ok}
+{regexp {\\f} a}			 {ok}
+{regexp {\\n} a}			 {ok}
+{regexp {\\m} a}			 {ok}
+{regexp {\\M} a}			 {ok}
+{regexp {\\r} a}			 {ok}
+{regexp {\\t} a}			 {ok}
+{regexp {\\u} a}			 {ok}
+{regexp {\\U} a}			 {ok}
+{regexp {\\v} a}			 {ok}
+{regexp {\\s} a}			 {ok}
+{regexp {\\S} a}			 {ok}
+{regexp {\\w} a}			 {ok}
+{regexp {\\W} a}			 {ok}
+{regexp {\\x} a}			 {ok}
+{regexp {\\y} a}			 {ok}
+{regexp {\\Y} a}			 {ok}
+{regexp {\\Z} a}			 {ok}
+{regexp {\\0} a}			 {ok}
+{regexp {\\} a}				 {ok}
+{regexp {\"} a}				 {ok}
+{regexp {\*} a}				 {ok}
+{regexp {\+} a}				 {ok}
+{regexp {\?} a}				 {ok}
+{regexp {\.} a}				 {ok}
+{regexp {\^} a}				 {ok}
+{regexp {\$} a}				 {ok}
+{regexp {\(} a}				 {ok}
+{regexp {\)} a}				 {ok}
+{regexp {\[} a}				 {ok}
+{regexp {\]} a}				 {ok}
+{regexp {\|} a}				 {ok}
+{regexp {\{} a}				 {ok}
+{regexp {\}} a}				 {ok}
+
+{regexp {\a} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} a}
+{regexp {\A} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} A}
+{regexp {\b} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} b}
+{regexp {\B} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} B}
+{regexp {\c} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} c}
+{regexp {\d} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} d}
+{regexp {\D} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} D}
+{regexp {\e} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} e}
+{regexp {\f} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} f}
+{regexp {\n} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} n}
+{regexp {\m} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} m}
+{regexp {\M} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} M}
+{regexp {\r} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} r}
+{regexp {\t} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} t}
+{regexp {\u} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} u}
+{regexp {\U} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} U}
+{regexp {\v} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} v}
+{regexp {\s} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} s}
+{regexp {\S} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} S}
+{regexp {\w} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} w}
+{regexp {\W} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} W}
+{regexp {\x} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} x}
+{regexp {\y} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} y}
+{regexp {\Y} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} Y}
+{regexp {\Z} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} Z}
+{regexp {\0} a}			 	 {1 {0 13} coreTcl::warnEscapeChar {7 4} 0}
+{regexp {\G} a}				 {1 {0 13} coreTcl::warnNotSpecial {7 4} G}
+{regexp {\1} a}				 {1 {0 13} coreTcl::warnNotSpecial {7 4} 1}
+{regexp {\=} a}				 {1 {0 13} coreTcl::warnNotSpecial {7 4} =}
+{regexp \\ a}				 {1 {0 11} coreTcl::warnNotSpecial {7 2} {{}}}
+
+{regexp {[]]} a} 			 {ok}
+{regexp {[^]]} a}			 {ok}
+{regexp {[A-Z]} a}			 {ok}
+{regexp {[\\]} a}			 {ok}
+{regexp {[\\A]} a}			 {ok}
+{regexp {[\\A\\]} a}			 {ok}
+{regexp {[\\A\\]} a}			 {ok}
+{regexp {[\\A\\A\\]} a}			 {ok}
+
+{regexp {[]\\]} a}			 {ok}
+{regexp {[]\\A]} a}			 {ok}
+{regexp {[^]\\]} a}			 {ok}
+{regexp {[^]\\A]} a}			 {ok}
+
+{regexp \[A-Z\] a}			 {ok}
+{regexp \[A-Z\] a}			 {ok}
+{regexp \[\\\\\] a}			 {ok}
+{regexp \[\\\\A\] a}			 {ok}
+{regexp \[\\\\A\\\\\] a}		 {ok}
+{regexp \[\\\\A\\\\\] a}		 {ok}
+{regexp \[\\\\A\\\\A\\\\\] a}		 {ok}
+{regexp \[\\\] a}			 {1 {0 15} coreTcl::warnQuoteChar {7 6} {}}
+{regexp \[\\A\] a}			 {1 {0 16} coreTcl::warnQuoteChar {7 7} {}}
+{regexp \[\\A\\\] a}			 {1 {0 18} coreTcl::warnQuoteChar {7 9} {} 1 {0 18} coreTcl::warnQuoteChar {7 9} {}}
+{regexp \[\\A\\\] a}			 {1 {0 18} coreTcl::warnQuoteChar {7 9} {} 1 {0 18} coreTcl::warnQuoteChar {7 9} {}}
+{regexp \[\\A\\A\\\] a}			 {1 {0 21} coreTcl::warnQuoteChar {7 12} {} 1 {0 21} coreTcl::warnQuoteChar {7 12} {} 1 {0 21} coreTcl::warnQuoteChar {7 12} {}}
+
+{regexp {[\]} a}			 {1 {0 14} coreTcl::warnQuoteChar {7 5} {}}
+{regexp {[^\]} a}			 {1 {0 15} coreTcl::warnQuoteChar {7 6} {}}
+{regexp {[\A]} a}			 {1 {0 15} coreTcl::warnQuoteChar {7 6} {}}
+{regexp {[\\A\]} a}			 {1 {0 17} coreTcl::warnQuoteChar {7 8} {}}
+{regexp {[\\A\\A\]} a}			 {1 {0 20} coreTcl::warnQuoteChar {7 11} {}}
+{regexp {[\A\A]} a}			 {1 {0 17} coreTcl::warnQuoteChar {7 8} {} 1 {0 17} coreTcl::warnQuoteChar {7 8} {}}
+{regexp {[\\\A\\\]} a}			 {1 {0 20} coreTcl::warnQuoteChar {7 11} {} 1 {0 20} coreTcl::warnQuoteChar {7 11} {}}
+
+{regexp {[]} a} 			 {1 {0 13} coreTcl::errBadBrktExp {7 4} {}}
+{regexp {[^]} a}			 {1 {0 14} coreTcl::errBadBrktExp {7 5} {}}
+{regexp {[A-Z} a}			 {1 {0 15} coreTcl::errBadBrktExp {7 6} {}}
+{regexp {[\\} a}			 {1 {0 14} coreTcl::errBadBrktExp {7 5} {}}
+{regexp {[\\A} a}			 {1 {0 15} coreTcl::errBadBrktExp {7 6} {}}
+{regexp {[\\A\\} a}			 {1 {0 17} coreTcl::errBadBrktExp {7 8} {}}
+{regexp {[\\A\\} a}			 {1 {0 17} coreTcl::errBadBrktExp {7 8} {}}
+{regexp {[\\A\\A\\} a}			 {1 {0 20} coreTcl::errBadBrktExp {7 11} {}}
+{regexp {[]\\} a}			 {1 {0 15} coreTcl::errBadBrktExp {7 6} {}}
+{regexp {[]\\A} a}			 {1 {0 16} coreTcl::errBadBrktExp {7 7} {}}
+{regexp {[^]\\} a}			 {1 {0 16} coreTcl::errBadBrktExp {7 7} {}}
+{regexp {[^]\\A} a}			 {1 {0 17} coreTcl::errBadBrktExp {7 8} {}}
+
+
+{regsub a a a a}			 {ok}
+{regsub -all a a a a}			 {ok}
+{regsub -nocase a a a a}		 {ok}
+{regsub -- a a a a}			 {ok}
+{regsub -all -nocase -- a a a a}	 {ok}
+{regsub}				 {1 {0 6} numArgs {} {}}
+{regsub a}				 {1 {0 8} numArgs {} {}}
+{regsub a a}				 {1 {0 10} numArgs {} {}}
+{regsub a a a}				 {1 {0 12} numArgs {} {}}
+{regsub a a a a a}			 {1 {0 16} numArgs {} {}}
+{regsub -all a a a}			 {1 {0 17} numArgs {} {}}
+{regsub -no a a a a}			 {1 {0 18} badSwitch {7 3} -no}
+{regsub -aa a a a a}			 {1 {0 18} badSwitch {7 3} -aa}
+{regsub [set] a a a}			 {1 {8 3} numArgs {} {}}
+{regsub a [set] a a}			 {1 {10 3} numArgs {} {}}
+{regsub a a [set] a}			 {1 {12 3} numArgs {} {}}
+{regsub a a a $A}			 {1 {0 15} warnVarRef {13 2} {}}
+{regsub {[]} a a a} 			 {1 {0 17} coreTcl::errBadBrktExp {7 4} {}}
+
+
+{rename a b}				 {ok}
+{rename}				 {1 {0 6} numArgs {} {}}
+{rename a b a}				 {1 {0 12} numArgs {} {}}
+{rename [set] a}			 {1 {8 3} numArgs {} {}}
+{rename a [set]}			 {1 {10 3} numArgs {} {}}
+
+
+{return}				 {ok}
+{return a}				 {ok}
+{return -code ok}			 {ok}
+{return -errorinfo a}			 {ok}
+{return -errorcode a}			 {ok}
+{return -code ok a}			 {ok}
+{return -errorinfo a a}			 {ok}
+{return -errorcode a a}			 {ok}
+{return -code ok -errorinfo a -errorcode a}	 {ok}
+{return -code ok -errorinfo a -errorcode a a}	 {ok}
+{return a a}				 {1 {0 10} numArgs {} {}}
+{return -code ok a a}			 {1 {0 19} numArgs {} {}}
+{return -errorinfo a a a}		 {1 {0 23} numArgs {} {}}
+{return -errorcode a a a}		 {1 {0 23} numArgs {} {}}
+{return -code ok -errorinfo a -errorcode a a a}	 {1 {0 45} numArgs {} {}}
+{return -code a}			 {1 {0 14} badKey {13 1} {{ok error return break continue} a}}
+{return -errorinfo [set]}		 {1 {19 3} numArgs {} {}}
+{return [set]}				 {1 {8 3} numArgs {} {}}
+{return -code ok [set]}			 {1 {17 3} numArgs {} {}}
+
+
+{scan a a a}				 {ok}
+{scan a a a a}				 {ok}
+{scan a a a a a}			 {ok}
+{scan}					 {1 {0 4} numArgs {} {}}
+{scan a}				 {1 {0 6} numArgs {} {}}
+{scan a a}				 {1 {0 8} numArgs {} {}}
+{scan [set] a a}			 {1 {6 3} numArgs {} {}}
+{scan a [set] a}			 {1 {8 3} numArgs {} {}}
+{scan a a $A}				 {1 {0 11} warnVarRef {9 2} {}}
+{scan a a a $A}				 {1 {0 13} warnVarRef {11 2} {}}
+
+
+{seek a 0}				 {ok}
+{seek a 0 start}			 {ok}
+{seek a 0 current}			 {ok}
+{seek a 0 end}				 {ok}
+{seek}					 {1 {0 4} numArgs {} {}}
+{seek a}				 {1 {0 6} numArgs {} {}}
+{seek a 0 end a}			 {1 {0 14} numArgs {} {}}
+{seek file0 0 end}			 {1 {0 16} nonPortChannel {5 5} stdin}
+{seek a a end}				 {1 {0 12} badInt {7 1} {}}
+{seek a a foo}				 {1 {0 12} badInt {7 1} {} 1 {0 12} badKey {9 3} {{start current end} foo}}
+
+
+{set a}					 {ok}
+{set a a}				 {ok}
+{set}					 {1 {0 3} numArgs {} {}}
+{set a a a}				 {1 {0 9} numArgs {} {}}
+{set $A}				 {1 {0 6} warnVarRef {4 2} {}}
+{set a [set]}				 {1 {7 3} numArgs {} {}}
+
+
+{source a}				 {ok}
+{source -rsrc AAAA}			 {ok}
+{source -rsrc AAAA a}			 {ok}
+{source -rsrc}				 {ok}
+{source -rsrc a}			 {ok}
+{source -rsrcid 12}			 {ok}
+{source -rsrcid [set a]}		 {ok}
+{source -rsrcid}			 {ok}
+{source}				 {1 {0 6} numArgs {} {}}
+{source a a}				 {1 {0 10} numArgs {} {}}
+{source $a/a}				 {1 {0 11} nonPortFile {7 4} {}}
+{source -rsrc AAAA a a}			 {1 {0 21} numArgs {} {}}
+{source -rsrc AAAA $a/a}		 {1 {0 22} nonPortFile {18 4} {}}
+{source -rsrcid 1 a a}			 {1 {0 20} numArgs {} {}}
+{source -rsrcid 1 $a/a}			 {1 {0 21} nonPortFile {17 4} {}}
+{source -rsrcid a}			 {1 {0 16} badInt {15 1} {}}
+{source -rsrcid a a}			 {1 {0 18} badInt {15 1} {}}
+
+
+{split a}				 {ok}
+{split a a}				 {ok}
+{split $string \"}			 {ok}
+{split}					 {1 {0 5} numArgs {} {}}
+{split a a a}				 {1 {0 11} numArgs {} {}}
+{split [set]}				 {1 {7 3} numArgs {} {}}
+{split a [set]}				 {1 {9 3} numArgs {} {}}
+
+{string $a a}				 {ok}
+{string $a a a}				 {ok}
+{string $a a a a}			 {ok}
+{string $a}				 {1 {0 9} numArgs {} {}}
+{string $a a a a a}			 {1 {0 17} numArgs {} {}}
+{string [set] a}			 {1 {8 3} numArgs {} {}}
+{string foo a}				 {1 {0 12} badOption {7 3} {{compare first index last length match range tolower toupper trim trimleft trimright} foo}}
+
+{string wordend a}			 {1 {0 16} badOption {7 7} {{compare first index last length match range tolower toupper trim trimleft trimright} wordend}}
+{string wordstart a}			 {1 {0 18} badOption {7 9} {{compare first index last length match range tolower toupper trim trimleft trimright} wordstart}}
+
+{string compare a a}			 {ok}
+{string compare}			 {1 {0 14} numArgs {} {}}
+{string compare a}			 {1 {0 16} numArgs {} {}}
+{string compare a a a}			 {1 {0 20} numArgs {} {}}
+{string compare [set] a}		 {1 {16 3} numArgs {} {}}
+{string compare a [set]}		 {1 {18 3} numArgs {} {}}
+
+{string first a a}			 {ok}
+{string first}				 {1 {0 12} numArgs {} {}}
+{string first a}			 {1 {0 14} numArgs {} {}}
+{string first a a a}			 {1 {0 18} numArgs {} {}}
+{string first [set] a}			 {1 {14 3} numArgs {} {}}
+{string first a [set]}			 {1 {16 3} numArgs {} {}}
+
+{string index a 0}			 {ok}
+{string index}				 {1 {0 12} numArgs {} {}}
+{string index a}			 {1 {0 14} numArgs {} {}}
+{string index a 0 a}			 {1 {0 18} numArgs {} {}}
+{string index [set] 0}			 {1 {14 3} numArgs {} {}}
+{string index a a}			 {1 {0 16} badInt {15 1} {}}
+
+{string last a a}			 {ok}
+{string last}				 {1 {0 11} numArgs {} {}}
+{string last a}				 {1 {0 13} numArgs {} {}}
+{string last a a a}			 {1 {0 17} numArgs {} {}}
+{string last [set] a}			 {1 {13 3} numArgs {} {}}
+{string last a [set]}			 {1 {15 3} numArgs {} {}}
+
+{string length a}			 {ok}
+{string length}				 {1 {0 13} numArgs {} {}}
+{string length a a}			 {1 {0 17} numArgs {} {}}
+{string length [set]}			 {1 {15 3} numArgs {} {}}
+
+{string match a a}			 {ok}
+{string match}	 			 {1 {0 12} numArgs {} {}}
+{string match a}			 {1 {0 14} numArgs {} {}}
+{string match a a a}			 {1 {0 18} numArgs {} {}}
+{string match a[pwd]* a}		 {1 {0 22} warnPattern {13 7} {}}
+{string match a [set]}			 {1 {16 3} numArgs {} {}}
+
+{string range a 0 0}			 {ok}
+{string range a 0 end}			 {ok}
+{string range}				 {1 {0 12} numArgs {} {}}
+{string range a}			 {1 {0 14} numArgs {} {}}
+{string range a 0}			 {1 {0 16} numArgs {} {}}
+{string range a 0 0 a}			 {1 {0 20} numArgs {} {}}
+{string range [set] 0 0}		 {1 {14 3} numArgs {} {}}
+{string range a a 0}			 {1 {0 18} badIndex {15 1} {}}
+{string range a 0 a}			 {1 {0 18} badIndex {17 1} {}}
+
+{string tolower a}			 {ok}
+{string tolower}			 {1 {0 14} numArgs {} {}}
+{string tolower a a}			 {1 {0 18} numArgs {} {}}
+{string tolower [set]}			 {1 {16 3} numArgs {} {}}
+
+{string toupper a}			 {ok}
+{string toupper}			 {1 {0 14} numArgs {} {}}
+{string toupper a a}			 {1 {0 18} numArgs {} {}}
+{string toupper [set]}			 {1 {16 3} numArgs {} {}}
+
+{string trim a}				 {ok}
+{string trim a a}			 {ok}
+{string trim}				 {1 {0 11} numArgs {} {}}
+{string trim a a a}			 {1 {0 17} numArgs {} {}}
+{string trim [set]}			 {1 {13 3} numArgs {} {}}
+{string trim a [set]}			 {1 {15 3} numArgs {} {}}
+
+{string trimleft a}			 {ok}
+{string trimleft a a}			 {ok}
+{string trimleft}			 {1 {0 15} numArgs {} {}}
+{string trimleft a a a}			 {1 {0 21} numArgs {} {}}
+{string trimleft [set]}			 {1 {17 3} numArgs {} {}}
+{string trimleft a [set]}		 {1 {19 3} numArgs {} {}}
+
+{string trimright a}			 {ok}
+{string trimright a a}			 {ok}
+{string trimright}			 {1 {0 16} numArgs {} {}}
+{string trimright a a a}		 {1 {0 22} numArgs {} {}}
+{string trimright [set]}		 {1 {18 3} numArgs {} {}}
+{string trimright a [set]}		 {1 {20 3} numArgs {} {}}
+
+
+{switch -exact a {a a}}			 {ok}
+{switch -glob a {a a}}			 {ok}
+{switch -regexp a {a a}}		 {ok}
+{switch -e -g -r a {a a}}		 {ok}
+{switch -exact a a a}			 {ok}
+{switch -glob a a a}			 {ok}
+{switch -regexp a a a}			 {ok}
+{switch -e -g -r a a a}			 {ok}
+{switch a $a}				 {ok}
+{switch a {a a}}			 {ok}
+{switch a {a {a}}}			 {ok}
+{switch a {a a a a}}			 {ok}
+{switch a {a a a {a}}}			 {ok}
+{switch a {a - a a}}			 {ok}
+{switch a {a - a {a}}}			 {ok}
+{switch a a a}				 {ok}
+{switch a a {a}}			 {ok}
+{switch a a a a a}			 {ok}
+{switch a a a a {a}}			 {ok}
+{switch a a - a a}			 {ok}
+{switch a a - a {a}}			 {ok}
+{switch}				 {1 {0 6} numArgs {} {}}
+{switch a}				 {1 {0 8} numArgs {} {}}
+{switch a a}				 {1 {0 10} noScript {} {}}
+{switch a {a}}				 {1 {0 12} noScript {} {}}
+{switch -e}				 {1 {0 9} numArgs {} {}}
+{switch -e a}				 {1 {0 11} numArgs {} {}}
+{switch -e a a}				 {1 {0 13} noScript {} {}}
+{switch -e a {a}}			 {1 {0 15} noScript {} {}}
+{switch [set] {a a}}			 {1 {8 3} numArgs {} {}}
+{switch a {a [set]}}			 {1 {13 3} numArgs {} {}}
+{switch a {a {set}}}			 {1 {13 3} numArgs {} {}}
+{switch a {a a a [set]}}		 {1 {17 3} numArgs {} {}}
+{switch a {a a a {set}}}		 {1 {17 3} numArgs {} {}}
+{switch [set] a a}			 {1 {8 3} numArgs {} {}}
+{switch a [set] a}			 {1 {10 3} numArgs {} {}}
+{switch a a [set]}			 {1 {12 3} numArgs {} {}}
+{switch a a {set}}			 {1 {12 3} numArgs {} {}}
+{switch a a a [set] a}			 {1 {14 3} numArgs {} {}}
+{switch a a a a [set]}			 {1 {16 3} numArgs {} {}}
+{switch a a a a {set}}			 {1 {16 3} numArgs {} {}}
+{switch a {a {testScanCmd}}}		 {1 {13 11} procNumArgs {} testScanCmd}
+
+
+{tcl_endOfWord a 0}			 {ok}
+{tcl_endOfWord}				 {1 {0 13} numArgs {} {}}
+{tcl_endOfWord a}			 {1 {0 15} numArgs {} {}}
+{tcl_endOfWord a 0 a}			 {1 {0 19} numArgs {} {}}
+{tcl_endOfWord [set] 0}			 {1 {15 3} numArgs {} {}}
+{tcl_endOfWord a a}			 {1 {0 17} badIndex {16 1} {}}
+
+
+{tcl_startOfPreviousWord a 0}		 {ok}
+{tcl_startOfPreviousWord}		 {1 {0 23} numArgs {} {}}
+{tcl_startOfPreviousWord a}		 {1 {0 25} numArgs {} {}}
+{tcl_startOfPreviousWord a 0 a}		 {1 {0 29} numArgs {} {}}
+{tcl_startOfPreviousWord [set] 0}	 {1 {25 3} numArgs {} {}}
+{tcl_startOfPreviousWord a a}		 {1 {0 27} badIndex {26 1} {}}
+
+
+{tcl_startOfNextWord a 0}		 {ok}
+{tcl_startOfNextWord}		 	 {1 {0 19} numArgs {} {}}
+{tcl_startOfNextWord a}		 	 {1 {0 21} numArgs {} {}}
+{tcl_startOfNextWord a 0 a}		 {1 {0 25} numArgs {} {}}
+{tcl_startOfNextWord [set] 0}	 	 {1 {21 3} numArgs {} {}}
+{tcl_startOfNextWord a a}		 {1 {0 23} badIndex {22 1} {}}
+
+
+{tcl_wordBreakAfter a 0}		 {ok}
+{tcl_wordBreakAfter}			 {1 {0 18} numArgs {} {}}
+{tcl_wordBreakAfter a}			 {1 {0 20} numArgs {} {}}
+{tcl_wordBreakAfter a 0 a}		 {1 {0 24} numArgs {} {}}
+{tcl_wordBreakAfter [set] 0}		 {1 {20 3} numArgs {} {}}
+{tcl_wordBreakAfter a a}		 {1 {0 22} badIndex {21 1} {}}
+
+
+{tcl_wordBreakBefore a 0}		 {ok}
+{tcl_wordBreakBefore}			 {1 {0 19} numArgs {} {}}
+{tcl_wordBreakBefore a}			 {1 {0 21} numArgs {} {}}
+{tcl_wordBreakBefore a 0 a}		 {1 {0 25} numArgs {} {}}
+{tcl_wordBreakBefore [set] 0}		 {1 {21 3} numArgs {} {}}
+{tcl_wordBreakBefore a a}		 {1 {0 23} badIndex {22 1} {}}
+
+
+{tell a}				 {ok}
+{tell}					 {1 {0 4} numArgs {} {}}
+{tell a a}				 {1 {0 8} numArgs {} {}}
+{tell file0}				 {1 {0 10} nonPortChannel {5 5} stdin}
+
+
+{time a}				 {ok}
+{time a 0}				 {ok}
+{time}					 {1 {0 4} numArgs {} {}}
+{time a 0 a}				 {1 {0 10} numArgs {} {}}
+{time {set}}				 {1 {6 3} numArgs {} {}}
+{time {set} 0}				 {1 {6 3} numArgs {} {}}
+{time a a}				 {1 {0 8} badInt {7 1} {}}
+{time {testScanCmd} 1}			 {1 {6 11} procNumArgs {} testScanCmd}
+
+
+{trace $a a}				 {ok}
+{trace $a a r a}			 {ok}
+{trace $a a a}				 {1 {0 12} numArgs {} {}}
+{trace $a a r a a}			 {1 {0 16} numArgs {} {}}
+{trace [set] a}				 {1 {7 3} numArgs {} {}}
+{trace foo a}				 {1 {0 11} badKey {6 3} {vinfo foo}}
+
+{trace variable a r a}			 {ok}
+{trace variable a w a}			 {ok}
+{trace variable a u a}			 {ok}
+{trace variable}			 {1 {0 14} numArgs {} {}}
+{trace variable a}			 {1 {0 16} badKey {6 8} {vinfo variable}}
+{trace variable a r}			 {1 {0 18} numArgs {} {}}
+{trace variable a r a a}		 {1 {0 22} numArgs {} {}}
+{trace variable [set] r a}		 {1 {16 3} numArgs {} {}}
+{trace variable a a a}			 {1 {0 20} coreTcl::badTraceOp {17 1} a}
+{trace variable a r [set]}		 {1 {20 3} numArgs {} {}}
+{trace variable a r lappend}		 {ok}
+
+
+{trace vdelete a r a}			 {ok}
+{trace vdelete a w a}			 {ok}
+{trace vdelete a u a}			 {ok}
+{trace vdelete}				 {1 {0 13} numArgs {} {}}
+{trace vdelete a}			 {1 {0 15} badKey {6 7} {vinfo vdelete}}
+{trace vdelete a r}			 {1 {0 17} numArgs {} {}}
+{trace vdelete a r a a}			 {1 {0 21} numArgs {} {}}
+{trace vdelete [set] r a}		 {1 {15 3} numArgs {} {}}
+{trace vdelete a a a}			 {1 {0 19} coreTcl::badTraceOp {16 1} a}
+{trace vdelete a r [set]}		 {1 {19 3} numArgs {} {}}
+
+{trace vinfo a}				 {ok}
+{trace vinfo}				 {1 {0 11} numArgs {} {}}
+{trace vinfo $A}			 {1 {0 14} warnVarRef {12 2} {}}
+
+
+{unknown a}				 {ok}
+{unknown a a}				 {ok}
+{unknown a a a}				 {ok}
+{unknown $a a}				 {ok}
+{unknown}				 {1 {0 7} numArgs {} {}}
+{unknown [set]}				 {1 {9 3} numArgs {} {}}
+{unknown a [set]}			 {1 {11 3} numArgs {} {}}
+{unknown a a [set]}			 {1 {13 3} numArgs {} {}}
+
+
+{unset a}				 {ok}
+{unset a a}				 {ok}
+{unset a a a}				 {ok}
+{unset}					 {1 {0 5} numArgs {} {}}
+{unset $A}				 {1 {0 8} warnVarRef {6 2} {}}
+{unset a $A}				 {1 {0 10} warnVarRef {8 2} {}}
+
+
+{uplevel a}				 {ok}
+{uplevel a a}				 {ok}
+{uplevel a a a}				 {ok}
+{uplevel a a a a}			 {ok}
+{uplevel}				 {1 {0 7} numArgs {} {}}
+{uplevel [set]}				 {1 {9 3} numArgs {} {}}
+{uplevel a [set]}			 {1 {11 3} numArgs {} {}}
+
+{uplevel pwd}				 {ok}
+{uplevel set a}				 {ok}
+{uplevel {set a 1}}			 {ok}
+{uplevel {set}}				 {1 {9 3} numArgs {} {}}
+{uplevel {testScanCmd}}			 {1 {9 11} procNumArgs {} testScanCmd}
+{uplevel {testScanCmd} a}		 {ok}
+
+{uplevel 1 pwd}				 {ok}
+{uplevel \#3 set a}			 {ok}
+{uplevel 1 {set a 1}}			 {ok}
+{uplevel 1 {set}}			 {1 {11 3} numArgs {} {}}
+{uplevel 1 {testScanCmd}}		 {1 {11 11} procNumArgs {} testScanCmd}
+{uplevel 1 {testScanCmd} a}		 {ok}
+
+
+{upvar a a}				 {ok}
+{upvar a a a a}				 {ok}
+{upvar a a a}				 {1 {0 11} badLevel {6 1} a}
+{upvar a $A}				 {1 {0 10} warnVarRef {8 2} {}}
+
+
+{while {1} a}				 {ok}
+{while}					 {1 {0 5} numArgs {} {}}
+{while {1}}				 {1 {0 9} numArgs {} {}}
+{while {a} a}				 {1 {0 11} parse {6 3} {{PARSE syntax 7 {syntax error in expression "a"}}}}
+{while {1} {set}}			 {1 {11 3} numArgs {} {}}
+{while {[testScanCmd]} {a}}		 {1 {8 11} procNumArgs {} testScanCmd}
+{while {[testScanCmd] != 1} {a}}	 {1 {8 11} procNumArgs {} testScanCmd}
+{while {1} {testScanCmd}}		 {1 {11 11} procNumArgs {} testScanCmd}
+}
+
+
+
+set checkCoreTcl7.4 {
+{after}					 {ok}
+{binary}				 {ok}
+{clock}					 {ok}
+{fblocked}				 {ok}
+{fconfigure}				 {ok}
+{fcopy}					 {ok}
+{fileevent}				 {ok}
+{interp}				 {ok}
+{load}					 {ok}
+{namespace}				 {ok}
+{package}				 {ok}
+{pkg_mkIndex}				 {ok}
+{registry}				 {ok}
+{resource}				 {ok}
+{socket}				 {ok}
+{update}				 {ok}
+{variable}				 {ok}
+{vwait}					 {ok}
+
+{file copy}				 {1 {0 9} badOption {5 4} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} copy}}
+{file delete}				 {1 {0 11} badOption {5 6} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} delete}}
+{file join}				 {1 {0 9} badOption {5 4} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} join}}
+{file mkdir}				 {1 {0 10} badOption {5 5} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} mkdir}}
+{file nativename}			 {1 {0 15} badOption {5 10} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} nativename}}
+{file pathtype}				 {1 {0 13} badOption {5 8} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} pathtype}}
+{file rename}				 {1 {0 11} badOption {5 6} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} rename}}
+{file split}				 {1 {0 10} badOption {5 5} {{atime attributes dirname executable exists extension isdirectory isfile lstat mtime owned readable readlink rootname size stat tail type volume writable} split}}
+
+{info sharedlibextension}		 {1 {0 23} badOption {5 18} {{args body cmdcount commands complete default exists globals level library loaded locals patchlevel procs script tclversion vars} sharedlibextension}}
+{info nameofexecutable}			 {1 {0 21} badOption {5 16} {{args body cmdcount commands complete default exists globals level library loaded locals patchlevel procs script tclversion vars} nameofexecutable}}
+{info hostname}				 {1 {0 13} badOption {5 8} {{args body cmdcount commands complete default exists globals level library loaded locals patchlevel procs script tclversion vars} hostname}}
+
+
+{append a}				 {ok}
+{append a 1}				 {ok}
+{append a 1 2}				 {ok}
+{append a 1 2 3}			 {ok}
+{append}				 {1 {0 6} numArgs {} {}}
+{append $A}				 {1 {0 9} warnVarRef {7 2} {}}
+
+
+{array exists a}			 {ok}
+{array exists}				 {1 {0 12} numArgs {} {}}
+{array exists a a}			 {1 {0 16} numArgs {} {}}
+{array exists $A}			 {1 {0 15} warnVarRef {13 2} {}}
+
+{array get a}				 {ok}
+{array get a a}				 {ok}
+{array get}				 {1 {0 9} numArgs {} {}}
+{array get a a a}			 {1 {0 15} numArgs {} {}}
+{array get $A}				 {1 {0 12} warnVarRef {10 2} {}}
+{array get a a[pwd]*}			 {1 {0 19} warnPattern {12 7} {}}
+
+{array names a}				 {ok}
+{array names a a}			 {ok}
+{array names}				 {1 {0 11} numArgs {} {}}
+{array names a a a}			 {1 {0 17} numArgs {} {}}
+{array names $A}			 {1 {0 14} warnVarRef {12 2} {}}
+{array names a a[pwd]*}			 {1 {0 21} warnPattern {14 7} {}}
+
+{array set a a}				 {ok}
+{array set}				 {1 {0 9} numArgs {} {}}
+{array set a}				 {1 {0 11} numArgs {} {}}
+{array set a a a}			 {1 {0 15} numArgs {} {}}
+{array set $A a}			 {1 {0 14} warnVarRef {10 2} {}}
+{array set a {{}a}}			 {1 {0 17} badList {13 1} {{list element in braces followed by "a" instead of space}}}
+
+
+{lappend a}				 {ok}
+{lappend a a a}				 {ok}
+{lappend}				 {1 {0 7} numArgs {} {}}
+{lappend $A}				 {1 {0 10} warnVarRef {8 2} {}}
+{lappend a [set]}			 {1 {11 3} numArgs {} {}}
+{lappend a a [set]}			 {1 {13 3} numArgs {} {}}
+
+
+{lindex a 0}				 {ok}
+{lindex a end}				 {ok}
+{lindex}				 {1 {0 6} numArgs {} {}}
+{lindex a}				 {1 {0 8} numArgs {} {}}
+{lindex a 1 a}				 {1 {0 12} numArgs {} {}}
+{lindex {{}a} 0}			 {1 {0 14} badList {8 1} {{list element in braces followed by "a" instead of space}}}
+{lindex a a}				 {1 {0 10} badIndex {9 1} {}}
+
+
+{linsert a 0 a}				 {ok}
+{linsert a 0 a a a}			 {ok}
+{linsert a end a a a}			 {ok}
+{linsert}				 {1 {0 7} numArgs {} {}}
+{linsert a}				 {1 {0 9} numArgs {} {}}
+{linsert a 0}				 {1 {0 11} numArgs {} {}}
+{linsert {{}a} 0 a}			 {1 {0 17} badList {9 1} {{list element in braces followed by "a" instead of space}}}
+{linsert a a a}				 {1 {0 13} badIndex {10 1} {}}
+{linsert a 0 [set]}			 {1 {13 3} numArgs {} {}}
+{linsert a 0 a [set]}			 {1 {15 3} numArgs {} {}}
+
+
+{lrange a 0 0}				 {ok}
+{lrange {a a} 0 0}			 {ok}
+{lrange $a 0 0}				 {ok}
+{lrange a end 0}			 {ok}
+{lrange a 0 end}			 {ok}
+{lrange}				 {1 {0 6} numArgs {} {}}
+{lrange a}				 {1 {0 8} numArgs {} {}}
+{lrange a 0}				 {1 {0 10} numArgs {} {}}
+{lrange a 0 0 a}			 {1 {0 14} numArgs {} {}}
+{lrange {{}a} 0 0}			 {1 {0 16} badList {8 1} {{list element in braces followed by "a" instead of space}}}
+{lrange a a 0}				 {1 {0 12} badIndex {9 1} {}}
+{lrange a 0 a}				 {1 {0 12} badIndex {11 1} {}}
+
+
+{lreplace a 0 0}			 {ok}
+{lreplace a 0 0 a}			 {ok}
+{lreplace a 0 0 a a}			 {ok}
+{lreplace a end 0 a}			 {ok}
+{lreplace a 0 end a}			 {ok}
+{lreplace}				 {1 {0 8} numArgs {} {}}
+{lreplace a}				 {1 {0 10} numArgs {} {}}
+{lreplace a 0}				 {1 {0 12} numArgs {} {}}
+{lreplace {{}a} 0 0 a}			 {1 {0 20} badList {10 1} {{list element in braces followed by "a" instead of space}}}
+{lreplace a a 0 a}			 {1 {0 16} badIndex {11 1} {}}
+{lreplace a 0 a a}			 {1 {0 16} badIndex {13 1} {}}
+{lreplace a 0 0 [set]}			 {1 {16 3} numArgs {} {}}
+{lreplace a 0 0 a [set]}		 {1 {18 3} numArgs {} {}}
+
+
+{parray a}				 {ok}
+{parray a a}				 {ok}
+{parray}				 {1 {0 6} numArgs {} {}}
+{parray a a[pwd]*}			 {1 {0 16} warnPattern {9 7} {}}
+{parray $A}				 {1 {0 9} warnVarRef {7 2} {}}
+
+
+{string $a a}				 {ok}
+{string $a a a}				 {ok}
+{string $a a a a}			 {ok}
+{string $a}				 {1 {0 9} numArgs {} {}}
+{string $a a a a a}			 {1 {0 17} numArgs {} {}}
+{string [set] a}			 {1 {8 3} numArgs {} {}}
+{string foo a}				 {1 {0 12} badOption {7 3} {{compare first index last length match range tolower toupper trim trimleft trimright wordend wordstart} foo}}
+
+{string compare a a}			 {ok}
+{string compare}			 {1 {0 14} numArgs {} {}}
+{string compare a}			 {1 {0 16} numArgs {} {}}
+{string compare a a a}			 {1 {0 20} numArgs {} {}}
+{string compare [set] a}		 {1 {16 3} numArgs {} {}}
+{string compare a [set]}		 {1 {18 3} numArgs {} {}}
+
+{string first a a}			 {ok}
+{string first}				 {1 {0 12} numArgs {} {}}
+{string first a}			 {1 {0 14} numArgs {} {}}
+{string first a a a}			 {1 {0 18} numArgs {} {}}
+{string first [set] a}			 {1 {14 3} numArgs {} {}}
+{string first a [set]}			 {1 {16 3} numArgs {} {}}
+
+{string index a 0}			 {ok}
+{string index}				 {1 {0 12} numArgs {} {}}
+{string index a}			 {1 {0 14} numArgs {} {}}
+{string index a 0 a}			 {1 {0 18} numArgs {} {}}
+{string index [set] 0}			 {1 {14 3} numArgs {} {}}
+{string index a a}			 {1 {0 16} badInt {15 1} {}}
+
+{string last a a}			 {ok}
+{string last}				 {1 {0 11} numArgs {} {}}
+{string last a}				 {1 {0 13} numArgs {} {}}
+{string last a a a}			 {1 {0 17} numArgs {} {}}
+{string last [set] a}			 {1 {13 3} numArgs {} {}}
+{string last a [set]}			 {1 {15 3} numArgs {} {}}
+
+{string length a}			 {ok}
+{string length}				 {1 {0 13} numArgs {} {}}
+{string length a a}			 {1 {0 17} numArgs {} {}}
+{string length [set]}			 {1 {15 3} numArgs {} {}}
+
+{string match a a}			 {ok}
+{string match}	 			 {1 {0 12} numArgs {} {}}
+{string match a}			 {1 {0 14} numArgs {} {}}
+{string match a a a}			 {1 {0 18} numArgs {} {}}
+{string match a[pwd]* a}		 {1 {0 22} warnPattern {13 7} {}}
+{string match a [set]}			 {1 {16 3} numArgs {} {}}
+
+{string range a 0 0}			 {ok}
+{string range a 0 end}			 {ok}
+{string range}				 {1 {0 12} numArgs {} {}}
+{string range a}			 {1 {0 14} numArgs {} {}}
+{string range a 0}			 {1 {0 16} numArgs {} {}}
+{string range a 0 0 a}			 {1 {0 20} numArgs {} {}}
+{string range [set] 0 0}		 {1 {14 3} numArgs {} {}}
+{string range a a 0}			 {1 {0 18} badIndex {15 1} {}}
+{string range a 0 a}			 {1 {0 18} badIndex {17 1} {}}
+
+{string tolower a}			 {ok}
+{string tolower}			 {1 {0 14} numArgs {} {}}
+{string tolower a a}			 {1 {0 18} numArgs {} {}}
+{string tolower [set]}			 {1 {16 3} numArgs {} {}}
+
+{string toupper a}			 {ok}
+{string toupper}			 {1 {0 14} numArgs {} {}}
+{string toupper a a}			 {1 {0 18} numArgs {} {}}
+{string toupper [set]}			 {1 {16 3} numArgs {} {}}
+
+{string trim a}				 {ok}
+{string trim a a}			 {ok}
+{string trim}				 {1 {0 11} numArgs {} {}}
+{string trim a a a}			 {1 {0 17} numArgs {} {}}
+{string trim [set]}			 {1 {13 3} numArgs {} {}}
+{string trim a [set]}			 {1 {15 3} numArgs {} {}}
+
+{string trimleft a}			 {ok}
+{string trimleft a a}			 {ok}
+{string trimleft}			 {1 {0 15} numArgs {} {}}
+{string trimleft a a a}			 {1 {0 21} numArgs {} {}}
+{string trimleft [set]}			 {1 {17 3} numArgs {} {}}
+{string trimleft a [set]}		 {1 {19 3} numArgs {} {}}
+
+{string trimright a}			 {ok}
+{string trimright a a}			 {ok}
+{string trimright}			 {1 {0 16} numArgs {} {}}
+{string trimright a a a}		 {1 {0 22} numArgs {} {}}
+{string trimright [set]}		 {1 {18 3} numArgs {} {}}
+{string trimright a [set]}		 {1 {20 3} numArgs {} {}}
+
+{string wordend a 0}			 {ok}
+{string wordend a end}			 {ok}
+{string wordend}			 {1 {0 14} numArgs {} {}}
+{string wordend a}			 {1 {0 16} numArgs {} {}}
+{string wordend a 0 a}			 {1 {0 20} numArgs {} {}}
+{string wordend [set] 0}		 {1 {16 3} numArgs {} {}}
+{string wordend a a}			 {1 {0 18} badIndex {17 1} {}}
+
+{string wordstart a 0}			 {ok}
+{string wordstart a end}		 {ok}
+{string wordstart}			 {1 {0 16} numArgs {} {}}
+{string wordstart a}			 {1 {0 18} numArgs {} {}}
+{string wordstart a 0 a}		 {1 {0 22} numArgs {} {}}
+{string wordstart [set] 0}		 {1 {18 3} numArgs {} {}}
+{string wordstart a a}			 {1 {0 20} badIndex {19 1} {}}
+
+
+{subst a}				 {ok}
+{subst -nobackslashes a}		 {ok}
+{subst -nocommands a}			 {ok}
+{subst -novariables a}			 {ok}
+{subst -nob -noc -nov a}		 {ok}
+{subst}					 {1 {0 5} numArgs {} {}}
+{subst a a}				 {1 {0 9} numArgs {} {}}
+{subst -no a}				 {1 {0 11} badSwitch {6 3} -no}
+{subst -a a}				 {1 {0 10} badSwitch {6 2} -a}
+{subst [set]}				 {1 {7 3} numArgs {} {}}
+{subst -nov [set]}			 {1 {12 3} numArgs {} {}}
+
+
+}
+
+set checkCoreTcl7.5 {
+{binary}				 {ok}
+{fcopy}					 {ok}
+{namespace}				 {ok}
+{registry}				 {ok}
+{resource}				 {ok}
+{variable}				 {ok}
+
+{file copy}				 {1 {0 9} badOption {5 4} {{atime attributes dirname executable exists extension isdirectory isfile join lstat mtime nativename owned pathtype readable readlink rootname size split stat tail type volume writable} copy}}
+{file delete}				 {1 {0 11} badOption {5 6} {{atime attributes dirname executable exists extension isdirectory isfile join lstat mtime nativename owned pathtype readable readlink rootname size split stat tail type volume writable} delete}}
+{file mkdir}				 {1 {0 10} badOption {5 5} {{atime attributes dirname executable exists extension isdirectory isfile join lstat mtime nativename owned pathtype readable readlink rootname size split stat tail type volume writable} mkdir}}
+{file rename}				 {1 {0 11} badOption {5 6} {{atime attributes dirname executable exists extension isdirectory isfile join lstat mtime nativename owned pathtype readable readlink rootname size split stat tail type volume writable} rename}}
+
+
+{interp expose}				 {1 {0 13} badOption {7 6} {{alias aliases create delete eval exists issafe share slaves target transfer} expose}}
+{interp hide}				 {1 {0 11} badOption {7 4} {{alias aliases create delete eval exists issafe share slaves target transfer} hide}}
+{interp hidden}				 {1 {0 13} badOption {7 6} {{alias aliases create delete eval exists issafe share slaves target transfer} hidden}}
+{interp invokehidden}			 {1 {0 19} badOption {7 12} {{alias aliases create delete eval exists issafe share slaves target transfer} invokehidden}}
+{interp marktrusted}			 {1 {0 18} badOption {7 11} {{alias aliases create delete eval exists issafe share slaves target transfer} marktrusted}}
+
+
+{after $a}				 {ok}
+{after $a a}				 {ok}
+{after $a a a}				 {ok}
+{after}					 {1 {0 5} numArgs {} {}}
+{after foo}				 {1 {0 9} badInt {6 3} {}}
+{after [set]}				 {1 {7 3} numArgs {} {}}
+
+{after 0}				 {ok}
+{after 0 a}				 {ok}
+{after $ms}				 {ok}
+{after $ms a}				 {ok}
+{after a}				 {1 {0 7} badInt {6 1} {}}
+
+{after cancel a}			 {ok}
+{after cancel a b c}			 {ok}
+{after can a}				 {ok}
+{after cancel}				 {1 {0 12} numArgs {} {}}
+{after cancel [set]}			 {1 {14 3} numArgs {} {}}
+
+{after idle}				 {ok}
+{after idle a}				 {ok}
+{after idle a b c}			 {ok}
+{after idle [set]}			 {1 {12 3} numArgs {} {}}
+{after idle {testScanCmd}}		 {1 {12 11} procNumArgs {} testScanCmd}
+{after idle {testScanCmd} a}		 {ok}
+
+{after info}				 {ok}
+{after info a}				 {ok}
+{after info [set]}			 {1 {12 3} numArgs {} {}}
+
+
+{bgerror a}				 {ok}
+{bgerror}				 {1 {0 7} numArgs {} {}}
+{bgerror a a}				 {1 {0 11} numArgs {} {}}
+{bgerror [set]}				 {1 {9 3} numArgs {} {}}
+
+
+{clock $a}				 {ok}
+{clock $a a}				 {ok}
+{clock $a a a a}			 {ok}
+{clock $a a a a a a}			 {ok}
+{clock $a a a a a a}			 {ok}
+{clock}					 {1 {0 5} numArgs {} {}}
+{clock $a a a a a a a a a}		 {1 {0 24} numArgs {} {}}
+{clock foo}				 {1 {0 9} badOption {6 3} {{clicks format scan seconds} foo}}
+{clock [set] a}				 {1 {7 3} numArgs {} {}}
+
+{clock clicks} 				 {ok}
+{clock clicks a}			 {1 {0 14} numArgs {} {}}
+
+{clock format 1}			 {ok}
+{clock format 1 -format a}		 {ok}
+{clock format 1 -for a}			 {ok}
+{clock format 1 -gmt 1}			 {ok}
+{clock format 1 -gmt false}		 {ok}
+{clock format 1 -g 1}			 {ok}
+{clock format 1 -f a -g 0}		 {ok}
+{clock format}				 {1 {0 12} numArgs {} {}}
+{clock format 1 a}			 {1 {0 16} numArgs {} {}}
+{clock format 1 -f a -g 0 -f a}		 {1 {0 29} numArgs {} {}}
+{clock format 1 -f}			 {1 {0 17} noSwitchArg {15 2} -f}
+{clock format 1 -g}			 {1 {0 17} noSwitchArg {15 2} -g}
+{clock format 1 -f a -g}		 {1 {0 22} noSwitchArg {20 2} -g}
+{clock format 1 -g 1 -f}		 {1 {0 22} noSwitchArg {20 2} -f}
+{clock format 1 -a a}			 {1 {0 19} badSwitch {15 2} -a 1 {0 19} numArgs {} {}}
+{clock format a}			 {1 {0 14} badInt {13 1} {}}
+{clock format 1 -g a}			 {1 {0 19} badBoolean {18 1} {}}
+{clock format 1 -f [set]}		 {1 {19 3} numArgs {} {}}
+{clock format 1111 -format %y}		 {1 {0 28} coreTcl::warnY2K {26 2} {}}
+
+{clock scan a}				 {ok}
+{clock scan a -base 0}			 {ok}
+{clock scan a -bas 0}			 {ok}
+{clock scan a -gmt 1}			 {ok}
+{clock scan a -gmt false}		 {ok}
+{clock scan a -b 0 -g 0}		 {ok}
+{clock scan}				 {1 {0 10} numArgs {} {}}
+{clock scan a a}			 {1 {0 14} numArgs {} {}}
+{clock scan a -a a}			 {1 {0 17} badSwitch {13 2} -a 1 {0 17} numArgs {} {}}
+{clock scan a -b}			 {1 {0 15} noSwitchArg {13 2} -b}
+{clock scan a -g}			 {1 {0 15} noSwitchArg {13 2} -g}
+{clock scan [set]}			 {1 {12 3} numArgs {} {}}
+{clock scan a -g a}			 {1 {0 17} badBoolean {16 1} {}}
+{clock scan a -b a}			 {1 {0 17} badInt {16 1} {}}
+
+{clock seconds}				 {ok}
+{clock seconds a}			 {1 {0 15} numArgs {} {}}
+
+
+{fblocked a}				 {ok}
+{fblocked $s}				 {ok}
+{fblocked}				 {1 {0 8} numArgs {} {}}
+{fblocked a a}				 {1 {0 12} numArgs {} {}}
+{fblocked file0}			 {1 {0 14} nonPortChannel {9 5} stdin}
+
+
+{fconfigure a}				 {ok}
+{fconfigure a -blocking}		 {ok}
+{fconfigure a -blocking 1}		 {ok}
+{fconfigure a -buffering}		 {ok}
+{fconfigure a -buffering full}		 {ok}
+{fconfigure a -buffering line}		 {ok}
+{fconfigure a -buffering none}		 {ok}
+{fconfigure a -buffersize}		 {ok}
+{fconfigure a -buffersize 1}		 {ok}
+{fconfigure a -eofchar}			 {ok}
+{fconfigure a -eofchar a}		 {ok}
+{fconfigure a -eofchar {a b}}		 {ok}
+{fconfigure a -peername}		 {ok}
+{fconfigure a -sockname}		 {ok}
+{fconfigure a -translation auto}	 {ok}
+{fconfigure a -translation binary}	 {ok}
+{fconfigure a -translation cr}		 {ok}
+{fconfigure a -translation crlf}	 {ok}
+{fconfigure a -translation lf}		 {ok}
+{fconfigure a -translation {cr lf}}	 {ok}
+{fconfigure a -translation "cr lf"}	 {ok}
+{fconfigure a -bl}			 {ok}
+{fconfigure}				 {1 {0 10} numArgs {} {}}
+{fconfigure file0}			 {1 {0 16} nonPortChannel {11 5} stdin}
+{fconfigure a -blocking a}		 {1 {0 24} badBoolean {23 1} {}}
+{fconfigure a -bufferi a}		 {1 {0 23} badKey {22 1} {{full line none} a}}
+{fconfigure a -buffers a}		 {1 {0 23} badInt {22 1} {}}
+{fconfigure a -e [set]}			 {1 {17 3} numArgs {} {}}
+{fconfigure a -p a}			 {1 {0 17} numArgs {} {}}
+{fconfigure a -s a}			 {1 {0 17} numArgs {} {}}
+{fconfigure a -t a}			 {1 {0 17} badKey {16 1} {{auto binary cr crlf lf} a}}
+{fconfigure a -t {cr a}}		 {1 {0 22} badKey {20 1} {{auto binary cr crlf lf} a}}
+
+
+{file $a}				 {ok}
+{file $a a}				 {ok}
+{file $a a a}				 {ok}
+{file $a a a a}				 {ok}
+{file}					 {1 {0 4} numArgs {} {}}
+{file [set]}				 {1 {6 3} numArgs {} {}}
+{file a a}				 {1 {0 8} badOption {5 1} {{atime attributes dirname executable exists extension isdirectory isfile join lstat mtime nativename owned pathtype readable readlink rootname size split stat tail type volume writable} a}}
+{file foo}				 {1 {0 8} badOption {5 3} {{atime attributes dirname executable exists extension isdirectory isfile join lstat mtime nativename owned pathtype readable readlink rootname size split stat tail type volume writable} foo}}
+
+{file copy}				 {1 {0 9} badOption {5 4} {{atime attributes dirname executable exists extension isdirectory isfile join lstat mtime nativename owned pathtype readable readlink rootname size split stat tail type volume writable} copy}}
+{file delete}				 {1 {0 11} badOption {5 6} {{atime attributes dirname executable exists extension isdirectory isfile join lstat mtime nativename owned pathtype readable readlink rootname size split stat tail type volume writable} delete}}
+{file mkdir}				 {1 {0 10} badOption {5 5} {{atime attributes dirname executable exists extension isdirectory isfile join lstat mtime nativename owned pathtype readable readlink rootname size split stat tail type volume writable} mkdir}}
+{file rename}				 {1 {0 11} badOption {5 6} {{atime attributes dirname executable exists extension isdirectory isfile join lstat mtime nativename owned pathtype readable readlink rootname size split stat tail type volume writable} rename}}
+
+{file atime a}				 {ok}
+{file atime}				 {1 {0 10} numArgs {} {}}
+{file atime a a}			 {1 {0 14} numArgs {} {}}
+{file atime $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file attributes a}			 {ok}
+{file attributes}			 {1 {0 15} numArgs {} {}}
+{file attributes a a}			 {1 {0 19} badSwitch {18 1} a}
+{file attributes $a/a}			 {1 {0 20} nonPortFile {16 4} {}}
+{file att a -bad}			 {1 {0 15} badSwitch {11 4} -bad}
+{file att a -group}			 {ok}
+{file att a -owner}			 {ok}
+{file att a -permissions}		 {ok}
+{file att a -archive}			 {ok}
+{file att a -hidden}			 {ok}
+{file att a -longname}			 {ok}
+{file att a -readonly}			 {ok}
+{file att a -shortname}			 {ok}
+{file att a -system}			 {ok}
+{file att a -creator}			 {ok}
+{file att a -type}			 {ok}
+{file att a -group b}			 {1 {0 19} nonPortCmd {11 6} {{}}}
+{file att a -owner b}			 {1 {0 19} nonPortCmd {11 6} {{}}}
+{file att a -permissions b}		 {1 {0 25} nonPortCmd {11 12} {{}}}
+{file att a -archive b}			 {1 {0 21} nonPortCmd {11 8} {{}}}
+{file att a -hidden b}			 {1 {0 20} nonPortCmd {11 7} {{}}}
+{file att a -longname b}		 {1 {0 22} nonPortCmd {11 9} {{}}}
+{file att a -readonly b}		 {1 {0 22} nonPortCmd {11 9} {{}}}
+{file att a -shortname b}		 {1 {0 23} nonPortCmd {11 10} {{}}}
+{file att a -system b}			 {1 {0 20} nonPortCmd {11 7} {{}}}
+{file att a -creator b}			 {1 {0 21} nonPortCmd {11 8} {{}}}
+{file att a -type b}		 	 {1 {0 18} nonPortCmd {11 5} {{}}}
+{file att a -type b -creator}	 	 {1 {0 27} nonPortCmd {11 5} {{}} 1 {0 27} noSwitchArg {19 8} -creator}
+{file att a -type b -creator b}	 	 {1 {0 29} nonPortCmd {11 5} {{}} 1 {0 29} nonPortCmd {19 8} {{}}}
+
+{file dirname a}			 {ok}
+{file dirname}				 {1 {0 12} numArgs {} {}}
+{file dirname a a}			 {1 {0 16} numArgs {} {}}
+{file dirname $a/a}			 {1 {0 17} nonPortFile {13 4} {}}
+
+{file executable a}			 {ok}
+{file executable}			 {1 {0 15} numArgs {} {}}
+{file executable a a}			 {1 {0 19} numArgs {} {}}
+{file executable $a/a}			 {1 {0 20} nonPortFile {16 4} {}}
+
+{file exists a}				 {ok}
+{file exists}				 {1 {0 11} numArgs {} {}}
+{file exists a a}			 {1 {0 15} numArgs {} {}}
+{file exists $a/a}			 {1 {0 16} nonPortFile {12 4} {}}
+
+{file extension a}			 {ok}
+{file extension}			 {1 {0 14} numArgs {} {}}
+{file extension a a}			 {1 {0 18} numArgs {} {}}
+{file extension $a/a}			 {1 {0 19} nonPortFile {15 4} {}}
+
+{file isdirectory a}			 {ok}
+{file isdirectory}			 {1 {0 16} numArgs {} {}}
+{file isdirectory a a}			 {1 {0 20} numArgs {} {}}
+{file isdirectory $a/a}			 {1 {0 21} nonPortFile {17 4} {}}
+
+{file isfile a}				 {ok}
+{file isfile}				 {1 {0 11} numArgs {} {}}
+{file isfile a a}			 {1 {0 15} numArgs {} {}}
+{file isfile $a/a}			 {1 {0 16} nonPortFile {12 4} {}}
+
+{file join a}				 {ok}
+{file join a a}				 {ok}
+{file join}				 {1 {0 9} numArgs {} {}}
+{file join $a/a}			 {1 {0 14} nonPortFile {10 4} {}}
+{file join a $a/a}			 {1 {0 16} nonPortFile {12 4} {}}
+	
+{file lstat a a}			 {ok}
+{file lstat}				 {1 {0 10} numArgs {} {}}
+{file lstat a}				 {1 {0 12} numArgs {} {}}
+{file lstat a a a}			 {1 {0 16} numArgs {} {}}
+{file lstat $a/a a}			 {1 {0 17} nonPortFile {11 4} {}}
+{file lstat a $A}			 {1 {0 15} warnVarRef {13 2} {}}
+
+{file nativename a}			 {ok}
+{file nativename}			 {1 {0 15} numArgs {} {}}
+{file nativename a a}			 {1 {0 19} numArgs {} {}}
+{file nativename $a/a}			 {1 {0 20} nonPortFile {16 4} {}}
+
+{file mtime a}				 {ok}
+{file mtime}				 {1 {0 10} numArgs {} {}}
+{file mtime a a}			 {1 {0 14} numArgs {} {}}
+{file mtime $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file owned a}				 {ok}
+{file owned}				 {1 {0 10} numArgs {} {}}
+{file owned a a}			 {1 {0 14} numArgs {} {}}
+{file owned $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file pathtype a}			 {ok}
+{file pathtype}				 {1 {0 13} numArgs {} {}}
+{file pathtype a a}			 {1 {0 17} numArgs {} {}}
+{file pathtype $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+{file readable a}			 {ok}
+{file readable}				 {1 {0 13} numArgs {} {}}
+{file readable a a}			 {1 {0 17} numArgs {} {}}
+{file readable $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+{file readlink a}			 {ok}
+{file readlink}				 {1 {0 13} numArgs {} {}}
+{file readlink a a}			 {1 {0 17} numArgs {} {}}
+{file readlink $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+{file rootname a}			 {ok}
+{file rootname}				 {1 {0 13} numArgs {} {}}
+{file rootname a a}			 {1 {0 17} numArgs {} {}}
+{file rootname $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+{file size a}				 {ok}
+{file size}				 {1 {0 9} numArgs {} {}}
+{file size a a}				 {1 {0 13} numArgs {} {}}
+{file size $a/a}			 {1 {0 14} nonPortFile {10 4} {}}
+
+{file split a}				 {ok}
+{file split}				 {1 {0 10} numArgs {} {}}
+{file split a a}			 {1 {0 14} numArgs {} {}}
+{file split $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file stat a a}				 {ok}
+{file stat}				 {1 {0 9} numArgs {} {}}
+{file stat a}				 {1 {0 11} numArgs {} {}}
+{file stat a a a}			 {1 {0 15} numArgs {} {}}
+{file stat $a/a a}			 {1 {0 16} nonPortFile {10 4} {}}
+{file stat a $A}			 {1 {0 14} warnVarRef {12 2} {}}
+
+{file tail a}				 {ok}
+{file tail}				 {1 {0 9} numArgs {} {}}
+{file tail a a}				 {1 {0 13} numArgs {} {}}
+{file tail $a/a}			 {1 {0 14} nonPortFile {10 4} {}}
+
+{file type a}				 {ok}
+{file type}				 {1 {0 9} numArgs {} {}}
+{file type a a}				 {1 {0 13} numArgs {} {}}
+{file type $a/a}			 {1 {0 14} nonPortFile {10 4} {}}
+
+{file volume}				 {ok}
+{file volume a}				 {1 {0 13} numArgs {} {}}
+
+{file writable a}			 {ok}
+{file writable}				 {1 {0 13} numArgs {} {}}
+{file writable a a}			 {1 {0 17} numArgs {} {}}
+{file writable $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+
+{fileevent a readable}			 {ok}
+{fileevent a readable a}		 {ok}
+{fileevent a writable}			 {ok}
+{fileevent a writable a}		 {ok}
+{fileevent a read}			 {ok}
+{fileevent}				 {1 {0 9} numArgs {} {}}
+{fileevent a}				 {1 {0 11} numArgs {} {}}
+{fileevent a a}				 {1 {0 13} badKey {12 1} {{readable writable} a}}
+{fileevent a readable {set}}		 {1 {22 3} numArgs {} {}}
+{fileevent file0}			 {1 {0 15} numArgs {} {}}
+
+
+{info $a}				 {ok}
+{info $a a}				 {ok}
+{info $a a a}				 {ok}
+{info $a a a a}				 {ok}
+{info $a a a a a}			 {1 {0 15} numArgs {} {}}
+{info}					 {1 {0 4} numArgs {} {}}
+{info [set]}				 {1 {6 3} numArgs {} {}}
+{info foo}				 {1 {0 8} badOption {5 3} {{args body cmdcount commands complete default exists globals hostname level library loaded locals nameofexecutable patchlevel procs script sharedlibextension tclversion vars} foo}}
+
+{info args a}				 {ok}
+{info args}				 {1 {0 9} numArgs {} {}}
+{info args a a}				 {1 {0 13} numArgs {} {}}
+{info args [set]}			 {1 {11 3} numArgs {} {}}
+
+{info body a}				 {ok}
+{info body}				 {1 {0 9} numArgs {} {}}
+{info body a a}				 {1 {0 13} numArgs {} {}}
+{info body [set]}			 {1 {11 3} numArgs {} {}}
+
+{info cmdcount}				 {ok}
+{info cmdcount a}			 {1 {0 15} numArgs {} {}}
+
+{info commands}				 {ok}
+{info commands a}			 {ok}
+{info commands a a}			 {1 {0 17} numArgs {} {}}
+{info commands a[pwd]*}			 {1 {0 21} warnPattern {14 7} {}}
+
+{info complete a}			 {ok}
+{info complete}				 {1 {0 13} numArgs {} {}}
+{info complete a a}			 {1 {0 17} numArgs {} {}}
+{info complete [set]}			 {1 {15 3} numArgs {} {}}
+
+{info default a a a}			 {ok}
+{info default}				 {1 {0 12} numArgs {} {}}
+{info default a}			 {1 {0 14} numArgs {} {}}
+{info default a a}			 {1 {0 16} numArgs {} {}}
+{info default a a a a}			 {1 {0 20} numArgs {} {}}
+{info default [set] a a}		 {1 {14 3} numArgs {} {}}
+{info default a [set] a}		 {1 {16 3} numArgs {} {}}
+{info default a a $A}			 {1 {0 19} warnVarRef {17 2} {}}
+
+{info exists a}				 {ok}
+{info exists}				 {1 {0 11} numArgs {} {}}
+{info exists a a}			 {1 {0 15} numArgs {} {}}
+{info exists $A}			 {1 {0 14} warnVarRef {12 2} {}}
+
+{info globals}				 {ok}
+{info globals a}			 {ok}
+{info globals a a}			 {1 {0 16} numArgs {} {}}
+{info globals a[pwd]*}			 {1 {0 20} warnPattern {13 7} {}}
+
+{info hostname}				 {ok}
+{info hostname a}			 {1 {0 15} numArgs {} {}}
+
+{info level}				 {ok}
+{info level 0}				 {ok}
+{info level 0 a}			 {1 {0 14} numArgs {} {}}
+{info level a}				 {1 {0 12} badInt {11 1} {}}
+
+{info library}				 {ok}
+{info library a}			 {1 {0 14} numArgs {} {}}
+
+{info loaded}				 {ok}
+{info loaded a}				 {ok}
+{info loaded a a}			 {1 {0 15} numArgs {} {}}
+{info loaded {}a}			 {1 {0 15} parse {14 1} {{extra characters after close-brace}}}
+
+{info locals}				 {ok}
+{info locals a}				 {ok}
+{info locals a a}			 {1 {0 15} numArgs {} {}}
+{info locals a[pwd]*}			 {1 {0 19} warnPattern {12 7} {}}
+
+{info nameofexecutable}			 {ok}
+{info nameofexecutable a}		 {1 {0 23} numArgs {} {}}
+
+{info patchlevel}			 {ok}
+{info patchlevel a}			 {1 {0 17} numArgs {} {}}
+
+{info procs}				 {ok}
+{info procs a}				 {ok}
+{info procs a a}			 {1 {0 14} numArgs {} {}}
+{info procs a[pwd]*}			 {1 {0 18} warnPattern {11 7} {}}
+
+{info script}				 {ok}
+{info script a}				 {1 {0 13} numArgs {} {}}
+
+{info sharedlibextension}		 {ok}
+{info sharedlibextension a}		 {1 {0 25} numArgs {} {}}
+
+{info tclversion}			 {ok}
+{info tclversion a}			 {1 {0 17} numArgs {} {}}
+
+{info vars}				 {ok}
+{info vars a}				 {ok}
+{info vars a a}				 {1 {0 13} numArgs {} {}}
+{info vars a[pwd]*}			 {1 {0 17} warnPattern {10 7} {}}
+
+
+{interp $a}			 	 {ok}
+{interp $a a}				 {ok}
+{interp $a a a a a a}			 {ok}
+{interp}				 {1 {0 6} numArgs {} {}}
+{interp [set]}				 {1 {8 3} numArgs {} {}}
+{interp foo}				 {1 {0 10} badOption {7 3} {{alias aliases create delete eval exists issafe share slaves target transfer} foo}}
+
+{interp alias a a}			 {ok}
+{interp alias a a {}}			 {ok}
+{interp alias a a a a}			 {ok}
+{interp alias a a a a a}		 {ok}
+{interp alias}				 {1 {0 12} numArgs {} {}}
+{interp alias a}			 {1 {0 14} numArgs {} {}}
+{interp alias {{}a} a}			 {1 {0 20} badList {14 1} {{list element in braces followed by "a" instead of space}}}
+{interp alias a [set]}			 {1 {16 3} numArgs {} {}}
+{interp alias {{}a} a {}}		 {1 {0 23} badList {14 1} {{list element in braces followed by "a" instead of space}}}
+{interp alias a [set] {}}		 {1 {16 3} numArgs {} {}}
+{interp alias a a a}			 {1 {0 18} badKey {17 1} {{{}} a}}
+{interp alias {{}a} a a a}		 {1 {0 24} badList {14 1} {{list element in braces followed by "a" instead of space}}}
+{interp alias a [set] a a}		 {1 {16 3} numArgs {} {}}
+{interp alias a a {{}a} a}		 {1 {0 24} badList {18 1} {{list element in braces followed by "a" instead of space}}}
+{interp alias a a a [set]}		 {1 {20 3} numArgs {} {}}
+{interp alias a a a a [set]}		 {1 {22 3} numArgs {} {}}
+
+{interp aliases}			 {ok}
+{interp aliases a}			 {ok}
+{interp aliases a a}			 {1 {0 18} numArgs {} {}}
+{interp aliases {{}a}}			 {1 {0 20} badList {16 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp create}				 {ok}
+{interp create a}			 {ok}
+{interp create -safe}			 {ok}
+{interp create -s}			 {ok}
+{interp create --}			 {ok}
+{interp create -safe --}		 {ok}
+{interp create -safe -- a}		 {ok}
+{interp create a a}			 {1 {0 17} numArgs {} {}}
+{interp create a a a}			 {1 {0 19} numArgs {} {}}
+{interp create a a a a}			 {1 {0 21} numArgs {} {}}
+{interp create -x}			 {1 {0 16} badSwitch {14 2} -x}
+{interp create -}			 {1 {0 15} badSwitch {14 1} -}
+{interp create {{}a}}			 {1 {0 19} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp delete}				 {ok}
+{interp delete a}			 {ok}
+{interp delete a a}			 {ok}
+{interp delete {{}a}}			 {1 {0 19} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp eval a a}			 {ok}
+{interp eval a a a}			 {ok}
+{interp eval a {a a}}			 {ok}
+{interp eval}				 {1 {0 11} numArgs {} {}}
+{interp eval a}				 {1 {0 13} numArgs {} {}}
+{interp eval {{}a} a}			 {1 {0 19} badList {13 1} {{list element in braces followed by "a" instead of space}}}
+{interp eval a {[set]}}			 {1 {16 3} numArgs {} {}}
+{interp eval a a [set]}			 {1 {17 3} numArgs {} {}}
+
+{interp exists a}			 {ok}
+{interp exists}				 {1 {0 13} numArgs {} {}}
+{interp exists a a}			 {1 {0 17} numArgs {} {}}
+{interp exists {{}a}}			 {1 {0 19} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp issafe}				 {ok}
+{interp issafe a}			 {ok}
+{interp issafe a a}			 {1 {0 17} numArgs {} {}}
+{interp issafe {{}a}}			 {1 {0 19} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp share a a a}			 {ok}
+{interp share}				 {1 {0 12} numArgs {} {}}
+{interp share a}			 {1 {0 14} numArgs {} {}}
+{interp share a a}			 {1 {0 16} numArgs {} {}}
+{interp share a a a a}			 {1 {0 20} numArgs {} {}}
+{interp share {{}a} a a}		 {1 {0 22} badList {14 1} {{list element in braces followed by "a" instead of space}}}
+{interp share a file0 a}		 {1 {0 22} nonPortChannel {15 5} stdin}
+{interp share a a {{}a}}		 {1 {0 22} badList {18 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp slaves}				 {ok}
+{interp slaves a}			 {ok}
+{interp slaves a a}			 {1 {0 17} numArgs {} {}}
+{interp slaves {{}a}}			 {1 {0 19} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp target a a}			 {ok}
+{interp target}				 {1 {0 13} numArgs {} {}}
+{interp target a}			 {1 {0 15} numArgs {} {}}
+{interp target a a a}			 {1 {0 19} numArgs {} {}}
+{interp target {{}a} a}			 {1 {0 21} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+{interp target a [set]}			 {1 {17 3} numArgs {} {}}
+
+{interp transfer a a a}			 {ok}
+{interp transfer}			 {1 {0 15} numArgs {} {}}
+{interp transfer a}			 {1 {0 17} numArgs {} {}}
+{interp transfer a a}			 {1 {0 19} numArgs {} {}}
+{interp transfer a a a a}		 {1 {0 23} numArgs {} {}}
+{interp transfer {{}a} a a}		 {1 {0 25} badList {17 1} {{list element in braces followed by "a" instead of space}}}
+{interp transfer a file0 a}		 {1 {0 25} nonPortChannel {18 5} stdin}
+{interp transfer a a {{}a}}		 {1 {0 25} badList {21 1} {{list element in braces followed by "a" instead of space}}}
+
+
+{load a}				 {ok}
+{load a a}				 {ok}
+{load a a a}				 {ok}
+{load}					 {1 {0 4} numArgs {} {}}
+{load a a a a}				 {1 {0 12} numArgs {} {}}
+{load $a/a a a}				 {1 {0 13} nonPortFile {5 4} {}}
+{load a [set] a}			 {1 {8 3} numArgs {} {}}
+{load a a {{}a}}			 {1 {0 14} badList {10 1} {{list element in braces followed by "a" instead of space}}}
+
+
+{package $a}				 {ok}
+{package $a a}				 {ok}
+{package $a a a}			 {ok}
+{package $a a a a}			 {ok}
+{package}				 {1 {0 7} numArgs {} {}}
+{package $a a a a a}			 {1 {0 18} numArgs {} {}}
+{package [set]}				 {1 {9 3} numArgs {} {}}
+{package foo}				 {1 {0 11} badOption {8 3} {{forget ifneeded names provide require unknown vcompare versions vsatisfies} foo}}
+
+{package forget a}			 {ok}
+{package forget}			 {1 {0 14} numArgs {} {}}
+{package forget a a}			 {1 {0 18} numArgs {} {}}
+{package forget [set]}			 {1 {16 3} numArgs {} {}}
+
+{package ifneeded a 1.1}		 {ok}
+{package ifneeded a 1.1 a}		 {ok}
+{package ifneeded a 1.1 {}}		 {ok}
+{package ifneeded}			 {1 {0 16} numArgs {} {}}
+{package ifneeded a}			 {1 {0 18} numArgs {} {}}
+{package ifneeded a 1.1 a a}		 {1 {0 26} numArgs {} {}}
+{package ifneeded [set] a}		 {1 {18 3} numArgs {} {} 1 {0 24} badVersion {23 1} {}}
+{package ifneeded a a}			 {1 {0 20} badVersion {19 1} {}}
+{package ifneeded a 1.1 {set}}		 {1 {24 3} numArgs {} {}}
+
+{package names}				 {ok}
+{package names a}			 {1 {0 15} numArgs {} {}}
+
+{package provide a}			 {ok}
+{package provide a 1.1}			 {ok}
+{package provide}			 {1 {0 15} numArgs {} {}}
+{package provide a 1.1 a}		 {1 {0 23} numArgs {} {}}
+{package provide [set]}			 {1 {17 3} numArgs {} {}}
+{package provide a a}			 {1 {0 19} badVersion {18 1} {}}
+
+{package require a}			 {ok}
+{package require a 1.1}			 {ok}
+{package require -exact a 1.1}		 {ok}
+{package require}			 {1 {0 15} numArgs {} {}}
+{package require a 1.1 a}		 {1 {0 23} numArgs {} {}}
+{package require -exact a 1.1 a}	 {1 {0 30} numArgs {} {}}
+{package require -e a 1.1}		 {1 {0 24} badSwitch {16 2} -e}
+{package require -a a 1.1}		 {1 {0 24} badSwitch {16 2} -a}
+{package require [set]}			 {1 {17 3} numArgs {} {}}
+{package require a a}			 {1 {0 19} badVersion {18 1} {}}
+
+{package unknown}			 {ok}
+{package unknown a}			 {ok}
+{package unknown a a}			 {1 {0 19} numArgs {} {}}
+{package unknown [set]}			 {1 {17 3} numArgs {} {}}
+
+{package vcompare 1.1 1.1}		 {ok}
+{package vcompare}			 {1 {0 16} numArgs {} {}}
+{package vcompare 1.1}			 {1 {0 20} numArgs {} {}}
+{package vcompare 1.1 1.1 a}		 {1 {0 26} numArgs {} {}}
+{package vcompare a 1.1}		 {1 {0 22} badVersion {17 1} {}}
+{package vcompare 1.1 a}		 {1 {0 22} badVersion {21 1} {}}
+
+{package versions a}			 {ok}
+{package versions}			 {1 {0 16} numArgs {} {}}
+{package versions [set]}		 {1 {18 3} numArgs {} {}}
+
+{package vsatisfies 1.1 1.1}		 {ok}
+{package vsatisfies}			 {1 {0 18} numArgs {} {}}
+{package vsatisfies 1.1}		 {1 {0 22} numArgs {} {}}
+{package vsatisfies 1.1 1.1 1.1}	 {1 {0 30} numArgs {} {}}
+{package vsatisfies a 1.1}		 {1 {0 24} badVersion {19 1} {}}
+{package vsatisfies 1.1 a}		 {1 {0 24} badVersion {23 1} {}}
+
+
+{pkg_mkIndex a a}			 {ok}
+{pkg_mkIndex a a a}			 {ok}
+{pkg_mkIndex a a a a}			 {ok}
+{pkg_mkIndex}				 {1 {0 11} numArgs {} {}}
+{pkg_mkIndex a}				 {1 {0 13} numArgs {} {}}
+{pkg_mkIndex $a/a a}			 {1 {0 18} nonPortFile {12 4} {}}
+{pkg_mkIndex a a[pwd]*}			 {1 {0 21} warnPattern {14 7} {}}
+
+
+{socket a 0}				 {ok}
+{socket -myaddr a a 0}			 {ok}
+{socket -myport 0 a 0}			 {ok}
+{socket -async a 0}			 {ok}
+{socket -server a 0}			 {ok}
+{socket -server a -myaddr a 0}		 {ok}
+{socket}				 {1 {0 6} numArgs {} {}}
+{socket a}				 {1 {0 8} numArgs {} {}}
+{socket a 0 a}				 {1 {0 12} numArgs {} {}}
+{socket -myaddr}			 {1 {0 14} numArgs {} {}}
+{socket -myaddr a}			 {1 {0 16} numArgs {} {}}
+{socket -myaddr a a 0 a}		 {1 {0 22} numArgs {} {}}
+{socket -myport}			 {1 {0 14} numArgs {} {}}
+{socket -myport 0}			 {1 {0 16} numArgs {} {}}
+{socket -myport 0 a 0 a}		 {1 {0 22} numArgs {} {}}
+{socket -async a a 0 a}			 {1 {0 21} numArgs {} {}}
+{socket -async a -myport 0 a 0 a}	 {1 {0 31} numArgs {} {}}
+{socket -server}			 {1 {0 14} numArgs {} {}}
+{socket -server a 0 a}			 {1 {0 20} numArgs {} {}}
+{socket -server a -myaddr}		 {1 {0 24} noSwitchArg {} -myaddr}
+{socket -server a -myaddr a}		 {1 {0 26} numArgs {} {}}
+{socket -server a -myaddr a 0 a}	 {1 {0 30} numArgs {} {}}
+{socket -server a -myport 0 0}		 {1 {0 28} coreTcl::serverAndPort {17 7} {}}
+{socket -async -server a 0}		 {1 {0 25} coreTcl::socketAsync {14 7} {}}
+{socket -server a -async 0}		 {1 {0 25} coreTcl::socketServer {17 6} {}}
+{socket -server a}			 {1 {0 16} numArgs {} {}}
+{socket -s a 0}				 {1 {0 13} badOption {7 2} {{-async, -myaddr, -myport, or -server} -s}}
+{socket -aa a 0}			 {1 {0 14} badOption {7 3} {{-async, -myaddr, -myport, or -server} -aa}}
+{socket [set] 0}			 {1 {8 3} numArgs {} {}}
+{socket a a}				 {1 {0 10} badInt {9 1} {}}
+{socket -myaddr [set] a 0}		 {1 {16 3} numArgs {} {}}
+{socket -myport [set] a 0}		 {1 {16 3} numArgs {} {}}
+{socket -myaddr a [set] 0}		 {1 {18 3} numArgs {} {}}
+{socket -myport 0 [set] 0}		 {1 {18 3} numArgs {} {}}
+{socket -myport a a 0}			 {1 {0 20} badInt {15 1} {}}
+{socket -async [set] 0}			 {1 {15 3} numArgs {} {}}
+{socket -server a a}			 {1 {0 18} badInt {17 1} {}}
+{socket -server a -myaddr [set] 0}	 {1 {26 3} numArgs {} {}}
+{socket -server a -myaddr a a}		 {1 {0 28} badInt {27 1} {}}
+
+
+{update}				 {ok}
+{update idletasks}			 {ok}
+{update idle}				 {ok}
+{update a}				 {1 {0 8} badKey {7 1} {idletasks a}}
+{update idletasks a}			 {1 {0 18} numArgs {} {}}
+{update idle a}				 {1 {0 13} numArgs {} {}}
+
+
+{vwait}					 {ok}
+{vwait a}				 {ok}
+{vwait a a}				 {1 {0 9} numArgs {} {}}
+{vwait $A}				 {1 {0 8} warnVarRef {6 2} {}}
+
+
+}
+
+set checkCoreTcl7.6 {
+{binary}				 {ok}
+{fcopy}					 {ok}
+{namespace}				 {ok}
+{registry}				 {ok}
+{resource}				 {ok}
+{variable}				 {ok}
+
+
+{interp expose}				 {1 {0 13} badOption {7 6} {{alias aliases create delete eval exists issafe share slaves target transfer} expose}}
+{interp hide}				 {1 {0 11} badOption {7 4} {{alias aliases create delete eval exists issafe share slaves target transfer} hide}}
+{interp hidden}				 {1 {0 13} badOption {7 6} {{alias aliases create delete eval exists issafe share slaves target transfer} hidden}}
+{interp invokehidden}			 {1 {0 19} badOption {7 12} {{alias aliases create delete eval exists issafe share slaves target transfer} invokehidden}}
+{interp marktrusted}			 {1 {0 18} badOption {7 11} {{alias aliases create delete eval exists issafe share slaves target transfer} marktrusted}}
+
+
+{file $a}				 {ok}
+{file $a a}				 {ok}
+{file $a a a}				 {ok}
+{file $a a a a}				 {ok}
+{file}					 {1 {0 4} numArgs {} {}}
+{file [set]}				 {1 {6 3} numArgs {} {}}
+{file a a}				 {1 {0 8} badOption {5 1} {{atime attributes copy delete dirname executable exists extension isdirectory isfile join lstat mkdir mtime nativename owned pathtype readable readlink rename rootname size split stat tail type volume writable} a}}
+{file foo}				 {1 {0 8} badOption {5 3} {{atime attributes copy delete dirname executable exists extension isdirectory isfile join lstat mkdir mtime nativename owned pathtype readable readlink rename rootname size split stat tail type volume writable} foo}}
+
+{file atime a}				 {ok}
+{file atime}				 {1 {0 10} numArgs {} {}}
+{file atime a a}			 {1 {0 14} numArgs {} {}}
+{file atime $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file attributes a}			 {ok}
+{file attributes}			 {1 {0 15} numArgs {} {}}
+{file attributes a a}			 {1 {0 19} badSwitch {18 1} a}
+{file attributes $a/a}			 {1 {0 20} nonPortFile {16 4} {}}
+{file att a -bad}			 {1 {0 15} badSwitch {11 4} -bad}
+{file att a -group}			 {ok}
+{file att a -owner}			 {ok}
+{file att a -permissions}		 {ok}
+{file att a -archive}			 {ok}
+{file att a -hidden}			 {ok}
+{file att a -longname}			 {ok}
+{file att a -readonly}			 {ok}
+{file att a -shortname}			 {ok}
+{file att a -system}			 {ok}
+{file att a -creator}			 {ok}
+{file att a -type}			 {ok}
+{file att a -group b}			 {1 {0 19} nonPortCmd {11 6} {{}}}
+{file att a -owner b}			 {1 {0 19} nonPortCmd {11 6} {{}}}
+{file att a -permissions b}		 {1 {0 25} nonPortCmd {11 12} {{}}}
+{file att a -archive b}			 {1 {0 21} nonPortCmd {11 8} {{}}}
+{file att a -hidden b}			 {1 {0 20} nonPortCmd {11 7} {{}}}
+{file att a -longname b}		 {1 {0 22} nonPortCmd {11 9} {{}}}
+{file att a -readonly b}		 {1 {0 22} nonPortCmd {11 9} {{}}}
+{file att a -shortname b}		 {1 {0 23} nonPortCmd {11 10} {{}}}
+{file att a -system b}			 {1 {0 20} nonPortCmd {11 7} {{}}}
+{file att a -creator b}			 {1 {0 21} nonPortCmd {11 8} {{}}}
+{file att a -type b}		 	 {1 {0 18} nonPortCmd {11 5} {{}}}
+{file att a -type b -creator}	 	 {1 {0 27} nonPortCmd {11 5} {{}} 1 {0 27} noSwitchArg {19 8} -creator}
+{file att a -type b -creator b}	 	 {1 {0 29} nonPortCmd {11 5} {{}} 1 {0 29} nonPortCmd {19 8} {{}}}
+
+{file copy a b}			  	 {ok}
+{file copy a a a b}		  	 {ok}
+{file copy -force a b}		  	 {ok}
+{file copy -- a b}		  	 {ok}
+{file copy -force -- a b}		 {ok}
+{file copy -force -- a a a b}	  	 {ok}
+{file copy}			  	 {1 {0 9} numArgs {} {}}
+{file copy a}			  	 {1 {0 11} numArgs {} {}}
+{file copy -force a}		  	 {1 {0 18} numArgs {} {}}
+{file copy -- a}		  	 {1 {0 14} numArgs {} {}}
+{file copy -f a b}		  	 {1 {0 16} badSwitch {10 2} -f}
+{file copy -a a b}		  	 {1 {0 16} badSwitch {10 2} -a}
+{file copy $a/a a}		  	 {1 {0 16} nonPortFile {10 4} {}}
+{file copy a $a/a}		  	 {1 {0 16} nonPortFile {12 4} {}}
+
+{file delete a}			  	 {ok}
+{file delete a b}		  	 {ok}
+{file delete a a a b}		  	 {ok}
+{file delete -force a}		  	 {ok}
+{file delete -- a b}		  	 {ok}
+{file delete -force -- a b}		 {ok}
+{file delete -force -- a a a b}	  	 {ok}
+{file delete}			  	 {1 {0 11} numArgs {} {}}
+{file delete -force}		  	 {1 {0 18} numArgs {} {}}
+{file delete --}		  	 {1 {0 14} numArgs {} {}}
+{file delete -f a}		  	 {1 {0 16} badSwitch {12 2} -f}
+{file delete -a a}		  	 {1 {0 16} badSwitch {12 2} -a}
+{file delete $a/a}		  	 {1 {0 16} nonPortFile {12 4} {}}
+
+{file dirname a}			 {ok}
+{file dirname}				 {1 {0 12} numArgs {} {}}
+{file dirname a a}			 {1 {0 16} numArgs {} {}}
+{file dirname $a/a}			 {1 {0 17} nonPortFile {13 4} {}}
+
+{file executable a}			 {ok}
+{file executable}			 {1 {0 15} numArgs {} {}}
+{file executable a a}			 {1 {0 19} numArgs {} {}}
+{file executable $a/a}			 {1 {0 20} nonPortFile {16 4} {}}
+
+{file exists a}				 {ok}
+{file exists}				 {1 {0 11} numArgs {} {}}
+{file exists a a}			 {1 {0 15} numArgs {} {}}
+{file exists $a/a}			 {1 {0 16} nonPortFile {12 4} {}}
+
+{file extension a}			 {ok}
+{file extension}			 {1 {0 14} numArgs {} {}}
+{file extension a a}			 {1 {0 18} numArgs {} {}}
+{file extension $a/a}			 {1 {0 19} nonPortFile {15 4} {}}
+
+{file isdirectory a}			 {ok}
+{file isdirectory}			 {1 {0 16} numArgs {} {}}
+{file isdirectory a a}			 {1 {0 20} numArgs {} {}}
+{file isdirectory $a/a}			 {1 {0 21} nonPortFile {17 4} {}}
+
+{file isfile a}				 {ok}
+{file isfile}				 {1 {0 11} numArgs {} {}}
+{file isfile a a}			 {1 {0 15} numArgs {} {}}
+{file isfile $a/a}			 {1 {0 16} nonPortFile {12 4} {}}
+
+{file join a}				 {ok}
+{file join a a}				 {ok}
+{file join}				 {1 {0 9} numArgs {} {}}
+{file join $a/a}			 {1 {0 14} nonPortFile {10 4} {}}
+{file join a $a/a}			 {1 {0 16} nonPortFile {12 4} {}}
+	
+{file lstat a a}			 {ok}
+{file lstat}				 {1 {0 10} numArgs {} {}}
+{file lstat a}				 {1 {0 12} numArgs {} {}}
+{file lstat a a a}			 {1 {0 16} numArgs {} {}}
+{file lstat $a/a a}			 {1 {0 17} nonPortFile {11 4} {}}
+{file lstat a $A}			 {1 {0 15} warnVarRef {13 2} {}}
+
+{file mkdir a}				 {ok}
+{file mkdir a a}			 {ok}
+{file mkdir}				 {1 {0 10} numArgs {} {}}
+{file mkdir $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file nativename a}			 {ok}
+{file nativename}			 {1 {0 15} numArgs {} {}}
+{file nativename a a}			 {1 {0 19} numArgs {} {}}
+{file nativename $a/a}			 {1 {0 20} nonPortFile {16 4} {}}
+
+{file mtime a}				 {ok}
+{file mtime}				 {1 {0 10} numArgs {} {}}
+{file mtime a a}			 {1 {0 14} numArgs {} {}}
+{file mtime $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file owned a}				 {ok}
+{file owned}				 {1 {0 10} numArgs {} {}}
+{file owned a a}			 {1 {0 14} numArgs {} {}}
+{file owned $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file pathtype a}			 {ok}
+{file pathtype}				 {1 {0 13} numArgs {} {}}
+{file pathtype a a}			 {1 {0 17} numArgs {} {}}
+{file pathtype $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+{file readable a}			 {ok}
+{file readable}				 {1 {0 13} numArgs {} {}}
+{file readable a a}			 {1 {0 17} numArgs {} {}}
+{file readable $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+{file readlink a}			 {ok}
+{file readlink}				 {1 {0 13} numArgs {} {}}
+{file readlink a a}			 {1 {0 17} numArgs {} {}}
+{file readlink $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+{file rename a b}		  	 {ok}
+{file rename a a a b}		  	 {ok}
+{file rename -force a b}	  	 {ok}
+{file rename -- a b}		  	 {ok}
+{file rename -force -- a b}		 {ok}
+{file rename -force -- a a a b}	  	 {ok}
+{file rename}			  	 {1 {0 11} numArgs {} {}}
+{file rename a}			  	 {1 {0 13} numArgs {} {}}
+{file rename -force a}		  	 {1 {0 20} numArgs {} {}}
+{file rename -- a}		  	 {1 {0 16} numArgs {} {}}
+{file rename -f a b}		  	 {1 {0 18} badSwitch {12 2} -f}
+{file rename -a a b}		  	 {1 {0 18} badSwitch {12 2} -a}
+{file rename $a/a}		  	 {1 {0 16} numArgs {} {}}
+
+{file rootname a}			 {ok}
+{file rootname}				 {1 {0 13} numArgs {} {}}
+{file rootname a a}			 {1 {0 17} numArgs {} {}}
+{file rootname $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+
+{file size a}				 {ok}
+{file size}				 {1 {0 9} numArgs {} {}}
+{file size a a}				 {1 {0 13} numArgs {} {}}
+{file size $a/a}			 {1 {0 14} nonPortFile {10 4} {}}
+
+{file split a}				 {ok}
+{file split}				 {1 {0 10} numArgs {} {}}
+{file split a a}			 {1 {0 14} numArgs {} {}}
+{file split $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file stat a a}				 {ok}
+{file stat}				 {1 {0 9} numArgs {} {}}
+{file stat a}				 {1 {0 11} numArgs {} {}}
+{file stat a a a}			 {1 {0 15} numArgs {} {}}
+{file stat $a/a a}			 {1 {0 16} nonPortFile {10 4} {}}
+{file stat a $A}			 {1 {0 14} warnVarRef {12 2} {}}
+
+{file tail a}				 {ok}
+{file tail}				 {1 {0 9} numArgs {} {}}
+{file tail a a}				 {1 {0 13} numArgs {} {}}
+{file tail $a/a}			 {1 {0 14} nonPortFile {10 4} {}}
+
+{file type a}				 {ok}
+{file type}				 {1 {0 9} numArgs {} {}}
+{file type a a}				 {1 {0 13} numArgs {} {}}
+{file type $a/a}			 {1 {0 14} nonPortFile {10 4} {}}
+
+{file volume}				 {ok}
+{file volume a}				 {1 {0 13} numArgs {} {}}
+
+{file writable a}			 {ok}
+{file writable}				 {1 {0 13} numArgs {} {}}
+{file writable a a}			 {1 {0 17} numArgs {} {}}
+{file writable $a/a}			 {1 {0 18} nonPortFile {14 4} {}}
+}
+
+
+set checkCoreTcl8.0 {
+{auto_import a}				 {ok}
+{auto_import}				 {1 {0 11} numArgs {} {}}
+{auto_import a a}			 {1 {0 15} numArgs {} {}}
+{auto_import a[pwd]*}			 {1 {0 19} warnPattern {12 7} {}}
+
+{auto_mkindex_old a}			 {ok}
+{auto_mkindex_old a a}			 {ok}
+{auto_mkindex_old}			 {1 {0 16} numArgs {} {}}
+{auto_mkindex_old $a/a}			 {1 {0 21} nonPortFile {17 4} {}}
+{auto_mkindex_old a a[pwd]*}		 {1 {0 26} warnPattern {19 7} {}}
+{auto_mkindex_old a a a[pwd]*}		 {1 {0 28} warnPattern {21 7} {}}
+
+{auto_qualify a a}			 {ok}
+{auto_qualify a}			 {1 {0 14} numArgs {} {}}
+{auto_qualify a a a}			 {1 {0 18} numArgs {} {}}
+{auto_qualify [set] a}			 {1 {14 3} numArgs {} {}}
+{auto_qualify a [set]}			 {1 {16 3} numArgs {} {}}
+
+{tcl_findLibrary a 1.0 c {set x} e f}	 {ok}
+{tcl_findLibrary a a a a a}		 {1 {0 25} numArgs {} {}}
+{tcl_findLibrary a a a a a a a}		 {1 {0 29} numArgs {} {}}
+{tcl_findLibrary a b c {set x} e f}	 {1 {0 33} badVersion {18 1} {}}
+{tcl_findLibrary a 1.0 c {set} e f}	 {1 {25 3} numArgs {} {}}
+{tcl_findLibrary a 1.0 c {set x} $e f}	 {1 {0 36} warnVarRef {32 2} {}}
+{tcl_findLibrary a 1.0 c {set x} e $f}	 {1 {0 36} warnVarRef {34 2} {}}
+
+{binary $a a}				 {ok}
+{binary}				 {1 {0 6} numArgs {} {}}
+{binary foo a}				 {1 {0 12} badOption {7 3} {{format scan} foo}}
+{binary [set] a}			 {1 {8 3} numArgs {} {}}
+
+{binary format a}			 {ok}
+{binary format a a}			 {ok}
+{binary format a a a}			 {ok}
+{binary format}				 {1 {0 13} numArgs {} {}}
+{binary format [set]}			 {1 {15 3} numArgs {} {}}
+{binary format a [set]}			 {1 {17 3} numArgs {} {}}
+
+{binary scan a a}			 {ok}
+{binary scan a a a}			 {ok}
+{binary scan a a a a}			 {ok}
+{binary scan}				 {1 {0 11} numArgs {} {}}
+{binary scan [set] a a}			 {1 {13 3} numArgs {} {}}
+{binary scan a [set] a}			 {1 {15 3} numArgs {} {}}
+{binary scan a a $A}			 {1 {0 18} warnVarRef {16 2} {}}
+
+
+{fconfigure a}				 {ok}
+{fconfigure a -blocking}		 {ok}
+{fconfigure a -blocking 1}		 {ok}
+{fconfigure a -buffering}		 {ok}
+{fconfigure a -buffering full}		 {ok}
+{fconfigure a -buffering line}		 {ok}
+{fconfigure a -buffering none}		 {ok}
+{fconfigure a -buffersize}		 {ok}
+{fconfigure a -buffersize 1}		 {ok}
+{fconfigure a -eofchar}			 {ok}
+{fconfigure a -eofchar a}		 {ok}
+{fconfigure a -eofchar {a b}}		 {ok}
+{fconfigure a -mode}			 {ok}
+{fconfigure a -mode a}			 {ok}
+{fconfigure a -peername}		 {ok}
+{fconfigure a -sockname}		 {ok}
+{fconfigure a -translation auto}	 {ok}
+{fconfigure a -translation binary}	 {ok}
+{fconfigure a -translation cr}		 {ok}
+{fconfigure a -translation crlf}	 {ok}
+{fconfigure a -translation lf}		 {ok}
+{fconfigure a -translation {cr lf}}	 {ok}
+{fconfigure a -translation "cr lf"}	 {ok}
+{fconfigure a -bl}			 {ok}
+{fconfigure}				 {1 {0 10} numArgs {} {}}
+{fconfigure file0}			 {1 {0 16} nonPortChannel {11 5} stdin}
+{fconfigure a -blocking a}		 {1 {0 24} badBoolean {23 1} {}}
+{fconfigure a -bufferi a}		 {1 {0 23} badKey {22 1} {{full line none} a}}
+{fconfigure a -buffers a}		 {1 {0 23} badInt {22 1} {}}
+{fconfigure a -e [set]}			 {1 {17 3} numArgs {} {}}
+{fconfigure a -p a}			 {1 {0 17} numArgs {} {}}
+{fconfigure a -s a}			 {1 {0 17} numArgs {} {}}
+{fconfigure a -t {cr a}}		 {1 {0 22} badKey {20 1} {{auto binary cr crlf lf} a}}
+{fconfigure a -encoding}		 {1 {0 22} badSwitch {13 9} -encoding}
+
+
+{fcopy a b}				 {ok}
+{fcopy a b -size 1}			 {ok}
+{fcopy a b -command a}			 {ok}
+{fcopy a b -size 1 -command a}		 {ok}
+{fcopy a b -s 1 -c a}			 {ok}
+{fcopy}					 {1 {0 5} numArgs {} {}}
+{fcopy a}				 {1 {0 7} numArgs {} {}}
+{fcopy a b 1}				 {1 {0 11} numArgs {} {}}
+{fcopy file0 a}				 {1 {0 13} nonPortChannel {6 5} stdin}
+{fcopy a file0}				 {1 {0 13} nonPortChannel {8 5} stdin}
+{fcopy a b -a 1}			 {1 {0 14} badSwitch {10 2} -a 1 {0 14} numArgs {} {}}
+{fcopy a b -s 1 -c a a}			 {1 {0 21} numArgs {} {}}
+{fcopy a b -s a}			 {1 {0 14} badInt {13 1} {}}
+{fcopy a b -c {set}}			 {1 {14 3} numArgs {} {}}
+
+
+{history}				 {ok}
+{history $a}				 {ok}
+{history $a a}				 {ok}
+{history $a a a}			 {ok}
+{history $a a a a}			 {1 {0 16} numArgs {} {}}
+{history [set]}				 {1 {9 3} numArgs {} {}}
+{history foo}				 {1 {0 11} badOption {8 3} {{add change clear event info keep nextid redo} foo}}
+
+{history add a}				 {ok}
+{history add a}				 {ok}
+{history add a exec}			 {ok}
+{history add a e}			 {ok}
+{history add}				 {1 {0 11} numArgs {} {}}
+{history add a exec a}			 {1 {0 20} numArgs {} {}}
+{history add a a}			 {1 {0 15} badKey {14 1} {exec a}}
+{history add {set}}			 {1 {13 3} numArgs {} {}}
+
+{history change a}			 {ok}
+{history change a a}			 {ok}
+{history change}			 {1 {0 14} numArgs {} {}}
+{history change a a a}			 {1 {0 20} numArgs {} {}}
+{history change [set]}			 {1 {16 3} numArgs {} {}}
+
+{history clear}			 	 {ok}
+{history clear a}			 {1 {0 15} numArgs {} {}}
+
+{history event}			 	 {ok}
+{history event a}		 	 {ok}
+{history event a a}			 {1 {0 17} numArgs {} {}}
+{history event [set]}		 	 {1 {15 3} numArgs {} {}}
+
+{history info}				 {ok}
+{history info 1}			 {ok}
+{history info a a}			 {1 {0 16} numArgs {} {}}
+{history info a}			 {1 {0 14} badInt {13 1} {}}
+
+{history keep}				 {ok}
+{history keep 1}			 {ok}
+{history keep a a}			 {1 {0 16} numArgs {} {}}
+{history keep a}			 {1 {0 14} badInt {13 1} {}}
+
+{history nextid}			 {ok}
+{history nextid a}			 {1 {0 16} numArgs {} {}}
+
+{history redo}			 	 {ok}
+{history redo a}		 	 {ok}
+{history redo a a}			 {1 {0 16} numArgs {} {}}
+{history redo [set]}			 {1 {14 3} numArgs {} {}}
+
+
+{interp $a}			 	 {ok}
+{interp $a a}				 {ok}
+{interp $a a a a a a}			 {ok}
+{interp}				 {1 {0 6} numArgs {} {}}
+{interp [set]}				 {1 {8 3} numArgs {} {}}
+{interp foo}				 {1 {0 10} badOption {7 3} {{alias aliases create delete eval exists expose hide hidden invokehidden issafe marktrusted share slaves target transfer} foo}}
+
+{interp alias a a}			 {ok}
+{interp alias a a {}}			 {ok}
+{interp alias a a a a}			 {ok}
+{interp alias a a a a a}		 {ok}
+{interp alias}				 {1 {0 12} numArgs {} {}}
+{interp alias a}			 {1 {0 14} numArgs {} {}}
+{interp alias {{}a} a}			 {1 {0 20} badList {14 1} {{list element in braces followed by "a" instead of space}}}
+{interp alias a [set]}			 {1 {16 3} numArgs {} {}}
+{interp alias {{}a} a {}}		 {1 {0 23} badList {14 1} {{list element in braces followed by "a" instead of space}}}
+{interp alias a [set] {}}		 {1 {16 3} numArgs {} {}}
+{interp alias a a a}			 {1 {0 18} badKey {17 1} {{{}} a}}
+{interp alias {{}a} a a a}		 {1 {0 24} badList {14 1} {{list element in braces followed by "a" instead of space}}}
+{interp alias a [set] a a}		 {1 {16 3} numArgs {} {}}
+{interp alias a a {{}a} a}		 {1 {0 24} badList {18 1} {{list element in braces followed by "a" instead of space}}}
+{interp alias a a a [set]}		 {1 {20 3} numArgs {} {}}
+{interp alias a a a a [set]}		 {1 {22 3} numArgs {} {}}
+
+{interp aliases}			 {ok}
+{interp aliases a}			 {ok}
+{interp aliases a a}			 {1 {0 18} numArgs {} {}}
+{interp aliases {{}a}}			 {1 {0 20} badList {16 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp create}				 {ok}
+{interp create a}			 {ok}
+{interp create -safe}			 {ok}
+{interp create -s}			 {ok}
+{interp create --}			 {ok}
+{interp create -safe --}		 {ok}
+{interp create -safe -- a}		 {ok}
+{interp create a a}			 {1 {0 17} numArgs {} {}}
+{interp create a a a}			 {1 {0 19} numArgs {} {}}
+{interp create a a a a}			 {1 {0 21} numArgs {} {}}
+{interp create -x}			 {1 {0 16} badSwitch {14 2} -x}
+{interp create -}			 {1 {0 15} badSwitch {14 1} -}
+{interp create {{}a}}			 {1 {0 19} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp delete}				 {ok}
+{interp delete a}			 {ok}
+{interp delete a a}			 {ok}
+{interp delete {{}a}}			 {1 {0 19} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp eval a a}			 {ok}
+{interp eval a a a}			 {ok}
+{interp eval a {a a}}			 {ok}
+{interp eval}				 {1 {0 11} numArgs {} {}}
+{interp eval a}				 {1 {0 13} numArgs {} {}}
+{interp eval {{}a} a}			 {1 {0 19} badList {13 1} {{list element in braces followed by "a" instead of space}}}
+{interp eval a {[set]}}			 {1 {16 3} numArgs {} {}}
+{interp eval a a [set]}			 {1 {17 3} numArgs {} {}}
+
+{interp exists a}			 {ok}
+{interp exists}				 {1 {0 13} numArgs {} {}}
+{interp exists a a}			 {1 {0 17} numArgs {} {}}
+{interp exists {{}a}}			 {1 {0 19} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp expose a a}			 {ok}
+{interp expose a a a}			 {ok}
+{interp expose}				 {1 {0 13} numArgs {} {}}
+{interp expose a}			 {1 {0 15} numArgs {} {}}
+{interp expose a a a a}			 {1 {0 21} numArgs {} {}}
+{interp expose {{}a} a}			 {1 {0 21} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+{interp expose a [set]}			 {1 {17 3} numArgs {} {}}
+{interp expose a a [set]}		 {1 {19 3} numArgs {} {}}
+
+{interp hide a a}			 {ok}
+{interp hide a a a}			 {ok}
+{interp hide}				 {1 {0 11} numArgs {} {}}
+{interp hide a}				 {1 {0 13} numArgs {} {}}
+{interp hide a a a a}			 {1 {0 19} numArgs {} {}}
+{interp hide {{}a} a}			 {1 {0 19} badList {13 1} {{list element in braces followed by "a" instead of space}}}
+{interp hide a [set]}			 {1 {15 3} numArgs {} {}}
+{interp hide a a [set]}			 {1 {17 3} numArgs {} {}}
+
+{interp hidden a}			 {ok}
+{interp hidden {a a}}			 {ok}
+{interp hidden}				 {ok}
+{interp hidden a a}			 {1 {0 17} numArgs {} {}}
+{interp hidden {{}a}}			 {1 {0 19} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp invokehidden a}			 {ok}
+{interp invokehidden a a}		 {ok}
+{interp invokehidden -global a}		 {ok}
+{interp invokehidden -global a a}	 {ok}
+{interp invokehidden}			 {1 {0 19} numArgs {} {}}
+{interp invokehidden a -g}		 {1 {0 24} badSwitch {22 2} -g}
+{interp invokehidden a -a}		 {1 {0 24} badSwitch {22 2} -a}
+{interp invokehidden -global [set]}	 {1 {29 3} numArgs {} {}}
+{interp invokehidden -global a [set]}	 {1 {31 3} numArgs {} {}}
+{interp invokehidden {}a}		 {1 {0 23} parse {22 1} {{extra characters after close-brace}}}
+
+{interp issafe}				 {ok}
+{interp issafe a}			 {ok}
+{interp issafe a a}			 {1 {0 17} numArgs {} {}}
+{interp issafe {{}a}}			 {1 {0 19} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp marktrusted a}			 {ok}
+{interp marktrusted}			 {1 {0 18} numArgs {} {}}
+{interp marktrusted a a}		 {1 {0 22} numArgs {} {}}
+{interp marktrusted {{}a}}		 {1 {0 24} badList {20 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp share a a a}			 {ok}
+{interp share}				 {1 {0 12} numArgs {} {}}
+{interp share a}			 {1 {0 14} numArgs {} {}}
+{interp share a a}			 {1 {0 16} numArgs {} {}}
+{interp share a a a a}			 {1 {0 20} numArgs {} {}}
+{interp share {{}a} a a}		 {1 {0 22} badList {14 1} {{list element in braces followed by "a" instead of space}}}
+{interp share a file0 a}		 {1 {0 22} nonPortChannel {15 5} stdin}
+{interp share a a {{}a}}		 {1 {0 22} badList {18 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp slaves}				 {ok}
+{interp slaves a}			 {ok}
+{interp slaves a a}			 {1 {0 17} numArgs {} {}}
+{interp slaves {{}a}}			 {1 {0 19} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+
+{interp target a a}			 {ok}
+{interp target}				 {1 {0 13} numArgs {} {}}
+{interp target a}			 {1 {0 15} numArgs {} {}}
+{interp target a a a}			 {1 {0 19} numArgs {} {}}
+{interp target {{}a} a}			 {1 {0 21} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+{interp target a [set]}			 {1 {17 3} numArgs {} {}}
+
+{interp transfer a a a}			 {ok}
+{interp transfer}			 {1 {0 15} numArgs {} {}}
+{interp transfer a}			 {1 {0 17} numArgs {} {}}
+{interp transfer a a}			 {1 {0 19} numArgs {} {}}
+{interp transfer a a a a}		 {1 {0 23} numArgs {} {}}
+{interp transfer {{}a} a a}		 {1 {0 25} badList {17 1} {{list element in braces followed by "a" instead of space}}}
+{interp transfer a file0 a}		 {1 {0 25} nonPortChannel {18 5} stdin}
+{interp transfer a a {{}a}}		 {1 {0 25} badList {21 1} {{list element in braces followed by "a" instead of space}}}
+
+
+{lsort a}				 {ok}
+{lsort -ascii a}			 {ok}
+{lsort -decreasing a}			 {ok}
+{lsort -dictionary a}			 {ok}
+{lsort -real a}				 {ok}
+{lsort -command {set} a}		 {ok}
+{lsort -increasing a}			 {ok}
+{lsort -index 0 a}			 {ok}
+{lsort -integer a}			 {ok}
+{lsort -a a}				 {ok}
+{lsort -r a}				 {ok}
+{lsort -c {set} a}			 {ok}
+{lsort -inc a}				 {ok}
+{lsort -ind 0 a}			 {ok}
+{lsort -int a}				 {ok}
+{lsort -dec a}				 {ok}
+{lsort -di a}				 {ok}
+{lsort -a -r -c {set} a}		 {ok}
+{lsort $opt $foo}			 {ok}
+{lsort $opt -x}				 {ok}
+{lsort $opt -ascii -x}			 {ok}
+{lsort -ascii $opt -x}			 {ok}
+{lsort}					 {1 {0 5} numArgs {} {}}
+{lsort a a}				 {1 {0 9} numArgs {} {}}
+{lsort a a a}				 {1 {0 11} numArgs {} {}}
+{lsort -a a a}				 {1 {0 12} numArgs {} {}}
+{lsort -c $a}				 {1 {0 11} numArgs {} {}}
+{lsort -c {badProc2} a}			 {1 {0 21} warnUndefProc {10 8} badProc2}
+{lsort -i a}				 {1 {0 10} badSwitch {6 2} -i}
+{lsort -aa a}				 {1 {0 11} badSwitch {6 3} -aa}
+{lsort {{}a}}				 {1 {0 11} badList {7 1} {{list element in braces followed by "a" instead of space}}}
+{lsort -ascii -foo $opt -ascii -x}	 {1 {0 32} badSwitch {13 4} -foo}
+
+
+{namespace $a}				 {ok}
+{namespace $a a}			 {ok}
+{namespace $a a a}			 {ok}
+{namespace}				 {1 {0 9} numArgs {} {}}
+{namespace [set]}			 {1 {11 3} numArgs {} {}}
+{namespace foo}				 {1 {0 13} badOption {10 3} {{children code current delete eval export forget import inscope origin parent qualifiers tail which} foo}}
+
+{namespace children}			 {ok}
+{namespace children ::}			 {ok}
+{namespace children :: a}		 {ok}
+{namespace children :: a a}		 {1 {0 25} numArgs {} {}}
+{namespace children [set] a}		 {1 {20 3} numArgs {} {}}
+{namespace children :: a[pwd]*}		 {1 {0 29} warnPattern {22 7} {}}
+{namespace children :: a[pwd]*::a}	 {1 {0 32} warnPattern {22 10} {}}
+
+{namespace code a}			 {ok}
+{namespace code {a}}			 {ok}
+{namespace code}			 {1 {0 14} numArgs {} {}}
+{namespace code a a}			 {1 {0 18} numArgs {} {}}
+{namespace code {set}}			 {ok}
+
+{namespace current}			 {ok}
+{namespace current a}			 {1 {0 19} numArgs {} {}}
+
+{namespace delete}			 {ok}
+{namespace delete ::a}			 {ok}
+{namespace delete ::a ::a}		 {ok}
+{namespace delete [set]}		 {1 {18 3} numArgs {} {}}
+{namespace delete a [set]}		 {1 {20 3} numArgs {} {}}
+
+{namespace eval a a}			 {ok}
+{namespace eval a a a}			 {ok}
+{namespace eval}			 {1 {0 14} numArgs {} {}}
+{namespace eval a}			 {1 {0 16} numArgs {} {}}
+{namespace eval [set] a}		 {1 {16 3} numArgs {} {}}
+{namespace eval a [set]}		 {1 {18 3} numArgs {} {}}
+{namespace eval {testScanCmd}}		 {1 {0 28} numArgs {} {}}
+
+{namespace export}			 {ok}
+{namespace export -clear}		 {ok}
+{namespace export -c}			 {ok}
+{namespace export a}			 {ok}
+{namespace export -c a}			 {ok}
+{namespace export -c a a}		 {ok}
+{namespace export -a}			 {1 {0 19} badSwitch {17 2} -a}
+{namespace export AA::*}		 {1 {0 22} warnExportPat {17 5} {}}
+{namespace export a AA::*}		 {1 {0 24} warnExportPat {19 5} {}}
+
+{namespace forget}			 {ok}
+{namespace forget a}			 {ok}
+{namespace forget a a}			 {ok}
+{namespace forget {a[pwd]*::}}		 {1 {0 28} warnNamespacePat {17 11} {}}
+{namespace forget *::}			 {1 {0 20} warnNamespacePat {17 3} {}}
+{namespace forget a a[pwd]*}		 {1 {0 26} warnPattern {19 7} {}}
+
+{namespace import}			 {ok}
+{namespace import -force}		 {ok}
+{namespace import -f}			 {ok}
+{namespace import a}			 {ok}
+{namespace import -f a}			 {ok}
+{namespace import -f a a}		 {ok}
+{namespace import -a}			 {1 {0 19} badSwitch {17 2} -a}
+{namespace import {a[pwd]*::}}		 {1 {0 28} warnNamespacePat {17 11} {}}
+{namespace import *::}			 {1 {0 20} warnNamespacePat {17 3} {}}
+{namespace import a a[pwd]*}		 {1 {0 26} warnPattern {19 7} {}}
+
+{namespace inscope a a}			 {ok}
+{namespace inscope a a a}		 {ok}
+{namespace inscope}			 {1 {0 17} numArgs {} {}}
+{namespace inscope a}			 {1 {0 19} numArgs {} {}}
+{namespace inscope [set] a}		 {1 {19 3} numArgs {} {}}
+{namespace inscope a [set]}		 {1 {21 3} numArgs {} {}}
+
+{namespace origin a}			 {ok}
+{namespace origin}			 {1 {0 16} numArgs {} {}}
+{namespace origin a a}			 {1 {0 20} numArgs {} {}}
+{namespace origin [set]}		 {1 {18 3} numArgs {} {}}
+
+{namespace parent}			 {ok}
+{namespace parent ::}			 {ok}
+{namespace parent a a}			 {1 {0 20} numArgs {} {}}
+{namespace parent [set]}		 {1 {18 3} numArgs {} {}}
+
+{namespace qualifiers a}		 {ok}
+{namespace qualifiers}			 {1 {0 20} numArgs {} {}}
+{namespace qualifiers a a}		 {1 {0 24} numArgs {} {}}
+{namespace qualifiers [set]}		 {1 {22 3} numArgs {} {}}
+
+{namespace tail a}			 {ok}
+{namespace tail}			 {1 {0 14} numArgs {} {}}
+{namespace tail a a}			 {1 {0 18} numArgs {} {}}
+{namespace tail [set]}			 {1 {16 3} numArgs {} {}}
+
+{namespace which a}			 {ok}
+{namespace which -command a}		 {ok}
+{namespace which -variable a}		 {ok}
+{namespace which -c a}			 {ok}
+{namespace which -v a}			 {ok}
+{namespace which -c -v a}		 {ok}
+{namespace which}			 {1 {0 15} numArgs {} {}}
+{namespace which a a}			 {1 {0 19} numArgs {} {}}
+{namespace which a a a}			 {1 {0 21} numArgs {} {}}
+{namespace which -c}			 {1 {0 18} numArgs {} {}}
+{namespace which -v}			 {1 {0 18} numArgs {} {}}
+{namespace which -c -v}			 {1 {0 21} numArgs {} {}}
+{namespace which -c a a}		 {1 {0 22} numArgs {} {}}
+{namespace which -v a a}		 {1 {0 22} numArgs {} {}}
+{namespace which -c -v a a} 		 {1 {0 25} numArgs {} {}}
+{namespace which -a a}			 {1 {0 20} badSwitch {16 2} -a}
+{namespace which -a a a}		 {1 {0 22} badSwitch {16 2} -a 1 {0 22} numArgs {} {}}
+{namespace which [set]}			 {1 {17 3} numArgs {} {}}
+
+
+{registry $a a}				 {1 {0 13} nonPortCmd {0 8} {{}}}
+{registry $a a a}			 {1 {0 15} nonPortCmd {0 8} {{}}}
+{registry $a a a a}			 {1 {0 17} nonPortCmd {0 8} {{}}}
+{registry $a a a a a}			 {1 {0 19} nonPortCmd {0 8} {{}}}
+{registry}				 {1 {0 8} nonPortCmd {0 8} {{}} 1 {0 8} numArgs {} {}}
+{registry $a}				 {1 {0 11} nonPortCmd {0 8} {{}} 1 {0 11} numArgs {} {}}
+{registry $a a a a a a}			 {1 {0 21} nonPortCmd {0 8} {{}} 1 {0 21} numArgs {} {}}
+{registry [set]}			 {1 {0 14} nonPortCmd {0 8} {{}} 1 {0 14} numArgs {} {} 1 {10 3} numArgs {} {}}
+{registry foo a}			 {1 {0 14} nonPortCmd {0 8} {{}} 1 {0 14} badOption {9 3} {{delete get keys set type values} foo}}
+
+{registry delete a}			 {1 {0 17} nonPortCmd {0 8} {{}}}
+{registry delete a a}			 {1 {0 19} nonPortCmd {0 8} {{}}}
+{registry delete}			 {1 {0 15} nonPortCmd {0 8} {{}} 1 {0 15} numArgs {} {}}
+{registry delete a a a}			 {1 {0 21} nonPortCmd {0 8} {{}} 1 {0 21} numArgs {} {}}
+{registry delete [set]}			 {1 {0 21} nonPortCmd {0 8} {{}} 1 {17 3} numArgs {} {}}
+{registry delete a [set]}		 {1 {0 23} nonPortCmd {0 8} {{}} 1 {19 3} numArgs {} {}}
+
+{registry get a a}			 {1 {0 16} nonPortCmd {0 8} {{}}}
+{registry get a}			 {1 {0 14} nonPortCmd {0 8} {{}} 1 {0 14} numArgs {} {}}
+{registry get}				 {1 {0 12} nonPortCmd {0 8} {{}} 1 {0 12} numArgs {} {}}
+{registry get a a a}			 {1 {0 18} nonPortCmd {0 8} {{}} 1 {0 18} numArgs {} {}}
+{registry get [set] a}			 {1 {0 20} nonPortCmd {0 8} {{}} 1 {14 3} numArgs {} {}}
+{registry get a [set]}			 {1 {0 20} nonPortCmd {0 8} {{}} 1 {16 3} numArgs {} {}}
+
+{registry keys a}			 {1 {0 15} nonPortCmd {0 8} {{}}}
+{registry keys a a}			 {1 {0 17} nonPortCmd {0 8} {{}}}
+{registry keys}				 {1 {0 13} nonPortCmd {0 8} {{}} 1 {0 13} numArgs {} {}}
+{registry keys a a a}			 {1 {0 19} nonPortCmd {0 8} {{}} 1 {0 19} numArgs {} {}}
+{registry keys [set]}			 {1 {0 19} nonPortCmd {0 8} {{}} 1 {15 3} numArgs {} {}}
+{registry keys a a[pwd]*}		 {1 {0 23} nonPortCmd {0 8} {{}} 1 {0 23} warnPattern {16 7} {}}
+
+{registry set a}			 {1 {0 14} nonPortCmd {0 8} {{}}}
+{registry set a a a}			 {1 {0 18} nonPortCmd {0 8} {{}}}
+{registry set a a a binary}		 {1 {0 25} nonPortCmd {0 8} {{}}}
+{registry set a a a none}		 {1 {0 23} nonPortCmd {0 8} {{}}}
+{registry set a a a sz}			 {1 {0 21} nonPortCmd {0 8} {{}}}
+{registry set a a a expand_sz}		 {1 {0 28} nonPortCmd {0 8} {{}}}
+{registry set a a a dword}		 {1 {0 24} nonPortCmd {0 8} {{}}}
+{registry set a a a dword_big_endian}	 {1 {0 35} nonPortCmd {0 8} {{}}}
+{registry set a a a link}		 {1 {0 23} nonPortCmd {0 8} {{}}}
+{registry set a a a multi_sz}		 {1 {0 27} nonPortCmd {0 8} {{}}}
+{registry set a a a resource_list}	 {1 {0 32} nonPortCmd {0 8} {{}}}
+{registry set}				 {1 {0 12} nonPortCmd {0 8} {{}} 1 {0 12} numArgs {} {}}
+{registry set a a}			 {1 {0 16} nonPortCmd {0 8} {{}} 1 {0 16} numArgs {} {}}
+{registry set [set]}			 {1 {0 18} nonPortCmd {0 8} {{}} 1 {14 3} numArgs {} {}}
+{registry set [set] a a}		 {1 {0 22} nonPortCmd {0 8} {{}} 1 {14 3} numArgs {} {}}
+{registry set [set] a a sz}		 {1 {0 25} nonPortCmd {0 8} {{}} 1 {14 3} numArgs {} {}}
+{registry set a [set] a}		 {1 {0 22} nonPortCmd {0 8} {{}} 1 {16 3} numArgs {} {}}
+{registry set a [set] a sz}		 {1 {0 25} nonPortCmd {0 8} {{}} 1 {16 3} numArgs {} {}}
+{registry set a a [set]}		 {1 {0 22} nonPortCmd {0 8} {{}} 1 {18 3} numArgs {} {}}
+{registry set a a [set] sz}		 {1 {0 25} nonPortCmd {0 8} {{}} 1 {18 3} numArgs {} {}}
+{registry set a a a bin}		 {1 {0 22} nonPortCmd {0 8} {{}} 1 {0 22} badKey {19 3} {{  binary none sz expand_sz dword dword_big_endian  link multi_sz resource_list} bin}}
+{registry set a a a aa}			 {1 {0 21} nonPortCmd {0 8} {{}} 1 {0 21} badKey {19 2} {{  binary none sz expand_sz dword dword_big_endian  link multi_sz resource_list} aa}}
+{registry set a a a [set]}		 {1 {0 24} nonPortCmd {0 8} {{}} 1 {20 3} numArgs {} {}}
+
+{registry type a a}			 {1 {0 17} nonPortCmd {0 8} {{}}}
+{registry type}				 {1 {0 13} nonPortCmd {0 8} {{}} 1 {0 13} numArgs {} {}}
+{registry type a}			 {1 {0 15} nonPortCmd {0 8} {{}} 1 {0 15} numArgs {} {}}
+{registry type a a a}			 {1 {0 19} nonPortCmd {0 8} {{}} 1 {0 19} numArgs {} {}}
+{registry type [set] a}			 {1 {0 21} nonPortCmd {0 8} {{}} 1 {15 3} numArgs {} {}}
+{registry type a [set]}			 {1 {0 21} nonPortCmd {0 8} {{}} 1 {17 3} numArgs {} {}}
+
+{registry values a}			 {1 {0 17} nonPortCmd {0 8} {{}}}
+{registry values a a}			 {1 {0 19} nonPortCmd {0 8} {{}}}
+{registry values}			 {1 {0 15} nonPortCmd {0 8} {{}} 1 {0 15} numArgs {} {}}
+{registry values a a a}			 {1 {0 21} nonPortCmd {0 8} {{}} 1 {0 21} numArgs {} {}}
+{registry values [set]}			 {1 {0 21} nonPortCmd {0 8} {{}} 1 {17 3} numArgs {} {}}
+{registry values a a[pwd]*}		 {1 {0 25} nonPortCmd {0 8} {{}} 1 {0 25} warnPattern {18 7} {}}
+
+
+{resource $a}				 {1 {0 11} nonPortCmd {0 8} {{}}}
+{resource $a a}				 {1 {0 13} nonPortCmd {0 8} {{}}}
+{resource $a a a}			 {1 {0 15} nonPortCmd {0 8} {{}}}
+{resource $a a a a}			 {1 {0 17} nonPortCmd {0 8} {{}}}
+{resource [set]}			 {1 {0 14} nonPortCmd {0 8} {{}} 1 {10 3} numArgs {} {}}
+{resource foo}				 {1 {0 12} nonPortCmd {0 8} {{}} 1 {0 12} badOption {9 3} {{close list open read types write} foo}}
+
+{resource close a}			 {1 {0 16} nonPortCmd {0 8} {{}}}
+{resource close}			 {1 {0 14} nonPortCmd {0 8} {{}} 1 {0 14} numArgs {} {}}
+{resource close a a}			 {1 {0 18} nonPortCmd {0 8} {{}} 1 {0 18} numArgs {} {}}
+{resource close [set]}			 {1 {0 20} nonPortCmd {0 8} {{}} 1 {16 3} numArgs {} {}}
+
+{resource list AAAA}			 {1 {0 18} nonPortCmd {0 8} {{}}}
+{resource list AAAA a}			 {1 {0 20} nonPortCmd {0 8} {{}}}
+{resource list}				 {1 {0 13} nonPortCmd {0 8} {{}} 1 {0 13} numArgs {} {}}
+{resource list AAAA a a}		 {1 {0 22} nonPortCmd {0 8} {{}} 1 {0 22} numArgs {} {}}
+{resource list a}			 {1 {0 15} nonPortCmd {0 8} {{}} 1 {0 15} badResource {14 1} {}}
+{resource list a a}			 {1 {0 17} nonPortCmd {0 8} {{}} 1 {0 17} badResource {14 1} {}}
+{resource list AAAA [set]}		 {1 {0 24} nonPortCmd {0 8} {{}} 1 {20 3} numArgs {} {}}
+
+{resource open a}			 {1 {0 15} nonPortCmd {0 8} {{}}}
+{resource open a w}			 {1 {0 17} nonPortCmd {0 8} {{}}}
+{resource open}				 {1 {0 13} nonPortCmd {0 8} {{}} 1 {0 13} numArgs {} {}}
+{resource open a w a}			 {1 {0 19} nonPortCmd {0 8} {{}} 1 {0 19} numArgs {} {}}
+{resource open $a/a}			 {1 {0 18} nonPortCmd {0 8} {{}} 1 {0 18} nonPortFile {14 4} {}}
+{resource open $a/a w}			 {1 {0 20} nonPortCmd {0 8} {{}} 1 {0 20} nonPortFile {14 4} {}}
+{resource open a BAD}			 {1 {0 19} nonPortCmd {0 8} {{}} 1 {0 19} badKey {16 3} {{RDONLY WRONLY RDWR APPEND CREAT EXCL NOCTTY NONBLOCK TRUNC} BAD} 1 {0 19} badMode {16 3} {}}
+
+{resource read AAAA a}			 {1 {0 20} nonPortCmd {0 8} {{}}}
+{resource read AAAA a a}		 {1 {0 22} nonPortCmd {0 8} {{}}}
+{resource read}				 {1 {0 13} nonPortCmd {0 8} {{}} 1 {0 13} numArgs {} {}}
+{resource read AAAA}			 {1 {0 18} nonPortCmd {0 8} {{}} 1 {0 18} numArgs {} {}}
+{resource read AAAA a a a}		 {1 {0 24} nonPortCmd {0 8} {{}} 1 {0 24} numArgs {} {}}
+{resource read a a}			 {1 {0 17} nonPortCmd {0 8} {{}} 1 {0 17} badResource {14 1} {}}
+{resource read a a a}			 {1 {0 19} nonPortCmd {0 8} {{}} 1 {0 19} badResource {14 1} {}}
+{resource read AAAA [set]}		 {1 {0 24} nonPortCmd {0 8} {{}} 1 {20 3} numArgs {} {}}
+{resource read AAAA [set] a}		 {1 {0 26} nonPortCmd {0 8} {{}} 1 {20 3} numArgs {} {}}
+{resource read AAAA a [set]}		 {1 {0 26} nonPortCmd {0 8} {{}} 1 {22 3} numArgs {} {}}
+
+{resource types}			 {1 {0 14} nonPortCmd {0 8} {{}}}
+{resource types a}			 {1 {0 16} nonPortCmd {0 8} {{}}}
+{resource types a a a}			 {1 {0 20} nonPortCmd {0 8} {{}} 1 {0 20} numArgs {} {}}
+{resource types [set]}			 {1 {0 20} nonPortCmd {0 8} {{}} 1 {16 3} numArgs {} {}}
+
+{resource write AAAA a}			 {1 {0 21} nonPortCmd {0 8} {{}}}
+{resource write -id a AAAA a}		 {1 {0 27} nonPortCmd {0 8} {{}}}
+{resource write -name a AAAA a}		 {1 {0 29} nonPortCmd {0 8} {{}}}
+{resource write -file a AAAA a}		 {1 {0 29} nonPortCmd {0 8} {{}}}
+{resource write -i a -n a -f a AAAA a}	 {1 {0 36} nonPortCmd {0 8} {{}}}
+{resource write}			 {1 {0 14} nonPortCmd {0 8} {{}} 1 {0 14} numArgs {} {}}
+{resource write AAAA}			 {1 {0 19} nonPortCmd {0 8} {{}} 1 {0 19} numArgs {} {}}
+{resource write AAAA a a}		 {1 {0 23} nonPortCmd {0 8} {{}} 1 {0 23} numArgs {} {}}
+{resource write -i a}			 {1 {0 19} nonPortCmd {0 8} {{}} 1 {0 19} numArgs {} {}}
+{resource write -n a}			 {1 {0 19} nonPortCmd {0 8} {{}} 1 {0 19} numArgs {} {}}
+{resource write -f a}			 {1 {0 19} nonPortCmd {0 8} {{}} 1 {0 19} numArgs {} {}}
+{resource write -i a AAAA}		 {1 {0 24} nonPortCmd {0 8} {{}} 1 {0 24} numArgs {} {}}
+{resource write -n a AAAA}		 {1 {0 24} nonPortCmd {0 8} {{}} 1 {0 24} numArgs {} {}}
+{resource write -f a AAAA}		 {1 {0 24} nonPortCmd {0 8} {{}} 1 {0 24} numArgs {} {}}
+{resource write -i [set] AAAA a}	 {1 {0 30} nonPortCmd {0 8} {{}} 1 {19 3} numArgs {} {}}
+{resource write -n [set] AAAA a}	 {1 {0 30} nonPortCmd {0 8} {{}} 1 {19 3} numArgs {} {}}
+{resource write -f [set] AAAA a}	 {1 {0 30} nonPortCmd {0 8} {{}} 1 {19 3} numArgs {} {}}
+{resource write -i a a a}		 {1 {0 23} nonPortCmd {0 8} {{}} 1 {0 23} badResource {20 1} {}}
+{resource write -i a AAAA [set]}	 {1 {0 30} nonPortCmd {0 8} {{}} 1 {26 3} numArgs {} {}}
+
+
+{variable}				 {ok}
+{variable a}				 {ok}
+{variable a a}				 {ok}
+{variable a a a}			 {ok}
+{variable a a a a}			 {ok}
+{variable $A}				 {1 {0 11} warnVarRef {9 2} {}}
+{variable a [set]}			 {1 {12 3} numArgs {} {}}
+{variable a a $A}			 {1 {0 15} warnVarRef {13 2} {}}
+{variable a a a [set]}			 {1 {16 3} numArgs {} {}}
+}
+
+set checkCoreTcl8.1 {
+{encoding $a}				 {ok}
+{encoding $a a}				 {ok}
+{encoding $a a a}			 {ok}
+{encoding}				 {1 {0 8} numArgs {} {}}
+{encoding [set]}			 {1 {10 3} numArgs {} {}}
+{encoding foo}				 {1 {0 12} badOption {9 3} {{convertfrom convertto names system} foo}}
+
+{encoding convertfrom a}		 {ok}	
+{encoding convertfrom a a}		 {ok}
+{encoding convertfrom a a a}		 {1 {0 26} numArgs {} {}}
+{encoding convertfrom}			 {1 {0 20} numArgs {} {}}
+
+{encoding convertto a}			 {ok}
+{encoding convertto a a}		 {ok}
+{encoding convertto a a a}		 {1 {0 24} numArgs {} {}}
+{encoding convertto}			 {1 {0 18} numArgs {} {}}
+
+{encoding names}			 {ok}
+{encoding names a}			 {1 {0 16} numArgs {} {}}
+
+{encoding system}			 {ok}
+{encoding system a}			 {ok}
+{encoding system a a}			 {1 {0 19} numArgs {} {}}
+
+{fconfigure a -encoding}		 {ok}
+{fconfigure a -encoding a}		 {ok}
+{fconfigure a -e a}		 	 {1 {0 17} badSwitch {13 2} -e}
+
+{lindex a 0}				 {ok}
+{lindex a end}				 {ok}
+{lindex a end-3}			 {ok}
+{lindex}				 {1 {0 6} numArgs {} {}}
+{lindex a}				 {1 {0 8} numArgs {} {}}
+{lindex a 1 a}				 {1 {0 12} numArgs {} {}}
+{lindex {{}a} 0}			 {1 {0 14} badList {8 1} {{list element in braces followed by "a" instead of space}}}
+{lindex a a}				 {1 {0 10} badIndex {9 1} {}}
+{lindex a endda}			 {1 {0 14} badIndex {9 5} {}}
+{lindex a end-a}			 {1 {0 14} badIndex {9 5} {}}
+
+{linsert a 0 a}				 {ok}
+{linsert a 0 a a a}			 {ok}
+{linsert a end a a a}			 {ok}
+{linsert a end-3 a a a}			 {ok}
+{linsert}				 {1 {0 7} numArgs {} {}}
+{linsert a}				 {1 {0 9} numArgs {} {}}
+{linsert a 0}				 {1 {0 11} numArgs {} {}}
+{linsert {{}a} 0 a}			 {1 {0 17} badList {9 1} {{list element in braces followed by "a" instead of space}}}
+{linsert a a a}				 {1 {0 13} badIndex {10 1} {}}
+{linsert a endda a}			 {1 {0 17} badIndex {10 5} {}}
+{linsert a end-a a}			 {1 {0 17} badIndex {10 5} {}}
+{linsert a 0 [set]}			 {1 {13 3} numArgs {} {}}
+{linsert a 0 a [set]}			 {1 {15 3} numArgs {} {}}
+
+{lrange a 0 0}				 {ok}
+{lrange {a a} 0 0}			 {ok}
+{lrange $a 0 0}				 {ok}
+{lrange a end 0}			 {ok}
+{lrange a end-3 0}			 {ok}
+{lrange a 0 end}			 {ok}
+{lrange a 0 end-3}			 {ok}
+{lrange}				 {1 {0 6} numArgs {} {}}
+{lrange a}				 {1 {0 8} numArgs {} {}}
+{lrange a 0}				 {1 {0 10} numArgs {} {}}
+{lrange a 0 0 a}			 {1 {0 14} numArgs {} {}}
+{lrange {{}a} 0 0}			 {1 {0 16} badList {8 1} {{list element in braces followed by "a" instead of space}}}
+{lrange a a 0}				 {1 {0 12} badIndex {9 1} {}}
+{lrange a 0 a}				 {1 {0 12} badIndex {11 1} {}}
+{lrange a endda 0}			 {1 {0 16} badIndex {9 5} {}}
+{lrange a end-a 0}			 {1 {0 16} badIndex {9 5} {}}
+{lrange a 0 endda}			 {1 {0 16} badIndex {11 5} {}}
+{lrange a 0 end-a}			 {1 {0 16} badIndex {11 5} {}}
+
+{lreplace a 0 0}			 {ok}
+{lreplace a 0 0 a}			 {ok}
+{lreplace a 0 0 a a}			 {ok}
+{lreplace a end 0 a}			 {ok}
+{lreplace a end-3 0 a}			 {ok}
+{lreplace a 0 end a}			 {ok}
+{lreplace a 0 end-3 a}			 {ok}
+{lreplace}				 {1 {0 8} numArgs {} {}}
+{lreplace a}				 {1 {0 10} numArgs {} {}}
+{lreplace a 0}				 {1 {0 12} numArgs {} {}}
+{lreplace {{}a} 0 0 a}			 {1 {0 20} badList {10 1} {{list element in braces followed by "a" instead of space}}}
+{lreplace a a 0 a}			 {1 {0 16} badIndex {11 1} {}}
+{lreplace a 0 a a}			 {1 {0 16} badIndex {13 1} {}}
+{lreplace a endda 0 a}			 {1 {0 20} badIndex {11 5} {}}
+{lreplace a end-a 0 a}			 {1 {0 20} badIndex {11 5} {}}
+{lreplace a 0 endda a}			 {1 {0 20} badIndex {13 5} {}}
+{lreplace a 0 end-a a}			 {1 {0 20} badIndex {13 5} {}}
+{lreplace a 0 0 [set]}			 {1 {16 3} numArgs {} {}}
+{lreplace a 0 0 a [set]}		 {1 {18 3} numArgs {} {}}
+
+{regexp {[\]} a}			 {ok}
+{regexp {\a} a} 			 {ok}
+{regexp -- $a a} 			 {ok}
+{regexp -line $a a} 			 {ok}
+{regexp -expanded -line -linestop -lineanchor -about $a a}	{ok}
+{regexp -expanded -line -linestop -lineanchor -about -- $a a}	{ok}
+{regexp -lin $a a}			 {1 {0 16} badSwitch {7 4} -lin}
+
+{regsub a a a a}			 {ok}
+{regsub -all a a a a}			 {ok}
+{regsub -nocase a a a a}		 {ok}
+{regsub -- a a a a}			 {ok}
+{regsub -all -nocase -- a a a a}	 {ok}
+{regsub -about $a a $a a} 		 {1 {0 23} badSwitch {7 6} -about}
+{regsub -line $a a $a a} 		 {1 {0 22} badSwitch {7 5} -line}
+{regsub -linestop $a a $a a} 		 {1 {0 26} badSwitch {7 9} -linestop}
+{regsub -lineanchor $a a $a a} 		 {1 {0 28} badSwitch {7 11} -lineanchor}
+{regsub}				 {1 {0 6} numArgs {} {}}
+{regsub a}				 {1 {0 8} numArgs {} {}}
+{regsub a a}				 {1 {0 10} numArgs {} {}}
+{regsub a a a}				 {1 {0 12} numArgs {} {}}
+{regsub a a a a a}			 {1 {0 16} numArgs {} {}}
+{regsub -all a a a}			 {1 {0 17} numArgs {} {}}
+{regsub -no a a a a}			 {1 {0 18} badSwitch {7 3} -no}
+{regsub -aa a a a a}			 {1 {0 18} badSwitch {7 3} -aa}
+{regsub [set] a a a}			 {1 {8 3} numArgs {} {}}
+{regsub a [set] a a}			 {1 {10 3} numArgs {} {}}
+{regsub a a [set] a}			 {1 {12 3} numArgs {} {}}
+{regsub a a a $A}			 {1 {0 15} warnVarRef {13 2} {}}
+{regsub {[]} a a a} 			 {1 {0 17} coreTcl::errBadBrktExp {7 4} {}}
+
+
+{string $a a}				 {ok}
+{string $a a a}				 {ok}
+{string $a a a a}			 {ok}
+{string $a a a a a}			 {ok}
+{string $a}				 {1 {0 9} numArgs {} {}}
+{string [set] a}			 {1 {8 3} numArgs {} {}}
+{string foo a}				 {1 {0 12} badOption {7 3} {{bytelength compare equal first index is last length map match range repeat replace tolower totitle toupper trim trimleft trimright wordend wordstart} foo}}
+
+{string bytelength a}			 {ok}
+{string bytelength}			 {1 {0 17} numArgs {} {}}
+{string bytelength a a}			 {1 {0 21} numArgs {} {}}
+{string bytelength [set]}		 {1 {19 3} numArgs {} {}}
+
+{string compare a a}			 {ok}
+{string compare -nocase a a}		 {ok}
+{string compare -length 1 a a}		 {ok}
+{string compare -nocase -length 1 a a}	 {ok}
+{string compare -nocase -length 1 -nocase a a}	 {ok}
+{string compare}			 {1 {0 14} numArgs {} {}}
+{string compare a}			 {1 {0 16} numArgs {} {}}
+{string compare a a a}			 {1 {0 20} numArgs {} {}}
+{string compare -length a a}		 {1 {0 26} badInt {23 1} {} 1 {0 26} numArgs {} {}}
+{string compare [set] a}		 {1 {16 3} numArgs {} {}}
+{string compare a [set]}		 {1 {18 3} numArgs {} {}}
+{string compare a a [set]}		 {1 {0 24} numArgs {} {} 1 {20 3} numArgs {} {}}
+
+{string equal a a}			 {ok}
+{string equal -nocase a a}		 {ok}
+{string equal -length 1 a a}		 {ok}
+{string equal -nocase -length 1 a a}	 {ok}
+{string equal -nocase -length 1 -nocase a a}	 {ok}
+{string equal}				 {1 {0 12} numArgs {} {}}
+{string equal a}			 {1 {0 14} numArgs {} {}}
+{string equal a a a}			 {1 {0 18} numArgs {} {}}
+{string equal -length a a}		 {1 {0 24} badInt {21 1} {} 1 {0 24} numArgs {} {}}
+{string equal [set] a}			 {1 {14 3} numArgs {} {}}
+{string equal a [set]}			 {1 {16 3} numArgs {} {}}
+{string equal a a [set]}		 {1 {0 22} numArgs {} {} 1 {18 3} numArgs {} {}}
+
+{string first a a}			 {ok}
+{string first a a end-1}		 {ok}
+{string first}				 {1 {0 12} numArgs {} {}}
+{string first a}			 {1 {0 14} numArgs {} {}}
+{string first a a a}			 {1 {0 18} badIndex {17 1} {}}
+{string first a a a a}			 {1 {0 20} numArgs {} {}}
+{string first [set] a}			 {1 {14 3} numArgs {} {}}
+{string first a [set]}			 {1 {16 3} numArgs {} {}}
+
+{string index a 0}			 {ok}
+{string index a e}			 {ok}
+{string index a end}			 {ok}
+{string index a end-3}			 {ok}
+{string index}				 {1 {0 12} numArgs {} {}}
+{string index a}			 {1 {0 14} numArgs {} {}}
+{string index a 0 a}			 {1 {0 18} numArgs {} {}}
+{string index [set] 0}			 {1 {14 3} numArgs {} {}}
+{string index a a}			 {1 {0 16} badIndex {15 1} {}}
+{string index a endda}			 {1 {0 20} badIndex {15 5} {}}
+{string index a end-a}			 {1 {0 20} badIndex {15 5} {}}
+
+{string is alnum a}			 {ok}
+{string is alpha a}			 {ok}
+{string is ascii a}			 {ok}
+{string is boolean a}			 {ok}
+{string is digit a}			 {ok}
+{string is double a}			 {ok}
+{string is false a}			 {ok}
+{string is integer a}			 {ok}
+{string is lower a}			 {ok}
+{string is space a}			 {ok}
+{string is true a}			 {ok}
+{string is tr a}			 {ok}
+{string is upper a}			 {ok}
+{string is wordchar a}			 {ok}
+{string is alnum -strict a}		 {ok}
+{string is alnum -failindex var a}	 {ok}
+{string is alnum -strict -failindex var a}	 {ok}
+{string is alnum -strict -failindex var -strict a}	 {ok}
+
+{string is}				 {1 {0 9} numArgs {} {}}
+{string is true}			 {1 {0 14} numArgs {} {}}
+{string is x a}				 {1 {0 13} badKey {10 1} {{  alnum alpha ascii boolean digit  double false integer lower space  true upper wordchar} x}}
+{string is true -failindex a}		 {1 {0 27} numArgs {} {}}
+{string is [set]}			 {1 {0 15} numArgs {} {} 1 {11 3} numArgs {} {}}
+{string is [set] a}			 {1 {11 3} numArgs {} {}}
+{string is [set] -strict a}		 {1 {11 3} numArgs {} {}}
+{string is [set] a a}			 {1 {11 3} numArgs {} {} 1 {0 19} numArgs {} {}}
+{string is alnum -failindex $var a}	 {1 {0 33} warnVarRef {27 4} {}}
+
+{string last a a}			 {ok}
+{string last a a 10}			 {ok}
+{string last}				 {1 {0 11} numArgs {} {}}
+{string last a}				 {1 {0 13} numArgs {} {}}
+{string last a a a}			 {1 {0 17} badIndex {16 1} {}}
+{string last a a a a}			 {1 {0 19} numArgs {} {}}
+{string last [set] a}			 {1 {13 3} numArgs {} {}}
+{string last a [set]}			 {1 {15 3} numArgs {} {}}
+
+{string length a}			 {ok}
+{string length}				 {1 {0 13} numArgs {} {}}
+{string length a a}			 {1 {0 17} numArgs {} {}}
+{string length [set]}			 {1 {15 3} numArgs {} {}}
+
+{string map {} a}			 {ok}
+{string map {a b} a}			 {ok}
+{string map -nocase {a b} a}		 {ok}
+{string map {a b c d} a}		 {ok}
+{string map a}				 {1 {0 12} numArgs {} {}}
+{string map a a a}			 {1 {0 16} numArgs {} {}}
+{string map a a}			 {1 {0 14} coreTcl::badCharMap {11 1} {}}
+{string map {a b c} a}			 {1 {0 20} coreTcl::badCharMap {11 7} {}}
+{string map [set] a}			 {1 {12 3} numArgs {} {}}
+{string map {a b} [set]}		 {1 {18 3} numArgs {} {}}
+
+{string match a a}			 {ok}
+{string match -nocase a a}		 {ok}
+{string match}	 			 {1 {0 12} numArgs {} {}}
+{string match a}			 {1 {0 14} numArgs {} {}}
+{string match a a a}			 {1 {0 18} numArgs {} {}}
+{string match -foo a a}			 {1 {0 21} badSwitch {13 4} -foo}
+{string match -nocase a a a}		 {1 {0 26} numArgs {} {}}
+{string match a[pwd]* a}		 {1 {0 22} warnPattern {13 7} {}}
+{string match a [set]}			 {1 {16 3} numArgs {} {}}
+
+{string range a 0 0}			 {ok}
+{string range a 0 end}			 {ok}
+{string range a 0 end-3}		 {ok}
+{string range}				 {1 {0 12} numArgs {} {}}
+{string range a}			 {1 {0 14} numArgs {} {}}
+{string range a 0}			 {1 {0 16} numArgs {} {}}
+{string range a 0 0 a}			 {1 {0 20} numArgs {} {}}
+{string range [set] 0 0}		 {1 {14 3} numArgs {} {}}
+{string range a a 0}			 {1 {0 18} badIndex {15 1} {}}
+{string range a 0 a}			 {1 {0 18} badIndex {17 1} {}}
+
+{string repeat a 1}			 {ok}
+{string repeat}	 			 {1 {0 13} numArgs {} {}}
+{string repeat a}			 {1 {0 15} numArgs {} {}}
+{string repeat a a a}			 {1 {0 19} numArgs {} {}}
+{string repeat a a}			 {1 {0 17} badInt {16 1} {}}
+{string repeat a [set]}			 {1 {17 3} numArgs {} {}}
+{string repeat [set] 1}			 {1 {15 3} numArgs {} {}}
+
+{string replace a 1 2}			 {ok}
+{string replace a end end}		 {ok}
+{string replace a end-3 end-3}		 {ok}
+{string replace a 1 2 a}		 {ok}
+{string replace a end end a}		 {ok}
+{string replace}	 		 {1 {0 14} numArgs {} {}}
+{string replace a}			 {1 {0 16} numArgs {} {}}
+{string replace a a}			 {1 {0 18} numArgs {} {}}
+{string replace a a a a a}		 {1 {0 24} numArgs {} {}}
+{string replace [set] 1 2}		 {1 {16 3} numArgs {} {}}
+{string replace a [set] 2}		 {1 {18 3} numArgs {} {}}
+{string replace a 1 [set]}		 {1 {20 3} numArgs {} {}}
+{string replace a 1 2 [set]}		 {1 {22 3} numArgs {} {}}
+
+{string tolower a}			 {ok}
+{string tolower a 1}			 {ok}
+{string tolower a end}			 {ok}
+{string tolower a 1 2}			 {ok}
+{string tolower a end end}		 {ok}
+{string tolower a end-3 end-3}		 {ok}
+{string tolower}			 {1 {0 14} numArgs {} {}}
+{string tolower a a a a}		 {1 {0 22} numArgs {} {}}
+{string tolower [set]}			 {1 {16 3} numArgs {} {}}
+{string tolower a [set]}		 {1 {18 3} numArgs {} {}}
+{string tolower a 1 [set]}		 {1 {20 3} numArgs {} {}}
+
+{string totitle a}			 {ok}
+{string totitle a 1}			 {ok}
+{string totitle a end}			 {ok}
+{string totitle a 1 2}			 {ok}
+{string totitle a end end}		 {ok}
+{string totitle a end-3 end-3}		 {ok}
+{string totitle}			 {1 {0 14} numArgs {} {}}
+{string totitle a a a a}		 {1 {0 22} numArgs {} {}}
+{string totitle [set]}			 {1 {16 3} numArgs {} {}}
+{string totitle a [set]}		 {1 {18 3} numArgs {} {}}
+{string totitle a 1 [set]}		 {1 {20 3} numArgs {} {}}
+
+{string toupper a}			 {ok}
+{string toupper a 1}			 {ok}
+{string toupper a end}			 {ok}
+{string toupper a 1 2}			 {ok}
+{string toupper a end end}		 {ok}
+{string toupper a end-3 end-3}		 {ok}
+{string toupper}			 {1 {0 14} numArgs {} {}}
+{string toupper a a a a}		 {1 {0 22} numArgs {} {}}
+{string toupper [set]}			 {1 {16 3} numArgs {} {}}
+{string toupper a [set]}		 {1 {18 3} numArgs {} {}}
+{string toupper a 1 [set]}		 {1 {20 3} numArgs {} {}}
+
+{string trim a}				 {ok}
+{string trim a a}			 {ok}
+{string trim}				 {1 {0 11} numArgs {} {}}
+{string trim a a a}			 {1 {0 17} numArgs {} {}}
+{string trim [set]}			 {1 {13 3} numArgs {} {}}
+{string trim a [set]}			 {1 {15 3} numArgs {} {}}
+
+{string trimleft a}			 {ok}
+{string trimleft a a}			 {ok}
+{string trimleft}			 {1 {0 15} numArgs {} {}}
+{string trimleft a a a}			 {1 {0 21} numArgs {} {}}
+{string trimleft [set]}			 {1 {17 3} numArgs {} {}}
+{string trimleft a [set]}		 {1 {19 3} numArgs {} {}}
+
+{string trimright a}			 {ok}
+{string trimright a a}			 {ok}
+{string trimright}			 {1 {0 16} numArgs {} {}}
+{string trimright a a a}		 {1 {0 22} numArgs {} {}}
+{string trimright [set]}		 {1 {18 3} numArgs {} {}}
+{string trimright a [set]}		 {1 {20 3} numArgs {} {}}
+
+{string wordend a 0}			 {ok}
+{string wordend a end}			 {ok}
+{string wordend a end-3}		 {ok}
+{string wordend}			 {1 {0 14} numArgs {} {}}
+{string wordend a}			 {1 {0 16} numArgs {} {}}
+{string wordend a 0 a}			 {1 {0 20} numArgs {} {}}
+{string wordend [set] 0}		 {1 {16 3} numArgs {} {}}
+{string wordend a a}			 {1 {0 18} badIndex {17 1} {}}
+
+{string wordstart a 0}			 {ok}
+{string wordstart a end}		 {ok}
+{string wordstart a end-3}		 {ok}
+{string wordstart}			 {1 {0 16} numArgs {} {}}
+{string wordstart a}			 {1 {0 18} numArgs {} {}}
+{string wordstart a 0 a}		 {1 {0 22} numArgs {} {}}
+{string wordstart [set] 0}		 {1 {18 3} numArgs {} {}}
+{string wordstart a a}			 {1 {0 20} badIndex {19 1} {}}
+}
+
+
+set checkCoreTcl8.2 {
+
+{regsub {[\]} a $a a}			 {ok}
+{regsub {\a} a $a a} 			 {ok}
+{regsub -- $a a $a a} 			 {ok}
+{regsub -about $a a $a a} 		 {ok}
+{regsub -line $a a $a a} 		 {ok}
+{regsub -linestop $a a $a a} 		 {ok}
+{regsub -lineanchor $a a $a a} 		 {ok}
+{regsub -expanded $a a $a a} 		 {ok}
+{regsub -expanded -line -linestop -lineanchor -about $a a $a a}		{ok}
+{regsub -expanded -line -linestop -lineanchor -about -- $a a $a a}	{ok}
+{regsub -lin $a a $a a}			 {1 {0 21} badSwitch {7 4} -lin}
+
+{clock clicks -milliseconds}		 {1 {0 26} numArgs {} {}}
+{fconfigure a -lasterror}	{1 {0 23} badSwitch {13 10} -lasterror}
+}
+
+set checkCoreTcl8.3 {
+
+{array unset a}				 {ok}
+{array unset a a}			 {ok}
+{array unset}				 {1 {0 11} numArgs {} {}}
+{array unset a a a}			 {1 {0 17} numArgs {} {}}
+{array unset $A}			 {1 {0 14} warnVarRef {12 2} {}}
+{array unset a a[pwd]*}			 {1 {0 21} warnPattern {14 7} {}}
+
+{clock clicks}				 {ok}
+{clock clicks -milliseconds}		 {ok}
+{clock clicks a}			 {1 {0 14} numArgs {} {}}
+{clock clicks -milliseconds a}		 {1 {0 28} numArgs {} {}}
+
+{fconfigure a -lasterror}		 {ok}
+{fconfigure a -l}		 	 {ok}
+{fconfigure a -lasterror a}		 {1 {0 25} nonPortCmd {13 10} {{}} 1 {0 25} numArgs {} {}}
+
+{file a a}				 {1 {0 8} badOption {5 1} {{atime attributes channels copy delete dirname executable exists extension isdirectory isfile join lstat mkdir mtime nativename owned pathtype readable readlink rename rootname size split stat tail type volume writable} a}}
+
+{file atime a}				 {ok}
+{file atime}				 {1 {0 10} numArgs {} {}}
+{file atime a a}			 {1 {0 14} badWholeNum {13 1} a}
+{file atime a 1}			 {ok}
+{file atime a 1 a}			 {1 {0 16} numArgs {} {}}
+{file atime $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{file channels}				 {ok}
+{file channels a}			 {ok}
+{file channels a[pwd]*}			 {1 {0 21} warnPattern {14 7} {}}
+{file channels a a}			 {1 {0 17} numArgs {} {}}
+
+{file mtime a}				 {ok}
+{file mtime}				 {1 {0 10} numArgs {} {}}
+{file mtime a a}			 {1 {0 14} badWholeNum {13 1} a}
+{file mtime a 1}			 {ok}
+{file mtime a 1 a}			 {1 {0 16} numArgs {} {}}
+{file mtime $a/a}			 {1 {0 15} nonPortFile {11 4} {}}
+
+{glob a}				 {ok}
+{glob a a}				 {ok}
+{glob -directory d a}			 {ok}
+{glob -directory d/$d a}		 {1 {0 22} nonPortFile {16 4} {}}
+{glob -directory d}			 {1 {0 17} numArgs {} {}}
+{glob -join a}				 {ok}
+{glob -join}				 {1 {0 10} numArgs {} {}}
+{glob -nocomplain a}			 {ok}
+{glob -path d a}			 {ok}
+{glob -path d/$d a}			 {1 {0 17} nonPortFile {11 4} {}}
+{glob -path d}				 {1 {0 12} numArgs {} {}}
+{glob -types t a}			 {ok}
+{glob -types t}				 {1 {0 13} numArgs {} {}}
+{glob -- a}				 {ok}
+{glob -nocomplain -- a}			 {ok}
+{glob -nocomplain -- a a}		 {ok}
+{glob}					 {1 {0 4} numArgs {} {}}
+{glob -no a}				 {1 {0 10} badSwitch {5 3} -no}
+{glob -a a}				 {1 {0 9} badSwitch {5 2} -a}
+{glob - a}				 {1 {0 8} badSwitch {5 1} -}
+{glob a[pwd]*}				 {1 {0 12} warnPattern {5 7} {}}
+
+{lsort -unique a}			 {ok}
+{lsort -unique -foo $opt -unique -x}	 {1 {0 34} badSwitch {14 4} -foo}
+
+{package $a}				 {ok}
+{package $a a}				 {ok}
+{package $a a a}			 {ok}
+{package $a a a a}			 {ok}
+{package}				 {1 {0 7} numArgs {} {}}
+{package $a a a a a}			 {1 {0 18} numArgs {} {}}
+{package [set]}				 {1 {9 3} numArgs {} {}}
+{package foo}				 {1 {0 11} badOption {8 3} {{forget ifneeded names present provide require unknown vcompare versions vsatisfies} foo}}
+
+{package present a}			 {ok}
+{package present a 1.1}			 {ok}
+{package present -exact a 1.1}		 {ok}
+{package present}			 {1 {0 15} numArgs {} {}}
+{package present a 1.1 a}		 {1 {0 23} numArgs {} {}}
+{package present -exact a 1.1 a}	 {1 {0 30} numArgs {} {}}
+{package present -e a 1.1}		 {1 {0 24} badSwitch {16 2} -e}
+{package present -a a 1.1}		 {1 {0 24} badSwitch {16 2} -a}
+{package present [set]}			 {1 {17 3} numArgs {} {}}
+{package present a a}			 {1 {0 19} badVersion {18 1} {}}
+
+{package unknown}			 {ok}
+{package unknown a}			 {ok}
+{package unknown {lindex}}		 {ok}
+{package unknown a a}			 {1 {0 19} numArgs {} {}}
+{package unknown [set]}			 {1 {17 3} numArgs {} {}}
+
+{pkg_mkIndex a a}			 {ok}
+{pkg_mkIndex -lazy a a}			 {ok}
+{pkg_mkIndex a a a}			 {ok}
+{pkg_mkIndex a a a a}			 {ok}
+{pkg_mkIndex}				 {1 {0 11} numArgs {} {}}
+{pkg_mkIndex a}				 {1 {0 13} numArgs {} {}}
+{pkg_mkIndex -lazy a}			 {1 {0 19} numArgs {} {}}
+{pkg_mkIndex $a/a a}			 {1 {0 18} nonPortFile {12 4} {}}
+{pkg_mkIndex a a[pwd]*}			 {1 {0 21} warnPattern {14 7} {}}
+
+{regexp {[\]} a}			 {ok}
+{regexp {\a} a} 			 {ok}
+{regexp -all $a a} 			 {ok}
+{regexp -inline $a a} 			 {ok}
+{regexp -start -1 $a a} 		 {ok}
+{regexp -start x $a a} 			 {1 {0 20} badInt {14 1} {}}
+{regexp -start 1 -all -inline -linestop -lineanchor -about $a a}	{ok}
+{regexp -all -- -foo a}			 {ok}
+{regexp -inl $a a}			 {1 {0 16} badSwitch {7 4} -inl}
+
+{regsub a a a a}			 {ok}
+{regsub -start -1 a a a a}		 {ok}
+{regsub -start x a a a a}		 {1 {0 23} badInt {14 1} {}}
+{regsub -start 1 -all a a a a}		 {ok}
+
+{scan a a a}				 {ok}
+{scan a a a a}				 {ok}
+{scan a a a a a}			 {ok}
+{scan}					 {1 {0 4} numArgs {} {}}
+{scan a}				 {1 {0 6} numArgs {} {}}
+{scan a a}				 {ok}
+{scan [set] a a}			 {1 {6 3} numArgs {} {}}
+{scan a [set] a}			 {1 {8 3} numArgs {} {}}
+{scan a a $A}				 {1 {0 11} warnVarRef {9 2} {}}
+{scan a a a $A}				 {1 {0 13} warnVarRef {11 2} {}}
+
+}
+
+set checkDebugger {
+{debugger_break}			 {ok}
+{debugger_break a}			 {ok}
+{debugger_break $a $b}			 {1 {0 20} numArgs {} {}}
+
+{debugger_eval exit}			 {ok}
+{debugger_eval -- exit}			 {ok}
+{debugger_eval -name a exit}		 {ok}
+{debugger_eval -name a -- exit}		 {ok}
+{debugger_eval {set}}		 	 {1 {15 3} numArgs {} {}}
+{debugger_eval -- {set}}		 {1 {18 3} numArgs {} {}}
+{debugger_eval -name a {set}}		 {1 {23 3} numArgs {} {}}
+{debugger_eval -name a -- {set}}	 {1 {26 3} numArgs {} {}}
+{debugger_eval}				 {1 {0 13} numArgs {} {}}
+{debugger_eval exit foo}		 {1 {0 22} numArgs {} {}}
+{debugger_eval -- $a $a}		 {1 {0 22} numArgs {} {}}
+{debugger_eval -- $a $a $a}		 {1 {0 25} numArgs {} {}}
+{debugger_eval -name a -- exit foo}	 {1 {0 33} numArgs {} {}}
+
+{debugger_init}				 {ok}
+{debugger_init foo}			 {ok}
+{debugger_init foo 5000}		 {ok}
+{debugger_init foo 5000 bar}		 {1 {0 26} numArgs {} {}}
+{debugger_init foo bar}			 {1 {0 21} badInt {18 3} {}}
+
+{]}					 {1 {0 1} warnExtraClose {0 1} {{}}}
+}
+
+lappend checkDebugger \}		 {1 {0 1} warnExtraClose {0 1} {{}}}

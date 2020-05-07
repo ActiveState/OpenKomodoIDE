@@ -1,0 +1,39 @@
+<!ENTITY openFiles.label "Open Files">
+<!ENTITY viewEditorTabs.label "Show Editor Tabs">
+<!ENTITY viewEditorTabs.tooltip "Toggle Editor Tabs">
+<!ENTITY closeFile.tooltip "Close File">
+<!ENTITY closeFiles.tooltip "Close Files">
+
+<!ENTITY userInterfaceShowHideOpenFilesTab.desc "User Interface: Show/Hide Open Files Pane">
+<!ENTITY userInterfaceFocusOpenFilesTab.desc "User Interface: Focus on Open Files Pane">
+
+<!ENTITY groupFiles.label "Group Open Files">
+<!ENTITY sortTabs.label "Sort Tabs">
+<!ENTITY groupFiles.desc "OpenFiles Widget: Arrange Open Files in Groups">
+<!ENTITY sortTabs.desc "OpenFiles Widget: Sort Tabs">
+<!ENTITY groupByLang.label "Group By Language">
+<!ENTITY groupByLang.desc "OpenFiles Widget: Group Open Files by Language">
+<!ENTITY groupByExt.label "Group By Extension">
+<!ENTITY groupByExt.desc "OpenFiles Widget: Group Open Files by Extension">
+<!ENTITY groupByFolder.label "Group By Folder">
+<!ENTITY groupByFolder.desc "OpenFiles Widget: Group Open Files by Folder">
+<!ENTITY groupByLocation.label "Group By Location">
+<!ENTITY groupByLocation.desc "OpenFiles Widget: Group Open Files by Location">
+<!ENTITY groupByPattern.label "Group By Pattern">
+<!ENTITY groupByPattern.desc "OpenFiles Widget: Group Open Files by Pattern">
+<!ENTITY sortAlpha.label "Sort By Name">
+<!ENTITY sortAlpha.desc "OpenFiles Widget: Sort Open Files Alphabetically">
+<!ENTITY sortNatural.label "Sort By Tab Index">
+<!ENTITY sortNatural.desc "OpenFiles Widget: Sort Open Files Naturally">
+<!ENTITY sortLastOpened.label "Sort By Last Opened">
+<!ENTITY sortLastOpened.desc "OpenFiles Widget: Sort Open Files by when they were last opened">
+<!ENTITY sortAccessNo.label "Sort By Usage">
+<!ENTITY sortAccessNo.desc "OpenFiles Widget: Sort Open Files by how often they are used">
+
+<!ENTITY sortAscending.label "Sort Ascending">
+<!ENTITY sortAscending.desc "OpenFiles Widget: Sort Open Files Ascending">
+<!ENTITY sortDescending.label "Sort Descending">
+<!ENTITY sortDescending.desc "OpenFiles Widget: Sort Open Files Descending">
+
+<!ENTITY reSort.label "Re-Sort List">
+<!ENTITY reSort.desc "OpenFiles Widget: Re-Sort the list of open files">

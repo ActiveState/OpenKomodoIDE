@@ -1,0 +1,4 @@
+/* scc checkout bindings */
+scc_checkout[type="hg"] {
+    -moz-binding: url('chrome://mercurial/content/bindings/hg_checkout.xml#hg_checkout');
+}

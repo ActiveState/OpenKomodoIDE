@@ -1,0 +1,10 @@
+# komodo tool: ffile
+# ==================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ==================
+<% /* FileField (ffile) */ %>
+[[%tabstop1:FIELDNAME]] = forms.FileField([[%tabstop2:2]])

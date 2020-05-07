@@ -1,0 +1,6 @@
+#in.error textarea, #expr.error input {
+  color: red;
+}
+#out {
+  border: 2px inset #000;
+}

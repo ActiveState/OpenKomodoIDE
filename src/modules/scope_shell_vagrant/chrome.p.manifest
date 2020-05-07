@@ -1,0 +1,5 @@
+# #if MODE == "dev"
+content scope-shell-vagrant content/
+# #else
+content scope-shell-vagrant jar:scope-shell-vagrant.jar!/content/
+# #endif

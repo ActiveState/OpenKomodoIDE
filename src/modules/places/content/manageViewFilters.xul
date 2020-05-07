@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % placesDTD SYSTEM "chrome://komodo-places/locale/places.dtd">
+  %placesDTD;
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+]>
+
+<!-- Copyright (c) 2000-2010 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo-places/skin/places.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/prefwidgets.css" type="text/css"?>
+
+<dialog id="manageViewFilters"
+        title="&manageViewFilters.caption;"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        persist="screenX screenY width height"
+        orient="vertical"
+        buttons="accept,cancel"
+        onload="onLoad()"
+        style="min-width: 40em; max-width: 55em;"
+        flex="1"
+        ondialogaccept="return OK();"
+        ondialogcancel="return Cancel();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/logging.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/trace.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/uriparse.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/dialogs.js"/>
+    <script src="chrome://komodo-places/content/manageViewFilters.js"
+          type="application/x-javascript"/>
+
+    <groupbox id="panelFrame" name="panelFrame" orient="vertical">
+        <caption label="&fileSystemFilterConfiguration.label;" class="kopadded"/>
+        <grid>
+            <columns>
+                <column flex="1"/>
+                <column/>
+                <column/>
+            </columns>
+            <rows>
+                <row align="center">
+                <menulist id="filter-configuration"
+                            oncommand="doChangeFilter(this);">
+                    <menupopup id="filter-configuration-popup" flex="1"/>
+                </menulist>
+                <button id="newButton" label="&newPlace.label;" oncommand="doSaveNewFilter()" />
+                <button id="deleteButton" label="&delete.label;" oncommand="doDeleteFilter()" />
+                </row>
+            </rows>
+        </grid>
+    </groupbox>
+
+    <groupbox orient="vertical"  id="filters">
+        <caption label="&filters.label;"/>
+        <separator class="thin"/>
+        <label value="&filesToInclude.label;"/>
+        <textbox id="include_matches" pref="true" value=""/>
+        <separator class="thin"/>
+        <label value="&filesToExclude.label;"/>
+        <textbox id="exclude_matches" pref="true" value=""/>
+    </groupbox>
+</dialog>
+

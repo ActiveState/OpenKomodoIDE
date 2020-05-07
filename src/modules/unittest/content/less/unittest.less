@@ -1,0 +1,146 @@
+@import url("chrome://komodo/skin/global/colors.less");
+@import url("resource://profile/colors.less");
+
+textbox,
+tabpanels
+{
+    padding: 0 !important;
+}
+
+textbox#test-output,
+textbox#test-errors
+{
+    font-family: monospace;
+}
+
+#test-result richlistitem
+{
+    &.entry[unittest-group]
+    {
+        padding-left: 14px;
+    }
+    
+    /* Details hbox */
+    & > vbox > hbox + hbox
+    {
+        padding-left: 12px;
+        visibility: collapse;
+        
+        .expected:not(.value),
+        .actual:not(.value)
+        {
+            opacity: 0.6;
+        }
+        
+        .expected.value
+        {
+            color: @state-info;
+        }
+        
+        .actual.value
+        {
+            color: @state-warning;
+        }
+        
+        .message.value
+        {
+            color: @state-error;
+        }
+    }
+    
+    label
+    {
+        margin-left: 4px;
+        
+        &.summary
+        {
+            font-weight: bold;
+        }
+        
+        &.duration
+        {
+            opacity: 0.6;
+        }
+        
+        &.counter.real
+        {
+            opacity: 0.6;
+        }
+    }
+    
+    .action
+    {
+        font-size: 12px;
+        margin-left: 4px;
+        line-height: @size;
+        vertical-align: middle;
+        cursor: pointer;
+        opacity: 0.6;
+    }
+}
+
+#test-result.show-details richlistitem > vbox > hbox + hbox
+{
+    visibility: visible;
+}
+
+#test-result.show-details richlistitem[selected] > vbox > hbox + hbox label
+{
+    color: @special-foreground-widget !important;
+}
+
+#summary > label
+{
+    margin-left: 4px;
+}
+
+#summary > box
+{
+    margin-left: 12px;
+}
+
+listbox
+{
+    height: auto;
+}
+
+.widgetToolbarWrap
+{
+    checkbox
+    {
+        margin-right: 4px;
+    }
+}
+
+#details-inner
+{
+    padding: 4px;
+    overflow: auto;
+    
+    & > vbox > hbox,
+    {
+        -moz-box-align: center;
+    }
+    
+    & .ui-label
+    {
+        width: 75px;
+        margin-right: 4px;
+        text-align: right;
+    }
+    
+    .ui-textbox
+    {
+        -moz-box-flex: 1;
+    }
+}
+
+#test-output-tab[dirty]
+{
+    color: @state-info;
+}
+
+#test-errors-tab[dirty]
+{
+    color: @state-error;
+}

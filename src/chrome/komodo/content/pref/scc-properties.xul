@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        class="kodialog pref-window"
+        orient="vertical"
+        onload="parent.initPanel();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+
+<script type="application/x-javascript;version=1.7">
+<![CDATA[
+
+function OnPreferencePageLoading() {
+  try {
+    var file;
+    if (parent.part) {
+        file = parent.part.getFile();
+    } else {
+        file = parent.view.koDoc.file;
+    }
+    var sccType = null;
+    if (file) {
+        sccType = file.sccType;
+        switch (file.sccType) {
+            case "p4":
+                sccType = "Perforce";
+                break;
+            case "cvs":
+                sccType = "CVS";
+                break;
+            case "svn":
+                sccType = "Subversion";
+                break;
+            case 'git':
+                sccType = "Git";
+                break;
+            case 'hg':
+                sccType = "Mercurial";
+                break;
+            case 'bzr':
+                sccType = "Bazaar";
+                break;
+            default:
+                sccType = file.sccType;
+        }
+    }
+    if (sccType) {
+        document.getElementById("scc-name").value = file.baseName;
+        document.getElementById("scc-type").value = sccType;
+        document.getElementById("scc-status").value = file.sccAction || file.sccStatus;
+        if (!file.sccDepotRevision || file.sccDepotRevision == '?') {
+            document.getElementById("scc-depotRevision-row").setAttribute('collapsed', 'true');
+        } else {
+            document.getElementById("scc-depotRevision").value = file.sccDepotRevision;
+        }
+        if (!file.sccLocalRevision || file.sccLocalRevision == '?') {
+            document.getElementById("scc-localRevision-row").setAttribute('collapsed', 'true');
+        } else {
+            document.getElementById("scc-localRevision").value = file.sccLocalRevision;
+        }
+    }
+  } catch (ex) {
+    ko.logging.getLogger("pref.scc-properties").exception(ex, "SCC properties error");
+  }
+}
+
+]]>
+</script>
+
+    <groupbox orient="vertical">
+        <caption label="&sourceCodeControlProperties.label;"/>
+            <grid flex="1">
+                <columns>
+                    <column style="min-width: 90px;"/>
+                    <column flex="1"/>
+                </columns>
+                <rows>
+                    <row align="center">
+                        <label value="&sccPropertiesName.label;"/>
+                        <textbox id="scc-name" readonly="true" flex="1"/>
+                    </row>
+                    <separator style="height: 8px;"/>
+                    <separator class="groovy-thin"/>
+                    <separator class="thin"/>
+
+                    <row align="center">
+                        <label value="&sccPropertiesSystem.label;"/>
+                        <label id="scc-type" value="&sccPropertiesNA.label;" crop="middle"/>
+                    </row>
+                    <separator class="thin"/>
+                    <row align="center">
+                        <label value="&sccPropertiesStatus.label;"/>
+                        <label id="scc-status" value="&sccPropertiesNA.label;" crop="middle"/>
+                    </row>
+                    <separator class="thin"/>
+                    <row id="scc-depotRevision-row" align="center">
+                        <label value="&sccPropertiesDepotRev.label;"/>
+                        <label id="scc-depotRevision" value="&sccPropertiesNA.label;" crop="middle"/>
+                    </row>
+                    <separator class="thin"/>
+                    <row id="scc-localRevision-row" align="center">
+                        <label value="&sccPropertiesLocalRev.label;"/>
+                        <label id="scc-localRevision" value="&sccPropertiesNA.label;" crop="middle"/>
+                    </row>
+                    <separator class="thin"/>
+                </rows>
+            </grid>
+
+
+    </groupbox>
+
+</window>

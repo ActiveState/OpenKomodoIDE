@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2016 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+  <!ENTITY % komodoDTD.INTERNAL SYSTEM "chrome://komodo/locale/komodo-internal.dtd">
+  %komodoDTD.INTERNAL;
+  <!ENTITY % komodoDTD.SCC SYSTEM "chrome://komodo/locale/scc.dtd">
+  %komodoDTD.SCC;
+]>
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/scc_widget.css" type="text/css"?>
+
+<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    
+    <script src="chrome://komodo/content/scc/widget.js"
+            type="application/x-javascript;version=1.7"/>
+    
+    <deck id="deck" flex="1" selectedIndex="0">
+    
+        <tabbox id="scc-tabs" class="embedded" flex="1" selectedIndex="0">
+            
+            <tabs class="widgetToolbarWrap">
+                <tab id="scc-tab-commit" label="Commit Changes" selected="true"/>
+                <tab id="scc-tab-history" label="Project History"/>
+                <tab id="scc-tab-history-file" label="File History"/>
+                <tab id="scc-tab-log" label="Log"/>
+            </tabs>
+            
+            <tabpanels flex="1">
+                
+                <tabpanel flex="1">
+                    <browser id="scc-browser-commit" _src="chrome://komodo/content/scc/commit.xul" flex="1" style="width: 100%"/>
+                </tabpanel>
+                
+                <tabpanel flex="1">
+                    <browser id="scc-browser-history" _src="chrome://komodo/content/scc/history.xul" flex="1" style="width: 100%"/>
+                </tabpanel>
+                
+                <tabpanel flex="1">
+                    <browser id="scc-browser-history-file" _src="chrome://komodo/content/scc/history.xul#file" flex="1" style="width: 100%"/>
+                </tabpanel>
+                
+                <tabpanel flex="1">
+                    <browser id="scc-browser-log" _src="chrome://komodo/content/scc/log.xul" flex="1" style="width: 100%"/>
+                </tabpanel>
+                
+            </tabpanels>
+            
+        </tabbox>
+        
+        <vbox flex="1" pack="center" align="center">
+            <description>
+                Current Places directory does not appear to be under version control
+            </description>
+            <button label="Checkout/Clone a Repository" oncommand="ko.commands.doCommandAsync('cmd_SCCcheckout')"/>
+            <button label="Retry" oncommand="ko.commands.doCommandAsync('cmd_refreshStatus'); reload();"/>
+        </vbox>
+        
+    </deck>
+    
+</page>

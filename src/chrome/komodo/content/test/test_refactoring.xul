@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2004-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xul-overlay href="chrome://komodo/content/bindings/scintilla-overlay.xul"?>
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+
+<window id="test_refactoring"
+        title="Refactoring Tests"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="OnLoad()"
+        screenX="40" screenY="40"
+        width="650" height="600"
+        persist="screenX screenY width height"
+        orient="vertical">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/prefs.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/test/test_refactoring.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://refactoring/content/refactoring.js" type="application/x-javascript;version=1.7"/>
+
+    <vbox style="padding: 10px 10px 20px 10px;">
+        <description>
+            Select a refactoring test below to run.
+        </description>
+        <hbox flex="1" align="center">
+            <separator flex="1"/>
+            <label value="Test Names" control="test-names" accesskey="N"/>
+            <menulist id="test-names"
+                      style="min-width: 150px;">
+                <menupopup>
+                    <menuitem label="PythonTests_CategorizeVars_01" />
+                    <menuitem label="PythonTests_CategorizeVars_02" />
+                    <menuitem label="PythonTests_CategorizeVars_03" />
+                    <menuitem label="PythonTests_ExtractMethod_01" />
+                    <menuitem label="PythonTests_ExtractMethod_02" />
+                    <menuitem label="PythonTests_ExtractMethod_03" />
+                    <menuitem label="PythonTests_ExtractMethod_04" />
+                    <menuitem label="PythonTests_ExtractMethod_05" />
+                    <menuitem label="PythonTests_CategorizeVars_04" />
+                    <menuitem label="PHPTests_CategorizeVars_01" />
+                    <menuitem label="PHPTests_ExtractMethod_01" />
+                    <menuitem label="PHPTests_ExtractMethod_02" />
+                    <menuitem label="PHPTests_ExtractMethod_03" />
+                    <menuitem label="PHPTests_ExtractMethod_04" />
+                    <menuitem label="PHPTests_ExtractMethod_05" />
+                    <menuitem label="PHPTests_ExtractMethod_06" />
+                    <menuitem label="PHPTests_ExtractMethod_07" />
+                    <menuitem label="PHPTests_ExtractMethod_08" />
+                    <menuitem label="PHPTests_ExtractMethod_09" />
+                    <menuitem label="PHPTests_ExtractMethod_10" />
+                    <menuitem label="JSTests_CategorizeVars_01" />
+                    <menuitem label="JSTests_ExtractMethod_01" />
+                    <menuitem label="JSTests_ExtractMethod_02" />
+                    <menuitem label="JSTests_ExtractMethod_03" />
+                    <menuitem label="JSTests_ExtractMethod_04" />
+                    <menuitem label="JSTests_ExtractMethod_05" />
+                    <menuitem label="JSTests_ExtractMethod_06" />
+                    <menuitem label="JSTests_StructureFail_01" />
+                    <menuitem label="JSTests_StructureFail_02" />
+                    <menuitem label="JSTests_StructureFail_03" />
+                    <menuitem label="JSTests_StructureCheck_04" />
+                    <menuitem label="JSTests_StructureCheck_05" />
+                    <menuitem label="JSTests_StructureCheck_06" />
+                    <menuitem label="NodeTests_CategorizeVars_01" />
+                    <menuitem label="NodeTests_ExtractMethod_01" />
+                    <menuitem label="NodeTests_ExtractMethod_02" />
+                    <menuitem label="NodeTests_StructureFail_01" />
+                    <menuitem label="NodeTests_StructureFail_02" />
+                    <menuitem label="NodeTests_StructureFail_03" />
+                    <menuitem label="NodeTests_StructureCheck_04" />
+                    <menuitem label="NodeTests_StructureCheck_05" />
+                    <menuitem label="NodeTests_StructureCheck_06" />
+                    <menuitem label="RubyTests_CategorizeVars_01" />
+                    <menuitem label="RubyTests_CategorizeVars_02" />
+                    <menuitem label="RubyTests_ExtractMethod_01" />
+                    <menuitem label="RubyTests_ExtractMethod_02_Raise" />
+                    <menuitem label="RubyTests_ExtractMethod_03" />
+                    <menuitem label="RubyTests_ExtractMethod_04" />
+                    <menuitem label="RubyTests_ExtractMethod_05" />
+                    <menuitem label="RubyTests_ExtractMethod_06" />
+                    <menuitem label="RubyTests_ExtractMethod_07" />
+                    <menuitem label="PythonTests_StructureCheck_01" />
+                    <menuitem label="PerlTests_CategorizeVars_01" />
+                    <menuitem label="PerlTests_CategorizeVars_02" />
+                    <menuitem label="PerlTests_ExtractMethod_03" />
+                    <menuitem label="PerlTests_ExtractMethod_04" />
+                    <menuitem label="PerlTests_ExtractMethod_05" />
+                    <menuitem label="PerlTests_ExtractMethod_06" />
+                    <menuitem label="PerlTests_ExtractMethod_07" />
+                    <menuitem label="PerlTests_ExtractMethod_08" />
+                    <menuitem label="PerlTests_ExtractMethod_09" />
+                    <menuitem label="PerlTests_ExtractMethod_10" />
+                </menupopup>
+            </menulist>
+            <hbox flex="1">
+              <button label="Run Test" accesskey="R" oncommand="RunTest();"/>
+            </hbox>
+            <separator flex="1"/>
+        </hbox>
+        <hbox flex="1">
+        <button label="Run All Tests" accesskey="A" oncommand="RunAllTests();" />
+        <button label="Clear Results" accesskey="C" oncommand="ClearResults();" />
+        <button label="Stop" id="stopTests" accesskey="S" oncommand="StopTests();" disabled="true" />
+        </hbox>
+        <separator />
+        <listbox id="results" rows="10" width="80%"  flex="1">
+          <listhead>
+            <listheader label="Test Name" width="300"  flex="1"/>
+            <listheader label="Status" width="200"  flex="1"/>
+            <listheader label="File" width="200"  flex="1"/>
+            <listheader label="Result" width="100"  flex="1"/>
+          </listhead>
+          <listcols>
+            <listcol />
+            <listcol />
+            <listcol />
+            <listcol />
+          </listcols>
+        </listbox>
+    </vbox>
+
+    <!--<view type="buffer" id="view" flex="1"/>-->
+</window>

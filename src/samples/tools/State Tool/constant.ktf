@@ -1,0 +1,14 @@
+# komodo tool: constant
+# ====================
+# auto_abbreviation: true
+# indent_relative: true
+# language: YAML
+# set_selection: true
+# treat_as_ejs: false
+# type: snippet
+# version: 1.1.5
+# ====================
+  - name: [[%tabstop:NAME]]
+    value: [[%tabstop:VALUE]]
+    [[%tabstop:constraint:
+      - os: linux,windows,macos]]!@#_currentPos!@#_anchor

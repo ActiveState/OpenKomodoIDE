@@ -1,0 +1,139 @@
+/* Copyright (c) 2003-2010 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+/*
+ * CSS for Places UI
+ */
+
+@icon-folder-explore: url("chrome://komodo-places/skin/folder_explore.png");
+
+
+treechildren#places-files-tree-body::-moz-tree-cell-text(disabled) {
+  color: grey;
+}
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccOk) {
+}
+
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccSync) {
+}
+
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccConflict) {
+}
+
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccAdd) {
+}
+
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccDelete) {
+}
+
+
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccBranch) {
+  /* XXX fixme */
+}
+
+/* XXX fixme integrate icons are needed, currently they match the edit icons */
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccIntegrate) {
+}
+
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccOk, sccIntegrate) {
+}
+
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccSync, sccIntegrate) {
+}
+
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccConflict, sccIntegrate) {
+}
+
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccEdit) {
+}
+
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccOk, sccEdit) {
+}
+
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccSync, sccEdit) {
+}
+
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, sccConflict, sccEdit) {
+}
+
+/* bindings */
+
+tree.placestree {
+  -moz-binding: url('chrome://komodo-places/content/widgets-places.xml#places_tree_b');
+}
+
+tree.projectPlacesTree {
+  -moz-binding: url('chrome://komodo-places/content/widgets-places.xml#projectPlacesTree_b');
+}
+
+/* ---- Places subpanel ---- */
+
+
+/* No default grippy image. Splitter-like cursor as appropriate. */
+#placesSubpanelSplitter {
+  -moz-appearance: none;
+  background: transparent !important;
+  border: 0 !important;
+}
+#placesSubpanelSplitterHboxBorder {
+  -moz-box-orient: horizontal;
+  height: 1px;
+  margin: 0 10px;
+}
+#placesSubpanelSplitter > grippy {
+  background-image: none !important;
+}
+#placesSubpanelSplitter,
+#placesSubpanelSplitter label {
+  cursor: ns-resize;
+}
+#placesSubpanelSplitter toolbarbutton  {
+  cursor: default;
+}   
+
+
+/* ---- Places "Projects" subpanel ---- */
+
+.recentProjectsTree:-moz-tree-cell-text(projectActive) {
+  font-weight: bold;
+}
+
+#placesRootButton > image
+{
+	display: none;
+}
+
+treechildren::-moz-tree-image {
+  width: 14px;
+  height: 14px;
+}
+
+/* Hidden Icons State */
+
+#places-files-tree.hideIcons {
+
+  treechildren#places-files-tree-body::-moz-tree-image {
+    width: 0;
+    height: 0;
+  }
+
+  treechildren#places-files-tree-body::-moz-tree-indentation {
+    width: 10px;
+    margin: 0;
+  }
+
+  treechildren#places-files-tree-body::-moz-tree-cell-text {
+    background-image: none;
+    margin-left: 2px;
+    padding-left: 0;
+  }
+
+}
+
+#places-scc-popup
+{
+  menuitem[disabled="true"]
+  {
+	visibility: collapse;
+  }
+}

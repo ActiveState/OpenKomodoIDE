@@ -1,0 +1,19 @@
+# komodo tool: tabularinline
+# ==========================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ==========================
+<% /* Tabular Inline */ %>
+
+class [[%tabstop1:1]]Inline(admin.TabularInline):
+        '''
+            Tabular Inline View for [[%tabstop1:1]]
+        '''
+      model = [[%tabstop2:${1]]}
+      min_num = [[%tabstop3:3]]
+      max_num = [[%tabstop4:20]]
+      extra = [[%tabstop5:1]]
+      raw_id_fields = ([[%tabstop6:6]],)

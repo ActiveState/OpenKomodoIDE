@@ -1,0 +1,60 @@
+---
+
+version: "{build}"
+
+branches:
+  only:
+    - master
+
+install:
+  - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
+  - echo %PATH%
+
+  - ruby --version
+  - where ruby
+
+  - gem update --system --no-document
+  - gem --version
+  - where gem
+
+  - gem install bundler --no-document
+  - bundler --version
+  - where bundler
+
+  - bundle install --jobs 3 --retry 3
+
+build_script:
+  - bundle exec rake clobber
+  - bundle exec rake compile
+
+test_script:
+  - bundle exec rake test
+
+environment:
+  matrix:
+    - ruby_version: '200'
+    - ruby_version: 200-x64
+    - ruby_version: '21'
+    - ruby_version: 21-x64
+    - ruby_version: '22'
+    - ruby_version: 22-x64
+
+  codeclimate_repo_token: '02530029b1e956220f05076c590b84b9ab078362c9083312eb2ad
+41cab138408'
+
+matrix:
+  allow_failures:
+    - ruby_version: '200'
+    - ruby_version: 200-x64
+
+  fast_finish: true
+
+notifications:
+  - provider: Email
+
+    on_build_success: false
+    on_build_failure: false
+    on_build_status_changed: true
+
+    to:
+      - deivid.rodriguez@gmail.com

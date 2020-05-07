@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % sccSvnDTD SYSTEM "chrome://komodo/locale/scc-svn.dtd">
+  %sccSvnDTD;
+]>
+
+<bindings id="koSvnCheckoutBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="svn_checkout">
+        <content>
+            <children>
+                <xul:vbox anonid="checkout_vbox">
+                    <xul:hbox anonid="checkout_hbox"
+                              xbl:inherits="disabled"
+                              align="center">
+                        <xul:label anonid="checkout_revision_label"
+                                   class="checkout_revision_label"
+                                   xbl:inherits="crop,disabled"
+                                   crop="right"
+                                   value="&checkoutRevision.label;"/>
+                        <xul:textbox anonid="checkout_revision_textbox"
+                                     class="checkout_revision_textbox"
+                                     xbl:inherits="disabled"
+                                     flex="1"
+                                     value="HEAD"/>
+                    </xul:hbox>
+                    <xul:checkbox anonid="checkout_top_folder_checkbox"
+                                  class="checkout_top_folder_checkbox"
+                                  xbl:inherits="crop,disabled"
+                                  label="&checkoutOnlyTheTopFolder.label;"
+                                  checked="false"/>
+                    <xul:checkbox anonid="checkout_omit_externals_checkbox"
+                                  class="checkout_omit_externals_checkbox"
+                                  xbl:inherits="crop,disabled"
+                                  label="&checkoutOmitExternals.label;"
+                                  checked="false"/>
+                </xul:vbox>
+            </children>
+        </content>
+
+        <implementation>
+            <constructor>
+            <![CDATA[
+            try {
+            } catch (e) {
+                log.exception(e);
+            }
+            ]]>
+            </constructor>
+
+            <method name="getCheckoutArguments">
+            <body>
+            <![CDATA[
+                // Must return an array of parameters to be used by the
+                // command line svn checkout.
+                var revTextbox = document.getAnonymousElementByAttribute(this, "anonid", "checkout_revision_textbox");
+                var topFolderOnlyCheckbox = document.getAnonymousElementByAttribute(this, "anonid", "checkout_top_folder_checkbox");
+                var omitExternalsCheckbox = document.getAnonymousElementByAttribute(this, "anonid", "checkout_omit_externals_checkbox");
+                var commandline_args = [];
+                if (revTextbox.value) {
+                    commandline_args.push("--revision");
+                    commandline_args.push(revTextbox.value);
+                }
+                if (topFolderOnlyCheckbox.checked) {
+                    commandline_args.push("--non-recursive");
+                }
+                if (omitExternalsCheckbox.checked) {
+                    commandline_args.push("--ignore-externals");
+                }
+                return commandline_args.join(" ");
+            ]]>
+            </body>
+            </method>
+
+        </implementation>
+
+    </binding>
+
+</bindings>

@@ -1,0 +1,22 @@
+// komodo tool: Delete Databases
+// =============================
+// async: 0
+// icon: chrome://famfamfamsilk/skin/icons/database_delete.png
+// language: JavaScript
+// rank: 100
+// trigger: trigger_postopen
+// trigger_enabled: 0
+// type: macro
+// version: 1.0.12
+// =============================
+(function() {    
+    try {
+        ko.extensions.rails.manageDatabases(window, 'delete', 'deletion');
+    } catch(ex) {
+	if (ex.message == "You cancelled.") {
+	    return;
+	}
+        var msg = ex + "\n";
+        alert(msg);
+    }
+})();

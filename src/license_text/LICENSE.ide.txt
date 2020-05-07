@@ -1,0 +1,379 @@
+ACTIVESTATE KOMODO IDE LICENSE AGREEMENT
+
+Agreement Version: December 15, 2018
+
+Please read carefully: THIS IS A LICENSE AND NOT AN AGREEMENT FOR
+SALE. By using and installing ActiveState's Software or, where
+applicable, choosing the "I ACCEPT..." option at the end of the
+License you indicate that you have read, understood, and accepted the
+terms and conditions of the License. IF YOU DO NOT AGREE WITH THE
+TERMS AND CONDITIONS, YOU SHOULD NOT ATTEMPT TO INSTALL THE SOFTWARE.
+If the Software is already downloaded or installed, you should
+promptly cease using the Software in any manner and destroy all copies
+of the Software in your possession. You, the user, assume all
+responsibility for the selection of the Software to achieve your
+intended results and for the installation, use and results obtained
+from the Software. If you have any questions concerning this, you may
+contact ActiveState via license@activestate.com.
+
+This ActiveState Komodo IDE License Agreement ("License") is made
+between ActiveState Software Inc. ("ActiveState") as licensor, and
+("You" or "Your"), as licensee, as of the date of your use of the
+Software (the Software is in use on a computer when it is loaded into
+the RAM or installed into the permanent memory (e.g., hard disk or
+other storage device) of that computer.). Any capitalized terms not
+defined in these License will be defined in the ActiveState® Platform
+Terms of Use and Service Agreement. By agreeing to the License, you
+also agree to the ActiveState® Platform Terms of Use and Service
+Agreement, as determined by the type of account you have with
+ActiveState, subject to features and User limits, as determined by
+your Subscription price, that will remain your price for the duration
+of the payment term; however, prices are subject to change at the end
+of a current Subscription term.
+
+This License reflects ActiveState's intent to retain full ownership of
+and control of the use and distribution of ActiveState Komodo and
+other applicable software (collectively the "Software").
+
+1)  Definitions.
+
+    a)  "Client" means a computer device used by a User for running
+        the Software.
+    b)  "Subscription Confirmation" means Your rights to access and
+        use Software, including the Subscription, and the number of
+        authorized Users, as determined by the type of account you
+        have.
+    c)  "Subscription" specifies the subscription term for the
+        Software provided to You when you register as a User and that
+        authorizes you to use the Software only in the following
+        specific contexts provided herein.
+
+2)  License Grant.
+
+    a)  The Software is provided on a per-User basis. If You comply
+        with the terms of this License, You have the rights stipulated
+        hereunder for each Subscription that You acquire. Your rights
+        acquired in relation to the Software are limited to those
+        necessary to enable You and its Users to effectively operate
+        the Software. All other rights remain reserved to ActiveState.
+    b)  Unless the Subscription has expired, or this License is
+        terminated in accordance with Section 3), then your use of the
+        Software is subject to the terms and conditions specified
+        herein, ActiveState grants You a non-exclusive and
+        non-transferable right to use the Software covered by the
+        Subscription as stipulated below:
+        i)  You may:
+            (1) Install and use any version of the Software covered by
+                the Subscription on any number of Clients and on any
+                operating system supported by the Software; and
+            (2) Make one backup copy of the Software solely for
+                archival/security backup purposes.
+        ii) You may not:
+            (1) Allow the same Subscription to be used concurrently by
+                more than one (1) User;
+            (2) Rent, lease, reproduce, modify, adapt, create
+                derivative works of, distribute, sell, or transfer the
+                Software;
+            (3) Provide access to the Software or the right to use the
+                Software to a third party;
+            (4) Reverse engineer, decompile, disassemble, modify, or
+                translate, or make any attempt to discover the source
+                code of, the Software; or
+            (5) Remove or obscure any proprietary or other notices
+                contained in the Product.
+        iii) Following the expiration of this License, the rights
+             stipulated in Section 2) B) i) shall terminate.
+        iv)  You acknowledge that no ownership right is conveyed to You
+             under this License, irrespective of the use of terms such
+             as "purchase" or "sale". ActiveState has and retains all
+             rights, title and interest, including all intellectual
+             property rights, in and to the Software and any and all
+             related or underlying technology, and any modifications or
+             derivative works thereof.
+        v)   As long as You comply with the terms and conditions of
+             this License, ActiveState grants to You a personal,
+             non-exclusive, non-transferable, and limited license to
+             use the Software solely to create, compile, test and
+             deploy, in source or object code form, your own
+             application programs ("Works"). You may create
+             redistributable applications based on your unique
+             development work using the Software and you may sublicense
+             to end users of such Works ("End Users") the personal,
+             non-exclusive, non-transferable right to install and
+             execute the files, and/or libraries that are necessary to
+             use the Works created using the Software. Use of such
+             files and/or libraries by such End Users is limited to
+             runtime purposes only. You may not provide any End User
+             with access to the development or interactive capabilities
+             of the Software libraries or technology, nor may you
+             expose the base programming language(s) as a scripting
+             language within the Works to any such End User.
+        vi)  Evaluation (Trial) Use. If the type of account you have
+             authorizes Evaluation (Trial) Use, you may use the
+             software only for evaluation purposes without payment of
+             any subscription fees for a period of no more than
+             twenty-one (21) days from the date of initiating the trial
+             in your account.
+        vii) Application Service Provision. Any use of the Software in
+             conjunction with ActiveState Platform and any updates to
+             such services which may be provided by ActiveState from
+             time to time. ActiveState hereby grants to You only the
+             non-exclusive right and license to access, use, and
+             transmit Your data with the Service. You shall access the
+             Service only with procedures communicated by ActiveState
+             and use the Service only for your internal business
+             operations including affiliated entities that control, or
+             are controlled by, You, and You shall not permit the
+             Service to be used by or for the benefit of third parties.
+             You shall not have the right to sublicense or sell rights
+             to access or use the Service or to transfer or assign
+             rights to access or use the Service, except as expressly
+             provided herein. All rights not expressly granted to You
+             herein are expressly reserved by ActiveState.
+        viii) Other Use. Any use of the Software other than the uses
+              specified above requires a separate license from
+             ActiveState and the payment of additional license fees as
+             determined by ActiveState. Such additional redistribution
+             options are available, at ActiveState's sole discretion,
+             on a case-by-case basis. Contact sales@activestate.com to
+             discuss any redistribution options not covered by this
+             license agreement. ActiveState reserves all rights not
+             expressly granted to you herein.
+
+3)  Term and Termination.
+
+    a)  The term of this Agreement will commence upon acceptance of
+        this License by You as set forth in the preamble above and
+        will continue for the Software through the end of the
+        applicable Subscription period specified in the respective
+        Subscription Confirmation. This License will automatically
+        renew with respect to the Software for a successive
+        Subscription terms, unless terminated as set forth herein.
+        Notwithstanding the following if your Subscription is
+        terminated for whatever reason and you have a perpetual
+        license to the Software purchased on or before December 31,
+        2018 then your perpetual license with that said version of the
+        Software will still be in effect as per the terms of that
+        license.
+    b)  You may terminate this License at any time by cancelling the
+        Subscription as set forth herein. If such termination occurs
+        during a then-current Subscription period, this License will
+        continue to be effective until the end of that Subscription
+        period. Such termination does not relieve You of the
+        obligation to pay any outstanding subscription fees owed to
+        ActiveState, and no credits or refunds will be issued to You
+        for prepaid Subscription fees).
+    c)  This License is effective until terminated. ActiveState may
+        terminate this License immediately and without prior notice if
+        you breach any term of this License or for any other
+        commercially reasonable ground. In the event of any
+        termination or expiration, you agree to immediately destroy
+        and/or erase the original and all copies of the Software, any
+        accompanying documentation and to discontinue their use and
+        you will not retain or store the Software or any copies
+        thereof, in any form or medium.
+
+4)  Proprietary Rights.
+    
+    The Software is licensed, not sold, to you. ActiveState reserves
+    all rights not expressly granted to you. Ownership of the Software
+    and its associated proprietary rights, including but not limited
+    to patent and patent applications, are retained by ActiveState.
+    The Software is protected by the copyright laws of Canada and the
+    United States and by international treaties. Therefore, you must
+    comply with such laws and treaties in your use of the Software.
+    You agree not to remove any of ActiveState’s copyright, trademarks
+    and other proprietary notices from the Software.
+
+5)  Distribution.
+    
+    Except as may be expressly allowed in Section 1, or as otherwise
+    agreed to in a written agreement signed by both you and
+    ActiveState, you will not distribute the Software, either in whole
+    or in part, in any form or medium.
+
+6)  Transfer and Use Restrictions.
+    
+    You may not sell, license, sub-license, lend, lease, rent, share,
+    assign, transmit, telecommunicate, export, distribute or otherwise
+    transfer the Software to others, except as expressly permitted in
+    this License Agreement or in another agreement with ActiveState.
+    In order to use the Software, you will require a valid account and
+    agree to this License Agreement for the use of the Software. You
+    will not disclose or provide access to your account to any other
+    person or entity. You must comply with all applicable Canadian and
+    other export control laws in your use of the Software. Except as
+    may be expressly permitted above, you may not modify, reverse
+    engineer, decompile, decrypt, extract or otherwise disassemble the
+    Software.
+
+7)  NO WARRANTY.
+    
+    ACTIVESTATE MAKES NO WARRANTIES WHATSOEVER REGARDING THE SOFTWARE
+    AND IN PARTICULAR, DOES NOT WARRANT THAT THE SOFTWARE WILL
+    FUNCTION IN ACCORDANCE WITH THE ACCOMPANYING DOCUMENTATION IN
+    EVERY COMBINATION OF HARDWARE PLATFORM OR SOFTWARE ENVIRONMENT OR
+    CONFIGURATION, OR BE COMPATIBLE WITH EVERY COMPUTER SYSTEM. IF THE
+    SOFTWARE IS DEFECTIVE FOR ANY REASON, YOU WILL ASSUME THE ENTIRE
+    COST OF ALL NECESSARY REPAIRS OR REPLACEMENTS. FURTHER, YOU
+    ACKNOWLEDGES AND AGREES THAT THE INTERNET IS NOT ESTABLISHED OR
+    MAINTAINED BY ACTIVESTATE, THAT ACTIVESTATE HAS NO CONTROL OVER
+    THE INTERNET, AND THAT ACTIVESTATE IS NOT LIABLE FOR THE
+    DISCONTINUANCE OF OPERATION OF ANY PORTION OF THE INTERNET OR
+    POSSIBLE REGULATION OF THE INTERNET WHICH MIGHT RESTRICT OR
+    PROHIBIT THE OPERATION OF THE SERVICE.
+
+8)  DISCLAIMER.
+    
+    ACTIVESTATE DOES NOT WARRANT THAT THE SOFTWARE OR SERVICE IS FREE
+    FROM BUGS, DEFECTS, ERRORS OR OMISSIONS. THE SOFTWARE OR SERVICE
+    IS PROVIDED ON AN "AS IS" BASIS AND ACTIVESTATE MAKES NO OTHER
+    WARRANTIES OR CONDITIONS, EXPRESS OR IMPLIED, WITH RESPECT TO THE
+    SOFTWARE OR SERVICE OR ANY ACCOMPANYING ITEMS INCLUDING WITHOUT
+    LIMITATION THE IMPLIED WARRANTIES OR CONDITIONS OF MERCHANTABILITY
+    OR FITNESS FOR A PARTICULAR PURPOSE. SOME JURISDICTIONS DO NOT
+    ALLOW THE EXCLUSION OF IMPLIED WARRANTIES, IN WHICH CASE THE ABOVE
+    EXCLUSIONS MAY NOT APPLY TO YOU.
+
+9)  LIMITATION OF LIABILITY.
+    
+    ACTIVESTATE WILL HAVE NO LIABILITY OR OBLIGATION FOR ANY DAMAGES
+    OR REMEDIES, INCLUDING, WITHOUT LIMITATION, THE COST OF SUBSTITUTE
+    GOODS, LOST DATA, LOST PROFITS, LOST REVENUES OR ANY OTHER DIRECT,
+    INDIRECT, INCIDENTAL, SPECIAL, GENERAL, PUNITIVE OR CONSEQUENTIAL
+    DAMAGES, ARISING OUT OF THIS LICENSE OR THE USE OR INABILITY TO
+    USE THE SOFTWARE OR SERVICE. IN NO EVENT WILL ACTIVESTATE’S TOTAL
+    AGGREGATE LIABILITY (WHETHER IN CONTRACT (INCLUDING FUNDAMENTAL
+    BREACH), WARRANTY, TORT (INCLUDING NEGLIGENCE), PRODUCT LIABILITY,
+    INTELLECTUAL PROPERTY INFRINGEMENT OR OTHER LEGAL THEORY) WITH
+    REGARD TO THE SOFTWARE AND/OR THIS LICENSE EXCEED THE LICENSE FEE
+    PAID BY YOU TO ACTIVESTATE. FURTHER, ACTIVESTATE WILL NOT BE
+    LIABLE FOR ANY DELAY OR FAILURE TO PERFORM ITS OBLIGATIONS UNDER
+    THIS LICENSE AS A RESULT OF ANY CAUSES OR CONDITIONS BEYOND
+    ACTIVESTATE’S REASONABLE CONTROL.
+
+10) Publicity Rights.
+    
+    You have granted ActiveState the right to include your name and
+    logo as a customer in product promotional material. You can deny
+    ActiveState this right at any time by submitting a written request
+    via email to marketing@activestate.com, requesting to be excluded
+    from product promotional material. Requests made after purchasing
+    may take up to thirty (30) calendar days to process.
+
+11) U.S. Government Restricted Rights Legend.
+    
+    If the Software is acquired by any agency or other part of the
+    U.S. government in a transaction subject to the Federal
+    Acquisition Regulations or the Defense Federal Acquisition
+    Regulations, the Software is furnished with Restricted Rights.
+    Use, duplication, or disclosure of the Software by the U.S.
+    government is subject to all applicable restrictions set forth in
+    such Regulations, as amended from time to time, including
+    subparagraphs (c)(1) and (2) of the Commercial Computer Software
+    -Restricted Rights clause at Section 48 C.F.R. 52.227-19.
+
+12) Application Server Operations.
+    
+    During the term hereof and subject to the terms and conditions
+    hereof, ActiveState shall undertake commercially reasonable
+    efforts to provide You with consistent Service (i) insulated from
+    changes in the Internet, and (ii) sufficient for access
+    twenty-four (24) hours per day, seven (7) days per week ("24 x
+    7"), except for routine maintenance. However, ActiveState, does
+    not promise, guarantee, or warrant a 24 x 7 Service but
+    ActiveState shall undertake commercially reasonable efforts during
+    its normal business hours to restore promptly all failures of
+    service at no additional charge to You. You shall be solely
+    responsible at its expense, for: (i) internal network, hardware,
+    software, and supported browsers sufficient to access the Service,
+    and (ii) broadband Internet connections. If You require a
+    guaranteed 24 x7 Service, you should contact ActiveState
+    sales@activestate.com to discuss upgrading the License.
+
+13) Ownership.
+    
+    Title to the Proprietary Rights embodied in the software that
+    generates the Service and other software installed on
+    ActiveState's Application Server or operating as part of
+    ActiveState's web site shall remain in and be the sole and
+    exclusive property of ActiveState and its licensors. You shall not
+    alter, change or remove any proprietary notices or confidentiality
+    legends placed on or contained within ActiveState's Application
+    Server operating as part of ActiveState's web site, the Service,
+    or any other software installed on ActiveState's Application
+    Server.
+
+14) Confidentiality of Software Installed on ActiveState's Application
+    Server.
+    
+    You acknowledge ActiveState's claim that the software installed on
+    ActiveState's Application Server embodies logic, design, and
+    coding methodology which constitute valuable confidential
+    information that is proprietary to ActiveState and its licensors.
+    You shall safeguard the right to access the Service using the same
+    standard of care which You uses for its similar confidential
+    materials, but In no event less than reasonable care.
+
+15) Confidentiality of Your Data.
+    
+    All Your Data and/or information disclosed to ActiveState in
+    connection with the performance of this Agreement ("Your
+    Confidential Information") shall be held as confidential by
+    ActiveState and shall not, without Your prior written consent, be
+    disclosed or be used for any purposes other than the performance
+    of this Agreement. ActiveState shall safeguard the confidentiality
+    of Your Confidential Information using the same standard of care
+    which ActiveState uses for its similar confidential materials, but
+    in no event less than reasonable care. Notwithstanding the
+    forgoing, the term "Your Confidential Information" shall not be
+    deemed to include information which: (i) is now, or hereafter
+    becomes, through no act or failure to act on the part of
+    ActiveState, generally known or available; (ii) is known by
+    ActiveState at the time of receiving such information as evidenced
+    by its written records; (iii) is hereafter furnished to
+    ActiveState by a third party, as a matter of right and without
+    restriction on disclosure; (iv) is independently developed by
+    ActiveState as evidenced by its written and dated records and
+    without any breach of this Agreement; or (v) is the subject of a
+    written permission to disclose provided by You. Further
+    notwithstanding the forgoing, disclosure of Your Confidential
+    Information shall not be precluded if such disclosure: (i) is in
+    response to a valid order of a court or other governmental body of
+    Canada or the United States; (ii) is otherwise required by law;
+    or (iii) is otherwise necessary to establish rights or enforce
+    obligations under this Agreement, but only to the extent that any
+    such disclosure is necessary.
+
+16) Entire Agreement.
+    
+    This License constitute the entire agreement between you and
+    ActiveState regarding the Software and all accompanying
+    documentation. If any provision is found to be invalid by a court
+    of competent jurisdiction, the balance of the provisions will
+    remain in full force and effect. This License will be governed by
+    and construed in accordance with the laws of the Province of
+    British Columbia, Canada, excluding its conflict of laws rules.
+    The parties hereby attorn to the jurisdiction of the courts of the
+    Province of British Columbia in the event of any dispute
+    hereunder. The provisions of the U.N. Convention on Contracts For
+    The International Sale of Goods (1980) and any successor
+    Convention, will not apply to this License.
+
+17) Inurement.
+    
+    The rights, restrictions, limitations, disclaimers and remedies
+    granted to, retained by, or for the benefit of ActiveState will
+    inure to the benefit of and will be enforceable by ActiveState and
+    its licensors, successors and assigns. You may not assign your
+    rights, obligations and interest in and to this License without
+    the prior written consent of ActiveState. The obligations,
+    covenants and rights which apply to you will inure to your benefit
+    and will be binding on you and your permitted successors and
+    assigns.
+    
+    BY INSTALLING THE SOFTWARE, OR, WHERE APPLICABLE, CHOOSING THE "I
+    ACCEPT..." OPTION, YOU INDICATE THAT YOU HAVE READ, UNDERSTOOD AND
+    ACCEPT THE TERMS AND CONDITIONS OF THE LICENSE. IF YOU DO NOT
+    AGREE WITH THE TERMS AND CONDITIONS, YOU SHOULD NOT ATTEMPT TO
+    INSTALL THE SOFTWARE.

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://komodo/locale/formatters/formatters.dtd" >
+
+<overlay id="formatters_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://komodo/content/formatters/formatters.js"  type="application/x-javascript;version=1.7"/>
+
+    <stringbundleset id="komodo_strbundles">
+        <stringbundle id="formatter_strings" src="chrome://komodo/locale/formatters/formatters.properties"/>
+    </stringbundleset>
+
+    <commandset id="cmdset_currentview_is_editor">
+        <command
+            id="cmd_format" key="key_cmd_format"
+            oncommand="ko.commands.doCommandAsync('cmd_format', event)"
+            disabled="true"
+            desc="&commandEditorFormat.desc;"/>
+        <command
+            id="cmd_formatSubLanguageBlock" key="key_cmd_formatSubLanguageBlock"
+            oncommand="ko.commands.doCommandAsync('cmd_formatSubLanguageBlock', event)"
+            disabled="true"
+            desc="&commandEditorFormatSubLanguageBlock.desc;"/>
+    </commandset>
+
+    <menupopup id="popup_sourcecode">
+        <menu id="popup_sourcecode_formatters_menu"
+              insertafter="codeConvert_menu"
+              label="&editorContextFormat.label;">
+            <menupopup id="popup_sourcecode_formatters_menupopup"
+                       onpopupshowing="ko.formatters.loadFormatterMenusForCurrentView(this, event)" />
+        </menu>
+    </menupopup>
+
+    <menupopup id="editorContextMenu">
+        <menu id="editor_contextmenu_formatters_menu"
+              insertbefore="editor-context-sep-extensions"
+              label="&editorContextFormat.label;">
+            <menupopup id="editor_contextmenu_formatters_menupopup"
+                       onpopupshowing="ko.formatters.loadFormatterMenusForCurrentView(this, event)" />
+        </menu>
+    </menupopup>
+
+</overlay>

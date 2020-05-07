@@ -1,0 +1,589 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+
+<?xml-stylesheet href="less://komodo/skin/prefs/pref-window.less" type="text/css"?>
+
+<window id="prefProjectsWindow"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="&projectPreferences.label;"
+        windowtype="komodo_projectprefs"
+        orient="vertical"
+        class="dialog"
+        style="width: 56em; height: 54em; min-width: 52em;"
+        persist="screenX screenY width height"
+        onload="Onload();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://xtk/content/treeview.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/browse.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/launch.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/windowManager.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://global/content/nsWidgetStateManager.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/pref/koPrefWindow.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/pref/koPrefUtils.js" />
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/pref/koFilteredPrefTree.js"/>
+
+    <script><![CDATA[
+    var hPrefWindow = null;
+    var prefPanelTree = null;
+    var part = null;
+    var view = null;
+    var isfolder = false;
+    var changedFields = {};
+    var file = null;
+    var prefInvokeType;
+    var koFilterBox;
+    var prefset = null;
+
+    var gprefs = Components.classes["@activestate.com/koPrefService;1"]
+                  .getService(Components.interfaces.koIPrefService).prefs;
+
+    function removeTreeNodes(nodes) {
+        for (var i = 0; i < nodes.length; i++) {
+            var el = document.getElementById(nodes[i]);
+            if (el)
+                el.parentNode.removeChild(el);
+        }
+    }
+    
+    function Onload()
+    {
+    try {
+        // get the project prefs passed in via the window arguments, otherwise
+        // get the current project preferences
+        if (window.arguments && window.arguments[0] != null) {
+            part = window.arguments[0].part;
+            view = window.arguments[0].view;
+            document.title = window.arguments[0].title;
+            isfolder = window.arguments[0].folder;
+            if (part) {
+                file = part.getFile();
+            } else {
+                file = view.koDoc.file;
+            }
+        } else {
+            // XXX TODO get the main komodo window instead
+            part = getKoObject('projects').manager.getCurrentProject();
+            file = part.getFile();
+            isfolder = true;
+        }
+        
+        // figure out what nodes we want to remove based on what kind of
+        // item we're view prefs for
+        var isProject = part && part.type == "project";
+        prefInvokeType = isProject ? "project" : "view";
+        var nodesToDrop = [];
+        if (!view) {
+            // XXX until prefs are more worked out, don't do editor prefs
+            // on project parts
+            nodesToDrop = nodesToDrop.concat(["advancedFileProperties",
+                                              "previewProperties"]);
+            
+            if (!isProject) {
+                nodesToDrop = nodesToDrop.concat(["editorProperties"]);
+            }
+        }
+        if (!isfolder) {
+            // stuff that should only show up on folders
+            nodesToDrop = nodesToDrop.concat(["folderImport"]);
+        }
+        if (!isProject) {
+            // Correct the top-level treecell name.
+            var bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
+                    .getService(Components.interfaces.nsIStringBundleService)
+                    .createBundle("chrome://komodo/locale/pref/file-properties.properties");
+            document.getElementById("properties_treecell").setAttribute("label",
+                                bundle.GetStringFromName("File Preferences"));
+
+            // stuff that should ONLY show up on project prefs
+            nodesToDrop = nodesToDrop.concat(["mappedURIsItem", "newFilesItem",
+                                              "environItem",
+                                              "internationalItem",
+                                              "debugProperties"]);
+            if (isfolder) {
+                // stuff that should NOT show up on non-project folders
+                nodesToDrop = nodesToDrop.concat(["fileProperties",
+                                                  "sccProperties",
+                                                  "editorProperties"]);
+            }        
+        }
+        // Show test-plan properties only if we're on a project .kpf part,
+        // or right-clicking on a file outside a project
+        if (view && !part) {
+            nodesToDrop = nodesToDrop.concat(["sleuthProperties_Project"]);
+        } else if (isProject) {
+            nodesToDrop = nodesToDrop.concat(["sleuthProperties_Document"]);
+        } else {
+            nodesToDrop = nodesToDrop.concat(["sleuthProperties_Project", "sleuthProperties_Document"]);
+        }
+        removeTreeNodes(nodesToDrop);
+        
+        //dump("part "+part+" name "+part.name+"\n");
+        //part.prefset.dump(0);
+        if (view) {
+            prefset = view.prefs;
+        } else {
+            prefset = part.prefset;
+        }
+        hPrefWindow = new koPrefWindow('panelFrame', prefset, true);
+        if (!hPrefWindow) {
+            throw new Error("failed to create prefwindow");
+        }
+        prefPanelTree = document.getElementById( "prefsTree" );
+        
+        var filteredTreeView = setupFilteredTree();
+        hPrefWindow.setTreeView(filteredTreeView);
+        document.getElementById("pref-deck").selectedIndex = 1;
+        hPrefWindow.prefDeckSwitched(1);
+        var selectedItem = null;
+        if (gprefs.hasPref('defaultSelectedSubPref')) {
+            selectedItem = gprefs.getStringPref('defaultSelectedSubPref');
+            switchToPanel(selectedItem);
+        }
+            
+        if (selectedItem == null || filteredTreeView.selection.currentIndex == -1) {
+            // We might have failed to select the node --
+            // projects and files each have unshared prefs.
+            selectedItem = filteredTreeView.getCellValue(0, {id:"id"});
+            switchToPanel(selectedItem);
+        }
+        koFilteredTreeView.loadPrefsFullText();
+    }catch(e) { dump(e+"\n");}
+    }
+
+    function setField(name, value)
+    {
+        changedFields[name] = value;
+    }
+
+    function switchToPanel(selectedItem) {
+        hPrefWindow.helper.selectRowById(selectedItem);
+        prefPanelTree.focus();
+    }
+
+    function doOk() {
+        if (!hPrefWindow.onOK())
+            return false;
+        if (window.arguments && window.arguments[0] != null) {
+            window.arguments[0].res = "ok";
+        }
+        gprefs.setStringPref('defaultSelectedSubPref',
+                             hPrefWindow.helper.getSelectedItemId());
+        
+        onApplied();
+        
+        return true;
+    }
+
+    function doApply() {
+        if ( ! hPrefWindow.onApply())
+            return false;
+
+        // The pref change itself might trigger more pref changes from
+        // observers, give them a bit of time to modify prefs further
+        // before we reinitialize
+        // todo: use actual events for this
+        // todo: block pref ui while this is in progress
+        setTimeout(function()
+        {
+            hPrefWindow.orig_prefset = null;
+            hPrefWindow.init(prefset);
+        }, 500);
+        
+        onApplied();
+        
+        return true;
+    }
+    
+    function onApplied() {
+        setTimeout(function() {
+            try {
+                var _ko= ko.windowManager.getMainWindow().ko;
+                _ko.places.manager.moveToProjectDir(_ko.projects.manager.currentProject)
+            } catch (e) {
+                var log = require("ko/logging").getLogger("project-xul");
+                log.exception(e);
+            }
+        }, 0);
+    }
+
+    function doCancel() {
+        gprefs.setStringPref('defaultSelectedSubPref',
+                              hPrefWindow.helper.getSelectedItemId());
+        if (!hPrefWindow.onCancel())
+            return false;
+        return true;
+    }
+
+    function getHelpTag() {
+        return hPrefWindow.helper.getSelectedCellValue("helptag");
+    }
+    
+    function canHelp() {
+        // enable or disable the help button based on whether a tag exists
+        var helpTag = getHelpTag();
+        // help_tag2page located in launch.js
+        if (helpTag) {
+            document.getElementById('prefs_help_button').removeAttribute('disabled');
+        } else {
+            document.getElementById('prefs_help_button').setAttribute('disabled','true');
+        }
+    }
+    
+    function doHelp() {
+        var tag = getHelpTag();
+        if (tag.indexOf(".html") >= 0)
+        {
+            ko.windowManager.getMainWindow().ko.help.open(tag);
+        }
+        else
+        {
+            tag = "prefs.html#"+tag.replace(/\_/g,"-").toLowerCase();
+            ko.windowManager.getMainWindow().ko.help.open(tag);
+        }
+    }
+    
+    function setupFilteredTree() {
+        var filteredTreeView = koFilteredTreeView.getPrefTreeView.apply(koFilteredTreeView);
+        if (!filteredTreeView) {
+            throw new Error("Couldn't create a filteredTreeView");
+        }
+        var filteredTree = document.getElementById("filteredPrefsTree");
+        filteredTree.treeBoxObject
+                    .QueryInterface(Components.interfaces.nsITreeBoxObject)
+                    .view = filteredTreeView;
+        koFilterBox = document.getElementById("pref-filter-textbox");
+        return filteredTreeView;
+    }
+
+    function onFilterKeypress(event) {
+        try {
+            if (event.keyCode == event.DOM_VK_TAB && !event.ctrlKey) {
+                event.cancelBubble = true;
+                event.stopPropagation();
+                event.preventDefault();
+                //this.manager.widgets.tree.focus();
+                //TODO: Bring up the first item's panel.
+                return;
+            } else if (event.keyCode == event.DOM_VK_ESCAPE) {
+                if (koFilterBox.value !== '') {
+                    koFilterBox.value = '';
+                    koFilteredTreeView.updateFilter("");
+                    event.cancelBubble = true;
+                    event.stopPropagation();
+                    event.preventDefault();
+                }
+                return;
+            }
+        } catch (e) {
+            log.exception(e);
+        }
+    }
+
+    function updateFilter(event) {
+        koFilteredTreeView.updateFilter(koFilterBox.value);
+    }
+    ]]></script>
+
+    <keyset id="prefKeys">
+        <key keycode="VK_ESCAPE" modifiers="" oncommand="doCancel();"/>
+        <key keycode="VK_RETURN" oncommand="ko.dialogs.handleEnterKey();"/>
+    </keyset>
+
+    <hbox flex="1" >
+        <vbox id="pref-deck-vbox" flex="1">
+            <textbox id="pref-filter-textbox"
+                       style="min-width:40px;"
+                       rows="1"
+                       type="search"
+                       timeout="500"
+                       onfocus="this.select();"
+                       onkeypress="onFilterKeypress(event);"
+                       oncommand="updateFilter(event);"
+                       tooltiptext="&amp; koFilteredTreeView.tooltiptext;"/>
+            <deck id="pref-deck" selectedIndex="0" flex="1">
+                <!-- tree sidebar -->
+                <tree id="prefsTree" style="min-width: 14em;"
+                      persist="width"
+                      hidecolumnpicker="true" seltype="single"
+                      onselect="if( hPrefWindow ) hPrefWindow.switchPage();">
+
+                    <treecols>
+                        <treecol id="category" primary="true"
+                                 class="treecell-header outset" url="__header"
+                                 label="&category.label;" flex="1"/>
+                    </treecols>
+
+                    <treechildren id="panelChildren" flex="1">
+                        <!-- Properties -->
+                        <treeitem container="true" id="fileProperties" open="true">
+                            <treerow>
+                                <treecell id="properties_treecell"
+                                          class="treecell-indent"
+                                          url="chrome://komodo/content/pref/file-properties.xul"
+                                          label="&projectPreferences.label;"/>
+                            </treerow>
+                            <treechildren id="mainChildren">
+
+                                <!-- Advanced -->
+                                <treeitem container="false" id="advancedFileProperties">
+                                    <treerow>
+                                        <treecell class="treecell-indent"
+                                                  url="chrome://komodo/content/pref/file-advanced-properties.xul"
+                                                  label="&fileAdvancedProperties.label;"/>
+                                    </treerow>
+                                </treeitem>
+        
+                                <!-- Browser Preview -->
+                                <treeitem container="false" id="previewProperties">
+                                    <treerow>
+                                        <treecell class="treecell-indent"
+                                                  url="chrome://komodo/content/pref/preview-properties.xul"
+                                                  label="&browserPreview.label;"/>
+                                    </treerow>
+                                </treeitem>
+    
+<!-- #if WITH_DEBUGGING -->
+                                <!-- Debugging -->
+                                <treeitem container="false" id="debugProperties">
+                                    <treerow>
+                                        <treecell class="treecell-indent"
+                                                  url="chrome://komodo/content/pref/pref-project-debugging-properties.xul"
+                                                  label="&debugging.label;"
+                                                  helptag="debugger-preferences"/>
+                                    </treerow>
+                                </treeitem>
+<!-- #endif -->
+    
+                                <!-- Editor -->
+                                <treeitem container="true" id="editorProperties">
+                                    <treerow>
+                                        <treecell class="treecell-indent"
+                                                  url="chrome://komodo/content/pref/pref-editor.xul"
+                                                  label="&editor.label;"
+                                                  helptag="editor-preferences"/>
+                                    </treerow>
+                                    <treechildren id="editingChildren">
+                                        <treeitem container="false" id="indentationProperties">
+                                            <treerow>
+                                                <treecell class="treecell-indent"
+                                                          url="chrome://komodo/content/pref/pref-indentation.xul"
+                                                          label="&indentation.label;"
+                                                          helptag="configuring-indentation"/>
+                                            </treerow>
+                                        </treeitem>
+                                        <treeitem container="false" id="editsmartItem">
+                                            <treerow>
+                                                <treecell class="treecell-indent"
+                                                          url="chrome://komodo/content/pref/pref-editsmart.xul"
+                                                          label="&smartEditing.label;"
+                                                          helptag="smart_editing"/>
+                                            </treerow>
+                                        </treeitem>
+                                    </treechildren>
+                                </treeitem>
+        
+                                <!-- Environment -->
+                                <treeitem container="false" id="environItem">
+                                    <treerow>
+                                        <treecell class="treecell-indent"
+                                                  url="chrome://komodo/content/pref/pref-environ.xul"
+                                                  label="&environment.label;"/>
+                                    </treerow>
+                                </treeitem>
+        
+                                <!-- Internationalization -->
+                                <treeitem container="false" id="internationalItem">
+                                    <treerow>
+                                        <treecell class="treecell-indent"
+                                                  url="chrome://komodo/content/pref/pref-intl.xul"
+                                                  label="&internationalization.label;"
+                                                  helptag="internationalization_preferences"/>
+                                    </treerow>
+                                </treeitem>
+        
+                                <!-- Languages -->
+                                <treeitem container="true" id="languagesItem" persist="open">
+                                    <treerow>
+                                        <treecell class="treecell-indent" label="&languages.label;"
+                                                  url="chrome://komodo/content/pref/pref-languages.xul"
+                                                  helptag="language-configuration"/>
+                                    </treerow>
+                                    <treechildren id="languagesChildren">
+                                        <treeitem container="false" id="javascriptItem">
+                                            <treerow>
+                                                <treecell class="treecell-indent"
+                                                          url="chrome://komodo/content/pref/pref-javascript.xul"
+                                                          label="&javaScript.label;"
+                                                          helptag="configuring-javascript"/>
+                                            </treerow>
+                                        </treeitem>
+                                        <treeitem container="false" id="nodejsItem">
+                                            <treerow>
+                                                <treecell class="treecell-indent"
+                                                          url="chrome://komodo/content/pref/pref-nodejs.xul"
+                                                          label="&nodejs.label;"
+                                                          helptag="configuring-javascript"/>
+                                            </treerow>
+                                        </treeitem>
+                                        <treeitem container="false" id="perlItem">
+                                            <treerow>
+                                                <treecell class="treecell-indent"
+                                                          url="chrome://komodo/content/pref/pref-perl.xul"
+                                                          label="&perl.label;"
+                                                          helptag="configuring-perl"/>
+                                            </treerow>
+                                        </treeitem>
+                                        <treeitem container="false" id="phpItem">
+                                            <treerow>
+                                                <treecell class="treecell-indent"
+                                                          url="chrome://komodo/content/pref/pref-php.xul"
+                                                          label="&PHP.label;"
+                                                          helptag="configuring-php"/>
+                                            </treerow>
+                                        </treeitem>
+                                        <treeitem container="false" id="pythonItem">
+                                            <treerow>
+                                                <treecell class="treecell-indent"
+                                                          url="chrome://komodo/content/pref/pref-python.xul"
+                                                          label="&python.label;"
+                                                          helptag="configuring-python"/>
+                                            </treerow>
+                                        </treeitem>
+                                        <treeitem container="false" id="python3Item">
+                                            <treerow>
+                                                <treecell class="treecell-indent"
+                                                          url="chrome://komodo/content/pref/pref-python3.xul"
+                                                          label="&python3.label;"
+                                                          helptag="configuring-python"/>
+                                            </treerow>
+                                        </treeitem>
+                                        <treeitem container="false" id="rubyItem">
+                                            <treerow>
+                                                <treecell class="treecell-indent"
+                                                          url="chrome://komodo/content/pref/pref-ruby.xul"
+                                                          label="&ruby.label;"
+                                                          helptag="configuring-ruby"/>
+                                            </treerow>
+                                        </treeitem>
+                                        <treeitem container="true" id="tclItem" persist="open">
+                                            <treerow>
+                                                <treecell class="treecell-indent"
+                                                          url="chrome://komodo/content/pref/pref-tcl.xul"
+                                                          label="&tcl.label;"
+                                                          helptag="configuring-tcl"/>
+                                            </treerow>
+<!-- #if WITH_DEBUGGING -->
+                                            <treechildren id="tclChildren">
+                                                <treeitem container="false" id="tclDebuggerItem">
+                                                    <treerow>
+                                                        <treecell class="treecell-indent"
+                                                                  url="chrome://komodo/content/pref/pref-tcl-debug.xul"
+                                                                  label="&debugging.label;"/>
+                                                    </treerow>
+                                                </treeitem>
+                                            </treechildren>
+<!-- #endif -->
+                                        </treeitem>
+                                      </treechildren>
+                                </treeitem>
+        
+                                <!-- Mapped URIs -->
+                                <treeitem container="false" id="mappedURIsItem">
+                                    <treerow>
+                                        <treecell class="treecell-indent"
+                                                  url="chrome://komodo/content/pref/pref-mappeduri.xul"
+                                                  label="&mappedURIs.label;"
+                                                  helptag="mapped_uris"/>
+                                    </treerow>
+                                </treeitem>
+               <!--
+                                <treeitem container="false" id="newFilesItem">
+                                    <treerow>
+                                        <treecell class="treecell-indent"
+                                                  url="chrome://komodo/content/pref/pref-newfiles.xul"
+                                                  label="&newFiles.label;"/>
+                                    </treerow>
+                                </treeitem>
+               -->
+        
+<!-- #if WITH_SCC -->
+                                <!-- Source Code Control -->
+                                <treeitem container="false" id="sccProperties">
+                                    <treerow>
+                                        <treecell class="treecell-indent"
+                                                  url="chrome://komodo/content/pref/scc-properties.xul"
+                                                  label="&sourceCodeControl.label;"
+                                                  helptag="source_code_control_preferences"/>
+                                    </treerow>
+                                </treeitem>
+<!-- #endif -->
+        
+                                <!-- Syntax Checking -->
+                                <treeitem container="false" id="syntaxCheckingItem">
+                                    <treerow>
+                                        <treecell class="treecell-indent"
+                                                  url="chrome://komodo/content/pref/pref-syntax-checking.xul"
+                                                  label="&syntaxAndSpellChecking.label;"
+                                                  helptag="syntax_checking"/>
+                                    </treerow>
+                                </treeitem>
+                            </treechildren>
+                        </treeitem>
+                    </treechildren>
+                </tree>
+                <!-- The dynamically built nsITreeView tree -->
+                <tree id="filteredPrefsTree" style="min-width: 14em;"
+                      persist="width"
+                      hidecolumnpicker="true" seltype="single"
+                      onselect="if( hPrefWindow ) hPrefWindow.switchPage();">
+
+                    <treecols>
+                        <treecol id="categoryDynamic" primary="true"
+                                 class="treecell-header outset" url="__header"
+                                 label="&category.label;" flex="1"/>
+                    </treecols>
+
+                    <treechildren id="panelChildrenDynamic" flex="1" />
+                </tree>
+            </deck>
+            <hbox style="padding-top: 5px">
+                <!-- Ensure same height as buttons box -->
+                <button label="X" style="visibility: hidden"/> 
+            </hbox>
+        </vbox>
+        <splitter orient="horizontal"
+                  style="margin: 0px; padding: 0px; border: none;"/>
+        <!-- Main prefs panel -->
+        <vbox flex="1" style="min-width: 30em;">
+            <deck id="panelFrame" name="panelFrame" style="width:0px"
+                    flex="1"/>
+
+            <hbox style="padding-top: 5px;">
+                <button id="prefs_help_button" label="&help.label;" accesskey="&prefsHelpButton.accesskey;" oncommand="doHelp();"/>
+                <separator flex="1"/>
+                <button label="&OK.label;" default="true" oncommand="doOk();"/>
+                <button label="&cancel.label;" oncommand="doCancel();"/>
+                <button label="&Apply.label;" default="true" oncommand="doApply();"/>
+            </hbox>
+        </vbox>
+    </hbox>
+
+</window>

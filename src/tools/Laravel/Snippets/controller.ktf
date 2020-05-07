@@ -1,0 +1,20 @@
+// komodo tool: controller
+// =======================
+// auto_abbreviation: true
+// indent_relative: false
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// =======================
+/**
+ * [[%tabstop:description]].
+ *
+ * @return \\\\Illuminate\\\\Http\\\\Response
+ */
+public function [[%tabstop:Name]]()
+{
+    [[%tabstop:// code]]
+    return view('');
+}!@#_currentPos!@#_anchor

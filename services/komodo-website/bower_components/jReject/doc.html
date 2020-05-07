@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>jReject - jQuery Plugin for Simple Browser Rejection</title>
+	<meta name="description" content="jReject: jQuery Browser Rejection Plugin" />
+
+	<link href="css/jquery.reject.css" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	body {
+		background: #f7f7f7;
+		font-size: 14px;
+		font-family: 'Arial', sans-serif;
+	}
+	a {
+		text-decoration: none;
+		color: #025167;
+	}
+	a:hover {
+		text-decoration: underline;
+	}
+	a:visited {
+		color: #025167;
+	}
+	a[rel="external"] {
+		font-weight: bold;
+	}
+	strong {
+		color: #262626;
+		text-decoration: underline;
+	}
+	h1 {
+		color: #5DB0E6;
+		margin-bottom: 20px;
+	}
+	h2 {
+		color: #a61700;
+		margin: 20px 0;
+	}
+	h3 {
+		color: #0082a9;
+		text-decoration: underline;
+	}
+	hr {
+		outline: 0;
+		border: 0;
+		width: 50%;
+		height: 1px;
+		margin: 20px auto;
+		background: #CCC;
+	}
+	p {
+		margin: 10px 0;
+	}
+	pre {
+		width: 100%;
+		font-family: monospace;
+	}
+	acronym {
+		border-bottom: 1px dashed #000;
+		cursor: help;
+	}
+	#wrapper {
+		margin: 0 auto;
+		width: 960px;
+		border: 1px solid #088de0;
+		border-top: 0;
+		border-bottom: 0;
+	}
+	#content {
+		width: 940px;
+		padding: 10px;
+		background: #f5f5f5;
+	}
+	.box, pre.javascript {
+		width: 90%;
+		border: 1px dashed #0082a9;
+		background: #cecccc;
+		padding: 10px;
+	}
+	.box {
+		width: 80%;
+	}
+	.example {
+		margin: 30px 0;
+	}
+	.example h3 {
+		display: inline;
+	}
+	a.demo {
+		font-weight: bold;
+		display: inline;
+		margin-left: 10px;
+	}
+	a.demo:active {
+		color: red;
+	}
+	</style>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script src="js/jquery.reject.js"></script>
+	<script>
+	$(function() {
+		// Handle external links
+		$('a[rel="external"]').click(function() {
+			var href = $(this).attr('href');
+
+			// Send external link event to Google Analaytics
+			try {
+				_gaq.push(['_trackEvent','External Links', href.split(/\/+/g)[1], href]);
+			} catch (e) {};
+
+			window.open(href,'jr_'+Math.round(Math.random()*11));
+			return false;
+		});
+
+		// Handle displaying of option links
+		$('em.option').css({
+			cursor: 'pointer',
+			fontSize: '1.1em',
+			color: '#333',
+			letterSpacing: '1px',
+			borderBottom: '1px dashed #BBB'
+		}).click(function() {
+			var self = $(this);
+			var opt = $.trim(self.text());
+
+			$('ol.dp-c:first').children('li').children('span').each(function() {
+				var self = $(this);
+				var text = self.text();
+				var srch = opt+':';
+
+				// If found, highlight and jump window to position on page
+				if (text.search(srch) !== -1) {
+					self.css('color','red');
+					window.location.hash = '#c-'+opt;
+					window.scrollTo(0,self[0].offsetTop);
+				}
+			});
+		});
+
+		/* Demo Codes */
+		$('#demo1').click(function() {
+			$.reject(); // Default Settings
+			return false;
+		});
+
+		$('#demo2').click(function() {
+			$.reject({
+				reject: {
+					safari: true, // Apple Safari
+					chrome: true, // Google Chrome
+					firefox: true, // Mozilla Firefox
+					msie: true, // Microsoft Internet Explorer
+					opera: true, // Opera
+					konqueror: true, // Konqueror (Linux)
+					unknown: true // Everything else
+				}
+			}); // Customized Browsers
+
+			return false;
+		});
+
+		$('#demo3').click(function() {
+			$.reject({
+				reject: { all: true }, // Reject all renderers for demo
+				header: 'Your browser is not supported here', // Header Text
+				paragraph1: 'You are currently using an unsupported browser', // Paragraph 1
+				paragraph2: 'Please install one of the many optional browsers below to proceed',
+				closeMessage: 'Close this window at your own demise!' // Message below close window link
+			}); // Customized Text
+
+			return false;
+		});
+
+		$('#demo4').click(function() {
+			$.reject({
+				reject: { all: true }, // Reject all renderers for demo
+				display: ['firefox','chrome','opera'] // Displays only firefox, chrome, and opera
+			});
+
+			return false;
+		});
+
+		$('#demo5').click(function() {
+			$.reject({
+				reject: { all: true }, // Reject all renderers for demo
+				// Displays only custom "Konqueror" browser, firefox and opera.
+				display: ['konqueror','firefox','opera'],
+				browserInfo: {
+					konqueror: { // Specifies browser name and image name (browser_konqueror.gif)
+						text: 'Konqueror 4', // Text Link
+						url: 'http://konqueror.kde.org/' // URL To link to
+					}
+				}
+			});
+
+			return false;
+		});
+
+		$('#demo6').click(function() {
+			$.reject({
+				reject: { all: true }, // Reject all renderers for demo
+				closeCookie: true // Set cookie to remmember close for this session
+			});
+
+			return false;
+		});
+
+		$('#demo7').click(function() {
+			$.reject({
+				reject: { all: true }, // Reject all renderers for demo
+				close: false, // Prevent closing of window
+				paragraph1: 'You will not be able to close this window', // Warning about closing
+				paragraph2: 'To exit, you must '+
+				'<a href="javascript:window.location=window.location.pathname;">refresh the page</a>'
+			});
+
+			return false;
+		});
+
+		$('#demo8').click(function() {
+			$.reject({
+				reject: { all: true }, // Reject all renderers for demo
+				beforeReject: function() {
+					if ($.browser.name === 'chrome') {
+						this.display = ['firefox','opera'];
+					}
+					if ($.os.name === 'iphone' || $.os.name === 'ipad') {
+						this.browserShow = false;
+						this.paragraph2 = '';
+					}
+				}
+			});
+
+			return false;
+		});
+	});
+	</script>
+</head>
+<body>
+<div id="wrapper">
+	<section id="content">
+		<h1>jReject: jQuery Browser Rejection</h1>
+		<p class="box">
+			jReject is a simple, light-weight library designed to
+			display a popup based on the browser, specific browser version,
+			specific platforms, or rendering engine. Provides full customization
+			of the popup, and uses a small CSS file. Can easily be used on page load
+			or during a specific page event. Also provides a flexible way to beautifully
+			and cleanly display custom browser alternatives in the popup.
+		</p>
+
+		<h2>Requirements</h2>
+		<p><a href="http://jquery.com/" rel="external">jQuery 1.7+</a></p>
+
+		<h2>Makes Use Of</h2>
+		<strong>jQuery Browser Plugin</strong> - Updated version included in default package.
+		<a href="http://jquery.thewikies.com/browser" rel="external">(View Original)</a>
+
+		<h2>Download jReject</h2>
+		<p>
+			<a href="https://github.com/TurnWheel/jReject" rel="external">Get Latest At GitHub</a>
+		</p>
+		<p>
+			If you are a developer familiar with using jQuery, continue with the documentation below.
+		</p>
+
+		<hr />
+
+		<h2>Documentation</h2>
+		<section id="documentation">
+			<p>
+				The object is called "reject", and can be invoked once the document
+				is ready ($.reject() or jQuery.reject()). The first parameter
+				contains all the options and configurations for the plugin.
+			</p>
+
+			<h3>Default Options</h3>
+			<p>
+				Here are the default options for the first parameter of the reject
+				object. You only need to specify those which you wish to override.
+			</p>
+
+			<pre name="code" class="javascript" id="options">
+options = {
+	reject : { // Rejection flags for specific browsers
+		all: false, // Covers Everything (Nothing blocked)
+		msie5: true, msie6: true // Covers MSIE 5-6 (Blocked by default)
+		/*
+			* Possibilities are endless...
+			*
+			* // MSIE Flags (Global, 5-8)
+			* msie, msie5, msie6, msie7, msie8,
+			* // Firefox Flags (Global, 1-3)
+			* firefox, firefox1, firefox2, firefox3,
+			* // Konqueror Flags (Global, 1-3)
+			* konqueror, konqueror1, konqueror2, konqueror3,
+			* // Chrome Flags (Global, 1-4)
+			* chrome, chrome1, chrome2, chrome3, chrome4,
+			* // Safari Flags (Global, 1-4)
+			* safari, safari2, safari3, safari4,
+			* // Opera Flags (Global, 7-10)
+			* opera, opera7, opera8, opera9, opera10,
+			* // Rendering Engines (Gecko, Webkit, Trident, KHTML, Presto)
+			* gecko, webkit, trident, khtml, presto,
+			* // Operating Systems (Win, Mac, Linux, Solaris, iPhone)
+			* win, mac, linux, solaris, iphone,
+			* unknown // Unknown covers everything else
+			*/
+	},
+	display: [], // What browsers to display and their order (default set below)
+	browserShow: true, // Should the browser options be shown?
+	browserInfo: { // Settings for which browsers to display
+		firefox: {
+			text: 'Mozilla Firefox', // Text below the icon
+			url: 'http://www.mozilla.com/firefox/' // URL For icon/text link
+		},
+		safari: {
+			text: 'Safari 5',
+			url: 'http://www.apple.com/safari/download/'
+		},
+		opera: {
+			text: 'Opera 12',
+			url: 'http://www.opera.com/download/'
+		},
+		chrome: {
+			text: 'Google Chrome',
+			url: 'http://www.google.com/chrome/'
+		},
+		msie: {
+			text: 'Internet Explorer 9',
+			url: 'http://www.microsoft.com/windows/Internet-explorer/'
+		},
+		gcf: {
+			text: 'Google Chrome Frame',
+			url: 'http://code.google.com/chrome/chromeframe/',
+			// This browser option will only be displayed for MSIE
+			allow: { all: false, msie: true }
+		}
+	},
+
+	// Header of pop-up window
+	header: 'Did you know that your Internet Browser is out of date?',
+	// Paragraph 1
+	paragraph1: 'Your browser is out of date, and may not be compatible with '+
+				'our website. A list of the most popular web browsers can be '+
+				'found below.',
+	// Paragraph 2
+	paragraph2: 'Just click on the icons to get to the download page',
+	close: true, // Allow closing of window
+	// Message displayed below closing link
+	closeMessage: 'By closing this window you acknowledge that your experience '+
+					'on this website may be degraded',
+	closeLink: 'Close This Window', // Text for closing link
+	closeURL: '#', // Close URL
+	closeESC: true, // Allow closing of window with esc key
+
+	// If cookies should be used to remmember if the window was closed
+	// See cookieSettings for more options
+	closeCookie: false,
+	// Cookie settings are only used if closeCookie is true
+	cookieSettings: {
+		// Path for the cookie to be saved on
+		// Should be root domain in most cases
+		path: '/',
+		// Expiration Date (in seconds)
+		// 0 (default) means it ends with the current session
+		expires: 0
+	},
+
+	imagePath: './images/', // Path where images are located
+	overlayBgColor: '#000', // Background color for overlay
+	overlayOpacity: 0.8, // Background transparency (0-1)
+
+	// Fade in time on open ('slow','medium','fast' or integer in ms)
+	fadeInTime: 'fast',
+	// Fade out time on close ('slow','medium','fast' or integer in ms)
+	fadeOutTime: 'fast',
+
+	// Google Analytics Link Tracking (Optional)
+	// Set to true to enable
+	// Note: Analytics tracking code must be added separately
+	analytics: false
+};
+			</pre>
+		</section><br />
+
+		<h3>Optional Event Methods</h3>
+		<strong>options.beforeReject()</strong><br />
+		<p>Called before rejection is determined.</p><br />
+
+		<strong>options.afterReject()</strong><br />
+		<p>Called after rejection window has been created, for browsers that matched the rejection settings.</p><br />
+
+		<strong>options.onFail()</strong><br />
+		<p>Called if the browser does NOT meet the rejection requirements</p><br />
+
+		<strong>options.beforeClose()</strong><br />
+		<p>Called after close button is clicked, but before popup is actually closed.</p><br />
+
+		<strong>options.afterClose()</strong><br />
+		<p>Called after rejection popup is closed</p><br />
+
+		<p>
+			<strong>Note:</strong> All callbacks can access and edit options by using <em>this</em><br />
+			View <a href="#demo8">Demo #8</a> as an example
+		</p>
+
+		<h2>Browser Plugin Options</h2>
+		<script>
+		$(function() {
+			$('#b_className').text($.browser.className);
+			$('#b_name').text($.browser.name);
+			$('#b_version').text($.browser.version);
+			$('#b_versionX').text($.browser.versionX);
+			$('#b_osname').text($.os.name);
+		});
+		</script>
+		$.browser.className = <strong id="b_className"></strong><br />
+		$.browser.name = <strong id="b_name"></strong><br />
+		$,browser.version = <strong id="b_version"></strong><br />
+		$.browser.versionX = <strong id="b_versionX"></strong><br />
+		$.os.name = <strong id="b_osname"></strong><br />
+
+		<hr />
+
+		<h2>Example Usage</h2>
+
+		<div class="example">
+			<h3>Demo #1: Default Settings</h3>
+			<a href="#" id="demo1" class="demo">Run Demo</a><br />
+
+			<p>
+				If nothing happened when you ran this demo, that is because you are not using IE6!<br />
+				By default (no settings specified) the reject function only rejects IE5 and IE6.
+			</p>
+
+			<pre name="code" class="javascript">
+$('#demo1').click(function() {
+	$.reject(); // Default Settings
+	return false;
+});
+			</pre>
+		</div>
+
+		<hr />
+
+		<div class="example">
+			<h3>Demo #2: Customize Browsers To Reject</h3>
+			<a href="#" id="demo2" class="demo">Run Demo</a><br />
+
+			<p>
+				In this example pretty much every browser should be rejected.
+			</p>
+
+			<pre name="code" class="javascript">
+$('#demo2').click(function() {
+	$.reject({
+		reject: {
+			safari: true, // Apple Safari
+			chrome: true, // Google Chrome
+			firefox: true, // Mozilla Firefox
+			msie: true, // Microsoft Internet Explorer
+			opera: true, // Opera
+			konqueror: true, // Konqueror (Linux)
+			unknown: true // Everything else
+		}
+	}); // Customized Browsers
+
+	return false;
+});
+			</pre>
+		</div>
+
+		<hr />
+
+		<div class="example">
+			<h3>Demo #3: Customize Popup Text</h3>
+			<a href="#" id="demo3" class="demo">Run Demo</a><br />
+
+			<p>
+				In this demo we use customized text in the popup window.
+				This demo uses the following properties:<br />
+				<em class="option">header</em>,
+				<em class="option">paragraph1</em>,
+				<em class="option">paragraph2</em>,
+				<em class="option">closeMessage</em><br />
+
+				<strong>See Also</strong> <em class="option">closeLink</em>
+			</p>
+
+			<pre name="code" class="javascript">
+$('#demo3').click(function() {
+	$.reject({
+		reject: { all: true }, // Reject all renderers for demo
+		header: 'Your browser is not supported here', // Header Text
+		paragraph1: 'You are currently using an unsupported browser', // Paragraph 1
+		paragraph2: 'Please install one of the many optional browsers below to proceed',
+		closeMessage: 'Close this window at your own demise!' // Message below close window link
+	}); // Customized Text
+
+	return false;
+});
+			</pre>
+		</div>
+
+		<hr />
+
+		<div class="example">
+			<h3>Demo #4: Customize Browsers To Suggest</h3>
+			<a href="#" id="demo4" class="demo">Run Demo</a><br />
+
+			<p>
+				Using the <em class="option">display</em> option, you can define
+				which browsers to suggest, and the order in which to suggest them.<br />
+				<acronym title="Google Chrome Frame">GCF</acronym> is supported,
+				but only displayed for IE users by default.
+			</p>
+			<p>
+				<strong>Default:</strong> ['firefox','chrome','msie','safari','opera','gcf']
+			</p>
+
+			<pre name="code" class="javascript">
+$('#demo4').click(function() {
+	$.reject({
+		reject: { all: true }, // Reject all renderers for demo
+		display: ['firefox','chrome','opera'] // Displays only firefox, chrome, and opera
+	});
+
+	return false;
+});
+			</pre>
+		</div>
+
+		<hr />
+
+		<div class="example">
+			<h3>Demo #5: Customize Your Own Browser Suggestion</h3>
+			<a href="#" id="demo5" class="demo">Run Demo</a><br />
+
+			<p>
+				You can even add a customized browser to the list, and display it in any order you want.
+			</p>
+			<p>
+				<strong>Note:</strong> To add your own icon, you need to create a 'browser_{browserName}.gif'<br />
+				file and place it in your <em class="option">imagePath</em> directory with the other images.<br />
+				<strong>Image Dimensions:</strong> 100x100<br />
+			</p>
+
+			<pre name="code" class="javascript">
+$('#demo5').click(function() {
+	$.reject({
+		reject: { all: true }, // Reject all renderers for demo
+		// Displays only custom "Konqueror" browser, firefox and opera.
+		display: ['konqueror','firefox','opera'],
+		browserInfo: {
+			konqueror: { // Specifies browser name and image name (browser_konqueror.gif)
+				text: 'Konqueror 4', // Text Link
+				url: 'http://konqueror.kde.org/' // URL To link to
+			}
+		}
+	});
+
+	return false;
+});
+			</pre>
+		</div>
+
+		<hr />
+
+		<div class="example">
+			<h3>Demo #6: Display Once Per Session</h3>
+			<a href="#" id="demo6" class="demo">Run Demo</a><br />
+
+			<p>
+				By using the <em class="option">closeCookie</em> option, you
+				can make the window only appear once per session.<br />
+
+				After it pops up the first time, this demo will not popup again
+				until next browser session.
+			</p>
+			<p>
+				<strong>Note:</strong> This requires the ability to close the window.
+				If <em class="option">close</em> is false the cookie will never be set.
+			</p>
+
+			<pre name="code" class="javascript">
+$('#demo6').click(function() {
+	$.reject({
+		reject: { all: true }, // Reject all renderers for demo
+		closeCookie: true // Set cookie to remmember close for this session
+	});
+
+	return false;
+});
+			</pre>
+		</div>
+
+		<hr />
+
+		<div class="example">
+			<h3>Demo #7: Disable ability to close window</h3>
+			<a href="#" id="demo7" class="demo">Run Demo</a><br />
+
+			<p>
+				The <em class="option">close</em> option allows
+				you to hide the <em class="option">closeLink</em>
+				or <em class="option">closeMessage</em> elements from displaying.<br />
+
+				This prevents the user from closing the window. If you
+				use this on a onLoad event, the user will never be able to use your site.
+			</p>
+			<p>
+				<strong>Note:</strong> Testing this demo will require you to
+				refresh the page to close out the popup window.
+			</p>
+
+			<pre name="code" class="javascript">
+$('#demo7').click(function() {
+	$.reject({
+		reject: { all: true }, // Reject all renderers for demo
+		close: false, // Prevent closing of window
+		paragraph1: 'You will not be able to close this window', // Warning about closing
+		paragraph2: 'To exit, you must '+
+		'&lt;a href=&quot;javascript:window.location=window.location.pathname;&quot;&gt;refresh the page&lt;/a&gt;'
+	});
+
+	return false;
+});
+			</pre>
+		</div>
+
+		<hr />
+
+		<div class="example">
+			<h3>Demo #8: Customize by Browser</h3>
+			<a href="#" id="demo8" class="demo">Run Demo</a><br />
+
+			<p>
+				This example uses the <em>beforeReject</em> callback to change options by browser.<br />
+				In chrome, only FireFox and Opera options will be displayed. iPhone/iPad displays no browser options
+			</p>
+
+			<pre name="code" class="javascript">
+
+$('#demo8').click(function() {
+	$.reject({
+		reject: { all: true }, // Reject all renderers for demo
+		beforeReject: function() {
+			if ($.browser.name === 'chrome') {
+				this.display = ['firefox','opera'];
+			}
+			if ($.os.name === 'iphone' || $.os.name === 'ipad') {
+				this.browserShow = false;
+				this.paragraph2 = '';
+			}
+		}
+	});
+
+	return false;
+});
+			</pre>
+		</div>
+
+		<footer>
+			<div id="copyright">
+				Concept based on <a href="http://code.google.com/p/ie6-upgrade-warning/" rel="external">"IE6 Upgrade Warning"</a><br />
+				Coded and Implemented by Steven Bower<br />
+				&copy; 2009-2012 <a href="http://turnwheel.com/" rel="external">TurnWheel Designs</a>
+			</div>
+		</footer>
+	</section>
+	<!-- End #content -->
+</div>
+<!-- End #wrapper -->
+</body>
+</html>

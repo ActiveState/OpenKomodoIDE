@@ -1,0 +1,46 @@
+<html>
+<head>
+
+<script>
+
+var old = '';
+
+function update()
+{
+  if(top.dynamicframe) {
+    textarea = document.f.ta;
+    d = top.dynamicframe.document; 
+
+    if (old != textarea.value)
+    {
+      old = textarea.value;
+
+      d.open();
+      d.write(old);
+      d.close();
+    }
+  }
+
+  window.setTimeout(update, 150);
+}
+
+</script>
+
+<style>
+
+.expand { width: 100%; height: 100%; }
+.close { border: none; margin: 0px; padding: 0px; }
+html,body { overflow: hidden; }
+
+</style>
+
+</head>
+
+<body class="expand close" onload="update(); document.f.ta.select();">
+<form class="expand close" name="f">
+<textarea class="expand close" style="background-color: #def" name="ta" wrap="hard" spellcheck="false"
+>&lt;h3&gt;Welcome to the real-time HTML editor!&lt;/h3&gt;
+&lt;p&gt;Type HTML in the textarea above, and it will magically appear in the frame below.&lt;/p&gt;</textarea>
+</form>
+</body>
+</html>

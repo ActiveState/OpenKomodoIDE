@@ -1,0 +1,13 @@
+{
+  "keyboard_shortcut": "", 
+  "name": "<textarea> Form Text Area w/ Dialog", 
+  "value": [
+    "<textarea name=\"[[%ask:Name:]]\" cols=\"[[%ask:Columns:40]]\" rows=\"[[%ask:Rows:10]]\" wrap=\"[[%ask:Wrap:SOFT]]\">!@#_currentPos!@#_anchor</textarea>"
+  ], 
+  "set_selection": "true", 
+  "version": "1.0.12", 
+  "indent_relative": "true", 
+  "type": "snippet", 
+  "treat_as_ejs": "false", 
+  "auto_abbreviation": "false"
+}

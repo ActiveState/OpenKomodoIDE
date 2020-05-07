@@ -1,0 +1,75 @@
+<!ENTITY PHPTutorial.label "PHP Tutorial">
+<!ENTITY XSLTTutorial.label "XSLT Tutorial">
+<!ENTITY activeStateCode.label "ActiveState Code">
+<!ENTITY activeStateWebsite.label "Komodo Website">
+<!ENTITY clearOutput.tooltiptext "Clear Output">
+<!ENTITY codeBrowser.settings.tooltiptext "Code Browser Settings">
+<!ENTITY codeBrowser.settings.autoLocateScope.label "Automatically locate cursor position">
+<!ENTITY codeBrowser.settings.showOnlyActiveBuffer.label "Show only active file">
+<!ENTITY codeBrowser.expandAll.label "Expand all nodes">
+<!ENTITY codeBrowser.collapseAll.label "Collapse all nodes">
+<!ENTITY codeBrowserGoToDefinition.desc "Code Browser: Go to Definition">
+<!ENTITY codeBrowserExpandAll.desc "Code Browser: Expand All Nodes">
+<!ENTITY codeBrowserCollapseAll.desc "Code Browser: Collapse All Nodes">
+<!ENTITY commit.label "Commit">
+<!ENTITY clone.label "Clone">
+<!ENTITY commitChanges.label "Commit">
+<!ENTITY push.label "Push">
+<!ENTITY pull.label "Pull">
+<!ENTITY pullRebase.label "Pull with Rebase">
+<!ENTITY currentFile.label "Current File">
+<!ENTITY diff.label "Diff">
+<!ENTITY diffCompareFiles.label "Diff (Compare Files)">
+<!ENTITY fileShowChanges.label "Show Changes in File">
+<!ENTITY fileAdd.label "Add File">
+<!ENTITY fileRemove.label "Remove File">
+<!ENTITY showChanges.label "Show Changes">
+<!ENTITY featureShowcase.label "Feature Showcase">
+<!ENTITY findReplaceInFiles.desc "Find: Replace in Files...">
+<!ENTITY groupByType.label "Group By Type">
+<!ENTITY helpTipOfTheDay.desc "Help: Tip of the Day...">
+<!ENTITY helpTutorialsMenu.accesskey "T">
+<!ENTITY history.label "History">
+<!ENTITY fileHistory.label "History of File">
+<!ENTITY openWebService.label "Open Web Service">
+<!ENTITY locateCurrentScope.label "Locate Current Scope">
+<!ENTITY locateCurrentScope.tooltiptext "Locate current scope">
+<!ENTITY locateCurrentScopeInCodeBrowser.label "Locate Current Scope in Code Browser">
+<!ENTITY menuHelpTipOfTheDay.accesskey "p">
+<!ENTITY perlTutorial.label "Perl Tutorial">
+<!ENTITY pythonTutorial.label "Python Tutorial">
+<!ENTITY redoSearch.tooltiptext "Redo Search">
+<!ENTITY regularExpressionsPrimer.title "Regular Expressions">
+<!ENTITY replaceInFiles.label "Replace in Files...">
+<!ENTITY revertChanges.label "Revert Changes">
+<!ENTITY fileRevertChanges.label "Revert Changes in File">
+<!ENTITY rubyOnRailsTutorial.label "Ruby on Rails Tutorial">
+<!ENTITY rubyTutorial.label "Ruby Tutorial">
+<!ENTITY runCommandTutorial.label "Run Command Tutorial">
+<!ENTITY rx.label "Rx">
+<!ENTITY rxToolkit.accesskey "x">
+<!ENTITY rxToolkit.label "Rx Toolkit">
+<!ENTITY rxToolkit.tooltiptext "Rx Toolkit">
+<!ENTITY sortAlphabetically.label "Sort Alphabetically">
+<!ENTITY sortByAccess.label "Sort By Access">
+<!ENTITY sortByFileOrder.label "Sort By File Order">
+<!ENTITY sortByType.label "Sort By Type">
+<!ENTITY testPlans.label "Test Plans">
+<!ENTITY tipOfTheDay.label "Tip of the day">
+<!ENTITY toolsRxToolkit.desc "Tools: Rx Toolkit">
+<!ENTITY tutorials.label "Tutorials">
+<!-- Sleuth terms -->
+<!ENTITY test.label "Test">
+<!ENTITY editCurrentTestPlan.tooltiptext "Edit Current Test Plan">
+<!ENTITY addTestPlan.tooltiptext "Add New Test Plan">
+<!ENTITY globalTestPlans.label "Global Test Plans">
+<!ENTITY showProjectsTestContextMenu "General: Hook to the project's test context menu">
+<!ENTITY importGlobalTestPlans.label "Import Global Test Plans">
+<!ENTITY runCurrentTestPlan.desc "Tools: Runs the current test plan selected in the Test tab">
+<!ENTITY runTestPlan.label "Run Test Plan">
+<!ENTITY stopTestPlan.label "Stop Test Plan">
+<!ENTITY testPlansForFile.template "Test Plans for File &#37;(basename)">
+<!ENTITY testResults_tab.label "Unit Testing">
+<!ENTITY testResults_moveNextPassResult.tooltiptext "Move to the next passed-result line.">
+<!ENTITY testResults_moveNextFailureResult.tooltiptext "Move to the next failed-result line.">
+<!ENTITY testResults_moveNextErrorResult.tooltiptext "Move to the next error-result line.">

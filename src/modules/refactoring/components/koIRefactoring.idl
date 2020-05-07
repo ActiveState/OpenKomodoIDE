@@ -1,0 +1,125 @@
+/* Copyright (c) 2004-2013 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+
+#include "nsISupports.idl"
+#include "ISciMoz.idl"
+#include "koIDocument.idl"
+#include "koILanguage.idl"
+
+[scriptable, uuid(f947509c-8b0c-4fe1-841e-bed8662ec3da)]
+interface koIRefactorVariableInfo: nsISupports {
+    const long UNDEFINED = 0x01;
+    const long USED_BEFORE_SELECTION = 0x02;
+    const long USED_IN_SELECTION = 0x04;
+    const long USED_AFTER_SELECTION = 0x08;
+    const long USED_AS_PARAMETER_NAME = 0x10;
+    const long DEFINED_BEFORE_SELECTION = 0x20;
+    const long DEFINED_IN_SELECTION = 0x40;
+    const long DEFINED_AFTER_SELECTION = 0x80;
+
+    const long NUM_USAGE_BITS = 8;
+    const long USAGE_BITS = 0xff;
+    
+    // The name of the variable
+    readonly attribute wstring name;
+    
+    // Flags on how each variable is used
+    // 'flags' is a combination of the position of the first
+    // instance of each name, shifted by 8 bits, or'ed with
+    // the usage flags.
+    readonly attribute long flags;
+};
+
+/**
+ * Callback for koIRefactoringLanguageService::categorizeVariables()
+ */
+[function, scriptable, uuid(5819d68b-d70d-4dc5-b9b0-41ff027015aa)]
+interface koIRefactoringGetVariableInfoCallback: nsISupports {
+    /**
+     * @param variables The variables; if the call failed, this is null.  Check
+     *      the last error service for details.
+     */
+    void onGetVariables([array, size_is(count)] in koIRefactorVariableInfo variables,
+                        in unsigned long count);
+};
+
+[scriptable, uuid(48e1e743-3644-4216-b89a-e5f6c58a930e)]
+interface koIRefactoringLanguageService: nsISupports {
+    attribute koILanguage languageObj;
+
+    readonly attribute boolean supportsRefactoring;
+    
+    // This might not be needed
+    // boolean supportsRefactoringOperation(in wstring operation);
+
+    // Figure out the canonical position of the start and end-positions.
+    // The most common forms are to move the start-position to the start
+    // of the current line, or if it's at the end of a line, move it to the
+    // start of the next line.
+    //
+    // And move the end point either to the end of the current line, or if
+    // it's at column 0, move it to the end of the previous line.
+    long adjustStartPosition(in ISciMoz scimoz, in long pos);
+    long adjustEndPosition(in ISciMoz scimoz, in long pos);
+
+    // Needed for refactoring: rename variable // rename class member
+    // Returns true if the word at the given position is
+    // an object attribute (method name, field name, etc.)
+    boolean wordIsAttribute(in ISciMoz scimoz,
+                            in long pos);
+
+    // If we're sitting on an identifier or variable named foo,
+    // what is the actual search term, and what's the comparison
+    // term we use to verify the hits?
+    // {wstring} nextChar is used only for Perl, to handle the
+    // different sigils for a variable name, such as tying
+    // %foo with $foo{hashIndex}.  It's not used for other languages.
+    // compareText is used to provide the pattern to check each hit.
+    void getSearchTermForVariable(in wstring searchText,
+                                  in wstring nextChar,
+                                  out wstring adjustedSearchText,
+                                  out wstring compareText);
+
+    void categorizeVariables(in ISciMoz scimoz,
+                             in koIDocument koDoc,
+                             in long selectionStart,
+                             in long selectionEnd,
+                             in koIRefactoringGetVariableInfoCallback callback);
+
+    void extractMethod(in ISciMoz scimoz,
+                       in long selectionStart,
+                       in long selectionEnd,
+                       in long sectionStartLine,
+                       in wstring targetName,
+                       in unsigned long inVarCount,
+                       [array, size_is(inVarCount)] in wstring inVars,
+                       in unsigned long outVarCount,
+                       [array, size_is(outVarCount)] in wstring outVars,
+                       in unsigned long firstUseOutVarCount,
+                       [array, size_is(firstUseOutVarCount)]
+                                           in wstring firstUseOutVars,
+                       out unsigned long selPointCount,
+                       [retval, array, size_is(selPointCount)] out long selPoints);
+    
+    /**
+       targetName: the name we want to change
+       context: the current line
+       columnNo: the point in the current line separating the previous
+               text from the expected target-name
+       The next four arguments are used if we're in a definition context
+     */
+    boolean acceptHit(in AString targetName,
+                      in AString context,
+                      in long columnNo,
+                      in wstring path,
+                      in long lineNo,
+                      in AString symbolType,
+                      in boolean inDefinitionContext);
+                      
+};
+
+[scriptable, uuid(46836e8d-25cb-4500-90bc-b4ca4dbe6c8a)]
+interface koIRefactoringLangSvcFactory: nsISupports {
+    koIRefactoringLanguageService getRefactoringLangSvcForLanguage(in wstring languageName);
+};

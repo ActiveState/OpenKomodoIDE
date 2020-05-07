@@ -1,0 +1,266 @@
+/* Copyright (c) 2004-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "nsIEnumerator.idl"
+#include "nsITreeView.idl"
+#include "ISciMoz.idl"
+#include "koIEncoding.idl"
+#include "koIEncodingServices.idl"
+#include "koIHierarchyItem.idl"
+
+interface ISciMoz;
+interface koIPreferenceSet;
+interface koIScintillaView;
+interface koIScintillaAutoCompleteController;
+
+
+[scriptable, uuid(96A8CC18-168B-4137-8435-E633D13F7925)]
+interface koILanguageService : nsISupports {
+    // template interface for language services
+    
+    // Any koILanguageService implementation can use this as a launching
+    // point for a test suite that requires a working SciMoz. You also need
+    // to add the glue code for this in test/test_scimoz.{xul|js} in chrome.
+    void test_scimoz(in ISciMoz scimoz);
+};
+
+[scriptable, uuid(29098AA5-7F16-4671-823D-FC0817250A7C)]
+interface koILanguage : nsISupports {
+    readonly attribute string name;
+    // A regular expression to match a "named block" (e.g. a function or class
+    // definition).
+    readonly attribute string namedBlockRE;
+    readonly attribute string importPref;
+    // A plaintext description of what namedBlockRE matches (e.g. functions and
+    // classes).
+    readonly attribute string namedBlockDescription;
+    readonly attribute string defaultExtension;
+    readonly attribute string sample;
+
+    /**
+     * Deprecated scimoz styling bits.
+     * @deprecated since Komodo 9.0
+     */
+    readonly attribute long styleBits;
+    readonly attribute long stylingBitsMask;
+    readonly attribute long indicatorBits;
+
+    readonly attribute wstring downloadURL;
+    // The URL used by the language help system, use %W as a replacement for the
+    // the currently selected word.
+    readonly attribute wstring searchURL;
+    readonly attribute string variableIndicators;
+    readonly attribute boolean foldable;
+    readonly attribute wstring supportsSmartIndent; // 'text', 'brace', 'python', 'XML', 'keyword'
+    
+    /**
+     * @deprecated since Komodo 9.0
+     */
+    attribute boolean primary;
+
+    // these are lexer dependent style numbers. these are used from the terminal
+    readonly attribute long styleStdin;
+    readonly attribute long styleStdout;
+    readonly attribute long styleStderr;
+
+    // Additional file associations, on top of the defaultExtension. Must be in
+    // basename glob format: ['*.py', 'Makefile', 'Perl.*']
+    //
+    //readonly attribute nsIArray extraFileAssociations
+    // Python classes may just want to add these using the extraFileAssociations
+    // list.
+    //
+    void getExtraFileAssociations([optional] out unsigned long count,
+                                  [retval, array, size_is(count)] out wstring associations);
+
+    void getSubLanguages([optional] out unsigned long count,
+                          [retval, array, size_is(count)] out wstring languages);
+    wstring getLanguageForFamily(in wstring family);
+
+    void getCommentStyles([optional] out unsigned long count,
+                          [retval, array, size_is(count)] out long styles);
+    void getStringStyles([optional] out unsigned long count,
+                         [retval, array, size_is(count)] out long styles);
+    void getNumberStyles([optional] out unsigned long count,
+                         [retval, array, size_is(count)] out long styles);
+    void getVariableStyles([optional] out unsigned long count,
+                         [retval, array, size_is(count)] out long styles);
+    void getNamedStyles(in wstring name,
+                        [optional] out unsigned long count,
+                        [retval, array, size_is(count)] out long styles);
+    void getSpellCheckableStyles([optional] out unsigned long count,
+                                 [retval, array, size_is(count)] out long styles);
+
+    // these are used by the language registry service to determine a sub
+    // language type for xml documents.  For example, if it is a XBL document
+    // vs. any "other" xml document.  For the most part, these will always
+    // return empty lists
+    void getPublidIdList(out unsigned long count,
+                          [retval, array, size_is(count)] out wstring publicIdList);
+    void getSystemIdList(out unsigned long count,
+                          [retval, array, size_is(count)] out wstring systemIdList);
+    void getNamespaces(out unsigned long count,
+                          [retval, array, size_is(count)] out wstring namespaces);
+
+    void getLanguageService(in nsIIDRef iid, 
+                            [retval,iid_is(iid)] out nsISupports result);
+    wstring getEncodingWarning(in koIEncoding encoding);
+
+    wstring getCommentDelimiter(in wstring key, in long index);
+    wstring getCommentDelimiters(in wstring key);
+  
+    const long NOT_A_BRACE = 0;
+    const long INDENT_BRACE = 1;
+    const long LINEUP_BRACE = 2;
+    // returns NOT_A_BRACE if the character at the given index is not a valid brace, or
+    // INDENT_BRACE if it's an 'indentation' brace, and 
+    // LINEUP_BRACE if it's a 'line-up' brace
+    long getBraceIndentStyle(in wchar character, in long style);
+
+    string getMatchingChar(in wchar character);
+    void getMatchingTagInfo(in ISciMoz scimoz,
+                            in long pos,
+                            in boolean constrainSearchInViewPort,
+                            [array, size_is(count)] out long coordinates,
+                            out unsigned long count);
+                            
+    // calls that do language indentation and brace line-up.
+    string computeIndent(in ISciMoz scimoz, in string indentStyle,
+                         in boolean continueComments);
+    void keyPressed(in wchar chr, in ISciMoz scimoz);
+    koILanguage supportsXMLIndentHere(in ISciMoz scimoz, 
+                                      in long position);
+    void guessIndentation(in ISciMoz scimoz,
+                          in long tabWidth,
+                          in boolean defaultUsesTabs,
+                          out long indentWidth,
+                          out boolean usesTabs);
+    
+    // Needed for HTML/XML auto-indentation
+    readonly attribute boolean isHTMLLanguage;
+
+    // Any koILanguage implementation can use this as a launching
+    // point for a test suite that requires a working SciMoz. You also
+    // need to add the glue code for this in test/test_scimoz.{xul|js}
+    // in chrome. See notes in sciutils.py::SciMozTestCase.
+    void test_scimoz(in ISciMoz scimoz);
+};
+
+
+[scriptable, uuid(37453EBA-7094-49bf-8399-076717A450C0)]
+interface koILanguageRegistryService : nsISupports {
+    // All languages must register themselves with this service.
+    // This service should never be used except by implementations
+    // of the other interfaces defined in this file.
+
+    /**
+     * Register a language at runtime.
+     * Languages may also register by being in the "komodo-language" category
+     * (via component registration).
+     */
+    void registerLanguage(in koILanguage language);
+  
+    // Get a language by its name.  koILanguage instances should
+    // always be fetched via this method. 
+    koILanguage getLanguage(in string languageName);
+  
+    // A list of all registered language names (in no particular order).
+    void getLanguageNames([array, size_is(count)] out string languages,
+                          out unsigned long count);
+    void patternsFromLanguageName(in string languageName,
+                                  [array, size_is(count)] out string patterns,
+                                  out unsigned long count);
+    koIHierarchyItem getLanguageHierarchy();
+
+    void changeLanguageStatus(in string languageName, in boolean status);
+
+    // Get the (sorted) list of current file associations.
+    void getFileAssociations(
+            out unsigned long pattern_count,
+            [array, size_is(pattern_count)] out wstring patterns,
+            out unsigned long languageName_count,
+            [array, size_is(languageName_count)] out wstring languageNames);
+
+    // Create the fileAssociationDiffs string from the given associations.
+    AString createFileAssociationPrefString(
+            in unsigned long pattern_count,
+            [array, size_is(pattern_count)] in wstring patterns,
+            in unsigned long languageName_count,
+            [array, size_is(languageName_count)] in wstring languageNames);
+
+    // Save the given set of file associations.
+    //
+    // This raises an exception sets an error message on koILastErrorService
+    // on failure.
+    void saveFileAssociations(
+            in unsigned long pattern_count,
+            [array, size_is(pattern_count)] in wstring patterns,
+            in unsigned long languageName_count,
+            [array, size_is(languageName_count)] in wstring languageNames);
+
+    // Determine the language name for this file from its basename.
+    // Returns an empty string if it has no suggestion.
+    //
+    // REFACTOR: s/suggestLanguageForFile/guessLanguageNameFromBasename/g
+    string suggestLanguageForFile(in wstring basename);
+
+    // Returns a list of possible matches.  The first match is the
+    // prefered language, and may be empty, in which case the following
+    // matches should be chosen from
+    // REFACTOR: s/guessLanguageFromContents/guessLanguageNamesFromContents/g
+    void guessLanguageFromContents(in AString documentHead,
+                                   in AString documentTail,
+                                   [array, size_is(count)] out string languages,
+                                   out unsigned long count);
+};
+
+
+// used only for testing the other language services components
+[scriptable, uuid(C8C2B9BF-87F1-4604-8AD0-318E20A8C04D)]
+interface koITestLanguageService : koILanguageService {
+    string getTestString();
+};
+
+[scriptable, uuid(F80B62F8-29B3-4360-A800-0DCFB8B2F0A6)]
+interface koILexerLanguageService : koILanguageService {
+    // All initialization is done behind the sceens
+  
+    // Configure the editor for lexing
+    //XXX we do not want this to depend on Scinitlla in the long run
+    //XXX we will remove this dependancy once we understand the 
+    //XXX cross-platform issues
+    void setCurrent(in ISciMoz scimoz);
+  
+    attribute boolean supportsFolding;
+};
+
+// Note: This completions/calltips interface is only used by Tcl.
+[scriptable, uuid(77500dfa-cf01-4298-b572-4e14791ab8b5)]
+interface koICompletionLanguageService : koILanguageService {
+    readonly attribute wstring triggers; // actually a set of characters
+    readonly attribute wstring triggersCallTip; // actually a set of characters
+    readonly attribute long completionSeparator; // represents one char
+    void AutoComplete(in wstring character, in ISciMoz scimoz, in koIScintillaAutoCompleteController controller);
+    void StartCallTip(in wstring character, in ISciMoz scimoz, in koIScintillaAutoCompleteController controller);
+};
+
+
+[scriptable, uuid(65D65B96-B7C6-499a-8675-CD3F34B65225)]
+interface koICommenterLanguageService : koILanguageService {
+    void comment(in ISciMoz scimoz);
+    void uncomment(in ISciMoz scimoz);
+};
+
+// Based on koICodeIntelCatalogsTreeView: a tree with a managed checkbox.
+
+[scriptable, uuid(f49776db-ff6b-452e-93be-352dfd41c206)]
+interface koILanguageStatusTreeView : nsITreeView {
+    void init();
+    void save(in koIPreferenceSet prefset);
+    readonly attribute wstring sortColId;
+    readonly attribute wstring sortDirection;
+    attribute wstring filter;
+    void toggleStatus(in long row_idx);
+};
+

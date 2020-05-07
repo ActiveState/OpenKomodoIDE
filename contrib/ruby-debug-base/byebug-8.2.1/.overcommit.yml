@@ -1,0 +1,62 @@
+#
+# For a complete list of hooks, see:
+# https://github.com/causes/overcommit/tree/master/lib/overcommit/hook
+#
+# For a complete list of options that you can use to customize hooks, see:
+# https://github.com/causes/overcommit#configuration
+#
+gemfile: Gemfile
+
+#
+# Hooks that are run against every commit message after a user has written it.
+#
+CommitMsg:
+  HardTabs:
+    enabled: true
+
+  SingleLineSubject:
+    enabled: true
+
+#
+# Hooks that are run after `git commit` is executed, before the commit message
+# editor is displayed.
+#
+PreCommit:
+  BundleCheck:
+    enabled: true
+
+  ExecutePermissions:
+    enabled: true
+    exclude:
+      - bin/byebug
+      - script/*
+
+  HardTabs:
+    enabled: true
+
+  LocalPathsInGemfile:
+    enabled: true
+
+  RuboCop:
+    enabled: true
+
+  CCop:
+    description: Analyzing C files with indent
+    enabled: true
+    required_executable: indent
+    install_command: sudo apt-get install indent
+    include: ext/byebug/*.c
+
+  ShellCheck:
+    enabled: true
+
+  TrailingWhitespace:
+    enabled: true
+
+  TravisLint:
+    enabled: true
+    required_files: true
+
+  YamlSyntax:
+    enabled: true
+    required_files: true

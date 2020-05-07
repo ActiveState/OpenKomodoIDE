@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+]>
+
+<!-- Copyright (c) 2003-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window id="newfilesPrefWindow"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="PrefNewFiles_OnLoad()">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/mru.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/pref-newfiles.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="newfiles-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical">
+            <caption label="&newFiles.label;"/>
+    
+            <vbox>
+                <description>
+                    &newButtonSettings.description;
+                </description>
+                <!-- Note: There is a little bit of special handling in the
+                     JS to set the initial value of this widget. -->
+                <langlist id="fileDefaultNew" class="lang-menulist"
+                          oncommand="this.setAttribute('data',this.selection);"
+                          pref="true" prefattribute="data"/>
+           </vbox>
+           <separator class="thin"/>
+           <vbox>
+                <description>
+                    &newFileEolIndicator.description;
+                </description>
+                <hbox pack="start">
+                   <menulist id="endOfLine"
+                            pref="true"
+                            prefattribute="data">
+                        <!-- XXX This bugs me. One of the options should be
+                             "System default" so that Komodo prefs files can be
+                             portable between OSes. - TM -->
+                        <menupopup>
+                           <menuitem data="CRLF" label="&DOSWindowsRN.label;"/>
+                           <menuitem data="LF" label="&UNIXN.label;"/>
+                           <menuitem data="CR" label="&macClassicR.label;"/>
+                        </menupopup>
+                   </menulist>
+                </hbox>
+           </vbox>
+            <separator class="thin"/>
+            <checkbox id="assignEmptyFilesSpecifiedEOL"
+                      style="margin-left: 27px;"
+                      label="&assignEmptyFilesSpecifiedEOL.label;"
+                      pref="true"/>
+        </groupbox>
+    
+        <groupbox orient="vertical" id="template-prefs">
+            <caption label="&templates.label;"/>
+            <hbox align="center">
+                <label control="mruTemplateSize"
+                       value="&numberTemplatesRember.label;"/>
+                <textbox id="mruTemplateSize" size="2" maxlength="2"
+                         pref="true" prefattribute="value"/>
+                <button label="&clearList.label;"
+                        oncommand="PrefNewFiles_ClearTemplateMRU();"
+                        tooltiptext="&clearListOfRecentTemplates.tooltiptext;"/>
+            </hbox>
+        </groupbox>
+
+    </vbox>
+
+</window>

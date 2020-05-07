@@ -1,0 +1,808 @@
+======================================================================
+New messageIDs that need to be added to the online help.  Once the
+messageIDs below have been integrated, place them, alphabetically, in
+the list below.
+======================================================================
+
+======================================================================
+A list of all messageIDs currently entered into the online help
+system.   Ordered alphabetically.
+======================================================================
+
+
+argAfterArgs	
+argument specified after "args" 
+Error
+An argument has been specified after the "args" keyword.  Although the
+Tcl interpreter will not complain about this usage, the extraneous
+variables "args" will not be marshalled into the argd list as
+expected. 
+
+
+argsNotDefault	
+"args" cannot be defaulted 
+Error
+The "args" keyword cannot be initialized to contain a default value.
+Although the Tcl interpreter will not complain about this usage, the
+"args" variable will never contain the value assigned as the default value. 
+
+
+badBoolean	
+invalid Boolean value 
+Error
+The command expects the string to specify a boolean value. The string
+can be "1", "0", "true", "false", "yes", "no", "on" or "off" in any
+unique abbreviation and case. 
+
+
+badByteNum
+invalid number, should be between 0 and 255
+Error
+The type should be a valid integer between 0 and 255.
+
+
+badColorFormat	
+invalid color name 
+Error
+The command expects the string to specify a color value.  The string
+can be any of the following forms:
+	colorname	
+	#RGB
+	#RRGGBB
+	#RRRGGGBBB
+	#RRRRGGGGBBBB
+"Colorname" can be any of the valid textual names for a color defined in
+the server's color database file, such as "red" or "PeachPuff".  If the
+colorname is not a Tcl defined color, a warning is flagged stating that
+the color may not be portable across all platforms.  The "RGB"
+characters represent hexadecimal digits that specify the red, green, and
+blue intensities of the color.
+
+
+badColorMap	
+invalid colormap "<colormap>": must be "new" or a window name 
+Error
+The command expects the string to specify a colormap to use.  If the
+string is "new", a new colormap is created.  Otherwise the string
+should be a valid path to a window name.
+
+
+badCursor	
+invalid cursor spec 
+Error
+The command expects the string to specify a cursor to use.  The string
+take any of the following forms: 
+	""
+	name
+	"name fgColor"
+	"@sourceFile fgColor"
+	"name fgColor bgColor"
+	"@sourceFile maskFile fgColor bgColor"
+If the "name" form is used, and the name of the cursor is not defined
+on all platforms, a warning is flagged stating that the cursor is not
+portable.  None of the forms that specify a color or multiple files
+are portable across all systems; they are flagged as being non portable.
+
+
+badEvent	
+invalid event type or keysym 
+Error
+The command expects the string to specify an event type.  If the
+string is not composed of valid a event and related modifier an error
+is reported.
+
+
+badFloat	
+invalid floating-point value 
+Error
+The command expects the string to specify a floating point value. The
+string can be white space; a sign; a sequence of digits; a decimal
+point; a sequence of digits; the letter "e"; and a signed decimal
+exponent. Any of the fields may be omitted, except that the digits
+either before or after the decimal point must be present and if the
+"e" is present then it must be followed by the exponent number. 
+
+
+badIndex	
+invalid index: should be integer or "end" 
+Error
+The command expects the string to specify an index value. The
+string can be an integer or "end".
+
+
+badInt		
+invalid integer 
+Error
+The command expects the string to specify an integer value.  The
+string can be optionally signed and optionally preceded by white
+space. If the first two characters of the string are "0x" then string is
+expected to be in hexadecimal form; otherwise, if the first character
+of string is "0" then the string is expected to be in octal form;
+otherwise, the string is expected to be in decimal form. 
+
+
+badGeometry	
+invalid geometry specifier 
+Error
+The command expects the string to specify a geometry value.  The
+string must have the following form:
+	?<+/-><width>x<+/-><height>?<+/-><x><+/-><y>??
+where any of <+/-><width>x<+/-><height> or <+/-><x><+/-><y> can be
+ommitted, and "width", "height", "x" and "y" are integers.
+
+
+badGridRel	
+must specify window before shortcut 
+Error
+When using the relative placement shortcuts in the "grid" command (i.e., "-",
+"x" or "^") an error is reported if the span column shortcut ("-") is
+used immediately after one of the other shortcuts.
+
+
+badGridMaster	
+cannot determine master window 
+Error
+The grid command flags an error if a valid window name was never
+specified in the command.
+
+	
+badKey		
+invalid keyword "<key>" must be: <options> 
+Error
+The command expects then "key" string to be a key that matches one of the
+strings in the option list.
+
+
+badLevel	
+invalid level 
+Error
+The command expects the string to be an integer or a "#" character
+followed by an integer.
+
+
+badLIndex
+invalid index: should be integer, \"len\" or \"end\""
+Error
+The command expects the string to specify an index value. The
+string can be an integer "len" or "end".
+
+
+badList		
+invalid list: <error info>
+Error
+The command expects the string to be a valid Tcl list.  The reason the
+string is not a valid Tcl list is displayed in the message associated
+with the error.
+
+
+badMemberName
+missing class specifier for body declaration
+Error
+An [incr Tcl] member name was not correctly qualified.  When defining
+the body for a class proc, class method or class variable, it is
+necessary to refrence the proc or variable with the fully qualified
+name.
+
+
+badMode		
+access mode must include either RDONLY, WRONLY, or RDWR 
+Error
+When specifying access modes for a Tcl channel, at least one of the
+three read-write access modes (RDONLY, WRONLY, or RDWR) must be
+specified with optional modifiers (APPEND, CREAT, EXCL, NOCTTY,
+NONBLOCK or TRUNC.)
+
+
+badOption	
+invalid option "<option>" must be: <options>
+Error
+The command expects the "option" string to be an option that matches one of the
+strings in "options".
+
+
+badPalette	
+invalid palette spec 
+Error
+The command expects the string to be a valid palette spec.  The
+palette string may be either a single decimal number, specifying
+the number of shades of gray to use, or three decimal numbers
+separated by slashes (/), specifying the number of shades of red,
+green and blue to use, respectively.
+
+
+badPixel	
+invalid pixel value 
+Error
+The command expects the string to specify a pixel value.  The string
+must be an integer pixel or floating-point millimeter optionally
+followed by one of the following characters: c, i, m, or p.
+
+
+badPriority	
+invalid priority keyword or value 
+Error
+The command expects the string to specify a priority value.  The
+string must contain one of the following values: "widgetDefault",
+"startupFile", "userDefault", "interactive" or an integer between 0
+and 100. 
+
+
+badProfileOpt
+option \"%1$s\" not valid when turning off profiling
+Error
+Using the TclX profiling tools, <option> is not valid.  Most likely
+the option is only valid when turning on profiling.
+
+
+badResource	
+invalid resource name 
+Error
+The command expects the string to specify a resource value.  If the
+length of the string is not four characters, an error is flagged.
+
+
+badScreen	
+invalid screen value 
+Error
+The command expects the string to specify a screen value.  The string
+must have the following form:
+	?<display name>?:<display>?.<screen>?
+where "name" is any string and "display" and "screen" are integers.
+
+
+badSticky	
+invalid stickyness value: should be one or more of nswe 
+Error
+The grid command expects the string to specify valid sticky
+coordiantes.  The string can contain any combiniation of the following
+characters: n, s, e or w.
+
+
+badSwitch	
+invalid switch: "<switch>" 
+Error
+The command expects the string to be a switch that matches one of the
+strings in list of switch options.
+
+
+badTab		
+invalid tab list
+Error
+The command expects a list of strings that define tab stops.  If the
+list cannot be parsed by the Tcl interpreter, an error is flagged.
+The tab list must consists of a list of screen distances giving the
+positions of the tab stops. Each position may optionally be followed
+in the next list element by one of the keywords "left", "right", "center",
+or "numeric", which specifies how to justify text relative to the tab
+stop.
+
+
+badTabJust	
+invalid tab justification "<tab item>": must be left right center or numeric 
+Error
+The command expects the justification string to be one of the
+following: "left", "right", "center" or "numeric".
+
+ 
+badTlibFile
+the filename must have a \".tlib\" suffix"
+Error
+The command expected a filename with a .tlib suffix.  The word should
+be changed to match the pattern <filename>.<tlib>.
+
+
+badTraceOp	
+invalid operation "<op>": should be one or more of rwu 
+Error
+The command expects the trace operation string to be one or more of
+the following characters: "r", "w" or "u".
+
+
+badVersion	
+invalid version number 
+Error
+The command expects a list of strings that specifies a package
+version.  A valid package version string is any number of integers
+seperated by "."s.
+
+
+badVirtual	
+virtual event is badly formed 
+Error
+The command expects the string to specify a virtual event.  The string
+must have the following form:
+	<<word>>
+where "word" is any non-empty string.
+
+
+badVisual	
+invalid visual 
+Error
+The command expects the string to specify a visual.  The string
+can have the following form:
+	<class> <depth>
+	default
+	<window name>
+	<number>
+	best ?<depth>?
+The "class" string must be one of "directcolor", "grayscale",
+"pseudocolor", "staticcolor", "staticgray", or "truecolor", or any
+unique abbreviation.  The "depth" value must be a valid integer.
+  
+
+badVisualDepth	
+invalid visual depth 
+Error
+If the depth specified by a visual string is not a valid integer, then
+this error is flagged.
+
+
+badWholeNum	
+invalid value "<value>": must be a non-negative integer 
+Error
+The command expects the string to specify a whole value. The string
+can be any non-negative integer.
+
+
+classOnly	
+command "<command>" only defined in class body 
+Error
+The specified command is only valid in the context of an [incr Tcl]
+class body.
+
+
+classNumArgs
+wrong # args for class constructor: <className>
+Error
+The wrong number of arguments are being used to instantiate the [incr
+Tcl] class <className>.  Compare the number of arguments used to
+instantiate the class to the number of arguments in the constructor
+defined by <className>.
+
+
+errBadBrktExp
+the bracket expression is missing a close bracket
+Error
+The bracket expression is missing a close bracket.  Common errors of
+this type are caused when the closing bracket is interpreted as a
+character to match on.  For example [] and [^] will generate this
+error because the close bracket is interpreted as a character to
+match, or not match, respectively.  The correct expressions would be:
+[]] and [^]].
+
+
+mismatchOptions 
+the specified options cannot be used in tandem
+Error
+Two or more options were specified that cannot be used at the same
+time.  The command should be re-written to use only one of the
+switches.  This commonly occurs when an overloaded command performs
+completely different operations based on the switches.
+
+
+noExpr		
+missing an expression 
+Error
+Similar to the "numArgs" messageID, TclPro Checker flags this error
+message when an "if" statement is missing in an expression.
+
+
+noScript	
+missing a script after "<control>" 
+Error
+Similar to the "numArgs" messageID, TclPro Checker flags this error
+message when an "if" statement is missing in an script.
+
+
+noSwitchArg	
+missing argument for <switch> switch 
+Error
+The command was called with a switch that expected an argument.  If
+no argument was given for the switch, this error is flagged.
+
+
+noVirtual	
+virtual event not allowed in definition of another virtual event 
+Error
+Virtual event are not allowed in event sequences.  If a virtual event
+(any event that begins with "<<"  and ends with ">>") is found, then
+this message is flagged.
+
+noEvent		
+no events specified in binding 
+Error
+The command expects an event but could not find one while parsing the
+command line.
+
+
+nonDefAfterDef	
+non-default arg specified after default 
+Error
+An non-defaulted argument has been specified after a defaulted
+argument.  Although the Tcl interpreter will not complain about this
+usage, the defaulted args will never be set by default.
+
+
+nonPortBitmap	
+use of non-portable bitmap
+Non-Portable Warning
+A bitmap was specified that is not supported on all platforms.
+
+
+nonPortChannel	
+use of non-portable file descriptor, use "<file>" instead
+Non-Portable Warning
+A channel was specified that is not supported on all platforms.  In
+most cases this is when "file0", "file1" or "file2" is used instead of
+"stdin", "stdout" or "stderr".
+
+
+nonPortCmd	
+use of non-portable command
+Non-Portable Warning
+A command was specified that is not supported on all platforms.
+
+
+nonPortColor	
+non-portable color name
+Non-Portable Warning
+A color was specified that is not supported on all platforms.
+
+
+nonPortCursor	
+non-portable cursor usage
+Non-Portable Warning
+A cursor was specified that is not supported on all platforms.
+
+
+nonPortFile	
+use of non-portable file name, use "file join"
+Non-Portable Warning
+A file name was specified that is not supported on all platforms.
+This warning is flagged then the string is a combination of words,
+variables, and/or commands seperated by system specific file
+seperators (e.g., $dir\$file)  Use the "file join" command to add the
+system specific file seperators (e.g., "[file join $dir $file]")
+
+
+nonPortKeysym	
+use of non-portable keysym
+Non-Portable Warning
+A keysym was specified that is not supported on all platforms.
+
+
+nonPortOption	
+use of non-portable option
+Non-Portable Warning
+An option was specified that is not supported on all platforms.
+Generally the option has no affect on the systems that do not support
+this option, however they silently accept the option without altering
+the state of the system.
+
+
+nonPortVar	
+use of non-portable variable
+Non-Portable Warning
+A variable was used that is not supported on all platforms.  In most
+cases, this is when the tcl_precision variable is used.
+
+
+nsOnly		
+command "<command>" only defined in namespace body 
+Error
+The specified command is only valid in the context of an [incr Tcl]
+namespace body. 
+
+
+nsOrClassOnly	
+command "<command>" only defined in class or namespace body 
+Error
+The specified command is only valid in the context of an [incr Tcl]
+class or namespace body.
+
+
+numArgs		
+wrong # args 
+Error
+An incorrect number of args was specified for a command.  Due to the
+dynamic nature of Tcl, this error me be flagged unnecessarily.  For
+example, if the command is called within an eval body with variables that
+will expand to be multiple arguments.  TclPro Checker sees only the
+one argument, but this may expand to match the required number of
+arguments when the command is evaluated.
+
+
+numListElts
+invalid number of list elements
+Error
+An incorrect number of list elements was specified.
+
+
+obsoleteCmd
+deprecated usage, use "<command>" instead
+Error
+The specified command, option or variable does not exist and is no
+longer supported in the version of the system you are checking.  Use
+the suggested alternative command, option or variable to upgrade the
+script.
+
+
+optionRequired 
+expected %1$s, got \"%2$s\"
+Error
+A specific option was expected, but the following option was found.
+
+
+oratcl::badConnectStr
+invalid Oracle connect string
+Error
+The connect string should be a valid Oracle connect string, in the
+form:
+               name
+               name/password
+               name@n:dbname
+               name/password@n:dbname
+
+
+oratcl::badOnOff
+invalid \"on\" or \"off\" value
+Error
+The command expects the argument to specify a string with either the
+"on" or "off" value.
+
+
+oratcl::badSubstChar
+invalid Oracle substitution character
+Error
+The command expects the argument to specify a single character value.
+
+
+oratcl::missingColon
+varName must be preceded by ':'
+Error
+The command expects the variableName element of the list to be
+preceeded by a colon.
+
+
+parse 		
+parse error: <error info> 
+Error
+TclPro Checker could not parse the script completely due to a parsing
+error.  The reason for the parsing error is displayed in the message
+associated with the error.
+
+
+procNumArgs
+wrong # args for user-defined proc: <procName>
+Error
+The wrong number of arguments are being used to call the Tcl procedure
+<procName>.  Compare the number of arguments used to call the
+procedure to the number of arguments in the definition of <procName>.
+
+
+procOutScope
+proc only defined in class <className>
+Error
+An [incr Tcl] class proc is being called from the wrong scope, or is
+improperly qualified.  This commonly occurs when calling inherited
+procedures.
+
+
+procProtected
+calling <protectionLevel> proc: <procName>
+Error
+Calling an inaccessable procedure with a protection level of
+<protectionLevel>.  This error is flagged when the procedure being
+called does not have premission to call this procedure. 
+
+
+serverAndPort	
+Option -myport is not valid for server sockets 
+Error
+The socket command specified the "-server" option and the "-myport"
+option on the same command line.  These are conflicting options and
+cannot be used together.
+
+
+socketAsync	
+cannot use -server option and -async option 
+Error
+The socket command specified the "-server" option and the "-async"
+option on the same command line.  These are conflicting options and
+cannot be used together.
+
+
+socketServer	
+cannot use -async option for server sockets 
+Error
+The socket command specified the "-async" option and the "-server"
+option on the same command line.  These are conflicting options and
+cannot be used together.
+
+
+tooManyFieldArg	
+too many fields in argument specifier 
+Error
+A defaulted procedure argument has been specified with multiple
+values.  An argument can have only one default value.  If the
+value is to be a list, quotes or curly braces must be used.
+
+
+warnAmbiguous	
+ambiguous switch, us <delimiter> to avoid conflicts
+Usage Warning
+The word being checked starts with a '-' but does not match any of the
+known switches.  Use <delimiter> to explicitly declare the end of the
+switch patterns.
+
+
+warnDeprecated	
+deprecated usage, use "<command>" instead
+Upgrade Warning
+The specified command, option or variable does not exists and is no
+longer supported in the version of the system you are checking.  Use
+the suggested alternative command, option or variable to upgrade the
+script.
+
+
+warnEscapeChar
+"\<char>" will have a new symantic when upgrading to Tcl 8.1
+Warning Upgrade
+The new regular expression package in Tcl 8.1 add many new special
+character sequences, called "escape characters."  When upgrading to
+8.1 the escape characters will change the semantics of the
+expression.  To maintain the beahvior of previous versions of Tcl, add
+another backslash before the character.
+
+
+warnExportPat	
+export patterns should not be qualified
+Warning
+Each export pattern may contain glob-style special characters, but it
+must not include any namespace qualifiers.  That is, the pattern can
+only specify commands in the current (exporting) namespace.
+
+
+warnExpr	
+use curly braces to avoid double substitution
+Performance Warning
+The "expr" command performs two levels of substitution on all
+expressions that are not inside curly braces.  To avoid the second
+substitution, and to imporve the performance of the command, place the
+expression inside curly braces.  Note, there exist cases where the
+second level of substitution is required and this warning will not
+apply.  TclPro Checker does not discern between these cases.
+
+
+warnExtraClose
+unmatched closing character
+Usage Warning
+A close bracket or close brace without a matching open bracket or open
+brace was detected. This frequently indicates an error introduced when
+a subcommand or script is deleted without deleting the final close
+brace or bracket.
+
+warnIfKeyword	
+deprecated usage, use else or elseif
+Warning
+When using the "if" command, it is legal to omit the "else" and
+"elseif" keywords.  However, omission of these keywords tends to
+produce error prone code, thus a warning is flagged.
+
+
+warnNamespacePat 
+glob chars in wrong portion of pattern
+Warning
+Each namespace pattern is qualified with the name of an exporting
+namespace and may have glob-style special characters in the command
+name at the end of the qualified name. The warning is flagged if a glob
+characters appears in a namespace name.
+
+
+warnNotSpecial
+"\<char>" has no meaning.  Did you mean "\\<char>" or "<char>"?
+Warning Upgrade
+The backslash character is used to quote special characters in an
+expression so their literal value can be used.  The character
+following the backslash in this expression has no affect on the
+character.  Consider simplifying the expression.
+
+
+warnPattern	
+possible unexpected substitution in pattern
+Warning
+Glob patterns use brackets to specify a list of characters to match.
+If brackets are used and the word is not properly quoted, Tcl will
+interpret this as a sub command to be evaluated, rather than a
+pattern.  This warning is flagged to avoid possible usage errors of
+this nature.
+
+
+warnQuoteChar
+\ in Tcl 8.1 bracket expressions are treated as quotes
+Warning Upgrade
+The new regular expression package in Tcl 8.1 changed the semantics of
+the backslash character inside of bracket expressions.  Previously
+they were treated as literal characters.  Now they are treated as a
+quote character.  To maintain the beahvior of previous versions of Tcl, add
+another backslash before the existing backslash.  (e.g. [*-\] becomes [*-\\])
+
+
+warnRedefine
+<userProc1> redefines <userProc2> in file <fileName> on line <lineNum>
+Warning Usage
+A proc or class is being defined, imported, inherited or renamed
+into a scope where a proc or class by the same name already exists.
+
+
+warnReserved	
+keyword is reserved for use in <version>
+Upgrade Warning
+When checking scripts using older versions of Tcl, Tk or [incr Tcl]
+this warning is flagged if a command is used that does not exist in
+the systems that you are checking against, but does exist in later
+versions.  This warning helps to prevent scripts from defining
+commands that will eventually collide with later versions.
+
+
+warnUndefProc
+the procedure was called but was never defined
+Warning
+The procedure was not defined in any of the files that were specified
+on the command line of the current invocation of procheck.  The
+procedure may get defined dynamically or in a file that was not
+specified on the procheck command line.  This warning is only
+triggered for the first use of the undefined procedure in the files
+being checked.
+
+
+warnUnsupported	
+unsupported command, option or variable: use <command>
+Error
+The specified command, option or variable still exists but is no
+longer supported.  Use the suggested alternative command, option or
+variable to upgrade the script.
+
+
+warnVarRef	
+variable reference used where variable name expected
+Warning
+Some commands expect a variable name for an argument (e.g., "incr".)
+If the argument is a variable reference, this warning is flagged to
+report possible usage errors. 
+
+
+warnY2K
+%y generates a year without a century. consider using %Y to avoid Y2K errors.
+Warning
+To avoid possible Y2K errors, use the %Y field descriptor to generate
+years with centuries (e.g., 1999 instead of 99).
+
+
+winAlpha	
+window name cannot begin with a capital letter 
+Error
+The window name for any Tcl widget cannot begin with a capital
+letter.
+
+
+winBeginDot	
+window name must begin with "." 
+Error
+The path name for any Tcl widget must begin with a "."
+
+
+winNotNull	
+window name cannot be an empty string 
+Error
+A window name or path cannot be an empty string.
+
+
+xmlact::badXMLaction
+invalid action, must be start children, end, or all
+Error
+The actionList argument to the xmlact::skip command is list of
+keywords that indicate the types of actions that should be
+skipped.  The valid actions for actionList are start, children, end,
+and all.
+

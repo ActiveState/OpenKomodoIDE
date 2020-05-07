@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Buttons"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script>
+<![CDATA[
+
+function setText(textID,val)
+{
+  document.getElementById(textID).value=val;
+}
+
+]]>
+</script>
+
+<html:h1>XUL Buttons</html:h1>
+
+<vbox flex="1" style="overflow: auto">
+
+ <groupbox>
+  <caption label="These buttons tab oddly." />
+  <hbox>
+    <button flex="1" label="6" tabindex="6" oncommand="setText('tab-text','6');" />
+    <button flex="1" label="3" tabindex="3" oncommand="setText('tab-text','3');" />
+    <button flex="1" label="4" tabindex="4" oncommand="setText('tab-text','4');" />
+    <button flex="1" label="2" tabindex="2" oncommand="setText('tab-text','2');" />
+    <button flex="1" label="5" tabindex="5" oncommand="setText('tab-text','5');" />
+    <button flex="1" label="1" tabindex="1" oncommand="setText('tab-text','1');" />
+  </hbox>
+  <hbox pack="center">
+    <description  id="tab-text" value="(no input yet)" />
+  </hbox>
+ </groupbox>
+
+ <groupbox>
+  <caption label="These buttons have access keys." />
+  <hbox>
+    <button flex="1" label="Animal" accesskey="A"
+                     oncommand="setText('accesskey-text','Animal');" />
+    <button flex="1" label="Bear"   accesskey="B"
+                     oncommand="setText('accesskey-text','Bear');" />
+    <button flex="1" label="Cat"    accesskey="C"
+                     oncommand="setText('accesskey-text','Cat');" />
+    <button flex="1" label="Dog"    accesskey="D"
+                     oncommand="setText('accesskey-text','Dog');" />
+    <button flex="1" label="Deer"   accesskey="E"
+                     oncommand="setText('accesskey-text','Deer');" />
+    <button flex="1" label="Fish"   accesskey="F"
+                     oncommand="setText('accesskey-text','Fish');" />
+  </hbox>
+  <hbox pack="center">
+    <description  id="accesskey-text" value="(no input yet)" />
+  </hbox>
+ </groupbox>
+
+ <hbox>
+ <groupbox flex="1">
+  <caption label="These show different states." />
+  <hbox>
+    <button  flex="1" label="Default"  default="true"
+                      oncommand="setText('state-text','Default');" />
+    <button  flex="1" label="Checked"  checked="true"
+                      oncommand="setText('state-text','Checked');" />
+    <button  flex="1" label="Normal"
+                      oncommand="setText('state-text','Normal');" />
+    <button  flex="1" label="Disabled" disabled="true"
+                      oncommand="setText('state-text','Disabled');" />
+  </hbox>
+  <hbox pack="center">
+    <description  id="state-text" value="(no input yet)" />
+  </hbox>
+ </groupbox>
+
+ <groupbox flex="1">
+   <caption label="These are menubuttons." />
+   <hbox>
+     <button flex="1" type="menu" label="Menu">
+       <menupopup>
+         <menuitem label="Option 1" oncommand="setText('menu-text','Option 1');" />
+         <menuitem label="Option 2" oncommand="setText('menu-text','Option 2');" />
+         <menuitem label="Option 3" oncommand="setText('menu-text','Option 3');" />
+         <menuitem label="Option 4" oncommand="setText('menu-text','Option 4');" />
+       </menupopup>
+     </button>
+     <button flex="1" type="menu-button" label="MenuButton">
+       <menupopup>
+         <menuitem label="Option A" oncommand="setText('menu-text','Option A');" />
+         <menuitem label="Option B" oncommand="setText('menu-text','Option B');" />
+         <menuitem label="Option C" oncommand="setText('menu-text','Option C');" />
+         <menuitem label="Option D" oncommand="setText('menu-text','Option D');" />
+       </menupopup>
+     </button>
+   </hbox>
+   <hbox pack="center">
+     <description  id="menu-text" value="(no input yet)" />
+   </hbox>
+ </groupbox>
+ </hbox>
+
+ <groupbox>
+  <caption label="These buttons show different labeling." />
+  <hbox pack="center">
+  <vbox>
+    <button flex="1" label="No Image"
+       oncommand="setText('label-text','A button with a label only');" />
+    <button label="Left" image="images/betty_boop.xbm"
+       oncommand="setText('label-text','A button with both an image and a label');" />
+    <button label="Right" image="images/betty_boop.xbm" dir="reverse"
+       oncommand="setText('label-text','A button with the image to the right of the label');"/>
+  </vbox>
+  <vbox>
+    <button label="Above" image="images/betty_boop.xbm"
+            orient="vertical" dir="forward"
+       oncommand="setText('label-text','A button with the image above the label');"/>
+    <button label="Below" image="images/betty_boop.xbm"
+            orient="vertical" dir="reverse"
+       oncommand="setText('label-text','A button with the image below the label');"/>
+  </vbox>
+  <vbox>
+    <button flex="1"
+       oncommand="setText('label-text','A button with neither image nor label');" />
+    <button image="images/betty_boop.xbm"
+       oncommand="setText('label-text','A button with an image only');" />
+    <button
+       oncommand="setText('label-text','A button with a multi-line, wrapped label');">
+      <label width="50">Wrapped Label</label>
+    </button>
+  </vbox>
+  <vbox>
+    <button flex="1" orient="vertical"
+      oncommand="setText('label-text','Another button with a multi-line label');">
+      <label value="This" />
+      <label value="is" />
+      <label value="a" />
+      <label value="button" />
+    </button>
+  </vbox>
+  </hbox>
+  <hbox pack="center">
+    <description  id="label-text" value="(no input yet)" />
+  </hbox>
+ </groupbox>
+
+</vbox>
+
+</window>

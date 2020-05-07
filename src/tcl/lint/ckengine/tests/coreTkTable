@@ -1,0 +1,3788 @@
+# coreTkTable --
+#
+#	This file contains the table of commands used to check coreTk.
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on TclX commands.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: coreTkTable,v 1.6 2000/06/14 02:09:09 hershey Exp $
+
+
+# data type		legal values		illegal values
+# ---------		------------		--------------
+# window/widget		a .a $a			0 0.0 {}
+# event			a $a			.a 0 0.0 {}
+# command		a .a $a	{}		0 0.0
+# display		.a $a			a 0 0.0 {}
+# tag			a .a $a 0 0.0 {}
+# subcommand		a $a			.a -a 0 0.0 {}
+# flag			-a $a			.a a 0 0.0 {}
+
+# variable		a				$a
+# file			[set]				$a$a
+# color			$a				0
+# image			$a				a
+# priority	widgetDefault startupFile
+#		userDefault interactive			0
+# style			s n e w				0
+# anchor	$a sw ne se nw n e s w ...		0
+# direction	$a up down left right active		0
+# justify	$a center left right			0
+# relief	$a flat sunken raised groove ridge	0
+
+set checkCoreTk3.6 {
+{bell}				{1 {0 4} warnReserved {0 4} {{Tk 4.0}}}
+
+{bind .a}			{ok}
+
+{bindtags .a}			{1 {0 11} warnReserved {0 8} {{Tk 4.0}}}
+
+{button .a}			{ok}
+
+{canvas .a}			{ok}
+
+{checkbutton .a}		{ok}
+
+{clipboard}			{1 {0 9} warnReserved {0 9} {{Tk 4.0}}}
+
+{destroy .a}			{ok}
+
+{entry .a}			{ok}
+
+{event}				{1 {0 5} warnReserved {0 5} {{Tk 4.2}}}
+
+{focus .a}			{ok}
+
+{font}				{1 {0 4} warnReserved {0 4} {{Tk 8.0}}}
+
+{frame .a}			{ok}
+
+{grab .a}			{ok}
+
+{grid}				{1 {0 4} warnReserved {0 4} {{Tk 4.1}}}
+
+{image}				{1 {0 5} warnReserved {0 5} {{Tk 4.0}}}
+	
+{label .a}			{ok}
+
+{listbox .a}			{ok}
+
+{lower .a}			{ok}
+
+{place .a}			{ok}
+
+{radiobutton .a}		{ok}
+
+{raise .a}			{ok}
+
+{scale .a}			{ok}
+
+{scrollbar .a}			{ok}
+
+{selection}			{1 {0 9} numArgs {} {}}
+{selection clear}		{ok}
+{selection get}			{ok}
+{selection handle .a a}		{ok}
+{selection own}			{ok}
+
+{send a a}			{ok}
+
+{text .a}			{ok}
+
+{tk colormodel .a}		{ok}
+
+{tk_bindForTraversal}		{1 {0 19} warnReserved {0 19} {{Tk 4.0}}}
+
+{tk_bisque}			{1 {0 9} warnReserved {0 9} {{Tk 4.0}}}
+
+{tk_chooseColor}		{1 {0 14} warnReserved {0 14} {{Tk 4.2}}}
+
+{tk_dialog .a a a error 0 a} 	{ok}
+
+{tk_focusFollowsMouse}		{1 {0 20} warnReserved {0 20} {{Tk 4.0}}}
+
+{tk_focusNext}			{1 {0 12} warnReserved {0 12} {{Tk 4.0}}}
+
+{tk_focusPrev}			{1 {0 12} warnReserved {0 12} {{Tk 4.0}}}
+
+{tk_getOpenFile}		{1 {0 14} warnReserved {0 14} {{Tk 4.2}}}
+
+{tk_getSaveFile}		{1 {0 14} warnReserved {0 14} {{Tk 4.2}}}
+
+{tk_menuBar .a}			{ok}
+{tk_menuBar .a .a .a}		{ok}
+{tk_menuBar a}			{1 {0 12} winBeginDot {11 1} {}}
+{tk_menuBar .a .a a}		{1 {0 18} winBeginDot {17 1} {}}
+{tk_menuBar}			{1 {0 10} numArgs {} {}}
+
+
+
+{tk_messageBox}			{1 {0 13} warnReserved {0 13} {{Tk 4.2}}}
+
+{tk_optionMenu}			{1 {0 13} warnReserved {0 13} {{Tk 4.0}}}
+
+{tk_popup}			{1 {0 8} warnReserved {0 8} {{Tk 4.0}}}
+
+{tkerror a}			{ok}
+
+{tkwait window .a}		{ok}
+
+{toplevel .a}			{ok}
+
+{winfo}				{1 {0 5} numArgs {} {}}
+{winfo atom .a}			{ok}
+{winfo atomname 0}		{ok}
+{winfo cells .a}		{ok}
+{winfo children .a}		{ok}
+{winfo class .a}		{ok}
+{winfo containing 0 0}		{ok}
+{winfo depth .a}		{ok}
+{winfo exists .a}		{ok}
+{winfo fpixels .a 0}		{ok}
+{winfo geometry .a}		{ok}
+{winfo height .a}		{ok}
+{winfo id .a}			{ok}
+{winfo interps}			{ok}
+{winfo ismapped .a}		{ok}
+{winfo manager .a}		{ok}
+{winfo name .a}			{ok}
+{winfo parent .a}		{ok}
+{winfo pathname 0}		{ok}
+{winfo pixels .a 0}		{ok}
+{winfo reqheight .a}		{ok}
+{winfo reqwidth .a}		{ok}
+{winfo rgb .a red}		{ok}
+{winfo rootx .a}		{ok}
+{winfo rooty .a}		{ok}
+{winfo screen .a}		{ok}
+{winfo screencell .a}		{ok}
+{winfo screendepth .a}		{ok}
+{winfo screenheight .a}		{ok}
+{winfo screenmmheight .a}	{ok}
+{winfo screenmmwidth .a}	{ok}
+{winfo screenvisual .a}		{ok}
+{winfo screenwidth .a}		{ok}
+{winfo toplevel .a}		{ok}
+{winfo viewable .a}		{ok}
+{winfo visual .a}		{ok}
+{winfo visualid .a}		{ok}
+{winfo vrootheight .a}		{ok}
+{winfo vrootwidth .a}		{ok}
+{winfo vrootx .a}		{ok}
+{winfo vrooty .a}		{ok}
+{winfo width .a}		{ok}
+{winfo x .a}			{ok}
+{winfo y .a}			{ok}
+
+{wm}				{1 {0 2} numArgs {} {}}
+{wm aspect .a}			{1 {0 12} nonPortOption {3 6} {{}}}
+{wm client .a}			{ok}
+{wm command .a}			{ok}
+{wm deiconify .a}		{ok}
+{wm focusmodel .a}		{1 {0 16} nonPortOption {3 10} {{}}}
+{wm frame .a}			{ok}
+{wm geometry .a}		{ok}
+{wm grid .a}			{ok}
+{wm group .a}			{ok}
+{wm iconbitmap .a}		{1 {0 16} nonPortOption {3 10} {{}}}
+{wm iconify .a}			{ok}
+{wm iconmask .a}		{1 {0 14} nonPortOption {3 8} {{}}}
+{wm iconname .a}		{1 {0 14} nonPortOption {3 8} {{}}}
+{wm iconposition .a}		{1 {0 18} nonPortOption {3 12} {{}}}
+{wm iconwindow .a}		{1 {0 16} nonPortOption {3 10} {{}}}
+{wm maxsize .a}			{ok}
+{wm minsize .a}			{ok}
+{wm overrideredirect .a}	{ok}
+{wm positionfrom .a}		{ok}
+{wm protocol .a}		{ok}
+{wm sizefrom .a}		{ok}
+{wm state .a}			{ok}
+{wm title .a}			{ok}
+{wm transient .a}		{ok}
+{wm withdraw .a}		{ok}
+}
+
+
+set checkCoreTk4.0 {
+{bell}				{ok}
+
+{bindtags .a}			{ok}
+
+{button .a}			{ok}
+
+{canvas .a}			{ok}
+
+{checkbutton .a}		{ok}
+
+{clipboard}			{1 {0 9} numArgs {} {}}
+{clipboard clear}		{ok}
+{clipboard append a}		{ok}
+
+{entry .a}			{ok}
+
+{frame .a}			{ok}
+
+{image}				{1 {0 5} numArgs {} {}}
+{image create}			{1 {0 12} numArgs {} {}}
+{image create bitmap -file a}	{ok}
+{image create image file a}	{ok}
+{image delete}			{ok}
+{image height a}		{ok}
+{image names}			{ok}
+{image type a}			{ok}
+{image types}			{ok}
+{image width a}			{ok}
+
+{label .a}			{ok}
+
+{listbox .a}			{ok}
+
+{radiobutton .a}		{ok}
+
+{scale .a}			{ok}
+
+{scrollbar .a}			{ok}
+
+{text .a}			{ok}
+
+{tk}				{1 {0 2} numArgs {} {}}
+
+{tk_bindForTraversal}		{1 {0 19} warnUnsupported {0 19} menu}
+
+{tk_bisque}			{ok}
+
+{tkerror a}			{ok}
+
+{tk_focusFollowsMouse}		{ok}
+
+{tk_focusNext .a}		{ok}
+
+{tk_focusPrev .a}		{ok}
+
+{tk_menuBar}			{1 {0 10} warnUnsupported {0 10} menu}
+
+{tk_optionMenu .a a a}		{ok}
+
+{tk_popup .a 0 0 .a}		{ok}
+
+{toplevel .a}			{ok}
+
+{winfo}				{1 {0 5} numArgs {} {}}
+{winfo colormapfull .a}		{ok}
+{winfo pointerx .a}		{ok}
+{winfo pointerxy .a}		{ok}
+{winfo pointery .a}		{ok}
+{winfo server .a}		{ok}
+{winfo visualsavailable .a}	{ok}
+
+{wm}				{1 {0 2} numArgs {} {}}
+{wm colormapwindows .a}		{ok}
+{wm resizable .a}		{ok}
+}
+
+
+set checkCoreTk4.1 {
+{grid .a}			{ok}
+{grid bbox .a 0 0}		{ok}
+{grid columnconfigure .a 0}	{ok}
+{grid configure .a}		{ok}
+{grid forget .a}		{ok}
+{grid info .a}			{ok}
+{grid location .a 0 0}		{ok}
+{grid propagate .a}		{ok}
+{grid rowconfigure .a 0}	{ok}
+{grid remove .a}		{ok}
+{grid size .a}			{ok}
+{grid slaves .a}		{ok}
+
+{tkerror a}	{1 {0 9} warnDeprecated {0 7} bgerror}
+{tkerror [set]}	{1 {0 13} warnDeprecated {0 7} bgerror 1 {9 3} numArgs {} {}}
+{tkerror a a}	{1 {0 11} warnDeprecated {0 7} bgerror 1 {0 11} numArgs {} {}}
+{tkerror}	{1 {0 7} warnDeprecated {0 7} bgerror 1 {0 7} numArgs {} {}}
+
+}
+
+
+set checkCoreTk4.2 {
+{event}				{1 {0 5} numArgs {} {}}
+{event add <<a>> a}		{ok}
+{event delete <<a>>}		{ok}
+{event generate .a a}		{ok}
+{event generate}		{1 {0 14} numArgs {} {}}
+{event info}			{ok}
+
+{tkerror a}	{1 {0 9} warnDeprecated {0 7} bgerror}
+{tkerror [set]}	{1 {0 13} warnDeprecated {0 7} bgerror 1 {9 3} numArgs {} {}}
+{tkerror a a}	{1 {0 11} warnDeprecated {0 7} bgerror 1 {0 11} numArgs {} {}}
+{tkerror}	{1 {0 7} warnDeprecated {0 7} bgerror 1 {0 7} numArgs {} {}}
+
+{tk_chooseColor}		{ok}
+
+{tk_getOpenFile}		{ok}
+
+{tk_getSaveFile}		{ok}
+
+{tk_messageBox}			{ok}
+}
+
+
+set checkCoreTk8.0 {
+{bell}				{ok}
+{bell -displayof .a}		{ok}
+{bell -d .a}			{ok}
+{bell a}			{1 {0 6} numArgs {} {}}
+{bell a a a}			{1 {0 10} numArgs {} {}}
+{bell a .a}			{1 {0 9} numArgs {} {}}
+{bell -displayof a}		{1 {0 17} winBeginDot {16 1} {}}
+
+
+{bind a}			{ok}
+{bind a a}			{ok}
+{bind a a a}			{ok}
+{bind [set]}			{1 {6 3} numArgs {} {}}
+{bind a a a a}			{1 {0 12} numArgs {} {}}
+{bind}				{1 {0 4} numArgs {} {}}
+
+
+{bindtags .a}			{ok}
+{bindtags .a a}			{ok}
+{bindtags a a a}		{1 {0 14} numArgs {} {}}
+{bindtags}			{1 {0 8} numArgs {} {}}
+{bindtags 0 a}			{1 {0 12} winBeginDot {9 1} {}}
+{bindtags .a [set]}		{1 {13 3} numArgs {} {}}
+
+
+{button .a}			{ok}
+{button}			{1 {0 6} numArgs {} {}}
+{button 0}			{1 {0 8} winBeginDot {7 1} {}}
+{button .a a}			{1 {0 11} badSwitch {10 1} a 1 {0 11} noSwitchArg {10 1} a}
+
+{button .a -activeforeground $a}	{ok}
+{button .a -activeforeground 0}		{1 {0 29} nonPortColor {28 1} {}}
+{button .a -activeforeground}		{1 {0 27} noSwitchArg {10 17} -activeforeground}
+
+{button .a -activebackground $a}	{ok}
+{button .a -activebackground 0}		{1 {0 29} nonPortColor {28 1} {}}
+{button .a -activebackground}		{1 {0 27} noSwitchArg {10 17} -activebackground}
+
+{button .a -anchor $a}		{ok}
+{button .a -anchor 0}		{1 {0 19} badKey {18 1} {{n ne e se s sw w nw center} 0}}
+{button .a -anchor}		{1 {0 17} noSwitchArg {10 7} -anchor}
+
+{button .a -background $a}	{ok}
+{button .a -background 0}	{1 {0 23} nonPortColor {22 1} {}}
+{button .a -background}		{1 {0 21} noSwitchArg {10 11} -background}
+
+{button .a -bitmap $a}		{ok}
+{button .a -bitmap 0}		{1 {0 19} coreTk::nonPortBitmap {18 1} {}}
+{button .a -bitmap}		{1 {0 17} noSwitchArg {10 7} -bitmap}
+
+{button .a -borderwidth $a}	{ok}
+{button .a -borderwidth a}	{1 {0 24} badPixel {23 1} {}}
+{button .a -borderwidth}	{1 {0 22} noSwitchArg {10 12} -borderwidth}
+
+{button .a -bg $a}		{ok}
+{button .a -bg 0}		{1 {0 15} nonPortColor {14 1} {}}
+{button .a -bg}			{1 {0 13} noSwitchArg {10 3} -bg}
+
+{button .a -command a}		{ok}
+{button .a -command [set]}	{1 {20 3} numArgs {} {}}
+{button .a -command}		{1 {0 18} noSwitchArg {10 8} -command}
+
+{button .a -cursor $a}		{ok}
+{button .a -cursor 0}		{1 {0 19} badCursor {18 1} {}}
+{button .a -cursor}		{1 {0 17} noSwitchArg {10 7} -cursor}
+
+{button .a -default normal}	{ok}
+{button .a -default a}		{1 {0 20} badKey {19 1} {{normal active disabled} a}}
+{button .a -default}		{1 {0 18} noSwitchArg {10 8} -default}
+
+{button .a -disabledforeground $a}	{ok}
+{button .a -disabledforeground 0}	{1 {0 31} nonPortColor {30 1} {}}
+{button .a -disabledforeground}		{1 {0 29} noSwitchArg {10 19} -disabledforeground}
+
+{button .a -fg $a}		{ok}
+{button .a -fg 0}		{1 {0 15} nonPortColor {14 1} {}}
+{button .a -fg}			{1 {0 13} noSwitchArg {10 3} -fg}
+
+{button .a -font $a}		{ok}
+{button .a -font [set]}		{1 {17 3} numArgs {} {}}
+{button .a -font}		{1 {0 15} noSwitchArg {10 5} -font}
+
+{button .a -foreground $a}	{ok}
+{button .a -foreground 0}	{1 {0 23} nonPortColor {22 1} {}}
+{button .a -foreground}		{1 {0 21} noSwitchArg {10 11} -foreground}
+
+{button .a -height 0}		{ok}
+{button .a -height a}		{1 {0 19} badPixel {18 1} {}}
+{button .a -height}		{1 {0 17} noSwitchArg {10 7} -height}
+
+{button .a -highlightbackground $a}	{ok}
+{button .a -highlightbackground 0}	{1 {0 32} nonPortColor {31 1} {}}
+{button .a -highlightbackground}	{1 {0 30} noSwitchArg {10 20} -highlightbackground}
+
+{button .a -highlightcolor $a}	{ok}
+{button .a -highlightcolor 0}	{1 {0 27} nonPortColor {26 1} {}}
+{button .a -highlightcolor}	{1 {0 25} noSwitchArg {10 15} -highlightcolor}
+
+{button .a -highlightthickness $a}	{ok}
+{button .a -highlightthickness a}	{1 {0 31} badPixel {30 1} {}}
+{button .a -highlightthickness}		{1 {0 29} noSwitchArg {10 19} -highlightthickness}
+
+{button .a -image $a}		{ok}
+{button .a -image [set]}	{1 {18 3} numArgs {} {}}
+{button .a -image}		{1 {0 16} noSwitchArg {10 6} -image}
+
+{button .a -justify $a}		{ok}
+{button .a -justify 0}		{1 {0 20} badKey {19 1} {{left center right} 0}}
+{button .a -justify}		{1 {0 18} noSwitchArg {10 8} -justify}
+
+{button .a -padx $a}		{ok}
+{button .a -padx a}		{1 {0 17} badPixel {16 1} {}}
+{button .a -padx}		{1 {0 15} noSwitchArg {10 5} -padx}
+
+{button .a -pady $a}		{ok}
+{button .a -pady a}		{1 {0 17} badPixel {16 1} {}}
+{button .a -pady}		{1 {0 15} noSwitchArg {10 5} -pady}
+
+{button .a -relief $a}		{ok}
+{button .a -relief a}		{1 {0 19} badKey {18 1} {{raised sunken flat ridge solid groove} a}}
+{button .a -relief}		{1 {0 17} noSwitchArg {10 7} -relief}
+
+{button .a -state $a}		{ok}
+{button .a -state a}		{1 {0 18} badKey {17 1} {{normal active disabled} a}}
+{button .a -state}		{1 {0 16} noSwitchArg {10 6} -state}
+
+{button .a -takefocus .a}	{ok}
+{button .a -takefocus [set]}	{1 {22 3} numArgs {} {}}
+{button .a -takefocus}		{1 {0 20} noSwitchArg {10 10} -takefocus}
+
+{button .a -text a}		{ok}
+{button .a -text [set]}		{1 {17 3} numArgs {} {}}
+{button .a -text}		{1 {0 15} noSwitchArg {10 5} -text}
+
+{button .a -textvariable a}	{ok}
+{button .a -textvariable $a}	{1 {0 26} warnVarRef {24 2} {}}
+{button .a -textvariable}	{1 {0 23} noSwitchArg {10 13} -textvariable}
+
+{button .a -underline 0}	{ok}
+{button .a -underline a}	{1 {0 22} badInt {21 1} {}}
+{button .a -underline}		{1 {0 20} noSwitchArg {10 10} -underline}
+
+{button .a -width 0}		{ok}
+{button .a -width a}		{1 {0 18} badPixel {17 1} {}}
+{button .a -width}		{1 {0 16} noSwitchArg {10 6} -width}
+
+{button .a -wraplength 0}	{ok}
+{button .a -wraplength a}	{1 {0 23} badPixel {22 1} {}}
+{button .a -wraplength}		{1 {0 21} noSwitchArg {10 11} -wraplength}
+
+{button .a -activeforeground $a -activebackground $a -anchor $a \
+    -background $a -bitmap $a -borderwidth $a -bg $a -command a -cursor $a \
+    -default normal -disabledforeground $a -fg $a -font $a -foreground $a \
+    -height 0 -highlightcolor $a -highlightbackground $a \
+    -highlightthickness $a -image $a -justify $a -padx $a -pady $a \
+    -relief $a -state $a -takefocus .a -text a -textvariable a -underline 0 \
+    -width 0 -wraplength 0}	{ok}
+
+
+{canvas .a}			{ok}
+{canvas}			{1 {0 6} numArgs {} {}}
+{canvas 0}			{1 {0 8} winBeginDot {7 1} {}}
+{canvas .a a}			{1 {0 11} badSwitch {10 1} a 1 {0 11} noSwitchArg {10 1} a}
+
+{canvas .a -background $a}	{ok}
+{canvas .a -background 0}	{1 {0 23} nonPortColor {22 1} {}}
+{canvas .a -background}		{1 {0 21} noSwitchArg {10 11} -background}
+
+{canvas .a -bg $a}		{ok}
+{canvas .a -bg 0}		{1 {0 15} nonPortColor {14 1} {}}
+{canvas .a -bg}			{1 {0 13} noSwitchArg {10 3} -bg}
+
+{canvas .a -borderwidth 0}	{ok}
+{canvas .a -borderwidth a}	{1 {0 24} badPixel {23 1} {}}
+{canvas .a -borderwidth}	{1 {0 22} noSwitchArg {10 12} -borderwidth}
+
+{canvas .a -closeenough 0}	{ok}
+{canvas .a -closeenough a}	{1 {0 24} badFloat {23 1} {}}
+{canvas .a -closeenough}	{1 {0 22} noSwitchArg {10 12} -closeenough}
+
+{canvas .a -confine 0}		{ok}
+{canvas .a -confine a}		{1 {0 20} badBoolean {19 1} {}}
+{canvas .a -confine}		{1 {0 18} noSwitchArg {10 8} -confine}
+
+{canvas .a -cursor $a}		{ok}
+{canvas .a -cursor 0}		{1 {0 19} badCursor {18 1} {}}
+{canvas .a -cursor}		{1 {0 17} noSwitchArg {10 7} -cursor}
+
+{canvas .a -height 0}	 	{ok}
+{canvas .a -height a}		{1 {0 19} badPixel {18 1} {}}
+{canvas .a -height}		{1 {0 17} noSwitchArg {10 7} -height}
+
+{canvas .a -highlightcolor $a}	{ok}
+{canvas .a -highlightcolor 0}	{1 {0 27} nonPortColor {26 1} {}}
+{canvas .a -highlightcolor}	{1 {0 25} noSwitchArg {10 15} -highlightcolor}
+
+{canvas .a -highlightbackground $a}	{ok}
+{canvas .a -highlightbackground 0}	{1 {0 32} nonPortColor {31 1} {}}
+{canvas .a -highlightbackground}	{1 {0 30} noSwitchArg {10 20} -highlightbackground}
+
+{canvas .a -highlightthickness 0}	{ok}
+{canvas .a -highlightthickness a}	{1 {0 31} badPixel {30 1} {}}
+{canvas .a -highlightthickness}		{1 {0 29} noSwitchArg {10 19} -highlightthickness}
+
+{canvas .a -insertbackground $a}	{ok}
+{canvas .a -insertbackground 0}		{1 {0 29} nonPortColor {28 1} {}}
+{canvas .a -insertbackground}		{1 {0 27} noSwitchArg {10 17} -insertbackground}
+
+{canvas .a -insertborderwidth 0}	{ok}
+{canvas .a -insertborderwidth a}	{1 {0 30} badPixel {29 1} {}}
+{canvas .a -insertborderwidth}		{1 {0 28} noSwitchArg {10 18} -insertborderwidth}
+
+{canvas .a -insertofftime 0}	{ok}
+{canvas .a -insertofftime a}	{1 {0 26} badInt {25 1} {}}
+{canvas .a -insertofftime}	{1 {0 24} noSwitchArg {10 14} -insertofftime}
+
+{canvas .a -insertontime 0}	{ok}
+{canvas .a -insertontime a}	{1 {0 25} badInt {24 1} {}}
+{canvas .a -insertontime}	{1 {0 23} noSwitchArg {10 13} -insertontime}
+
+{canvas .a -insertwidth 0}	{ok}
+{canvas .a -insertwidth a}	{1 {0 24} badPixel {23 1} {}}
+{canvas .a -insertwidth}	{1 {0 22} noSwitchArg {10 12} -insertwidth}
+
+{canvas .a -relief $a}		{ok}
+{canvas .a -relief a}		{1 {0 19} badKey {18 1} {{raised sunken flat ridge solid groove} a}}
+{canvas .a -relief}		{1 {0 17} noSwitchArg {10 7} -relief}
+
+{canvas .a -selectbackground $a}	{ok}
+{canvas .a -selectbackground 0}		{1 {0 29} nonPortColor {28 1} {}}
+{canvas .a -selectbackground}		{1 {0 27} noSwitchArg {10 17} -selectbackground}
+
+{canvas .a -scrollregion $a}		{ok}
+{canvas .a -scrollregion {0 0 0 0}}	{ok}
+{canvas .a -scrollregion {0 0 0 a}}	{1 {0 33} badPixel {31 1} {}}
+{canvas .a -scrollregion {0 0 0 0 a}}	{1 {0 35} numListElts {24 11} {}}
+{canvas .a -scrollregion {0 0 a 0 0}}	{1 {0 35} numListElts {24 11} {} 1 {0 35} badPixel {29 1} {}}
+{canvas .a -scrollregion {0 0 0}}	{1 {0 31} numListElts {24 7} {}}
+{canvas .a -scrollregion}		{1 {0 23} noSwitchArg {10 13} -scrollregion}
+
+{canvas .a -selectborderwidth 0}	{ok}
+{canvas .a -selectborderwidth a}	{1 {0 30} badPixel {29 1} {}}
+{canvas .a -selectborderwidth}		{1 {0 28} noSwitchArg {10 18} -selectborderwidth}
+
+{canvas .a -selectforeground $a}	{ok}
+{canvas .a -selectforeground 0}		{1 {0 29} nonPortColor {28 1} {}}
+{canvas .a -selectforeground}		{1 {0 27} noSwitchArg {10 17} -selectforeground}
+
+{canvas .a -takefocus .a}	{ok}
+{canvas .a -takefocus [set]}	{1 {22 3} numArgs {} {}}
+{canvas .a -takefocus}		{1 {0 20} noSwitchArg {10 10} -takefocus}
+
+{canvas .a -xscrollcommand $a}		{ok}
+{canvas .a -xscrollcommand [set]}	{1 {27 3} numArgs {} {}}
+{canvas .a -xscrollcommand}		{1 {0 25} noSwitchArg {10 15} -xscrollcommand}
+
+{canvas .a -xscrollincrement 0}		{ok}
+{canvas .a -xscrollincrement a}		{1 {0 29} badPixel {28 1} {}}
+{canvas .a -xscrollincrement}		{1 {0 27} noSwitchArg {10 17} -xscrollincrement}
+
+{canvas .a -yscrollcommand $a}		{ok}
+{canvas .a -yscrollcommand [set]}	{1 {27 3} numArgs {} {}}
+{canvas .a -yscrollcommand}		{1 {0 25} noSwitchArg {10 15} -yscrollcommand}
+
+{canvas .a -yscrollincrement 0}		{ok}
+{canvas .a -yscrollincrement a}		{1 {0 29} badPixel {28 1} {}}
+{canvas .a -yscrollincrement}		{1 {0 27} noSwitchArg {10 17} -yscrollincrement}
+
+{canvas .a -background $a -borderwidth $a -bg $a  -closeenough 0 \
+    -confine 0 -cursor $a -height 0 -highlightcolor $a \
+    -highlightbackground $a -highlightthickness $a \
+    -insertbackground $a -insertborderwidth $a -insertofftime 0 \
+    -insertontime 0 -insertwidth 0 -relief $a -scrollregion {0 0 0 0} \
+    -selectbackground $a -selectborderwidth 0 -selectforeground $a \
+    -takefocus .a -xscrollcommand $a -xscrollcommand 0 \
+    -yscrollcommand $a -yscrollcommand 0}	{ok}
+
+
+{checkbutton .a}		{ok}
+{checkbutton}			{1 {0 11} numArgs {} {}}
+{checkbutton 0}			{1 {0 13} winBeginDot {12 1} {}}
+{checkbutton .a a}		{1 {0 16} badSwitch {15 1} a 1 {0 16} noSwitchArg {15 1} a}
+
+{checkbutton .a -activeforeground $a}	{ok}
+{checkbutton .a -activeforeground 0}	{1 {0 34} nonPortColor {33 1} {}}
+{checkbutton .a -activeforeground}	{1 {0 32} noSwitchArg {15 17} -activeforeground}
+
+{checkbutton .a -activebackground $a}	{ok}
+{checkbutton .a -activebackground 0}	{1 {0 34} nonPortColor {33 1} {}}
+{checkbutton .a -activebackground}	{1 {0 32} noSwitchArg {15 17} -activebackground}
+
+{checkbutton .a -anchor $a}	{ok}
+{checkbutton .a -anchor 0}	{1 {0 24} badKey {23 1} {{n ne e se s sw w nw center} 0}}
+{checkbutton .a -anchor}	{1 {0 22} noSwitchArg {15 7} -anchor}
+
+{checkbutton .a -background $a}	{ok}
+{checkbutton .a -background 0}	{1 {0 28} nonPortColor {27 1} {}}
+{checkbutton .a -background}	{1 {0 26} noSwitchArg {15 11} -background}
+
+{checkbutton .a -bitmap $a}	{ok}
+{checkbutton .a -bitmap 0}	{1 {0 24} coreTk::nonPortBitmap {23 1} {}}
+{checkbutton .a -bitmap}	{1 {0 22} noSwitchArg {15 7} -bitmap}
+
+{checkbutton .a -borderwidth $a}	{ok}
+{checkbutton .a -borderwidth a}	{1 {0 29} badPixel {28 1} {}}
+{checkbutton .a -borderwidth}	{1 {0 27} noSwitchArg {15 12} -borderwidth}
+
+{checkbutton .a -bg $a}		{ok}
+{checkbutton .a -bg 0}		{1 {0 20} nonPortColor {19 1} {}}
+{checkbutton .a -bg}		{1 {0 18} noSwitchArg {15 3} -bg}
+
+{checkbutton .a -command a}	{ok}
+{checkbutton .a -command [set]}	{1 {25 3} numArgs {} {}}
+{checkbutton .a -command}	{1 {0 23} noSwitchArg {15 8} -command}
+
+{checkbutton .a -cursor $a}	{ok}
+{checkbutton .a -cursor 0}	{1 {0 24} badCursor {23 1} {}}
+{checkbutton .a -cursor}	{1 {0 22} noSwitchArg {15 7} -cursor}
+
+{checkbutton .a -disabledforeground $a}	{ok}
+{checkbutton .a -disabledforeground 0}	{1 {0 36} nonPortColor {35 1} {}}
+{checkbutton .a -disabledforeground}	{1 {0 34} noSwitchArg {15 19} -disabledforeground}
+
+{checkbutton .a -fg $a}		{ok}
+{checkbutton .a -fg 0}		{1 {0 20} nonPortColor {19 1} {}}
+{checkbutton .a -fg}		{1 {0 18} noSwitchArg {15 3} -fg}
+
+{checkbutton .a -font $a}	{ok}
+{checkbutton .a -font [set]}	{1 {22 3} numArgs {} {}}
+{checkbutton .a -font}		{1 {0 20} noSwitchArg {15 5} -font}
+
+{checkbutton .a -foreground $a}	{ok}
+{checkbutton .a -foreground 0}	{1 {0 28} nonPortColor {27 1} {}}
+{checkbutton .a -foreground}	{1 {0 26} noSwitchArg {15 11} -foreground}
+
+{checkbutton .a -height 0}	{ok}
+{checkbutton .a -height a}	{1 {0 24} badPixel {23 1} {}}
+{checkbutton .a -height}	{1 {0 22} noSwitchArg {15 7} -height}
+
+{checkbutton .a -highlightcolor $a}	{ok}
+{checkbutton .a -highlightcolor 0}	{1 {0 32} nonPortColor {31 1} {}}
+{checkbutton .a -highlightcolor}	{1 {0 30} noSwitchArg {15 15} -highlightcolor}
+
+{checkbutton .a -highlightbackground $a}	{ok}
+{checkbutton .a -highlightbackground 0}	{1 {0 37} nonPortColor {36 1} {}}
+{checkbutton .a -highlightbackground}	{1 {0 35} noSwitchArg {15 20} -highlightbackground}
+
+{checkbutton .a -highlightthickness $a}	{ok}
+{checkbutton .a -highlightthickness a}	{1 {0 36} badPixel {35 1} {}}
+{checkbutton .a -highlightthickness}	{1 {0 34} noSwitchArg {15 19} -highlightthickness}
+
+{checkbutton .a -image $a}	{ok}
+{checkbutton .a -image [set]}	{1 {23 3} numArgs {} {}}
+{checkbutton .a -image}		{1 {0 21} noSwitchArg {15 6} -image}
+
+{checkbutton .a -indicatoron 0}	{ok}
+{checkbutton .a -indicatoron a}	{1 {0 29} badBoolean {28 1} {}}
+{checkbutton .a -indicatoron}	{1 {0 27} noSwitchArg {15 12} -indicatoron}
+
+{checkbutton .a -justify $a}	{ok}
+{checkbutton .a -justify 0}	{1 {0 25} badKey {24 1} {{left center right} 0}}
+{checkbutton .a -justify}	{1 {0 23} noSwitchArg {15 8} -justify}
+
+{checkbutton .a -offvalue $a}	{ok}
+{checkbutton .a -offvalue [set]}	{1 {26 3} numArgs {} {}}
+{checkbutton .a -offvalue}	{1 {0 24} noSwitchArg {15 9} -offvalue}
+
+{checkbutton .a -onvalue $a}	{ok}
+{checkbutton .a -onvalue [set]}	{1 {25 3} numArgs {} {}}
+{checkbutton .a -onvalue}	{1 {0 23} noSwitchArg {15 8} -onvalue}
+
+{checkbutton .a -padx $a}	{ok}
+{checkbutton .a -padx a}	{1 {0 22} badPixel {21 1} {}}
+{checkbutton .a -padx}		{1 {0 20} noSwitchArg {15 5} -padx}
+
+{checkbutton .a -pady $a}	{ok}
+{checkbutton .a -pady a}	{1 {0 22} badPixel {21 1} {}}
+{checkbutton .a -pady}		{1 {0 20} noSwitchArg {15 5} -pady}
+
+{checkbutton .a -relief $a}	{ok}
+{checkbutton .a -relief a}	{1 {0 24} badKey {23 1} {{raised sunken flat ridge solid groove} a}}
+{checkbutton .a -relief}	{1 {0 22} noSwitchArg {15 7} -relief}
+
+{checkbutton .a -selectcolor $a}	{ok}
+{checkbutton .a -selectcolor 0}	{1 {0 29} nonPortColor {28 1} {}}
+{checkbutton .a -selectcolor}	{1 {0 27} noSwitchArg {15 12} -selectcolor}
+
+{checkbutton .a -selectimage $a}	{ok}
+{checkbutton .a -selectimage [set]}	{1 {29 3} numArgs {} {}}
+{checkbutton .a -selectimage}	{1 {0 27} noSwitchArg {15 12} -selectimage}
+
+{checkbutton .a -state $a}	{ok}
+{checkbutton .a -state a}	{1 {0 23} badKey {22 1} {{normal active disabled} a}}
+{checkbutton .a -state}		{1 {0 21} noSwitchArg {15 6} -state}
+
+{checkbutton .a -takefocus .a}	{ok}
+{checkbutton .a -takefocus [set]}	{1 {27 3} numArgs {} {}}
+{checkbutton .a -takefocus}	{1 {0 25} noSwitchArg {15 10} -takefocus}
+
+{checkbutton .a -text a}	{ok}
+{checkbutton .a -text [set]}	{1 {22 3} numArgs {} {}}
+{checkbutton .a -text}		{1 {0 20} noSwitchArg {15 5} -text}
+
+{checkbutton .a -textvariable a}	{ok}
+{checkbutton .a -textvariable $a}	{1 {0 31} warnVarRef {29 2} {}}
+{checkbutton .a -textvariable}	{1 {0 28} noSwitchArg {15 13} -textvariable}
+
+{checkbutton .a -underline 0}	{ok}
+{checkbutton .a -underline a}	{1 {0 27} badInt {26 1} {}}
+{checkbutton .a -underline}	{1 {0 25} noSwitchArg {15 10} -underline}
+
+{checkbutton .a -variable a}	{ok}
+{checkbutton .a -variable $a}	{1 {0 27} warnVarRef {25 2} {}}
+{checkbutton .a -variable}	{1 {0 24} noSwitchArg {15 9} -variable}
+
+{checkbutton .a -width 0}	{ok}
+{checkbutton .a -width a}	{1 {0 23} badPixel {22 1} {}}
+{checkbutton .a -width}		{1 {0 21} noSwitchArg {15 6} -width}
+
+{checkbutton .a -wraplength 0}	{ok}
+{checkbutton .a -wraplength a}	{1 {0 28} badPixel {27 1} {}}
+{checkbutton .a -wraplength}	{1 {0 26} noSwitchArg {15 11} -wraplength}
+
+{checkbutton .a -activeforeground $a -activebackground $a -anchor $a \
+    -background $a -bitmap $a -borderwidth $a -bg $a -command a -cursor $a \
+    -disabledforeground $a -fg $a -font $a -foreground $a -height 0 \
+    -highlightcolor $a -highlightbackground $a -highlightthickness $a \
+    -image $a -indicatoron 0 -justify $a -offvalue $a -onvalue $a -padx $a \
+    -pady $a -relief $a -selectcolor $a -selectimage $a -state $a \
+    -takefocus .a -text a -textvariable a -underline 0 -variable a \
+    -width 0 -wraplength 0}	{ok}
+
+
+{clipboard 0}			{1 {0 11} badOption {10 1} {{clear append} 0}}
+{clipboard}			{1 {0 9} numArgs {} {}}
+
+{clipboard append a}		{ok}
+{clipboard append [set]}	{1 {18 3} numArgs {} {}}
+{clipboard append}		{1 {0 16} numArgs {} {}}
+
+{clipboard append -displayof .a a}	{ok}
+{clipboard append -displayof .a [set]}	{1 {32 3} numArgs {} {}}
+{clipboard append -displayof [set] a}	{1 {29 3} numArgs {} {}}
+{clipboard append -displayof .a}	{1 {0 30} numArgs {} {}}
+{clipboard append -displayof}	{1 {0 27} noSwitchArg {17 10} -displayof}
+
+{clipboard clear a}		{1 {0 17} numArgs {} {}}
+{clipboard clear}		{ok}
+
+{clipboard clear -displayof .a}	{ok}
+{clipboard clear -displayof [set]}	{1 {28 3} numArgs {} {}}
+{clipboard clear -displayof}	{1 {0 26} noSwitchArg {16 10} -displayof}
+{clipboard clear -displayof .a a}	{1 {0 31} numArgs {} {}}
+
+
+{destroy .a}			{ok}
+{destroy .a .a .a}		{ok}
+{destroy}			{ok}
+{destroy a}			{1 {0 9} winBeginDot {8 1} {}}
+{destroy .a .a a}		{1 {0 15} winBeginDot {14 1} {}}
+
+
+{entry .a}			{ok}
+{entry}				{1 {0 5} numArgs {} {}}
+{entry 0}			{1 {0 7} winBeginDot {6 1} {}}
+{entry .a a}			{1 {0 10} badSwitch {9 1} a 1 {0 10} noSwitchArg {9 1} a}
+
+{entry .a -background $a}	{ok}
+{entry .a -background 0}	{1 {0 22} nonPortColor {21 1} {}}
+{entry .a -background}		{1 {0 20} noSwitchArg {9 11} -background}
+
+{entry .a -borderwidth $a}	{ok}
+{entry .a -borderwidth a}	{1 {0 23} badPixel {22 1} {}}
+{entry .a -borderwidth}		{1 {0 21} noSwitchArg {9 12} -borderwidth}
+
+{entry .a -bg $a}		{ok}
+{entry .a -bg 0}		{1 {0 14} nonPortColor {13 1} {}}
+{entry .a -bg}			{1 {0 12} noSwitchArg {9 3} -bg}
+
+{entry .a -cursor $a}		{ok}
+{entry .a -cursor 0}		{1 {0 18} badCursor {17 1} {}}
+{entry .a -cursor}		{1 {0 16} noSwitchArg {9 7} -cursor}
+
+{entry .a -exportselection 0}	{ok}
+{entry .a -exportselection a}	{1 {0 27} badBoolean {26 1} {}}
+{entry .a -exportselection}	{1 {0 25} noSwitchArg {9 16} -exportselection}
+
+{entry .a -fg $a}		{ok}
+{entry .a -fg 0}		{1 {0 14} nonPortColor {13 1} {}}
+{entry .a -fg}			{1 {0 12} noSwitchArg {9 3} -fg}
+
+{entry .a -font $a}		{ok}
+{entry .a -font [set]}		{1 {16 3} numArgs {} {}}
+{entry .a -font}		{1 {0 14} noSwitchArg {9 5} -font}
+
+{entry .a -foreground $a}	{ok}
+{entry .a -foreground 0}	{1 {0 22} nonPortColor {21 1} {}}
+{entry .a -foreground}		{1 {0 20} noSwitchArg {9 11} -foreground}
+
+{entry .a -highlightcolor $a}	{ok}
+{entry .a -highlightcolor 0}	{1 {0 26} nonPortColor {25 1} {}}
+{entry .a -highlightcolor}	{1 {0 24} noSwitchArg {9 15} -highlightcolor}
+
+{entry .a -highlightbackground $a}	{ok}
+{entry .a -highlightbackground 0}	{1 {0 31} nonPortColor {30 1} {}}
+{entry .a -highlightbackground}	{1 {0 29} noSwitchArg {9 20} -highlightbackground}
+
+{entry .a -highlightthickness $a}	{ok}
+{entry .a -highlightthickness a}	{1 {0 30} badPixel {29 1} {}}
+{entry .a -highlightthickness}	{1 {0 28} noSwitchArg {9 19} -highlightthickness}
+
+{entry .a -insertbackground $a}	{ok}
+{entry .a -insertbackground a}	{1 {0 28} nonPortColor {27 1} {}}
+{entry .a -insertbackground}	{1 {0 26} noSwitchArg {9 17} -insertbackground}
+
+{entry .a -insertborderwidth 0}	{ok}
+{entry .a -insertborderwidth a}	{1 {0 29} badPixel {28 1} {}}
+{entry .a -insertborderwidth}	{1 {0 27} noSwitchArg {9 18} -insertborderwidth}
+
+{entry .a -insertofftime 0}	{ok}
+{entry .a -insertofftime a}	{1 {0 25} badInt {24 1} {}}
+{entry .a -insertofftime}	{1 {0 23} noSwitchArg {9 14} -insertofftime}
+
+{entry .a -insertontime 0}	{ok}
+{entry .a -insertontime a}	{1 {0 24} badInt {23 1} {}}
+{entry .a -insertontime}	{1 {0 22} noSwitchArg {9 13} -insertontime}
+
+{entry .a -insertwidth 0}	{ok}
+{entry .a -insertwidth a}	{1 {0 23} badPixel {22 1} {}}
+{entry .a -insertwidth}		{1 {0 21} noSwitchArg {9 12} -insertwidth}
+
+{entry .a -justify $a}		{ok}
+{entry .a -justify 0}		{1 {0 19} badKey {18 1} {{left center right} 0}}
+{entry .a -justify}		{1 {0 17} noSwitchArg {9 8} -justify}
+
+{entry .a -relief $a}		{ok}
+{entry .a -relief a}		{1 {0 18} badKey {17 1} {{raised sunken flat ridge solid groove} a}}
+{entry .a -relief}		{1 {0 16} noSwitchArg {9 7} -relief}
+
+{entry .a -show a}		{ok}
+{entry .a -show [set]}		{1 {16 3} numArgs {} {}}
+{entry .a -show}		{1 {0 14} noSwitchArg {9 5} -show}
+
+{entry .a -state $a}		{ok}
+{entry .a -state a}		{1 {0 17} badKey {16 1} {{normal disabled} a}}
+{entry .a -state}		{1 {0 15} noSwitchArg {9 6} -state}
+
+{entry .a -takefocus .a}	{ok}
+{entry .a -takefocus [set]}	{1 {21 3} numArgs {} {}}
+{entry .a -takefocus}		{1 {0 19} noSwitchArg {9 10} -takefocus}
+
+{entry .a -textvariable a}	{ok}
+{entry .a -textvariable $a}	{1 {0 25} warnVarRef {23 2} {}}
+{entry .a -textvariable}	{1 {0 22} noSwitchArg {9 13} -textvariable}
+
+{entry .a -selectbackground $a}	{ok}
+{entry .a -selectbackground a}	{1 {0 28} nonPortColor {27 1} {}}
+{entry .a -selectbackground}	{1 {0 26} noSwitchArg {9 17} -selectbackground}
+
+{entry .a -selectforeground $a}	{ok}
+{entry .a -selectforeground a}	{1 {0 28} nonPortColor {27 1} {}}
+{entry .a -selectforeground}	{1 {0 26} noSwitchArg {9 17} -selectforeground}
+
+{entry .a -selectborderwidth 0}	{ok}
+{entry .a -selectborderwidth a}	{1 {0 29} badPixel {28 1} {}}
+{entry .a -selectborderwidth}	{1 {0 27} noSwitchArg {9 18} -selectborderwidth}
+
+{entry .a -width 0}		{ok}
+{entry .a -width a}		{1 {0 17} badPixel {16 1} {}}
+{entry .a -width}		{1 {0 15} noSwitchArg {9 6} -width}
+
+{entry .a -background $a -borderwidth $a -bg $a -cursor $a -exportselection 0 \
+    -fg $a -font $a -foreground $a -highlightcolor $a -highlightbackground $a \
+    -highlightthickness $a -insertofftime 0 -insertontime 0 -insertwidth 0 \
+    -justify $a -relief $a -state $a -textvariable a -selectbackground $a \
+    -selectforeground $a -selectborderwidth 0 -width 0}	{ok}
+
+
+{event 0}	{1 {0 7} badOption {6 1} {{add delete generate info} 0}}
+{event}		{1 {0 5} numArgs {} {}}
+
+{event add $a a}	{ok}
+{event add $a a a a}	{ok}
+{event add a a}		{1 {0 13} coreTk::badVirtual {10 1} {}}
+{event add $a [set]}	{1 {14 3} numArgs {} {}}
+{event add $a a a [set]}	{1 {18 3} numArgs {} {}}
+{event add $a}		{1 {0 12} numArgs {} {}}
+
+{event delete $a}		{ok}
+{event delete $a a}		{ok}
+{event delete $a a a a}		{ok}
+{event delete a}		{1 {0 14} coreTk::badVirtual {13 1} {}}
+{event delete $a [set]}		{1 {17 3} numArgs {} {}}
+{event delete $a a a [set]}	{1 {21 3} numArgs {} {}}
+{event delete}			{1 {0 12} numArgs {} {}}
+
+{event generate .a <<Paste>>}	{ok}
+{event generate a a}		{1 {0 18} winBeginDot {15 1} {}}
+{event generate .a <foo>}	{1 {0 23} coreTk::nonPortKeysym {19 1} {}}
+{event generate .a}		{1 {0 17} numArgs {} {}}
+{event generate .a $a foo}	{1 {0 24} badSwitch {21 3} foo 1 {0 24} noSwitchArg {21 3} foo}
+{event generate .a $a foo $a}	{1 {0 27} badSwitch {21 3} foo}
+
+{event generate .a $a -above .a}	{ok}
+{event generate .a $a -above a}		{1 {0 29} winBeginDot {28 1} {}}
+{event generate .a $a -above}		{1 {0 27} noSwitchArg {21 6} -above}
+
+{event generate .a $a -borderwidth 0}	{ok}
+{event generate .a $a -borderwidth a}	{1 {0 35} badPixel {34 1} {}}
+{event generate .a $a -borderwidth}	{1 {0 33} noSwitchArg {21 12} -borderwidth}
+
+{event generate .a $a -count -1}	{ok}
+{event generate .a $a -count 1.1}	{1 {0 31} badInt {28 3} {}}
+{event generate .a $a -count}		{1 {0 27} noSwitchArg {21 6} -count}
+
+{event generate .a $a -detail NotifyAncestor}	{ok}
+{event generate .a $a -detail NotifyNonlinearVirtual}	{ok}
+{event generate .a $a -detail NotifyDetailNone}	{ok}
+{event generate .a $a -detail NotifyPointer}	{ok}
+{event generate .a $a -detail NotifyInferior}	{ok}
+{event generate .a $a -detail NotifyPointerRoot}	{ok}
+{event generate .a $a -detail NotifyNonlinear}	{ok}
+{event generate .a $a -detail NotifyVirtual}	{ok}
+{event generate .a $a -detail foo}	{1 {0 32} badKey {29 3} {{ NotifyAncestor NotifyNonlinearVirtual  NotifyDetailNone NotifyPointer  NotifyInferior NotifyPointerRoot  NotifyNonlinear NotifyVirtual  } foo}}
+{event generate .a $a -detail}		{1 {0 28} noSwitchArg {21 7} -detail}
+
+{event generate .a $a -focus false}	{ok}
+{event generate .a $a -focus a}		{1 {0 29} badBoolean {28 1} {}}
+{event generate .a $a -focus}		{1 {0 27} noSwitchArg {21 6} -focus}
+
+{event generate .a $a -height 0}	{ok}
+{event generate .a $a -height a}	{1 {0 30} badPixel {29 1} {}}
+{event generate .a $a -height}		{1 {0 28} noSwitchArg {21 7} -height}
+
+{event generate .a $a -keycode -1}	{ok}
+{event generate .a $a -keycode 1.1}	{1 {0 33} badInt {30 3} {}}
+{event generate .a $a -keycode}		{1 {0 29} noSwitchArg {21 8} -keycode}
+
+{event generate .a $a -keysym space}	{ok}
+{event generate .a $a -keysym 1.1}	{1 {0 32} coreTk::nonPortKeysym {29 3} {}}
+{event generate .a $a -keysym}		{1 {0 28} noSwitchArg {21 7} -keysym}
+
+{event generate .a $a -mode NotifyNormal}	{ok}
+{event generate .a $a -mode NotifyGrab}	{ok}
+{event generate .a $a -mode NotifyUngrab}	{ok}
+{event generate .a $a -mode NotifyWhileGrabbed}	{ok}
+{event generate .a $a -mode a}		{1 {0 28} badKey {27 1} {{ NotifyNormal NotifyGrab NotifyUngrab NotifyWhileGrabbed  } a}}
+{event generate .a $a -mode}		{1 {0 26} noSwitchArg {21 5} -mode}
+
+{event generate .a $a -override false}	{ok}
+{event generate .a $a -override a}	{1 {0 32} badBoolean {31 1} {}}
+{event generate .a $a -override}	{1 {0 30} noSwitchArg {21 9} -override}
+
+{event generate .a $a -place PlaceOnTop}	{ok}
+{event generate .a $a -place a}		{1 {0 29} badKey {28 1} {{ PlaceOnTop PlaceOnBottom  } a}}
+{event generate .a $a -place}		{1 {0 27} noSwitchArg {21 6} -place}
+
+{event generate .a $a -root .a}	{ok}
+{event generate .a $a -root 0x32}	{ok}
+{event generate .a $a -root 1}	{ok}
+{event generate .a $a -root a}	{1 {0 28} winBeginDot {27 1} {}}
+{event generate .a $a -root}	{1 {0 26} noSwitchArg {21 5} -root}
+
+{event generate .a $a -rootx 0}	{ok}
+{event generate .a $a -rootx a}	{1 {0 29} badPixel {28 1} {}}
+{event generate .a $a -rootx}	{1 {0 27} noSwitchArg {21 6} -rootx}
+
+{event generate .a $a -rooty 0}	{ok}
+{event generate .a $a -rooty a}	{1 {0 29} badPixel {28 1} {}}
+{event generate .a $a -rooty}	{1 {0 27} noSwitchArg {21 6} -rooty}
+
+{event generate .a $a -sendevent false}	{ok}
+{event generate .a $a -sendevent a}	{1 {0 33} badBoolean {32 1} {}}
+{event generate .a $a -sendevent}	{1 {0 31} noSwitchArg {21 10} -sendevent}
+
+{event generate .a $a -serial -1}	{ok}
+{event generate .a $a -serial 1.1}	{1 {0 32} badInt {29 3} {}}
+{event generate .a $a -serial}		{1 {0 28} noSwitchArg {21 7} -serial}
+
+{event generate .a $a -state 1}	{ok}
+{event generate .a $a -state VisibilityPartiallyObscured}	{ok}
+{event generate .a $a -state VisibilityFullyObscured}	{ok}
+{event generate .a $a -state VisibilityUnobscured}	{ok}
+{event generate .a $a -state a}	{1 {0 29} badKey {28 1} {{ VisibilityUnobscured VisibilityPartiallyObscured VisibilityFullyObscured } a}}
+{event generate .a $a -state}	{1 {0 27} noSwitchArg {21 6} -state}
+
+{event generate .a $a -subwindow .a}	{ok}
+{event generate .a $a -subwindow a}	{1 {0 33} winBeginDot {32 1} {}}
+{event generate .a $a -subwindow}	{1 {0 31} noSwitchArg {21 10} -subwindow}
+
+{event generate .a $a -time 0}	{ok}
+{event generate .a $a -time a}	{1 {0 28} badInt {27 1} {}}
+{event generate .a $a -time}	{1 {0 26} noSwitchArg {21 5} -time}
+
+{event generate .a $a -width 0}	{ok}
+{event generate .a $a -width a}	{1 {0 29} badPixel {28 1} {}}
+{event generate .a $a -width}	{1 {0 27} noSwitchArg {21 6} -width}
+
+{event generate .a $a -when now}	{ok}
+{event generate .a $a -when 0}	{1 {0 28} badKey {27 1} {{ now tail head mark  } 0}}
+{event generate .a $a -when}	{1 {0 26} noSwitchArg {21 5} -when}
+
+{event generate .a $a -x 0}	{ok}
+{event generate .a $a -x a}	{1 {0 25} badPixel {24 1} {}}
+{event generate .a $a -x}	{1 {0 23} noSwitchArg {21 2} -x}
+
+{event generate .a $a -y 0}	{ok}
+{event generate .a $a -y a}	{1 {0 25} badPixel {24 1} {}}
+{event generate .a $a -y}	{1 {0 23} noSwitchArg {21 2} -y}
+
+{event generate .a $a -above .a -borderwidth 0 -count -1 -detail $a \
+    -focus 0 -height 0 -keycode -1 -keysym space -mode NotifyGrab \
+    -override 0 -place $a -root .a -rootx 0 -rooty 0  -sendevent 0 \
+    -serial -1 -state $a -subwindow .a -time 0 -width 0 -when now \
+    -x 0 -y 0}	{ok}
+
+{event info}		{ok}
+{event info $a}		{ok}
+{event info a}		{1 {0 12} coreTk::badVirtual {11 1} {}}
+{event info $a a}	{1 {0 15} numArgs {} {}}
+
+
+{focus}				{ok}
+{focus .a}			{ok}
+{focus 0}			{1 {0 7} winBeginDot {6 1} {}}
+
+{focus -displayof .a}		{ok}
+{focus -displayof 0}		{1 {0 18} winBeginDot {17 1} {}}
+{focus -displayof}		{1 {0 16} numArgs {} {}}
+{focus -displayof .a a}		{1 {0 21} numArgs {} {}}
+
+{focus -force .a}		{ok}
+{focus -force 0}		{1 {0 14} winBeginDot {13 1} {}}
+{focus -force}			{1 {0 12} numArgs {} {}}
+{focus -force .a a}		{1 {0 17} numArgs {} {}}
+
+{focus -lastfor .a}		{ok}
+{focus -lastfor 0}		{1 {0 16} winBeginDot {15 1} {}}
+{focus -lastfor}		{1 {0 14} numArgs {} {}}
+{focus -lastfor .a a}		{1 {0 19} numArgs {} {}}
+
+
+{font}				{1 {0 4} numArgs {} {}}
+{font foo}			{1 {0 8} badOption {5 3} {{actual configure create delete families measure metrics names} foo}}
+
+{font actual a}			{ok}
+{font actual a -displayof .a}	{ok}
+{font actual a -displayof .a -size}	{ok}
+{font actual [set]}		{1 {13 3} numArgs {} {}}
+{font actual a -displayof a}	{1 {0 26} winBeginDot {25 1} {}}
+{font actual a -displayof .a a}	{1 {0 29} badKey {28 1} {{-family -size -weight -slant  -underline -overstrike} a}}
+{font actual}				{1 {0 11} numArgs {} {}}
+{font actual a -displayof .a -size a}	{1 {0 35} numArgs {} {}}
+
+{font configure a}		{ok}
+{font configure a -size}	{ok}
+{font configure a x}		{1 {0 18} badSwitch {17 1} x}
+{font configure a -size 0 -family}	{1 {0 32} noSwitchArg {25 7} -family}
+{font configure a -size 0 x}	{1 {0 26} badSwitch {25 1} x 1 {0 26} noSwitchArg {25 1} x}
+{font configure}	{1 {0 14} numArgs {} {}}
+
+{font configure a -size 0}		{ok}
+{font configure a -size a}		{1 {0 24} badInt {23 1} {}}
+{font configure a -family a}		{ok}
+{font configure a -family [set]}	{1 {26 3} numArgs {} {}}
+{font configure a -weight normal}	{ok}
+{font configure a -weight a}		{1 {0 26} badKey {25 1} {{normal bold} a}}
+{font configure a -slant roman}		{ok}
+{font configure a -slant 0}		{1 {0 25} badKey {24 1} {{roman italic} 0}}
+{font configure a -underline 0}		{ok}
+{font configure a -underline a}		{1 {0 29} badBoolean {28 1} {}}
+{font configure a -overstrike 0}	{ok}
+{font configure a -overstrike a}	{1 {0 30} badBoolean {29 1} {}}
+
+{font configure a -size 0 -family $a -weight normal -slant $a -underline 0 \
+    -overstrike 0}	{ok}
+
+{font create}		{ok}
+{font create a}		{ok}
+{font create a x}	{1 {0 15} badSwitch {14 1} x 1 {0 15} noSwitchArg {14 1} x}
+{font create -size}	{1 {0 17} noSwitchArg {12 5} -size}
+{font create a -size}	{1 {0 19} noSwitchArg {14 5} -size}
+{font create -size 0 x}	{1 {0 21} badSwitch {20 1} x 1 {0 21} noSwitchArg {20 1} x}
+{font create a -size 0 x}	{1 {0 23} badSwitch {22 1} x 1 {0 23} noSwitchArg {22 1} x}
+
+{font create -size 0}		{ok}
+{font create a -size a}		{1 {0 21} badInt {20 1} {}}
+{font create -family a}		{ok}
+{font create a -family [set]}	{1 {23 3} numArgs {} {}}
+{font create -weight normal}	{ok}
+{font create a -weight a}	{1 {0 23} badKey {22 1} {{normal bold} a}}
+{font create -slant roman}	{ok}
+{font create a -slant 0}	{1 {0 22} badKey {21 1} {{roman italic} 0}}
+{font create -underline 0}	{ok}
+{font create a -underline a}	{1 {0 26} badBoolean {25 1} {}}
+{font create -overstrike 0}	{ok}
+{font create a -overstrike a}	{1 {0 27} badBoolean {26 1} {}}
+
+{font create a -size 0 -family $a -weight normal -slant $a -underline 0 \
+    -overstrike 0}	{ok}
+
+{font delete a}			{ok}
+{font delete a a a a}		{ok}
+{font delete}			{1 {0 11} numArgs {} {}}
+{font delete [set]}		{1 {13 3} numArgs {} {}}
+{font delete a a a [set]}	{1 {19 3} numArgs {} {}}
+
+{font families}			{ok}
+{font families -displayof .a}	{ok}
+{font families a}		{1 {0 15} badSwitch {14 1} a 1 {0 15} noSwitchArg {14 1} a}
+{font families -displayof}	{1 {0 24} noSwitchArg {14 10} -displayof}
+{font families -displayof a}	{1 {0 26} winBeginDot {25 1} {}}
+{font families -displayof a x}	{1 {0 28} numArgs {} {}}
+
+{font measure a a}		{ok}
+{font measure a -displayof .a a}	{ok}
+{font measure [set] a}		{1 {14 3} numArgs {} {}}
+{font measure a [set]}		{1 {16 3} numArgs {} {}}
+{font measure a -displayof a a}	{1 {0 29} winBeginDot {26 1} {}}
+{font measure a -displayof}	{1 {0 25} numArgs {} {}}
+{font measure a -displayof .a}	{1 {0 28} numArgs {} {}}
+{font measure a -displayof .a a x}	{1 {0 32} numArgs {} {}}
+{font measure a a x}		{1 {0 18} numArgs {} {}}
+{font measure a}		{1 {0 14} numArgs {} {}}
+
+{font metrics a}		{ok}
+{font metrics a -fixed}		{ok}
+{font metrics a -displayof .a}	{ok}
+{font metrics a -displayof .a -fixed}	{ok}
+{font metrics [set]}		{1 {14 3} numArgs {} {}}
+{font metrics a a}		{1 {0 16} badKey {15 1} {{-ascent -descent -linespace -fixed} a}}
+{font metrics a -displayof a}	{1 {0 27} winBeginDot {26 1} {}}
+{font metrics a -displayof .a a}	{1 {0 30} badKey {29 1} {{-ascent -descent -linespace -fixed} a}}
+{font metrics a -displayof}	{1 {0 25} numArgs {} {}}
+{font metrics a -displayof .a -fixed x}	{1 {0 37} numArgs {} {}}
+{font metrics a -fixed x}	{1 {0 23} numArgs {} {}}
+{font metrics}			{1 {0 12} numArgs {} {}}
+
+{font names}			{ok}
+{font names x}			{1 {0 12} numArgs {} {}}
+
+
+{frame .a}		{ok}
+{frame 0}		{1 {0 7} winBeginDot {6 1} {}}
+{frame .a a}		{1 {0 10} badSwitch {9 1} a 1 {0 10} noSwitchArg {9 1} a}
+{frame .a 0 $a}		{1 {0 13} badSwitch {9 1} 0}
+{frame}			{1 {0 5} numArgs {} {}}
+
+{frame .a -background $a}	{ok}
+{frame .a -background 0}	{1 {0 22} nonPortColor {21 1} {}}
+{frame .a -background}		{1 {0 20} noSwitchArg {9 11} -background}
+
+{frame .a -bg $a}	{ok}
+{frame .a -bg 0}	{1 {0 14} nonPortColor {13 1} {}}
+{frame .a -bg}		{1 {0 12} noSwitchArg {9 3} -bg}
+
+{frame .a -borderwidth 0}	{ok}
+{frame .a -borderwidth a}	{1 {0 23} badPixel {22 1} {}}
+{frame .a -borderwidth}		{1 {0 21} noSwitchArg {9 12} -borderwidth}
+
+{frame .a -class a}	{ok}
+{frame .a -class [set]}	{1 {17 3} numArgs {} {}}
+{frame .a -class}	{1 {0 15} noSwitchArg {9 6} -class}
+
+{frame .a -colormap new}	{ok}
+{frame .a -colormap 0}	{1 {0 20} coreTk::badColormap {19 1} 0}
+{frame .a -colormap}	{1 {0 18} noSwitchArg {9 9} -colormap}
+
+{frame .a -cursor $a}	{ok}
+{frame .a -cursor 0}	{1 {0 18} badCursor {17 1} {}}
+{frame .a -cursor}	{1 {0 16} noSwitchArg {9 7} -cursor}
+
+{frame .a -height 0}		{ok}
+{frame .a -height a}		{1 {0 18} badPixel {17 1} {}}
+{frame .a -height}		{1 {0 16} noSwitchArg {9 7} -height}
+
+{frame .a -highlightbackground $a}	{ok}
+{frame .a -highlightbackground 0}	{1 {0 31} nonPortColor {30 1} {}}
+{frame .a -highlightbackground}	{1 {0 29} noSwitchArg {9 20} -highlightbackground}
+
+{frame .a -highlightcolor $a}	{ok}
+{frame .a -highlightcolor 0}	{1 {0 26} nonPortColor {25 1} {}}
+{frame .a -highlightcolor}	{1 {0 24} noSwitchArg {9 15} -highlightcolor}
+
+{frame .a -highlightthickness 0}	{ok}
+{frame .a -highlightthickness a}	{1 {0 30} badPixel {29 1} {}}
+{frame .a -highlightthickness}	{1 {0 28} noSwitchArg {9 19} -highlightthickness}
+
+{frame .a -relief $a}		{ok}
+{frame .a -relief 0}		{1 {0 18} badKey {17 1} {{raised sunken flat ridge solid groove} 0}}
+{frame .a -relief}		{1 {0 16} noSwitchArg {9 7} -relief}
+
+{frame .a -takefocus .a}	{ok}
+{frame .a -takefocus [set]}	{1 {21 3} numArgs {} {}}
+{frame .a -takefocus}		{1 {0 19} noSwitchArg {9 10} -takefocus}
+
+{frame .a -visual $a}		{ok}
+{frame .a -visual a}		{1 {0 18} coreTk::badVisual {17 1} {}}
+{frame .a -visual}		{1 {0 16} noSwitchArg {9 7} -visual}
+
+{frame .a -width 0}		{ok}
+{frame .a -width a}		{1 {0 17} badPixel {16 1} {}}
+{frame .a -width}		{1 {0 15} noSwitchArg {9 6} -width}
+
+{frame .a -background $a -bg $a -borderwidth 0 -class a -colormap new \
+    -cursor $a -height 0 -highlightbackground $a \
+    -highlightcolor $a -highlightthickness 0 -relief $a \
+    -takefocus .a -visual best -width 0}	{ok}
+
+
+{grab .a}			{ok}
+{grab -global .a}		{ok}
+{grab}				{1 {0 4} numArgs {} {}}
+{grab .a a}			{1 {0 9} numArgs {} {}}
+{grab -global}			{1 {0 12} numArgs {} {}}
+{grab -global a}		{1 {0 14} winBeginDot {13 1} {}}
+
+{grab current}			{ok}
+{grab current .a}		{ok}
+{grab current a}		{1 {0 14} winBeginDot {13 1} {}}
+{grab current .a a}		{1 {0 17} numArgs {} {}}
+
+{grab release .a}		{ok}
+{grab release a}		{1 {0 14} winBeginDot {13 1} {}}
+{grab release a .a}		{1 {0 17} numArgs {} {}}
+{grab release}			{1 {0 12} numArgs {} {}}
+
+{grab set .a}			{ok}
+{grab set -global .a}		{ok}
+{grab set a}			{1 {0 10} winBeginDot {9 1} {}}
+{grab set .a a}			{1 {0 13} numArgs {} {}}
+{grab set}			{1 {0 8} numArgs {} {}}
+{grab set -global a}		{1 {0 18} winBeginDot {17 1} {}}
+{grab set -global .a a}		{1 {0 21} numArgs {} {}}
+{grab set -global}		{1 {0 16} numArgs {} {}}
+
+{grab status .a}		{ok}
+{grab status a}			{1 {0 13} winBeginDot {12 1} {}}
+{grab status a .a}		{1 {0 16} numArgs {} {}}
+{grab status}			{1 {0 11} numArgs {} {}}
+
+
+{grid}				{1 {0 4} numArgs {} {}}
+{grid a}			{1 {0 6} winBeginDot {5 1} {}}
+
+{grid bbox .a}			{ok}
+{grid bbox .a 0 0}		{ok}
+{grid bbox}			{1 {0 9} numArgs {} {}}
+{grid bbox .a 0}		{1 {0 14} numArgs {} {}}
+{grid bbox .a 0 0 0}		{1 {0 18} numArgs {} {}}
+
+{grid columnconfigure .a 0}	{ok}
+{grid columnconfigure a}	{1 {0 22} numArgs {} {}}
+{grid columnconfigure}		{1 {0 20} numArgs {} {}}
+
+{grid configure .a}		{ok}
+{grid configure .a .a .a}	{ok}
+{grid configure .a .a -column 0}	{ok}
+{grid configure .a .a -column a}	{1 {0 30} badWholeNum {29 1} a}
+{grid configure .a .a -columnspan 0}	{ok}
+{grid configure .a .a -columnspan a}	{1 {0 34} badWholeNum {33 1} a}
+{grid configure .a .a -in .a}	{ok}
+{grid configure .a .a -in 0}	{1 {0 26} winBeginDot {25 1} {}}
+{grid configure .a .a -ipadx 0}	{ok}
+{grid configure .a .a -ipadx a}	{1 {0 29} badPixel {28 1} {}}
+{grid configure .a .a -ipady 0}	{ok}
+{grid configure .a .a -ipady a}	{1 {0 29} badPixel {28 1} {}}
+{grid configure .a .a -padx 0}	{ok}
+{grid configure .a .a -padx a}	{1 {0 28} badPixel {27 1} {}}
+{grid configure .a .a -pady 0}	{ok}
+{grid configure .a .a -pady a}	{1 {0 28} badPixel {27 1} {}}
+{grid configure .a .a -row 0}	{ok}
+{grid configure .a .a -row a}	{1 {0 27} badWholeNum {26 1} a}
+{grid configure .a .a -rowspan 0}	{ok}
+{grid configure .a .a -rowspan a}	{1 {0 31} badWholeNum {30 1} a}
+{grid configure .a .a -sticky n}	{ok}
+{grid configure .a .a -sticky 0}	{1 {0 30} coreTk::badSticky {29 1} {}}
+{grid configure .a .a a}	{1 {0 22} winBeginDot {21 1} {}}
+{grid configure .a .a -column 0 a}	{1 {0 32} badSwitch {31 1} a 1 {0 32} noSwitchArg {31 1} a}
+{grid configure}		{1 {0 14} numArgs {} {}}
+
+{grid forget .a}		{ok}
+{grid forget .a .a .a}		{ok}
+{grid forget a}			{1 {0 13} winBeginDot {12 1} {}}
+{grid forget}			{1 {0 11} numArgs {} {}}
+
+{grid info .a}			{ok}
+{grid info .a .a}		{1 {0 15} numArgs {} {}}
+{grid info a}			{1 {0 11} winBeginDot {10 1} {}}
+{grid info}			{1 {0 9} numArgs {} {}}
+
+{grid location .a 0 0}		{ok}
+{grid location .a 0 0 0}	{1 {0 22} numArgs {} {}}
+{grid location .a 0}		{1 {0 18} numArgs {} {}}
+{grid location a}		{1 {0 15} numArgs {} {}}
+{grid location}			{1 {0 13} numArgs {} {}}
+
+{grid propagate .a}		{ok}
+{grid propagate .a 0}		{ok}
+{grid propagate a}		{1 {0 16} winBeginDot {15 1} {}}
+{grid propagate .a 0 a}		{1 {0 21} numArgs {} {}}
+{grid propagate}		{1 {0 14} numArgs {} {}}
+
+{grid rowconfigure .a 0}	{ok}
+{grid rowconfigure .a 0 -minsize 0}	{ok}
+{grid rowconfigure .a}		{1 {0 20} numArgs {} {}}
+{grid rowconfigure .a 0 a}	{1 {0 24} badSwitch {23 1} a}
+{grid rowconfigure .a 0 -minsize a}	{1 {0 33} badInt {32 1} {}}
+{grid rowconfigure .a 0 -minsize 0 a}	{1 {0 35} badSwitch {34 1} a 1 {0 35} noSwitchArg {34 1} a}
+{grid rowconfigure}		{1 {0 17} numArgs {} {}}
+
+{grid remove .a}		{ok}
+{grid remove .a .a .a}		{ok}
+{grid remove a}			{1 {0 13} winBeginDot {12 1} {}}
+{grid remove .a .a a}		{1 {0 19} winBeginDot {18 1} {}}
+{grid remove}			{1 {0 11} numArgs {} {}}
+
+{grid size .a}			{ok}
+{grid size a}			{1 {0 11} winBeginDot {10 1} {}}
+{grid size .a a}		{1 {0 14} numArgs {} {}}
+{grid size}			{1 {0 9} numArgs {} {}}
+
+{grid slaves .a}		{ok}
+{grid slaves .a -row 0}		{ok}
+{grid slaves .a a}		{1 {0 16} numArgs {} {}}
+{grid slaves .a -row a}		{1 {0 21} badInt {20 1} {}}
+{grid slaves .a -row 0 a}	{1 {0 23} numArgs {} {}}
+{grid slaves a}			{1 {0 13} winBeginDot {12 1} {}}
+{grid slaves}			{1 {0 11} numArgs {} {}}
+
+
+{image}				{1 {0 5} numArgs {} {}}
+{image a}			{1 {0 7} badOption {6 1} {{create delete height names type types width} a}}
+{image create}			{1 {0 12} numArgs {} {}}
+
+{image create bitmap}		{ok}
+{image create bitmap a}		{ok}
+{image create bitmap [set]}	{1 {21 3} numArgs {} {}}
+{image create bitmap a a}	{1 {0 23} badOption {22 1} {{-background -data -file -foreground -maskdata -maskfile} a}}
+
+{image create bitmap -background $a}	{ok}
+{image create bitmap -background 0}	{1 {0 33} nonPortColor {32 1} {}}
+{image create bitmap a -background}	{1 {0 33} noSwitchArg {22 11} -background}
+
+{image create bitmap -file $a}		{ok}
+{image create bitmap -file $a/$a}	{1 {0 31} nonPortFile {26 5} {}}
+{image create bitmap a -file}	{1 {0 27} noSwitchArg {22 5} -file}
+
+{image create bitmap -foreground $a}	{ok}
+{image create bitmap -foreground 0}	{1 {0 33} nonPortColor {32 1} {}}
+{image create bitmap a -foreground}	{1 {0 33} noSwitchArg {22 11} -foreground}
+
+{image create bitmap -maskdata a}	{ok}
+{image create bitmap -maskdata [set]}	{1 {31 3} numArgs {} {}}
+{image create bitmap a -maskdata}	{1 {0 31} noSwitchArg {22 9} -maskdata}
+
+{image create bitmap -maskfile $a}	{ok}
+{image create bitmap -maskfile $a/$a}	{1 {0 35} nonPortFile {30 5} {}}
+{image create bitmap a -maskfile}	{1 {0 31} noSwitchArg {22 9} -maskfile}
+
+{image create bitmap -background $a -file $a -foreground $a \
+    -maskdata a -maskfile $a}	{ok}
+
+{image create photo}		{ok}
+{image create photo a}		{ok}
+{image create photo a a}	{1 {0 22} badOption {21 1} {{-data -file -format -gamma -height -palette -width} a}}
+{image create photo [set]}	{1 {20 3} numArgs {} {}}
+
+{image create photo -data a}	{ok}
+{image create photo -data [set]}	{1 {26 3} numArgs {} {}}
+{image create photo a -data}	{1 {0 26} noSwitchArg {21 5} -data}
+
+{image create photo -file $a}		{ok}
+{image create photo -file $a/$a}	{1 {0 30} nonPortFile {25 5} {}}
+{image create photo a -file}	{1 {0 26} noSwitchArg {21 5} -file}
+
+{image create photo -format gif}	{ok}
+{image create photo -format [set]}	{1 {28 3} numArgs {} {}}
+{image create photo a -format}	{1 {0 28} noSwitchArg {21 7} -format}
+
+{image create photo -gamma 1.1}		{ok}
+{image create photo -gamma a}	{1 {0 27} badFloat {26 1} {}}
+{image create photo a -gamma}	{1 {0 27} noSwitchArg {21 6} -gamma}
+
+{image create photo -height 0}		{ok}
+{image create photo -height a}	{1 {0 28} badInt {27 1} {}}
+{image create photo a -height}	{1 {0 28} noSwitchArg {21 7} -height}
+
+{image create photo -palette 1.1}		{ok}
+{image create photo -palette 1.1/2.2/3.3}	{ok}
+{image create photo -palette a}	{1 {0 29} coreTk::badPalette {28 1} {}}
+{image create photo a -palette}	{1 {0 29} noSwitchArg {21 8} -palette}
+
+{image create photo -width 0}		{ok}
+{image create photo -width a}	{1 {0 27} badInt {26 1} {}}
+{image create photo a -width}	{1 {0 27} noSwitchArg {21 6} -width}
+
+{image create photo -data a -file $a -format gif -gamma 1.1 -height 0 \
+    -palette 1.1 -width 0}	{ok}
+
+{image delete}			{ok}
+{image delete a}		{ok}
+{image delete a a a}		{ok}
+{image delete [set]}		{1 {14 3} numArgs {} {}}
+
+{image height a}		{ok}
+{image height [set]}		{1 {14 3} numArgs {} {}}
+{image height a a}		{1 {0 16} numArgs {} {}}
+{image height}			{1 {0 12} numArgs {} {}}
+
+{image names}			{ok}
+{image names a}			{1 {0 13} numArgs {} {}}
+
+{image type a}			{ok}
+{image type [set]}		{1 {12 3} numArgs {} {}}
+{image type a a}		{1 {0 14} numArgs {} {}}
+{image type}			{1 {0 10} numArgs {} {}}
+
+{image types}			{ok}
+{image types a}			{1 {0 13} numArgs {} {}}
+
+{image width a}			{ok}
+{image width [set]}		{1 {13 3} numArgs {} {}}
+{image width a a}		{1 {0 15} numArgs {} {}}
+{image width}			{1 {0 11} numArgs {} {}}
+
+
+{label .a}			{ok}
+{label}				{1 {0 5} numArgs {} {}}
+{label a}			{1 {0 7} winBeginDot {6 1} {}}
+{label .a a}			{1 {0 10} badSwitch {9 1} a 1 {0 10} noSwitchArg {9 1} a}
+
+{label .a -anchor $a}		{ok}
+{label .a -anchor a}		{1 {0 18} badKey {17 1} {{n ne e se s sw w nw center} a}}
+{label .a -anchor}		{1 {0 16} noSwitchArg {9 7} -anchor}
+
+{label .a -background $a}	{ok}
+{label .a -background 0}	{1 {0 22} nonPortColor {21 1} {}}
+{label .a -background}		{1 {0 20} noSwitchArg {9 11} -background}
+
+{label .a -bitmap $a}		{ok}
+{label .a -bitmap 0}		{1 {0 18} coreTk::nonPortBitmap {17 1} {}}
+{label .a -bitmap}		{1 {0 16} noSwitchArg {9 7} -bitmap}
+
+{label .a -bg $a}		{ok}
+{label .a -bg 0}		{1 {0 14} nonPortColor {13 1} {}}
+{label .a -bg}			{1 {0 12} noSwitchArg {9 3} -bg}
+
+{label .a -borderwidth 0}	{ok}
+{label .a -borderwidth a}	{1 {0 23} badPixel {22 1} {}}
+{label .a -borderwidth}		{1 {0 21} noSwitchArg {9 12} -borderwidth}
+
+{label .a -cursor $a}		{ok}
+{label .a -cursor 0}		{1 {0 18} badCursor {17 1} {}}
+{label .a -cursor}		{1 {0 16} noSwitchArg {9 7} -cursor}
+
+{label .a -fg $a}		{ok}
+{label .a -fg 0}		{1 {0 14} nonPortColor {13 1} {}}
+{label .a -fg}			{1 {0 12} noSwitchArg {9 3} -fg}
+
+{label .a -font $a}		{ok}
+{label .a -font [set]}		{1 {16 3} numArgs {} {}}
+{label .a -font}		{1 {0 14} noSwitchArg {9 5} -font}
+
+{label .a -foreground $a}	{ok}
+{label .a -foreground 0}	{1 {0 22} nonPortColor {21 1} {}}
+{label .a -foreground}		{1 {0 20} noSwitchArg {9 11} -foreground}
+
+{label .a -height 0}		{ok}
+{label .a -height a}		{1 {0 18} badPixel {17 1} {}}
+{label .a -height}		{1 {0 16} noSwitchArg {9 7} -height}
+
+{label .a -highlightbackground $a}	{ok}
+{label .a -highlightbackground 0}	{1 {0 31} nonPortColor {30 1} {}}
+{label .a -highlightbackground}		{1 {0 29} noSwitchArg {9 20} -highlightbackground}
+
+{label .a -highlightcolor $a}	{ok}
+{label .a -highlightcolor 0}	{1 {0 26} nonPortColor {25 1} {}}
+{label .a -highlightcolor}	{1 {0 24} noSwitchArg {9 15} -highlightcolor}
+
+{label .a -highlightthickness $a}	{ok}
+{label .a -highlightthickness a}	{1 {0 30} badPixel {29 1} {}}
+{label .a -highlightthickness}	{1 {0 28} noSwitchArg {9 19} -highlightthickness}
+
+{label .a -image $a}		{ok}
+{label .a -image [set]}		{1 {17 3} numArgs {} {}}
+{label .a -image}		{1 {0 15} noSwitchArg {9 6} -image}
+
+{label .a -justify $a}		{ok}
+{label .a -justify 0}		{1 {0 19} badKey {18 1} {{left center right} 0}}
+{label .a -justify}		{1 {0 17} noSwitchArg {9 8} -justify}
+
+{label .a -padx $a}		{ok}
+{label .a -padx a}		{1 {0 16} badPixel {15 1} {}}
+{label .a -padx}		{1 {0 14} noSwitchArg {9 5} -padx}
+
+{label .a -pady $a}		{ok}
+{label .a -pady a}		{1 {0 16} badPixel {15 1} {}}
+{label .a -pady}		{1 {0 14} noSwitchArg {9 5} -pady}
+
+{label .a -relief $a}		{ok}
+{label .a -relief a}		{1 {0 18} badKey {17 1} {{raised sunken flat ridge solid groove} a}}
+{label .a -relief}		{1 {0 16} noSwitchArg {9 7} -relief}
+
+{label .a -takefocus .a}	{ok}
+{label .a -takefocus [set]}	{1 {21 3} numArgs {} {}}
+{label .a -takefocus}		{1 {0 19} noSwitchArg {9 10} -takefocus}
+
+{label .a -text a}		{ok}
+{label .a -text [set]}		{1 {16 3} numArgs {} {}}
+{label .a -text}		{1 {0 14} noSwitchArg {9 5} -text}
+
+{label .a -textvariable a}	{ok}
+{label .a -textvariable $a}	{1 {0 25} warnVarRef {23 2} {}}
+{label .a -textvariable}	{1 {0 22} noSwitchArg {9 13} -textvariable}
+
+{label .a -underline 0}		{ok}
+{label .a -underline a}		{1 {0 21} badInt {20 1} {}}
+{label .a -underline}		{1 {0 19} noSwitchArg {9 10} -underline}
+
+{label .a -width 0}		{ok}
+{label .a -width a}		{1 {0 17} badPixel {16 1} {}}
+{label .a -width}		{1 {0 15} noSwitchArg {9 6} -width}
+
+{label .a -wraplength 0}	{ok}
+{label .a -wraplength a}	{1 {0 22} badPixel {21 1} {}}
+{label .a -wraplength}		{1 {0 20} noSwitchArg {9 11} -wraplength}
+
+{label .a -anchor $a -background $a -bitmap $a -bg $a -borderwidth 0 \
+    -cursor $a -fg $a -font $a -foreground $a -height 0 \
+    -highlightbackground $a -highlightcolor $a -highlightthickness $a \
+    -image $a -justify $a -padx $a -pady $a -relief $a -takefocus .a \
+    -text a -textvariable a -underline 0 -width 0 \
+    -wraplength 0}	{ok}
+
+
+{listbox .a}			{ok}
+{listbox}			{1 {0 7} numArgs {} {}}
+{listbox 0}			{1 {0 9} winBeginDot {8 1} {}}
+{listbox .a a}			{1 {0 12} badSwitch {11 1} a 1 {0 12} noSwitchArg {11 1} a}
+
+{listbox .a -background $a}	{ok}
+{listbox .a -background 0}	{1 {0 24} nonPortColor {23 1} {}}
+{listbox .a -background}	{1 {0 22} noSwitchArg {11 11} -background}
+
+{listbox .a -borderwidth $a}	{ok}
+{listbox .a -borderwidth a}	{1 {0 25} badPixel {24 1} {}}
+{listbox .a -borderwidth}	{1 {0 23} noSwitchArg {11 12} -borderwidth}
+
+{listbox .a -bg $a}		{ok}
+{listbox .a -bg 0}		{1 {0 16} nonPortColor {15 1} {}}
+{listbox .a -bg}		{1 {0 14} noSwitchArg {11 3} -bg}
+
+{listbox .a -cursor $a}	{ok}
+{listbox .a -cursor [set]}	{1 {20 3} numArgs {} {}}
+{listbox .a -cursor}		{1 {0 18} noSwitchArg {11 7} -cursor}
+
+{listbox .a -exportselection 0}	{ok}
+{listbox .a -exportselection a}	{1 {0 29} badBoolean {28 1} {}}
+{listbox .a -exportselection}	{1 {0 27} noSwitchArg {11 16} -exportselection}
+
+{listbox .a -fg $a}		{ok}
+{listbox .a -fg 0}		{1 {0 16} nonPortColor {15 1} {}}
+{listbox .a -fg}		{1 {0 14} noSwitchArg {11 3} -fg}
+
+{listbox .a -font $a}	{ok}
+{listbox .a -font [set]}	{1 {18 3} numArgs {} {}}
+{listbox .a -font}		{1 {0 16} noSwitchArg {11 5} -font}
+
+{listbox .a -foreground $a}	{ok}
+{listbox .a -foreground 0}	{1 {0 24} nonPortColor {23 1} {}}
+{listbox .a -foreground}	{1 {0 22} noSwitchArg {11 11} -foreground}
+
+{listbox .a -height 0}	{ok}
+{listbox .a -height a}	{1 {0 20} badPixel {19 1} {}}
+{listbox .a -height}	{1 {0 18} noSwitchArg {11 7} -height}
+
+{listbox .a -highlightbackground $a}	{ok}
+{listbox .a -highlightbackground 0}	{1 {0 33} nonPortColor {32 1} {}}
+{listbox .a -highlightbackground}	{1 {0 31} noSwitchArg {11 20} -highlightbackground}
+
+{listbox .a -highlightcolor $a}	{ok}
+{listbox .a -highlightcolor 0}	{1 {0 28} nonPortColor {27 1} {}}
+{listbox .a -highlightcolor}	{1 {0 26} noSwitchArg {11 15} -highlightcolor}
+
+{listbox .a -highlightthickness $a}	{ok}
+{listbox .a -highlightthickness a}	{1 {0 32} badPixel {31 1} {}}
+{listbox .a -highlightthickness}	{1 {0 30} noSwitchArg {11 19} -highlightthickness}
+
+{listbox .a -relief $a}	{ok}
+{listbox .a -relief a}	{1 {0 20} badKey {19 1} {{raised sunken flat ridge solid groove} a}}
+{listbox .a -relief}	{1 {0 18} noSwitchArg {11 7} -relief}
+
+{listbox .a -selectbackground $a}	{ok}
+{listbox .a -selectbackground 0}	{1 {0 30} nonPortColor {29 1} {}}
+{listbox .a -selectbackground}		{1 {0 28} noSwitchArg {11 17} -selectbackground}
+
+{listbox .a -selectborderwidth 0}	{ok}
+{listbox .a -selectborderwidth a}	{1 {0 31} badPixel {30 1} {}}
+{listbox .a -selectborderwidth}		{1 {0 29} noSwitchArg {11 18} -selectborderwidth}
+
+{listbox .a -selectforeground $a}	{ok}
+{listbox .a -selectforeground 0}	{1 {0 30} nonPortColor {29 1} {}}
+{listbox .a -selectforeground}		{1 {0 28} noSwitchArg {11 17} -selectforeground}
+
+{listbox .a -selectmode single}	{ok}
+{listbox .a -selectmode 0}	{1 {0 24} badKey {23 1} {{single browse multiple extended} 0}}
+{listbox .a -selectmode}	{1 {0 22} noSwitchArg {11 11} -selectmode}
+
+{listbox .a -setgrid 0}	{ok}
+{listbox .a -setgrid a}	{1 {0 21} badBoolean {20 1} {}}
+{listbox .a -setgrid}	{1 {0 19} noSwitchArg {11 8} -setgrid}
+
+{listbox .a -takefocus .a}	{ok}
+{listbox .a -takefocus [set]}	{1 {23 3} numArgs {} {}}
+{listbox .a -takefocus}	{1 {0 21} noSwitchArg {11 10} -takefocus}
+
+{listbox .a -width 0}	{ok}
+{listbox .a -width a}	{1 {0 19} badPixel {18 1} {}}
+{listbox .a -width}		{1 {0 17} noSwitchArg {11 6} -width}
+
+{listbox .a -background $a -borderwidth $a -bg $a -cursor $a \
+    -exportselection 0 -fg $a -font $a -foreground $a -height 0 \
+    -highlightbackground $a -highlightcolor $a -highlightthickness $a \
+    -relief $a -selectborderwidth 0 -selectforeground $a \
+    -selectmode single -setgrid 0 -takefocus .a -width 0}	{ok}
+
+
+{lower .a}			{ok}
+{lower .a .a}			{ok}
+{lower a}			{1 {0 7} winBeginDot {6 1} {}}
+{lower .a a}			{1 {0 10} winBeginDot {9 1} {}}
+{lower .a .a a}			{1 {0 13} numArgs {} {}}
+{lower}				{1 {0 5} numArgs {} {}}
+
+
+{menu .a}			{ok}
+{menu}				{1 {0 4} numArgs {} {}}
+{menu 0}			{1 {0 6} winBeginDot {5 1} {}}
+{menu .a a}			{1 {0 9} badSwitch {8 1} a 1 {0 9} noSwitchArg {8 1} a}
+
+{menu .a -activeforeground $a}	{ok}
+{menu .a -activeforeground 0}	{1 {0 27} nonPortColor {26 1} {}}
+{menu .a -activeforeground}	{1 {0 25} noSwitchArg {8 17} -activeforeground}
+
+{menu .a -activebackground $a}	{ok}
+{menu .a -activebackground 0}	{1 {0 27} nonPortColor {26 1} {}}
+{menu .a -activebackground}	{1 {0 25} noSwitchArg {8 17} -activebackground}
+
+{menu .a -activeborderwidth 0}	{ok}
+{menu .a -activeborderwidth a}	{1 {0 28} badPixel {27 1} {}}
+{menu .a -activeborderwidth}	{1 {0 26} noSwitchArg {8 18} -activeborderwidth}
+
+{menu .a -background $a}	{ok}
+{menu .a -background 0}		{1 {0 21} nonPortColor {20 1} {}}
+{menu .a -background}		{1 {0 19} noSwitchArg {8 11} -background}
+
+{menu .a -borderwidth $a}	{ok}
+{menu .a -borderwidth a}	{1 {0 22} badPixel {21 1} {}}
+{menu .a -borderwidth}		{1 {0 20} noSwitchArg {8 12} -borderwidth}
+
+{menu .a -bg $a}		{ok}
+{menu .a -bg 0}			{1 {0 13} nonPortColor {12 1} {}}
+{menu .a -bg}			{1 {0 11} noSwitchArg {8 3} -bg}
+
+{menu .a -cursor $a}		{ok}
+{menu .a -cursor 0}		{1 {0 17} badCursor {16 1} {}}
+{menu .a -cursor}		{1 {0 15} noSwitchArg {8 7} -cursor}
+
+{menu .a -disabledforeground $a}	{ok}
+{menu .a -disabledforeground 0}	{1 {0 29} nonPortColor {28 1} {}}
+{menu .a -disabledforeground}	{1 {0 27} noSwitchArg {8 19} -disabledforeground}
+
+{menu .a -fg $a}		{ok}
+{menu .a -fg 0}			{1 {0 13} nonPortColor {12 1} {}}
+{menu .a -fg}			{1 {0 11} noSwitchArg {8 3} -fg}
+
+{menu .a -font $a}		{ok}
+{menu .a -font [set]}		{1 {15 3} numArgs {} {}}
+{menu .a -font}			{1 {0 13} noSwitchArg {8 5} -font}
+
+{menu .a -foreground $a}	{ok}
+{menu .a -foreground 0}		{1 {0 21} nonPortColor {20 1} {}}
+{menu .a -foreground}		{1 {0 19} noSwitchArg {8 11} -foreground}
+
+{menu .a -postcommand a}	{ok}
+{menu .a -postcommand [set]}	{1 {22 3} numArgs {} {}}
+{menu .a -postcommand}	{1 {0 20} noSwitchArg {8 12} -postcommand}
+
+{menu .a -relief $a}		{ok}
+{menu .a -relief a}		{1 {0 17} badKey {16 1} {{raised sunken flat ridge solid groove} a}}
+{menu .a -relief}		{1 {0 15} noSwitchArg {8 7} -relief}
+
+{menu .a -selectcolor $a}	{ok}
+{menu .a -selectcolor 0}	{1 {0 22} nonPortColor {21 1} {}}
+{menu .a -selectcolor}	{1 {0 20} noSwitchArg {8 12} -selectcolor}
+
+{menu .a -takefocus .a}		{ok}
+{menu .a -takefocus [set]}	{1 {20 3} numArgs {} {}}
+{menu .a -takefocus}		{1 {0 18} noSwitchArg {8 10} -takefocus}
+
+{menu .a -tearoff 0}		{ok}
+{menu .a -tearoff a}		{1 {0 18} badBoolean {17 1} {}}
+{menu .a -tearoff}		{1 {0 16} noSwitchArg {8 8} -tearoff}
+
+{menu .a -title a}		{ok}
+{menu .a -title [set]}		{1 {16 3} numArgs {} {}}
+{menu .a -title}		{1 {0 14} noSwitchArg {8 6} -title}
+
+{menu .a -type menubar}		{ok}
+{menu .a -type tearoff}		{ok}
+{menu .a -type normal}		{ok}
+{menu .a -type a}		{1 {0 15} badKey {14 1} {{menubar tearoff normal} a}}
+{menu .a -type}			{1 {0 13} noSwitchArg {8 5} -type}
+
+{menu .a -activeforeground $a -activebackground $a \
+    -activeborderwidth $a -background $a -borderwidth $a -bg $a \
+    -cursor $a -disabledforeground $a -fg $a -font $a -foreground $a \
+    -postcommand a -relief $a -selectcolor $a -takefocus .a \
+    -tearoff 0 -title a -type menubar}	{ok}
+
+
+{menubutton .a}			{ok}
+{menubutton}			{1 {0 10} numArgs {} {}}
+{menubutton 0}			{1 {0 12} winBeginDot {11 1} {}}
+{menubutton .a a}		{1 {0 15} badSwitch {14 1} a 1 {0 15} noSwitchArg {14 1} a}
+
+{menubutton .a -activeforeground $a}	{ok}
+{menubutton .a -activeforeground 0}	{1 {0 33} nonPortColor {32 1} {}}
+{menubutton .a -activeforeground}	{1 {0 31} noSwitchArg {14 17} -activeforeground}
+
+{menubutton .a -activebackground $a}	{ok}
+{menubutton .a -activebackground 0}	{1 {0 33} nonPortColor {32 1} {}}
+{menubutton .a -activebackground}	{1 {0 31} noSwitchArg {14 17} -activebackground}
+
+{menubutton .a -anchor $a}	{ok}
+{menubutton .a -anchor 0}	{1 {0 23} badKey {22 1} {{n ne e se s sw w nw center} 0}}
+{menubutton .a -anchor}		{1 {0 21} noSwitchArg {14 7} -anchor}
+
+{menubutton .a -background $a}	{ok}
+{menubutton .a -background 0}	{1 {0 27} nonPortColor {26 1} {}}
+{menubutton .a -background}	{1 {0 25} noSwitchArg {14 11} -background}
+
+{menubutton .a -bitmap $a}	{ok}
+{menubutton .a -bitmap 0}	{1 {0 23} coreTk::nonPortBitmap {22 1} {}}
+{menubutton .a -bitmap}		{1 {0 21} noSwitchArg {14 7} -bitmap}
+
+{menubutton .a -borderwidth $a}	{ok}
+{menubutton .a -borderwidth a}	{1 {0 28} badPixel {27 1} {}}
+{menubutton .a -borderwidth}	{1 {0 26} noSwitchArg {14 12} -borderwidth}
+
+{menubutton .a -bg $a}		{ok}
+{menubutton .a -bg 0}		{1 {0 19} nonPortColor {18 1} {}}
+{menubutton .a -bg}		{1 {0 17} noSwitchArg {14 3} -bg}
+
+{menubutton .a -cursor $a}	{ok}
+{menubutton .a -cursor 0}	{1 {0 23} badCursor {22 1} {}}
+{menubutton .a -cursor}		{1 {0 21} noSwitchArg {14 7} -cursor}
+
+{menubutton .a -direction $a}	{ok}
+{menubutton .a -direction a}	{1 {0 26} badKey {25 1} {{above below left right flush} a}}
+{menubutton .a -direction}	{1 {0 24} noSwitchArg {14 10} -direction}
+
+{menubutton .a -disabledforeground $a}	{ok}
+{menubutton .a -disabledforeground 0}	{1 {0 35} nonPortColor {34 1} {}}
+{menubutton .a -disabledforeground}	{1 {0 33} noSwitchArg {14 19} -disabledforeground}
+
+{menubutton .a -fg $a}		{ok}
+{menubutton .a -fg 0}		{1 {0 19} nonPortColor {18 1} {}}
+{menubutton .a -fg}		{1 {0 17} noSwitchArg {14 3} -fg}
+
+{menubutton .a -font $a}	{ok}
+{menubutton .a -font [set]}	{1 {21 3} numArgs {} {}}
+{menubutton .a -font}		{1 {0 19} noSwitchArg {14 5} -font}
+
+{menubutton .a -foreground $a}	{ok}
+{menubutton .a -foreground 0}	{1 {0 27} nonPortColor {26 1} {}}
+{menubutton .a -foreground}	{1 {0 25} noSwitchArg {14 11} -foreground}
+
+{menubutton .a -height 0}	{ok}
+{menubutton .a -height a}	{1 {0 23} badPixel {22 1} {}}
+{menubutton .a -height}		{1 {0 21} noSwitchArg {14 7} -height}
+
+{menubutton .a -highlightcolor $a}	{ok}
+{menubutton .a -highlightcolor 0}	{1 {0 31} nonPortColor {30 1} {}}
+{menubutton .a -highlightcolor}		{1 {0 29} noSwitchArg {14 15} -highlightcolor}
+
+{menubutton .a -highlightbackground $a}	{ok}
+{menubutton .a -highlightbackground 0}	{1 {0 36} nonPortColor {35 1} {}}
+{menubutton .a -highlightbackground}	{1 {0 34} noSwitchArg {14 20} -highlightbackground}
+
+{menubutton .a -highlightthickness $a}	{ok}
+{menubutton .a -highlightthickness a}	{1 {0 35} badPixel {34 1} {}}
+{menubutton .a -highlightthickness}	{1 {0 33} noSwitchArg {14 19} -highlightthickness}
+
+{menubutton .a -image $a}		{ok}
+{menubutton .a -image [set]}		{1 {22 3} numArgs {} {}}
+{menubutton .a -image}			{1 {0 20} noSwitchArg {14 6} -image}
+
+{menubutton .a -indicatoron 0}		{ok}
+{menubutton .a -indicatoron a}		{1 {0 28} badBoolean {27 1} {}}
+{menubutton .a -indicatoron}		{1 {0 26} noSwitchArg {14 12} -indicatoron}
+
+{menubutton .a -justify $a}		{ok}
+{menubutton .a -justify 0}		{1 {0 24} badKey {23 1} {{left center right} 0}}
+{menubutton .a -justify}		{1 {0 22} noSwitchArg {14 8} -justify}
+
+{menubutton .a -menu .a}		{ok}
+{menubutton .a -menu 0}			{1 {0 21} winBeginDot {20 1} {}}
+{menubutton .a -menu}			{1 {0 19} noSwitchArg {14 5} -menu}
+
+{menubutton .a -padx $a}		{ok}
+{menubutton .a -padx a}			{1 {0 21} badPixel {20 1} {}}
+{menubutton .a -padx}			{1 {0 19} noSwitchArg {14 5} -padx}
+
+{menubutton .a -pady $a}		{ok}
+{menubutton .a -pady a}			{1 {0 21} badPixel {20 1} {}}
+{menubutton .a -pady}			{1 {0 19} noSwitchArg {14 5} -pady}
+
+{menubutton .a -relief $a}		{ok}
+{menubutton .a -relief a}		{1 {0 23} badKey {22 1} {{raised sunken flat ridge solid groove} a}}
+{menubutton .a -relief}			{1 {0 21} noSwitchArg {14 7} -relief}
+
+{menubutton .a -state $a}		{ok}
+{menubutton .a -state a}		{1 {0 22} badKey {21 1} {{normal active disabled} a}}
+{menubutton .a -state}			{1 {0 20} noSwitchArg {14 6} -state}
+
+{menubutton .a -takefocus .a}		{ok}
+{menubutton .a -takefocus [set]}	{1 {26 3} numArgs {} {}}
+{menubutton .a -takefocus}		{1 {0 24} noSwitchArg {14 10} -takefocus}
+
+{menubutton .a -text a}			{ok}
+{menubutton .a -text [set]}		{1 {21 3} numArgs {} {}}
+{menubutton .a -text}			{1 {0 19} noSwitchArg {14 5} -text}
+
+{menubutton .a -textvariable a}		{ok}
+{menubutton .a -textvariable $a}	{1 {0 30} warnVarRef {28 2} {}}
+{menubutton .a -textvariable}		{1 {0 27} noSwitchArg {14 13} -textvariable}
+
+{menubutton .a -underline 0}		{ok}
+{menubutton .a -underline a}		{1 {0 26} badInt {25 1} {}}
+{menubutton .a -underline}		{1 {0 24} noSwitchArg {14 10} -underline}
+
+{menubutton .a -width 0}		{ok}
+{menubutton .a -width a}		{1 {0 22} badPixel {21 1} {}}
+{menubutton .a -width}			{1 {0 20} noSwitchArg {14 6} -width}
+
+{menubutton .a -wraplength 0}		{ok}
+{menubutton .a -wraplength a}		{1 {0 27} badPixel {26 1} {}}
+{menubutton .a -wraplength}		{1 {0 25} noSwitchArg {14 11} -wraplength}
+
+{menubutton .a -activeforeground $a -activebackground $a -anchor $a \
+    -background $a -bitmap $a -borderwidth $a -bg $a -cursor $a \
+    -direction $a -direction $a -disabledforeground $a -fg $a -font $a \
+    -foreground $a -height 0 -highlightcolor $a -highlightbackground $a \
+    -highlightthickness $a -image $a -indicatoron 0 -justify $a \
+    -menu .a -padx $a -pady $a -relief $a -state $a -takefocus .a \
+    -text a -textvariable a -underline 0 -width 0 \
+    -wraplength 0}	{ok}
+
+
+{message .a}			{ok}
+{message}			{1 {0 7} numArgs {} {}}
+{message 0}			{1 {0 9} winBeginDot {8 1} {}}
+{message .a a}			{1 {0 12} badSwitch {11 1} a 1 {0 12} noSwitchArg {11 1} a}
+
+{message .a -anchor $a}		{ok}
+{message .a -anchor 0}		{1 {0 20} badKey {19 1} {{n ne e se s sw w nw center} 0}}
+{message .a -anchor}		{1 {0 18} noSwitchArg {11 7} -anchor}
+
+{message .a -aspect 0}		{ok}
+{message .a -aspect -1}		{1 {0 21} badWholeNum {19 2} -1}
+{message .a -aspect}		{1 {0 18} noSwitchArg {11 7} -aspect}
+
+{message .a -background $a}	{ok}
+{message .a -background 0}	{1 {0 24} nonPortColor {23 1} {}}
+{message .a -background}	{1 {0 22} noSwitchArg {11 11} -background}
+
+{message .a -borderwidth $a}	{ok}
+{message .a -borderwidth a}	{1 {0 25} badPixel {24 1} {}}
+{message .a -borderwidth}	{1 {0 23} noSwitchArg {11 12} -borderwidth}
+
+{message .a -bg $a}		{ok}
+{message .a -bg 0}		{1 {0 16} nonPortColor {15 1} {}}
+{message .a -bg}		{1 {0 14} noSwitchArg {11 3} -bg}
+
+{message .a -cursor $a}		{ok}
+{message .a -cursor 0}		{1 {0 20} badCursor {19 1} {}}
+{message .a -cursor}		{1 {0 18} noSwitchArg {11 7} -cursor}
+
+{message .a -fg $a}		{ok}
+{message .a -fg 0}		{1 {0 16} nonPortColor {15 1} {}}
+{message .a -fg}		{1 {0 14} noSwitchArg {11 3} -fg}
+
+{message .a -font $a}		{ok}
+{message .a -font [set]}	{1 {18 3} numArgs {} {}}
+{message .a -font}		{1 {0 16} noSwitchArg {11 5} -font}
+
+{message .a -foreground $a}	{ok}
+{message .a -foreground 0}	{1 {0 24} nonPortColor {23 1} {}}
+{message .a -foreground}		{1 {0 22} noSwitchArg {11 11} -foreground}
+
+{message .a -highlightbackground $a}	{ok}
+{message .a -highlightbackground 0}	{1 {0 33} nonPortColor {32 1} {}}
+{message .a -highlightbackground}	{1 {0 31} noSwitchArg {11 20} -highlightbackground}
+
+{message .a -highlightcolor $a}	{ok}
+{message .a -highlightcolor 0}	{1 {0 28} nonPortColor {27 1} {}}
+{message .a -highlightcolor}	{1 {0 26} noSwitchArg {11 15} -highlightcolor}
+
+{message .a -highlightthickness $a}	{ok}
+{message .a -highlightthickness a}	{1 {0 32} badPixel {31 1} {}}
+{message .a -highlightthickness}	{1 {0 30} noSwitchArg {11 19} -highlightthickness}
+
+{message .a -justify $a}	{ok}
+{message .a -justify 0}	{1 {0 21} badKey {20 1} {{left center right} 0}}
+{message .a -justify}	{1 {0 19} noSwitchArg {11 8} -justify}
+
+{message .a -padx $a}		{ok}
+{message .a -padx a}		{1 {0 18} badPixel {17 1} {}}
+{message .a -padx}		{1 {0 16} noSwitchArg {11 5} -padx}
+
+{message .a -pady $a}		{ok}
+{message .a -pady a}		{1 {0 18} badPixel {17 1} {}}
+{message .a -pady}		{1 {0 16} noSwitchArg {11 5} -pady}
+
+{message .a -relief $a}		{ok}
+{message .a -relief a}		{1 {0 20} badKey {19 1} {{raised sunken flat ridge solid groove} a}}
+{message .a -relief}		{1 {0 18} noSwitchArg {11 7} -relief}
+
+{message .a -takefocus .a}	{ok}
+{message .a -takefocus [set]}	{1 {23 3} numArgs {} {}}
+{message .a -takefocus}		{1 {0 21} noSwitchArg {11 10} -takefocus}
+
+{message .a -text a}		{ok}
+{message .a -text [set]}		{1 {18 3} numArgs {} {}}
+{message .a -text}		{1 {0 16} noSwitchArg {11 5} -text}
+
+{message .a -textvariable a}	{ok}
+{message .a -textvariable $a}	{1 {0 27} warnVarRef {25 2} {}}
+{message .a -textvariable}	{1 {0 24} noSwitchArg {11 13} -textvariable}
+
+{message .a -width 0}		{ok}
+{message .a -width a}		{1 {0 19} badPixel {18 1} {}}
+{message .a -width}		{1 {0 17} noSwitchArg {11 6} -width}
+
+{message .a -anchor $a -aspect 0 -background $a -borderwidth $a \
+    -bg $a -cursor $a -fg $a -font $a -foreground $a -highlightcolor $a \
+    -highlightbackground $a -highlightthickness $a -justify $a -padx $a \
+    -pady $a -relief $a -takefocus .a -text a -textvariable a \
+    -width 0}	{ok}
+
+
+{option}				{1 {0 6} numArgs {} {}}
+{option 0}				{1 {0 8} badOption {7 1} {{add clear get readfile} 0}}
+
+{option add $a a}			{ok}
+{option add $a a $a}			{ok}
+{option add $a a $a a}			{1 {0 20} numArgs {} {}}
+{option add $a a a}			{1 {0 17} coreTk::badPriority {16 1} {}}
+{option add $a}				{1 {0 13} numArgs {} {}}
+{option add}				{1 {0 10} numArgs {} {}}
+
+{option clear}				{ok}
+{option clear a}			{1 {0 14} numArgs {} {}}
+
+{option get .a a $a}			{ok}
+{option get a a $a}			{1 {0 17} winBeginDot {11 1} {}}
+{option get .a a}			{1 {0 15} numArgs {} {}}
+{option get .a}				{1 {0 13} numArgs {} {}}
+{option get}				{1 {0 10} numArgs {} {}}
+
+{option readfile $a}			{ok}
+{option readfile $a $a}			{ok}
+{option readfile $a a}			{1 {0 20} coreTk::badPriority {19 1} {}}
+{option readfile $a $a a}		{1 {0 23} numArgs {} {}}
+{option readfile}			{1 {0 15} numArgs {} {}}
+
+
+{pack .a}	{ok}
+{pack .a .a .a}	{ok}
+{pack}		{1 {0 4} numArgs {} {}}
+{pack z}	{1 {0 6} badSwitch {5 1} z 1 {0 6} noSwitchArg {5 1} z}
+{pack .A}	{1 {0 7} winAlpha {6 3} {}}
+{pack .a a}	{1 {0 9} badSwitch {8 1} a 1 {0 9} noSwitchArg {8 1} a}
+
+{pack .a -after .a}	{ok}
+{pack .a -after a}	{1 {0 16} winBeginDot {15 1} {}}
+{pack .a -after}	{1 {0 14} noSwitchArg {8 6} -after}
+
+{pack .a -anchor n}	{ok}
+{pack .a -anchor a}	{1 {0 17} badKey {16 1} {{n ne e se s sw w nw center} a}}
+{pack .a -anchor}	{1 {0 15} noSwitchArg {8 7} -anchor}
+
+{pack .a -before .a}	{ok}
+{pack .a -before a}	{1 {0 17} winBeginDot {16 1} {}}
+{pack .a -before}	{1 {0 15} noSwitchArg {8 7} -before}
+
+{pack .a -expand 0}	{ok}
+{pack .a -expand a}	{1 {0 17} badBoolean {16 1} {}}
+{pack .a -expand}	{1 {0 15} noSwitchArg {8 7} -expand}
+
+{pack .a -fill x}	{ok}
+{pack .a -fill a}	{1 {0 15} badKey {14 1} {{none x y both} a}}
+{pack .a -fill}		{1 {0 13} noSwitchArg {8 5} -fill}
+
+{pack .a -in .a}	{ok}
+{pack .a -in a}		{1 {0 13} winBeginDot {12 1} {}}
+{pack .a -in}		{1 {0 11} noSwitchArg {8 3} -in}
+
+{pack .a -ipadx 0}	{ok}
+{pack .a -ipadx a}	{1 {0 16} badPixel {15 1} {}}
+{pack .a -ipadx}	{1 {0 14} noSwitchArg {8 6} -ipadx}
+
+{pack .a -ipady 0}	{ok}
+{pack .a -ipady a}	{1 {0 16} badPixel {15 1} {}}
+{pack .a -ipady}	{1 {0 14} noSwitchArg {8 6} -ipady}
+
+{pack .a -side left}	{ok}
+{pack .a -side a}	{1 {0 15} badKey {14 1} {{left right top bottom} a}}
+{pack .a -side}		{1 {0 13} noSwitchArg {8 5} -side}
+
+{pack .a .a .a -after .a -anchor n -before .a -expand 0 -fill x -in .a \
+    -ipadx 0 -ipady 0 -side left}	{ok}
+
+{pack append}		{1 {0 11} warnDeprecated {5 6} {{-before or -after configure option}} 1 {0 11} numArgs {} {}}
+{pack append .a}	{1 {0 14} warnDeprecated {5 6} {{-before or -after configure option}}}
+{pack append .a .a}	{1 {0 17} warnDeprecated {5 6} {{-before or -after configure option}}}
+
+{pack configure}		{1 {0 14} numArgs {} {}}
+{pack configure .a -after .a}	{ok}
+{pack configure .a -after a}	{1 {0 26} winBeginDot {25 1} {}}
+{pack configure .a -after}	{1 {0 24} noSwitchArg {18 6} -after}
+
+{pack configure .a -anchor n}	{ok}
+{pack configure .a -anchor a}	{1 {0 27} badKey {26 1} {{n ne e se s sw w nw center} a}}
+{pack configure .a -anchor}	{1 {0 25} noSwitchArg {18 7} -anchor}
+
+{pack configure .a -before .a}	{ok}
+{pack configure .a -before a}	{1 {0 27} winBeginDot {26 1} {}}
+{pack configure .a -before}	{1 {0 25} noSwitchArg {18 7} -before}
+
+{pack configure .a -expand 0}	{ok}
+{pack configure .a -expand a}	{1 {0 27} badBoolean {26 1} {}}
+{pack configure .a -expand}	{1 {0 25} noSwitchArg {18 7} -expand}
+
+{pack configure .a -fill x}	{ok}
+{pack configure .a -fill a}	{1 {0 25} badKey {24 1} {{none x y both} a}}
+{pack configure .a -fill}	{1 {0 23} noSwitchArg {18 5} -fill}
+
+{pack configure .a -in .a}	{ok}
+{pack configure .a -in a}	{1 {0 23} winBeginDot {22 1} {}}
+{pack configure .a -in}		{1 {0 21} noSwitchArg {18 3} -in}
+
+{pack configure .a -ipadx 0}	{ok}
+{pack configure .a -ipadx a}	{1 {0 26} badPixel {25 1} {}}
+{pack configure .a -ipadx}	{1 {0 24} noSwitchArg {18 6} -ipadx}
+
+{pack configure .a -ipady 0}	{ok}
+{pack configure .a -ipady a}	{1 {0 26} badPixel {25 1} {}}
+{pack configure .a -ipady}	{1 {0 24} noSwitchArg {18 6} -ipady}
+
+{pack configure .a -side left}	{ok}
+{pack configure .a -side a}	{1 {0 25} badKey {24 1} {{left right top bottom} a}}
+{pack configure .a -side}	{1 {0 23} noSwitchArg {18 5} -side}
+
+{pack configure .a .a .a -after .a -anchor n -before .a -expand 0 \
+    -fill x -in .a -ipadx 0 -ipady 0 -side left}	{ok}
+
+{pack forget .a}	{ok}
+{pack forget .a .a .a}	{ok}
+{pack forget a}		{1 {0 13} winBeginDot {12 1} {}}
+{pack forget .a .a a}	{1 {0 19} winBeginDot {18 1} {}}
+{pack forget}		{1 {0 11} numArgs {} {}}
+
+{pack info .a}		{ok}
+{pack info a}		{1 {0 11} winBeginDot {10 1} {}}
+{pack info .a a}	{1 {0 14} numArgs {} {}}
+{pack info}		{1 {0 9} numArgs {} {}}
+
+{pack propagate .a}		{ok}
+{pack propagate .a 0}		{ok}
+{pack propagate a}		{1 {0 16} winBeginDot {15 1} {}}
+{pack propagate .a a}		{1 {0 19} badBoolean {18 1} {}}
+{pack propagate $a $a $a}	{1 {0 23} numArgs {} {}}
+{pack propagate}		{1 {0 14} numArgs {} {}}
+
+{pack slaves .a}	{ok}
+{pack slaves a}		{1 {0 13} winBeginDot {12 1} {}}
+{pack slaves .a $a}	{1 {0 17} numArgs {} {}}
+{pack slaves}		{1 {0 11} numArgs {} {}}
+
+
+{place .a -in .a}	{ok}
+{place .a}		{ok}
+{place .A}		{1 {0 8} winAlpha {7 3} {}}
+{place}			{1 {0 5} numArgs {} {}}
+{place a}		{1 {0 7} badSwitch {6 1} a 1 {0 7} noSwitchArg {6 1} a}
+
+{place .a -anchor n}	{ok}
+{place .a -anchor a}	{1 {0 18} badKey {17 1} {{n ne e se s sw w nw center} a}}
+{place .a -anchor}	{1 {0 16} noSwitchArg {9 7} -anchor}
+
+{place .a -bordermode inside}	{ok}
+{place .a -bordermode a}	{1 {0 22} badKey {21 1} {{inside outside ignore} a}}
+{place .a -bordermode}	{1 {0 20} noSwitchArg {9 11} -bordermode}
+
+{place .a -height 0}	{ok}
+{place .a -height a}	{1 {0 18} badPixel {17 1} {}}
+{place .a -height}	{1 {0 16} noSwitchArg {9 7} -height}
+
+{place .a -in .a}	{ok}
+{place .a -in a}	{1 {0 14} winBeginDot {13 1} {}}
+{place .a -in}		{1 {0 12} noSwitchArg {9 3} -in}
+
+{place .a -relheight 0}	{ok}
+{place .a -relheight a}	{1 {0 21} badFloat {20 1} {}}
+{place .a -relheight}	{1 {0 19} noSwitchArg {9 10} -relheight}
+
+{place .a -relwidth 0}	{ok}
+{place .a -relwidth a}	{1 {0 20} badFloat {19 1} {}}
+{place .a -relwidth}	{1 {0 18} noSwitchArg {9 9} -relwidth}
+
+{place .a -relx 0}	{ok}
+{place .a -relx a}	{1 {0 16} badPixel {15 1} {}}
+{place .a -relx}	{1 {0 14} noSwitchArg {9 5} -relx}
+
+{place .a -rely 0}	{ok}
+{place .a -rely a}	{1 {0 16} badPixel {15 1} {}}
+{place .a -rely}	{1 {0 14} noSwitchArg {9 5} -rely}
+
+{place .a -x 0}		{ok}
+{place .a -x a}		{1 {0 13} badPixel {12 1} {}}
+{place .a -x}		{1 {0 11} noSwitchArg {9 2} -x}
+
+{place .a -y 0}		{ok}
+{place .a -y a}		{1 {0 13} badPixel {12 1} {}}
+{place .a -y}		{1 {0 11} noSwitchArg {9 2} -y}
+
+{place .a -width 0}	{ok}
+{place .a -width a}	{1 {0 17} badPixel {16 1} {}}
+{place .a -width}	{1 {0 15} noSwitchArg {9 6} -width}
+
+{place .a -anchor n -bordermode inside -height 0 -in .a \
+    -relheight 0 -relwidth 0 -relx 0 -rely 0 -x 0 -y 0 \
+    -width 0}	{ok}
+
+{place configure .a -anchor n}	{ok}
+{place configure .a -anchor a}	{1 {0 28} badKey {27 1} {{n ne e se s sw w nw center} a}}
+{place configure .a -anchor}	{1 {0 26} noSwitchArg {19 7} -anchor}
+
+{place configure .a -bordermode inside}	{ok}
+{place configure .a -bordermode a}	{1 {0 32} badKey {31 1} {{inside outside ignore} a}}
+{place configure .a -bordermode}	{1 {0 30} noSwitchArg {19 11} -bordermode}
+
+{place configure .a -height 0}	{ok}
+{place configure .a -height a}	{1 {0 28} badPixel {27 1} {}}
+{place configure .a -height}	{1 {0 26} noSwitchArg {19 7} -height}
+
+{place configure .a -in .a}	{ok}
+{place configure .a -in a}	{1 {0 24} winBeginDot {23 1} {}}
+{place configure .a -in}	{1 {0 22} noSwitchArg {19 3} -in}
+
+{place configure .a -relheight 0}	{ok}
+{place configure .a -relheight a}	{1 {0 31} badFloat {30 1} {}}
+{place configure .a -relheight}	{1 {0 29} noSwitchArg {19 10} -relheight}
+
+{place configure .a -relwidth 0}	{ok}
+{place configure .a -relwidth a}	{1 {0 30} badFloat {29 1} {}}
+{place configure .a -relwidth}	{1 {0 28} noSwitchArg {19 9} -relwidth}
+
+{place configure .a -relx 0}	{ok}
+{place configure .a -relx a}	{1 {0 26} badPixel {25 1} {}}
+{place configure .a -relx}	{1 {0 24} noSwitchArg {19 5} -relx}
+
+{place configure .a -rely 0}	{ok}
+{place configure .a -rely a}	{1 {0 26} badPixel {25 1} {}}
+{place configure .a -rely}	{1 {0 24} noSwitchArg {19 5} -rely}
+
+{place configure .a -x 0}	{ok}
+{place configure .a -x a}	{1 {0 23} badPixel {22 1} {}}
+{place configure .a -x}		{1 {0 21} noSwitchArg {19 2} -x}
+
+{place configure .a -y 0}	{ok}
+{place configure .a -y a}	{1 {0 23} badPixel {22 1} {}}
+{place configure .a -y}		{1 {0 21} noSwitchArg {19 2} -y}
+
+{place configure .a -width 0}	{ok}
+{place configure .a -width a}	{1 {0 27} badPixel {26 1} {}}
+{place configure .a -width}	{1 {0 25} noSwitchArg {19 6} -width}
+
+{place configure .a -anchor n -bordermode inside -height 0 -in .a \
+    -relheight 0 -relwidth 0 -relx 0 -rely 0 -x 0 -y 0 \
+    -width 0}	{ok}
+
+{place forget .a}	{ok}
+{place forget a}	{1 {0 14} winBeginDot {13 1} {}}
+{place forget .a a}	{1 {0 17} numArgs {} {}}
+{place forget}		{1 {0 12} numArgs {} {}}
+
+{place info .a}		{ok}
+{place info a}		{1 {0 12} winBeginDot {11 1} {}}
+{place info .a a}	{1 {0 15} numArgs {} {}}
+{place info}		{1 {0 10} numArgs {} {}}
+
+{place slaves .a}	{ok}
+{place slaves a}	{1 {0 14} winBeginDot {13 1} {}}
+{place slaves .a $a}	{1 {0 18} numArgs {} {}}
+{place slaves}		{1 {0 12} numArgs {} {}}
+
+
+{radiobutton .a}		{ok}
+{radiobutton}			{1 {0 11} numArgs {} {}}
+{radiobutton a}			{1 {0 13} winBeginDot {12 1} {}}
+{radiobutton .a a}		{1 {0 16} badSwitch {15 1} a 1 {0 16} noSwitchArg {15 1} a}
+
+{radiobutton .a -activeforeground $a}	{ok}
+{radiobutton .a -activeforeground 0}	{1 {0 34} nonPortColor {33 1} {}}
+{radiobutton .a -activeforeground}	{1 {0 32} noSwitchArg {15 17} -activeforeground}
+
+{radiobutton .a -activebackground $a}	{ok}
+{radiobutton .a -activebackground 0}	{1 {0 34} nonPortColor {33 1} {}}
+{radiobutton .a -activebackground}	{1 {0 32} noSwitchArg {15 17} -activebackground}
+
+{radiobutton .a -anchor $a}	{ok}
+{radiobutton .a -anchor 0}	{1 {0 24} badKey {23 1} {{n ne e se s sw w nw center} 0}}
+{radiobutton .a -anchor}	{1 {0 22} noSwitchArg {15 7} -anchor}
+
+{radiobutton .a -background $a}	{ok}
+{radiobutton .a -background 0}	{1 {0 28} nonPortColor {27 1} {}}
+{radiobutton .a -background}	{1 {0 26} noSwitchArg {15 11} -background}
+
+{radiobutton .a -bitmap $a}	{ok}
+{radiobutton .a -bitmap 0}	{1 {0 24} coreTk::nonPortBitmap {23 1} {}}
+{radiobutton .a -bitmap}	{1 {0 22} noSwitchArg {15 7} -bitmap}
+
+{radiobutton .a -borderwidth $a}	{ok}
+{radiobutton .a -borderwidth a}	{1 {0 29} badPixel {28 1} {}}
+{radiobutton .a -borderwidth}	{1 {0 27} noSwitchArg {15 12} -borderwidth}
+
+{radiobutton .a -bg $a}		{ok}
+{radiobutton .a -bg 0}		{1 {0 20} nonPortColor {19 1} {}}
+{radiobutton .a -bg}		{1 {0 18} noSwitchArg {15 3} -bg}
+
+{radiobutton .a -command a}	{ok}
+{radiobutton .a -command [set]}	{1 {25 3} numArgs {} {}}
+{radiobutton .a -command}	{1 {0 23} noSwitchArg {15 8} -command}
+
+{radiobutton .a -cursor $a}	{ok}
+{radiobutton .a -cursor [set]}	{1 {24 3} numArgs {} {}}
+{radiobutton .a -cursor}	{1 {0 22} noSwitchArg {15 7} -cursor}
+
+{radiobutton .a -disabledforeground $a}	{ok}
+{radiobutton .a -disabledforeground 0}	{1 {0 36} nonPortColor {35 1} {}}
+{radiobutton .a -disabledforeground}	{1 {0 34} noSwitchArg {15 19} -disabledforeground}
+
+{radiobutton .a -fg $a}		{ok}
+{radiobutton .a -fg 0}		{1 {0 20} nonPortColor {19 1} {}}
+{radiobutton .a -fg}		{1 {0 18} noSwitchArg {15 3} -fg}
+
+{radiobutton .a -font $a}	{ok}
+{radiobutton .a -font [set]}	{1 {22 3} numArgs {} {}}
+{radiobutton .a -font}		{1 {0 20} noSwitchArg {15 5} -font}
+
+{radiobutton .a -foreground $a}	{ok}
+{radiobutton .a -foreground 0}	{1 {0 28} nonPortColor {27 1} {}}
+{radiobutton .a -foreground}	{1 {0 26} noSwitchArg {15 11} -foreground}
+
+{radiobutton .a -height 0}	{ok}
+{radiobutton .a -height a}	{1 {0 24} badPixel {23 1} {}}
+{radiobutton .a -height}	{1 {0 22} noSwitchArg {15 7} -height}
+
+{radiobutton .a -highlightcolor $a}	{ok}
+{radiobutton .a -highlightcolor 0}	{1 {0 32} nonPortColor {31 1} {}}
+{radiobutton .a -highlightcolor}	{1 {0 30} noSwitchArg {15 15} -highlightcolor}
+
+{radiobutton .a -highlightbackground $a}	{ok}
+{radiobutton .a -highlightbackground 0}	{1 {0 37} nonPortColor {36 1} {}}
+{radiobutton .a -highlightbackground}	{1 {0 35} noSwitchArg {15 20} -highlightbackground}
+
+{radiobutton .a -highlightthickness $a}	{ok}
+{radiobutton .a -highlightthickness a}	{1 {0 36} badPixel {35 1} {}}
+{radiobutton .a -highlightthickness}	{1 {0 34} noSwitchArg {15 19} -highlightthickness}
+
+{radiobutton .a -image $a}	{ok}
+{radiobutton .a -image [set]}	{1 {23 3} numArgs {} {}}
+{radiobutton .a -image}		{1 {0 21} noSwitchArg {15 6} -image}
+
+{radiobutton .a -indicatoron 0}	{ok}
+{radiobutton .a -indicatoron a}	{1 {0 29} badBoolean {28 1} {}}
+{radiobutton .a -indicatoron}	{1 {0 27} noSwitchArg {15 12} -indicatoron}
+
+{radiobutton .a -justify $a}	{ok}
+{radiobutton .a -justify 0}	{1 {0 25} badKey {24 1} {{left center right} 0}}
+{radiobutton .a -justify}	{1 {0 23} noSwitchArg {15 8} -justify}
+
+{radiobutton .a -padx $a}	{ok}
+{radiobutton .a -padx a}	{1 {0 22} badPixel {21 1} {}}
+{radiobutton .a -padx}		{1 {0 20} noSwitchArg {15 5} -padx}
+
+{radiobutton .a -pady $a}	{ok}
+{radiobutton .a -pady a}	{1 {0 22} badPixel {21 1} {}}
+{radiobutton .a -pady}		{1 {0 20} noSwitchArg {15 5} -pady}
+
+{radiobutton .a -relief $a}	{ok}
+{radiobutton .a -relief a}	{1 {0 24} badKey {23 1} {{raised sunken flat ridge solid groove} a}}
+{radiobutton .a -relief}	{1 {0 22} noSwitchArg {15 7} -relief}
+
+{radiobutton .a -selectcolor $a}	{ok}
+{radiobutton .a -selectcolor 0}	{1 {0 29} nonPortColor {28 1} {}}
+{radiobutton .a -selectcolor}	{1 {0 27} noSwitchArg {15 12} -selectcolor}
+
+{radiobutton .a -selectimage $a}	{ok}
+{radiobutton .a -selectimage [set]}	{1 {29 3} numArgs {} {}}
+{radiobutton .a -selectimage}	{1 {0 27} noSwitchArg {15 12} -selectimage}
+
+{radiobutton .a -state $a}	{ok}
+{radiobutton .a -state a}	{1 {0 23} badKey {22 1} {{normal active disabled} a}}
+{radiobutton .a -state}		{1 {0 21} noSwitchArg {15 6} -state}
+
+{radiobutton .a -takefocus .a}	{ok}
+{radiobutton .a -takefocus [set]}	{1 {27 3} numArgs {} {}}
+{radiobutton .a -takefocus}	{1 {0 25} noSwitchArg {15 10} -takefocus}
+
+{radiobutton .a -text a}	{ok}
+{radiobutton .a -text [set]}	{1 {22 3} numArgs {} {}}
+{radiobutton .a -text}		{1 {0 20} noSwitchArg {15 5} -text}
+
+{radiobutton .a -textvariable a}	{ok}
+{radiobutton .a -textvariable $a}	{1 {0 31} warnVarRef {29 2} {}}
+{radiobutton .a -textvariable}	{1 {0 28} noSwitchArg {15 13} -textvariable}
+
+{radiobutton .a -underline 0}	{ok}
+{radiobutton .a -underline a}	{1 {0 27} badInt {26 1} {}}
+{radiobutton .a -underline}	{1 {0 25} noSwitchArg {15 10} -underline}
+
+{radiobutton .a -value a}	{ok}
+{radiobutton .a -value [set]}	{1 {23 3} numArgs {} {}}
+{radiobutton .a -value}		{1 {0 21} noSwitchArg {15 6} -value}
+
+{radiobutton .a -variable a}	{ok}
+{radiobutton .a -variable $a}	{1 {0 27} warnVarRef {25 2} {}}
+{radiobutton .a -variable}	{1 {0 24} noSwitchArg {15 9} -variable}
+
+{radiobutton .a -width 0}	{ok}
+{radiobutton .a -width a}	{1 {0 23} badPixel {22 1} {}}
+{radiobutton .a -width}		{1 {0 21} noSwitchArg {15 6} -width}
+
+{radiobutton .a -wraplength 0}	{ok}
+{radiobutton .a -wraplength a}	{1 {0 28} badPixel {27 1} {}}
+{radiobutton .a -wraplength}	{1 {0 26} noSwitchArg {15 11} -wraplength}
+
+{radiobutton .a -activeforeground $a -activebackground $a -anchor $a \
+    -background $a -bitmap $a -borderwidth $a -bg $a -command a -cursor $a \
+    -disabledforeground $a -fg $a -font $a -foreground $a -height 0 \
+    -highlightcolor $a -highlightbackground $a -highlightthickness $a \
+    -image $a -indicatoron 0 -justify $a -padx $a -pady $a -relief $a \
+    -selectcolor $a -selectimage $a -state normal -takefocus .a -text a \
+    -textvariable a -underline 0 -value a -variable a -width 0 \
+    -wraplength 0}	{ok}
+
+
+{raise .a}			{ok}
+{raise .a .a}			{ok}
+{raise a}			{1 {0 7} winBeginDot {6 1} {}}
+{raise .a a}			{1 {0 10} winBeginDot {9 1} {}}
+{raise .a .a a}			{1 {0 13} numArgs {} {}}
+{raise}				{1 {0 5} numArgs {} {}}
+
+
+{scale .a}			{ok}
+{scale}				{1 {0 5} numArgs {} {}}
+{scale 0}			{1 {0 7} winBeginDot {6 1} {}}
+{scale .a a}			{1 {0 10} badSwitch {9 1} a 1 {0 10} noSwitchArg {9 1} a}
+
+{scale .a -activebackground $a}	{ok}
+{scale .a -activebackground 0}	{1 {0 28} nonPortColor {27 1} {}}
+{scale .a -activebackground}	{1 {0 26} noSwitchArg {9 17} -activebackground}
+
+{scale .a -background $a}	{ok}
+{scale .a -background 0}	{1 {0 22} nonPortColor {21 1} {}}
+{scale .a -background}		{1 {0 20} noSwitchArg {9 11} -background}
+
+{scale .a -bigincrement 0}	{ok}
+{scale .a -bigincrement a}	{1 {0 24} badFloat {23 1} {}}
+{scale .a -bigincrement}	{1 {0 22} noSwitchArg {9 13} -bigincrement}
+
+{scale .a -borderwidth $a}	{ok}
+{scale .a -borderwidth a}	{1 {0 23} badPixel {22 1} {}}
+{scale .a -borderwidth}		{1 {0 21} noSwitchArg {9 12} -borderwidth}
+
+{scale .a -bg $a}		{ok}
+{scale .a -bg 0}		{1 {0 14} nonPortColor {13 1} {}}
+{scale .a -bg}			{1 {0 12} noSwitchArg {9 3} -bg}
+
+{scale .a -command puts}	{ok}
+{scale .a -command a}		{ok}
+{scale .a -command [set]}	{1 {19 3} numArgs {} {}}
+{scale .a -command}		{1 {0 17} noSwitchArg {9 8} -command}
+
+{scale .a -cursor $a}		{ok}
+{scale .a -cursor 0}		{1 {0 18} badCursor {17 1} {}}
+{scale .a -cursor}		{1 {0 16} noSwitchArg {9 7} -cursor}
+
+{scale .a -digits 0}		{ok}
+{scale .a -digits a}		{1 {0 18} badInt {17 1} {}}
+{scale .a -digits}		{1 {0 16} noSwitchArg {9 7} -digits}
+
+{scale .a -fg $a}	{ok}
+{scale .a -fg 0}	{1 {0 14} nonPortColor {13 1} {}}
+{scale .a -fg}		{1 {0 12} noSwitchArg {9 3} -fg}
+
+{scale .a -font $a}		{ok}
+{scale .a -font [set]}		{1 {16 3} numArgs {} {}}
+{scale .a -font}		{1 {0 14} noSwitchArg {9 5} -font}
+
+{scale .a -foreground $a}	{ok}
+{scale .a -foreground 0}	{1 {0 22} nonPortColor {21 1} {}}
+{scale .a -foreground}		{1 {0 20} noSwitchArg {9 11} -foreground}
+
+{scale .a -from 0}		{ok}
+{scale .a -from a}		{1 {0 16} badFloat {15 1} {}}
+{scale .a -from}		{1 {0 14} noSwitchArg {9 5} -from}
+
+{scale .a -label a}		{ok}
+{scale .a -label [set]}		{1 {17 3} numArgs {} {}}
+{scale .a -label}		{1 {0 15} noSwitchArg {9 6} -label}
+
+{scale .a -highlightbackground $a}	{ok}
+{scale .a -highlightbackground 0}	{1 {0 31} nonPortColor {30 1} {}}
+{scale .a -highlightbackground}		{1 {0 29} noSwitchArg {9 20} -highlightbackground}
+
+{scale .a -highlightcolor $a}		{ok}
+{scale .a -highlightcolor 0}		{1 {0 26} nonPortColor {25 1} {}}
+{scale .a -highlightcolor}		{1 {0 24} noSwitchArg {9 15} -highlightcolor}
+
+{scale .a -highlightthickness $a}	{ok}
+{scale .a -highlightthickness a}	{1 {0 30} badPixel {29 1} {}}
+{scale .a -highlightthickness}		{1 {0 28} noSwitchArg {9 19} -highlightthickness}
+
+{scale .a -orient horizontal}	{ok}
+{scale .a -orient a}		{1 {0 18} badKey {17 1} {{horizontal vertical} a}}
+{scale .a -orient}		{1 {0 16} noSwitchArg {9 7} -orient}
+
+{scale .a -relief $a}		{ok}
+{scale .a -relief a}		{1 {0 18} badKey {17 1} {{raised sunken flat ridge solid groove} a}}
+{scale .a -relief}		{1 {0 16} noSwitchArg {9 7} -relief}
+
+{scale .a -repeatdelay 0}	{ok}
+{scale .a -repeatdelay a}	{1 {0 23} badInt {22 1} {}}
+{scale .a -repeatdelay}		{1 {0 21} noSwitchArg {9 12} -repeatdelay}
+
+{scale .a -repeatinterval 0}	{ok}
+{scale .a -repeatinterval a}	{1 {0 26} badInt {25 1} {}}
+{scale .a -repeatinterval}	{1 {0 24} noSwitchArg {9 15} -repeatinterval}
+
+{scale .a -resolution 0}	{ok}
+{scale .a -resolution a}	{1 {0 22} badFloat {21 1} {}}
+{scale .a -resolution}		{1 {0 20} noSwitchArg {9 11} -resolution}
+
+{scale .a -showvalue 0}		{ok}
+{scale .a -showvalue a}		{1 {0 21} badBoolean {20 1} {}}
+{scale .a -showvalue}		{1 {0 19} noSwitchArg {9 10} -showvalue}
+
+{scale .a -sliderlength 0}	{ok}
+{scale .a -sliderlength a}	{1 {0 24} badPixel {23 1} {}}
+{scale .a -sliderlength}	{1 {0 22} noSwitchArg {9 13} -sliderlength}
+
+{scale .a -sliderrelief raised}	{ok}
+{scale .a -sliderrelief a}	{1 {0 24} badKey {23 1} {{raised sunken flat ridge solid groove} a}}
+{scale .a -sliderrelief}	{1 {0 22} noSwitchArg {9 13} -sliderrelief}
+
+{scale .a -state normal}	{ok}
+{scale .a -state a}		{1 {0 17} badKey {16 1} {{normal active disabled} a}}
+{scale .a -state}		{1 {0 15} noSwitchArg {9 6} -state}
+
+{scale .a -takefocus .a}	{ok}
+{scale .a -takefocus [set]}	{1 {21 3} numArgs {} {}}
+{scale .a -takefocus}	{1 {0 19} noSwitchArg {9 10} -takefocus}
+
+{scale .a -tickinterval 0}	{ok}
+{scale .a -tickinterval a}	{1 {0 24} badFloat {23 1} {}}
+{scale .a -tickinterval}	{1 {0 22} noSwitchArg {9 13} -tickinterval}
+
+{scale .a -troughcolor $a}	{ok}
+{scale .a -troughcolor a}	{1 {0 23} nonPortColor {22 1} {}}
+{scale .a -troughcolor}		{1 {0 21} noSwitchArg {9 12} -troughcolor}
+
+{scale .a -variable a}		{ok}
+{scale .a -variable $a}		{1 {0 21} warnVarRef {19 2} {}}
+{scale .a -variable}		{1 {0 18} noSwitchArg {9 9} -variable}
+
+{scale .a -width 0}	{ok}
+{scale .a -width a}	{1 {0 17} badPixel {16 1} {}}
+{scale .a -width}	{1 {0 15} noSwitchArg {9 6} -width}
+
+{scale .a -activebackground $a -background $a -bigincrement 0 -bg $a \
+    -command a -cursor $a -digits 0 -fg $a -font $a -foreground $a \
+    -from 0 -label a -highlightbackground $a -highlightcolor $a \
+    -highlightthickness $a  -orient horizontal -relief $a \
+    -repeatdelay 0 -repeatinterval 0 -resolution 0 -showvalue 0 \
+    -sliderlength 0 -sliderrelief raised -state normal -takefocus .a \
+     -tickinterval 0 -troughcolor $a -variable a -width 0}	{ok}
+
+
+{scrollbar .a}		{ok}
+{scrollbar}		{1 {0 9} numArgs {} {}}
+{scrollbar 0}		{1 {0 11} winBeginDot {10 1} {}}
+{scrollbar .a a}	{1 {0 14} badSwitch {13 1} a 1 {0 14} noSwitchArg {13 1} a}
+
+{scrollbar .a -activebackground $a}	{ok}
+{scrollbar .a -activebackground 0}	{1 {0 32} nonPortColor {31 1} {}}
+{scrollbar .a -activebackground}	{1 {0 30} noSwitchArg {13 17} -activebackground}
+
+{scrollbar .a -activerelief $a}		{ok}
+{scrollbar .a -activerelief a}		{1 {0 28} badKey {27 1} {{raised sunken flat ridge solid groove} a}}
+{scrollbar .a -activerelief}		{1 {0 26} noSwitchArg {13 13} -activerelief}
+
+{scrollbar .a -background $a}	{ok}
+{scrollbar .a -background 0}	{1 {0 26} nonPortColor {25 1} {}}
+{scrollbar .a -background}	{1 {0 24} noSwitchArg {13 11} -background}
+
+{scrollbar .a -bg $a}	{ok}
+{scrollbar .a -bg 0}	{1 {0 18} nonPortColor {17 1} {}}
+{scrollbar .a -bg}	{1 {0 16} noSwitchArg {13 3} -bg}
+
+{scrollbar .a -borderwidth $a}	{ok}
+{scrollbar .a -borderwidth a}	{1 {0 27} badPixel {26 1} {}}
+{scrollbar .a -borderwidth}	{1 {0 25} noSwitchArg {13 12} -borderwidth}
+
+{scrollbar .a -cursor $a}	{ok}
+{scrollbar .a -cursor 0}	{1 {0 22} badCursor {21 1} {}}
+{scrollbar .a -cursor}		{1 {0 20} noSwitchArg {13 7} -cursor}
+
+{scrollbar .a -elementborderwidth $a}	{ok}
+{scrollbar .a -elementborderwidth a}	{1 {0 34} badPixel {33 1} {}}
+{scrollbar .a -elementborderwidth}	{1 {0 32} noSwitchArg {13 19} -elementborderwidth}
+
+{scrollbar .a -highlightbackground $a}	{ok}
+{scrollbar .a -highlightbackground 0}	{1 {0 35} nonPortColor {34 1} {}}
+{scrollbar .a -highlightbackground}	{1 {0 33} noSwitchArg {13 20} -highlightbackground}
+
+{scrollbar .a -highlightcolor $a}	{ok}
+{scrollbar .a -highlightcolor 0}	{1 {0 30} nonPortColor {29 1} {}}
+{scrollbar .a -highlightcolor}	{1 {0 28} noSwitchArg {13 15} -highlightcolor}
+
+{scrollbar .a -highlightthickness 0}	{ok}
+{scrollbar .a -highlightthickness a}	{1 {0 34} badPixel {33 1} {}}
+{scrollbar .a -highlightthickness}	{1 {0 32} noSwitchArg {13 19} -highlightthickness}
+
+{scrollbar .a -jump 0}	{ok}
+{scrollbar .a -jump a}	{1 {0 20} badBoolean {19 1} {}}
+{scrollbar .a -jump}	{1 {0 18} noSwitchArg {13 5} -jump}
+
+{scrollbar .a -orient horizontal}	{ok}
+{scrollbar .a -orient a}	{1 {0 22} badKey {21 1} {{horizontal vertical} a}}
+{scrollbar .a -orient}		{1 {0 20} noSwitchArg {13 7} -orient}
+
+{scrollbar .a -relief $a}	{ok}
+{scrollbar .a -relief a}	{1 {0 22} badKey {21 1} {{raised sunken flat ridge solid groove} a}}
+{scrollbar .a -relief}		{1 {0 20} noSwitchArg {13 7} -relief}
+
+{scrollbar .a -repeatdelay 0}	{ok}
+{scrollbar .a -repeatdelay a}	{1 {0 27} badInt {26 1} {}}
+{scrollbar .a -repeatdelay}		{1 {0 25} noSwitchArg {13 12} -repeatdelay}
+
+{scrollbar .a -repeatinterval 0}	{ok}
+{scrollbar .a -repeatinterval a}	{1 {0 30} badInt {29 1} {}}
+{scrollbar .a -repeatinterval}	{1 {0 28} noSwitchArg {13 15} -repeatinterval}
+
+{scrollbar .a -takefocus .a}	{ok}
+{scrollbar .a -takefocus [set]}	{1 {25 3} numArgs {} {}}
+{scrollbar .a -takefocus}	{1 {0 23} noSwitchArg {13 10} -takefocus}
+
+{scrollbar .a -troughcolor $a}	{ok}
+{scrollbar .a -troughcolor a}	{1 {0 27} nonPortColor {26 1} {}}
+{scrollbar .a -troughcolor}	{1 {0 25} noSwitchArg {13 12} -troughcolor}
+
+{scrollbar .a -width $a}	{ok}
+{scrollbar .a -width a} {1 {0 21} badPixel {20 1} {}}
+{scrollbar .a -width}	{1 {0 19} noSwitchArg {13 6} -width}
+
+{scrollbar .a -activebackground $a -activerelief $a -background $a -bg $a \
+    -borderwidth $a -cursor $a -elementborderwidth $a \
+    -highlightbackground $a -highlightcolor $a -highlightthickness 0 \
+    -jump 0 -orient horizontal -relief $a -repeatdelay 0 -repeatinterval 0 \
+    -takefocus .a -troughcolor $a -width $a}	{ok}
+
+
+{selection 0}	{1 {0 11} badOption {10 1} {{clear get handle own} 0}}
+{selection}	{1 {0 9} numArgs {} {}}
+
+{selection clear}	{ok}
+{selection clear .a}	{1 {0 18} warnDeprecated {10 5} -displayof}
+{selection clear a}	{1 {0 17} warnDeprecated {10 5} -displayof 1 {0 17} winBeginDot {16 1} {}}
+{selection clear .a a}	{1 {0 20} numArgs {} {}}
+
+{selection clear -displayof .a}	{ok}
+{selection clear -displayof [set]}	{1 {28 3} numArgs {} {}}
+{selection clear -displayof}	{1 {0 26} noSwitchArg {16 10} -displayof}
+{selection clear -displayof .a a}	{1 {0 31} warnDeprecated {27 2} -displayof 1 {0 31} winBeginDot {30 1} {}}
+
+{selection clear -selection $a}	{ok}
+{selection clear -selection [set]}	{1 {28 3} numArgs {} {}}
+{selection clear -selection}	{1 {0 26} noSwitchArg {16 10} -selection}
+{selection clear -selection $a a}	{1 {0 31} warnDeprecated {27 2} -displayof 1 {0 31} winBeginDot {30 1} {}}
+
+{selection clear -displayof .a -selection $a}	{ok}
+{selection clear -displayof .a -selection $a a}	{1 {0 45} warnDeprecated {41 2} -displayof 1 {0 45} winBeginDot {44 1} {}}
+{selection clear -displayof .a -selection $a .a a}	{1 {0 48} numArgs {} {}}
+
+{selection get}		{ok}
+{selection get .a}	{1 {0 16} warnDeprecated {10 3} -type}
+{selection get a}	{1 {0 15} warnDeprecated {10 3} -type}
+{selection get .a a}	{1 {0 18} numArgs {} {}}
+
+{selection get -displayof .a}	{ok}
+{selection get -displayof [set]}	{1 {26 3} numArgs {} {}}
+{selection get -displayof}	{1 {0 24} noSwitchArg {14 10} -displayof}
+{selection get -displayof .a a}	{1 {0 29} warnDeprecated {25 2} -type}
+
+{selection get -selection $a}	{ok}
+{selection get -selection [set]}	{1 {26 3} numArgs {} {}}
+{selection get -selection}	{1 {0 24} noSwitchArg {14 10} -selection}
+{selection get -selection $a a}	{1 {0 29} warnDeprecated {25 2} -type}
+
+{selection get -type $a}	{ok}
+{selection get -type [set]}	{1 {21 3} numArgs {} {}}
+{selection get -type}		{1 {0 19} noSwitchArg {14 5} -type}
+{selection get -type $a a}	{1 {0 24} warnDeprecated {20 2} -type}
+
+{selection get -displayof .a -selection $a -type $a}	{ok}
+{selection get -displayof .a -selection $a -type $a a}	{1 {0 52} warnDeprecated {48 2} -type}
+{selection get -displayof .a -selection $a -type $a .a a}	{1 {0 55} numArgs {} {}}
+
+{selection handle .a a}		{ok}
+{selection handle a a}	{1 {0 20} winBeginDot {17 1} {}}
+{selection handle .a [set]}	{1 {21 3} numArgs {} {}}
+{selection handle}		{1 {0 16} numArgs {} {}}
+{selection handle a}		{1 {0 18} numArgs {} {}}
+{selection handle .a a a}	{1 {0 23} numArgs {} {}}
+
+{selection handle -format $a .a a}	{ok}
+{selection handle -format [set] .a a}	{1 {26 3} numArgs {} {}}
+{selection handle -format $a}		{1 {0 27} numArgs {} {}}
+{selection handle -format $a a}		{1 {0 29} numArgs {} {}}
+{selection handle -format $a a a a}	{1 {0 33} numArgs {} {}}
+
+{selection handle -selection $a .a a}	{ok}
+{selection handle -selection [set] .a a}	{1 {29 3} numArgs {} {}}
+{selection handle -selection $a}	{1 {0 30} numArgs {} {}}
+{selection handle -selection $a a}	{1 {0 32} numArgs {} {}}
+{selection handle -selection $a a a a}	{1 {0 36} numArgs {} {}}
+
+{selection handle -type $a .a a}	{ok}
+{selection handle -type [set] .a a}	{1 {24 3} numArgs {} {}}
+{selection handle -type $a}		{1 {0 25} numArgs {} {}}
+{selection handle -type $a a}		{1 {0 27} numArgs {} {}}
+{selection handle -type $a a a a}	{1 {0 31} numArgs {} {}}
+
+{selection handle -type $a -selection $a -type $a .a a}	{ok}
+{selection handle -type $a -selection $a -type $a .a a a}	{1 {0 55} numArgs {} {}}
+{selection handle -type $a -selection $a -type $a .a}	{1 {0 51} numArgs {} {}}
+{selection handle -type $a -selection $a -type $a}	{1 {0 48} numArgs {} {}}
+
+{selection own}			{ok}
+{selection own .a}		{ok}
+{selection own a}		{1 {0 15} winBeginDot {14 1} {}}
+{selection own .a a}		{1 {0 18} numArgs {} {}}
+
+{selection own -displayof .a}	{ok}
+{selection own -displayof [set]}	{1 {26 3} numArgs {} {}}
+{selection own -displayof}	{1 {0 24} winBeginDot {14 10} {}}
+{selection own -displayof .a a}	{1 {0 29} badSwitch {14 10} -displayof}
+
+{selection own -selection $a}		{ok}
+{selection own -selection $a .a}	{ok}
+{selection own -selection [set]}	{1 {26 3} numArgs {} {}}
+{selection own -selection}		{1 {0 24} winBeginDot {14 10} {}}
+{selection own -selection $a a}		{1 {0 29} winBeginDot {28 1} {}}
+
+{selection own -command a .a}	{ok}
+{selection own -command a}	{1 {0 24} badSwitch {14 8} -command 1 {0 24} numArgs {} {}}
+{selection own -command [set]}	{1 {0 28} badSwitch {14 8} -command 1 {0 28} numArgs {} {}}
+{selection own -command}	{1 {0 22} winBeginDot {14 8} {}}
+{selection own -command $a a}	{1 {0 27} winBeginDot {26 1} {}}
+
+{selection own -displayof .a -selection $a}	{ok}
+{selection own -displayof .a $opt $a a}	{1 {0 37} badSwitch {14 10} -displayof}
+
+{selection own -command a -selection $a .a}	{ok}
+{selection own -command a -selection $a a}	{1 {0 40} winBeginDot {39 1} {}}
+{selection own -command a -selection $a}	{1 {0 38} badSwitch {14 8} -command 1 {0 38} numArgs {} {}}
+{selection own -command a -selection $a .a a}	{1 {0 43} numArgs {} {}}
+
+
+{send $a $a}			{ok}
+{send $a $a a a a}		{ok}
+{send}				{1 {0 4} numArgs {} {}}
+{send a}			{1 {0 6} numArgs {} {}}
+
+{send -async $a $a}		{ok}
+{send -async $a $a a a a}	{ok}
+{send -async}			{1 {0 11} numArgs {} {}}
+{send -async a}			{1 {0 13} numArgs {} {}}
+
+{send -- $a $a}			{ok}
+{send -- $a $a a a a}		{ok}
+{send -- -async $a}		{ok}
+{send -- -displayof a}		{ok}
+{send --}			{1 {0 7} numArgs {} {}}
+{send -- $a}			{1 {0 10} numArgs {} {}}
+
+{send -displayof .a $a $a}	{ok}
+{send -displayof .a $a $a a a a}	{ok}
+{send -displayof a $a $a}	{1 {0 23} winBeginDot {16 1} {}}
+{send -displayof .a $a}		{1 {0 21} numArgs {} {}}
+{send -displayof}		{1 {0 15} noSwitchArg {5 10} -displayof}
+{send -displayof a}		{1 {0 17} winBeginDot {16 1} {} 1 {0 17} numArgs {} {}}
+
+{send -async -displayof .a -- $a $a}		{ok}
+{send -async -displayof .a -- $a $a a a a}	{ok}
+{send -async -displayof .a -- -async $a}	{ok}
+{send -async -displayof .a -- -displayof a}	{ok}
+{send -async -displayof .a -async $a}	{1 {0 35} numArgs {} {}}
+{send -async -displayof .a -- $a}	{1 {0 31} numArgs {} {}}
+{send -async -displayof .a -displayof a}	{1 {0 38} winBeginDot {37 1} {} 1 {0 38} numArgs {} {}}
+
+
+{text .a}		{ok}
+{text}			{1 {0 4} numArgs {} {}}
+{text 0}		{1 {0 6} winBeginDot {5 1} {}}
+{text .a a}		{1 {0 9} badSwitch {8 1} a 1 {0 9} noSwitchArg {8 1} a}
+
+{text .a -background $a}	{ok}
+{text .a -background 0}	{1 {0 21} nonPortColor {20 1} {}}
+{text .a -background}	{1 {0 19} noSwitchArg {8 11} -background}
+
+{text .a -bg $a}	{ok}
+{text .a -bg 0}		{1 {0 13} nonPortColor {12 1} {}}
+{text .a -bg}		{1 {0 11} noSwitchArg {8 3} -bg}
+
+{text .a -borderwidth 0}	{ok}
+{text .a -borderwidth a}	{1 {0 22} badPixel {21 1} {}}
+{text .a -borderwidth}	{1 {0 20} noSwitchArg {8 12} -borderwidth}
+
+{text .a -cursor $a}	{ok}
+{text .a -cursor 0}	{1 {0 17} badCursor {16 1} {}}
+{text .a -cursor}	{1 {0 15} noSwitchArg {8 7} -cursor}
+
+{text .a -exportselection 0}	{ok}
+{text .a -exportselection a}	{1 {0 26} badBoolean {25 1} {}}
+{text .a -exportselection}	{1 {0 24} noSwitchArg {8 16} -exportselection}
+
+{text .a -fg $a}	{ok}
+{text .a -fg 0}		{1 {0 13} nonPortColor {12 1} {}}
+{text .a -fg}		{1 {0 11} noSwitchArg {8 3} -fg}
+
+{text .a -font $a}	{ok}
+{text .a -font [set]}	{1 {15 3} numArgs {} {}}
+{text .a -font}		{1 {0 13} noSwitchArg {8 5} -font}
+
+{text .a -foreground $a}	{ok}
+{text .a -foreground 0}	{1 {0 21} nonPortColor {20 1} {}}
+{text .a -foreground}	{1 {0 19} noSwitchArg {8 11} -foreground}
+
+{text .a -height 0}	{ok}
+{text .a -height a}	{1 {0 17} badPixel {16 1} {}}
+{text .a -height}	{1 {0 15} noSwitchArg {8 7} -height}
+
+{text .a -highlightbackground $a}	{ok}
+{text .a -highlightbackground 0}	{1 {0 30} nonPortColor {29 1} {}}
+{text .a -highlightbackground}		{1 {0 28} noSwitchArg {8 20} -highlightbackground}
+
+{text .a -highlightcolor $a}	{ok}
+{text .a -highlightcolor 0}	{1 {0 25} nonPortColor {24 1} {}}
+{text .a -highlightcolor}	{1 {0 23} noSwitchArg {8 15} -highlightcolor}
+
+{text .a -highlightthickness 0}	{ok}
+{text .a -highlightthickness a}	{1 {0 29} badPixel {28 1} {}}
+{text .a -highlightthickness}	{1 {0 27} noSwitchArg {8 19} -highlightthickness}
+
+{text .a -insertbackground $a}	{ok}
+{text .a -insertbackground 0}	{1 {0 27} nonPortColor {26 1} {}}
+{text .a -insertbackground}	{1 {0 25} noSwitchArg {8 17} -insertbackground}
+
+{text .a -insertborderwidth 0}	{ok}
+{text .a -insertborderwidth a}	{1 {0 28} badPixel {27 1} {}}
+{text .a -insertborderwidth}	{1 {0 26} noSwitchArg {8 18} -insertborderwidth}
+
+{text .a -insertofftime 0}	{ok}
+{text .a -insertofftime a}	{1 {0 24} badInt {23 1} {}}
+{text .a -insertofftime}	{1 {0 22} noSwitchArg {8 14} -insertofftime}
+
+{text .a -insertontime 0}	{ok}
+{text .a -insertontime a}	{1 {0 23} badInt {22 1} {}}
+{text .a -insertontime}	{1 {0 21} noSwitchArg {8 13} -insertontime}
+
+{text .a -insertwidth 0}	{ok}
+{text .a -insertwidth a}	{1 {0 22} badPixel {21 1} {}}
+{text .a -insertwidth}	{1 {0 20} noSwitchArg {8 12} -insertwidth}
+
+{text .a -padx $a}	{ok}
+{text .a -padx a}	{1 {0 15} badPixel {14 1} {}}
+{text .a -padx}		{1 {0 13} noSwitchArg {8 5} -padx}
+
+{text .a -pady $a}	{ok}
+{text .a -pady a}	{1 {0 15} badPixel {14 1} {}}
+{text .a -pady}		{1 {0 13} noSwitchArg {8 5} -pady}
+
+{text .a -relief $a}	{ok}
+{text .a -relief a}	{1 {0 17} badKey {16 1} {{raised sunken flat ridge solid groove} a}}
+{text .a -relief}	{1 {0 15} noSwitchArg {8 7} -relief}
+
+{text .a -selectbackground $a}	{ok}
+{text .a -selectbackground 0}	{1 {0 27} nonPortColor {26 1} {}}
+{text .a -selectbackground}	{1 {0 25} noSwitchArg {8 17} -selectbackground}
+
+{text .a -selectborderwidth 0}	{ok}
+{text .a -selectborderwidth a}	{1 {0 28} badPixel {27 1} {}}
+{text .a -selectborderwidth}	{1 {0 26} noSwitchArg {8 18} -selectborderwidth}
+
+{text .a -selectforeground $a}	{ok}
+{text .a -selectforeground 0}	{1 {0 27} nonPortColor {26 1} {}}
+{text .a -selectforeground}	{1 {0 25} noSwitchArg {8 17} -selectforeground}
+
+{text .a -setgrid 0}	{ok}
+{text .a -setgrid a}	{1 {0 18} badBoolean {17 1} {}}
+{text .a -setgrid}	{1 {0 16} noSwitchArg {8 8} -setgrid}
+
+{text .a -spacing1 0}	{ok}
+{text .a -spacing1 a}	{1 {0 19} badPixel {18 1} {}}
+{text .a -spacing1}	{1 {0 17} noSwitchArg {8 9} -spacing1}
+
+{text .a -spacing2 0}	{ok}
+{text .a -spacing2 a}	{1 {0 19} badPixel {18 1} {}}
+{text .a -spacing2}	{1 {0 17} noSwitchArg {8 9} -spacing2}
+
+{text .a -state $a}	{ok}
+{text .a -state a}	{1 {0 16} badKey {15 1} {{normal disabled} a}}
+{text .a -state}	{1 {0 14} noSwitchArg {8 6} -state}
+
+{text .a -tabs 2c}	{ok}
+{text .a -tabs a}	{1 {0 15} badPixel {14 1} {}}
+{text .a -tabs}		{1 {0 13} noSwitchArg {8 5} -tabs}
+
+{text .a -takefocus .a}	{ok}
+{text .a -takefocus [set]}	{1 {20 3} numArgs {} {}}
+{text .a -takefocus}		{1 {0 18} noSwitchArg {8 10} -takefocus}
+
+{text .a -width 0}	{ok}
+{text .a -width a}	{1 {0 16} badPixel {15 1} {}}
+{text .a -width}	{1 {0 14} noSwitchArg {8 6} -width}
+
+{text .a -wrap none}	{ok}
+{text .a -wrap a}	{1 {0 15} badKey {14 1} {{char none word} a}}
+{text .a -wrap}		{1 {0 13} noSwitchArg {8 5} -wrap}
+
+{text .a -xscrollcommand $a}	{ok}
+{text .a -xscrollcommand [set]}	{1 {25 3} numArgs {} {}}
+{text .a -xscrollcommand}	{1 {0 23} noSwitchArg {8 15} -xscrollcommand}
+
+{text .a -yscrollcommand $a}	{ok}
+{text .a -yscrollcommand [set]}	{1 {25 3} numArgs {} {}}
+{text .a -yscrollcommand}	{1 {0 23} noSwitchArg {8 15} -yscrollcommand}
+
+{text .a -background $a -borderwidth $a -bg $a -cursor $a \
+    -exportselection 0 -fg $a -font $a -foreground $a -height 0 \
+    -highlightcolor $a -highlightbackground $a -highlightthickness $a \
+    -insertbackground $a -insertborderwidth $a -insertofftime 0 \
+    -insertontime 0 -insertwidth 0 -padx $a -pady $a -relief $a \
+    -selectbackground $a -selectborderwidth 0 -selectforeground $a \
+    -setgrid 0 -spacing1 0 -spacing2 0 -tabs 2c -takefocus .a \
+    -width 0 -wrap none -xscrollcommand $a -yscrollcommand $a}	{ok}
+
+
+{toplevel .a}			{ok}
+{toplevel}			{1 {0 8} numArgs {} {}}
+{toplevel 0}			{1 {0 10} winBeginDot {9 1} {}}
+{toplevel .a a}			{1 {0 13} badSwitch {12 1} a 1 {0 13} noSwitchArg {12 1} a}
+
+{toplevel .a -background $a}	{ok}
+{toplevel .a -background 0}	{1 {0 25} nonPortColor {24 1} {}}
+{toplevel .a -background}	{1 {0 23} noSwitchArg {12 11} -background}
+
+{toplevel .a -bg $a}	{ok}
+{toplevel .a -bg 0}	{1 {0 17} nonPortColor {16 1} {}}
+{toplevel .a -bg}	{1 {0 15} noSwitchArg {12 3} -bg}
+
+{toplevel .a -borderwidth 0}	{ok}
+{toplevel .a -borderwidth a}	{1 {0 26} badPixel {25 1} {}}
+{toplevel .a -borderwidth}	{1 {0 24} noSwitchArg {12 12} -borderwidth}
+
+{toplevel .a -class a}		{ok}
+{toplevel .a -class [set]}	{1 {20 3} numArgs {} {}}
+{toplevel .a -class}		{1 {0 18} noSwitchArg {12 6} -class}
+
+{toplevel .a -colormap new}	{ok}
+{toplevel .a -colormap 0}	{1 {0 23} coreTk::badColormap {22 1} 0}
+{toplevel .a -colormap}		{1 {0 21} noSwitchArg {12 9} -colormap}
+
+{toplevel .a -cursor $a}	{ok}
+{toplevel .a -cursor 0}		{1 {0 21} badCursor {20 1} {}}
+{toplevel .a -cursor}		{1 {0 19} noSwitchArg {12 7} -cursor}
+
+{toplevel .a -height 0}		{ok}
+{toplevel .a -height a}		{1 {0 21} badPixel {20 1} {}}
+{toplevel .a -height}		{1 {0 19} noSwitchArg {12 7} -height}
+
+{toplevel .a -highlightbackground $a}	{ok}
+{toplevel .a -highlightbackground 0}	{1 {0 34} nonPortColor {33 1} {}}
+{toplevel .a -highlightbackground}	{1 {0 32} noSwitchArg {12 20} -highlightbackground}
+
+{toplevel .a -highlightcolor $a}	{ok}
+{toplevel .a -highlightcolor 0}		{1 {0 29} nonPortColor {28 1} {}}
+{toplevel .a -highlightcolor}		{1 {0 27} noSwitchArg {12 15} -highlightcolor}
+
+{toplevel .a -highlightthickness 0}	{ok}
+{toplevel .a -highlightthickness a}	{1 {0 33} badPixel {32 1} {}}
+{toplevel .a -highlightthickness}	{1 {0 31} noSwitchArg {12 19} -highlightthickness}
+
+{toplevel .a -menu .a}	{ok}
+{toplevel .a -menu a}	{1 {0 19} winBeginDot {18 1} {}}
+{toplevel .a -menu}	{1 {0 17} noSwitchArg {12 5} -menu}
+
+{toplevel .a -relief $a}	{ok}
+{toplevel .a -relief 0}		{1 {0 21} badKey {20 1} {{raised sunken flat ridge solid groove} 0}}
+{toplevel .a -relief}		{1 {0 19} noSwitchArg {12 7} -relief}
+
+{toplevel .a -screen 0:0}	{1 {0 23} nonPortOption {12 7} {}}
+{toplevel .a -screen a}		{1 {0 21} nonPortOption {12 7} {} 1 {0 21} coreTk::badScreen {20 1} {}}
+{toplevel .a -screen}		{1 {0 19} noSwitchArg {12 7} -screen}
+
+{toplevel .a -takefocus .a}	{ok}
+{toplevel .a -takefocus [set]}	{1 {24 3} numArgs {} {}}
+{toplevel .a -takefocus}	{1 {0 22} noSwitchArg {12 10} -takefocus}
+
+{toplevel .a -use ""}		{ok}
+{toplevel .a -use 0}		{ok}
+{toplevel .a -use a}		{1 {0 18} badFloat {17 1} {}}
+{toplevel .a -use}		{1 {0 16} noSwitchArg {12 4} -use}
+
+{toplevel .a -visual $a}	{ok}
+{toplevel .a -visual a}		{1 {0 21} coreTk::badVisual {20 1} {}}
+{toplevel .a -visual}		{1 {0 19} noSwitchArg {12 7} -visual}
+
+{toplevel .a -width 0}		{ok}
+{toplevel .a -width a}		{1 {0 20} badPixel {19 1} {}}
+{toplevel .a -width}		{1 {0 18} noSwitchArg {12 6} -width}
+
+{toplevel .a -background $a -bg $a -borderwidth 0 -class a -colormap new \
+    -cursor $a -height 0 -highlightbackground $a \
+    -highlightcolor $a -highlightthickness 0 -menu .a -relief $a \
+    -screen 0:0 -takefocus .a -use 0 -visual best \
+    -width 0}	{1 {0 236} nonPortOption {181 7} {}}
+
+
+{tk}				{1 {0 2} numArgs {} {}}
+{tk 0}				{1 {0 4} badOption {3 1} {{appname scaling} 0}}
+
+{tk appname}			{ok}
+{tk appname $a}			{ok}
+{tk appname [set]}		{1 {12 3} numArgs {} {}}
+{tk appname $a a}		{1 {0 15} numArgs {} {}}
+
+{tk scaling}			{ok}
+{tk scaling $a}			{ok}
+{tk scaling a}			{1 {0 12} badFloat {11 1} {}}
+{tk scaling $a a}		{1 {0 15} numArgs {} {}}
+
+{tk scaling -displayof .a}	{ok}
+{tk scaling -displayof .a $a}	{ok}
+{tk scaling -displayof a}	{1 {0 23} winBeginDot {22 1} {}}
+{tk scaling -displayof a $a}	{1 {0 26} winBeginDot {22 1} {}}
+{tk scaling -displayof .a [set]}	{1 {26 3} numArgs {} {}}
+{tk scaling -displayof}		{1 {0 21} noSwitchArg {11 10} -displayof}
+
+{tkerror a}			{1 {0 9} obsoleteCmd {0 7} bgerror}
+
+{tkwait}			{1 {0 6} numArgs {} {}}
+{tkwait a}			{1 {0 8} badOption {7 1} {{variable visibility window} a}}
+
+{tkwait variable a}		{ok}
+{tkwait variable [set]}		{1 {17 3} numArgs {} {}}
+{tkwait variable}		{1 {0 15} numArgs {} {}}
+{tkwait variable a a}		{1 {0 19} numArgs {} {}}
+
+{tkwait visibility .a}		{ok}
+{tkwait visibility a}		{1 {0 19} winBeginDot {18 1} {}}
+{tkwait visibility}		{1 {0 17} numArgs {} {}}
+{tkwait visibility .a a}	{1 {0 22} numArgs {} {}}
+
+{tkwait window .a}		{ok}
+{tkwait window a}		{1 {0 15} winBeginDot {14 1} {}}
+{tkwait window}			{1 {0 13} numArgs {} {}}
+{tkwait window .a a}		{1 {0 18} numArgs {} {}}
+
+
+{tk_bisque}			{ok}
+{tk_bisque a}			{1 {0 11} numArgs {} {}}
+
+
+{tk_chooseColor}		{ok}
+{tk_chooseColor a}		{1 {0 16} numArgs {} {}}
+
+{tk_chooseColor -initialcolor $a}	{ok}
+{tk_chooseColor -initialcolor 0}	{1 {0 30} nonPortColor {29 1} {}}
+{tk_chooseColor -initialcolor}	{1 {0 28} noSwitchArg {15 13} -initialcolor}
+
+{tk_chooseColor -parent .a}	{ok}
+{tk_chooseColor -parent a}	{1 {0 24} winBeginDot {23 1} {}}
+{tk_chooseColor -parent}	{1 {0 22} noSwitchArg {15 7} -parent}
+
+{tk_chooseColor -title a}	{ok}
+{tk_chooseColor -title [set]}	{1 {23 3} numArgs {} {}}
+{tk_chooseColor -title}		{1 {0 21} noSwitchArg {15 6} -title}
+
+{tk_chooseColor -initialcolor $a -parent .a -title a}	{ok}
+
+
+{tk_dialog .a a a $a 0 a}	{ok}
+{tk_dialog .a a a $a 0 a a a}	{ok}
+{tk_dialog .a a a "" 0 a}	{ok}
+{tk_dialog .a a a $a "" a}	{ok}
+{tk_dialog a a a $a 0 a}	{1 {0 22} winBeginDot {10 1} {}}
+{tk_dialog .a [set] a $a 0 a}	{1 {14 3} numArgs {} {}}
+{tk_dialog .a a [set] $a 0 a}	{1 {16 3} numArgs {} {}}
+{tk_dialog .a a a a 0 a}	{1 {0 22} coreTk::nonPortBitmap {17 1} {}}
+{tk_dialog .a a a $a a a}	{1 {0 23} badInt {20 1} {}}
+{tk_dialog .a a a $a 0 [set]}	{1 {23 3} numArgs {} {}}
+{tk_dialog .a a a $a 0 a a [set]}	{1 {27 3} numArgs {} {}}
+{tk_dialog}			{1 {0 9} numArgs {} {}}
+{tk_dialog $a}			{1 {0 12} numArgs {} {}}
+{tk_dialog $a $a}		{1 {0 15} numArgs {} {}}
+{tk_dialog $a $a $a}		{1 {0 18} numArgs {} {}}
+{tk_dialog $a $a $a $a}		{1 {0 21} numArgs {} {}}
+{tk_dialog $a $a $a $a $a}	{1 {0 24} numArgs {} {}}
+
+
+{tk_focusFollowsMouse}		{ok}
+{tk_focusFollowsMouse a}	{1 {0 22} numArgs {} {}}
+
+
+{tk_focusNext .a}		{ok}
+{tk_focusNext a}		{1 {0 14} winBeginDot {13 1} {}}
+{tk_focusNext}			{1 {0 12} numArgs {} {}}
+
+
+{tk_focusPrev .a}		{ok}
+{tk_focusPrev a}		{1 {0 14} winBeginDot {13 1} {}}
+{tk_focusPrev}			{1 {0 12} numArgs {} {}}
+
+
+{tk_getOpenFile}		{ok}
+{tk_getOpenFile a}		{1 {0 16} numArgs {} {}}
+
+{tk_getOpenFile -defaultextension a}	{ok}
+{tk_getOpenFile -defaultextension [set]}	{1 {34 3} numArgs {} {}}
+{tk_getOpenFile -defaultextension}	{1 {0 32} noSwitchArg {15 17} -defaultextension}
+
+{tk_getOpenFile -filetypes {"Tcl Scripts" {.a .b}}}	{ok}
+{tk_getOpenFile -filetypes a}	{1 {0 27} numListElts {26 1} {}}
+{tk_getOpenFile -filetypes}	{1 {0 25} noSwitchArg {15 10} -filetypes}
+
+{tk_getOpenFile -initialdir a}	{ok}
+{tk_getOpenFile -initialdir [set]}	{1 {28 3} numArgs {} {}}
+{tk_getOpenFile -initialdir}	{1 {0 26} noSwitchArg {15 11} -initialdir}
+
+{tk_getOpenFile -initialfile a}	{ok}
+{tk_getOpenFile -initialfile [set]}	{1 {29 3} numArgs {} {}}
+{tk_getOpenFile -initialfile}	{1 {0 27} noSwitchArg {15 12} -initialfile}
+
+{tk_getOpenFile -parent .a}	{ok}
+{tk_getOpenFile -parent a}	{1 {0 24} winBeginDot {23 1} {}}
+{tk_getOpenFile -parent}	{1 {0 22} noSwitchArg {15 7} -parent}
+
+{tk_getOpenFile -title a}	{ok}
+{tk_getOpenFile -title [set]}	{1 {23 3} numArgs {} {}}
+{tk_getOpenFile -title}		{1 {0 21} noSwitchArg {15 6} -title}
+
+{tk_getOpenFile -defaultextension a -filetypes {"Tcl Scripts" {.a .b}} \
+    -initialdir a -initialfile a -parent .a -title a}	{ok}
+
+
+{tk_getSaveFile}		{ok}
+{tk_getSaveFile a}		{1 {0 16} numArgs {} {}}
+
+{tk_getSaveFile -defaultextension a}	{ok}
+{tk_getSaveFile -defaultextension [set]}	{1 {34 3} numArgs {} {}}
+{tk_getSaveFile -defaultextension}	{1 {0 32} noSwitchArg {15 17} -defaultextension}
+
+{tk_getSaveFile -filetypes {"Tcl Scripts" {.a .b}}}	{ok}
+{tk_getSaveFile -filetypes a}	{1 {0 27} numListElts {26 1} {}}
+{tk_getSaveFile -filetypes}	{1 {0 25} noSwitchArg {15 10} -filetypes}
+
+{tk_getSaveFile -initialdir a}	{ok}
+{tk_getSaveFile -initialdir [set]}	{1 {28 3} numArgs {} {}}
+{tk_getSaveFile -initialdir}	{1 {0 26} noSwitchArg {15 11} -initialdir}
+
+{tk_getSaveFile -initialfile a}	{ok}
+{tk_getSaveFile -initialfile [set]}	{1 {29 3} numArgs {} {}}
+{tk_getSaveFile -initialfile}	{1 {0 27} noSwitchArg {15 12} -initialfile}
+
+{tk_getSaveFile -parent .a}	{ok}
+{tk_getSaveFile -parent a}	{1 {0 24} winBeginDot {23 1} {}}
+{tk_getSaveFile -parent}	{1 {0 22} noSwitchArg {15 7} -parent}
+
+{tk_getSaveFile -title a}	{ok}
+{tk_getSaveFile -title [set]}	{1 {23 3} numArgs {} {}}
+{tk_getSaveFile -title}		{1 {0 21} noSwitchArg {15 6} -title}
+
+{tk_getSaveFile -defaultextension a -filetypes {"Tcl Scripts" {.a .b}} \
+    -initialdir a -initialfile a -parent .a -title a}	{ok}
+
+
+{tk_messageBox}			{ok}
+{tk_messageBox a}		{1 {0 15} badSwitch {14 1} a 1 {0 15} noSwitchArg {14 1} a}
+
+{tk_messageBox -default .a}	{ok}
+{tk_messageBox -default [set]}	{1 {24 3} numArgs {} {}}
+{tk_messageBox -default}	{1 {0 22} noSwitchArg {14 8} -default}
+
+{tk_messageBox -icon info}	{ok}
+{tk_messageBox -icon a}		{1 {0 21} badKey {20 1} {{error info question warning} a}}
+{tk_messageBox -icon}		{1 {0 19} noSwitchArg {14 5} -icon}
+
+{tk_messageBox -message a}	{ok}
+{tk_messageBox -message [set]}	{1 {24 3} numArgs {} {}}
+{tk_messageBox -message}	{1 {0 22} noSwitchArg {14 8} -message}
+
+{tk_messageBox -parent .a}	{ok}
+{tk_messageBox -parent a}	{1 {0 23} winBeginDot {22 1} {}}
+{tk_messageBox -parent}		{1 {0 21} noSwitchArg {14 7} -parent}
+
+{tk_messageBox -title a}	{ok}
+{tk_messageBox -title [set]}	{1 {22 3} numArgs {} {}}
+{tk_messageBox -title}		{1 {0 20} noSwitchArg {14 6} -title}
+
+{tk_messageBox -type ok}	{ok}
+{tk_messageBox -type a}		{1 {0 21} badKey {20 1} {{ abortretryignore ok okcancel retrycancel yesno yesnocancel } a}}
+{tk_messageBox -type}		{1 {0 19} noSwitchArg {14 5} -type}
+
+{tk_messageBox -default ok -icon info -message a -parent .a -title a \
+    -type ok}	{ok}
+
+
+{tk_optionMenu .a a a}		{ok}
+{tk_optionMenu .a a a a a a}	{ok}
+{tk_optionMenu 0}		{1 {0 15} numArgs {} {}}
+{tk_optionMenu .a $a a}		{1 {0 21} warnVarRef {17 2} {}}
+{tk_optionMenu .a a [set]}	{1 {20 3} numArgs {} {}}
+{tk_optionMenu .a a a a a [set]}	{1 {26 3} numArgs {} {}}
+{tk_optionMenu $a $a}		{1 {0 19} numArgs {} {}}
+{tk_optionMenu $a}		{1 {0 16} numArgs {} {}}
+{tk_optionMenu}			{1 {0 13} numArgs {} {}}
+
+
+{tk_popup .a 0 0}		{ok}
+{tk_popup .a 0 0 0}		{ok}
+{tk_popup .a a 0}		{1 {0 15} badInt {12 1} {}}
+{tk_popup .a 0 a}		{1 {0 15} badInt {14 1} {}}
+{tk_popup .a 0 0 .a}		{ok}
+{tk_popup .a 0 0 0 $a}		{1 {0 20} numArgs {} {}}
+{tk_popup $a $a}		{1 {0 14} numArgs {} {}}
+{tk_popup $a}			{1 {0 11} numArgs {} {}}
+{tk_popup}			{1 {0 8} numArgs {} {}}
+
+
+{tk_setPalette $a}		{ok}
+{tk_setPalette $a $a}		{ok}
+{tk_setPalette $a $a $a $a}	{ok}
+{tk_setPalette a $a}		{1 {0 18} badKey {14 1} {{ activeBackground foreground selectColor activeForeground highlightBackground selectBackground background highlightColor selectForeground disabledForeground insertBackground troughColor } a}}
+{tk_setPalette $a a}		{1 {0 18} nonPortColor {17 1} {}}
+{tk_setPalette $a $a a}		{1 {0 21} badKey {20 1} {{ activeBackground foreground selectColor activeForeground highlightBackground selectBackground background highlightColor selectForeground disabledForeground insertBackground troughColor } a} 1 {0 21} numArgs {} {}}
+{tk_setPalette $a $a $a $a a}	{1 {0 27} badKey {26 1} {{ activeBackground foreground selectColor activeForeground highlightBackground selectBackground background highlightColor selectForeground disabledForeground insertBackground troughColor } a} 1 {0 27} numArgs {} {}}
+{tk_setPalette [set]}		{1 {15 3} numArgs {} {}}
+{tk_setPalette}			{1 {0 13} numArgs {} {}}
+
+
+{wm}		{1 {0 2} numArgs {} {}}
+{wm foo}	{1 {0 6} badOption {3 3} {{aspect client command deiconify focusmodel frame geometry grid group iconbitmap iconify iconmask iconname iconposition iconwindow maxsize minsize overrideredirect positionfrom protocol sizefrom state title transient withdraw colormapwindows resizable} foo}}
+
+{wm grid .a}		{ok}
+{wm grid .a 0 0 0 0}	{ok}
+{wm grid a}		{1 {0 9} winBeginDot {8 1} {}}
+{wm grid .a a 0 0 0}	{1 {0 18} badInt {11 1} {}}
+{wm grid .a 0 a 0 0}	{1 {0 18} badInt {13 1} {}}
+{wm grid .a 0 0 a 0}	{1 {0 18} badInt {15 1} {}}
+{wm grid .a 0 0 0 a}	{1 {0 18} badInt {17 1} {}}
+{wm grid}		{1 {0 7} numArgs {} {}}
+{wm grid .a 0}		{1 {0 12} numArgs {} {}}
+{wm grid .a 0 0}	{1 {0 14} numArgs {} {}}
+{wm grid .a 0 0 0}	{1 {0 16} numArgs {} {}}
+{wm grid .a 0 0 0 0 a}	{1 {0 20} numArgs {} {}}
+
+{wm aspect .a}		{1 {0 12} nonPortOption {3 6} {{}}}
+{wm aspect .a 0 0 0 0}	{1 {0 20} nonPortOption {3 6} {{}}}
+{wm aspect a}		{1 {0 11} nonPortOption {3 6} {{}} 1 {0 11} winBeginDot {10 1} {}}
+{wm aspect .a a 0 0 0}	{1 {0 20} nonPortOption {3 6} {{}} 1 {0 20} badInt {13 1} {}}
+{wm aspect .a 0 a 0 0}	{1 {0 20} nonPortOption {3 6} {{}} 1 {0 20} badInt {15 1} {}}
+{wm aspect .a 0 0 a 0}	{1 {0 20} nonPortOption {3 6} {{}} 1 {0 20} badInt {17 1} {}}
+{wm aspect .a 0 0 0 a}	{1 {0 20} nonPortOption {3 6} {{}} 1 {0 20} badInt {19 1} {}}
+{wm aspect}		{1 {0 9} nonPortOption {3 6} {{}} 1 {0 9} numArgs {} {}}
+{wm aspect .a 0}	{1 {0 14} nonPortOption {3 6} {{}} 1 {0 14} numArgs {} {}}
+{wm aspect .a 0 0}	{1 {0 16} nonPortOption {3 6} {{}} 1 {0 16} numArgs {} {}}
+{wm aspect .a 0 0 0}	{1 {0 18} nonPortOption {3 6} {{}} 1 {0 18} numArgs {} {}}
+{wm aspect .a 0 0 0 0 a}	{1 {0 22} nonPortOption {3 6} {{}} 1 {0 22} numArgs {} {}}
+
+{winfo}			{1 {0 5} numArgs {} {}}
+{winfo foo}		{1 {0 9} badOption {6 3} {{atom atomname cells children class colormapfull containing depth exists fpixels geometry height id interps ismapped manager name parent pathname pixels pointerx pointerxy pointery reqheight reqwidth rgb rootx rooty screen screencells screendepth screenheight screenmmheight screenmmwidth screenvisual screenwidth server toplevel viewable visual visualid visualsavailable vrootheight vrootwidth vrootx vrooty width x y} foo}}
+
+{winfo atom .a}			{ok}
+{winfo atom -displayof .a .a}	{ok}
+{winfo atom a}			{1 {0 12} winBeginDot {11 1} {}}
+{winfo atom -displayof a .a}	{1 {0 26} winBeginDot {22 1} {}}
+{winfo atom -displayof .a}	{1 {0 24} numArgs {} {}}
+{winfo atom -displayof .a .a a}	{1 {0 29} numArgs {} {}}
+{winfo atom .a a}		{1 {0 15} numArgs {} {}}
+{winfo atom}			{1 {0 10} numArgs {} {}}
+
+{winfo atomname 0}		{ok}
+{winfo atomname -displayof .a 0}	{ok}
+{winfo atomname a}		{1 {0 16} badInt {15 1} {}}
+{winfo atomname -displayof a 0}	{1 {0 29} winBeginDot {26 1} {}}
+{winfo atomname -displayof .a}	{1 {0 28} numArgs {} {}}
+{winfo atomname -displayof .a 0 a}	{1 {0 32} numArgs {} {}}
+{winfo atomname 0 a}		{1 {0 18} numArgs {} {}}
+{winfo atomname}		{1 {0 14} numArgs {} {}}
+
+{winfo cells .a}	{ok}
+{winfo cells a}		{1 {0 13} winBeginDot {12 1} {}}
+{winfo cells}		{1 {0 11} numArgs {} {}}
+{winfo cells .a x}	{1 {0 16} numArgs {} {}}
+
+{winfo children .a}	{ok}
+{winfo children a}	{1 {0 16} winBeginDot {15 1} {}}
+{winfo children}	{1 {0 14} numArgs {} {}}
+{winfo children .a x}	{1 {0 19} numArgs {} {}}
+
+{winfo class .a}	{ok}
+{winfo class a}		{1 {0 13} winBeginDot {12 1} {}}
+{winfo class}		{1 {0 11} numArgs {} {}}
+{winfo class .a x}	{1 {0 16} numArgs {} {}}
+
+{winfo colormapfull .a}	{ok}
+{winfo colormapfull a}	{1 {0 20} winBeginDot {19 1} {}}
+{winfo colormapfull}	{1 {0 18} numArgs {} {}}
+{winfo colormapfull .a x}	{1 {0 23} numArgs {} {}}
+
+{winfo containing 0 0}	{ok}
+{winfo containing -displayof .a 0 0}	{ok}
+{winfo containing a 0}		{1 {0 20} badPixel {17 1} {}}
+{winfo containing 0 a}		{1 {0 20} badPixel {19 1} {}}
+{winfo containing -displayof a 0 0}	{1 {0 33} winBeginDot {28 1} {}}
+{winfo containing -displayof .a}	{1 {0 30} numArgs {} {}}
+{winfo containing -displayof .a 0}	{1 {0 32} numArgs {} {}}
+{winfo containing -displayof .a 0 0 a}	{1 {0 36} numArgs {} {}}
+{winfo containing 0}		{1 {0 18} numArgs {} {}}
+
+{winfo depth .a}	{ok}
+{winfo depth a}		{1 {0 13} winBeginDot {12 1} {}}
+{winfo depth}		{1 {0 11} numArgs {} {}}
+{winfo depth .a x}	{1 {0 16} numArgs {} {}}
+
+{winfo exists .a}	{ok}
+{winfo exists a}	{1 {0 14} winBeginDot {13 1} {}}
+{winfo exists}		{1 {0 12} numArgs {} {}}
+{winfo exists .a x}	{1 {0 17} numArgs {} {}}
+
+{winfo fpixels .a 2.0c}	{ok}
+{winfo fpixels a 2.0c}	{1 {0 20} winBeginDot {14 1} {}}
+{winfo fpixels .a c}	{1 {0 18} badPixel {17 1} {}}
+{winfo fpixels .a}	{1 {0 16} numArgs {} {}}
+{winfo fpixels .a 2.0c x}	{1 {0 23} numArgs {} {}}
+
+{winfo geometry .a}	{ok}
+{winfo geometry a}	{1 {0 16} winBeginDot {15 1} {}}
+{winfo geometry}	{1 {0 14} numArgs {} {}}
+{winfo geometry .a x}	{1 {0 19} numArgs {} {}}
+
+{winfo height .a}	{ok}
+{winfo height a}	{1 {0 14} winBeginDot {13 1} {}}
+{winfo height}		{1 {0 12} numArgs {} {}}
+{winfo height .a x}	{1 {0 17} numArgs {} {}}
+
+{winfo id .a}		{ok}
+{winfo id a}		{1 {0 10} winBeginDot {9 1} {}}
+{winfo id}		{1 {0 8} numArgs {} {}}
+{winfo id .a x}		{1 {0 13} numArgs {} {}}
+
+{winfo interps}			{ok}
+{winfo interps -displayof .a}	{ok}
+{winfo interps -displayof a}	{1 {0 26} winBeginDot {25 1} {}}
+{winfo interps $opt .a}		{ok}
+{winfo interps a}		{1 {0 15} badOption {14 1} {-displayof a}}
+{winfo interps -displayof .a -displayof .a}	{1 {0 41} numArgs {} {}}
+{winfo interps -displayof .a a}	{1 {0 29} numArgs {} {}}
+{winfo interps -foo .a}		{1 {0 21} badOption {14 4} {-displayof -foo}}
+
+{winfo ismapped .a}	{ok}
+{winfo ismapped a}	{1 {0 16} winBeginDot {15 1} {}}
+{winfo ismapped}	{1 {0 14} numArgs {} {}}
+{winfo ismapped .a x}	{1 {0 19} numArgs {} {}}
+
+{winfo manager .a}	{ok}
+{winfo manager a}	{1 {0 15} winBeginDot {14 1} {}}
+{winfo manager}		{1 {0 13} numArgs {} {}}
+{winfo manager .a x}	{1 {0 18} numArgs {} {}}
+
+{winfo name .a}		{ok}
+{winfo name a}		{1 {0 12} winBeginDot {11 1} {}}
+{winfo name}		{1 {0 10} numArgs {} {}}
+{winfo name .a x}	{1 {0 15} numArgs {} {}}
+
+{winfo parent .a}	{ok}
+{winfo parent a}	{1 {0 14} winBeginDot {13 1} {}}
+{winfo parent}		{1 {0 12} numArgs {} {}}
+{winfo parent .a x}	{1 {0 17} numArgs {} {}}
+
+{winfo pathname 0}	{ok}
+{winfo pathname -displayof .a 0}	{ok}
+{winfo pathname a}		{1 {0 16} badInt {15 1} {}}
+{winfo pathname -displayof a 0}	{1 {0 29} winBeginDot {26 1} {}}
+{winfo pathname -displayof .a}	{1 {0 28} numArgs {} {}}
+{winfo pathname -displayof .a 0 a}	{1 {0 32} numArgs {} {}}
+{winfo pathname 0 a}		{1 {0 18} numArgs {} {}}
+{winfo pathname}		{1 {0 14} numArgs {} {}}
+
+{winfo pixels .a 0}	{ok}
+{winfo pixels a 2.0c}	{1 {0 19} winBeginDot {13 1} {}}
+{winfo pixels .a c}	{1 {0 17} badPixel {16 1} {}}
+{winfo pixels .a}	{1 {0 15} numArgs {} {}}
+{winfo pixels .a 2.0c x}	{1 {0 22} numArgs {} {}}
+
+{winfo pointerx .a}	{ok}
+{winfo pointerx a}	{1 {0 16} winBeginDot {15 1} {}}
+{winfo pointerx}	{1 {0 14} numArgs {} {}}
+{winfo pointerx .a x}	{1 {0 19} numArgs {} {}}
+
+{winfo pointerxy .a}	{ok}
+{winfo pointerxy a}	{1 {0 17} winBeginDot {16 1} {}}
+{winfo pointerxy}	{1 {0 15} numArgs {} {}}
+{winfo pointerxy .a x}	{1 {0 20} numArgs {} {}}
+
+{winfo pointery .a}	{ok}
+{winfo pointery a}	{1 {0 16} winBeginDot {15 1} {}}
+{winfo pointery}	{1 {0 14} numArgs {} {}}
+{winfo pointery .a x}	{1 {0 19} numArgs {} {}}
+
+{winfo reqheight .a}	{ok}
+{winfo reqheight a}	{1 {0 17} winBeginDot {16 1} {}}
+{winfo reqheight}	{1 {0 15} numArgs {} {}}
+{winfo reqheight .a x}	{1 {0 20} numArgs {} {}}
+
+{winfo reqwidth .a}	{ok}
+{winfo reqwidth a}	{1 {0 16} winBeginDot {15 1} {}}
+{winfo reqwidth}	{1 {0 14} numArgs {} {}}
+{winfo reqwidth .a x}	{1 {0 19} numArgs {} {}}
+
+{winfo rgb .a $a}	{ok}
+{winfo rgb a $a}	{1 {0 14} winBeginDot {10 1} {}}
+{winfo rgb .a 0}	{1 {0 14} nonPortColor {13 1} {}}
+{winfo rgb .a}		{1 {0 12} numArgs {} {}}
+{winfo rgb .a $a x}	{1 {0 17} numArgs {} {}}
+
+{winfo rootx .a}	{ok}
+{winfo rootx a}		{1 {0 13} winBeginDot {12 1} {}}
+{winfo rootx}		{1 {0 11} numArgs {} {}}
+{winfo rootx .a x}	{1 {0 16} numArgs {} {}}
+
+{winfo rooty .a}	{ok}
+{winfo rooty a}		{1 {0 13} winBeginDot {12 1} {}}
+{winfo rooty}		{1 {0 11} numArgs {} {}}
+{winfo rooty .a x}	{1 {0 16} numArgs {} {}}
+
+{winfo screen .a}	{ok}
+{winfo screen a}	{1 {0 14} winBeginDot {13 1} {}}
+{winfo screen}		{1 {0 12} numArgs {} {}}
+{winfo screen .a x}	{1 {0 17} numArgs {} {}}
+
+{winfo screencell .a}	{ok}
+{winfo screencell a}	{1 {0 18} winBeginDot {17 1} {}}
+{winfo screencell}	{1 {0 16} numArgs {} {}}
+{winfo screencell .a x}	{1 {0 21} numArgs {} {}}
+
+{winfo screendepth .a}	{ok}
+{winfo screendepth a}	{1 {0 19} winBeginDot {18 1} {}}
+{winfo screendepth}	{1 {0 17} numArgs {} {}}
+{winfo screendepth .a x}	{1 {0 22} numArgs {} {}}
+
+{winfo screenheight .a}	{ok}
+{winfo screenheight a}	{1 {0 20} winBeginDot {19 1} {}}
+{winfo screenheight}	{1 {0 18} numArgs {} {}}
+{winfo screenheight .a x}	{1 {0 23} numArgs {} {}}
+
+{winfo screenmmheight .a}	{ok}
+{winfo screenmmheight a}	{1 {0 22} winBeginDot {21 1} {}}
+{winfo screenmmheight}		{1 {0 20} numArgs {} {}}
+{winfo screenmmheight .a x}	{1 {0 25} numArgs {} {}}
+
+{winfo screenmmwidth .a}	{ok}
+{winfo screenmmwidth a}	{1 {0 21} winBeginDot {20 1} {}}
+{winfo screenmmwidth}	{1 {0 19} numArgs {} {}}
+{winfo screenmmwidth .a x}	{1 {0 24} numArgs {} {}}
+
+{winfo screenvisual .a}	{ok}
+{winfo screenvisual a}	{1 {0 20} winBeginDot {19 1} {}}
+{winfo screenvisual}	{1 {0 18} numArgs {} {}}
+{winfo screenvisual .a x}	{1 {0 23} numArgs {} {}}
+
+{winfo screenwidth .a}	{ok}
+{winfo screenwidth a}	{1 {0 19} winBeginDot {18 1} {}}
+{winfo screenwidth}	{1 {0 17} numArgs {} {}}
+{winfo screenwidth .a x}	{1 {0 22} numArgs {} {}}
+
+{winfo server .a}	{ok}
+{winfo server a}	{1 {0 14} winBeginDot {13 1} {}}
+{winfo server}		{1 {0 12} numArgs {} {}}
+{winfo server .a x}	{1 {0 17} numArgs {} {}}
+
+{winfo toplevel .a}	{ok}
+{winfo toplevel a}	{1 {0 16} winBeginDot {15 1} {}}
+{winfo toplevel}	{1 {0 14} numArgs {} {}}
+{winfo toplevel .a x}	{1 {0 19} numArgs {} {}}
+
+{winfo viewable .a}	{ok}
+{winfo viewable a}	{1 {0 16} winBeginDot {15 1} {}}
+{winfo viewable}	{1 {0 14} numArgs {} {}}
+{winfo viewable .a x}	{1 {0 19} numArgs {} {}}
+
+{winfo visual .a}	{ok}
+{winfo visual a}	{1 {0 14} winBeginDot {13 1} {}}
+{winfo visual}		{1 {0 12} numArgs {} {}}
+{winfo visual .a x}	{1 {0 17} numArgs {} {}}
+
+{winfo visualid .a}	{ok}
+{winfo visualid a}	{1 {0 16} winBeginDot {15 1} {}}
+{winfo visualid}		{1 {0 14} numArgs {} {}}
+{winfo visualid .a x}	{1 {0 19} numArgs {} {}}
+
+{winfo visualsavailable .a}	{ok}
+{winfo visualsavailable .a includeids}	{ok}
+{winfo visualsavailable .a 0}	{1 {0 27} badKey {26 1} {includeids 0}}
+{winfo visualsavailable a}	{1 {0 24} winBeginDot {23 1} {}}
+{winfo visualsavailable .a [set]}	{1 {27 3} numArgs {} {}}
+{winfo visualsavailable}	{1 {0 22} numArgs {} {}}
+{winfo visualsavailable .a x y}	{1 {0 29} numArgs {} {}}
+
+{winfo vrootheight .a}	{ok}
+{winfo vrootheight a}	{1 {0 19} winBeginDot {18 1} {}}
+{winfo vrootheight}	{1 {0 17} numArgs {} {}}
+{winfo vrootheight .a x}	{1 {0 22} numArgs {} {}}
+
+{winfo vrootwidth .a}	{ok}
+{winfo vrootwidth a}	{1 {0 18} winBeginDot {17 1} {}}
+{winfo vrootwidth}	{1 {0 16} numArgs {} {}}
+{winfo vrootwidth .a x}	{1 {0 21} numArgs {} {}}
+
+{winfo vrootx .a}	{ok}
+{winfo vrootx a}	{1 {0 14} winBeginDot {13 1} {}}
+{winfo vrootx}		{1 {0 12} numArgs {} {}}
+{winfo vrootx .a x}	{1 {0 17} numArgs {} {}}
+
+{winfo vrooty .a}	{ok}
+{winfo vrooty a}	{1 {0 14} winBeginDot {13 1} {}}
+{winfo vrooty}		{1 {0 12} numArgs {} {}}
+{winfo vrooty .a x}	{1 {0 17} numArgs {} {}}
+
+{winfo width .a}	{ok}
+{winfo width a}		{1 {0 13} winBeginDot {12 1} {}}
+{winfo width}		{1 {0 11} numArgs {} {}}
+{winfo width .a x}	{1 {0 16} numArgs {} {}}
+
+{winfo x .a}		{ok}
+{winfo x a}		{1 {0 9} winBeginDot {8 1} {}}
+{winfo x}		{1 {0 7} numArgs {} {}}
+{winfo x .a x}		{1 {0 12} numArgs {} {}}
+
+{winfo y .a}		{ok}
+{winfo y a}		{1 {0 9} winBeginDot {8 1} {}}
+{winfo y}		{1 {0 7} numArgs {} {}}
+{winfo y .a x}		{1 {0 12} numArgs {} {}}
+
+
+{wm client .a}		{ok}
+{wm client .a a}	{ok}
+{wm client a}		{1 {0 11} winBeginDot {10 1} {}}
+{wm client .a [set]}	{1 {14 3} numArgs {} {}}
+{wm client}		{1 {0 9} numArgs {} {}}
+{wm client .a a a}	{1 {0 16} numArgs {} {}}
+
+{wm colormapwindows .a}		{ok}
+{wm colormapwindows .a .a}	{ok}
+{wm colormapwindows .a {.a}}	{ok}
+{wm colormapwindows .a {.a .a .a}}	{ok}
+{wm colormapwindows a}		{1 {0 20} winBeginDot {19 1} {}}
+{wm colormapwindows .a a}	{1 {0 23} winBeginDot {22 1} {}}
+{wm colormapwindows .a {a a a}}	{1 {0 29} winBeginDot {23 1} {} 1 {0 29} winBeginDot {25 1} {} 1 {0 29} winBeginDot {27 1} {}}
+{wm colormapwindows}		{1 {0 18} numArgs {} {}}
+{wm colormapwindows .a .a a}	{1 {0 26} numArgs {} {}}
+
+{wm command .a}		{ok}
+{wm command .a a}	{ok}
+{wm command a}		{1 {0 12} winBeginDot {11 1} {}}
+{wm command .a [set]}	{1 {15 3} numArgs {} {}}
+{wm command}		{1 {0 10} numArgs {} {}}
+{wm command .a a a}	{1 {0 17} numArgs {} {}}
+
+{wm deiconify .a}	{ok}
+{wm deiconify a}	{1 {0 14} winBeginDot {13 1} {}}
+{wm deiconify}		{1 {0 12} numArgs {} {}}
+{wm deiconify .a a}	{1 {0 17} numArgs {} {}}
+
+{wm focusmodel .a}		{1 {0 16} nonPortOption {3 10} {{}}}
+{wm focusmodel .a active}	{1 {0 23} nonPortOption {3 10} {{}}}
+{wm focusmodel a}		{1 {0 15} nonPortOption {3 10} {{}} 1 {0 15} winBeginDot {14 1} {}}
+{wm focusmodel .a f}		{1 {0 18} nonPortOption {3 10} {{}} 1 {0 18} badKey {17 1} {{passive active} f}}
+{wm focusmodel}			{1 {0 13} nonPortOption {3 10} {{}} 1 {0 13} numArgs {} {}}
+{wm focusmodel .a active a}	{1 {0 25} nonPortOption {3 10} {{}} 1 {0 25} numArgs {} {}}
+
+{wm frame .a}		{ok}
+{wm frame a}		{1 {0 10} winBeginDot {9 1} {}}
+{wm frame}		{1 {0 8} numArgs {} {}}
+{wm frame .a a}		{1 {0 13} numArgs {} {}}
+
+{wm geometry .a}	{ok}
+{wm geometry .a $a}	{ok}
+{wm geometry a}		{1 {0 13} winBeginDot {12 1} {}}
+{wm geometry .a 0}	{1 {0 16} coreTk::badGeometry {15 1} {}}
+{wm geometry}		{1 {0 11} numArgs {} {}}
+{wm geometry .a $a a}	{1 {0 19} numArgs {} {}}
+
+{wm grid .a}		{ok}
+{wm grid .a 0 0 0 0}	{ok}
+{wm grid a}		{1 {0 9} winBeginDot {8 1} {}}
+{wm grid .a a 0 0 0}	{1 {0 18} badInt {11 1} {}}
+{wm grid .a 0 a 0 0}	{1 {0 18} badInt {13 1} {}}
+{wm grid .a 0 0 a 0}	{1 {0 18} badInt {15 1} {}}
+{wm grid .a 0 0 0 a}	{1 {0 18} badInt {17 1} {}}
+{wm grid}		{1 {0 7} numArgs {} {}}
+{wm grid .a 0}		{1 {0 12} numArgs {} {}}
+{wm grid .a 0 0}	{1 {0 14} numArgs {} {}}
+{wm grid .a 0 0 0}	{1 {0 16} numArgs {} {}}
+{wm grid .a 0 0 0 0 a}	{1 {0 20} numArgs {} {}}
+
+{wm group .a}		{ok}
+{wm group .a .a}	{ok}
+{wm group a}		{1 {0 10} winBeginDot {9 1} {}}
+{wm group .a a}		{1 {0 13} winBeginDot {12 1} {}}
+{wm group}		{1 {0 8} numArgs {} {}}
+{wm group .a .a a}	{1 {0 16} numArgs {} {}}
+
+{wm iconbitmap .a}	{1 {0 16} nonPortOption {3 10} {{}}}
+{wm iconbitmap .a $a}	{1 {0 19} nonPortOption {3 10} {{}}}
+{wm iconbitmap a}	{1 {0 15} nonPortOption {3 10} {{}} 1 {0 15} winBeginDot {14 1} {}}
+{wm iconbitmap .a 0}	{1 {0 18} nonPortOption {3 10} {{}} 1 {0 18} coreTk::nonPortBitmap {17 1} {}}
+{wm iconbitmap}		{1 {0 13} nonPortOption {3 10} {{}} 1 {0 13} numArgs {} {}}
+{wm iconbitmap .a $a a}	{1 {0 21} nonPortOption {3 10} {{}} 1 {0 21} numArgs {} {}}
+
+{wm iconify .a}		{ok}
+{wm iconify a}		{1 {0 12} winBeginDot {11 1} {}}
+{wm iconify}		{1 {0 10} numArgs {} {}}
+{wm iconify .a a}	{1 {0 15} numArgs {} {}}
+
+{wm iconmask .a}	{1 {0 14} nonPortOption {3 8} {{}}}
+{wm iconmask .a $a}	{1 {0 17} nonPortOption {3 8} {{}}}
+{wm iconmask a}		{1 {0 13} nonPortOption {3 8} {{}} 1 {0 13} winBeginDot {12 1} {}}
+{wm iconmask .a 0}	{1 {0 16} nonPortOption {3 8} {{}} 1 {0 16} coreTk::nonPortBitmap {15 1} {}}
+{wm iconmask}		{1 {0 11} nonPortOption {3 8} {{}} 1 {0 11} numArgs {} {}}
+{wm iconmask .a $a a}	{1 {0 19} nonPortOption {3 8} {{}} 1 {0 19} numArgs {} {}}
+
+{wm iconname .a}	{1 {0 14} nonPortOption {3 8} {{}}}
+{wm iconname .a a}	{1 {0 16} nonPortOption {3 8} {{}}}
+{wm iconname a}		{1 {0 13} nonPortOption {3 8} {{}} 1 {0 13} winBeginDot {12 1} {}}
+{wm iconname .a [set]}	{1 {0 20} nonPortOption {3 8} {{}} 1 {16 3} numArgs {} {}}
+{wm iconname}		{1 {0 11} nonPortOption {3 8} {{}} 1 {0 11} numArgs {} {}}
+{wm iconname .a a a}	{1 {0 18} nonPortOption {3 8} {{}} 1 {0 18} numArgs {} {}}
+
+{wm iconposition .a}		{1 {0 18} nonPortOption {3 12} {{}}}
+{wm iconposition .a 0 0}	{1 {0 22} nonPortOption {3 12} {{}}}
+{wm iconposition .a "" ""}	{1 {0 24} nonPortOption {3 12} {{}}}
+{wm iconposition a}		{1 {0 17} nonPortOption {3 12} {{}} 1 {0 17} winBeginDot {16 1} {}}
+{wm iconposition .a a 0}	{1 {0 22} nonPortOption {3 12} {{}} 1 {0 22} badInt {19 1} {}}
+{wm iconposition .a 0 a}	{1 {0 22} nonPortOption {3 12} {{}} 1 {0 22} badInt {21 1} {}}
+{wm iconposition}		{1 {0 15} nonPortOption {3 12} {{}} 1 {0 15} numArgs {} {}}
+{wm iconposition .a 0 0 a}	{1 {0 24} nonPortOption {3 12} {{}} 1 {0 24} numArgs {} {}}
+
+{wm iconwindow .a}	{1 {0 16} nonPortOption {3 10} {{}}}
+{wm iconwindow .a .a}	{1 {0 19} nonPortOption {3 10} {{}}}
+{wm iconwindow a}	{1 {0 15} nonPortOption {3 10} {{}} 1 {0 15} winBeginDot {14 1} {}}
+{wm iconwindow .a a}	{1 {0 18} nonPortOption {3 10} {{}} 1 {0 18} winBeginDot {17 1} {}}
+{wm iconwindow}		{1 {0 13} nonPortOption {3 10} {{}} 1 {0 13} numArgs {} {}}
+{wm iconwindow .a .a a}	{1 {0 21} nonPortOption {3 10} {{}} 1 {0 21} numArgs {} {}}
+
+{wm maxsize .a}		{ok}
+{wm maxsize .a 0 0}	{ok}
+{wm maxsize a}		{1 {0 12} winBeginDot {11 1} {}}
+{wm maxsize .a a 0}	{1 {0 17} badInt {14 1} {}}
+{wm maxsize .a 0 a}	{1 {0 17} badInt {16 1} {}}
+{wm maxsize}		{1 {0 10} numArgs {} {}}
+{wm maxsize .a 0}	{1 {0 15} numArgs {} {}}
+{wm maxsize .a 0 0 a}	{1 {0 19} numArgs {} {}}
+
+{wm minsize .a}		{ok}
+{wm minsize .a 0 0}	{ok}
+{wm minsize a}		{1 {0 12} winBeginDot {11 1} {}}
+{wm minsize .a a 0}	{1 {0 17} badInt {14 1} {}}
+{wm minsize .a 0 a}	{1 {0 17} badInt {16 1} {}}
+{wm minsize}		{1 {0 10} numArgs {} {}}
+{wm minsize .a 0}	{1 {0 15} numArgs {} {}}
+{wm minsize .a 0 0 a}	{1 {0 19} numArgs {} {}}
+
+{wm overrideredirect .a}	{ok}
+{wm overrideredirect .a 0}	{ok}
+{wm overrideredirect a}	{1 {0 21} winBeginDot {20 1} {}}
+{wm overrideredirect .a a}	{1 {0 24} badBoolean {23 1} {}}
+{wm overrideredirect}		{1 {0 19} numArgs {} {}}
+{wm overrideredirect .a 0 a}	{1 {0 26} numArgs {} {}}
+
+{wm positionfrom .a}		{ok}
+{wm positionfrom .a user}	{ok}
+{wm positionfrom a}	{1 {0 17} winBeginDot {16 1} {}}
+{wm positionfrom .a a}	{1 {0 20} badKey {19 1} {{program user} a}}
+{wm positionfrom}		{1 {0 15} numArgs {} {}}
+{wm positionfrom .a user a}	{1 {0 25} numArgs {} {}}
+
+{wm protocol .a}	{ok}
+{wm protocol .a a}	{1 {0 16} nonPortOption {15 1} {{}}}
+{wm protocol .a a a}	{1 {0 18} nonPortOption {15 1} {{}}}
+{wm protocol .a a ""}	{1 {0 19} nonPortOption {15 1} {{}}}
+{wm protocol a}		{1 {0 13} winBeginDot {12 1} {}}
+{wm protocol .a [set]}	{1 {16 3} numArgs {} {}}
+{wm protocol .a a [set]}	{1 {0 22} nonPortOption {15 1} {{}} 1 {18 3} numArgs {} {}}
+{wm protocol .a a a a}	{1 {0 20} numArgs {} {}}
+{wm protocol}		{1 {0 11} numArgs {} {}}
+
+{wm resizable .a}	{ok}
+{wm resizable .a 0 0}	{ok}
+{wm resizable a}	{1 {0 14} winBeginDot {13 1} {}}
+{wm resizable .a a 0}	{1 {0 19} badBoolean {16 1} {}}
+{wm resizable .a 0 a}	{1 {0 19} badBoolean {18 1} {}}
+{wm resizable}		{1 {0 12} numArgs {} {}}
+{wm resizable .a 0}	{1 {0 17} numArgs {} {}}
+{wm resizable .a 0 0 a}	{1 {0 21} numArgs {} {}}
+
+{wm sizefrom .a}	{ok}
+{wm sizefrom .a user}	{ok}
+{wm sizefrom .a ""}	{ok}
+{wm sizefrom .a p}	{ok}
+{wm sizefrom a}		{1 {0 13} winBeginDot {12 1} {}}
+{wm sizefrom .a a}	{1 {0 16} badKey {15 1} {{"" program user} a}}
+{wm sizefrom .a user a}	{1 {0 21} numArgs {} {}}
+{wm sizefrom}		{1 {0 11} numArgs {} {}}
+
+{wm state .a}		{ok}
+{wm state a}		{1 {0 10} winBeginDot {9 1} {}}
+{wm state}		{1 {0 8} numArgs {} {}}
+{wm state .a a}		{1 {0 13} numArgs {} {}}
+
+{wm title .a}		{ok}
+{wm title .a a}		{ok}
+{wm title a}		{1 {0 10} winBeginDot {9 1} {}}
+{wm title .a [set]}	{1 {13 3} numArgs {} {}}
+{wm title}		{1 {0 8} numArgs {} {}}
+{wm title .a a a}	{1 {0 15} numArgs {} {}}
+
+{wm transient .a}	{ok}
+{wm transient .a .a}	{ok}
+{wm transient a}	{1 {0 14} winBeginDot {13 1} {}}
+{wm transient .a a}	{1 {0 17} winBeginDot {16 1} {}}
+{wm transient}		{1 {0 12} numArgs {} {}}
+{wm transient .a .a a}	{1 {0 20} numArgs {} {}}
+
+{wm withdraw .a}	{ok}
+{wm withdraw a}		{1 {0 13} winBeginDot {12 1} {}}
+{wm withdraw}		{1 {0 11} numArgs {} {}}
+{wm withdraw .a a}	{1 {0 16} numArgs {} {}}
+
+}
+
+set checkCoreTk8.1 {}
+set checkCoreTk8.2 {}
+set checkCoreTk8.3 {
+
+{entry .a -invalidcommand $a}		{ok}
+{entry .a -invalidcommand {set}}	{1 {26 3} numArgs {} {}}
+{entry .a -invalidcommand}		{1 {0 24} noSwitchArg {9 15} -invalidcommand}
+
+{entry .a -invcmd $a}		{ok}
+{entry .a -invcmd {set}}	{1 {18 3} numArgs {} {}}
+{entry .a -invcmd}		{1 {0 16} noSwitchArg {9 7} -invcmd}
+
+{entry .a -validate focus}	{ok}
+{entry .a -validate foo}	{1 {0 22} badKey {19 3} {{none focus focusin focusout key all} foo}}
+{entry .a -validate}		{1 {0 18} noSwitchArg {9 9} -validate}
+
+{entry .a -validatecommand $a}		{ok}
+{entry .a -validatecommand {set}}	{1 {27 3} numArgs {} {}}
+{entry .a -validatecommand}		{1 {0 25} noSwitchArg {9 16} -validatecommand}
+
+{entry .a -vcmd $a}		{ok}
+{entry .a -vcmd {set}}		{1 {16 3} numArgs {} {}}
+{entry .a -vcmd}		{1 {0 14} noSwitchArg {9 5} -vcmd}
+
+{entry .a -background $a -borderwidth $a -bg $a -cursor $a -exportselection 0 \
+    -fg $a -font $a -foreground $a -highlightcolor $a -highlightbackground $a \
+    -highlightthickness $a -insertofftime 0 -insertontime 0 -insertwidth 0 \
+    -justify $a -relief $a -state $a -textvariable a -selectbackground $a \
+    -selectforeground $a -selectborderwidth 0 -width 0 -invalidcommand $a \
+    -invcmd $a -validate focus -validatecommand $a -vcmd $a}	{ok}
+
+
+{event generate .a $a -warp false}	{ok}
+{event generate .a $a -warp a}		{1 {0 28} badBoolean {27 1} {}}
+{event generate .a $a -warp}		{1 {0 26} noSwitchArg {21 5} -warp}
+
+{event generate .a $a -above .a -borderwidth 0 -count -1 -detail $a \
+    -focus 0 -height 0 -keycode -1 -keysym space -mode NotifyGrab \
+    -override 0 -place $a -root .a -rootx 0 -rooty 0  -sendevent 0 \
+    -serial -1 -state $a -subwindow .a -time 0 -warp 1 -width 0 \
+    -when now -x 0 -y 0}	{ok}
+
+
+{listbox .a -listvar a}		{ok}
+{listbox .a -listvar $a}	{1 {0 22} warnVarRef {20 2} {}}
+{listbox .a -listvar}		{1 {0 19} noSwitchArg {11 8} -listvar}
+
+{listbox .a -background $a -borderwidth $a -bg $a -cursor $a \
+    -exportselection 0 -fg $a -font $a -foreground $a -height 0 \
+    -highlightbackground $a -highlightcolor $a -highlightthickness $a \
+    -listvar a -relief $a -selectborderwidth 0 -selectforeground $a \
+    -selectmode single -setgrid 0 -takefocus .a -width 0}	{ok}
+
+
+{tk_chooseDirectory}			{ok}
+{tk_chooseDirectory -initialdir $a}	{ok}
+{tk_chooseDirectory -initialdir b/$a}	{1 {0 35} nonPortFile {31 4} {}}
+{tk_chooseDirectory -parent $a}		{ok}
+{tk_chooseDirectory -parent a}		{1 {0 28} winBeginDot {27 1} {}}
+{tk_chooseDirectory -title $a}		{ok}
+{tk_chooseDirectory -title [set]}	{1 {27 3} numArgs {} {}}
+{tk_chooseDirectory -mustexist $a}	{ok}
+{tk_chooseDirectory -mustexist a}	{1 {0 31} badBoolean {30 1} {}}
+{tk_chooseDirectory -foo}		{1 {0 23} badSwitch {19 4} -foo}
+{tk_chooseDirectory -initialdir $a -parent $a -title $a -mustexist $a}	{ok}
+{tk_chooseDirectory -initialdir}	{1 {0 30} noSwitchArg {19 11} -initialdir}
+{tk_chooseDirectory -initialdir $a a}	{1 {0 35} numArgs {} {}}
+
+{wm state .a}		{ok}
+{wm state a}		{1 {0 10} winBeginDot {9 1} {}}
+{wm state .a iconic}	{ok}
+{wm state .a foo}	{1 {0 15} badKey {12 3} {{normal iconic withdrawn icon zoomed} foo}}
+{wm state}		{1 {0 8} numArgs {} {}}
+{wm state .a iconic a}	{1 {0 20} numArgs {} {}}
+{wm foo .a}	{1 {0 9} badOption {3 3} {{state aspect client command deiconify focusmodel frame geometry grid group iconbitmap iconify iconmask iconname iconposition iconwindow maxsize minsize overrideredirect positionfrom protocol sizefrom state title transient withdraw colormapwindows resizable} foo}}
+
+}

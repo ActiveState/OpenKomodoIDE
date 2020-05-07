@@ -1,0 +1,228 @@
+# tclDomProTable --
+#
+#	This file contains the table of commands used to check TclDomPro.
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on TclDomPro commands.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+# 
+# RCS: @(#) $Id: tclDomProTable,v 1.8 2000/05/30 22:25:02 wart Exp $
+
+set ::checkTclDomPro1.0 {
+
+{dom::DOMImplementation hasFeature a a}		{ok}
+{DOMImplementation hasFeature a a}	{ok}
+{DOMImplementation hasFeature a}	{1 {0 30} numArgs {} {}}
+{DOMImplementation hasFeature a a a}	{1 {0 34} numArgs {} {}}
+{DOMImplementation create}		{ok}
+{DOMImplementation create a}		{ok}
+{DOMImplementation create $a}		{1 {0 27} warnVarRef {25 2} {}}
+{DOMImplementation create a a}		{1 {0 28} numArgs {} {}}
+{DOMImplementation destroy a}		{ok}
+{DOMImplementation destroy}		{1 {0 25} numArgs {} {}}
+{DOMImplementation destroy a a}		{1 {0 29} numArgs {} {}}
+{DOMImplementation parse a}		{ok}
+{DOMImplementation parse a -parser a}	{ok}
+{DOMImplementation parse a -progresscommand $a}		{ok}
+{DOMImplementation parse a -progresscommand {set}}	{1 {44 3} numArgs {} {}}
+{DOMImplementation parse a -chunksize -1}	{ok}
+{DOMImplementation parse a -chunksize a}	{1 {0 38} badInt {37 1} {}}
+{DOMImplementation parse a -final true}	{ok}
+{DOMImplementation parse a -final a}	{1 {0 34} badBoolean {33 1} {}}
+{DOMImplementation parse a -trim}	{ok}
+{DOMImplementation parse a -trim a}	{1 {0 33} numArgs {} {}}
+{DOMImplementation parse a -foo a}	{1 {0 32} badOption {26 4} {{-parser -progresscommand -chunksize -final -trim} -foo}}
+{DOMImplementation parse}		{1 {0 23} numArgs {} {}}
+{DOMImplementation parse a -parser a a}	{1 {0 37} numArgs {} {}}
+{DOMImplementation serialize a}		{ok}
+{DOMImplementation serialize a -newline {}}		{ok}
+{DOMImplementation serialize a -newline {a b c}}	{ok}
+{DOMImplementation serialize a -foo a}	{1 {0 36} badOption {30 4} {-newline -foo}}
+{DOMImplementation serialize}		{1 {0 27} numArgs {} {}}
+{DOMImplementation serialize a -newline {} a}		{1 {0 43} numArgs {} {}}
+{DOMImplementation trim a}		{ok}
+{DOMImplementation trim}		{1 {0 22} numArgs {} {}}
+{DOMImplementation trim a a}		{1 {0 26} numArgs {} {}}
+{DOMImplementation foo}			{1 {0 21} badOption {18 3} {{hasFeature create destroy parse serialize trim} foo}}
+
+{dom::document cget a -doctype}			{ok}
+{document cget a -implementation}		{ok}
+{document cget a -documentElement}		{ok}
+{document cget a -doctype -implementation}	{1 {0 40} numArgs {} {}}
+{document cget a -foo}				{1 {0 20} badSwitch {16 4} -foo}
+{document configure a -implementation a}	{ok}
+{document configure a -doctype a}		{ok}
+{document configure a -doctype a $a}		{1 {0 34} numArgs {} {}}
+{document configure a -doctype a -implementation a}	{1 {0 49} numArgs {} {}}
+{document configure a -foo}			{1 {0 25} badOption {21 4} {{-doctype -implementation} -foo}}
+{document createElement a a}			{ok}
+{document createElement a}			{1 {0 24} numArgs {} {}}
+{document createElement a a a}			{1 {0 28} numArgs {} {}}
+{document createDocumentFragment a}		{ok}
+{document createDocumentFragment}		{1 {0 31} numArgs {} {}}
+{document createDocumentFragment a a}		{1 {0 35} numArgs {} {}}
+{document createTextNode a a}			{ok}
+{document createTextNode a}			{1 {0 25} numArgs {} {}}
+{document createTextNode a a a}			{1 {0 29} numArgs {} {}}
+{document createComment a a}			{ok}
+{document createComment a}			{1 {0 24} numArgs {} {}}
+{document createComment a a a}			{1 {0 28} numArgs {} {}}
+{document createCDATASection a a}		{ok}
+{document createCDATASection a}			{1 {0 29} numArgs {} {}}
+{document createCDATASection a a a}		{1 {0 33} numArgs {} {}}
+{document createProcessingInstruction a a a}	{ok}
+{document createProcessingInstruction a a}	{1 {0 40} numArgs {} {}}
+{document createProcessingInstruction a a a a}	{1 {0 44} numArgs {} {}}
+{document createAttribute a a}			{ok}
+{document createAttribute a}			{1 {0 26} numArgs {} {}}
+{document createAttribute a a a}		{1 {0 30} numArgs {} {}}
+{document createEntity a}			{ok}
+{document createEntity}				{1 {0 21} numArgs {} {}}
+{document createEntity a a}			{1 {0 25} numArgs {} {}}
+{document createEntityReference a}		{ok}
+{document createEntityReference}		{1 {0 30} numArgs {} {}}
+{document createEntityReference a a}		{1 {0 34} numArgs {} {}}
+{document createDocTypeDecl a a a a a a}	{ok}
+{document createDocTypeDecl a a a a a}		{1 {0 36} numArgs {} {}}
+{document createDocTypeDecl a a a a a a a}	{1 {0 40} numArgs {} {}}
+{document getElementsByTagName a a}		{ok}
+{document getElementsByTagName a}		{1 {0 31} numArgs {} {}}
+{document getElementsByTagName a a a}		{1 {0 35} numArgs {} {}}
+{document foo}					{1 {0 12} numArgs {} {}}
+{document foo a}				{1 {0 14} badOption {9 3} {{cget configure createElement createDocumentFragment createTextNode createComment createCDATASection createProcessingInstruction createAttribute createEntity createEntityReference createDocTypeDecl getElementsByTagName} foo}}
+
+{dom::node cget a -nodeName}	{ok}
+{node cget a -nodeName a}	{1 {0 23} numArgs {} {}}
+{node cget a -nodeType}		{ok}
+{node cget a -nodeType a}	{1 {0 23} numArgs {} {}}
+{node cget a -parentNode}	{ok}
+{node cget a -parentNode a}	{1 {0 25} numArgs {} {}}
+{node cget a -childNodes}	{ok}
+{node cget a -childNodes a}	{1 {0 25} numArgs {} {}}
+{node cget a -firstChild}	{ok}
+{node cget a -firstChild a}	{1 {0 25} numArgs {} {}}
+{node cget a -lastChild}	{ok}
+{node cget a -lastChild a}	{1 {0 24} numArgs {} {}}
+{node cget a -previousSibling}	{ok}
+{node cget a -previousSibling a}	{1 {0 30} numArgs {} {}}
+{node cget a -nextSibling}	{ok}
+{node cget a -nextSibling a}	{1 {0 26} numArgs {} {}}
+{node cget a -attributes}	{ok}
+{node cget a -attributes a}	{1 {0 25} numArgs {} {}}
+{node cget a -nodeValue}	{ok}
+{node cget a -nodeValue a}	{1 {0 24} numArgs {} {}}
+{node cget a -parsingComplete}	{ok}
+{node cget a -parsingComplete a}	{1 {0 30} numArgs {} {}}
+{node cget a -startLine}	{ok}
+{node cget a -startLine a}	{1 {0 24} numArgs {} {}}
+{node cget a -endLine}		{ok}
+{node cget a -endLine a}	{1 {0 22} numArgs {} {}}
+{node cget a -startColumn}	{ok}
+{node cget a -startColumn a}	{1 {0 26} numArgs {} {}}
+{node cget a -endColumn}	{ok}
+{node cget a -endColumn a}	{1 {0 24} numArgs {} {}}
+{node cget a -startWidth}	{ok}
+{node cget a -startWidth a}	{1 {0 25} numArgs {} {}}
+{node cget a -endWidth}		{ok}
+{node cget a -endWidth a}	{1 {0 23} numArgs {} {}}
+{node cget a -foo}		{1 {0 16} badSwitch {12 4} -foo}
+{node configure a -childNodes a}	{ok}
+{node configure a -childNodes a a}	{1 {0 32} numArgs {} {}}
+{node configure a -childNodes}		{1 {0 28} numArgs {} {}}
+{node configure a -firstChild a}	{ok}
+{node configure a -firstChild a a}	{1 {0 32} numArgs {} {}}
+{node configure a -firstChild}		{1 {0 28} numArgs {} {}}
+{node configure a -lastChild a}		{ok}
+{node configure a -lastChild a a}	{1 {0 31} numArgs {} {}}
+{node configure a -lastChild}		{1 {0 27} numArgs {} {}}
+{node configure a -nodeValue a}		{ok}
+{node configure a -nodeValue a a}	{1 {0 31} numArgs {} {}}
+{node configure a -nodeValue}		{1 {0 27} numArgs {} {}}
+{node configure a -foo x}		{1 {0 23} badOption {17 4} {{-childNodes -firstChild -lastChild -nodeValue} -foo}}
+{node insertBefore a a}			{ok}
+{node insertBefore a a a}		{ok}
+{node insertBefore a}			{1 {0 19} numArgs {} {}}
+{node insertBefore a a a a}		{1 {0 25} numArgs {} {}}
+{node replaceChild a a a}		{ok}
+{node replaceChild a a}			{1 {0 21} numArgs {} {}}
+{node replaceChild a a a a}		{1 {0 25} numArgs {} {}}
+{node removeChild a a}			{ok}
+{node removeChild a}			{1 {0 18} numArgs {} {}}
+{node removeChild a a a}		{1 {0 22} numArgs {} {}}
+{node appendChild a a}			{ok}
+{node appendChild a}			{1 {0 18} numArgs {} {}}
+{node appendChild a a a}		{1 {0 22} numArgs {} {}}
+{node hasChildNodes a}			{ok}
+{node hasChildNodes}			{1 {0 18} numArgs {} {}}
+{node hasChildNodes a a}		{1 {0 22} numArgs {} {}}
+{node cloneNode a}			{ok}
+{node cloneNode a 1}			{ok}
+{node cloneNode a a}			{1 {0 18} badBoolean {17 1} {}}
+{node cloneNode a 0 a}			{1 {0 20} numArgs {} {}}
+{node cloneNode}			{1 {0 14} numArgs {} {}}
+{node children a}			{ok}
+{node children}				{1 {0 13} numArgs {} {}}
+{node children a a}			{1 {0 17} numArgs {} {}}
+{node parent a}				{ok}
+{node parent}				{1 {0 11} numArgs {} {}}
+{node parent a a}			{1 {0 15} numArgs {} {}}
+{node foo a}				{1 {0 10} badOption {5 3} {{cget configure insertBefore replaceChild removeChild appendChild hasChildNodes cloneNode children parent} foo}}
+
+
+{dom::element cget a -tagName}	{ok}
+{element cget a -tagName a}	{1 {0 25} numArgs {} {}}
+{element cget a -empty}		{ok}
+{element cget a -empty a}	{1 {0 23} numArgs {} {}}
+{element cget a -foo}		{1 {0 19} badSwitch {15 4} -foo}
+{element cget a -foo a}		{1 {0 21} numArgs {} {}}
+{element configure a -tagName a}	{ok}
+{element configure a -tagName a a}	{1 {0 32} numArgs {} {}}
+{element configure a -tagName}		{1 {0 28} numArgs {} {}}
+{element configure a -empty 1}		{ok}
+{element configure a -empty a}		{1 {0 28} badBoolean {27 1} {}}
+{element configure a -empty a a}	{1 {0 30} numArgs {} {}}
+{element configure a -empty}		{1 {0 26} numArgs {} {}}
+{element configure a -foo a}		{1 {0 26} badOption {20 4} {{-tagName -empty} -foo}}
+{element configure a -foo a a}		{1 {0 28} numArgs {} {}}
+{element configure a -foo}		{1 {0 24} numArgs {} {}}
+{element getAttribute a a}		{ok}
+{element getAttribute a a a}		{1 {0 26} numArgs {} {}}
+{element getAttribute a}		{1 {0 22} numArgs {} {}}
+{element setAttribute a a a}		{ok}
+{element setAttribute a a}		{1 {0 24} numArgs {} {}}
+{element setAttribute a a a a}		{1 {0 28} numArgs {} {}}
+{element removeAttribute a a}		{ok}
+{element removeAttribute a}		{1 {0 25} numArgs {} {}}
+{element removeAttribute a a a}		{1 {0 29} numArgs {} {}}
+{element getAttributeNode a a}		{ok}
+{element getAttributeNode a a a}	{1 {0 30} numArgs {} {}}
+{element getAttributeNode a}		{1 {0 26} numArgs {} {}}
+{element setAttributeNode a a a}	{ok}
+{element setAttributeNode a a}		{1 {0 28} numArgs {} {}}
+{element setAttributeNode a a a a}	{1 {0 32} numArgs {} {}}
+{element removeAttributeNode a a}	{ok}
+{element removeAttributeNode a}		{1 {0 29} numArgs {} {}}
+{element removeAttributeNode a a a}	{1 {0 33} numArgs {} {}}
+{element getElementsByTagName a a}	{ok}
+{element getElementsByTagName a}	{1 {0 30} numArgs {} {}}
+{element getElementsByTagName a a a}	{1 {0 34} numArgs {} {}}
+{element normalize a}			{ok}
+{element normalize a a}			{1 {0 21} numArgs {} {}}
+{element normalize}			{1 {0 17} numArgs {} {}}
+{element foo a}				{1 {0 13} badOption {8 3} {{cget configure getAttribute setAttribute removeAttribute getAttributeNode setAttributeNode removeAttributeNode getElementsByTagName normalize} foo}}
+
+{dom::processinginstruction cget a -target}	{ok}
+{processinginstruction cget a -target a}	{1 {0 38} numArgs {} {}}
+{processinginstruction cget a -data}		{ok}
+{processinginstruction cget a -data a}		{1 {0 36} numArgs {} {}}
+{processinginstruction cget a -foo}		{1 {0 33} badSwitch {29 4} -foo}
+{processinginstruction cget a -foo a}		{1 {0 35} numArgs {} {}}
+{processinginstruction configure a -data a}	{ok}
+{processinginstruction configure a -data a a}	{1 {0 43} numArgs {} {}}
+{processinginstruction configure a -data}	{1 {0 39} numArgs {} {}}
+{processinginstruction configure a -foo a}	{1 {0 40} badOption {34 4} {-data -foo}}
+{processinginstruction configure a -foo a a}	{1 {0 42} numArgs {} {}}
+{processinginstruction configure a -foo}	{1 {0 38} numArgs {} {}}
+{processinginstruction foo a}			{1 {0 27} badOption {22 3} {{cget configure} foo}}
+}

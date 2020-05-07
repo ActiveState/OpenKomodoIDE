@@ -1,0 +1,5 @@
+<!ENTITY watchFileViewer.title "Watch File Viewer">
+
+<!--tail.xul-->
+<!ENTITY closeButton.Label "Close">
+<!ENTITY filePath.label "File Path: ">

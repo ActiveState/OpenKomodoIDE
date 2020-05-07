@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % dialogsDTD SYSTEM "chrome://komodo/locale/dialogs.dtd">
+  %dialogsDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+
+<dialog id="dialog-iconpicker"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="&pickAnIcon.title;"
+        onload="OnLoad();"
+        orient="vertical"
+        persist="screenX screenY width height"
+        style="padding: 10px; width: 450px; height: 350px;"
+        buttons="accept,extra1,extra2,cancel"
+        ondialogaccept="return OK();"
+        ondialogextra1="return PickCustom();"
+        ondialogextra2="return Reset();"
+        ondialogcancel="return Cancel();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/logging.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/stringutils.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/filepickers.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/uriparse.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/dialogs.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/dialogs/iconpicker.js"/>
+    <tooltip id="aHTMLTooltip" onpopupshowing="return FillInHTMLTooltip(document.tooltipNode);" />
+    <description>
+        &iconpicker.description;
+    </description>
+    <menulist id="icon-families"
+              lastSelectedIndex="0"
+              persist="lastSelectedIndex"
+              oncommand="selectIconFamily(event);">
+      <menupopup id="icon-families-menupopup">
+        <menuitem label="&icomoon.label;" src="chrome://komodo/content/dialogs/iconlist_icomoon.html"/>
+        <menuitem label="&fontawesome.label;" src="chrome://komodo/content/dialogs/iconlist_fontawesome.html"/>
+      </menupopup>
+    </menulist>
+    <separator class="thin"/>
+    <iframe id="iframe"
+            flex="1"
+            style="border: thin inset;"
+            tooltip="aHTMLTooltip"/>
+    <separator class="thin"/>
+    <hbox>
+      <label value="&search.label;"/>
+      <textbox id="iconFilter"
+               style="min-width:40px;"
+               accesskey="&iconFilter.accessKey;"
+               rows="1"
+               type="search"
+               flex="1"
+               timeout="500"
+               onfocus="this.select();"
+               oncommand="doUpdateFilter(this.value);"
+               tooltiptext="&search.tooltiptext;"/>
+    </hbox>
+    <separator class="thin"/>
+    <hbox>
+        <image id="icon32" style="width: 32px; height: 32px; max-height: 32px;"/>
+        <spring width="15"/>
+        <vbox>
+            <spring flex="1"/>
+            <hbox>
+                <image id="icon16" style="width: 16px; height: 16px; max-height: 16px;"/>
+                <spring width="15"/>
+                <label id="iconlabel" value=""/>
+            </hbox>
+            <spring flex="1"/>
+        </vbox>
+        <spring flex="1"/>
+    </hbox>
+    <separator class="thin"/>
+</dialog>
+
+

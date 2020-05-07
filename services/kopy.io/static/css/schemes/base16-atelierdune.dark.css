@@ -1,0 +1,114 @@
+/*
+
+    Name:       Base16 Atelier Dune Dark
+    Author:     Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/dune)
+
+    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-chrome-devtools)
+    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+*/
+
+.cm-s-base16-atelierdune-dark.CodeMirror {background: #20201d; color: #e8e4cf;}
+.cm-s-base16-atelierdune-dark div.CodeMirror-selected {background: #292824 !important;}
+.cm-s-base16-atelierdune-dark .CodeMirror-gutters {background: #20201d; border-right: 0px;}
+.cm-s-base16-atelierdune-dark .CodeMirror-linenumber {color: #7d7a68;}
+.cm-s-base16-atelierdune-dark .CodeMirror-cursor {border-left: 1px solid #999580 !important;}
+
+.cm-s-base16-atelierdune-dark span.cm-header {color: #7d7a68;}
+.cm-s-base16-atelierdune-dark span.cm-comment {color: #7d7a68;}
+.cm-s-base16-atelierdune-dark span.cm-atom {color: #b854d4;}
+.cm-s-base16-atelierdune-dark span.cm-number {color: #b65611;}
+
+.cm-s-base16-atelierdune-dark span.cm-property {color: #e8e4cf;}
+.cm-s-base16-atelierdune-dark span.cm-attribute {color: #b65611;}
+.cm-s-base16-atelierdune-dark span.cm-keyword {color: #b854d4;}
+.cm-s-base16-atelierdune-dark span.cm-string {color: #60ac39;}
+
+.cm-s-base16-atelierdune-dark span.cm-variable {color: #d73737;}
+.cm-s-base16-atelierdune-dark span.cm-variable-2 {color: #6684e1;}
+.cm-s-base16-atelierdune-dark span.cm-def {color: #6684e1;}
+.cm-s-base16-atelierdune-dark span.cm-error {background: #d73737; color: #999580;}
+.cm-s-base16-atelierdune-dark span.cm-bracket {color: #292824;}
+.cm-s-base16-atelierdune-dark span.cm-tag {color: #d73737;}
+.cm-s-base16-atelierdune-dark span.cm-link {color: #b854d4;}
+.cm-s-base16-atelierdune-dark span.cm-builtin {color: #b854d4;}
+
+.cm-s-base16-atelierdune-dark .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
+
+.cm-s-base16-atelierdune-dark .CodeMirror-activeline-background { background: #292824 !important; }
+
+
+
+body,
+textarea {
+  background: #20201d;
+  color: #a6a28c;
+}
+
+#sidebar, .modal {
+  background: #292824;
+  color: #e8e4cf;
+}
+
+a, a:hover {
+    color: #d43552;
+}
+
+a.option {
+    color: #d43552 !important;
+}
+
+#logos {
+  background: #1a1a17;
+  color: #a6a28c;
+}
+
+#buttons {
+  background: #292824;
+  color: #999580;
+}
+
+#buttons .function.enabled:hover {
+  color: #e8e4cf;
+}
+
+#buttonTips {
+  background: #d43552;
+  color: #fefbec;
+}
+
+#pointer:after {
+    border-bottom-color: #d43552 !important;
+}
+
+#linenos {
+  background: #292824;
+  border-color: #6e6b5e !important;
+}
+
+#linenos a {
+    color: #999580 !important;
+}
+
+.option {
+    background: #20201d !important;
+    color: #999580 !important;
+}
+
+.option:hover {
+    background: #1a1a17 !important;
+}
+
+.dropdown:after {
+    border-top-color: #7d7a68 !important;
+}
+
+#messages li {
+  background: #6684e1;
+  color: #fefbec;
+}
+
+#messages li.error {
+  background: #d73737;
+  color: #fefbec;
+}

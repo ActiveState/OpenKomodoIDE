@@ -1,0 +1,23 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2007 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+Import(
+    'cons',
+    'build',
+    'mozChromeDir',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'komodoPythonUtilsDir',
+    'unsiloedPythonExe',
+    'jarring',
+    'mozBin',
+    'buildFlavour',
+);
+
+$cons->BuildXpt("koIRemoteSvn.idl");
+$cons->InstallAs("$mozBin/extensions/remotesvn\@ActiveState.com/components/koIRemoteSvn.xpt", 'koIRemoteSvn.xpt');
+#$cons->InstallAs("$mozBin/extensions/remotesvn\@ActiveState.com/idl/koIRemoteSvn.idl", 'koIRemoteSvn.idl');
+$cons->InstallAs("$mozBin/extensions/remotesvn\@ActiveState.com/components/koRemoteSvn.py", 'koRemoteSvn.py');

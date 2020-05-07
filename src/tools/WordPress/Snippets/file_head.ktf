@@ -1,0 +1,19 @@
+// komodo tool: file_head
+// ======================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ======================
+<% /* WordPress File Header */ %>
+
+/**
+ * [[%tabstop1:[Short Description (no period for file headers)]]]
+ *
+ * [[%tabstop2:[Long Description.]]]
+ *
+ * @link [[%tabstop3:[URL]]]
+ * @since [[%tabstop4:[x.x.x (if available)]]]
+ *
+ * @package [[%tabstop5:[Plugin/Theme/Etc]]]
+ */

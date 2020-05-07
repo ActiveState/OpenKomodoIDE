@@ -1,0 +1,14 @@
+content git content/
+
+locale	git	en-US	     locale/en-US/
+skin    git     classic/1.0  skin/
+
+overlay	chrome://komodo/content/pref/pref.xul	    chrome://git/content/pref-scc-git-overlay.xul
+overlay	chrome://komodo/content/scc/checkout.xul    chrome://git/content/checkout-overlay.xul
+
+component {5653ba47-8552-424d-b93b-6b74a7c4e37a} components/koGit.py
+contract @activestate.com/koSCC?type=git;1 {5653ba47-8552-424d-b93b-6b74a7c4e37a}
+category category-komodo-scc git @activestate.com/koSCC?type=git;1
+component {ee4672de-377e-4dd0-912b-65002aeaab77} components/koGit.py
+contract @activestate.com/koFileStatusChecker?type=git;1 {ee4672de-377e-4dd0-912b-65002aeaab77}
+category category-komodo-file-status git @activestate.com/koFileStatusChecker?type=git;1

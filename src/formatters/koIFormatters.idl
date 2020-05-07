@@ -1,0 +1,150 @@
+/* Copyright (c) 2000-2008 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "koIPrefs.idl"
+interface ISciMoz;
+interface koIScintillaView;
+
+
+[scriptable, uuid(6f19be63-a6c5-490c-80a5-4686fefab853)]
+interface koIFormatterContext: nsISupports {
+
+    // Formatting types.
+    const long FORMAT_LINE = 1;
+    const long FORMAT_SELECTION = 2;
+    const long FORMAT_BLOCK = 3;
+    const long FORMAT_TEXT = 4;
+
+    // Type of formatting operation.
+    attribute long type;
+
+    // Komodo language name (i.e. "HTML", "Python", ...)
+    attribute wstring lang;
+
+    // The code/text string to format.
+    attribute AString text;
+
+    // Encoding of the above text, the text is Unicode, but some formatters
+    // will only work if the text is passed as an encoded text chunk, bug 82615.
+    // If no encoding is supplied, the default filesystem encoding is used.
+    attribute wstring encoding;
+
+    // File uri the formatter is working upon, may be empty.
+    attribute wstring uri;
+
+    // Komodo preference set (i.e. file, project or global).
+    attribute koIPreferenceSet prefset;
+
+    // Specific configuration preferences for the formatter. This prefset will
+    // hold the specific settings to be used for the formatter.
+    // Example: for the generic command line formatter, this prefset will
+    //          contain the executable and arguments to be used for formatting.
+    attribute koIPreferenceSet formatter_prefset;
+
+};
+
+
+[scriptable, uuid(a39dbc7f-a14e-432e-a577-235dafbb77b6)]
+interface koIFormatterScimozContext: koIFormatterContext {
+
+    // The text start position in the scimoz document.
+    attribute long pos_start;
+    // The text end position in the scimoz document.
+    attribute long pos_end;
+
+    attribute ISciMoz scimoz;
+
+};
+
+
+[scriptable, uuid(f11e6111-5842-4a45-9c1d-4adf9789de43)]
+interface koIFormatter: nsISupports {
+
+    /**
+     * The short alias name for the formatter, like "astyle"
+     */
+    attribute wstring name;
+    /**
+     * The full name for the formatter, like "Artistic Style", which will be
+     * used when the formatter name needs to be shown to the user, like in the
+     * Komodo preferences dialog.
+     */
+    attribute wstring prettyName;
+
+    /**
+     * Does the formatter support a given language.
+     */
+    boolean supportsLanguage(in wstring lang);
+    /**
+     * Return the list of supported languages.
+     * The special language name of "*", means that the formatter can be
+     * used for any language!
+     */
+    void getSupportedLanguages(out unsigned long count,
+                               [array, size_is(count), retval] out wstring langs);
+
+    /**
+     * Do the actual formatting. On success, the context will be updated to
+     * contain the newly formatted data. In the case that the context is an
+     * instance of koIFormatterScimozContext, you can access the scimoz instance
+     * through the context after peforming a QueryInterface.
+     */
+    void format(in koIFormatterContext formatterContext);
+
+};
+
+
+[scriptable, uuid(ffc28bd1-94e6-4d68-b847-38b9f4640ec3)]
+interface koIFormatterService: nsISupports {
+
+    /**
+     * Return an array of all registered koIFormatter's.
+     */
+    void getAllFormatters(out unsigned long count,
+                          [array, size_is(count), retval] out koIFormatter formatters);
+
+    /**
+     * Return an array of koIFormatter's that support the given language.
+     */
+    void getAllFormattersForLanguage(in wstring lang,
+                        out unsigned long count,
+                        [array, size_is(count), retval] out koIFormatter formatters);
+
+    /**
+     * Return the koIFormatter that has the given name.
+     */
+    koIFormatter getFormatterWithName(in wstring name);
+
+    /**
+     * Return the koIFormatter that has the given pretty name.
+     */
+    koIFormatter getFormatterWithPrettyName(in wstring prettyName);
+
+    /**
+     * Return the user's preferenced formatter for the given context. When there
+     * is an available formatter, the formatter_prefset will updated to
+     * reference the specific formatter's configuration.
+     */
+    koIFormatter getFormatterForContext(in koIFormatterContext formatterContext);
+
+    /**
+     * Create a formatter context from the supplied view. If the view
+     * is null, then Komodo's currentView is used, in the case the currentView
+     * is null, then an exception will be raised. Note: The new context will
+     * have a null formatter_prefset value, the formatter_prefset can be updated
+     * through the getFormatterForContext() call.
+     */
+    koIFormatterScimozContext createFormatterContextFromView(in koIScintillaView view);
+
+    /**
+     * Create a formatter context from the supplied view and return the
+     * both the formatter and the formatter context according to the view's
+     * preferences. If the view is null, then Komodo's currentView is used, in
+     * the case the currentView is null, then an exception will be raised.
+     */
+    void getFormatterAndContextFromView(in koIScintillaView view,
+                                        out koIFormatter formatter,
+                                        out koIFormatterScimozContext formatterContext);
+
+};

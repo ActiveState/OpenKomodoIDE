@@ -1,0 +1,11 @@
+// komodo tool: include
+// ====================
+// auto_abbreviation: true
+// indent_relative: false
+// set_selection: false
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ====================
+<% /* include */ %>
+{% include "[[%tabstop1:2]]" %}!@#_currentPos!@#_anchor

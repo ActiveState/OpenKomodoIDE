@@ -1,0 +1,114 @@
+/*
+
+    Name:       Base16 London Tube Dark
+    Author:     Jan T. Sott
+
+    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-chrome-devtools)
+    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+*/
+
+.cm-s-base16-londontube-dark.CodeMirror {background: #231f20; color: #e7e7e8;}
+.cm-s-base16-londontube-dark div.CodeMirror-selected {background: #1c3f95 !important;}
+.cm-s-base16-londontube-dark .CodeMirror-gutters {background: #231f20; border-right: 0px;}
+.cm-s-base16-londontube-dark .CodeMirror-linenumber {color: #737171;}
+.cm-s-base16-londontube-dark .CodeMirror-cursor {border-left: 1px solid #959ca1 !important;}
+
+.cm-s-base16-londontube-dark span.cm-header {color: #737171;}
+.cm-s-base16-londontube-dark span.cm-comment {color: #737171;}
+.cm-s-base16-londontube-dark span.cm-atom {color: #98005d;}
+.cm-s-base16-londontube-dark span.cm-number {color: #f386a1;}
+
+.cm-s-base16-londontube-dark span.cm-property {color: #e7e7e8;}
+.cm-s-base16-londontube-dark span.cm-attribute {color: #f386a1;}
+.cm-s-base16-londontube-dark span.cm-keyword {color: #98005d;}
+.cm-s-base16-londontube-dark span.cm-string {color: #00853e;}
+
+.cm-s-base16-londontube-dark span.cm-variable {color: #ee2e24;}
+.cm-s-base16-londontube-dark span.cm-variable-2 {color: #009ddc;}
+.cm-s-base16-londontube-dark span.cm-def {color: #009ddc;}
+.cm-s-base16-londontube-dark span.cm-error {background: #ee2e24; color: #959ca1;}
+.cm-s-base16-londontube-dark span.cm-bracket {color: #1c3f95;}
+.cm-s-base16-londontube-dark span.cm-tag {color: #ee2e24;}
+.cm-s-base16-londontube-dark span.cm-link {color: #98005d;}
+.cm-s-base16-londontube-dark span.cm-builtin {color: #98005d;}
+
+.cm-s-base16-londontube-dark .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
+
+.cm-s-base16-londontube-dark .CodeMirror-activeline-background { background: #1c3f95 !important; }
+
+
+
+body,
+textarea {
+  background: #231f20;
+  color: #d9d8d8;
+}
+
+#sidebar, .modal {
+  background: #1c3f95;
+  color: #e7e7e8;
+}
+
+a, a:hover {
+    color: #b06110;
+}
+
+a.option {
+    color: #b06110 !important;
+}
+
+#logos {
+  background: #1c191a;
+  color: #d9d8d8;
+}
+
+#buttons {
+  background: #1c3f95;
+  color: #959ca1;
+}
+
+#buttons .function.enabled:hover {
+  color: #e7e7e8;
+}
+
+#buttonTips {
+  background: #b06110;
+  color: #ffffff;
+}
+
+#pointer:after {
+    border-bottom-color: #b06110 !important;
+}
+
+#linenos {
+  background: #1c3f95;
+  border-color: #5a5758 !important;
+}
+
+#linenos a {
+    color: #959ca1 !important;
+}
+
+.option {
+    background: #231f20 !important;
+    color: #959ca1 !important;
+}
+
+.option:hover {
+    background: #1c191a !important;
+}
+
+.dropdown:after {
+    border-top-color: #737171 !important;
+}
+
+#messages li {
+  background: #009ddc;
+  color: #ffffff;
+}
+
+#messages li.error {
+  background: #ee2e24;
+  color: #ffffff;
+}

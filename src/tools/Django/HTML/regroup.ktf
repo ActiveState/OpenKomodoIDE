@@ -1,0 +1,9 @@
+// komodo tool: regroup
+// ====================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ====================
+<% /* regroup */ %>
+{% regroup [[%tabstop1:1]] by [[%tabstop2:2]] as [[%tabstop3:3]] %}

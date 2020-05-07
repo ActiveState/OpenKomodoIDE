@@ -1,0 +1,725 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!--
+Distributed under GNU Public License!
+For details see: http://www.gnu.org/licenses/gpl.html
+
+Please keep these credits:
+Author : Cüneyt Yilmaz
+Contact: please open the page for email info
+
+I assume no responsibility for ANYTHING that you may cause via the use of this program!
+
+-->
+
+<html>
+
+<head>
+<!------------------------------------------------------------------------------------------------->
+<title>JRX: real-time JavaScript RegExp evaluator - cuneytyilmaz.com</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-9">
+<meta name="author" content="Cuneyt Yilmaz, c&uuml;neyt y&yacute;lmaz, cuneytyilmaz.com>">
+<meta name="keywords" content="jrx, javascript, regexp, regex, regular expressions, cuneyt, yilmaz, real time, real-time, on the fly, on-the-fly, rx, activestate, komodo, evaluate, evaluator">
+<meta name="description" content="This is a simple JavaScript real-time regular expression evaluator, similar to RX tool of Activestate's Komodo IDE">
+<meta name="version" content="1.0b">
+
+<style type="text/css">
+<!--
+
+
+
+body {
+    font-family: Verdana, Helvetica, sans-serif; font-size: 0.9em;
+    color: #172F60; background-color: #fff;
+    margin: 5px; padding: 0 0 0 0;
+    }
+h1 {
+    font-size: 1.5em; font-family : Garamond, Times, serif;
+    color: #25968A; background-color: transparent;
+    display: inline; margin-right: 5em;
+    }
+select, input, option, textarea {
+    color: inherit; background-color: inherit;
+    font-family: "Courier New", Courier, sans-serif;
+    }
+
+/* link colors */
+a:link, a:visited, a:hover, a:active { text-decoration: underline; }
+a:visited { color: #AE2A56; border-bottom: 1px solid #2F5FC1; }
+a:link    { color: #2F5FC1; border-bottom: 1px solid #2F5FC1; }
+a:hover   { color: #F3F5F8; border-bottom: 1px solid #172F60; background-color: #B7BCC7; }
+html>body a:link, html>body a:visited { border-bottom: 1px dotted #2F5FC1; text-decoration: none; }
+html>body a:hover, html>body a:active { border-bottom: 1px solid; }
+
+
+#pageheader, #fs_regexp, #fs_results, #fs_target {
+    width: 40.8em;
+    }
+
+#fs_regexp, #fs_results, #fs_target {
+    display: block;
+    /* border: 1px solid #A6BCE8; */
+    border: 1px solid #DFE4EC;
+    /* border-width: 1px 0 0 1px; */
+    /* border: none;*/
+    /*
+    margin-left: 0px; margin-top: 15px;
+    padding-left: 10px; padding-right: 10px; padding-top: 10px;
+    */
+    /* margin: 0.5em auto 0.5em 0.5em; */
+    margin: 0.5em auto 0 0;
+    padding: 5px 10px 10px 10px;
+    background-color: #F3F5F8;
+}
+
+/* for the field labels */
+#l_regexp, #l_results, #l_target {
+    font-weight: bold; font-size: 0.8em;
+    margin: 0 0 0.4em 0;
+    padding: 0.4em;
+    border: 1px solid #DFE4EC;
+    border-width: 1px 1px 0 1px;
+    /*color: #F3F5F8;*/
+    background-color: #F3F5F8;
+    }
+
+
+
+
+/* for the modifiers & options */
+#block_opt
+    { font: normal normal 0.7em/0.8 Verdana, Helvetica, sans-serif; }
+#i_autoupdate, #i_global, #i_multiline, #i_insensitive, #i_miniref
+    { width: 12px; height: 12px; margin-bottom: 0px; }
+label abbr{ border-bottom: 1px dotted; }
+
+/*input[type="checkbox"] { width: 1.1em; height: 1.1em; } */
+
+
+
+/* for the 3 main elements */
+#i_regexp, #i_result, #i_target {
+    font-size: 0.75em;
+    /* UAs don't allow this to be overridden!?! border: 1px solid #A6BCE8 !important; */
+    border: 1px solid #DFE4EC;
+    color: inherit; background-color: #fff;
+    overflow: auto;
+    }
+#i_regexp:focus, #i_result:focus, #i_target:focus {
+    background-color: #FFF1D4;
+    }
+option:active, option:hover {
+    font-weight: bold; color: #F3F5F8; background-color: #B7BCC7; cursor: pointer;
+    }
+option.nostyle {
+    font-weight: normal; color: inherit; background-color: inherit; cursor: default;
+    }
+
+
+
+#i_regexp_preview { display: none; }
+#i_regexp_preview, #num_results, #input_length
+    { border: 1px solid #AE2A56; color: #AE2A56; background-color: #fff; font-weight: bold; text-align: right; }
+/*
+#i_regexp_preview:focus, #num_results:focus, #input_length:focus
+    { background-color: #F3F5F8; }
+/**/
+
+
+
+/* general purpose */
+/* #cleartext { font-size: 0.7em; }*/
+.fixedwidth { font-family: "Courier New", Courier, sans-serif; font-size: 0.9em; border: 1px solid; padding-left: 2px; }
+.notes { width: 650px; text-align: justify;}
+.pointer { cursor: pointer; }
+.noStyles { display: none; }
+#inlinehelp { position: absolute; left: 45em; top: 1em; width: auto; border: 1px solid #DFE4EC; display: none; }
+#inlinehelp pre { font-size: 0.9em; }
+#help {
+    text-decoration: none;
+    font-weight: bold;
+    /* vertical-align: top; */
+    cursor: help !important;
+    /* position: absolute; left: 450px; */
+    margin: 0 auto auto 7em;
+    float: right;
+    }
+
+button { border: 1px solid; color: #000000;  background-color: #AAB6C4; margin: 0 0.5em 0 0.5em; }
+
+html>body button {
+  /* margin: 2px; */
+  border: 6px solid;
+ -moz-border-top-colors: transparent transparent transparent #000000 #BBC6D1 #B1BBC9;
+  -moz-border-right-colors: transparent transparent transparent #000000 #A2AEBB #A7B4C1;
+  -moz-border-bottom-colors: transparent transparent transparent #000000 #97A6B6 #9DAAB9;
+  -moz-border-left-colors: transparent transparent transparent #000000 #BBC6D1 #B1BBC9;
+  -moz-border-radius: 5px;
+  min-width: 12em;
+  text-align: right;
+  font: menu;
+  /* border: 1px solid black; */
+}
+
+
+button.legend_button     { font-family: Verdana, Helvetica, sans-serif; font-size: 0.9em; font-weight: normal; }
+button.legend_button_emp { font-family: Verdana, Helvetica, sans-serif; font-size: 0.9em; font-weight: bold; }
+button:hover { font-weight: bold; }
+
+
+-->
+</style>
+
+<!------------------------------------------------------------------------------------------------->
+
+<script language="JavaScript1.2" type="text/javascript">
+<!--
+
+//var agt = navigator.userAgent.toLowerCase();
+var is_gecko = (navigator.userAgent.toLowerCase().indexOf('gecko') != -1);
+var ie_ver;
+if(!is_gecko) { ie_ver = Number(ScriptEngineMajorVersion() + "." + ScriptEngineMinorVersion()); }
+
+//var is_gecko = (navigator.userAgent.toLowerCase().indexOf('gecko') != -1);
+//var is_ie5up = (!is_gecko && Number(ScriptEngineMajorVersion() + "." + ScriptEngineMinorVersion()) > 5.1 ? true : false);
+
+
+var i_regexp_width = 80;
+var i_result_width = 80;
+var i_target_width = 80;
+
+
+
+// this portion courtesy of: Jim Tucek
+
+// <!--Quick! Hide the java!
+// Speaking of Java, this particular script is (C) Copyright 2002 Jim Tucek
+// If you wish to use my Email Encryption script, these comments must be left
+// alone!  That is all.
+
+// Visit www.jracademy.com/~jtucek/ for script information and a bit of help
+// setting it up, or www.jracademy.com/~jtucek/email.html for contact
+// information.
+
+// A brief history of this script can be found (and it's rather entertaining)
+// at www.jracademy.com/~jtucek/eencrypt.html
+
+
+function goForth()
+{
+    var c = '815 206 333 51 506 689 797 206 848 233 178 561 739 307 692 461 692 142 719 412 526 730 552 178 333 412';
+    var n = 851;
+    var d = 317;
+    c += ' ';
+    var length = c.length;
+    var number = 0;
+    var bar = 0;
+    var answer = '';
+    for(var i = 0; i < length; i++)
+    {
+        number = 0;
+        bar = 0;
+        while(c.charCodeAt(i) != 32)
+        {
+            number = number * 10;
+            number = number + c.charCodeAt(i)-48;
+            i++;
+        }
+        answer += String.fromCharCode(decrypt(number,n,d));
+    }
+    return answer;
+}
+
+function decrypt(c,n,d)
+{
+    // Split exponents up
+    if (d % 2== 0)
+    {
+        bar = 1;
+        for(var i = 1; i <= d/2; i++)
+        {
+            foo = (c*c) % n;
+            bar = (foo*bar) % n;
+        }
+    }
+    else
+    {
+        bar = c;
+        for(var i = 1; i <= d/2; i++)
+        {
+            foo = (c*c) % n;
+            bar = (foo*bar) % n;
+        }
+    }
+    return bar;
+}
+
+function dumpEmail()
+{
+    emailAddress = goForth();
+    //emailAddress is the decrypted version of your email address, ie none@none.com
+    document.write('<a href="mailto:' + emailAddress + '" title="send an email about JRX">drop me an email.</a>');
+}
+
+// Stop hiding the script
+
+
+var counter=0;
+// currently only partially used used for newline stripping
+// will be later used for extended regexp's
+function stripExtendedWhitespace(str)
+{
+    // maybe some regular expressions??? can be a lil bit hairy :)
+    return str.replace(/(\r\n|\n|\r)+/, '');
+    for(var i=0; i < str.length; i++)
+    {
+        curChar = str.charAt(i);
+        if(curChar == '\\')
+        {
+            // skip next char
+            i++;
+        }
+        //alert(curChar);
+    }
+
+    return str;
+}
+
+function checkMultiline()
+{
+    if(!is_gecko) document.jrxform.i_multiline.disabled='true';
+}
+
+
+function getResult (str, regexpstr)
+{
+
+    var myStatus = -1;
+    var myArray = new Array;
+    var dummyArray= new Array;
+    var lidx = -1;
+    var myLen = -1;
+
+    try
+    {
+        regexpstr = stripExtendedWhitespace(regexpstr);
+        var evalstr = '/' + regexpstr + '/';
+        if(document.jrxform.i_global.checked)
+            evalstr += 'g';
+        if(document.jrxform.i_multiline.checked)
+            evalstr += 'm';
+        if(document.jrxform.i_insensitive.checked)
+            evalstr += 'i';
+
+        /*
+        if(document.jrxform.extended.checked)
+        {
+            Alert("You shouldn't see this message yet, since it should be deactivated!");
+            evalstr += 'x (x for Perl only)';
+            // strip extended whitespace from the regexp
+            evalstr = stripExtendedWhitespace(evalstr);
+        }
+        */
+
+        // display the regexp for copy-paste
+        /* document.jrxform.i_regexp_preview.size = evalstr.length + 1; */
+        document.jrxform.i_regexp_preview.value = evalstr.length + ' ' + evalstr;
+
+        /* self.status = evalstr; */
+
+        // assign and use it
+        evalstr = "myRe = " + evalstr + ";";
+
+        //regexpstr = regexpstr.replace(/\\/, "\\\\");
+        //evalstr = "myRe = new Regexp(\"" + regexpstr + "\", \"" + evalstr + "\");";
+        //myRe = new Regexp(regexpstr, evalstr);
+        //alert(myRe);
+        //alert(evalstr);
+        eval(evalstr);
+
+        // myArray = myRe.exec(str);
+
+
+        if(!document.jrxform.i_global.checked)
+        {
+            myArray = myRe.exec(str);
+        }
+        else
+        {
+            //alert("array: " + dummyArray + "\n" + "lidx: " + lidx);
+            var counter = 0;
+            while( counter++ < 250 && (dummyArray =myRe.exec(str)) != null)
+            {
+                if(is_gecko || ie_ver>5.1)
+                {
+                    //alert("GECKO -- arr: " + dummyArray + " lidx: " + myRe.lastIndex);
+                }
+                //else if(ie_ver>5.1)
+                //{
+                //    //alert('Hello');
+                //}
+                else
+                {
+                    //alert("IE -- arr: " + dummyArray + " lidx: " + dummyArray.lastIndex);
+                    str = str.substring(dummyArray.lastIndex - 1);
+                }
+                //alert("GEN -- arr: " + dummyArray + " lidx: " + dummyArray.lastIndex);
+                for(i=0; i< dummyArray.length; i++)
+                {
+                    x = dummyArray[i];
+                    //alert('x:' + x);
+                    // fucking IE5 doesn't know array.push method! %@%§!&
+                    //myArray.push(x);
+                    myArray[myArray.length] = x;
+                    //alert('pushed: ' + dummyArray.lastIndex);
+                }
+
+            }
+        }
+
+        myStatus = 0;
+    }
+    catch(e)
+    {
+        // do nothing
+        // necessary avoid the errors if the regexp is empty
+        // this will be corrected in the next version
+        myStatus = 2;
+    }
+
+    // this block is just a workaround for Array.length bug/quirk(?) in JavaScript
+    // even if an Array is created, but is empty, you cannot use .length method
+    // this produces an exception!!!
+    try
+    {
+        myLen = myArray.length;
+    }
+    catch(e)
+    {
+        // preserve status if status is something else
+        myStatus = (myStatus == 0 ? 1 : myStatus);
+    }
+
+
+    //if(!document.jrxform.i_autoupdate.checked)
+    //{
+    //    return;
+    //}
+
+    // delete the old results
+    for(var o = document.jrxform.i_result.options.length; o >= 2; o--)
+      document.jrxform.i_result.options[o] = null;
+
+    // insert the results into select field
+    try
+    {
+        var sel, text, opt;
+        //alert(myStatus);
+        if(myStatus == 1)
+            myArray = ["---Nothing could be matched!---"];
+        if(myStatus == 2)
+            myArray = ["---NO RESULTS FOUND! MAYBE AN EMPTY/INVALID REGEXP?---"];
+
+
+        for(var i = 0; i < myArray.length; i++)
+        {
+            text = ( myStatus == 0  ?  i + ': (' + myArray[i] + ')'  :  myArray[i] ); // new text
+            opt = new Option(text, i);              // new item to be added
+            sel = document.jrxform.i_result;        // select object
+            sel.options[sel.options.length] = opt;  // add the item at the end
+        }
+        ////if(document.jrxform.i_result.options.length <= 10)
+        // this part is buggy with Mozilla atm
+        //if(myArray.length <= 10)
+        //{
+        //    document.jrxform.i_result.size = 13;
+        //}
+        //else if(myArray.length >= 15)
+        //{
+        //    document.jrxform.i_result.size = 18;
+        //}
+        //else
+        //{
+        //    document.jrxform.i_result.size = myArray.length + 3;
+        //}
+        document.jrxform.num_results.value = myArray.length;
+
+        // clear results to avoid refresh problems
+        myArray = null;
+    }
+    catch (e)
+    {
+        // do nothing
+    }
+
+}
+function updateResults()
+{
+    getResult(document.jrxform.i_target.value, document.jrxform.i_regexp.value);
+    document.jrxform.i_regexp.cols = i_regexp_width;
+    document.jrxform.i_target.cols = i_target_width;
+}
+
+function emphasizeRefresh()
+{
+    document.jrxform.refreshbutton.className = (document.jrxform.i_autoupdate.checked ? "legend_button" : "legend_button_emp") ;
+    updateResults();
+    //if(!document.jrxform.i_autoupdate.checked)
+    //{
+    //    document.jrxform.refreshbutton.style.backgroundColor = "black";
+    //}
+    //else
+    //    document.jrxform.refreshbutton.style.backgroundColor = "black";
+    //}
+}
+function setInputFocus()
+{
+    document.jrxform.i_regexp.focus();
+}
+function clearTargetText()
+{
+    document.jrxform.i_target.value = '';
+}
+function setTargetFocus()
+{
+    document.jrxform.i_target.focus();
+}
+function countInputChars()
+{
+    document.jrxform.input_length.value = document.jrxform.i_target.value.length;
+}
+/* currently not used
+function dumpRuler()
+{
+    return ("123456789<strong>0</strong>123456789<strong>0</strong>123456789<strong>0</strong>123456789<strong>0</strong>123456789<strong>0</strong>123456789<strong>0</strong>");
+}
+*/
+function makeString(ch, times)
+{
+    retVal = '';
+    for(i=0; i<times; i++)
+    {
+        retVal += ch;
+    }
+    return retVal;
+}
+function dumpResultsHeader(pos)
+{
+    fullLen = i_result_width;
+    headerTop = new Array("Results will be displayed here:", "");
+    headerTop[1] += makeString( "&#x00af;", headerTop[0].length);
+    headerTop[0] += makeString( "&nbsp;",   fullLen - headerTop[0].length);
+    document.write (pos == 0 ? headerTop[0] : headerTop[1] );
+}
+function resizeInput()
+{
+    str = document.jrxform.i_regexp.value;
+    iArr = str.split("\n");
+    len = (iArr ? iArr.length : 0);
+
+    /* resize input if line number is:
+      is 1 => 2
+      btw 2 & 5 => 5
+      btw 6 & 9 => 9
+      more => 10
+    */
+    rows = 10;
+    if(len-6 <= 3) rows = 9;
+    if(len-2 <= 3) rows = 5;
+    if(len-1 <= 0) rows = 1;
+
+    document.jrxform.i_regexp.rows = rows;
+    document.jrxform.i_regexp.style.overflow = 'auto';
+
+
+}
+function toggleMiniRef()
+{
+     document.getElementById("inlinehelp").style.display =
+        (document.getElementById("i_miniref").checked ? '' : 'none');
+}
+
+function aboutWindow()
+{
+    str = "<html><head>"
+        + "<style>\n"
+        + "body {font-family: Verdana, Helvetica, sans-serif; font-size: 0.9em;}"
+        + "table,td {font-size: 0.9em;}"
+        + "a:link, a:visited, a:hover, a:active { text-decoration: underline; }"
+        + "a:visited { color: #AE2A56; border-bottom: 1px solid #2F5FC1; }"
+        + "a:link    { color: #2F5FC1; border-bottom: 1px solid #2F5FC1; }"
+        + "a:hover   { color: #F3F5F8; border-bottom: 1px solid #172F60; background-color: #B7BCC7; }"
+        + "html>body a:link, html>body a:visited { border-bottom: 1px dotted #2F5FC1; text-decoration: none; }"
+        + "html>body a:hover, html>body a:active { border-bottom: 1px solid; }"
+        + "\n</style>\n"
+        + "<title>JRX: Help & About - cuneytyilmaz.com</title></head><body onBlur=\"window.focus()\" style=\"\">\n"
+        + "<h3>About</h3>"
+        + "<p class=\"notes\">Inspired by the RX tool in "
+        + "<a href=\"http://www.activestate.com/Products/Komodo/\" target=\"_blank\" title=\"Try Komodo as well\">ActiveState's Komodo</a> IDE.<br/>"
+        + "Though RX is more powerful and supports Perl Regular Expressions (almost?) fully,"
+        + "I've needed an always-accessible and installation-free implementation.<br/>"
+        + "And here it is: a single HTML file, <strong>no</strong> external file ;)<br/>"
+        + "Save it to your disk if you like, or use online for latest version.</p>"
+        + "<p class=\"notes\">JRX is tested with Mozilla 1.3, IE 6.0 and Opera 7.1.<br/>"
+        + "However, IE6 and Opera have some funny bugs with JavaScript and CSS. <a href=\"http://www.mozilla.org/releases/\" target=\"_blank\" title=\"Use a real browser, use Mozilla ;)\">Use a real browser</a> :)<br/>"
+        + "Have fun.</p>"
+        + "<h3>Mini FAQ</h3>"
+        + "<p>Q. Why are my results shown twice, if I use global and parentheses?</p>"
+        + "<p>A. Results always include $0, which means, if you use, e.g. /(^.$)/, "
+        + "$0 is implicitly the whole matched string and $1 is your backreference!<br/>"
+        + "And if you pack the whole regexp into parens again, $0 &amp; $1 will be naturally the same :)<br/>"
+        + "...try the above regexp with multiline(m) &amp; global(g), you'll see.</p>"
+        + "<h3>Keyboard shortcuts</h3>"
+        + "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" summary=\"Quick Regular Expressions reference\">\n"
+            + "<tr><td>Alt-<strong>E</strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><strong>E</strong>xpression box  </td></tr>\n"
+            + "<tr><td>Alt-<strong>R</strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><strong>R</strong>esults box</td></tr>\n"
+            + "<tr><td>Alt-<strong>T</strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><strong>T</strong>ext box </td></tr>\n"
+            + "<tr><td>Alt-<strong>F</strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>re<strong>F</strong>resh results</td></tr>\n"
+            + "<tr><td>Alt-<strong>H</strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><strong>H</strong>elp &amp; about</td></tr>\n"
+        + "</table>\n"
+        + "<br/><br/>"
+        + "<table id=\"help\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" summary=\"Quick Regular Expressions reference\">\n"
+            + "<tr><th colspan=\"2\">Quick Regular Expressions reference</th></tr>\n"
+            + "<tr><td><b>\\d     </b></td><td>any decimal digit                                                   </td></tr>\n"
+            + "<tr><td><b>\\D     </b></td><td>any char that is not a decimal digit                                </td></tr>\n"
+            + "<tr><td><b>\\s     </b></td><td>any whitespace char                                                 </td></tr>\n"
+            + "<tr><td><b>\\S     </b></td><td>any char that is not a whitespace                                   </td></tr>\n"
+            + "<tr><td><b>\\w     </b></td><td>any <em>word</em> char                                              </td></tr>\n"
+            + "<tr><td><b>\\W     </b></td><td>any <em>non-word</em> char                                          </td></tr>\n"
+            + "<tr><td><b>\\b     </b></td><td>word boundary; inside char-class: backspace                         </td></tr>\n"
+            + "<tr><td><b>\\B     </b></td><td>not a word boundary                                                 </td></tr>\n"
+            + "<tr><td><b>\\A     </b></td><td>start of subject (independent of multiline mode)                    </td></tr>\n"
+            + "<tr><td><b>\\Z     </b></td><td>end of subject or newline at end (independent of multiline mode)    </td></tr>\n"
+            + "<tr><td><b>\\z     </b></td><td>end of subject(independent of multiline mode)                       </td></tr>\n"
+            + "<tr><td><b>[]      </b></td><td>char class                                                          </td></tr>\n"
+            + "<tr><td><b>^       </b></td><td>beginning of line; inside char-class: negate                        </td></tr>\n"
+            + "<tr><td><b>$       </b></td><td>end of line                                                         </td></tr>\n"
+            + "<tr><td><b>()      </b></td><td>capturing parentheses                                               </td></tr>\n"
+            + "<tr><td><b>|       </b></td><td>alternation                                                         </td></tr>\n"
+            + "<tr><td><b>*       </b></td><td>zero or more time, equals to {0,}                                   </td></tr>\n"
+            + "<tr><td><b>+       </b></td><td>one or more time, equals to {1,}                                    </td></tr>\n"
+            + "<tr><td><b>?       </b></td><td>zero or one time, equals to {0,1}                                   </td></tr>\n"
+            + "<tr><td><b>{m,n}   </b></td><td>preceding char or group minimal m, maximal n times                  </td></tr>\n"
+            + "<tr><td><b>(?:)    </b></td><td>non-capturing parentheses                                           </td></tr>\n"
+            + "<tr><td><b>(?=x)   </b></td><td>lookahead, i.e. only if followed by x                               </td></tr>\n"
+            + "<tr><td><b>(?!x)   </b></td><td>negated lookahead, i.e. only if not                                 </td></tr>\n"
+            + "<tr><td><b>\\f     </b></td><td>form-feed                                                           </td></tr>\n"
+            + "<tr><td><b>\\t     </b></td><td>tab                                                                 </td></tr>\n"
+            + "<tr><td><b>\\v     </b></td><td>vertical-tab                                                        </td></tr>\n"
+            + "<tr><td><b>\\r     </b></td><td>carriage return                                                     </td></tr>\n"
+            + "<tr><td><b>\\n     </b></td><td>new line (unix:\\n, win:\\r\\n, mac:\\r)                            </td></tr>\n"
+            + "<tr><td><b>\\xhh   </b></td><td>hexadecimal code of char (2 hex)                                    </td></tr>\n"
+            + "<tr><td><b>\\uhhhh </b></td><td>unicode code of char (4 hex)                                        </td></tr>\n"
+        + "</table>\n"
+        + "<br/>\n"
+        + "<h3>Copy issues</h3>"
+        + "<p>Distributed under <a href=\"http://www.gnu.org/licenses/gpl.html\" target=\"_blank\" title=\"for details see GNU License\">GNU License</a>.<br/>"
+        + "Modifications are allowed as long as credits are preserved!</p>"
+        + "Email portion of this program courtesy of: <a href=\"http://www.jracademy.com/~jtucek/\" target=\"_blank\">Jim Tucek</a>"
+        + "<h3>Credits</h3>"
+        + "<p>Thanks to Luciano Espirito Santo for his feedback about help, usability and symphathetic smiley about Phoenix browser :)</p>"
+        + "<button onClick=\"self.close();\" style=\"text-align:center; padding: 5px;\">Close this window!</button><br/><br/>"
+        + "</body></html>"
+    jrxAboutWH = window.open('', "jrxAboutWin", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,dependent=yes,width=500,height=500,alwaysRaised=1,titlebar=no");
+    jrxAboutWH.document.write(str);
+}
+//-->
+</script>
+
+<!------------------------------------------------------------------------------------------------->
+
+
+</head>
+
+<body lang="en" onLoad="JavaScript:checkMultiline(); toggleMiniRef(); setInputFocus(); countInputChars(); updateResults();" background="data:image/gif;base64,R0lGODlhAQACALMAAPf39////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAAQACAAAEAzCACAA7">
+
+<div id="pageheader">
+<h1><abbr title="Javascript Regular eXpressions">JRX</abbr>: real-time JavaScript <abbr title="Regular Expression">RegExp</abbr> evaluator v1.1b3</h1>
+<a href="#" id="help" title="Program info, a RegExp quick reference &amp; and miscellaneous" accesskey="h" onClick="JavaScript:aboutWindow();">?&nbsp;<u>H</u>elp&nbsp;&amp;&nbsp;About</a>
+</div>
+
+<form name="jrxform" action="">
+
+    <fieldset id="fs_regexp">
+        <legend id="l_regexp">Reg<u>E</u>xp
+            <button id="refreshbutton" accesskey="f" class="legend_button" onClick="JavaScript: updateResults(); setInputFocus(); return false;"/>Re<u>f</u>resh Results</button>
+            <input type="text" id="i_regexp_preview" size="50" value="" readonly="readonly" tabindex="30" />
+        </legend>
+        <textarea id="i_regexp" cols="60" rows="1" wrap="soft" accesskey="e" onKeyUp="JavaScript: if(document.jrxform.i_autoupdate.checked) updateResults(); resizeInput();">\b\w{4,5}\b</textarea><br/>
+        <div id="block_opt">
+            <label accesskey="a"><input type="checkbox" id="i_autoupdate" onClick="JavaScript:emphasizeRefresh(); setInputFocus();" checked="checked" /><abbr title="whether the results list should be automatically updated"><u>A</u>uto-refresh</abbr></label>
+            <label accesskey="g"><input type="checkbox" id="i_global" onClick="JavaScript:updateResults(); setInputFocus();" checked="checked" /><abbr title="whether the regexp should return after the 1st match, or search all"><u>G</u>lobal</abbr></label>
+            <label accesskey="m"><input type="checkbox" id="i_multiline" onClick="JavaScript:updateResults(); setInputFocus();" title="currently works only with Mozilla" /><abbr title="whether ^ and $ should match multiple times"><u>M</u>ulti-line</abbr></label>
+            <label accesskey="i"><input type="checkbox" id="i_insensitive" onClick="JavaScript:updateResults(); setInputFocus();" checked="checked" /><abbr title="whether case of letters should be taken into account"><u>I</u>gnore case</abbr></label>
+            <label accesskey="s"><input type="checkbox" id="i_miniref" onClick="JavaScript:toggleMiniRef();" /><abbr title="whether the quick regexp reference should be shown (experimental)"><u>S</u>how mini-ref</abbr></label>
+<!--
+            <label><input type="checkbox" id="i_extended" disabled="disabled" onClick="JavaScript:updateResults(); setInputFocus();"/>
+                Extended pattern (e.g. spaces allowed; <b>to be implemented!</b>)</label><br/>
+            <br/>
+-->
+        </div>
+    </fieldset>
+
+        <fieldset id="fs_results">
+            <legend id="l_results"><u>R</u>esults (incl. $0-all matched): <input type="text" id="num_results" value="0" size="7" readonly="readonly" />&nbsp;</legend>
+            <select id="i_result" size="11" accesskey="r">
+            <option name="" class="nostyle"><script>dumpResultsHeader(0);</script></option>
+            <option name="" class="nostyle"><script>dumpResultsHeader(1);</script></option>
+            </select>
+        </fieldset>
+
+        <fieldset id="fs_target">
+            <legend id="l_target"><u>T</u>arget
+                <button id="cleartext" accesskey="c" class="legend_button" onClick="JavaScript:clearTargetText(); setTargetFocus(); return false;"/><u>C</u>lear Text</button>
+                Length:&nbsp;<input type="text" id="input_length" value="0" size="7" readonly="readonly" />
+            </legend>
+            <textarea id="i_target" cols="60" rows="5" accesskey="t" onKeyUp="JavaScript:countInputChars(); updateResults();"
+                onChange="countInputChars();">The quick brown fox jumps over the lazy dog.
+0123456789.:,;(*!?')
+/\"$%&+-_#</textarea><br/>
+            <!--<a id="clear_text" href="JavaScript:clearTargetText(); setTargetFocus();" title="Clear target textfield">Clear Text</a>-->
+        </fieldset>
+</form>
+
+<div id="inlinehelp">
+Quick Regular Expressions reference
+<pre>
+\d     any decimal digit
+\D     any char that is not a decimal digit
+\s     any whitespace char
+\S     any char that is not a whitespace
+\w     any <em>word</em> char
+\W     any <em>non-word</em> char
+\b     word boundary; backspace inside []
+\B     not a word boundary
+\A     start of subject
+       (independent of multiline mode)
+\Z     end of subject or newline at end
+       (independent of multiline mode)
+\z     end of subject
+       (independent of multiline mode)
+
+[]     char class
+^      beginning of line; negate inside []
+$      end of line
+()     capturing parentheses
+|      alternation
+
+*      zero or more time, equals to {0,}
++      one or more time, equals to {1,}
+?      zero or one time, equals to {0,1}
+{m,n}  preceding group: min m, max n times
+(?:)   non-capturing parentheses
+(?=x)  lookahead (only if followed by x)
+(?!x)  negated lookahead (only if not followed)
+\f     form-feed
+\t     tab
+\v     vertical-tab
+\r     carriage return
+\n     new line (unix:\n, win:\r\n, mac:\r)
+
+\xhh   hexadecimal code of char (2 hex)
+\uhhhh unicode code of char (4 hex)
+</pre>
+</div>
+</body>
+</html>

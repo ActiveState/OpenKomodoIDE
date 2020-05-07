@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2011 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE window PUBLIC "-//MOZILLA//DTD XUL V1.0//EN"
+          "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % komobDTD SYSTEM "chrome://komob/locale/komob.dtd">
+  %komobDTD;
+]>
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komob/skin/komob.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komob/skin/friendslist.css" type="text/css"?>
+
+<!-- Collaboration pane content -->
+<page id="collab-pane"
+      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <stringbundleset id="komodo_strbundles">
+        <stringbundle id="komobStringBundle"
+                      src="chrome://komob/locale/komob.properties"/>
+    </stringbundleset>
+
+    <script type="application/x-javascript"
+            src="chrome://komob/content/main.js"/>
+    <script type="application/x-javascript;version=1.8"
+            src="chrome://komob/content/utils.js"/>
+    <script type="application/x-javascript;version=1.8"
+            src="chrome://komob/content/api.js"/>
+    <script type="application/x-javascript;version=1.8"
+            src="chrome://komob/content/sessions.js"/>
+    <script type="application/x-javascript;version=1.8"
+            src="chrome://komob/content/friends.js"/>
+
+    <deck id="collab-panel-container" flex="1">
+        <vbox id="collab-panel-content-disabled">
+            <hbox align="center" class="status-toolbar">
+                <label value="&Collaboration;"/>
+            </hbox>
+            <vbox>
+                <description>&collaboration_disabled_message;</description>
+                <button id="collab-panel-open-setup"
+                        label="&enable_collaboration;"
+                        onclick="ko.collaboration.enableService()"/>
+            </vbox>
+        </vbox>
+        <vbox id="collab-panel-content-offline">
+            <hbox align="center" class="status-toolbar">
+                <label value="&Collaboration;"/>
+            </hbox>
+            <vbox>
+                <description>&communication_error_message;</description>
+                <button id="collab-panel-force-reconnect"
+                        label="&force_reconnect;"
+                        oncommand="ko.collaboration.service.forceReconnect()" />
+            </vbox>
+        </vbox>
+        <vbox id="collab-panel-content-online">
+            <hbox align="center" class="status-toolbar">
+                <toolbarbutton
+                    id="sessionRootButton"
+                    class="normal panel-label"
+                    type="menu"
+                    orient="horizontal"
+                    label="Session">
+                    <menupopup
+                        id="sessionSelect"
+                        position="after_start" />
+                </toolbarbutton>
+                <spacer flex="1"/>
+                <toolbarbutton id="collab-sessions-menu"
+                    buttonstyle="pictures"
+                    orient="horizontal"
+                    class="collab-sessions-menu-icon"
+                    tooltiptext="&collab_options;"
+                    type="menu">
+                    <menupopup id="collab-sessions-menu-menupopup">
+                        <menuitem id="collab-sessions-context-remove-document-empty"
+                              label="&empty_doc;"
+                              oncommand="ko.collaboration.sessions.addNewTabToSelectedSession()"/>
+                        <menuitem id="collab-sessions-context-add-document-file"
+                              label="&new_doc_from_file;"
+                              oncommand="ko.collaboration.sessions.addExistingFileToSession()"/>
+                        <menuitem label="&create_new_session;"
+                                  oncommand="ko.collaboration.sessions.createSession()"/>
+                        <menuseparator/>
+                        <menu id="collab-sessions-context-add-user-menu"
+                              label="&user_to_session;">
+                            <menupopup id="collab-sessions-context-add-user-popup"
+                                       onpopupshowing="ko.collaboration.sessions.userPopupHandler()"/>
+                        </menu>
+                        <menu id="collab-sessions-context-remove-user-menu"
+                              label="&user_from_session;">
+                            <menupopup id="collab-sessions-context-remove-user-popup"
+                                       onpopupshowing="ko.collaboration.sessions.userPopupHandler(true)"/>
+                        </menu>
+                        <menuitem id="collab-sessions-context-rename"
+                                  label="&RenameSession;"
+                                  oncommand="ko.collaboration.sessions.renameSelectedItem(true)"/>
+                        <menuitem id="collab-sessions-context-leave-session"
+                                  label="&Leave;"
+                                  oncommand="ko.collaboration.sessions.leaveSelectedSession()"/>
+                        <menuitem id="collab-sessions-context-delete-session"
+                                  label="&DeleteSession;"
+                                  oncommand="ko.collaboration.sessions.deleteSelectedSession()"/>
+                        <menuseparator/>
+                        <menuitem label="&add_contact;"
+                                  oncommand="ko.collaboration.friends.sendFriendRequest()"/>
+                        <menu label="&remove_contact;">
+                            <menupopup id="remove_contact"/>
+                        </menu>
+                        <menuseparator/>
+                        <menuitem label="&my_account;"
+                                  oncommand="ko.services.sso.openSetup()"/>
+                        <menuitem label="&reload;"
+                                  oncommand="ko.collaboration.sessions.refresh(); ko.collaboration.friends.update();"/>
+                    </menupopup>
+                </toolbarbutton>
+            </hbox>
+            <vbox flex="4" id="collab-sessions-vbox">
+                <tree id="collab-sessions-tree" seltype="multiple"
+					  class="bg_transparent twisty-only"
+                      flex="1" hidecolumnpicker="true"
+                      context="collab-sessions-context"
+                      onclick="ko.collaboration.sessions.handleTreeClick(event)"
+                      ondblclick="ko.collaboration.sessions.handleTreeDblClick(event)">
+                    <treecols>
+                        <treecol id="collab-sessions-tree-column"
+                           flex="1"
+                           persist="width hidden sortActive sortDirection"
+                           class="sortDirectionIndicator"
+                           hideheader="true"
+                           primary="true"/>
+                    </treecols>
+                    <treechildren id="collab-sessions-tree-children" />
+                </tree>
+            </vbox>
+<!--            <splitter class="widget_splitter"
+                      orient="vertical"
+                      resizeafter="farthest"
+                      collapse="after">
+                <box flex="1"/>
+            </splitter>
+            <vbox flex="1" id="collab-sessions-vbox">
+                <label id="collab-sessions-label">&Sessions;</label>
+                <richlistbox flex="1" id="collab-sessions-listbox"/>
+            </vbox>-->
+        </vbox>
+    </deck>
+
+    <popupset id="collabPopupSet">
+        <menupopup id="collab-sessions-context"
+                   class="has-iconic-menuitems"
+                   onpopupshowing="return ko.collaboration.sessions.contextPopupHandler(event)">
+            <menuitem id="collab-sessions-context-open-document"
+                      label="&Open;"
+                      onclick="ko.collaboration.sessions.openSelectedDocument()"/>
+            <menuitem id="collab-sessions-context-rename"
+                      label="&Rename;"
+                      onclick="ko.collaboration.sessions.renameSelectedItem()"/>
+            <menuitem id="collab-sessions-context-delete"
+                      label="&Delete;"
+                      onclick="ko.collaboration.sessions.deleteSelectedItems()"/>
+        </menupopup>
+    </popupset>
+	
+</page>

@@ -1,0 +1,13 @@
+// komodo tool: for
+// ================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ================
+<% /* for */ %>
+
+{% for [[%tabstop1:1]] in [[%tabstop2:2]] %}
+	[[%tabstop3:<%= require("ko/editor").getColumnNumber() %>]]
+{% endfor %}
+	

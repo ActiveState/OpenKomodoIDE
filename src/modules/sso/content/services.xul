@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://services/locale/sso.dtd">
+<overlay id="komoodo-services-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <stringbundleset id="komodo_strbundles">
+        <stringbundle id="servicesStringBundle"
+                      src="chrome://services/locale/sso.properties"/>
+    </stringbundleset>
+
+    <script type="application/x-javascript">
+        Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+        if (!ko.services) ko.services = {};
+        
+        XPCOMUtils.defineLazyGetter(ko.services, "sso",
+            function() {
+                var scope = {};
+                Components.utils.import("resource://services/sso.js", scope);
+                return scope.SSOSvc;
+            });
+        
+        ko.services.updateUI = function() {
+            if (typeof gWeaveWin !== 'undefined')
+                gWeaveWin.updateUI();
+        }
+    </script>
+</overlay>

@@ -1,0 +1,32 @@
+{
+	"name": "jReject",
+	"title": "jQuery Browser Rejection",
+	"description": "jReject is a simple tool for rejecting specific browsers in a nice modal window",
+	"keywords": [
+		"browser",
+		"reject",
+		"popup"
+	],
+	"version": "1.0.2",
+	"author": {
+		"name": "Steven Bower",
+		"url": "https://github.com/BluSyn"
+	},
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://opensource.org/licenses/MIT"
+		},
+		{
+			"type": "GPLv2",
+			"url": "http://opensource.org/licenses/GPL-2.0"
+		}
+	],
+	"bugs": "https://github.com/TurnWheel/jReject/issues",
+	"homepage": "https://github.com/TurnWheel/jReject",
+	"docs": "http://jreject.turnwheel.com",
+	"download": "https://github.com/TurnWheel/jReject/archive/1.0.2.zip",
+	"dependencies": {
+		"jquery": ">=1.5"
+	}
+}

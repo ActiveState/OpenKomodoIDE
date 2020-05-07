@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="PrefWeb_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/pref-web.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="web-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical">
+            <caption label="&webBrowser.label;"/>
+            <vbox flex="1">
+                <description>&whichBrowserUse.description;</description>
+            </vbox>
+            <spacer height="5"/>
+            <hbox>
+                <menulist id="selectedbrowser"
+                          flex="1"
+                          pref="true"
+                          prefstring="browser">
+                    <menupopup id="selectedbrowser-popup"/>
+                </menulist>
+                <button label="&browse.label;" oncommand="browseForBrowser();"/>
+            </hbox>
+        </groupbox>
+    
+        <groupbox orient="vertical">
+            <caption label="&previewInBrowser.label;"/>
+            <radiogroup id="browser_preview_method" flex="1" pref="true"
+                        prefattribute="value">
+                <description>&whichMethodUse.description;</description>
+                <radio value="in-tab-other-group"
+                       label="&previewInKomodoTabOtherTabGroup.label;"
+                       selected="true"/>
+                <radio value="in-tab-same-group"
+                       label="&previewInKomodoTabSameTabGroup.label;"/>
+                <radio value="in-separate-dialog"
+                       label="&previewInKomodoDialog.label;"
+                       selected="true"/>
+                <radio value="external"
+                       label="&previewInExternalBrowserSpecifiedAbove.label;"/>
+            </radiogroup>
+        </groupbox>
+    
+        <groupbox orient="vertical">
+            <caption label="&saveChangedFiles.label;"/>
+            <label>&whenStartingPreviewOnUnsavedFile.label;</label>
+            <menulist pref="true" prefattribute="data"
+                      prefstrings="donotask_save_buffer_before_preview,donotask_action_save_buffer_before_preview">
+                <menupopup>
+                    <menuitem data="false,"   label="&askToSaveCurrentFile.label;"/>
+                    <menuitem data="true,All" label="&alwaysSaveCurrentFile.label;"/>
+                    <menuitem data="true,None"  label="&dontSaveCurrentFile.label;"/>
+                </menupopup>
+            </menulist>
+        </groupbox>
+        
+        <groupbox id="connectionGroup">
+            <caption label="&connection.label;"/>
+          
+            <hbox align="center">
+                <description flex="1" control="connectionSettings">&connectionDesc.label;</description>
+                <button id="connectionSettings" label="&connectionSettings.label;"
+                      accesskey="&connectionSettings.accesskey;"
+                      oncommand="configureProxies();"/>
+            </hbox>
+            <hbox align="center">
+                <description flex="1" control="showCertificates">&certManager.description;</description>
+                <button id="showCertificates"
+                        label="&certManager.label;"
+                        accesskey="&certManager.accesskey;"
+                        oncommand="showCertificates();"/>
+            </hbox>
+        </groupbox>
+    
+    </vbox>
+
+</window>

@@ -1,0 +1,4 @@
+content perldevkit content/
+skin perldevkit classic/1.0 skin/
+overlay chrome://komodo/content/komodo.xul chrome://perldevkit/content/overlay.xul
+overlay chrome://komodo/content/pref/pref.xul chrome://perldevkit/content/prefsOverlay.xul

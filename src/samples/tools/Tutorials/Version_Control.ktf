@@ -1,0 +1,248 @@
+// komodo tool: Version Control
+// ============================
+// is_clean: true
+// type: tutorial
+// version: 1.1.5
+// ============================
+# Sample content, edit, delete, do whatever you like
+Description: An introduction to version control in Komodo.
+Author: ActiveState
+Version: 1.0
+# Placement can be floating or docked
+Placement: docked
+Callouts:
+    versionControlWidget:
+        Element: "#scc-widget"
+        Message: This is the Version Control Pane.
+    placesWidget:
+        Element: "#placesViewbox"
+        Message: This is the Places widget.
+    placesCog:
+        Element: "#openfilesPrefButton"
+        Message: This is the Place Cog menu.
+    sideToolbar:
+        Element: "#toolbox_side"
+        Message: "This is the Komodo side toolbar, you can toggle it by right clicking it and selecting 'Customize'."
+        Fail: "Enable the side toolbar using View > Toolbars > Show Side Toolbar"
+    uniMenuButton:
+        Element: "#unifiedMenuButton"
+        Message: Access Komodo menus in the Unified Menu.
+    vcsDynButton:
+        Element: "#dynamicBtnGrp-SourceCodeControl"
+        Message: This is the dynamic button for version control.
+        Fail: "Enable the side toolbar using View > Toolbars > Show Side Toolbar"
+Steps: 
+    -
+        Title: Version Control
+        Summary: >
+            This tutorial covers Komodo's integration with version control systems (VCS).
+            
+            You can access frequently used VCS features through the
+            <i class="icon icon-scc"></i>&nbsp;**[Version Control Widget][callback:showVersionControl]**,
+            the Version Control button on the [side toolbar][callout:sideToolbar],
+            and through context menus on files in the
+            <i class="icon icon-folder-open"></i>&nbsp;**[Places widget][callback:showPlacesPane]**
+            and on file tabs. However, most of these features will not be available unless your
+            files are under version control.
+            
+        Task: >
+            Use one of the following methods to open your VCS repository in the
+            <i class="icon icon-folder-open"></i>&nbsp;**[Places widget][callback:showPlacesPane]**.
+            
+            #### New Checkout/Clone
+            
+            Open 
+            <% if (require("sdk/system").platform == "darwin") { %>
+            the **File** menu in your menubar, then pick
+            <% } else { %>
+            the <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:uniMenuButton]**,
+            then pick **File** >
+            <% } %>
+            **Source Code Control** > **Checkout**.
+            
+            #### Existing Checkout/Clone
+            
+            Click the <i class="icon icon-cog"></i>&nbsp; **Cog button** in your
+            <i class="icon icon-folder-open"></i>&nbsp;**[Places widget][callback:showPlacesPane]**,
+            then select **Open Directory** and choose the root directory of your
+            repository.
+        Tips:
+            - You can access the context menu by right clicking a file in Places or Open Files and selecting Source Code Control.
+            - Select **Create a Komodo project when complete** during the checkout process.  This makes it easier to open your project in the Places widget.
+        Validate: validateUnderVcs
+            
+    -
+        Title: File State Indicators
+        Summary: >
+            Komodo shows file state by changing the filename color.  Since users
+            can change Komodo's colors easily in our Color Scheme editor, these colors
+            may vary slightly but generally follow the guide lines from our
+            [source code control documentation](http://docs.activestate.com/komodo/12/ manual/scc.html#source-code-control-komodo-ide-only_using-source-code-control_file-colors).
+            
+            | Color                                         | State         |
+            |-----------------------------------------------|:-------------:|
+            | *normal*                                      | file in sync  |
+            | *<span style="color: green">green</span>*     | file added    |
+            | *<span style="color: red">red</span>*         | file deleted  |
+            | *<span style="color: blue">blue</span>*       | file modified |
+            | *<span style="color: teal">teal</span>*       | local and remote file have changed |
+            | *<span style="color: orange">orange</span>*   | conflict detected |
+        Task: >
+            1. Open any file from your repository.
+            2. Make a change in the file and save it.
+            3. Note the filename color changes in the
+            <i class="icon icon-folder-open"></i>&nbsp;**[Places widget][callback:showPlacesPane]**
+            and the file tab (blue).
+            4. Note the file listed in the <i class="icon icon-scc"></i>&nbsp;**[Version Control Widget][callback:showVersionControl]**
+            (also blue).
+        Tips:
+            - To quickly  revert changes to the last commit state, right click the file and select **Source Code Control > Revert**.
+    -
+        Title: Commit a Change
+        Summary: >
+            The Version Control widget allows you to quickly prepare and execute
+            a commit by double clicking files, writing a commit message, and then
+            clicking **Commit**.
+            
+            Make sure the
+            <i class="icon icon-scc"></i>&nbsp;**[Version Control Widget][callback:showVersionControl]**
+            is open.
+        Task: >
+            1. Edit, add, or delete a file (or do all three so there are more files to practice with).
+            1. Double click each listed file, or highlight them and right click and select **Source Code Control > Commit**.
+            1. Write a commit message.
+            1. Press the **Commit** button to commit your change.
+        Tips:
+            - Version control widget works with untracked files as well.  Double clicking untracked files to add them to a commit will cause Komodo to run an **add** command for the files so they are tracked and then ready to commit.
+    -
+        Title: Review a Change
+        Summary: >
+            The Version Control widget also allows you to review the project and
+            file history. This is very useful if you want to find out exactly
+            what has changed, or who made a change.
+        Task: >
+            Check the Project History and File History tabs in the
+            <i class="icon icon-scc"></i>&nbsp;**[Version Control Widget][callback:showVersionControl]**
+            for the commit you just made.
+    -
+        Title: Standalone Dialog
+        Summary: >
+            You can also open the Commit and History features in their own dialog,
+            simply hit the <i class="icon icon-external-link-square"></i>&nbsp;**Open Dialog** button in the widget.
+            
+            This option is particularly useful for developers who work with multiple monitors.
+        Task: >
+            Click the <i class="icon icon-external-link-square"></i>&nbsp;**Open Dialog** button in the Commit widget
+    -
+        Title: Dynamic Button
+        Summary: >
+            Finally, one last component worth exploring is the
+            <i class="icon icon-scc"></i>&nbsp;**[Dynamic Button for version control][callout:vcsDynButton]**.
+            
+            This button is only shown when using projects that are under version
+            control. It gives you quick access to common VCS tasks.
+            
+            One notable option here is to "Open the web service" for a file under
+            version control. This option is only available for Github or Bitbucket
+            managed files, and will open the relevant Github/Bitbucket page when clicked.
+            
+        Task: >
+            Explore the menu options under the
+            <i class="icon icon-scc"></i>&nbsp;**[Dynamic Button for version control][callout:vcsDynButton]**.
+        Success: >
+            ## More information
+            
+            Komodo supports the following version control tools:
+            
+            * Git
+            * Mercurial (Hg)
+            * Subversion (SVN)
+            * Perforce (P4)
+            * Bazaar (bzr)
+            * CVS
+            
+            For full documentation on the Version Control features
+            in Komodo see the [VCS Docs](http://docs.activestate.com/komodo/12/ manual/scc.html).
+// ============================
+// komodo meta: logic
+// ============================
+// Sample content, edit, delete, do whatever you like
+(function() {
+    const tut = require("tutorials/tutorials");
+    const w = require("ko/windows").getMain();
+    const ko = w.ko;
+    /**
+     * Called when the tutorial starts, right after the tutorial panel
+     * is initialized but before the first step is rendered
+     */
+    this.start = function() {}
+    
+    /**
+     * Called before the step is changed, you can get the current step
+     * with require("tutorials")._getActive().step.
+     *
+     * Steps are always incremental. To go back a step the active step
+     * counter is decreased and then this function gets called.
+     * 
+     * @returns {Boolean} Returning false stops execution
+     */
+    this.preStep = function() {}
+    
+    /**
+     * Called after a step has changed.
+     *
+     * See this.preStep() for further details
+     */
+    this.step = function() {}
+    
+    /**
+     * Called before the tutorial is closed and the tutorial ends.
+     * 
+     * @returns {Boolean} Returning false stops execution
+     */
+    this.preClose = function() {}
+    
+    /**
+     * Called after the tutorial is closed.
+     *
+     * See this.preClose() for further details.
+     */
+    this.close = function() {}
+    
+    /**
+     * A custom validation function that can be hooked up in
+     * your tutorial meta information.
+     * 
+     * @returns {Boolean|String} Return true to pass, anything else to fail
+     *
+     * If you return a string it will be used as the error message.
+     */
+    // this.myValidationFunction = function() {}
+    
+    /**
+     * Show the version control tab then callout
+     */
+    this.showVersionControl = function()
+    {
+        ko.uilayout.ensureTabShown("scc-widget");
+        // Tab isn't showing before callout is run.  Wait to run it.
+        setTimeout(function() {tut.logicCallout("versionControlWidget");}, 100);
+    };
+    
+    this.showPlacesPane = function()
+    {
+        ko.uilayout.ensureTabShown('placesViewbox', true);
+        setTimeout(function(){
+                require("tutorials/tutorials").logicCallout("placesWidget")
+            },100);
+    };
+    
+    this.validateUnderVcs = function()
+    {
+        if (ko.scc.getCurrentService())
+            return true;
+        
+        return "Your current Places widget directory is not under version control";
+    };
+    
+}).apply(module.exports);

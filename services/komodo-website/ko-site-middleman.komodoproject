@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="d5d441b5-7993-42ef-b90a-e73a0340b4db" kpf_version="5" name="ko-site-middleman.komodoproject">
+<preference-set idref="d5d441b5-7993-42ef-b90a-e73a0340b4db" id="project" preftype="project">
+  <string relative="path" id="import_dirname"></string>
+  <string id="import_exclude_matches">*.*~;*.bak;*.tmp;CVS;.#*;*.pyo;*.pyc;.svn;*%25*;tmp*.html;.DS_Store;__pycache__;.git;.komodotools;bower_components;node_modules;build</string>
+  <string id="last_local_directory">None</string>
+  <string id="last_remote_directory">None</string>
+  <long id="prefs_version">1</long>
+</preference-set>
+</project>

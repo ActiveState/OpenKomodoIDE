@@ -1,0 +1,22 @@
+// komodo tool: Unit Tests
+// =======================
+// async: 0
+// icon: chrome://famfamfamsilk/skin/icons/sport_tennis.png
+// language: JavaScript
+// rank: 100
+// trigger: trigger_postopen
+// trigger_enabled: 0
+// type: macro
+// version: 1.0.12
+// =======================
+try {
+    var obj = {base: 'rake', ruby: null, rake:null, env:null};
+    ko.extensions.rails.setup_associated_paths_env(obj);
+    var options = {
+        env: obj.env,
+        __END__ : null
+    };
+    ko.extensions.rails.runCommand(window, obj.rake + ' test:units', options);
+} catch(ex) {
+    alert(ex + "\n");
+}

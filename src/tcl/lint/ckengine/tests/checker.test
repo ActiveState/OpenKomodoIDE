@@ -1,0 +1,166 @@
+# checker.test --
+#
+#	This file contains basic sanity tests for the checker.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+#
+# RCS: @(#) $Id: checker.test,v 1.10 2000/10/10 03:00:50 sven Exp $
+
+if {[string compare test [info procs test]] == 1} {
+    lappend auto_path [file join [file dirname [info script]]]
+    package require protest
+    namespace import ::protest::*
+}
+
+catch {parse} parseMsg
+if {[regexp "invalid command" $parseMsg]} {
+    package require parser
+}
+
+source [file join $::protest::sourceDirectory checker.tcl]
+::configure::packageSetup
+
+# correct scripts
+test checker-1.1 {Checker, empty script} {
+    set result [list [catch {::checker::check ""} msg] $msg]
+} {0 {}}
+
+# error scripts
+test checkero-2.1 {Checker, Missing close brace} {
+    set script {
+        if {[} {}
+    }
+    set result [list [catch {::checker::check $script} msg] $msg]
+} {0 {{parse {(parse) parse error: PARSE missingBracket 13 {missing close-bracket}} {12 3}}}}
+test checkero-2.2 {Checker, Missing close brace} {
+    set script {
+        proc aaa {} {
+           \}
+        }
+    }
+    set result [list [catch {::checker::check $script} msg] $msg]
+} {0 {{warnExtraClose {(warnExtraClose) unmatched closing character} {34 2}}}}
+
+# test the filter
+test checkero-3.1 {Check with filter W1} {
+    set script {
+        if {0} {} {
+            aaaa]
+        }
+    }
+    ::configure::setFilter W1
+    set result [list [catch {::checker::check $script} msg] $msg]
+} {0 {}}
+test checkero-3.2 {Check with filter W2} {
+    set script {
+        if {0} {
+            aaaa]
+        }
+    }
+    ::configure::setFilter W2
+    set result [list [catch {::checker::check $script} msg] $msg]
+} {0 {{warnExtraClose {(warnExtraClose) unmatched closing character} {34 1}}}}
+test checkero-3.3 {Check with filter W3} {
+    set script {
+        if {0} {
+            aaaa]
+        }
+    }
+    ::configure::setFilter W3
+    set result [list [catch {::checker::check $script} msg] $msg]
+} {0 {{warnUndefProc {(warnUndefProc) undefined procedure: aaaa]} {30 6}} {warnExtraClose {(warnExtraClose) unmatched closing character} {34 1}}}}
+test checkero-3.4 {Check with filter Wa} {
+    set script {
+        if {0} {
+            aaaa]
+        }
+    }
+    ::configure::setFilter Wa
+    set result [list [catch {::checker::check $script} msg] $msg]
+} {0 {{warnUndefProc {(warnUndefProc) undefined procedure: aaaa]} {30 6}} {warnExtraClose {(warnExtraClose) unmatched closing character} {34 1}}}}
+test checkero-3.5 {Check with filter Wall} {
+    set script {
+        if {0} {
+            aaaa]
+        }
+    }
+    ::configure::setFilter Wall
+    set result [list [catch {::checker::check $script} msg] $msg]
+} {0 {{warnUndefProc {(warnUndefProc) undefined procedure: aaaa]} {30 6}} {warnExtraClose {(warnExtraClose) unmatched closing character} {34 1}}}}
+test checkero-3.6 {Check with filter warnUndefProc and warnExtraClose} {
+    set script {
+        if {0} {
+            aaaa]
+        }
+    }
+    ::configure::setFilter [list warn]
+    set result [list [catch {::checker::check $script} msg] $msg]
+} {0 {{warnExtraClose {(warnExtraClose) unmatched closing character} {34 1}}}}
+
+# test the filter
+test checkero-4.1 {Check with suppressors off} {
+    set script {
+        if {0} {
+            aaaa]
+        }
+    }
+    ::configure::setFilter Wall
+    ::configure::setSuppressors ""
+    set result [list [catch {::checker::check $script} msg] $msg]
+} {0 {{warnUndefProc {(warnUndefProc) undefined procedure: aaaa]} {30 6}} {warnExtraClose {(warnExtraClose) unmatched closing character} {34 1}}}}
+test checkero-4.2 {Check with suppressors set to warnUndefProc} {
+    set script {
+        if {0} {
+            aaaa]
+        }
+    }
+    ::configure::setSuppressors "warnUndefProc"
+    set result [list [catch {::checker::check $script} msg] $msg]
+} {0 {{warnExtraClose {(warnExtraClose) unmatched closing character} {34 1}}}}
+
+# test the set passes flag
+test checkero-5.1 {Check with only one pass} {
+    set script {
+        if {0} {
+            aaaa]
+        }
+    }
+    ::configure::setFilter Wall
+    ::configure::setSuppressors ""
+    ::configure::setPasses 1
+    set result [list [catch {::checker::check $script} msg] $msg]
+} {0 {{warnExtraClose {(warnExtraClose) unmatched closing character} {34 1}}}}
+test checkero-5.2 {Check with two passes} {
+    set script {
+        if {0} {
+            aaaa]
+        }
+    }
+    ::configure::setFilter Wall
+    ::configure::setSuppressors ""
+    ::configure::setPasses 2
+    set result [list [catch {::checker::check $script} msg] $msg]
+} {0 {{warnUndefProc {(warnUndefProc) undefined procedure: aaaa]} {30 6}} {warnExtraClose {(warnExtraClose) unmatched closing character} {34 1}}}}
+
+# test the package handling
+set pkgList [lsort [list coreTcl coreTk incrTcl expect tclX]]
+set allPackages {}
+foreach pkg [lsort [concat $pkgList $::projectInfo::pcxPkgs]] {
+    set tmp $::protest::prettyPkgName($pkg)
+    lappend allPackages "$pkg[lindex $::protest::supportedVersions($tmp) end]"
+}
+
+test checker-6.1 {Check with no special packages enabled (bug 3194)} {
+    set script {}
+    set ::analyzer::verbose 1
+    catch {::checker::check $script} msg
+    set result ""
+    foreach {pkg ver} [configure::getInitPkgs] {
+       lappend result ${pkg}${ver}
+    }
+    lsort $result
+} $allPackages
+
+::tcltest::cleanupTests
+return

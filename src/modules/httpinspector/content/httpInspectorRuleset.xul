@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % httpinspectorDTD SYSTEM "chrome://httpinspector/locale/httpinspector.dtd">
+  %httpinspectorDTD;
+]>
+
+<!-- Copyright (c) 2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/listbox.css" type="text/css"?>
+<?xml-stylesheet href="chrome://httpinspector/skin/httpinspector.css" type="text/css"?>
+
+<window id="komodo_httpInspector_ruleset"
+        title="&HTTPInspectorRules.title;"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:nc="http://home.netscape.com/NC-rdf#"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        type="komodo_httpinspector_ruleset"
+        orient="vertical"
+        onload="httpInspectorRuleset_onLoad();"
+        onunload="httpInspectorRuleset_onUnload();"
+        height="480"
+        width="640"
+        persist="screenX screenY width height">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://httpinspector/content/httpInspectorRuleset.js" type="application/x-javascript;version=1.7"/>
+
+  <!-- Commands -->
+    <commandset id="httpInspectorRuleset_commandset">
+        <command id="cmd_httpInspectorRuleset_newRule"
+                 key="key_cmd_httpInspectorRuleset_newRule"
+                 oncommand="httpInspectorRuleset_newRule()"
+                 desc="&HTTPInspectorRulesCreateANewRule.desc;"/>
+        <command id="cmd_httpInspectorRuleset_editRule"
+                 key="key_cmd_httpInspectorRuleset_editRule"
+                 oncommand="httpInspectorRuleset_editRule()"
+                 desc="&HTTPInspectorRulesEditTheRule.desc;"/>
+        <command id="cmd_httpInspectorRuleset_deleteRule"
+                 key="key_cmd_httpInspectorRuleset_deleteRule"
+                 oncommand="httpInspectorRuleset_deleteRule()"
+                 desc="&HTTPInspectorRulesDeleteTheRule.desc;"/>
+        <command id="cmd_httpInspectorRuleset_moveRuleUp"
+                 key="key_cmd_httpInspectorRuleset_moveRuleUp"
+                 oncommand="httpInspectorRuleset_moveRuleUp()"
+                 desc="&HTTPInspectorRulesMoveTheRuleUpOnePosition.desc;"/>
+        <command id="cmd_httpInspectorRuleset_moveRuleDown"
+                 key="key_cmd_httpInspectorRuleset_moveRuleDown"
+                 oncommand="httpInspectorRuleset_moveRuleDown()"
+                 desc="&HTTPInspectorRulesMoveTheRuleDownOnePosition.desc;"/>
+    </commandset>
+
+  <!-- Window layout -->
+    <vbox flex="1">
+        <hbox flex="1" style="padding: 5px;">
+            <tree id="httpInspectorRuleset_mainTree"
+                  flex="1"
+                  enableColumnDrag="false"
+                  ondblclick="httpInspectorRuleset_editRule();"
+                  hidecolumnpicker="false">
+                <treecols>
+                    <!--<treecol id="httpInspectorRuleset_treecol_flags"-->
+                    <!--         label="Flags"-->
+                    <!--         crop="right"-->
+                    <!--         persist="width hidden"/>-->
+                    <!--<splitter class="tree-splitter"/>-->
+                    <treecol id="httpInspectorRuleset_treecol_name"
+                             label="&ruleName.label;"
+                             flex="1"
+                             crop="right"
+                             persist="width hidden"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="httpInspectorRuleset_treecol_type"
+                             label="&type.label;"
+                             flex="1"
+                             crop="right"
+                             persist="width hidden"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="httpInspectorRuleset_treecol_description"
+                             label="&description.label;"
+                             flex="1"
+                             crop="right"
+                             persist="width hidden"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="httpInspectorRuleset_treecol_enabled"
+                             label="&enabled.label;"
+                             flex="1"
+                             crop="right"
+                             cycler="true"
+                             persist="width hidden"/>
+                    <splitter class="tree-splitter"/>
+                </treecols>
+                <!-- Tree children are dynamically generated, we use our own custom tree view -->
+                <treechildren/>
+            </tree>
+            <vbox>
+                <button id="httpInspectorRuleset_buttonNew"
+                        label="&new.label;"
+                        command="cmd_httpInspectorRuleset_newRule"/>
+                <button id="httpInspectorRuleset_buttonEdit"
+                        label="&edit.label;"
+                        command="cmd_httpInspectorRuleset_editRule"/>
+                <button id="httpInspectorRuleset_buttonDelete"
+                        label="&delete.label;"
+                        command="cmd_httpInspectorRuleset_deleteRule"/>
+                <separator/>
+                <button id="httpInspectorRuleset_buttonMoveUp"
+                        label="&moveUp.label;"
+                        command="cmd_httpInspectorRuleset_moveRuleUp"/>
+                <button id="httpInspectorRuleset_buttonMoveDown"
+                        label="&moveDown.label;"
+                        command="cmd_httpInspectorRuleset_moveRuleDown"/>
+                <separator flex="1"/>
+                <button id="httpInspectorRuleset_buttonClose"
+                        label="&close.label;"
+                        oncommand="window.close();"/>
+            </vbox>
+        </hbox>
+    </vbox>
+</window>

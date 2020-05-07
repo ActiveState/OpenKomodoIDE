@@ -1,0 +1,8 @@
+content httpinspector content/
+skin httpinspector classic/1.0 skin/
+locale httpinspector en-US locale/en-US/
+
+overlay chrome://komodo/content/komodo.xul chrome://httpinspector/content/overlay.xul
+overlay chrome://komodo/content/pref/pref.xul chrome://httpinspector/content/pref-overlay.xul
+
+manifest components/component.manifest

@@ -1,0 +1,167 @@
+<!ENTITY ABeginningOfTheString.label "\A : beginning of the string">
+<!ENTITY BAnythingBUTTheBeginningOrEndOfAWord.label "\B : anything BUT the beginning or end of a word">
+<!ENTITY DAnyNonDigit.label "\D : any non-digit">
+<!ENTITY I.accesskey "I">
+<!ENTITY PNameTheContentsOfTheGroupOfTheGivenName.label "(?P=name) : the contents of the group of the given name">
+<!ENTITY SAnyNonWhitespaceCharacter.label "\S : any non-whitespace character">
+<!ENTITY WAnyNonAlphanumericCharacter.label "\W : any non-alphanumeric character">
+<!ENTITY ZEndOfTheString.label "\Z : end of the string">
+<!ENTITY aCommentTheContentsAreIgnored.label "(?#...) : a comment, the contents are ignored">
+<!ENTITY anyCharacterExceptANewline.label ". : any character except a newline">
+<!ENTITY bTheBeginningOrEndOfAWord.label "\b : the beginning or end of a word">
+<!ENTITY beginningOfLine.label "^ : beginning of line">
+<!ENTITY close.label "Close">
+<!ENTITY currentDocument.label "Current document">
+<!ENTITY currentProject.label "Current project">
+<!ENTITY dAnyDecimalDigit.label "\d : any decimal digit">
+<!ENTITY endOfLine.label "$ : end of line">
+<!ENTITY enterDirectoriesWin.tooltiptext "Enter directories to search in. Separate directories with ';'.">
+<!ENTITY enterDirectoriesUnix.tooltiptext "Enter directories to search in. Separate directories with ':'.">
+<!ENTITY enterFiletypesToExcludeWin.tooltiptext "Enter filetypes to exclude from search, e.g. '*.dtd;*.obj'. Empty means none.">
+<!ENTITY enterFiletypesToExcludeUnix.tooltiptext "Enter filetypes to exclude from search, e.g. '*.dtd:*.obj'. Empty means none.">
+<!ENTITY enterFiletypesToIncludeWin.tooltiptext "Enter filetypes to include in search, e.g. '*.pl;*.pm'. Empty means all.">
+<!ENTITY enterFiletypesToIncludeUnix.tooltiptext "Enter filetypes to include in search, e.g. '*.pl:*.pm'. Empty means all.">
+<!ENTITY equivalentTo09.tooltiptext "equivalent to [0-9]">
+<!ENTITY equivalentToNot09.tooltiptext "equivalent to [^0-9]">
+<!ENTITY equivalentToTNRFV.tooltiptext "equivalent to [ \t\n\r\f\v]">
+<!ENTITY equivalentToNotTNRFV.tooltiptext "equivalent to [^ \t\n\r\f\v]">
+<!ENTITY escapeRegexSpecialCharacters.label "escape regex special characters">
+<!ENTITY files.label "Files...">
+<!ENTITY find.label "Find">
+<!ENTITY find.title "Find">
+<!ENTITY findAll.label "Find All">
+<!ENTITY findAllButton.accesskey "A">
+<!ENTITY findCloseButton.accesskey "s">
+<!ENTITY findNext.label "Find Next">
+<!ENTITY findNextButton.accesskey "F">
+<!ENTITY findPrevious.label "Find Previous">
+<!ENTITY group.label "(...) : group">
+<!ENTITY help.label "Help">
+<!ENTITY helpButton.accesskey "H">
+<!ENTITY mExactlyMCopiesOfThePrecedingBlock.label "{m} : exactly 'm' copies of the preceding block">
+<!ENTITY mNMToNCopiesOfThePrecedingBlock.label "{m,n} : 'm' to 'n' copies of the preceding block">
+<!ENTITY mNMToNCopiesOfThePrecedingBlockNonGreedy.label "{m,n}? : 'm' to 'n' copies of the preceding block (non-greedy)">
+<!ENTITY markAll.label "Mark All">
+<!ENTITY multiline.label "Multiline">
+<!ENTITY multiline.tooltiptext "Use Multiple Lines">
+<!ENTITY nonGroupingGroup.label "(?:...) : non-grouping group">
+<!ENTITY numberTheContentsOfTheGroupOfTheGivenNumber.label "\number : the contents of the group of the given number">
+<!ENTITY oneOrMoreOfThePrecedingBlock.label "+ : one or more of the preceding block">
+<!ENTITY oneOrMoreOfThePrecedingBlockNonGreedy.label "+? : one or more of the preceding block (non-greedy)">
+<!ENTITY openInRx.tooltiptext "Open in Rx">
+<!ENTITY options.label "Options">
+<!ENTITY pin.tooltiptext "Pin this window (always on top)">
+<!ENTITY replace.label "Replace">
+<!ENTITY replaceAll.label "Replace All">
+<!ENTITY replaceAllButton.accesskey "A">
+<!ENTITY replaceButton.accesskey "R">
+<!ENTITY sAnyWhitespaceCharacter.label "\s : any whitespace character">
+<!ENTITY searchIn.label "Where:">
+<!ENTITY searchIn.title "Search In">
+<!ENTITY selection.label "Selection">
+<!ENTITY theResultOfTheMatchIsNOTAssignedAGroupNumber.tooltiptext "the result of the match is NOT assigned a group number">
+<!ENTITY wAnyAlphanumericCharacter.label "\w : any alphanumeric character">
+<!ENTITY x.accesskey "x">
+<!ENTITY zeroOrMoreOfThePrecedingBlock.label "* : zero or more of the preceding block">
+<!ENTITY zeroOrMoreOfThePrecedingBlockNonGreedy.label "*? : zero or more of the preceding block (non-greedy)">
+<!ENTITY zeroOrOneOfThePrecedingBlock.label "? : zero or one of the preceding block">
+<!ENTITY zeroOrOneOfThePrecedingBlockNonGreedy.label "?? : zero or one of the preceding block (non-greedy)">
+
+<!--browseForDirs.xul-->
+<!ENTITY selectDirsForSearch.description "Select directories in which to search for files.">
+
+<!--confirmrepl.xul-->
+<!ENTITY confirmReplacement.title "Confirm Replacements">
+<!ENTITY confirmReplacement.description "Confirm replacements before changes are made. Check the files you would like to change and click 'Make Changes' to commit. Click 'Cancel' to cancel without making any changes.">
+<!ENTITY preparing.label "Preparing...">
+<!ENTITY checkToApplyChanges.tooltiptext "Check to apply changes to this file">
+<!ENTITY showSelectedChanges.label "Show Selected Changes">
+<!ENTITY showSelectedChanges.tooltiptext "Show the changes for the selected paths.">
+<!ENTITY showMarkedChanges.label "Show Changes">
+<!ENTITY showMarkedChanges.tooltiptext "Show the changes to be made for all paths that have been checked.">
+<!ENTITY showMarkedChanges.accesskey "S">
+<!ENTITY context_menu_check.label "Check">
+<!ENTITY context_menu_diff.label "Diff">
+<!ENTITY context_menu_uncheck.label "Uncheck">
+<!ENTITY context_menu_associate.accesskey "A">
+<!ENTITY context_menu_associate.label "Associate with Language">
+<!ENTITY context_menu_ignore.accesskey "E">
+<!ENTITY context_menu_ignore.label "Exclude path">
+
+<!--embedded.xul-->
+<!ENTITY findWhat.label "Find:">
+<!ENTITY findWhat.accesskey "n">
+<!ENTITY regExpShortcut.tooltiptext "Regular Expression Shortcuts">
+<!ENTITY namedGroup.label "(?P&lt;name&gt;...) : named group">
+<!ENTITY matchesIfNextNotConsume.label "(?=...) : matches if &lt;...&gt; matches next, but does not consume the string">
+<!ENTITY matchesIfNotNextNotConsume.label "(?!...) : matches if &lt;...&gt; does NOT match next, but does not consume the string">
+<!ENTITY positiveLookbehindAssertion.label "(?&lt;=...) : positive lookbehind assertion">
+<!ENTITY positiveLookbehindAssertion.tooltiptext "matches if the current position is immediately preceded by a match for &lt;...&gt;">
+<!ENTITY negativeLookbehindAssertion.label "(?&lt;!...) : negative lookbehind assertion">
+<!ENTITY negativeLookbehindAssertion.tooltiptext "matches if the current position is NOT immediately preceded by a match for &lt;...&gt;">
+<!ENTITY replaceWith.label "Replace:">
+<!ENTITY replaceWith.accesskey "l">
+<!ENTITY newValue.label "New Value:">
+<!ENTITY newValue.accesskey "v">
+<!ENTITY regex.label "Regex">
+<!ENTITY regex.accesskey "x">
+<!ENTITY regex.tooltiptext "Treat the pattern as a regular expression">
+<!ENTITY matchCase.label "Match case">
+<!ENTITY matchCase.accesskey "c">
+<!ENTITY word.label "Word">
+<!ENTITY word.accesskey "W">
+<!ENTITY matchWholeWords.tooltiptext "Match whole words">
+<!ENTITY multiline.accesskey "t">
+<!ENTITY replace.accesskey "p">
+<!ENTITY searchIn.accesskey "i">
+<!ENTITY selectedText.label "Selected text">
+<!ENTITY openFiles.label "Open files">
+<!ENTITY filesAlt.label "Files">
+<!ENTITY collection.label "Collection">
+<!ENTITY directories.label "Directories:">
+<!ENTITY directory.label "Directory:">
+<!ENTITY directories.accesskey "D">
+<!ENTITY threeFullStop.label "...">
+<!ENTITY threeFullStop.accesskey ".">
+<!ENTITY editListDirToSearch.tooltiptext "Edit list of directories to search">
+<!ENTITY searchInSubDir.label "Search in sub-directories">
+<!ENTITY searchInSubDir.accesskey "b">
+<!ENTITY include.label "Include:">
+<!ENTITY include.accesskey "u">
+<!ENTITY exclude.label "Exclude:">
+<!ENTITY exclude.accesskey "E">
+<!ENTITY findPrev.accesskey "v">
+<!ENTITY confirm.label "Confirm">
+<!ENTITY confirm.accesskey "m">
+<!ENTITY confirm.tooltiptext "Confirm replacements before making changes">
+<!ENTITY showResults.label "Show results">
+<!ENTITY showResults.accesskey "o">
+<!ENTITY showResults.tooltiptext "Show results tab in bottom pane for 'Replace All'">
+<!ENTITY markAll.accesskey "k">
+
+<!--undorepl.xul-->
+<!ENTITY undoReplacements.title "Undo Replacements">
+<!ENTITY undoingReplacements.description "Undoing replacement.">
+<!ENTITY preparing.description "Preparing...">
+
+<!--findbar.xml-->
+<!ENTITY findbar.prompt "Incremental search ready">
+<!ENTITY findbar.close.tooltiptext "Close find bar">
+<!ENTITY findbar.next.label "Next">
+<!ENTITY findbar.next.tooltiptext "Find the next occurrence">
+<!ENTITY findbar.previous.label "Previous">
+<!ENTITY findbar.previous.tooltiptext "Find the previous occurrence">
+<!ENTITY findbar.case.insensitive.label "Insensitive">
+<!ENTITY findbar.case.insensitive.tooltiptext "Search case-insensitively">
+<!ENTITY findbar.case.sensitive.label "Sensitive">
+<!ENTITY findbar.case.sensitive.tooltiptext "Search case-sensitively">
+<!ENTITY findbar.case.smart.label "Smart">
+<!ENTITY findbar.case.smart.tooltiptext "Search case-sensitively only if the search string is mixed case">
+<!ENTITY findbar.using.simple.label "Plain">
+<!ENTITY findbar.using.simple.tooltiptext "Search using plain text">
+<!ENTITY findbar.using.wildcard.label "Wildcard">
+<!ENTITY findbar.using.wildcard.tooltiptext "Search using wild cards">
+<!ENTITY findbar.using.regex.label "RegEx">
+<!ENTITY findbar.using.regex.tooltiptext "Search using regular expressions (Python syntax)">
+<!ENTITY findbar.openDialog.tooltiptext "Open the find dialog">
+

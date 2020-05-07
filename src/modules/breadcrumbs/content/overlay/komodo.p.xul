@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2013 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % breadcrumbsDTD SYSTEM "chrome://breadcrumbs/locale/breadcrumbs.dtd">
+  %breadcrumbsDTD;
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+]>
+
+<?xml-stylesheet href="less://breadcrumbs/skin/breadcrumbs.less" type="text/css"?>
+ 
+<overlay id="breadcrumbsOverlay"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://breadcrumbs/content/bootstrap.js"
+            type="application/x-javascript;version=1.7"/>
+
+    <panel id="hidden-placeholder">
+        <hbox id="breadcrumbBarWrap" anonid="breadcrumbBarWrap">
+            <toolbar
+                anonid="breadcrumbBar"
+                class="native-icons"
+                flex="1"
+                grippyhidden="true">
+
+                <toolbarbutton
+                    anonid="breadcrumbOverflowBtn"
+                    class="breadcrumb-overflow-button"
+                    label="..."
+                    type="menu"
+                    preserve="true"
+                    collapsed="true">
+                    <menupopup ignorekeys="true"></menupopup>
+                </toolbarbutton>
+
+            </toolbar>
+
+            <!-- Templates -->
+            <box collapsed="true">
+                <toolbarbutton
+                    anonid="breadcrumbTemplateFolder"
+                    class="breadcrumb folder">
+                </toolbarbutton>
+
+                <toolbarbutton
+                    anonid="breadcrumbTemplateFile"
+                    class="breadcrumb file breadcrumb-file-icon"
+                    native-image="chrome://komodo/skin/images/existing_file.png"/>
+
+                <menuitem
+                    anonid="breadcrumbMenuFileTemplate"
+                    class="menuitem-iconic file-item force-icon"
+                    oncommand="ko.views.manager.currentView._breadcrumbs.onCommandMenuItem('Select', this)"
+                    image="chrome://komodo/skin/images/existing_file.png"/>
+
+                <menu
+                    anonid="breadcrumbMenuFolderTemplate"
+                    class="menu-iconic folder-item"/>
+
+                <menupopup
+                    position="end_before"
+                    anonid="breadcrumbMenupopupTemplate"
+                    ignorekeys="true">
+
+                    <menuseparator anonid="reloadSeparator" preserve="true" />
+                    <menuitem
+                        anonid="fastOpenHere"
+                        label="&fastopenHere.label;"
+                        oncommand="ko.views.manager.currentView._breadcrumbs.onCommandMenuItem('FastOpen', this)"
+                        acceltext="Ctrl+Shift+Click"
+                        preserve="true"/>
+                    <menuitem
+                        anonid="findInFolder"
+                        label="&findInFolder.label;"
+                        oncommand="ko.views.manager.currentView._breadcrumbs.onCommandMenuItem('Find', this)"
+<!-- #if PLATFORM == "darwin" -->
+                        acceltext="Cmd+Click"
+<!-- #else -->
+                        acceltext="Ctrl+Click"
+<!-- #endif -->
+                        preserve="true"/>
+                    <menuitem
+                        anonid="showInPlaces"
+                        label="&showInPlaces.label;"
+                        oncommand="ko.views.manager.currentView._breadcrumbs.onCommandMenuItem('ShowPlaces', this)"
+                        acceltext="Shift+Click"
+                        preserve="true"/>
+                    <menuitem
+                        label="&reload.label;"
+                        oncommand="ko.views.manager.currentView._breadcrumbs.reload()"
+                        preserve="true"/>
+                    <menuseparator anonid="filterSeparator" preserve="true" />
+                    <textbox
+                        anonid="filter"
+                        preserve="true"
+                        placeholder="&filter.placeholder;" />
+                </menupopup>
+
+                <menu
+                    anonid="overflowMenuTemplate"
+                    class="menu-iconic folder-item breadcrumb-folder-icon"/>
+            </box>
+        </hbox>
+    </panel>
+
+    <broadcasterset id="broadcasterset_global">
+
+        <broadcaster
+            id="cmd_openCrumbMenu"
+            observes="cmd_openCrumbMenu"
+            key="key_cmd_openCrumbMenu"
+            desc="&openCrumbMenu.desc;"
+            autoCheck="false"/>
+        
+    </broadcasterset>
+
+    <commandset
+        id="cmdset_breadcrumbs"
+        oncommandupdate="ko.commands.updateCommandset(this, event)"
+        commandupdater="true">
+
+        <command
+            id="cmd_openCrumbMenu"
+            key="key_cmd_openCrumbMenu"
+            oncommand="ko.commands.doCommand('cmd_openCrumbMenu', event)"
+            desc="&openCrumbMenu.desc;"/>
+
+    </commandset>
+
+</overlay>

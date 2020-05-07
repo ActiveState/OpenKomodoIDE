@@ -1,0 +1,16 @@
+// komodo tool: theloop
+// ====================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ====================
+<% /* The Loop */ %>
+
+<?${TM_PHP_OPEN_TAG:php} if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+${1:<!-- post -->}
+<?${TM_PHP_OPEN_TAG:php} endwhile; ?>
+${2:<!-- post navigation -->}
+<?${TM_PHP_OPEN_TAG:php} else: ?>
+${0:<!-- no posts found -->}
+<?${TM_PHP_OPEN_TAG:php} endif; ?>

@@ -1,0 +1,27 @@
+// komodo tool: register_schedule
+// ==============================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ==============================
+<% /* Register Schedule */ %>
+
+/**
+ * Register a new Cron Schedule
+ *
+ * 'interval' - time in seconds between each time the schedule is run
+ * 'display' - friendly description of the interval
+ *
+ * @param array \$schedules
+ * @return array
+ */
+function ${1:register_my_schedule}( \$schedules ) {
+// remember, we're adding to the array, not replacing it
+	\$schedules['${2:string quarter_hour}'] = array(
+	'interval'	=> ${3:900},
+	'display'	=> _( '${4:Every 15 Minutes}' )
+	);$0
+	return \$schedules;
+}
+add_filter( 'cron_schedules', '$1' );

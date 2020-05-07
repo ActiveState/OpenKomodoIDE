@@ -1,0 +1,81 @@
+/**
+ * CSS for the collaboration tab
+ */
+
+#collab-pane .collab-sessions-refresh-icon {
+  list-style-image: url("chrome://famfamfamsilk/skin/icons/arrow_refresh.png");
+}
+
+#collab-pane .collab-sessions-add-icon {
+  list-style-image: url("chrome://famfamfamsilk/skin/icons/add.png");
+}
+
+#collab-pane .collab-sessions-menu-icon {
+  list-style-image: url("chrome://famfamfamsilk/skin/icons/cog.png");
+}
+
+#collab-pane .collab-userlist-icon {
+  list-style-image: url("chrome://famfamfamsilk/skin/icons/user_green.png");
+}
+
+#collaboration-tabpanels-splitter {
+  background: transparent !important;
+  border: none;
+  border-top: solid 1px ThreeDShadow;
+}
+
+treechildren#collab-sessions-tree-children::-moz-tree-indentation
+{
+  width: 0 !important;
+}
+
+treechildren#collab-sessions-tree-children::-moz-tree-image(sessionNode) {
+  
+}
+treechildren#collab-sessions-tree-children::-moz-tree-image(documentNode) {
+  /* handled by node's getImageSrc() */
+}
+treechildren#collab-sessions-tree-children::-moz-tree-image(collaboratorNode) {
+  margin-right: 2px;
+  list-style-image: url('chrome://famfamfamsilk/skin/icons/user_green.png');
+}
+
+#collaboration-tabpanels-splitter > grippy {
+  background-image: none !important;
+}
+#collaboration-tabpanels-splitter,
+#collaboration-tabpanels-splitter label {
+  cursor: ns-resize;
+}
+#collaboration-tabpanels-splitter toolbarbutton  {
+  cursor: default;
+}
+
+treechildren#collabtree-current-children::-moz-tree-image {
+  margin-right: 2px;
+}
+
+treechildren#collabtree-current-children::-moz-tree-image(sessionUser) {
+  list-style-image: url('chrome://famfamfamsilk/skin/icons/user_green.png');
+}
+
+
+.collaboration_cursor_panel {
+  -moz-appearance: none;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: rgba(0,0,0,0.01);
+  border-left: 2px solid blue;
+}
+
+.collaboration_cursor_panel_label {
+  font-family: monospace;
+  -moz-appearance: none;
+  color: #000;
+  font-size: 0.9rem;
+  padding: 2px 4px 2px 2px;
+  margin: 0;
+  font-weight: bold;
+}
+

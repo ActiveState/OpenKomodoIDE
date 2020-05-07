@@ -1,0 +1,36 @@
+<!ENTITY dialog.title "JS-Beautify Formatter Options">
+<!ENTITY formatterOptionsGroupbox.caption "Configurable Options">
+<!ENTITY formatterOptions.description "Specify the js-beuify options that you wish to use for your JavaScript formatting.">
+<!ENTITY jsBeautifyWebsite.label "Visit the js_beautify website for more information">
+
+<!ENTITY braceStyle.label "Brace style:">
+
+<!ENTITY braceStyleCollapse.label "Collapse">
+<!ENTITY braceStyleCollapse.tooltiptext "Puts braces on the same line as control statements">
+
+<!ENTITY braceStyleExpand.label "Expand">
+<!ENTITY braceStyleExpand.tooltiptext "Puts braces on their own line">
+
+<!ENTITY braceStyleEndExpand.label "End-Expand">
+<!ENTITY braceStyleEndExpand.tooltiptext "Puts end-braces on their own line">
+
+<!ENTITY preserveNewlines.checkbox.label "Preserve new lines">
+<!ENTITY preserveNewlines.checkbox.tooltiptext "Whether existing line breaks should be preserved">
+
+<!ENTITY breakChainedMethods.checkbox.label "Break chained methods">
+<!ENTITY breakChainedMethods.checkbox.tooltiptext "Will break chained method calls across subsequent lines">
+
+<!ENTITY jslintStricterMode.checkbox.label "JSLint stricter mode">
+<!ENTITY jslintStricterMode.checkbox.tooltiptext "The jslint-stricter mode is enforced, 'function()' will format to 'function ()'">
+
+<!ENTITY preserveArrayIndentation.checkbox.label "Keep array indentation">
+<!ENTITY preserveArrayIndentation.checkbox.tooltiptext "Will preserve array indentations">
+
+<!ENTITY preserveFunctionIndentation.checkbox.label "Keep function indentation">
+<!ENTITY preserveFunctionIndentation.checkbox.tooltiptext "Will preserve function indentations">
+
+<!ENTITY unescapeStrings.checkbox.label "Unescape strings">
+<!ENTITY unescapeStrings.checkbox.tooltiptext "Decodes printable characters encoded in JavaScript xNN notation">
+
+<!ENTITY spaceBeforeConditional.checkbox.label "Space before conditional">
+<!ENTITY spaceBeforeConditional.checkbox.tooltiptext "Use space before conditional statements, 'if(true)' vs 'if (true)',">

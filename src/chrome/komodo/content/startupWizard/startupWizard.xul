@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<!--
+This hidden window is only used on the Mac, see bug 85838.
+
+It's used to allow keyboard commands when using the File open dialog.
+
+This hiddenWindow is only used when the "browser.hiddenWindowChromeURL" pref is
+set to a chrome URL.
+-->
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+
+<?xul-overlay href="chrome://global/content/editMenuOverlay.xul"?>
+<?xul-overlay href="chrome://komodo/content/bindings/scintilla-overlay.xul"?>
+
+<window id="startup-wizard"
+        title="Komodo IDE - Let's Get Started"
+        class="dialog"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        buttonalign="horizontal"
+        buttonorient="horizontal">
+    
+    <script>
+        if (typeof JetPack == "undefined")
+        {
+            Components.utils.import("chrome://komodo/content/sdk/console.js");
+            Components.utils.import("chrome://komodo/content/jetpack.js");
+        }
+    </script>
+    
+    <!-- Scintilla overlay - required files. -->
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/timers.js"       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/stringutils.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/markers.js"              type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/browse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/startupWizard/startupWizard.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/startupWizard/dependencyPage.js" type="application/x-javascript;version=1.7"/>
+    <hbox id="scintillaOverlayXul"/>
+    
+    <stack id="sample-stack" align="stretch" pack="stretch" flex="1">
+        <view id="sample" type="buffer" flex="1" pluginPaintHack="true" style="min-width: 400px"/>
+    </stack>
+    
+</window>

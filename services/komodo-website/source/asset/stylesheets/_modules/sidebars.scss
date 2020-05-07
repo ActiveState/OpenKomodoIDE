@@ -1,0 +1,152 @@
+aside
+{
+    #side-collapse
+    {
+        display: none;
+    }
+
+    @include media($sidebar-collapse)
+    {
+        width: auto !important;
+        right: 15px;
+        top: 100px;
+
+        #side-collapse
+        {
+            position: absolute;
+            left: -52px;
+            top: 0;
+            display: block;
+            width: 50px;
+            height: 50px;
+            line-height: 22.5px;
+            vertical-align: middle;
+            opacity: 0.4;
+
+            &:hover
+            {
+                opacity: 1;
+            }
+        }
+
+        #side-collapse .icon-chevron-right,
+        .inner
+        {
+            display: none;
+        }
+
+        &.expand
+        {
+            width: 75% !important;
+
+            #side-collapse
+            {
+                opacity: 1;
+            }
+            
+            #side-collapse .icon.icon-chevron-right,
+            .inner
+            {
+                display: block;
+            }
+
+            .icon-chevron-left
+            {
+                display: none;
+            }
+        }
+
+        .inner
+        {
+            padding: 10px;
+            border-radius: 3px;
+            @include background-image(
+                linear-gradient(left, rgba(0,0,0,0.4) 0%,rgba(75, 104, 103, 0.3) 45%,rgba(75, 104, 103,0.3) 55%,rgba(0,0,0,0.4) 100%),
+                url("../images/layout/header-bg.png")
+            );
+            box-shadow: 0 0 6px 1px rgba(0,0,0,0.4);
+
+            &, h1, h2, h3
+            {
+                color: #e9e9e9;
+            }
+
+        }
+
+        #side-border
+        {
+            display: none;
+        }
+    }
+    
+    .try-buy-buttons
+    {
+        .inner
+        {
+            .button
+            {
+                width: 48%;
+                
+                &:nth-child(2)
+                {
+                    float: right;
+                }
+            }
+        }
+    }
+
+}
+
+#content.sidebar.sidebar-left
+{
+    section[role="main"]
+    {
+        float: right;
+        margin-right: 0;
+        margin-left: 2%;
+        width: 73%;
+    }
+
+    aside
+    {
+        width: 25%;
+
+        #side-border
+        {
+            display: none;
+        }
+    }
+}
+
+#content.sidebar.sidebar-small
+{
+    @include media($sidebar-collapse-invert)
+    {
+        section[role="main"]
+        {
+            width: 78%;
+            margin-right: 2%;
+            margin-left: 0;
+        }
+    
+        aside
+        {
+            width: 20%;
+        }
+    }
+}
+
+.sidebar-opensource
+{
+
+}
+
+.sidebar-download
+{
+    a.button
+    {
+        width: 100%;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+}

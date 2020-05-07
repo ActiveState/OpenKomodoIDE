@@ -1,0 +1,10 @@
+#include "nsISupports.idl"
+#include "koIAsyncOperations.idl"
+
+[scriptable, uuid(F29AD95E-C88A-4DDB-AB20-BA0C4E393869)]
+interface koICodeintel : nsISupports
+{
+    wstring getResultFor(in wstring id);
+    wstring getNextScopeLine(in wstring buffer, in long line, in wstring language, in koIAsyncCallback callback);
+    wstring getCaretScopeLine(in wstring buffer, in long line, in long position, in wstring language, in koIAsyncCallback callback);
+};

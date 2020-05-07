@@ -1,0 +1,112 @@
+
+family markup
+
+#pattern JSNAMES='(?:x-)?(?:java|ecma|j|live)script[\d\.]*'
+# /(?:text|application)\/(?x-)?javascript[^<>']*/i: # stay here
+#/application\/(?x-)?javascript[^<>']*/i: # stay here
+
+# States to switch into JavaScript (simplified)
+
+state IN_M_STAG_EXP_TNAME:
+/script\b/i : paint(upto, M_STAGO), paint(include, M_TAGNAME) => IN_H2CSL_STAG_POST_TAGNAME
+
+
+state IN_H2CSL_STAG_POST_TAGNAME:
+'>' : paint(upto, M_TAGSPACE), paint(include, M_STAGC) => IN_H2CSL_STAG_POST_TAGNAME_IN_WS
+# empty tag : nothing to lex inside it.
+'/>' : paint(upto, M_TAGSPACE), paint(include, M_EMP_TAGC) => IN_M_DEFAULT
+/(?:type|language)(?=\s*=)/i: paint(upto, M_TAGSPACE), paint(include, M_ATTRNAME) => IN_H2CSL_STAG_IN_TYPE_ATTR_NAME
+/[$CS]/ : paint(upto, M_TAGSPACE) => IN_H2CSL_STAG_IN_ATTRNAME
+# Assume a < means we're out of sync, bail
+'<'    : paint(upto, M_TAGSPACE), redo => IN_M_DEFAULT
+
+
+state IN_H2CSL_STAG_POST_TAGNAME_IN_WS:
+/^/: paint(include, M_DEFAULT), => IN_CSL_DEFAULT
+/\S/: paint(upto, M_DEFAULT), redo, => IN_CSL_DEFAULT
+
+state IN_H2CSL_STAG_IN_ATTRNAME
+/[^$CS]/ :  paint(upto, M_ATTRNAME), redo, => IN_H2CSL_STAG_POST_ATTRNAME_1
+'<'    : paint(upto, M_TAGSPACE), redo => IN_M_DEFAULT
+
+state IN_H2CSL_STAG_IN_TYPE_ATTR_NAME
+'=': paint(upto, M_TAGSPACE), paint(include, M_OPERATOR) => IN_H2CSL_STAG_IN_TYPE_ATTR_VALUE
+
+state IN_H2CSL_STAG_IN_TYPE_ATTR_VALUE:
+'"': paint(upto, M_TAGSPACE), => IN_H2CSL_STAG_IN_TYPE_ATTR_VALUE_2_DSTRING
+"'": paint(upto, M_TAGSPACE), => IN_H2CSL_STAG_IN_TYPE_ATTR_VALUE_2_SSTRING
+'<': paint(upto, M_TAGSPACE), redo => IN_M_DEFAULT
+'/>' : paint(upto, M_TAGSPACE), paint(include, M_EMP_TAGC) => IN_M_DEFAULT
+'>': paint(upto, M_TAGSPACE), redo => IN_M_DEFAULT
+/\S/: paint(upto, M_TAGSPACE), redo, => IN_H2CSL_STAG_IN_TYPE_ATTR_VALUE_2_USTRING
+
+state IN_H2CSL_STAG_IN_TYPE_ATTR_VALUE_2_DSTRING:
+# type="" implies text/javascript
+
+'"': paint(include, M_STRING), => IN_H2CSL_STAG_POST_TAGNAME
+/(?:(?:text|application)\/(?:x-)?)?(?:java|ecma|j|live)script[\d\.]*(?:;.*?)?(?=")/i: # stay here
+# Various kinds of bail-outs
+# Don't transition to JS for this tag.  Finish the rest of the 
+# element back in the standard markup attribute handler.
+/\S/: redo, => IN_M_STAG_ATTR_DSTRING
+
+state IN_H2CSL_STAG_IN_TYPE_ATTR_VALUE_2_SSTRING:
+# type='' implies text/javascript
+"'": paint(include, M_STRING), => IN_H2CSL_STAG_POST_TAGNAME
+/(?:(?:text|application)\/(?:x-)?)?(?:java|ecma|j|live)script[\d\.]*(?:;.*?)?(?=')/i: # stay here
+# Don't transition to JS for this tag.  Finish the rest of the 
+# element back in the standard markup attribute handler.
+/\S/: redo, => IN_M_STAG_ATTR_SSTRING
+
+
+state IN_H2CSL_STAG_IN_TYPE_ATTR_VALUE_2_USTRING:
+/[$WS]/: paint(include, M_STRING), => IN_H2CSL_STAG_POST_TAGNAME
+/(?:(?:text|application)\/(?:x-)?)?(?:java|ecma|j|live)script[\d\.]*(?:;.*?)?(?=[<>\s]|$)/i: \
+       paint(include, M_STRING), => IN_H2CSL_STAG_POST_TAGNAME
+/\S/: redo, => IN_M_STAG_ATTR_USTRING
+
+
+state IN_H2CSL_STAG_POST_ATTRNAME_1
+'=' : paint(upto, M_TAGSPACE), paint(include, M_OPERATOR) => IN_H2CSL_STAG_POST_ATTRNAME_2
+/[^$WS]/ : paint(upto, M_TAGSPACE), redo => IN_H2CSL_STAG_POST_TAGNAME
+
+# This is complicated because HTML can have unquoted attribute values
+
+state IN_H2CSL_STAG_POST_ATTRNAME_2
+'\"' : paint(upto, M_TAGSPACE), => IN_H2CSL_STAG_ATTR_DSTRING
+'\'' : paint(upto, M_TAGSPACE), => IN_H2CSL_STAG_ATTR_SSTRING
+'>' : paint(upto, M_TAGSPACE), paint(include, M_STAGC), => IN_CSL_DEFAULT
+# Bail out
+'/>' : paint(upto, M_TAGSPACE), paint(include, M_EMP_TAGC), => IN_M_DEFAULT
+'<'    : paint(upto, M_TAGSPACE), redo => IN_M_DEFAULT
+/[^$WS]/ : paint(upto, M_TAGSPACE), redo, => IN_H2CSL_STAG_ATTR_USTRING # unquoted
+
+state IN_H2CSL_STAG_ATTR_DSTRING:
+'"' : paint(include, M_STRING), => IN_H2CSL_STAG_POST_TAGNAME
+
+state IN_H2CSL_STAG_ATTR_SSTRING:
+'\'' : paint(include, M_STRING), => IN_H2CSL_STAG_POST_TAGNAME
+
+state IN_H2CSL_STAG_ATTR_USTRING:
+'>'    : paint(upto, M_STRING), paint(include, M_STAGC), => IN_CSL_DEFAULT
+# Empty-tag bail
+'/>'    : paint(upto, M_STRING), paint(include, M_EMP_TAGC), => IN_M_DEFAULT
+/[$WS]/ : paint(upto, M_STRING), => IN_H2CSL_STAG_POST_TAGNAME
+
+
+# Allow for style attributes, for any "onXXX" attributes.
+
+state IN_M_STAG_POST_TAGNAME:
+/\bon([a-zA-Z]+)\b/i: paint(upto, M_TAGSPACE), paint(include, M_ATTRNAME) => IN_H2CSL_ON_ATTR_1
+
+state IN_H2CSL_ON_ATTR_1:
+'=' : paint(upto, M_TAGSPACE), paint(include, M_OPERATOR) => IN_H2CSL_STYLE_ATTR_2
+# bail
+/[^$WS]/ : paint(upto, M_TAGSPACE), redo => IN_M_STAG_POST_TAGNAME
+
+state IN_H2CSL_STYLE_ATTR_2:
+/[$WS]+/ : #stay
+/(")/ : set_delimiter(1), paint(upto, M_TAGSPACE), paint(include, M_STRING), => IN_CSL_STAG_ATTR_DEFAULT_DOUBLEQUOTE
+/(')/ : set_delimiter(1), paint(upto, M_TAGSPACE), paint(include, M_STRING), => IN_CSL_STAG_ATTR_DEFAULT_SINGLEQUOTE
+# bail, but allow for other handling of attribute values
+/./ : paint(upto, M_TAGSPACE), redo, => IN_M_STAG_POST_ATTRNAME_2

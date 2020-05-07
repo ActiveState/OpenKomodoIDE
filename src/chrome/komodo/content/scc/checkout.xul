@@ -1,0 +1,220 @@
+<?xml version="1.0"?>
+<!DOCTYPE wizard SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % scc-checkout-DTD SYSTEM "chrome://komodo/locale/scc-checkout.dtd">
+  %scc-checkout-DTD;
+  <!ENTITY % dialogsDTD SYSTEM "chrome://komodo/locale/dialogs.dtd">
+  %dialogsDTD;
+]>
+
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+
+<?xul-overlay href="chrome://komodo/content/bindings/scintilla-overlay.xul"?>
+
+<wizard id="komodo-scc-checkout" title="&sccCheckoutWizard.title;"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        width="640"
+        height="540"
+        persist="width height screenx screeny"
+        onload="OnLoad();"
+        onunload="OnUnLoad();"
+        onwizardfinish="return onWizardFinish();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/globals.js" type="application/x-javascript;version=1.8"/>
+    <!-- XXX: strres.js is needed so that wizardManager.js will work -->
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://global/content/strres.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://global/content/wizardOverlay.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://global/content/wizardHandlerSet.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://global/content/wizardManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://global/content/widgetStateManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/prefs.js"                type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js"        type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/open.js"                 type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/stringutils.js"          type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/mru.js"                  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/timers.js"               type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/markers.js"                      type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/views.js"                        type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/scc/scc.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/scc/checkout.js" type="application/x-javascript;version=1.7"/>
+
+    <stringbundleset id="scc_checkout_strbundles">
+        <stringbundle id="scc_checkout_strings" src="chrome://komodo/locale/scc-checkout.properties"/>
+    </stringbundleset>
+
+    <hbox id="scintillaOverlayXul"/>
+    
+    <!-- Page one -->
+    <wizardpage id="page1"
+                label="&wizard.page1.label;"
+                description="&wizard.page1.description;"
+                onpageshow="page1_onPageShow();"
+                onpageadvanced="return validate_page1();">
+        <!--<description>-->
+        <!--    XXX: Update me.-->
+        <!--</description>-->
+
+        <seperator/>
+
+        <grid id="scc_page1_grid">
+            <columns id="scc_page1_grid_columns">
+                <column id="scc_page1_grid_column1" />
+                <column id="scc_page1_grid_column2" flex="1"/>
+            </columns>
+
+            <rows id="scc_page1_grid_rows">
+
+                <row id="scc_page1_grid_handler_row" align="center">
+                    <label id="scc_handler_label"
+                           value="&scc.handler.label;"/>
+                    <hbox align="center">
+                        <menulist id="scc_handler_menulist"
+                                  label="&scc.checkout.handler.none.selected.label;"
+                                  tooltiptext="&scc.checkout.handler.tooltiptext;"
+                                  oncommand="scc_handler_menulist_onchange(this, event);">
+                            <menupopup id="scc_handler_menupopup"/>
+                        </menulist>
+                    </hbox>
+                </row>
+
+                <row id="scc_page1_grid_url_row" align="center">
+                    <label id="scc_checkout_url_label"
+                           value="&scc.checkout.url.label;"/>
+                    <textbox id="scc_checkout_url_textbox"
+                             emptytext="&scc.checkout.url.textbox.emptytext;"
+                             tooltiptext="&scc.checkout.url.textbox.tooltiptext;"
+                             oninput="checkout_url_oninput(event);"
+                             style="min-height: 16px;"
+                             maxrows="10"
+                             size="30"
+                             type="autocomplete"
+                             autocompletesearch="mru"
+                             autocompletesearchparam="mru: scc_checkout_url_textbox_mru"
+                             autocompletepopup="popupTextboxAutoComplete"
+                             enablehistory="true"
+                             tabscrolling="true"
+                             completeselectedindex="true"
+                             ontextentered="this.focus();
+                                            this.setSelectionRange(this.textLength, this.textLength);"
+                             />
+                </row>
+
+                <row id="scc_page1_grid_saveto_row" align="center">
+                    <label value="&scc.checkout.location.label;"/>
+                    <hbox align="center">
+                        <textbox id="scc_checkout_to_location"
+                                 emptytext="&scc.checkout.location.textbox.emptytext;"
+                                 tooltiptext="&scc.checkout.location.textbox.tooltiptext;"
+                                 flex="1"
+                                 style="min-height: 16px;"
+                                 maxrows="10"
+                                 size="30"
+                                 type="autocomplete"
+                                 autocompletesearch="mru_and_dirpath"
+                                 autocompletesearchparam="mru: scc_checkout_to_location_mru; maxmru: 10"
+                                 autocompletepopup="popupTextboxAutoComplete"
+                                 enablehistory="true"
+                                 tabscrolling="true"
+                                 completeselectedindex="true"
+                                 ontextentered="this.focus();
+                                                this.setSelectionRange(this.textLength, this.textLength);"
+                                 />
+                        <button label="&browse.label;"
+                                oncommand="location_OnBrowse();"/>
+                    </hbox>
+                </row>
+
+            </rows>
+        </grid>
+
+    </wizardpage>
+
+
+
+    <!-- Page two -->
+    <wizardpage id="page2"
+                label="&wizard.page2.label;"
+                description="&wizard.page2.description;"
+                onpageshow="page2_onPageShow();"
+                onpageadvanced="return validate_page2();">
+
+        <groupbox id="settings_groupbox" minheight="100">
+            <caption id="settings_groupbox_label" label="&additional.settings.groupbox.label;"/>
+            <scc_checkout id="scc_checkout_element"
+                          type=""/>
+        </groupbox>
+
+    </wizardpage>
+
+
+
+    <!-- Page three -->
+    <wizardpage id="page3"
+                label="&wizard.page3.label;"
+                description="&wizard.page3.description;"
+                onpageshow="page3_onPageShow();">
+
+        <description id="finish-msg"/>
+
+        <groupbox id="command_line_groupbox">
+            <caption id="command_line_groupbox_caption"
+                     label="&process.commandline.groupbox.label;" />
+            <textbox id="scc_command_textbox"
+                     collapsed="false"
+                     readonly="true"
+                     multiline="true"
+                     rows="2"
+                     />
+    
+            <hbox align="center">
+                <label id="scc_command_cwd_label"
+                       value="&command.line.workingDirectory.label;"/>
+                <label id="scc_command_cwd_value_label"
+                       crop="left"/>
+            </hbox>
+        </groupbox>
+
+        <groupbox id="status_groupbox">
+            <caption id="status_groupbox_caption"
+                     label="&process.status.groupbox.label;" />
+            <hbox id="status_hbox">
+                <label id="status_label"
+                       value="&process.current.status.label;" />
+                <!-- The image is in a hbox to ensure that there is no-resizing
+                     done to the image, without this the image will be
+                     stretched and look distorted. -->
+                <hbox align="start">
+                  <image id="status_image" />
+                </hbox>
+                <label id="current_status_label"
+                       value="&process.current.status.notRunning.value;" />
+            </hbox>
+            <label id="output_label"
+                   value="&command.output.label;" />
+            <view id="output_view"
+                  type="terminal"
+                  flex="1"
+                  minheight="120px"
+                  style="cursor: text;"/>
+
+        </groupbox>
+
+        <groupbox id="project_groupbox">
+            <checkbox id="project_create_checkbox"
+                      label="&scc.checkout.create.project.label;"
+                      checked="true"
+                      />
+        </groupbox>
+    </wizardpage>
+
+</wizard>

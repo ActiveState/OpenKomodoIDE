@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % httpinspectorDTD SYSTEM "chrome://httpinspector/locale/overlay.dtd">
+  %httpinspectorDTD;
+]>
+
+<?xml-stylesheet href="chrome://httpinspector/skin/httpinspector.css" type="text/css"?>
+
+<overlay id="httpinspector-overlay"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+    <script src="chrome://httpinspector/content/overlay.js" type="application/x-javascript;version=1.7"/>
+  
+    <commandset id="allcommands">
+        <command
+            id="cmd_httpInspector"
+            key="key_cmd_httpInspector"
+            oncommand="ko.httpinspector.open();"
+            desc="&toolsHTTPInspector.desc;"/>
+    </commandset>
+    
+    <toolbaritem id="toolsToolbarGroup">
+        <toolbarbutton id="httpInspectorButton"
+                       label="&HTTPInspector.label;"
+                       class="http-inspector"
+                       tooltiptext="&HTTPInspector.tooltiptext;"
+                       persist="buttonstyle"
+                       buttonstyle="pictures"
+                       observes="cmd_httpInspector"/>
+    </toolbaritem>
+
+    <menupopup id="popup_tools">
+        <menuitem label="&HTTPInspector.label;"
+                  accesskey="&HTTPInspector.accesskey;"
+                  class="menuitem-iconic http-inspector"
+                  observes="cmd_httpInspector"
+                  insertbefore="menu_compareFiles"
+                  />
+    </menupopup>
+</overlay>

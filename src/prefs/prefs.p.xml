@@ -1,0 +1,2587 @@
+<?xml version="1.0" ?>
+
+<preference-set id="default">
+
+  <!-- This version field is used by Komodo to upgrade preferences.
+       The value should be kept in sync with "../components/koInitService.p.py"
+  -->
+  <long id="version">70</long> <!-- Increment by 10, unless we're injecting in between 2 versions -->
+
+  <!-- "uilayout_version" is used by Komodo to upgrade ui layouts.
+       Must keep in sync with "../chrome/komodo/content/library/uilayout.p.js"
+  -->
+  <long id="uilayout_version">2</long>
+
+  <boolean id="startupMaximized" nonvital="true">0</boolean>
+  <boolean id="startupFullScreen" nonvital="true">0</boolean>
+  <long id="tabWidth" validate="value > 0">4</long>
+  <long id="indentWidth" validate="value > 0">4</long>
+  <boolean id="useTabs">0</boolean>
+  <boolean id="useSmartTabs">1</boolean>
+  <boolean id="indentStringsAfterParens">0</boolean>
+  <boolean id="dedentOnColon">0</boolean>
+  <boolean id="showWhitespace">0</boolean>
+  <boolean id="showEOL">0</boolean>
+<!-- #if PLATFORM == "win" -->
+  <string id="endOfLine">CRLF</string>
+<!-- #else -->
+  <string id="endOfLine">LF</string>
+<!-- #endif -->
+  <boolean id="assignEmptyFilesSpecifiedEOL">true</boolean>
+  <string id="browser"></string> <!-- no default value -->
+  <!-- browser_preview_method - where to open browser previews for files
+        "in-tab-other-group": Preview in Komodo tab, other tab group
+        "in-tab-same-group":  Preview in Komodo tab, same tab group
+        "external":           Preview in external browser
+    -->
+  <string id="browser_preview_method">in-tab-other-group</string>
+  <string id="preview_path"/>
+  
+  <!-- save_buffer_before_preview_action
+    - "All": Save current dirty file when starting previewing
+    - "None": Don't save current dirty file when starting previewing
+    - "": Ask me what to do
+  -->
+  <boolean id="donotask_save_buffer_before_preview">0</boolean>
+  <string id="donotask_action_save_buffer_before_preview"></string>
+
+  <boolean id="showIndentationGuides">1</boolean>
+  <boolean id="showLineNumbers">1</boolean>
+  <boolean id="scrollEndAtLastLine">0</boolean>
+  <long id="caretStyle">1</long>
+  <long id="caretWidth">1</long>
+  <long id="screenX" nonvital="true">100</long>
+  <long id="screenY" nonvital="true">100</long>
+  <long id="outerHeight" nonvital="true">680</long>
+  <long id="outerWidth" nonvital="true">820</long>
+  <long id="upperBoxHeight" nonvital="true">100</long>
+  <long id="lowerBoxHeight" nonvital="true">100</long>
+
+  <string id="mappedPaths"></string>
+
+  <long id="rxScreenX" nonvital="true">100</long>
+  <long id="rxScreenY" nonvital="true">100</long>
+  <long id="rxOuterHeight" nonvital="true">460</long>
+  <long id="rxOuterWidth" nonvital="true">600</long>
+  <long id="rxRegexAreaHeight" nonvital="true">100</long>
+  <long id="rxMatchVarsAreaHeight" nonvital="true">100</long>
+  <boolean id="rxMatchVarsAreaCollapsed">0</boolean>
+  <boolean id="rxModG">0</boolean>
+  <boolean id="rxModM">0</boolean>
+  <boolean id="rxModI">0</boolean>
+  <boolean id="rxModS">0</boolean>
+  <boolean id="rxModX">0</boolean>
+  <string id="rx-default-regex">(.*)(\d+)</string>
+  <string id="rx-default-teststring">testing123</string>
+
+  <!-- The new new Rx (aka Rxx) preferences:
+    rxx_*_{width|height}: Rx window pane dimensions in pixels, if defined
+        rxx_pattern_row_height, rxx_text_row_height, rxx_search_column_width,
+        rxx_replace_column_width, rxx_match_results_area_height
+    rxx_regex_area_height: if defined, the height in pixels
+    rxx_search_text_area_height: if defined, the height in pixels
+    rxx_regex_area_width: if defined, the width in pixels
+    rxx_replacement_area_width: if defined, the width in pixels
+    rxx_match_results_area_height: if defined, the height in pixels
+    rxx_mode: one of "match", "search", "find-all", "replace" defining
+        the mode of usage of the user's regular expression in Rxx.
+    rxx_language: one of the supported Rxx languages, e.g. "python", "perl"
+    rxx_search_text: the save search text
+    rxx_regex: the saved regular expression
+    rxx_replacement: the saved replacement pattern
+    rxx_modifier_?: one boolean pref for each regular expression modifier:
+        i: ignore-case
+        m: multiline
+        s: dotall
+        x: verbose
+        u: unicode
+        l: locale
+  -->
+  <string id="rxx_mode">match-all</string> <!-- probably the mode most commonly wanted -->
+  <string id="rxx_language">python</string> <!-- XXX want to change to "perl" when that is supported -->
+  <boolean id="rxx_modifier_i">0</boolean>
+  <boolean id="rxx_modifier_m">0</boolean>
+  <boolean id="rxx_modifier_s">0</boolean>
+  <boolean id="rxx_modifier_x">0</boolean>
+  <boolean id="rxx_modifier_u">0</boolean>
+  <boolean id="rxx_modifier_l">0</boolean>
+
+  <boolean id="uiRxSeparateWindow">0</boolean>
+
+  <string id="ui.tabs.sidepanes.left.layout">icons</string>
+  <string id="ui.tabs.sidepanes.right.layout">icons</string>
+  <string id="ui.tabs.sidepanes.bottom.layout">horizontal</string>
+  <boolean id="ui.hide.chrome">1</boolean>
+  <boolean id="ui.classic.mode">0</boolean>
+  <boolean id="ui.classic.toolbar">0</boolean>
+  <boolean id="ui.classic.statusbar">0</boolean>
+<!-- #if PLATFORM == "darwin" -->
+  <boolean id="ui.windowbuttons.left">1</boolean>
+  <long id="ui.windowbuttons.min.ordinal">1</long>
+  <long id="ui.windowbuttons.max.ordinal">2</long>
+  <long id="ui.windowbuttons.close.ordinal">0</long>
+<!-- #else -->
+  <boolean id="ui.windowbuttons.left">0</boolean>
+  <long id="ui.windowbuttons.min.ordinal">0</long>
+  <long id="ui.windowbuttons.max.ordinal">1</long>
+  <long id="ui.windowbuttons.close.ordinal">2</long>
+<!-- #endif -->
+
+  <long id="mruProjectSize">15</long>
+  <long id="mruFileSize">30</long>
+  <long id="mruTemplateSize">10</long>
+  <long id="mruMenuItemSize">10</long>
+  <string id="mruDirectory">.</string>
+
+  <!--For optimization purposes, we don't restore fold points by default - it's-->
+  <!--a very slow process.  Users who care can turn it on.-->
+  <boolean id="editRestoreFoldPoints">0</boolean>
+  <boolean id="foldSeparateBlockParts">0</boolean>
+  <boolean id="editUseLinting">1</boolean>
+  <boolean id="editHomeKeyFavorsFirstNonSpace">1</boolean>
+  <long id="lintDelay">2000</long>
+  <boolean id="lintEOLs">1</boolean>
+  <boolean id="lintClearOnTextChange">0</boolean>
+  <boolean id="editUseSpellChecking">1</boolean>
+  <string id="spellCheckDictionary">en-US</string>
+  <string id="spellCheckIgnoredWords"></string>
+  <long id="spellCheckDelay">1000</long>
+  <boolean id="spellCheckWithinStrings">1</boolean>
+  <boolean id="colorizing_enabled">1</boolean>
+  <boolean id="editUseAlternateFaceType">0</boolean>
+  <!-- editFoldStyle: none, box, plusminus, curvytree, squaretree, arrows -->
+  <string id="editFoldStyle">squaretree</string>
+  
+  <!-- editShowMinimap: whether to show a minimap scrollbar -->
+  <boolean id="editShowMinimap">false</boolean>
+
+  <!-- editFoldLines: whether to show horizontal lines on fold marks -->
+  <boolean id="editFoldLines">1</boolean>
+  <boolean id="editEnableMouseZoom">1</boolean>
+  
+  <!-- Bug 93681 asks for pre-v7 behavior, where tab doesn't change caret
+       Bug 95409 asks that tabbing repositions caret horizontally
+  -->
+  <boolean id="repositionCaretAfterTab">0</boolean>
+  
+  <!-- strip extra whitespace on file save -->
+  <boolean id="cleanLineEnds">0</boolean>
+  <boolean id="cleanLineEnds_CleanCurrentLine">0</boolean>
+  <!-- Remove trailing white-space only from changed lines. -->
+  <boolean id="cleanLineEnds_ChangedLinesOnly">0</boolean>
+  <!-- ensure file ends with a newline on file save -->
+  <boolean id="ensureFinalEOL">0</boolean>
+  
+  <boolean id="showMatchingTagsOnClick">1</boolean>
+  <boolean id="showMatchingTags_constrainSearchInViewPort">1</boolean>
+  <long id="showMatchingTags_clearInterval">1000</long>
+  <boolean id="editMatchingTags">1</boolean>
+  
+  <!--
+  These prefs are to keep Komodo from hanging when a document
+  that hits at least one of these limits is loaded.  Komodo will
+  treat the document as a Text file, meaning all language-specific
+  functions, including code-colorizing, are dropped.
+
+  The reason for the high first value is that long lines are
+  costlier than long documents.  2013-11: Increase limits to
+  2MB / 40K lines / 100K max line-length due to fixing bug 101267
+  probably too low.
+  -->
+  <long id="documentByteCountThreshold">2000000</long> <!-- 2 MB -->
+  <long id="documentLineCountThreshold">40000</long> <!-- 40K * 40c/line => 1.6 MB -->
+  <long id="documentLineLengthThreshold">100000</long><!-- 100K -->
+  <boolean id="donotask_treat_large_documents_as_text">0</boolean>
+
+<!-- #if WITH_DEBUGGING -->
+  <boolean id="debug_break_on_remote_connect">1</boolean>
+  <string id="interactiveShellDefaultLanguage">Python3</string>
+  <boolean id="interactiveShellCloseOnEnd">1</boolean>
+  <boolean id="donotask_interactiveshell_confirm_close">1</boolean>
+  <string id="donotask_action_interactiveshell_confirm_close">Kill Session and Close Tab</string>
+  <!--
+  ishell_cwd_type can be one of:
+     - project: use the cwd of the project of the current file if
+       there is one, the dir of the current file otherwise
+     - file: use the dir of the current file otherwise
+     - specific: use the value specified in "ishell_cwd_specific"
+  -->
+  <string id="ishell_cwd_type">project</string>
+  <string id="ishell_cwd_specific"></string>
+  <!-- debugger prefs -->
+  <boolean id="debuggerHoverValue">1</boolean>
+  <boolean id="debuggerSpecifyCommandLineParams">1</boolean>
+  <boolean id="debuggerRunInConsole">0</boolean>
+  <!-- Komodo 4: 'remoteDebuggerListenPort' was replaced with the following
+       for clarity and to assist representation in the prefs UI:
+
+        'debuggerListenerPortType': one of 'system' (use a system-provided
+            free port) or 'specific' (use the user-specified value store
+            in the following pref)
+        'debuggerListenerPort': user-specified port to use
+    -->
+  <string id="debuggerListenerPortType">system</string>
+  <long id="debuggerListenerPort">9000</long>
+
+  <string id="dbgpProxyKey"/>
+  <string id="dbgpProxyListenAddress">127.0.0.1:9001</string>
+  <boolean id="dbgpProxyEnabled">0</boolean>
+  <boolean id="listenForDebugger">1</boolean>
+  <boolean id="debugSkipDialog">0</boolean>
+  <boolean id="debuggerFindLocalFile">1</boolean>
+  <string id="debuggerLastFile"/>
+  <string id="debuggerLastArgs"/>
+  <string id="debuggerLastCwd"/>
+  <!-- Whether to restore the position at the start of the debug session
+       when the session terminates normally. This is only for an interactive
+       debug session, i.e. not for "Run without debugging. -->
+  <boolean id="debuggerRestoreStartPosAtEndOfSession">1</boolean>
+  
+  <string id="XSLTDebuggerLastSourceFile"/>
+  <string id="userCGIEnvironment"/>
+  <string id="debuggerEnvironment"
+  ><![CDATA[AUTH_PASSWORD=
+AUTH_TYPE=
+AUTH_USER=
+CONTENT_TYPE=text/html;
+GATEWAY_INTERFACE=CGI/1.1
+HTTP_ACCEPT=*/*
+HTTP_ACCEPT_LANGUAGE=en-us
+HTTP_CONNECTION=Keep-Alive
+HTTP_HOST=localhost
+HTTP_USER_AGENT=Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)
+HTTP_ACCEPT_ENCODING=
+HTTPS=off
+LOCAL_ADDR=127.0.0.1
+REMOTE_ADDR=127.0.0.1
+REMOTE_HOST=localhost
+REMOTE_USER=
+SERVER_NAME=localhost
+SERVER_PORT=80
+SERVER_PORT_SECURE=0
+SERVER_PROTOCOL=HTTP/1.0
+SERVER_SOFTWARE=Komodo/CGI Simulator
+CERT_COOKIE=
+CERT_FLAGS=
+CERT_ISSUER=
+CERT_KEYSIZE=
+CERT_SECRETKEYSIZE=
+CERT_SERIALNUMBER=
+CERT_SERVER_ISSUER=
+CERT_SERVER_SUBJECT=
+CERT_SUBJECT=
+HTTPS_KEYSIZE=
+HTTPS_SECRETKEYSIZE=
+HTTPS_SERVER_ISSUER=
+HTTPS_SERVER_SUBJECT=
+SERVER_PORT_SECURE=
+SSL_CLIENT_CN=
+SSL_CLIENT_EMAIL=
+SSL_CLIENT_OU=
+SSL_CLIENT_O=
+SSL_CLIENT_L=
+SSL_CLIENT_ST=
+SSL_CLIENT_C=
+SSL_CLIENT_I_CN=
+SSL_CLIENT_I_EMAIL=
+SSL_CLIENT_I_OU=
+SSL_CLIENT_I_O=
+SSL_CLIENT_I_L=
+SSL_CLIENT_I_ST=
+SSL_CLIENT_I_C=
+]]></string>
+
+  <string id="tclInstrument"></string>
+  <string id="perl_debuggerlogpath"/>
+  <boolean id="perl_debuggerlogenabled">0</boolean>
+  <boolean id="perlDebugger.RecommendPadWalker">1</boolean>
+
+  <string id="ruby_debuggerlogpath"/>
+  <boolean id="ruby_debuggerlogenabled">0</boolean>
+
+  <string id="python_debuggerLogPath"/>
+  <string id="python_debuggerLogLevel">WARN</string>
+  <string id="python3_debuggerLogPath"/>
+  <string id="python3_debuggerLogLevel">WARN</string>
+
+  <string id="debuggerLineColorFore">#8f0000</string>
+  <string id="debuggerLineColorBack">#FFFF00</string>
+  <string id="debuggerLineColorBackLite">#FFFF00</string>
+  <long id="debuggerMaxChildren">25</long>
+  <long id="debuggerMaxData">10240</long>
+  <long id="debuggerMaxDepth">1</long>
+  <long id="debuggerMaxTooltipSize">256</long>
+
+
+  <!-- save_on_debug_action
+    - "All": Save all dirty files when starting debugging
+    - "None": Save no dirty files when starting debugging
+    - "": Ask me what to do
+  -->
+  <boolean id="donotask_save_on_debug">0</boolean>
+  <string id="donotask_action_save_on_debug"></string>
+  <boolean id="donotask_allow_remote_debug">0</boolean>
+  <string id="donotask_action_allow_remote_debug"></string>
+  <boolean id="donotask_allow_remote_profiling">0</boolean>
+  <string id="donotask_action_allow_remote_profiling"></string>
+  <boolean id="donotask_debugger_confirm_close">0</boolean>
+  <string id="donotask_action_debugger_confirm_close"></string>
+  <boolean id="donotask_syntax_errors_on_debug">0</boolean>
+  <string id="donotask_action_syntax_errors_on_debug"></string>
+
+  <string id="tcl_debuggerlogpath"/>
+  <boolean id="tcl_debuggerlogenabled">0</boolean>
+
+  <boolean id="donotask_debugger_switch_to_nodejs">0</boolean>
+  <string id="donotask_action_debugger_switch_to_nodejs"></string>
+
+  <string id="javaScriptChromeExecutable"/>
+
+    <!-- end debugger section -->
+<!-- #endif -->
+
+  <string id="userEnvironmentStartupOverride"/>
+  <!-- Whether to allow Komodo to implicitly add some common dirs to the PATH
+       in some cases. See bug 80656. -->
+  <boolean id="userEnvironmentAllowImplicitPATHAdditions">1</boolean>
+  <string id="userEnvironment"/>
+
+  <string id="xmlCatalogPaths"/>
+  <string id="statetoolDefaultbinary"/>
+  <string id="nodejsDefaultInterpreter"/>
+  <string id="perlDefaultInterpreter"/>
+  <string id="pythonDefaultInterpreter"/>
+  <string id="python3DefaultInterpreter"/>
+  <string id="tclshDefaultInterpreter"/>
+  <string id="wishDefaultInterpreter"/>
+  <string id="tclInterpreterType">wish</string>
+  <string id="xsltDefaultInterpreter"/>
+  <string id="phpDefaultInterpreter"/>
+  <string id="phpConfigFile"/>
+  <string id="phpCommentStyle">//,#</string>
+  <boolean id="phpDoubleClickSelectsEntireVariable">1</boolean>
+  <boolean id="phpLintWithINIFile">1</boolean>
+  <long id="phpGetOutputAndErrorTimeout">5</long>
+
+  <!--Additional  directories for Python, Perl, and Tcl. These are-->
+  <!--stored as pathsep-separated local paths.-->
+  <string id="javascriptExtraPaths"></string>
+  <string id="javascriptExcludePaths"></string>
+  <string id="nodejsExtraPaths"></string>
+  <string id="nodejsExcludePaths"></string>
+  <string id="phpExtraPaths"></string>
+  <string id="phpExcludePaths"></string>
+  <string id="pythonExtraPaths"></string>
+  <string id="pythonExcludePaths"></string>
+  <string id="python3ExtraPaths"></string>
+  <string id="python3ExcludePaths"></string>
+  <string id="perlExtraPaths"></string>
+  <string id="perlExcludePaths"></string>
+  <string id="tclExtraPaths"></string>
+
+  <!-- Go prefs -->
+  <string id="gocodeDefaultLocation"></string>
+  <string id="godefDefaultLocation"></string>
+  <string id="golangDefaultLocation"></string>
+  <string id="Go/newEncoding">utf-8</string>
+  <long id="Go/indentWidth">8</long>
+  <boolean id="Go/useTabs">1</boolean>
+  
+  <!-- Namespace mappings for Codeintel. These are stored as-->
+  <!-- '::'-separated local paths. Keys and values are-->
+  <!-- stored as '##'-separated.-->
+  <string id="javascriptNamespaceMapping"></string>
+  <string id="nodejsNamespaceMapping"></string>
+
+  <!-- CoffeeScript linting options -->
+  <boolean id="lint_coffee_script">1</boolean>
+
+  <!-- JavaScript linting options -->
+  <!-- Note that all Node.js files use the JS linter options.  If they didn't,
+       switching a file's language from JS to Node would lose its doc-specific
+       syntax-checking options, and people using jshint are likely to
+       end up with many doc-specific options.
+       
+       Also note that Komodo will automatically add a node=true option to
+       jshint when linting a Node.js file.  User can override by
+       putting 'node=false' in the options box.
+  -->
+  <boolean id="lintJavaScriptEnableWarnings">1</boolean>
+  <boolean id="lintJavaScriptEnableStrict">1</boolean>
+  <boolean id="lintJavaScript_SpiderMonkey">0</boolean>
+
+  <!-- jshint is a popular fork of jslint, see github.com/jshint -->
+  <!-- JSHint linting options -->
+  <boolean id="lintWithJSHint">true</boolean>
+  <string id="jshintOptions">moz=true unused=true esnext=true</string>
+  <string id="jshint_linter_chooser"></string> <!-- radiogroup for choosing default or custom jshint.js -->
+  <string id="jshint_linter_specific"></string> <!-- path to alternate jshint to use -->
+
+  <!-- TypeScript linting options -->
+  <boolean id="lint_typescript">1</boolean>
+  <string id="tslintConfigFile"></string>
+
+  <!-- HTML linters -->
+  <boolean id="lintHTMLTidy">true</boolean>
+  <boolean id="lintHTML5Lib">false</boolean>
+  <boolean id="lintHTML_CheckWith_Perl_HTML_Tidy">false</boolean>
+  <boolean id="lintHTML_CheckWith_Perl_HTML_Lint">false</boolean>
+  
+  <!-- Python linters -->
+  <boolean id="lint_python_with_standard_python">true</boolean>
+
+  <boolean id="lint_python_with_pyflakes">false</boolean>
+  <boolean id="lint_python_with_pylint">false</boolean>
+  <string id="pylint_checking_rcfile"></string>
+  <boolean id="lint_python_with_pep8">false</boolean>
+  <string id="pep8_checking_rcfile"></string>
+  
+  <boolean id="lint_python_with_pychecker">false</boolean>
+  <string id="pychecker_wrapper_location"></string>
+  <string id="pychecker_checking_rcfile"></string>
+
+  <!-- Python3 linters -->
+  <boolean id="lint_python3_with_standard_python">true</boolean>
+  <boolean id="lint_python3_with_pyflakes3">false</boolean>
+  <boolean id="lint_python3_with_pylint3">false</boolean>
+  <string id="pylint3_checking_rcfile"></string>
+  <boolean id="lint_python3_with_pep83">false</boolean>
+  <string id="pep83_checking_rcfile"></string>
+  <boolean id="lint_python3_with_pychecker3">false</boolean>
+  <string id="pychecker3_wrapper_location"></string>
+  <string id="pychecker3_checking_rcfile"></string>
+  
+  <!-- CSS/SCSS/LESS/Sass linter info -->
+  
+  <!-- one of none/path/builtin : If scssLinterPath is set, there must be
+       a ruby executable in that path as well.  If it isn't, but there's an
+       scss in %ruby, use that.  Otherwise, use builtin checking (not as good).
+    -->
+  <string id="sassLinterType">path</string>
+  <string id="sassDefaultInterpreter"></string>
+  
+  <string id="scssLinterType">path</string>
+  <string id="scssDefaultInterpreter"></string>
+  
+  <string id="lessLinterType">path</string>
+  <string id="lessDefaultInterpreter"></string>  
+
+<!-- ruby start -->
+  <!-- Ruby strings -->
+  <string id="rubyExtraPaths"></string>
+  <string id="rubyExcludePaths"></string>
+  <string id="rubyDefaultInterpreter"/>
+  <string id="ruby_lintOption">cwT</string>
+<!-- ruby end -->
+
+<!-- Remote files -->
+      <!-- How long (in seconds) to try opening a new remote connection,
+           after this period a timeout error will be raised. -->
+  <long id="remotefiles_defaultConnectionTimeout">30</long>
+      <!-- How long (in seconds) to keep an in-active remote file connection
+           opened, after this period they will be closed. -->
+  <long id="remotefiles_inactiveConnectionExpirySeconds">900</long>
+
+<!-- HTTP Inspector start -->
+  <boolean id="httpInspector_enabledAtStartup">0</boolean>
+  <long id="httpInspector_listenPort">8080</long>
+  <boolean id="httpInspector_acceptLocalConnectionsOnly">1</boolean>
+  <boolean id="httpInspector_breakOnRequest">0</boolean>
+  <boolean id="httpInspector_breakOnResponse">0</boolean>
+  <boolean id="httpInspector_viewImageInline">0</boolean>
+  <boolean id="httpInspector_proxyForwardingEnabled">0</boolean>
+  <string id="httpInspector_proxyForwardingAddress">127.0.0.1:8080</string>
+  <ordered-preference id="httpInspector_ruleset"/>
+<!-- HTTP Inspector end -->
+
+  <string id="perl_lintOption">cw</string>
+  <string id="perl_lintOption_perlCriticLevel">off</string>
+  <!-- bug 83165 (and others): Fix this frequent problem by
+       including the curr dir in the linter's search path
+       when in Taint mode. -->
+  <boolean id="perl_lintOption_includeCurrentDirForLinter">1</boolean>
+  <boolean id="perl_lintOption_disableBeginBlocks">1</boolean>
+  <string id="perlcritic_checking_rcfile"></string>
+
+  <!-- File associations are (roughly) determined by starting with this set
+       (factoryFileAssociations, which should only exist at the factory level)
+       and applying changes at the user (or site) level via the
+       'fileAssociationDiffs' pref.
+    -->
+  <string id="factoryFileAssociations">{'*.ada': 'Ada',
+ '*.ant': 'Bullant',
+ '*.asm': 'Assembler',
+ '*.aux': 'LaTeX',
+ '*.ave': 'Avenue',
+ '*.bat': 'Batch',
+ '*.bbl': 'LaTeX',
+ '*.bc': 'Baan',
+ '*.c': 'C++',
+ '*.cbl': 'Cobol',
+ '*.c++': 'C++',
+ '*.cc': 'C++',
+ '*.cg': 'HLSL',
+ '*.cgi': 'Perl',
+ '*.cix': 'XML',
+ '*.cln': 'Baan',
+ '*.cls': 'LaTeX',
+ '*.clw': 'CLW',
+ '*.cmd': 'Batch',
+ '*.coffee': 'CoffeeScript',
+ '*.conf': 'Apache',
+ '*.cpp': 'C++',
+ '*.cron': 'nnCrontab',
+ '*.cs': 'C#',
+ '*.css': 'CSS',
+ '*.css.less': 'Less',
+ '*.css.sass': 'Sass',
+ '*.css.scss': 'SCSS',
+ '*.ctp': 'PHP',
+ '*.cxx': 'C++',
+ '*.diff': 'Diff',
+ '*.e': 'Eiffel',
+ '*.el': 'Lisp',
+ '*.em': 'EScript',
+ '*.erl': 'Erlang',
+ '*.f': 'Fortran 77',
+ '*.f90': 'Fortran',
+ '*.f95': 'Fortran',
+ '*.for': 'Fortran 77',
+ '*.forth': 'Forth',
+ '*.fx': 'HLSL',
+ '*.gc': 'Gui4Cli',
+ '*.gsp': 'HTML',
+ '*.h': 'C++',
+ '*.hbs': 'Handlebars',
+ '*.h++': 'C++',
+ '*.hpp': 'C++',
+ '*.hlsl': 'HLSL',
+ '*.htm': 'HTML',
+ '*.html': 'HTML',
+ '*.html.erb': 'RHTML',
+ '*.hxx': 'C++',
+ '*.idl': 'IDL',
+ '*.inc': 'PHP',
+ '*.inl': 'C++',
+ '*.java': 'Java',
+ '*.jinja': 'Jinja2',
+ '*.js': 'JavaScript',
+ '*.json': 'JSON',
+ '*.jsm': 'JavaScript',
+ '*.jsx': 'JSX',
+ '*.kix': 'Kix',
+ '*.komodoproject': 'XML',
+ '*.kpf': 'XML',
+ '*.ksf': 'Python3',
+ '*.less': 'Less',
+ '*.lis': 'Lisp',
+ '*.lof': 'LaTeX',
+ '*.lot': 'Lot',
+ '*.lsp': 'Lisp',
+ '*.lt': 'Lout',
+ '*.ltx': 'LaTeX',
+ '*.lua': 'Lua',
+ '*.m': 'Matlab',
+ '*.mac': 'APDL',
+ '*.mak': 'Makefile',
+ '*.md': 'Markdown',
+ '*.markdown': 'Markdown',
+ '*.mdown': 'Markdown',
+ '*.mkdn': 'Markdown',
+ '*.mkd': 'Markdown',
+ '*.mdml': 'Markdown',
+ '*.mixal': 'MMIXAL',
+ '*.mm': 'C++',
+ '*.module': 'PHP',
+ '*.mp': 'Metapost',
+ '*.mustache': 'Mustache',
+ '*.mysql': 'MySQL',
+ '*.nim': 'Nimrod',
+ '*.nsi': 'Nsis',
+ '*.pas': 'Pascal',
+ '*.patch': 'Diff',
+ '*.pb': 'PowerBasic',
+ '*.php': 'PHP',
+ '*.phtml': 'PHP',
+ '*.pl': 'Perl',
+ '*.plex': 'Perl',
+ '*.plx': 'Perl',
+ '*.plsql': 'PL-SQL',
+ '*.pm': 'Perl',
+ '*.po': 'GetText',
+ '*.pov': 'POVRay',
+ '*.ps': 'PostScript',
+ '*.ps1': 'PowerShell',
+ '*.py': 'Python3',
+ '*.pyd': 'Python3',
+ '*.pyi': 'Python3',
+ '*.pyw': 'Python3',
+ '*.pyx': 'Python3',
+ '*.pxd': 'Python3',
+ '*.rake': 'Ruby',
+ '*.rb': 'Ruby',
+ '*.rjs': 'Ruby',
+ '*.ru': 'Ruby',
+ '*.rxml': 'Ruby',
+ '*.sass': 'Sass',
+ '*.scss': 'SCSS',
+ '*.sml': 'SML',
+ '*.sh': 'Bash',
+ '*.sol': 'Scriptol',
+ '*.sorcus': 'Sorcus',
+ '*.spf': 'nnCrontab',
+ '*.sql': 'SQL',
+ '*.sty': 'LaTeX',
+ '*.t': 'Perl',
+ '*.tab': 'nnCrontab',
+ '*.tal': 'TAL',
+ '*.tacl': 'TACL',
+ '*.tcl': 'Tcl',
+ '*.tex': 'LaTeX',
+ '*.toc': 'LaTeX',
+ '*.txt': 'Text',
+ '*.v': 'Verilog',
+ '*.vb': 'VisualBasic',
+ '*.vbs': 'VBScript',
+ '*.vh': 'Verilog',
+ '*.xhtml': 'HTML',
+ '*.xml': 'XML',
+ '*.xs': 'C++',
+ '*.xsl': 'XSLT',
+ '*.xslt': 'XSLT',
+ '*.yaml': 'YAML',
+ '*.yml': 'YAML',
+ '*.zcml': 'XML',
+ '.htaccess': 'Apache',
+ 'CMakeLists.txt': 'CMake',
+ 'Conscript': 'Perl',
+ 'Construct': 'Perl',
+ 'Gemfile': 'Ruby',
+ 'makefile': 'Makefile',
+ 'rakefile': 'Ruby',
+ 'Vagrantfile': 'Ruby'
+}</string>
+
+  <string id="fileDefaultNew">Text</string>
+  <long id="gui_port">11010</long> <!-- port to be used in socket communication -->
+  <string id="defaultSelectedPref">ui</string>
+  <string id="encodingDefault">utf-8</string>
+  <boolean id="encodingAutoDetect">1</boolean>
+  <boolean id="encodingXMLDec">1</boolean>
+  <boolean id="encodingHTML">0</boolean>
+  <boolean id="encodingModeline">1</boolean>
+
+  <long id="find-patternType">0</long>
+  <long id="find-caseSensitivity">0</long>
+  <long id="find-preferredContextType">0</long> <!-- 0 == current document -->
+  <boolean id="find-matchWord">0</boolean>
+  <boolean id="find-searchBackward">0</boolean>
+  <boolean id="find-displayInFindResults2">0</boolean>
+  <boolean id="find-showReplaceAllResults">1</boolean>
+  <boolean id="find-highlightEnabled">1</boolean>
+  <long id="find-highlightTimeout">1000</long>
+  <ordered-preference id="find-folders"/>
+  <boolean id="find-searchInSubfolders">1</boolean>
+  <string id="find-cwd">~</string>
+  <ordered-preference id="find-includeFiletypes"/>
+  <ordered-preference id="find-excludeFiletypes">
+    <string>.svn</string>
+    <string>CVS</string>
+    <string>.git</string>
+    <string>.hg</string>
+    <string>.bzr</string>
+    <string>*~</string>
+  </ordered-preference>
+  <!-- Whether to show multiline text boxes in the find dialog. -->
+  <boolean id="find-multiline">0</boolean> 
+  <boolean id="find-confirmReplacementsInFiles">1</boolean> 
+  <!-- The context the last time the user did find/replace in files. Used to
+       restore that when doing a new find/replace in files. Bug 81579.
+       Valid values are: files, open-files, and curr-project
+       (the same as the `<menuitem value="VALUE">` values in
+       `<menulist id="search-in-menu">` of "embedded.xul").
+       -->
+  <string id="find-lastInFilesContext">files</string>
+  <boolean id="find-skipLargeFilesEnabled">1</boolean>
+  <long id="find-skipFileSizesLargerThan">104857600</long> <!-- 100 MB -->
+  <boolean id="find-pinFindReplaceDialog">1</boolean>
+
+  <!-- variable highlighting preferences (see kd 0277) -->
+  <boolean id="codeintel_highlight_variables_auto_mouse">1</boolean>
+  <boolean id="codeintel_highlight_variables_auto_keyboard">0</boolean>
+  <boolean id="codeintel_highlight_variables_match_prefix">0</boolean>
+  <long id="codeintel_highlight_variables_auto_delay">250</long>
+  <long id="codeintel_highlight_variables_min_auto_length">2</long>
+  <boolean id="codeintel_highlight_variables_use_scope">1</boolean>
+
+  <long id="editWrapType">0</long>
+  <long id="editWordWrapMarker">0</long>
+  <long id="editWordWrapIndentation">1</long>
+  <boolean id="editUseEdge">0</boolean>
+  <!-- editAutoIndentStyle:
+     'smart': adjust auto-indent after newline _in brace languages_
+     'plain': auto-indent to first column of previous line that contains non-whitespace after newline, nothing after }
+     'none': no auto-indent
+  -->
+  <string id="editAutoIndentStyle">smart</string>
+  <!-- editElectricBrace:
+     if true, adjust position of closing brace to indent of matching brace line
+  -->
+  <boolean id="editElectricBrace">1</boolean>
+  
+  <boolean id="edit.indent.keyword.dedent_on_last_char">1</boolean>
+  <long id="editAutoWrapColumn">80</long>
+  <boolean id="editSmartSoftCharacters">1</boolean>
+  <boolean id="enableSmartSoftCharactersInsideLine">0</boolean>
+  <boolean id="enableSmartTabSkipsSoftCharacters">1</boolean>
+  
+  <boolean id="editSmartWrapSelection">1</boolean>
+  <boolean id="editSmartWrapSelectionKeep">0</boolean>
+  <boolean id="wrapSelectionOnlyPlainText">1</boolean>
+  <string id="wrapSelectionDelimiters_FactorySetting">([{&lt;&quot;&apos;`*/</string>
+  <string id="wrapSelectionDelimiters">([{&lt;&quot;&apos;`*/</string>
+  
+  <string id="editDelimitedBlockSelectDelimiters_FactorySetting">&apos;&quot;`([{</string>
+  <string id="editDelimitedBlockSelectDelimiters">&apos;&quot;`([{</string>
+
+  <boolean id="editMatchingDelimiter">1</boolean>
+  
+  <boolean id="enableElasticTabstops">0</boolean>
+  
+  <!-- Have the Cut/Copy commands cut/copy the current line if there is no
+       selection. -->
+  <boolean id="editSmartCutCopyWithoutSelection">1</boolean>
+  <boolean id="enableMultipleSelectionMouse">1</boolean>
+  <long id="autoSaveSeconds">30</long>
+  <boolean id="checkDiskFile">1</boolean>
+  <boolean id="checkNetworkDiskFile">0</boolean>
+
+  <string id="PerlExHost">demo3.activestate.com</string>
+  <long id="PerlExPort">8080</long>
+
+  <!-- PDK Preferences -->
+  <boolean id="donotask_pdk_xpi_update">0</boolean>
+  <preference-set id="PDK">
+    <string id="scriptname"></string>
+    <string id="extras"></string>
+    <string id="pdkType">app</string>
+    <string id="targetname"></string>
+    <string id="dependencies">freestanding</string>
+    <boolean id="verbose">1</boolean>
+    <boolean id="failedUses">0</boolean>
+    <boolean id="hideConsole">0</boolean>
+    <boolean id="clean">0</boolean>
+    <boolean id="buildDCOM">0</boolean>
+    <boolean id="forceOverwrite">0</boolean>
+    <boolean id="autoRun">0</boolean> <!-- whether to register com/svc or run app/net/tray after build -->
+    <string id="debugging">none</string>
+    <string id="hostname">localhost</string>
+    <string id="port">0</string>
+
+    <ordered-preference id="extraModules"/>
+    <ordered-preference id="trimModules"/>
+    <ordered-preference id="dataFiles"/>
+    <ordered-preference id="libs"/>
+    <ordered-preference id="blibs"/>
+    <ordered-preference id="icons"/>
+    <preference-set id="versionInfo"/>
+  </preference-set>
+
+  <!-- Language Preferences; these are treated specially in koDocumentBase -->
+  <boolean id="languages/Makefile/useTabs">1</boolean>
+  <string id="languages/Python/newEncoding">ascii</string>
+  <long id="languages/Ruby/indentWidth">2</long>
+  <long id="languages/RHTML/indentWidth">2</long>
+  <long id="languages/YAML/indentWidth">2</long>
+
+  <preference-set id="filepickers.defaultDirs"/>
+
+  <!-- Allow XML declaration tags to override file settings, except
+       in the case of HTML and XSLT. -->
+  <boolean id="xmlDeclDetection">1</boolean>
+  <string id="defaultHTMLDecl">-//W3C//DTD HTML 5//EN</string>
+  <string id="defaultHTMLDeclSystemIdentifier">"http://www.w3.org/TR/html5/html5.dtd"</string>
+  <string id="defaultHTML5Decl">-//W3C//DTD HTML 5//EN</string>
+  <string id="defaultHTML5DeclSystemIdentifier">"http://www.w3.org/TR/html5/html5.dtd"</string>
+  <!-- Allow #! lines to override filename associations. -->
+  <boolean id="shebangDetection">1</boolean>
+  <!-- Allow emacs local variables in file content to override file type
+       association. -->
+  <boolean id="emacsLocalModeVariableDetection">1</boolean>
+  <boolean id="autoDetectJSvsNode">1</boolean>
+  <boolean id="preferJavaScriptOverNode">1</boolean>
+
+  <boolean id="cvsEnabled">1</boolean>
+  <boolean id="cvsBackgroundCheck">1</boolean>
+  <boolean id="cvsRecursive">0</boolean>
+  <long id="cvsBackgroundMinutes">15</long>
+  <string id="cvsDiffOptions">-u</string>
+  <string id="cvsExecutable"></string>
+  <boolean id="donotask_cvs_ssh_setup_warning">0</boolean>
+
+  <boolean id="svnEnabled">1</boolean>
+  <boolean id="svnBackgroundCheck">1</boolean>
+  <long id="svnBackgroundMinutes">15</long>
+  <string id="svnDiffOptions"></string>
+  <string id="svnExecutable"></string>
+  <boolean id="donotask_svn_ssh_setup_warning">0</boolean>
+
+  <boolean id="p4Enabled">1</boolean>
+  <boolean id="p4BackgroundCheck">0</boolean>
+  <boolean id="p4Recursive">0</boolean>
+  <long id="p4BackgroundMinutes">15</long>
+  <string id="p4DiffOptions">u</string>
+  <string id="p4Executable"></string>
+  <string id="diffDisplayStyle">diffwin</string>
+  <boolean id="diskStatusEnabled">1</boolean>
+  <boolean id="diskBackgroundCheck">1</boolean>
+  <long id="diskBackgroundMinutes">15</long>
+  <long id="directoryMonitoringTimeout">1</long>
+  <boolean id="fileNotificationServiceEnabled">1</boolean>
+  <!-- Enable usage of OS-level APIs for file notification handling.  -->
+  <boolean id="osControlledFileNotificationsEnabled">1</boolean>
+  <!-- Enable file polling, used as a fallback when the OS-level notifications
+       are disabled. -->
+  <boolean id="filePollingServiceEnabled">1</boolean>
+  <!-- Tip of the Day preferences:
+    "tipShowAtStartup" specifies whether to launch the Tip o' the day dialog.
+    "tipNumber" indicates the tip to display next. -->
+  <boolean id="tipShowAtStartup">0</boolean>
+  <long id="tipNumber">0</long>
+
+  <!-- Run Command preferences:
+    "runShowMoreOptions" specifies whether to show the "More Options" part of
+        the Run Command dialog.
+    "runCwd" is a directory in which to start the child process.
+    "runRunIn" is a string indicating in what window the command should be
+        started.
+    "runDoNotOpenOutWin" specifies that the output pane should not be openned
+        to show the command run.
+    "runParseOutput" is a boolean indicating whether to parse output lines.
+    "runParseRegex" specifies a regex to use to parse output lines.
+    "runShowParsedOutputList" is a boolean indicating whether parse output
+        should be shown initially as a list (i.e. in an tree).
+    "runEnv" is a string encoding the environment settings
+    -->
+  <boolean id="runShowMoreOptions">0</boolean>
+  <string id="runCwd"></string>
+  <string id="runRunIn"></string>
+  <boolean id="runDoNotOpenOutWin">0</boolean>
+  <string id="runEnv"></string>
+  <boolean id="runParseOutput">0</boolean>
+  <string id="runParseRegex"></string>
+  <boolean id="runShowParsedOutputList">0</boolean>
+  <!-- preload the parse regex MRU with a demonstrative value -->
+  <ordered-preference id="run-parseRegexMru">
+    <string>^(?P&lt;file&gt;.+?):(?P&lt;line&gt;\d+):(?P&lt;content&gt;.*)$</string>
+  </ordered-preference>
+
+
+  <!-- The commands that are run to lookup information on a per language basis -->
+<!-- #if PLATFORM == "darwin" -->
+  <string id="PerlHelpCommand">open http://www.google.com/search?q=site%3Adocs.activestate.com%2Factiveperl+%W</string>
+  <string id="PythonHelpCommand">open http://www.google.com/search?q=site%3Adocs.activestate.com%2Factivepython+%W</string>
+  <string id="Python3HelpCommand">open http://www.google.com/search?q=site%3Adocs.activestate.com%2Factivepython+%W</string>
+  <string id="PHPHelpCommand">open http://www.php.net/manual-lookup.php?pattern=%W</string>
+  <string id="RubyHelpCommand">open http://www.ruby-doc.org/find/pickaxe?search=%W</string>
+  <string id="TclHelpCommand">open http://www.google.com/search?q=site%3Adocs.activestate.com%2Factivetcl+%W</string>
+  <string id="XSLTHelpCommand">open http://www.google.com/search?q=%W+XSLT+reference</string>
+  <string id="TextHelpCommand">open http://www.answers.com/%W</string>
+  <string id="DefaultHelpCommand">open http://www.google.com/search?q=%W</string>
+  <string id="OtherHelpCommand">open http://www.google.com/search?q=%W</string>
+<!-- #else -->
+  <string id="PerlHelpCommand">%(browser) http://www.google.com/search?q=site%3Adocs.activestate.com%2Factiveperl+%W</string>
+  <string id="PythonHelpCommand">%(browser) http://www.google.com/search?q=site%3Adocs.activestate.com%2Factivepython+%W</string>
+  <string id="Python3HelpCommand">%(browser) http://www.google.com/search?q=site%3Adocs.activestate.com%2Factivepython+%W</string>
+  <string id="PHPHelpCommand">%(browser) http://www.php.net/manual-lookup.php?pattern=%W</string>
+  <string id="RubyHelpCommand">%(browser) http://www.ruby-doc.org/find/pickaxe?search=%W</string>
+  <string id="TclHelpCommand">%(browser) http://www.google.com/search?q=site%3Adocs.activestate.com%2Factivetcl+%W</string>
+  <string id="XSLTHelpCommand">%(browser) http://www.google.com/search?q=%W+XSLT+reference</string>
+  <string id="TextHelpCommand">%(browser) http://www.answers.com/%W</string>
+  <string id="DefaultHelpCommand">%(browser) http://www.google.com/search?q=%W</string>
+  <string id="OtherHelpCommand">%(browser) http://www.google.com/search?q=%W</string>
+<!-- #endif -->
+
+  <!-- Cursor Color prefs and the like -->
+  <string id="cursorColor">#000000</string>
+  <string id="edgeColor">#C0DCC0</string>
+  <string id="currentLineColor">#F5F5F5</string>
+  <boolean id="useCurrentLineColor">0</boolean>
+  <boolean id="useSelectFore">0</boolean>
+  <string id="selectFore">#333333</string>
+  <string id="selectBack">#c0c0c0</string>
+
+  <!-- number of lines to keep above and below cursor - see scintilla setYCaretPolicy -->
+  <long id="ySlop">5</long>
+  <!-- number of columns to keep after cursor - see scintilla setXCaretPolicy -->
+  <long id="xSlop">0</long>
+
+  <!-- horizontal scrollbar width (in pixels) -->
+  <long id="scrollWidth">2000</long>
+  <!-- Automatic adjusting of the horizontal scrollbar width to match the document. -->
+  <boolean id="scrollWidthTracking">0</boolean>
+
+  <!-- Keybinding configurations -->
+  <string id="keybinding-scheme">Default</string>
+  <boolean id="keybindingDisableAccesskeys">0</boolean>
+  <string id="default-keybinding-scheme">Default</string>
+  <boolean id="printHeaderFilepath">1</boolean>
+  <boolean id="printFooterPageNumber">1</boolean>
+  <boolean id="printFooterTimeStamp">1</boolean>
+  <boolean id="print_showLineNos">1</boolean>
+  <boolean id="print_useColor">0</boolean>
+  <double id="print_scalingRatio">1.5</double>
+  <long id="print_lineLength">132</long>
+  <string id="isearchType">0</string> <!-- plain text search -->
+  <string id="isearchCaseSensitivity">2</string> <!-- case sensitive if patterns contains uppercase char -->
+  <long id="isearchHighlightTimeout">35</long> <!-- msecs to abort highlighting in isearch -->
+  <boolean id="isearchKeysToEditor">0</boolean>
+
+  <string id="import_include_matches"></string>
+<!-- #if PLATFORM == "win" -->
+  <!-- Note: _svn may be used on windows with subversion instead of .svn -->
+  <string id="import_exclude_matches">*.*~;*.bak;*.tmp;CVS;.#*;*.pyo;*.pyc;.svn;_svn;.git;.hg;.bzr;*%*;tmp*.html;.DS_Store;*.swp;*.kpf;*.komodoproject;.komodotools;__pycache__</string>
+<!-- #else -->
+  <string id="import_exclude_matches">*.*~;*.bak;*.tmp;CVS;.#*;*.pyo;*.pyc;.svn;.git;.hg;.bzr;*%*;tmp*.html;.DS_Store;*.swp;*.kpf;*.komodoproject;.komodotools;__pycache__</string>
+<!-- #endif -->
+  <boolean id="import_recursive">1</boolean>
+  <string id="import_type">useFolders</string>
+  <string id="import_dirname"></string>
+  <boolean id="import_live">1</boolean>
+
+
+  <!-- save_before_perlapp
+    - "All": Save all dirty files when starting pdk
+    - "None": Save no dirty files when starting pdk
+    - "": Ask me what to do
+  -->
+  <boolean id="donotask_save_before_perlapp">0</boolean>
+  <string id="donotask_action_save_before_perlapp"></string>
+
+  <!-- Don't alert when dirty buffer conflicts with file on disk. -->
+  <boolean id="donotask_buffer_conflicts_with_file_on_disk">0</boolean>
+
+  <!-- open_recent_files_on_project_open
+    - if boolean pref is true, then:
+        - string pref == "Yes": Open recent files when opening project
+        - string pref == "No":  Do nothing when opening project
+    -->
+  <boolean id="donotask_open_recent_files_on_project_open">0</boolean>
+  <string id="donotask_action_open_recent_files_on_project_open"></string>
+
+  <!-- close_all_files_on_project_close
+    - if boolean pref is true, then:
+        - string pref == "Yes": Close all open files in project when project is closed
+        - string pref == "No":  Close no files when project is closed
+    -->
+  <boolean id="donotask_close_all_files_on_project_close">0</boolean>
+  <string id="donotask_action_close_all_files_on_project_close"></string>
+
+  <!-- close_deleted_files
+    - if boolean pref is true, then:
+        - string pref == "All": Close all deleted files when komodo gains focus
+        - string pref == "None":  Close no deleted files when komodo gains focus
+    -->
+  <boolean id="donotask_close_deleted_files">0</boolean>
+  <string id="donotask_action_close_deleted_files"></string>
+
+  <!-- reload_changed_files
+    - if boolean pref is true, then:
+        - string pref == "All": Reload all changed files when komodo gains focus
+        - string pref == "None":  Reload no changed files when komodo gains focus
+    -->
+  <boolean id="donotask_reload_changed_files">1</boolean>
+  <string id="donotask_action_reload_changed_files">All</string>
+  
+  <boolean id="select_most_recent_buffer_on_buffer_close">false</boolean>
+
+  <!-- p4_diff_type and externaldiff: what type of diff tool to use w/ Perforce
+    - 'komododiff': use the 'standard' - run p4 diff, parse output, and either put up a new window
+      or a new tab depending on the value of the "diffDisplayStyle" pref.
+    - 'externaldiffchoice': set P4DIFF to the value of the "externaldiff" pref.
+  -->
+  <string id="p4_diff_type">komododiff</string>
+  <string id="externaldiff">p4diff</string>
+
+  <!-- restore_workspace
+    - if boolean pref is true, then:
+        - string pref == "Yes": Restore desktop at startup
+        - string pref == "No":  Do nothing at startup
+  -->
+  <boolean id="donotask_restore_workspace">1</boolean>
+  <string id="donotask_action_restore_workspace">Yes</string>
+  <boolean id="workspace_restory_history">0</boolean>
+
+  <!-- Dealing with workspaces when Komodo did not shutdown correctly (crashed).
+         komodo_normal_shutdown: set to false when Komodo initially starts up
+                                 set to true after Komodo saves the workspace
+                                 during shutdown.
+       No doNotAsk pref is used with this in case their is a problem with Komodo
+       restoring the workspace, which will allow the user to bypass the
+       workspace restore.
+  -->
+  <boolean id="komodo_normal_shutdown">1</boolean>
+
+  <!-- Whether to show the error dialog of reopening file failures at startup. -->
+  <boolean id="donotask_startup_reopen_file_error_dialog">0</boolean>
+
+  <!-- Whether to prompt the user before discarding all changes on cmd_revert. -->
+  <boolean id="donotask_revert_buffer">0</boolean>
+  <string id="donotask_action_revert_buffer"></string>
+
+  <!-- The default format used to generate a date string. -->
+  <string id="defaultDateFormat">%a %b %d %H:%M:%S %Y</string>
+
+  <!-- Don't ask to readjust snippet selection positions automatically so that
+       they are valid positions. -->
+  <boolean id="donotask_readjust_snippet_selection">0</boolean>
+  <boolean id="enableAutoAbbreviations">1</boolean>
+  <string id="autoAbbreviationTriggerCharacters_FactorySetting">! \t@#$%^&amp;*()+[]{}\\|/?:;&lt;,&quot;&apos;</string>
+  <string id="autoAbbreviationTriggerCharacters">! \t@#$%^&amp;*()+[]{}\\|/?:;&lt;,&quot;&apos;</string>
+
+  <!-- Maximum size of viewstate MRU - no UI provided as of yet -->
+  <long id="viewStateMRUSize">300</long>
+  <long id="docStateMRUSize">300</long>
+
+<!-- #if BUILD_FLAVOUR == "dev" -->
+  <!-- Prefs for the test.js::test_dialog_*() methods. -->
+  <boolean id="donotask_test">0</boolean>
+  <string id="donotask_action_test"></string>
+<!-- #endif -->
+
+<!-- #if WITH_SCC -->
+  <boolean id="donotask_save_on_scc">0</boolean>
+  <string id="donotask_action_save_on_scc"></string>
+  <boolean id="donotask_scc_no_commit_message">0</boolean>
+  <string id="donotask_action_scc_no_commit_message"></string>
+  <boolean id="donotask_scc_no_commit_confirm_close">0</boolean>
+  <string id="donotask_action_scc_no_commit_confirm_close"></string>
+  <ordered-preference id="commit_message_history" />
+<!-- #endif -->
+
+  <!-- Whether to ask and, if not, whether to append an appropriate extension
+       to filenames chosen with ko.filepicker.saveFile. -->
+  <boolean id="donotask_ensure_filename_has_ext">0</boolean>
+  <string id="donotask_action_ensure_filename_has_ext"></string>
+
+  <!-- Whether to add new files (created via File -> New -> File) to the
+       current project, if any. -->
+  <boolean id="new_file_add_to_project">1</boolean>
+
+  <!-- show_scc_tab
+    - if boolean pref is true, then:
+        - string pref == "Yes": Force showing of bottom pane on SCC action completion
+        - string pref == "No":  Do no force show of bottom pane on SCC action completion
+    -->
+  <boolean id="donotask_show_scc_tab">0</boolean>
+  <string id="donotask_action_show_scc_tab"></string>
+
+  <string id="editor-scheme">Default</string>
+  <string id="interface-scheme">Default</string>
+  <string id="widget-scheme">Default</string>
+  <boolean id="link-schemes">1</boolean>
+  
+  <boolean id="interface-font-defer">1</boolean>
+  <string id="interface-font">"Lucida Grande", "Segoe UI", "Droid Sans", "Open Sans", sans-serif</string>
+  <string id="interface-font-size">1rem</string>
+  
+  <boolean id="editor-font-defer">1</boolean>
+  <string id="editor-font">Monaco, Consolas, Inconsolata, "DejaVu Sans Mono", "Bitstream Vera Sans Mono", Menlo, Monaco, "Courier New", Courier, Monospace</string>
+  <long id="editor-font-size">11</long>
+  <long id="editor-line-spacing">2</long>
+
+  <!-- #if PLATFORM == "darwin" -->
+  <!-- Use a different fontQuality setting on the Mac - see bug 99891. -->
+  <long id="editor_font_quality">3</long>
+  <!-- #else -->
+  <long id="editor_font_quality">0</long>
+  <!-- #endif -->
+
+  <boolean id="donotask_dragdrop_uri">0</boolean>
+  <string id="donotask_action_dragdrop_uri"></string>
+
+  <boolean id="donotask_remotedebug_mapped_uri">0</boolean>
+  <string id="donotask_action_remotedebug_mapped_uri"></string>
+  
+  <boolean id="donotask_reboot_after_changing_keybindings">0</boolean>
+
+  <!-- p4_edit_on_save
+    - if boolean pref is true, then:
+        - string pref == "Yes": Automatically 'p4 edit', as appropriate, on save.
+        - string pref == "No":  Do not 'p4 edit' automatically, ever, on save.
+    -->
+  <boolean id="donotask_p4_edit_on_save">0</boolean>
+  <string id="donotask_action_p4_edit_on_save"></string>
+  <boolean id="donotask_force_save_on_error">0</boolean>
+  <string id="donotask_action_force_save_on_error"></string>
+
+  <!-- Persistence of data for the "New File"/template dialog. -->
+  <string id="templates_selected_category">Common</string>
+  <string id="templates_selected_template_by_category">{'Common': 'Text'}</string>
+  <string id="templates_open_categories"></string>
+  <!-- Persistence of data for the "New Project"/template dialog. -->
+  <string id="project-templates_selected_category">Common</string>
+  <string id="project-templates_selected_template_by_category">{'Common': 'Live Project'}</string>
+  <string id="project-templates_open_categories"></string>
+
+  <boolean id="editBackspaceDedents">1</boolean>
+
+  <!-- Pref which determines whether tab after a word characted does the same
+       thing as ctrl+space -->
+  <boolean id="editTabCompletes">0</boolean>
+
+  <!-- Do not warn about templates with old codes -->
+  <boolean id="donotask_old_template_codes">1</boolean>
+
+  <!-- Warning about closing a Find Results tab while its search is still
+       in progress. -->
+  <boolean id="donotask_stop_search_before_closing_tab">0</boolean>
+  <string id="donotask_action_stop_search_before_closing_tab"></string>
+
+  <!-- Ask the user to confirm deletion of breakpoints. -->
+  <boolean id="donotask_confirm_delete_breakpoint">0</boolean>
+
+  <boolean id="useSharedToolbox">0</boolean>
+
+  <!-- Common Data Dir:
+       - Normally the Common Data Dir is an OS-specific value determined
+         by koIDirs.
+       - "commonDataDirMethod" and "customCommonDataDir" allow the _user_ to
+         override these. "commonDataDirMethod" is one of "default" or "custom",
+         Iff "custom", then the value is that of the "customCommonDataDir"
+         pref. Iff "default", then the above points determine.
+    -->
+  <string id="commonDataDirMethod">default</string>
+  <string id="customCommonDataDir"></string>
+
+  <!-- Prefs related to Tcl linting.
+       if force_tcllint_version is true, then tcllint_version
+       specifies the version that is passed to the tcl linter with
+       the -use argument.
+
+       tcllint_suppress, if specified, is passed as the -suppress
+       argument value
+  -->
+  <boolean id="force_tcllint_version">0</boolean>
+  <string id="tcllint_version">8.4</string>
+  <boolean id="tcllint_argAfterArgs">0</boolean>
+  <boolean id="tcllint_argsNotDefault">0</boolean>
+  <boolean id="tcllint_badBoolean">0</boolean>
+  <boolean id="tcllint_badByteNum">0</boolean>
+  <boolean id="tcllint_badColorFormat">0</boolean>
+  <boolean id="tcllint_badCursor">0</boolean>
+  <boolean id="tcllint_badFloat">0</boolean>
+  <boolean id="tcllint_badIndex">0</boolean>
+  <boolean id="tcllint_badIndexExpr">0</boolean>
+  <boolean id="tcllint_badInt">0</boolean>
+  <boolean id="tcllint_badKey">0</boolean>
+  <boolean id="tcllint_badList">0</boolean>
+  <boolean id="tcllint_badLevel">0</boolean>
+  <boolean id="tcllint_badMode">0</boolean>
+  <boolean id="tcllint_badOption">0</boolean>
+  <boolean id="tcllint_badPixel">0</boolean>
+  <boolean id="tcllint_badResource">0</boolean>
+  <boolean id="tcllint_badSwitch">0</boolean>
+  <boolean id="tcllint_badVersion">0</boolean>
+  <boolean id="tcllint_badWholeNum">0</boolean>
+  <boolean id="tcllint_badNatNum">0</boolean>
+  <boolean id="tcllint_badArrayIndex">0</boolean>
+  <boolean id="tcllint_mismatchOptions">0</boolean>
+  <boolean id="tcllint_noExpr">0</boolean>
+  <boolean id="tcllint_noScript">0</boolean>
+  <boolean id="tcllint_noSwitchArg">0</boolean>
+  <boolean id="tcllint_nonDefAfterDef">0</boolean>
+  <boolean id="tcllint_nonPortChannel">0</boolean>
+  <boolean id="tcllint_nonPortCmd">0</boolean>
+  <boolean id="tcllint_nonPortColor">0</boolean>
+  <boolean id="tcllint_nonPortCursor">0</boolean>
+  <boolean id="tcllint_nonPortFile">0</boolean>
+  <boolean id="tcllint_nonPortOption">0</boolean>
+  <boolean id="tcllint_nonPortVar">0</boolean>
+  <boolean id="tcllint_numArgs">0</boolean>
+  <boolean id="tcllint_numListElts">0</boolean>
+  <boolean id="tcllint_obsoleteCmd">0</boolean>
+  <boolean id="tcllint_parse">0</boolean>
+  <boolean id="tcllint_procNumArgs">0</boolean>
+  <boolean id="tcllint_tooManyFieldArg">0</boolean>
+  <boolean id="tcllint_warnDeprecated">0</boolean>
+  <boolean id="tcllint_warnExportPat">0</boolean>
+  <boolean id="tcllint_warnExpr">0</boolean>
+  <boolean id="tcllint_warnExtraClose">0</boolean>
+  <boolean id="tcllint_warnIfKeyword">0</boolean>
+  <boolean id="tcllint_warnNamespacePat">0</boolean>
+  <boolean id="tcllint_warnPattern">0</boolean>
+  <boolean id="tcllint_warnReserved">0</boolean>
+  <boolean id="tcllint_warnRedefine">0</boolean>
+  <boolean id="tcllint_warnUndefProc">0</boolean>
+  <boolean id="tcllint_warnUnsupported">0</boolean>
+  <boolean id="tcllint_warnVarRef">0</boolean>
+  <boolean id="tcllint_winAlpha">0</boolean>
+  <boolean id="tcllint_winBeginDot">0</boolean>
+  <boolean id="tcllint_winNotNull">0</boolean>
+  <boolean id="tcllint_warnInternalCmd">0</boolean>
+  <boolean id="tcllint_invalidUsage">0</boolean>
+  <boolean id="tcllint_warnBehaviourCmd">0</boolean>
+  <boolean id="tcllint_warnBehaviour">0</boolean>
+  <boolean id="tcllint_internalError">0</boolean>
+  <boolean id="tcllint_warnReadonlyVar">0</boolean>
+  <boolean id="tcllint_arrayReadAsScalar">0</boolean>
+  <boolean id="tcllint_warnUndefFunc">0</boolean>
+  <boolean id="tcllint_badMathOp">0</boolean>
+  <boolean id="tcllint_nonPublicVar">0</boolean>
+  <boolean id="tcllint_warnUndefinedVar">0</boolean>
+  <boolean id="tcllint_warnGlobalVarColl">0</boolean>
+  <boolean id="tcllint_warnShadowVar">0</boolean>
+  <boolean id="tcllint_warnUpvarNsNonsense">0</boolean>
+  <boolean id="tcllint_warnGlobalNsNonsense">0</boolean>
+  <boolean id="tcllint_warnUndefinedUpvar">0</boolean>
+  <boolean id="tcllint_badTraceOp">0</boolean>
+  <boolean id="tcllint_serverAndPort">0</boolean>
+  <boolean id="tcllint_socketArgOpt">0</boolean>
+  <boolean id="tcllint_socketAsync">0</boolean>
+  <boolean id="tcllint_socketBadOpt">0</boolean>
+  <boolean id="tcllint_socketServer">0</boolean>
+  <boolean id="tcllint_badCharMap">0</boolean>
+  <boolean id="tcllint_warnEscapeChar">0</boolean>
+  <boolean id="tcllint_warnNotSpecial">0</boolean>
+  <boolean id="tcllint_warnQuoteChar">0</boolean>
+  <boolean id="tcllint_errBadBrktExp">0</boolean>
+  <boolean id="tcllint_warnY2K">0</boolean>
+  <boolean id="tcllint_badRegexp">0</boolean>
+  <boolean id="tcllint_warnAIPattern">0</boolean>
+  <boolean id="tcllint_warnMemoryCmd">0</boolean>
+  <boolean id="tcllint_badBinaryFmt">0</boolean>
+  <boolean id="tcllint_badFormatFmt">0</boolean>
+  <boolean id="tcllint_badSerialMode">0</boolean>
+  <boolean id="tcllint_pkgBadExactRq">0</boolean>
+  <boolean id="tcllint_pkgVConflict">0</boolean>
+  <boolean id="tcllint_pkgTclConflict">0</boolean>
+  <boolean id="tcllint_pkgUnchecked">0</boolean>
+  <boolean id="tcllint_badColormap">0</boolean>
+  <boolean id="tcllint_badEvent">0</boolean>
+  <boolean id="tcllint_badGeometry">0</boolean>
+  <boolean id="tcllint_badGridRel">0</boolean>
+  <boolean id="tcllint_badGridMaster">0</boolean>
+  <boolean id="tcllint_badPalette">0</boolean>
+  <boolean id="tcllint_badPriority">0</boolean>
+  <boolean id="tcllint_badScreen">0</boolean>
+  <boolean id="tcllint_badSticky">0</boolean>
+  <boolean id="tcllint_badTab">0</boolean>
+  <boolean id="tcllint_badTabJust">0</boolean>
+  <boolean id="tcllint_badVirtual">0</boolean>
+  <boolean id="tcllint_badVisual">0</boolean>
+  <boolean id="tcllint_badVisualDepth">0</boolean>
+  <boolean id="tcllint_nonPortBitmap">0</boolean>
+  <boolean id="tcllint_nonPortKeysym">0</boolean>
+  <boolean id="tcllint_noVirtual">0</boolean>
+  <boolean id="tcllint_noEvent">0</boolean>
+  <boolean id="tcllint_warnConsoleCmd">0</boolean>
+  <boolean id="tcllint_warnTkCmd">0</boolean>
+  <boolean id="tcllint_badBindSubst">0</boolean>
+  <boolean id="tcllint_blt_badIntRange">0</boolean>
+  <boolean id="tcllint_blt_badSignal">0</boolean>
+  <boolean id="tcllint_blt_badSignalInt">0</boolean>
+  <boolean id="tcllint_expect_warnAmbiguous">0</boolean>
+  <boolean id="tcllint_incrTcl_classNumArgs">0</boolean>
+  <boolean id="tcllint_incrTcl_procOutScope">0</boolean>
+  <boolean id="tcllint_incrTcl_procProtected">0</boolean>
+  <boolean id="tcllint_incrTcl_badMemberName">0</boolean>
+  <boolean id="tcllint_incrTcl_classOnly">0</boolean>
+  <boolean id="tcllint_incrTcl_warnUnsupported">0</boolean>
+  <boolean id="tcllint_incrTcl_nsOnly">0</boolean>
+  <boolean id="tcllint_incrTcl_nsOrClassOnly">0</boolean>
+  <boolean id="tcllint_tclX_badProfileOpt">0</boolean>
+  <boolean id="tcllint_tclX_optionRequired">0</boolean>
+  <boolean id="tcllint_tclX_badLIndex">0</boolean>
+  <boolean id="tcllint_tclX_badTlibFile">0</boolean>
+  <boolean id="tcllint_oratcl_badConnectStr">0</boolean>
+  <boolean id="tcllint_oratcl_badSubstChar">0</boolean>
+  <boolean id="tcllint_oratcl_badOnOff">0</boolean>
+  <boolean id="tcllint_oratcl_missingColon">0</boolean>
+  <boolean id="tcllint_sybtcl_badSubstChar">0</boolean>
+  <boolean id="tcllint_xmlAct_badXMLaction">0</boolean>
+  <string id="tcllint_extra"></string>
+
+  <string id="tidy_configpath"/>
+  <string id="tidy_errorlevel">errors</string>
+  <string id="tidy_accessibility">0</string>
+
+  <!-- Code Intelligence system preferences:
+        "codeintel_enabled" is the master pref indicating if the Code Intel
+            system is running at all. It should NOT be set on a per file or
+            per project level.
+        "codeintel_sort_codebrowser_by" is the sort-order to use in the
+            Code Browser.
+        "codeintel_completion_languages" is a space-separated list of
+            languages for which Komodo considers providing CodeIntel-based
+            autocomplete and calltips. This should not be overridden: this is
+            basically a convenient location to hard code this data.
+        "codeintel_completion_triggering_enabled"
+            This indicates if completion triggers should fire automatically
+            while editing. <Ctrl+J> to manually open these UIs is still
+            available.
+        "codeintel_calltip_triggering_enabled"
+            This indicates if calltip triggers should fire automatically
+            while editing. <Ctrl+J> to manually open these UIs is still
+            available.
+        "codeintel_completions_enabled" - whether completions popup get shown.
+        "codeintel_calltips_enabled" - whether calltips are shown.
+        "codeintel_goto_definition_enabled" - whether goto def is enabled.
+        "codeintel_rescan_while_typing_enabled" indicates if scan requests
+            should be issued for the current file while it is being edited.
+        "codeintel_scanning_imports_enabled" indicates whether the CodeIntel
+            system should schedule (re)scans of imported modules.
+        "codeintel_calltip_max_lines" the maximum number of lines to display
+            onscreen when showing a calltip.
+        "codeintel_calltip_max_line_width" the maximum width of individual
+            calltip lines when showing a calltip.
+        "codeintel_completion_auto_fillups_enabled" indicates whether the
+            fill-up functionality of AutoComplete is enabled. "Fill-up" is where
+            typing a certain char (like '(' or '.') during an AutoComplete
+            session will trigger insertion of the current completion *and*
+            that char. This is separate from the usual insertion via <Tab>
+            or <Enter>. Each language has its own appropriate set of
+            completion fillups.
+        "codeintel_have_preloaded_database" is a boolean indicating if
+            the codeintel database has been pre-loaded for this version.
+        "codeintel_selected_catalogs" is a string-repr of a list of codeintel
+            catalog selections.
+        "codeintel_scan_files_in_project" is a boolean indicating whether
+            codeintel should scan all files and directories in the associated
+            project (i.e. of the current file being edited).
+        "codeintel_max_recursive_dir_depth" is an integer indicating the
+            maximum number of sub-directories deep the system will look
+            under configured PHP and JavaScript import dirs.
+    -->
+  <boolean id="codeintel_enabled">1</boolean>
+  <string id="codeintel_sort_codebrowser_by">file-order</string>
+  <boolean id="codeintel_completion_triggering_enabled">1</boolean>
+  <boolean id="codeintel_calltip_triggering_enabled">1</boolean>
+  <boolean id="codeintel_rescan_while_typing_enabled">1</boolean>
+  <boolean id="codeintel_scanning_imports_enabled">1</boolean>
+  <boolean id="codeintel_browser_show_projects">0</boolean> <!-- not implemented -->
+  <boolean id="codeintel_browser_show_all_projects">0</boolean> <!-- not implemented -->
+  <long id="codeintel_calltip_max_lines">20</long>
+  <long id="codeintel_calltip_max_line_width">60</long>
+  <boolean id="codeintel_completion_auto_fillups_enabled">0</boolean>
+  <boolean id="codeintel_have_preloaded_database">0</boolean>
+<!-- #if PLATFORM == "win" -->
+  <string id="codeintel_selected_catalogs">["pywin32", "pywin32 (Python3)"]</string>
+<!-- #else -->
+  <string id="codeintel_selected_catalogs">[]</string>
+<!-- #endif -->
+  <long id="codeintel_max_recursive_dir_depth">10</long>
+  <boolean id="codeintel_scan_files_in_project">1</boolean>
+
+  <!-- The maximum number of rows to display in autocomplete popups -->
+  <long id="codeintel_autocomplete_max_rows">5</long>
+
+  <!-- automatically insert the end tag on typing the start tag -->
+  <boolean id="autoInsertEndTag">1</boolean>
+
+  <!-- Used for codeintel goto definition when the definition is not found. -->
+  <boolean id="donotask_gotoDefinitionOnline">0</boolean>
+  <string id="donotask_action_gotoDefinitionOnline"></string>
+
+  <!-- Enable triggering of macros by Komodo events (turn off for troubleshooting) -->
+  <boolean id="triggering_macros_enabled">1</boolean>
+
+  <!-- How to display project paths in MRU sequences -->
+  <string id="mru_project_path_display">full_path</string>
+  
+  <!-- Environment-related preferences:
+        "environ_userShell" (only used on non-Windows platforms) is a full path
+            to the system shell from which to get the user's startup
+            environment for restoring when running external commands.
+    -->
+<!-- #if PLATFORM == "win" -->
+<!-- #else -->
+  <string id="environ_userShell">/bin/bash</string>
+<!-- #endif -->
+
+  <!-- Vi emulation customizable settings -->
+  <preference-set id="viCustomSettings"/>
+  
+  <long id="defaultRepeatFactor">4</long>
+
+
+  <!-- Komodo pref-configured code formatters. The default formatter for
+       a given language is the first formatter that is found in this list.
+       The string value is a uuid, which matches to a corresponding preference
+       set id, the preference set holds all of the the formatter settings.
+  -->
+  <ordered-preference id="configuredFormatters">
+    <string>{e58137f6-341f-4363-a43d-afdece483c5d}</string>
+    <string>{a9042652-2625-40a2-84c6-98db281b5918}</string>
+    <string>{f6d2e6f0-958a-4d3b-afc8-faa5fe0df170}</string>
+    <string>{d5c8c06d-ffc6-4022-82e8-cbbe8a6cd1d6}</string>
+    <string>{a5b90f01-8d7b-4006-8b44-e59ea21c968d}</string>
+    <string>{e57f53b1-49ea-4a84-9f07-6332af94648f}</string>
+    <string>{bbac2aaa-2fb8-4f34-bf56-768da39a3c74}</string>
+    <string>{2c9252e1-9bd6-4a62-9c3d-bea90fe3f770}</string>
+    <string>{f2dfde76-b9e9-4884-bb54-4c69b1d98e4f}</string>
+    <string>{466cb9a4-5d74-46b9-8fdf-eacfc6faf260}</string>
+    <string>{d800c5d0-4d6e-4160-9d0b-a5b6437a640a}</string>
+  </ordered-preference>
+
+  <!-- HTML formatters -->
+  <preference-set id="{e58137f6-341f-4363-a43d-afdece483c5d}">
+    <string id="formatter_name">generic</string>
+    <string id="lang">HTML</string>
+    <string id="name">Tidy Document</string>
+    <preference-set id="genericFormatterPrefs">
+      <string id="arguments">-i -w 1000 --indent-spaces %(pref:indentWidth) --tidy-mark no --char-encoding utf8</string>
+<!-- #if PLATFORM == "win" -->
+      <string id="executable">%(path:supportDir)\html\tidy.exe</string>
+<!-- #else -->
+      <string id="executable">%(path:supportDir)/html/tidy</string>
+<!-- #endif -->
+    </preference-set>
+  </preference-set>
+
+  <preference-set id="{a9042652-2625-40a2-84c6-98db281b5918}">
+    <string id="formatter_name">generic</string>
+    <string id="lang">HTML</string>
+    <string id="name">Tidy Fragment</string>
+    <preference-set id="genericFormatterPrefs">
+      <string id="arguments">-i -w 1000 --show-body-only yes --indent-spaces %(pref:indentWidth) --char-encoding utf8</string>
+<!-- #if PLATFORM == "win" -->
+      <string id="executable">%(path:supportDir)\html\tidy.exe</string>
+<!-- #else -->
+      <string id="executable">%(path:supportDir)/html/tidy</string>
+<!-- #endif -->
+    </preference-set>
+  </preference-set>
+
+  <preference-set id="{bbac2aaa-2fb8-4f34-bf56-768da39a3c74}">
+    <string id="formatter_name">generic</string>
+    <string id="lang">HTML</string>
+    <string id="name">Convert Document to XHTML</string>
+    <preference-set id="genericFormatterPrefs">
+      <string id="arguments">-asxhtml -i -w 1000 --indent-spaces %(pref:indentWidth) --tidy-mark no --char-encoding utf8</string>
+<!-- #if PLATFORM == "win" -->
+      <string id="executable">%(path:supportDir)\html\tidy.exe</string>
+<!-- #else -->
+      <string id="executable">%(path:supportDir)/html/tidy</string>
+<!-- #endif -->
+    </preference-set>
+  </preference-set>
+
+
+  <!-- HTML5 formatters -->
+  <preference-set id="{2c9252e1-9bd6-4a62-9c3d-bea90fe3f770}">
+    <string id="formatter_name">generic</string>
+    <string id="lang">HTML5</string>
+    <string id="name">HTML5 Document</string>
+    <preference-set id="genericFormatterPrefs">
+      <string id="arguments">-i -w 1000 --indent-spaces %(pref:indentWidth) --tidy-mark no --char-encoding utf8 --new-blocklevel-tags section,header,footer,article,aside,summary,hgroup,main,nav,dialog,datalist,details,figcaption,figure,mark,meter,output,progress --new-inline-tags video,audio,canvas,source,embed,ruby,rt,rp,keygen,menu,command,time</string>
+<!-- #if PLATFORM == "win" -->
+      <string id="executable">%(path:supportDir)\html\tidy.exe</string>
+<!-- #else -->
+      <string id="executable">%(path:supportDir)/html/tidy</string>
+<!-- #endif -->
+    </preference-set>
+  </preference-set>
+
+  <preference-set id="{f2dfde76-b9e9-4884-bb54-4c69b1d98e4f}">
+    <string id="formatter_name">generic</string>
+    <string id="lang">HTML5</string>
+    <string id="name">HTML5 Fragment</string>
+    <preference-set id="genericFormatterPrefs">
+      <string id="arguments">-i -w 1000 --show-body-only yes --indent-spaces %(pref:indentWidth) --char-encoding utf8 --new-blocklevel-tags section,header,footer,article,aside,summary,hgroup,main,nav,dialog,datalist,details,figcaption,figure,mark,meter,output,progress --new-inline-tags video,audio,canvas,source,embed,ruby,rt,rp,keygen,menu,command,time</string>
+<!-- #if PLATFORM == "win" -->
+      <string id="executable">%(path:supportDir)\html\tidy.exe</string>
+<!-- #else -->
+      <string id="executable">%(path:supportDir)/html/tidy</string>
+<!-- #endif -->
+    </preference-set>
+  </preference-set>
+
+  <!-- CSS formatter -->
+  <preference-set id="{d800c5d0-4d6e-4160-9d0b-a5b6437a640a}">
+    <string id="formatter_name">css_beautify</string>
+    <string id="lang">CSS</string>
+    <string id="name">CSS Beautify</string>
+  </preference-set>
+
+  <!-- JavaScript formatter -->
+  <preference-set id="{466cb9a4-5d74-46b9-8fdf-eacfc6faf260}">
+    <string id="formatter_name">js_beautifier</string>
+    <string id="lang">JavaScript</string>
+    <string id="name">JS Beautify</string>
+  </preference-set>
+
+  <!-- JSON formatter -->
+  <preference-set id="{e57f53b1-49ea-4a84-9f07-6332af94648f}">
+    <string id="formatter_name">js_beautifier</string>
+    <string id="lang">JSON</string>
+    <string id="name">JSON Beautify</string>
+  </preference-set>
+
+  <!-- Python formatter -->
+  <preference-set id="{a5b90f01-8d7b-4006-8b44-e59ea21c968d}">
+    <string id="formatter_name">generic</string>
+    <string id="lang">Python</string>
+    <string id="name">Python Reindent</string>
+    <preference-set id="genericFormatterPrefs">
+<!-- #if PLATFORM == "win" -->
+      <string id="arguments">"%(path:komodoPythonLibDir)\reindent.py" -i %(pref:indentWidth)</string>
+<!-- #else -->
+      <string id="arguments">"%(path:komodoPythonLibDir)/reindent.py" -i %(pref:indentWidth)</string>
+<!-- #endif -->
+      <string id="executable">%(python)</string>
+    </preference-set>
+  </preference-set>
+
+  <!-- XML formatter -->
+  <preference-set id="{d5c8c06d-ffc6-4022-82e8-cbbe8a6cd1d6}">
+    <string id="formatter_name">generic</string>
+    <string id="lang">XML</string>
+    <string id="name">XML Tidy</string>
+    <preference-set id="genericFormatterPrefs">
+      <string id="arguments">-i -xml -w 1000 --indent-spaces %(pref:indentWidth) --char-encoding utf8</string>
+<!-- #if PLATFORM == "win" -->
+      <string id="executable">%(path:supportDir)\html\tidy.exe</string>
+<!-- #else -->
+      <string id="executable">%(path:supportDir)/html/tidy</string>
+<!-- #endif -->
+    </preference-set>
+  </preference-set>
+
+  <!-- XUL formatter -->
+  <preference-set id="{f6d2e6f0-958a-4d3b-afc8-faa5fe0df170}">
+    <string id="formatter_name">generic</string>
+    <string id="lang">XUL</string>
+    <string id="name">XUL Tidy</string>
+    <preference-set id="genericFormatterPrefs">
+      <string id="arguments">-i -xml -w 1000 --preserve-entities yes --indent-spaces %(pref:indentWidth) --char-encoding utf8</string>
+<!-- #if PLATFORM == "win" -->
+      <string id="executable">%(path:supportDir)\html\tidy.exe</string>
+<!-- #else -->
+      <string id="executable">%(path:supportDir)/html/tidy</string>
+<!-- #endif -->
+    </preference-set>
+  </preference-set>
+  
+  <!-- Go Formatter -->
+  <preference-set id="{cf500001-ec59-4047-86e7-369d257f4b80}">
+      <string id="formatter_name">generic</string>
+      <preference-set id="genericFormatterPrefs">
+          <string id="arguments">-w=false</string>
+          <string id="executable">%25(go)fmt</string>
+      </preference-set>
+      <string id="lang">Go</string>
+      <string id="name">GoFmt</string>
+      <string id="uuid">{cf500001-ec59-4047-86e7-369d257f4b80}</string>
+  </preference-set>
+  
+  <!-- Hyperlinks -->
+  <boolean id="hyperlinksEnabled">1</boolean>
+  <boolean id="hyperlinksEnableGotoDefinition">1</boolean>
+  <boolean id="hyperlinksEnableColorPicker">1</boolean>
+  
+  <boolean id="hyperlinksColorpickerAlwaysEnable">1</boolean>
+  <string id="hyperlinksColorpickerEnabled">CSS,Less,SCSS,Sass,HTML,HTML5</string>
+
+  <!-- Color picker -->
+  <string id="colorpicker_cid" nonvital="true">@activestate.com/koColorPicker;1</string>
+
+  <!-- Whether there are native file icons available, i.e. for "moz-icon://.js"
+       URLs. We assume they are available and then auto-detect them at Komodo
+       startup for Linux users. -->
+  <boolean id="native_mozicons_available">1</boolean>
+
+  <!-- ActiveState auto-update notification messages -->
+  <boolean id="activestate_notification_messages_enabled">1</boolean>
+
+  <!-- Projects & Places -->
+  <!-- See bug Bug #98484 - comments #4 and #5 -->
+  <boolean id="donotask_placesAllowDragDropItemsToFolders">0</boolean>
+  <string id="donotask_action_placesAllowDragDropItemsToFolders"></string>
+  <boolean id="places.multiple_project_view">0</boolean>
+
+  <!-- Analytics -->
+  <string id="analytics_ga_id">3d09d7e1-ec13-40a6-8307-f22a41c15bcf</string>
+  <string id="analytics_deskmetrics_id">6r25977273</string>
+  <boolean id="analytics_enabled">1</boolean> <!-- Analytics is opt-out, not opt-in -->
+
+  <ordered-preference id="analytics_track_prefs">
+    <string>activestate_notification_messages_enabled</string>
+    <string>hyperlinksEnabled</string>
+    <string>hyperlinksEnableGotoDefinition</string>
+    <string>hyperlinksEnableColorPicker</string>
+    <string>ui.tabs.sidepanes.left.layout</string>
+    <string>ui.tabs.sidepanes.right.layout</string>
+    <string>ui.tabs.sidepanes.bottom.layout</string>
+    <string>keybinding-scheme</string>
+    <string>editor-scheme</string>
+    <string>interface-scheme</string>
+    <string>widget-scheme</string>
+    <string>editor_font_quality</string>
+  </ordered-preference>
+
+  <ordered-preference id="analytics_track_decks">
+    <string>komodo-box</string>
+  </ordered-preference>
+
+  <!-- File Icons -->
+    <!--
+        Format: <language>:<ext>:<color>
+        Ext should be no longer than 4 characters
+        Color can be in any format that css "background-color" accepts
+    -->
+  <ordered-preference id="fileicons_presets" nonvital="true">
+    <string>Text:TXT:#A1A1A1</string>
+    <string>Unknown:?:#A1A1A1</string>
+    <string>PHP:PHP:#A075B2</string>
+    <string>Ruby:RB:#EB594C</string>
+    <string>JavaScript:JS:#37A63A</string>
+    <string>Node.js:NODE:#4B8850</string>
+    <string>HTML:HTML:#F2A935</string>
+    <string>HTML5:HTML:#F25D5A</string>
+    <string>Python:PY:#424B9C</string>
+    <string>Python3:PY:#296A9C</string>
+    <string>CSS:CSS:#5C8AB9</string>
+    <string>LESS:CSS:#362397</string>
+  </ordered-preference>
+
+  <ordered-preference id="fileicons_ext_mapping" nonvital="true">
+    <string>snd:#6F24C2:adp,au,snd,mid,midi,kar,rmi,mp4a,mpga,mp2,mp2a,mp3,m2a,m3a,oga,ogg,spx,s3m,sil,uva,uvva,eol,dra,dts,dtshd,lvp,pya,ecelp4800,ecelp7470,ecelp9600,rip,weba,aac,aif,aiff,aifc,caf,flac,mka,m3u,wax,wma,ram,ra,rmp,wav,xm</string>
+    <string>img:#C22427:bmp,cgm,g3,gif,ief,jpeg,jpg,jpe,ktx,png,btif,sgi,svg,svgz,tiff,tif,psd,uvi,uvvi,uvg,uvvg,sub,djvu,djv,dwg,dxf,fbs,fpx,fst,mmr,rlc,mdi,wdp,npx,wbmp,xif,webp,3ds,ras,cmx,fh,fhc,fh4,fh5,fh7,ico,sid,pcx,pic,pct,pnm,pbm,pgm,ppm,rgb,tga,xbm,xpm,xwd</string>
+    <string>txt:#A1A1A1:appcache,ics,ifb,css,csv,html,htm,n3,txt,text,conf,def,list,log,in,dsc,rtx,sgml,sgm,tsv,t,tr,roff,man,me,ms,ttl,uri,uris,urls,vcard,curl,dcurl,scurl,mcurl,sub,fly,flx,gv,3dml,spot,jad,wml,wmls,s,asm,c,cc,cxx,cpp,h,hh,dic,f,for,f77,f90,java,opml,p,pas,nfo,etx,sfv,uu,vcs,vcf</string>
+    <string>vid:#2470C2:3gp,3g2,h261,h263,h264,jpgv,jpm,jpgm,mj2,mjp2,mp4,mp4v,mpg4,mpeg,mpg,mpe,m1v,m2v,ogv,qt,mov,uvh,uvvh,uvm,uvvm,uvp,uvvp,uvs,uvvs,uvv,uvvv,dvb,fvt,mxu,m4u,pyv,uvu,uvvu,viv,webm,f4v,fli,flv,m4v,mkv,mk3d,mks,mng,asf,asx,vob,wm,wmv,wmx,wvx,avi,movie,smv</string>
+    <string>font:bdf,gsf,psf,otf,pcf,snf,ttf,ttc,pfa,pfb,pfm,afm,woff</string>
+  </ordered-preference>
+
+  <string id="fileicons_color_whitelist" nonvital="true">class:rss:rtf:csv:com:bat:sh:dtd:xpi:conscript:construct:manifest</string>
+
+  <ordered-preference id="notify_disabled_categories">
+    <string>codeintel-verbose</string>
+    <string>codeintel-event</string>
+  </ordered-preference>
+  
+  <ordered-preference id="notify_disabled_categories_warning">
+    <string>codeintel-event</string>
+  </ordered-preference>
+  
+  <ordered-preference id="notify_disabled_categories_error">
+    <string>codeintel-event</string>
+  </ordered-preference>
+  
+  <long id="notify_max_queue_length">3</long>
+
+  <ordered-preference id="commando_favourites"/>
+  <boolean id="commando_preserve_query">1</boolean>
+  <string id="commando_shell_output">hud</string>
+  <boolean id="commando_navigate_by_number">1</boolean>
+  <long id="commando_result_render_delay">50</long>
+  <long id="commando_search_delay">50</long>
+  <long id="commando_number_select_delay">200</long>
+  <long id="commando_search_max_results" validate="value > 9">50</long>
+  <long id="commando_files_max_depth">8</long>
+
+  <ordered-preference id="scope-files-shortcuts"/>
+  
+  <!-- #if PLATFORM == "linux" -->
+  <boolean id="notify_use_opacity">0</boolean>
+  <!-- #endif -->
+  <!-- #if PLATFORM != "linux" -->
+  <boolean id="notify_use_opacity">1</boolean>
+  <!-- #endif -->
+  <boolean id="notify_use_animations">1</boolean>
+  
+  <preference-set id="workspace2"/>
+  
+  <boolean id="bugsnag_enabled">0</boolean>
+  <string id="bugsnag_key">a0ffb67a805253227e906fb6ec1a1cde</string>
+  
+  <string id="package_api_endpoint">https://community.komodoide.com/json/packages/v10/</string>
+  
+  <boolean id="collaboration_always_show_user_flags">0</boolean>
+  
+  <boolean id="pin_find_frame">0</boolean>
+  
+  <boolean id="find_in_view">0</boolean>
+  
+  <string id="doc_site">http://docs.activestate.com/komodo</string>
+  <string id="doc_site_reset">http://docs.activestate.com/komodo/12/ manual/trouble.html#ko_default</string>
+  
+  <!-- Do NOT remove OR change the preservation status of this pref, stuff will break -->
+  <ordered-preference id="preservedNonDefaultPrefs" preserve="true">
+    <!-- These are partial keys -->
+    <string>analyticsLastVersion</string>
+    <string>commit_message_history</string>
+    <string>Interpreter</string>
+    <string>Binary</string>
+    <string>donotask_</string>
+    <string>extensions.</string>
+    <string>dbexplorer</string>
+    <string>Database Explorer</string>
+    <string>languages/</string>
+    <string>lint</string>
+    <string>CommentStyle</string>
+    <string>ConfigFile</string>
+    <string>ExtraPaths</string>
+    <string>rails.</string>
+    <string>logpath</string>
+    <string>scope-</string>
+    <string>spellCheck</string>
+    <string>testPlans</string>
+    <string>publishing</string>
+    <string>mru</string>
+    <string>Association</string>
+  </ordered-preference>
+  
+  <string id="virtualStyles" nonvital="true">less://resource/profile/interfaceChrome.less,less://resource/profile/userChrome.less</string>
+  
+  <long id="unittest_throttle_volume">100</long>
+  <long id="unittest_throttle_time">250</long>
+
+  <long id="simpledebug_scan_delay">500</long>
+  <long id="simpledebug_max_filesize">100000</long> <!-- bytes -->
+  <string id="platform_not_new">1609372800000</string> <!-- one year from 2019 Dec 31 00:00:00 -->
+  <preference-set id="KomodoPlatformProjects" preserve="true">
+    <preference-set id="Python">
+      <string id="project">ActiveState/Komodo-Python2</string>
+    </preference-set>
+    <preference-set id="Python3">
+      <string id="project">ActiveState/Komodo-Python3</string>
+    </preference-set>
+    <preference-set id="Perl">
+      <string id="project">ActiveState/Komodo-Perl</string>
+    </preference-set>
+  </preference-set>
+  <preference-set id="knownFrameworks" preserve="true">
+    <preference-set id="Drupal">
+      <string id="language">PHP</string>
+    </preference-set>
+    <preference-set id="Wordpress">
+      <string id="language">PHP</string>
+    </preference-set>
+    <preference-set id="Laravel">
+      <string id="language">PHP</string>
+      <string id="initCommand">laravel new</string>
+    </preference-set>
+    <preference-set id="Symfony">
+      <string id="language">PHP</string>
+      <string id="initCommand">symfony new .</string>
+    </preference-set>
+    <preference-set id="CodeIgniter">
+      <string id="language">PHP</string>
+    </preference-set>
+    <preference-set id="Yii">
+      <string id="language">PHP</string>
+      <string id="initCommand">composer -n create-project yiisoft/yii2-app-basic .</string>
+    </preference-set>
+    <preference-set id="Phalcon">
+      <string id="language">PHP</string>
+      <string id="initCommand">phalcon create-project --directory=.</string>
+    </preference-set>
+    <preference-set id="CakePHP">
+      <string id="language">PHP</string>
+      <string id="initCommand">composer -n create-project cakephp/app .</string>
+    </preference-set>
+    <preference-set id="Zend Framework">
+      <string id="language">PHP</string>
+      <string id="initCommand">composer -n create-project zendframework/skeleton-application .</string>
+    </preference-set>
+    <preference-set id="Slim">
+      <string id="language">PHP</string>
+      <string id="initCommand">composer -n create-project slim/slim-skeleton .</string>
+    </preference-set>
+    <preference-set id="jQuery">
+      <string id="language">JavaScript</string>
+      <string id="initCommand">npm init -y &amp;&amp; npm install --save jquery</string>
+    </preference-set>
+    <preference-set id="React">
+      <string id="language">JavaScript</string>
+      <string id="initCommand">npm init -y &amp;&amp; npm install --save react</string>
+    </preference-set>
+    <preference-set id="Angular">
+      <string id="language">JavaScript</string>
+      <string id="initCommand">npm init -y &amp;&amp; npm install --save angular</string>
+    </preference-set>
+    <preference-set id="Vue">
+      <string id="language">JavaScript</string>
+      <string id="initCommand">npm init -y &amp;&amp; npm install --save vue</string>
+    </preference-set>
+    <preference-set id="Ember">
+      <string id="language">JavaScript</string>
+      <string id="initCommand">ember init</string>
+    </preference-set>
+    <preference-set id="Meteor">
+      <string id="language">JavaScript</string>
+      <string id="initCommand">meteor create .</string>
+    </preference-set>
+    <preference-set id="Dojo">
+      <string id="language">JavaScript</string>
+      <string id="initCommand">npm init -y &amp;&amp; npm install --save dojo</string>
+    </preference-set>
+    <preference-set id="MochiKit">
+      <string id="language">JavaScript</string>
+    </preference-set>
+    <preference-set id="PhoneGap">
+      <string id="language">Node.js</string>
+      <string id="initCommand">phonegap create .</string>
+    </preference-set>
+    <preference-set id="Cordova">
+      <string id="language">Node.js</string>
+      <string id="initCommand">cordova create .</string>
+    </preference-set>
+    <preference-set id="Express">
+      <string id="language">Node.js</string>
+      <string id="initCommand">npm init -y &amp;&amp; npm install --save express</string>
+    </preference-set>
+    <preference-set id="Sails">
+      <string id="language">Node.js</string>
+      <string id="initCommand">sails new .</string>
+    </preference-set>
+    <preference-set id="Koa">
+      <string id="language">Node.js</string>
+      <string id="initCommand">npm init -y &amp;&amp; npm install --save koa</string>
+    </preference-set>
+    <preference-set id="Derby">
+      <string id="language">Node.js</string>
+      <string id="initCommand">npm init -y &amp;&amp; npm install --save derby</string>
+    </preference-set>
+    <preference-set id="Flatiron">
+      <string id="language">Node.js</string>
+      <string id="initCommand">npm init -y &amp;&amp; npm install --save flatiron</string>
+    </preference-set>
+    <preference-set id="Hapi">
+      <string id="language">Node.js</string>
+      <string id="initCommand">npm init -y &amp;&amp; npm install --save hapi</string>
+    </preference-set>
+    <preference-set id="Mean.IO">
+      <string id="language">Node.js</string>
+      <string id="initCommand">mean init .</string>
+    </preference-set>
+    <preference-set id="Bootstrap">
+      <string id="language">CSS</string>
+    </preference-set>
+    <preference-set id="Semantic-UI">
+      <string id="language">CSS</string>
+    </preference-set>
+    <preference-set id="Foundation">
+      <string id="language">CSS</string>
+    </preference-set>
+    <preference-set id="Materialize">
+      <string id="language">CSS</string>
+    </preference-set>
+    <preference-set id="Material UI">
+      <string id="language">CSS</string>
+    </preference-set>
+    <preference-set id="Pure">
+      <string id="language">CSS</string>
+    </preference-set>
+    <preference-set id="Skeleton">
+      <string id="language">CSS</string>
+    </preference-set>
+    <preference-set id="Django">
+      <string id="language">Python</string>
+      <string id="initCommand">django-admin startproject %name%</string>
+    </preference-set>
+    <preference-set id="Flask">
+      <string id="language">Python</string>
+    </preference-set>
+    <preference-set id="Pyramid">
+      <string id="language">Python</string>
+    </preference-set>
+    <preference-set id="CherryPy">
+      <string id="language">Python</string>
+    </preference-set>
+    <preference-set id="Bottle">
+      <string id="language">Python</string>
+    </preference-set>
+    <preference-set id="Pecan">
+      <string id="language">Python</string>
+    </preference-set>
+    <preference-set id="Tornado">
+      <string id="language">Python</string>
+    </preference-set>
+    <preference-set id="Grok">
+      <string id="language">Python</string>
+    </preference-set>
+    <preference-set id="Rails">
+      <string id="language">Ruby</string>
+      <string id="initCommand">rails new .</string>
+    </preference-set>
+    <preference-set id="Nancy">
+      <string id="language">Ruby</string>
+    </preference-set>
+    <preference-set id="Scorched">
+      <string id="language">Ruby</string>
+    </preference-set>
+    <preference-set id="Cuba">
+      <string id="language">Ruby</string>
+    </preference-set>
+    <preference-set id="Padrino">
+      <string id="language">Ruby</string>
+    </preference-set>
+    <preference-set id="Grape">
+      <string id="language">Ruby</string>
+    </preference-set>
+    <preference-set id="Sinatra">
+      <string id="language">Ruby</string>
+    </preference-set>
+    <preference-set id="FastWeb">
+      <string id="language">Tcl</string>
+    </preference-set>
+    <preference-set id="HereTcl">
+      <string id="language">Tcl</string>
+    </preference-set>
+    <preference-set id="Spindle">
+      <string id="language">Tcl</string>
+    </preference-set>
+    <preference-set id="Tanzer">
+      <string id="language">Tcl</string>
+    </preference-set>
+    <preference-set id="Woof">
+      <string id="language">Tcl</string>
+    </preference-set>
+    <preference-set id="Wub">
+      <string id="language">Tcl</string>
+    </preference-set>
+    <preference-set id="Catalyst">
+      <string id="language">Perl</string>
+    </preference-set>
+    <preference-set id="Interchange">
+      <string id="language">Perl</string>
+    </preference-set>
+    <preference-set id="Mason">
+      <string id="language">Perl</string>
+    </preference-set>
+    <preference-set id="CGI::Application">
+      <string id="language">Perl</string>
+    </preference-set>
+    <preference-set id="Jifty">
+      <string id="language">Perl</string>
+    </preference-set>
+    <preference-set id="Gantry">
+      <string id="language">Perl</string>
+    </preference-set>
+    <preference-set id="Dancer">
+      <string id="language">Perl</string>
+    </preference-set>
+    <preference-set id="Mojolicious">
+      <string id="language">Perl</string>
+    </preference-set>
+    <preference-set id="Beego">
+      <string id="language">Go</string>
+      <string id="initCommand">bee new .</string>
+    </preference-set>
+    <preference-set id="Martini">
+      <string id="language">Go</string>
+    </preference-set>
+    <preference-set id="Iris">
+      <string id="language">Go</string>
+    </preference-set>
+    <preference-set id="Revel">
+      <string id="language">Go</string>
+    </preference-set>
+    <preference-set id="Buffalo">
+      <string id="language">Go</string>
+    </preference-set>
+    <preference-set id="Gorilla">
+      <string id="language">Go</string>
+    </preference-set>
+    <preference-set id="Lapis">
+      <string id="language">Lua</string>
+    </preference-set>
+    <preference-set id="Sailor">
+      <string id="language">Lua</string>
+    </preference-set>
+    <preference-set id="Orbit">
+      <string id="language">Lua</string>
+    </preference-set>
+    <preference-set id="Luvit">
+      <string id="language">Lua</string>
+    </preference-set>
+    <preference-set id="TurboLua">
+      <string id="language">Lua</string>
+    </preference-set>
+    <preference-set id="Ophal">
+      <string id="language">Lua</string>
+    </preference-set>
+    <preference-set id="LuePress">
+      <string id="language">Lua</string>
+    </preference-set>
+    <preference-set id="Sputnik">
+      <string id="language">Lua</string>
+    </preference-set>
+  </preference-set>
+
+  <!-- CodeIntel v3 -->
+  <boolean id="codeintel.completions.enabled">1</boolean>
+  <boolean id="codeintel.calltips.enabled">1</boolean>
+  <boolean id="codeintel.symbollist.enabled">1</boolean>
+  <boolean id="codeintel.symbolbrowser.enabled">1</boolean>
+  <boolean id="codeintel.symbolscope.enabled">1</boolean>
+  <boolean id="codeintel.scanner.enabled">1</boolean>
+  <boolean id="codeintel.gotodef.enabled">1</boolean>
+  <boolean id="codeintel.jumpsections.enabled">1</boolean>
+  <boolean id="codeintel.findreferences.enabled">1</boolean>
+
+  <long id="codeintel.keepalive.interval">5000</long> <!-- ms -->
+
+  <boolean id="codeintel.completions.while_typing">1</boolean>
+  <long id="codeintel.completions.debounce_delay">100</long>
+  <long id="codeintel.completions.max_results">5</long>
+  <long id="codeintel.completions.max_results_hard">50</long> <!-- Simply won't go further than this -->
+  <boolean id="codeintel.completions.show_matches">0</boolean>
+  <boolean id="codeintel.completions.max_distance">10</boolean>
+
+  <boolean id="codeintel.calltips.while_typing">0</boolean>
+  <long id="codeintel.calltips.debounce_delay">200</long>
+  <boolean id="codeintel.calltips.show_while_typing">0</boolean>
+
+  <long id="codeintel.symbolbrowser.debounce_delay">200</long>
+  <long id="codeintel.symbolbrowser.scope_update_delay">500</long>
+  <long id="codeintel.symbolbrowser.code_update_delay">2000</long>
+  <boolean id="codeintel.symbolbrowser.showall">0</boolean>
+  <boolean id="codeintel.symbolbrowser.locate_scope">1</boolean>
+  <string id="codeintel.symbolbrowser.sort">organic</string>
+  <long id="codeintel.symbolbrowser.max_filesize">100000</long> <!-- in bytes -->
+
+  <long id="codeintel.symbollist.scope_update_delay">500</long>
+  <boolean id="codeintel.symbollist.showall">0</boolean>
+  <long id="codeintel.symbollist.max_filesize">100000</long> <!-- in bytes -->
+
+  <long id="codeintel.symbolbrowser.buffer">4</long>
+  <long id="codeintel.scanner.max_depth">10</long>
+  <long id="codeintel.scanner.max_implicit">100</long>
+  <boolean id="codeintel.scanner.prompt">1</boolean>
+
+  <boolean id="refactoring.renameVariable_in_strings">0</boolean>
+  <boolean id="refactoring.renameVariable_in_comments">0</boolean>
+
+    <preference-set id="dependencies">
+        <preference-set id="state">
+            <string id="label">State Tool</string>
+            <string id="group">Tools</string>
+            <ordered-preference id="executables">
+                <string>state</string>
+            </ordered-preference>
+            <!-- #if PLATFORM == "win" -->
+            <ordered-preference id="paths">
+                <string>%APPDATA%\ActiveState\bin</string>
+            </ordered-preference>
+            <!-- #else -->
+            <ordered-preference id="paths">
+                <string>/usr/local/bin</string>
+                <string>$HOME/.local/bin</string>
+            </ordered-preference>
+            <!-- #endif -->
+            <string id="preference">statetoolDefaultbinary</string>
+            <string id="documentation">http://docs.activestate.com/platform/state/</string>
+        </preference-set>
+        <preference-set id="php">
+            <string id="label">PHP</string>
+            <string id="group">Languages</string>
+            <ordered-preference id="executables">
+                <string>php</string>
+                <string>php-cgi</string>
+                <string>php-cli</string>
+                <string>php5</string>
+                <string>php6</string>
+                <string>php7</string>
+            </ordered-preference>
+            <!-- #if PLATFORM == "win" -->
+            <ordered-preference id="paths">
+                <string>C:\php\</string>
+            </ordered-preference>
+            <!-- #else -->
+            <ordered-preference id="paths">
+                <string>/usr/local/bin</string>
+            </ordered-preference>
+            <!-- #endif -->
+            <string id="preference">phpDefaultInterpreter</string>
+            <string id="documentation">http://php.net/manual/en/install.php</string>
+        </preference-set>
+        <preference-set id="python">
+            <string id="label">Python 2</string>
+            <string id="group">Languages</string>
+            <ordered-preference id="executables">
+                <string>python</string>
+                <string>python2</string>
+                <string>python2.7</string>
+            </ordered-preference>
+            <!-- #if PLATFORM == "win" -->
+            <ordered-preference id="paths">
+                <string>C:\python27\</string>
+            </ordered-preference>
+            <!-- #elif PLATFORM == "linux" -->
+            <ordered-preference id="paths">
+                <string>/opt/ActivePython-2.7</string>
+                <string>~/ActivePython-2.7</string>
+            </ordered-preference>
+            <!-- #else -->
+            <ordered-preference id="paths">
+                <string>/Library/Frameworks/Python.framework/Versions/2.7</string>
+                <string>/usr/local/bin</string>
+            </ordered-preference>
+            <!-- #endif -->
+            <string id="preference">pythonDefaultInterpreter</string>
+            <string id="documentation">https://www.activestate.com/activepython</string>
+        </preference-set>
+        <preference-set id="python3">
+            <string id="label">Python 3</string>
+            <string id="group">Languages</string>
+            <ordered-preference id="executables">
+                <string>python</string>
+                <string>python3</string>
+                <string>python3.6</string>
+            </ordered-preference>
+            <!-- #if PLATFORM == "win" -->
+            <ordered-preference id="paths">
+                <string>C:\python36\</string>
+            </ordered-preference>
+            <ordered-preference id="paths">
+                <string>/opt/ActivePython-3.6</string>
+                <string>~/ActivePython-3.6</string>
+            </ordered-preference>
+            <!-- #else -->
+            <ordered-preference id="paths">
+                <string>/Library/Frameworks/Python.framework/Versions/3.6</string>
+                <string>/usr/local/bin</string>
+            </ordered-preference>
+            <!-- #endif -->
+            <string id="preference">python3DefaultInterpreter</string>
+            <string id="documentation">https://www.activestate.com/activepython</string>
+        </preference-set>
+        <preference-set id="perl">
+            <string id="label">Perl</string>
+            <string id="group">Languages</string>
+            <ordered-preference id="executables">
+                <string>perl</string>
+            </ordered-preference>
+            <!-- #if PLATFORM == "win" -->
+            <ordered-preference id="paths">
+                <string>C:\perl\bin</string>
+            </ordered-preference>
+            <!-- #elif PLATFORM == "linux" -->
+            <ordered-preference id="paths">
+                <string>/opt/ActivePerl-5.22/bin/</string>
+                <string>/opt/ActivePerl-5.24/bin/</string>
+                <string>/usr/local/bin/</string>
+            </ordered-preference>
+            <!-- #else -->
+            <ordered-preference id="paths">
+                <string>/usr/local/ActivePerl-5.22/bin</string>
+                <string>/usr/local/ActivePerl-5.24/bin</string>
+                <string>/usr/local/bin/</string>
+            </ordered-preference>
+            <!-- #endif -->
+            <string id="preference">perlDefaultInterpreter</string>
+            <string id="documentation">https://www.activestate.com/activeperl</string>
+        </preference-set>
+        <preference-set id="tcl">
+            <string id="label">Tcl</string>
+            <string id="group">Languages</string>
+            <ordered-preference id="executables">
+                <string>tclsl</string>
+                <string>wish</string>
+            </ordered-preference>
+            <!-- #if PLATFORM == "win" -->
+            <ordered-preference id="paths">
+                <string>C:\ActiveTcl\bin</string>
+            </ordered-preference>
+            <!-- #elif PLATFORM == "linux" -->
+            <ordered-preference id="paths">
+                <string>/opt/ActiveTcl-8.6</string>
+                <string>/opt/ActiveTcl-8.5</string>
+                <string>/usr/local/bin/</string>
+            </ordered-preference>
+            <!-- #else -->
+            <ordered-preference id="paths">
+                <string>/usr/local/bin/</string>
+            </ordered-preference>
+            <!-- #endif -->
+            <string id="preference">tclDefaultInterpreter</string>
+            <string id="documentation">https://www.activestate.com/activetcl/</string>
+        </preference-set>
+        <preference-set id="nodejs">
+            <string id="label">Node.js</string>
+            <string id="group">Languages</string>
+            <ordered-preference id="executables">
+                <string>node</string>
+            </ordered-preference>
+            <!-- #if PLATFORM == "win" -->
+            <ordered-preference id="paths">
+                <string>C:\Program Files\nodejs</string>
+                <string>C:\Program Files (x86)\nodejs</string>
+            </ordered-preference>
+            <!-- #elif PLATFORM == "linux" -->
+            <ordered-preference id="paths">
+                <string>/usr/bin/</string>
+            </ordered-preference>
+            <!-- #else -->
+            <ordered-preference id="paths">
+                <string>/usr/local/bin/</string>
+            </ordered-preference>
+            <!-- #endif -->
+            <string id="preference">nodejsDefaultInterpreter</string>
+            <string id="documentation">https://www.activestate.com/node</string>
+        </preference-set>
+        <preference-set id="ruby">
+            <string id="label">Ruby</string>
+            <string id="group">Languages</string>
+            <ordered-preference id="executables">
+                <string>ruby</string>
+            </ordered-preference>
+            <!-- #if PLATFORM == "win" -->
+            <ordered-preference id="paths">
+                <string>C:\ActiveRuby\bin</string>
+            </ordered-preference>
+            <!-- #else -->
+            <ordered-preference id="paths">
+                <string>/usr/bin/</string>
+            </ordered-preference>
+            <!-- #endif -->
+            <string id="preference">rubyDefaultInterpreter</string>
+            <string id="documentation">https://www.activestate.com/ruby</string>
+        </preference-set>
+        <preference-set id="go">
+            <string id="label">Go</string>
+            <string id="group">Languages</string>
+            <ordered-preference id="executables">
+                <string>go</string>
+            </ordered-preference>
+            <!-- #if PLATFORM == "win" -->
+            <ordered-preference id="paths">
+                <string>C:\ActiveGo\bin</string>
+            </ordered-preference>
+            <!-- #else -->
+            <ordered-preference id="paths">
+                <string>/usr/local/go/bin</string>
+            </ordered-preference>
+            <!-- #endif -->
+            <string id="preference">golangDefaultLocation</string>
+            <string id="documentation">https://www.activestate.com/activego</string>
+        </preference-set>
+        <preference-set id="git">
+            <string id="label">Git</string>
+            <string id="group">Version Control</string>
+            <ordered-preference id="executables">
+                <string>git</string>
+            </ordered-preference>
+            <string id="preference">gitExecutable</string>
+            <string id="documentation">https://git-scm.com/</string>
+        </preference-set>
+        <preference-set id="cvs">
+            <string id="label">CVS</string>
+            <string id="group">Version Control</string>
+            <ordered-preference id="executables">
+                <string>cvs</string>
+            </ordered-preference>
+            <string id="preference">cvsExecutable</string>
+            <string id="documentation">http://www.nongnu.org/cvs/</string>
+        </preference-set>
+        <preference-set id="perforce">
+            <string id="label">Perforce</string>
+            <string id="group">Version Control</string>
+            <ordered-preference id="executables">
+                <string>p4</string>
+            </ordered-preference>
+            <string id="preference">p4Executable</string>
+            <string id="documentation">https://www.perforce.com/</string>
+        </preference-set>
+        <preference-set id="subversion">
+            <string id="label">Subversion</string>
+            <string id="group">Version Control</string>
+            <ordered-preference id="executables">
+                <string>svn</string>
+            </ordered-preference>
+            <string id="preference">svnExecutable</string>
+            <string id="documentation">http://subversion.tigris.org/</string>
+        </preference-set>
+        <preference-set id="mercurial">
+            <string id="label">Mercurial</string>
+            <string id="group">Version Control</string>
+            <ordered-preference id="executables">
+                <string>hg</string>
+            </ordered-preference>
+            <string id="preference">hgExecutable</string>
+            <string id="documentation">https://www.mercurial-scm.org/wiki/</string>
+        </preference-set>
+        <preference-set id="bazaar">
+            <string id="label">Bazaar</string>
+            <string id="group">Version Control</string>
+            <ordered-preference id="executables">
+                <string>bzr</string>
+            </ordered-preference>
+            <string id="preference">bzrExecutable</string>
+            <string id="documentation">http://bazaar.canonical.com/en/</string>
+        </preference-set>
+        <preference-set id="composer">
+            <string id="label">Composer</string>
+            <string id="group">Package Managers</string>
+            <ordered-preference id="executables">
+                <string>composer</string>
+            </ordered-preference>
+            <string id="preference">composerDefaultInterpreter</string>
+            <string id="documentation">https://getcomposer.org/doc/00-intro.md</string>
+        </preference-set>
+        <preference-set id="cpanm">
+            <string id="label">CPANM</string>
+            <string id="group">Package Managers</string>
+            <ordered-preference id="executables">
+                <string>cpanm</string>
+            </ordered-preference>
+            <string id="preference">cpanmDefaultInterpreter</string>
+            <string id="documentation">https://www.activestate.com/activeperl</string>
+        </preference-set>
+        <preference-set id="cpan">
+            <string id="label">CPAN</string>
+            <string id="group">Package Managers</string>
+            <ordered-preference id="executables">
+                <string>cpan</string>
+            </ordered-preference>
+            <string id="preference">cpanDefaultInterpreter</string>
+            <string id="documentation">https://www.activestate.com/activeperl</string>
+        </preference-set>
+        <preference-set id="bower">
+            <string id="label">Bower</string>
+            <string id="group">Package Managers</string>
+            <ordered-preference id="executables">
+                <string>bower</string>
+            </ordered-preference>
+            <string id="preference">bowerDefaultInterpreter</string>
+        </preference-set>
+        <preference-set id="gem">
+            <string id="label">Gem</string>
+            <string id="group">Package Managers</string>
+            <ordered-preference id="executables">
+                <string>gem</string>
+            </ordered-preference>
+            <string id="preference">gemDefaultInterpreter</string>
+            <string id="documentation">https://www.activestate.com/activeruby</string>
+        </preference-set>
+        <preference-set id="npm">
+            <string id="label">NPM</string>
+            <string id="group">Package Managers</string>
+            <ordered-preference id="executables">
+                <string>npm</string>
+            </ordered-preference>
+            <string id="preference">npmDefaultInterpreter</string>
+            <string id="documentation">https://www.activestate.com/node</string>
+        </preference-set>
+        <preference-set id="pip">
+            <string id="label">pip 2</string>
+            <string id="group">Package Managers</string>
+            <ordered-preference id="executables">
+                <string>pip</string>
+            </ordered-preference>
+            <string id="preference">pipDefaultInterpreter</string>
+            <string id="documentation">https://www.activestate.com/activepython</string>
+        </preference-set>
+        <preference-set id="pip3">
+            <string id="label">pip 3</string>
+            <string id="group">Package Managers</string>
+            <ordered-preference id="executables">
+                <string>pip</string>
+            </ordered-preference>
+            <string id="preference">pip3DefaultInterpreter</string>
+            <string id="documentation">https://www.activestate.com/activepython</string>
+        </preference-set>
+        <preference-set id="yarn">
+            <string id="label">Yarn</string>
+            <string id="group">Package Managers</string>
+            <ordered-preference id="executables">
+                <string>yarn</string>
+            </ordered-preference>
+            <string id="preference">yarnDefaultInterpreter</string>
+            <string id="documentation">https://yarnpkg.com/lang/en/docs/install/</string>
+        </preference-set>
+        <preference-set id="gotools">
+            <string id="label">Gocode</string>
+            <string id="group">Tools</string>
+            <ordered-preference id="executables">
+                <string>gocode</string>
+            </ordered-preference>
+            <string id="preference">gocodeDefaultLocation</string>
+            <string id="documentation">https://www.activestate.com/activego</string>
+        </preference-set>
+        <preference-set id="godef">
+            <string id="label">Godef</string>
+            <string id="group">Tools</string>
+            <ordered-preference id="executables">
+                <string>godef</string>
+            </ordered-preference>
+            <string id="preference">godefDefaultLocation</string>
+            <string id="documentation">https://www.activestate.com/activego</string>
+        </preference-set>
+        <preference-set id="vagrant">
+            <string id="label">Vagrant</string>
+            <string id="group">Tools</string>
+            <ordered-preference id="executables">
+                <string>vagrant</string>
+            </ordered-preference>
+            <string id="preference">vagrantDefaultInterpreter</string>
+            <string id="documentation">https://www.vagrantup.com/docs/installation/</string>
+        </preference-set>
+        <preference-set id="cordova">
+            <string id="label">Cordova</string>
+            <string id="group">Tools</string>
+            <ordered-preference id="executables">
+                <string>cordova</string>
+            </ordered-preference>
+            <string id="preference">cordovaDefaultInterpreter</string>
+            <string id="documentation">https://cordova.apache.org/docs/en/latest/guide/cli/</string>
+        </preference-set>
+        <preference-set id="phonegap">
+            <string id="label">PhoneGap</string>
+            <string id="group">Tools</string>
+            <ordered-preference id="executables">
+                <string>phonegap</string>
+            </ordered-preference>
+            <string id="preference">phonegapDefaultInterpreter</string>
+            <string id="documentation">http://docs.phonegap.com/getting-started/1-install-phonegap/desktop/</string>
+        </preference-set>
+        <preference-set id="grunt">
+            <string id="label">Grunt</string>
+            <string id="group">Tools</string>
+            <ordered-preference id="executables">
+                <string>grunt</string>
+            </ordered-preference>
+            <string id="preference">gruntDefaultInterpreter</string>
+            <string id="documentation">https://gruntjs.com/installing-grunt</string>
+        </preference-set>
+        <preference-set id="gulp">
+            <string id="label">Gulp</string>
+            <string id="group">Tools</string>
+            <ordered-preference id="executables">
+                <string>gulp</string>
+            </ordered-preference>
+            <string id="preference">gulpDefaultInterpreter</string>
+            <string id="documentation">http://gulpjs.com/</string>
+        </preference-set>
+        <preference-set id="docker">
+            <string id="label">Docker</string>
+            <string id="group">Tools</string>
+            <ordered-preference id="executables">
+                <string>docker</string>
+            </ordered-preference>
+            <string id="preference">dockerDefaultInterpreter</string>
+            <string id="documentation">https://docs.docker.com/engine/installation/</string>
+        </preference-set>
+        <preference-set id="drush">
+            <string id="label">Drush</string>
+            <string id="group">Tools</string>
+            <ordered-preference id="executables">
+                <string>drush</string>
+            </ordered-preference>
+            <string id="preference">drushDefaultInterpreter</string>
+            <string id="documentation">http://docs.drush.org/en/master/install/</string>
+        </preference-set>
+    </preference-set>
+  
+  <long id="startupwizard.dependency_load_delay">100</long>
+  <string id="dependency.documentation_search_url">https://www.google.com/#q=%s</string>
+  <string id="versioncheck.url">http://docs.komodoide.com/changelog/%s</string>
+  <string id="versioncheck.moreinfo.url">https://www.activestate.com/komodo-ide</string>
+  <string id="versioncheck.valid.domains">komodoide.com,activestate.com</string>
+  <string id="platform.api.url">https://platform.activestate.com//api/v1</string>
+  <string id="platform.url">https://platform.activestate.com/</string>
+  <string id="platform.createAccountstr">?utm_campaign=create-account&amp;utm_medium=application&amp;utm_source=komodo-ide&amp;utm_term=create-account&amp;utm_content=komodo-ide-application-popup&amp;source=komodo</string>
+  <boolean id="state.dynbtn.seen">false</boolean>
+  <string id="platform.doc.site">https://docs.activestate.com/</string>
+  <string id="state.doc.site.path">komodo/12/state-integration</string>
+
+  <!-- #if PLATFORM == "win" -->
+  <string id="state.install.url">https://platform.activestate.com/dl/cli/install.ps1</string>
+  <string id="state.install.command">C:\WINDOWS\SysNative\WindowsPowerShell\v1.0\powershell.exe "IEX(New-Object Net.WebClient).downloadString('https://platform.activestate.com/dl/cli/install.ps1')"</string>
+  <!-- #else -->
+  <string id="state.install.url">https://platform.activestate.com/dl/cli/install.sh</string>
+  <string id="state.install.command">rm -Rf /tmp/state &amp;&amp; mkdir /tmp/state &amp;&amp; cd /tmp/state &amp;&amp; curl -o install.sh https://platform.activestate.com/dl/cli/install.sh &amp;&amp; chmod +x install.sh &amp;&amp; ./install.sh</string>
+  <!-- #endif -->
+  <boolean id="state.verbose">false</boolean>
+
+  <string id="preview.browser.languages">HTML,HTML5,AngularJS,JSX</string>
+  <preference-set id="codeintel.catalogs">
+    <preference-set id="AngularJS">
+        <string id="name">AngularJS</string>
+        <string id="lang">JavaScript</string>
+        <string id="path">:catalog_angular:</string>
+        <string id="desc">HTML enhanced for web apps!</string>
+    </preference-set>
+    <preference-set id="Dojo">
+        <string id="name">Dojo</string>
+        <string id="lang">JavaScript</string>
+        <string id="path">:catalog_dojo:</string>
+        <string id="desc">Dojo Toolkit API</string>
+    </preference-set>
+    <preference-set id="jQuery">
+        <string id="name">jQuery</string>
+        <string id="lang">JavaScript</string>
+        <string id="path">:catalog_jquery:</string>
+        <string id="desc">jQuery JavaScript library</string>
+    </preference-set>
+    <preference-set id="Drupal">
+        <string id="name">Drupal</string>
+        <string id="lang">PHP</string>
+        <string id="path">:catalog_drupal:</string>
+        <string id="desc">A full-featured PHP content management/discussion engine</string>
+    </preference-set>
+    <preference-set id="Ember">
+        <string id="name">Ember</string>
+        <string id="lang">JavaScript</string>
+        <string id="path">:catalog_ember:</string>
+        <string id="desc">A framework for creating ambitious web applications</string>
+    </preference-set>
+    <preference-set id="MochiKit">
+        <string id="name">MochiKit</string>
+        <string id="lang">JavaScript</string>
+        <string id="path">:catalog_mochikit:</string>
+        <string id="desc">A lightweight JavaScript library</string>
+    </preference-set>
+    <preference-set id="Pecl">
+        <string id="name">Pecl</string>
+        <string id="lang">PHP</string>
+        <string id="path">:catalog_pecl:</string>
+        <string id="desc">A collection of PHP Extensions</string>
+    </preference-set>
+    <preference-set id="Prototype">
+        <string id="name">Prototype</string>
+        <string id="lang">JavaScript</string>
+        <string id="path">:catalog_prototype:</string>
+        <string id="desc">JavaScript framework for web development</string>
+    </preference-set>
+    <preference-set id="PyWin32">
+        <string id="name">PyWin32</string>
+        <string id="lang">Python</string>
+        <string id="path">:catalog_pywin32:</string>
+        <string id="desc">Python Extensions for Windows</string>
+    </preference-set>
+    <preference-set id="PyWin32-3">
+        <string id="name">PyWin32 (Python3)</string>
+        <string id="lang">Python3</string>
+        <string id="path">:catalog_python3_pywin32:</string>
+        <string id="desc">Python Extensions for Windows</string>
+    </preference-set>
+    <preference-set id="YUI">
+        <string id="name">YUI</string>
+        <string id="lang">JavaScript</string>
+        <string id="path">:catalog_yui:</string>
+        <string id="desc">Yahoo! User Interface Library</string>
+    </preference-set>
+    <preference-set id="Rails">
+        <string id="name">Rails</string>
+        <string id="lang">Ruby</string>
+        <string id="path">:catalog_rails:</string>
+        <string id="desc">Ruby on Rails web application framework</string>
+    </preference-set>
+    <preference-set id="XPCOM">
+        <string id="name">XPCOM</string>
+        <string id="lang">JavaScript</string>
+        <string id="path">:catalog_xpcom:</string>
+        <string id="desc"></string>
+    </preference-set>
+    <preference-set id="XBL">
+        <string id="name">XBL</string>
+        <string id="lang">JavaScript</string>
+        <string id="path">:catalog_xbl:</string>
+        <string id="desc">Xul Bindings</string>
+    </preference-set>
+</preference-set>
+</preference-set>

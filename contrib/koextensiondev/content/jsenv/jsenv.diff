@@ -1,0 +1,36 @@
+--- toolbar.html	2005-11-11 05:24:34.000000000 +0100
++++ toolbarnew.html	2006-07-27 15:58:27.249724800 +0200
+@@ -111,17 +111,20 @@ function execute()
+ {
+   var js = inputFrame.document.getElementById("input").value;
+ 
+   var useOpener = parent.opener && !parent.opener.closed;
+   var oldStyle = !! document.all; // lame but meh.
++  var useScope = parent.scope;
+   
+   print("Running" + (useOpener ? " in bookmarklet mode" : "") + (oldStyle ? " in make-IE-happy mode" : "") + "...", "orange");
+ 
+   if (useOpener)
+     executeWithJSURL(js, parent.opener); // only way to execute against another frame
+   else if (oldStyle)
+     executeWithDW(js, execFrame); // only way to get line numbers in IE
++  else if (useScope)
++    executeWithJSURL(js, parent.scope); // running in extensiondev
+   else
+     executeWithJSURL(js, execFrame); // faster in Mozilla  
+ }
+ 
+ // Advantages: can get line numbers in IE.
+@@ -184,10 +187,10 @@ function makeUserScript(userScriptLink)
+ <!-- <button accesskey="H" onclick="help(); refocus();"><u>H</u>elp</button> -->
+ 
+ <a href="data:text/html,..." onfocus="makeUserScript(this);" onmouseover="makeUserScript(this);" target="_blank">Install as user script</a>
+ 
+ <div style="visibility: hidden">
+-<iframe name="execFrame" width="5" height="5" src="about:blank"></iframe>
++<iframe name="execFrame" width="5" height="5" src="blank.html"></iframe>
+ </div>
+ 
+ </body>
+ </html>
+\ No newline at end of file

@@ -1,0 +1,39 @@
+
+# Buglets
+
+- Saw this error in account.as.com admin emails:
+    Traceback (most recent call last):
+      File "/data/account/externals/lib/django/core/handlers/base.py", line 92, in get_response
+        response = callback(request, *callback_args, **callback_kwargs)
+      File "/data/account/externals/lib/django/contrib/auth/decorators.py", line 78, in __call__
+        return self.view_func(request, *args, **kwargs)
+      File "/data/account/thesite/apps/licenses/views.py", line 1338, in license_action
+        license_ids=[license.id])
+      File "/data/account/externals/lib/activeapis2/storeapi.py", line 371, in addtocart
+        response = self._request_json(url, "POST", data)
+      File "/data/account/externals/lib/activeapis2/apibase.py", line 93, in _request_json
+        json_str = self._request(url, method, body, headers)
+      File "/data/account/externals/lib/activeapis2/apibase.py", line 149, in _request
+        self._raise_on_socket_error(ex, url)
+      File "/data/account/externals/lib/activeapis2/apibase.py", line 207, in _raise_on_socket_error
+        errno, msg = ex.args
+    ValueError: need more than 1 value to unpack
+
+    <ModPythonRequest path:/licenses/SCF7DC6C4F/action/,
+    ...
+
+
+
+# General TODOs
+
+- add docs/devguide.txt detailing the rote work for doing a release and
+  preping for the next release. Include info on releasing sdists via a new
+  "mk release_sdist" task (see
+  http://bugs.activestate.com/show_bug.cgi?id=85910 for info on that).
+- add "is_test" attribute to NotificationsAPI.__init__() then can specify
+  it in the APIFactory
+- incorporate Damien's emma module library
+- monexaapi.py
+- convert users of activessolib/activessoapi.py to activeapis/accountapi.py
+  here
+- incorporate account.as.com/thesite/safarilib.py?

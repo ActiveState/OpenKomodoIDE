@@ -1,0 +1,102 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2010 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+# Conscript file for the Komodo build process
+
+use File::Basename;
+use File::Find ();
+use File::Spec;
+
+Import(
+    'cons',
+    'platform',
+    'productType',
+    'buildFlavour',
+    'sdkDir',
+    'build',
+    'mozBin',
+    'unsiloedPythonExe',
+    'mozVersion',
+    'mozExtensionDir',
+    'siloedPython',
+    'buildAbsDir'
+);
+
+my $baseDir = "$buildAbsDir/modules/codeintel";
+my $targetDir = "$mozExtensionDir/codeintel\@activestate.com";
+my $koextPy = "$sdkDir/bin/koext";
+
+if ($platform eq "win") {
+    $koextPy = "$sdkDir/bin/koext.py";
+}
+
+# Various setup.py-based things need extra flags for debbugging
+if ($buildType eq 'debug') {
+    $debugFlags = "--debug";
+} else {
+    $debugFlags = "";
+}
+
+my $root = dirname(__FILE__);
+
+my @files  = _find_files( root => $root, dir => 'skin');
+push @files, _find_files( root => $root, dir => 'content');
+push @files, _find_files( root => $root, dir => 'components');
+push @files, _find_files( root => $root, dir => 'locale');
+push @files, _find_files( root => $root, dir => 'server/src',     exclude => qr/\.pyc$/ );
+push @files, _find_files( root => $root, dir => 'server/contrib', exclude => qr/(?:\.pyc|\.pyo|antlr|\/build\/)$/ );
+
+my $consLocal = $cons;
+
+my $landmark = "$baseDir/pylib/codeintel/lib/server.py";
+$consLocal->Command(
+    $landmark,
+    "server/setup.py",
+
+    "bootstrap.js",
+    "install.rdf",
+    "chrome.manifest",
+
+    @files,
+
+    qq(
+        cd %1:d && $siloedPython %1:f build -b $baseDir/pylib/codeintel --build-purelib $baseDir/pylib/codeintel/lib --pyexe $siloedPython
+        cd $baseDir && find . -name "*.cix" -type f -delete
+        rm -Rf $targetDir
+        cd $baseDir && $siloedPython $koextPy build --unjarred
+        cd $baseDir && unzip -q codeintel-3.0-ko.xpi -d $targetDir
+    )
+);
+
+sub _find_files {
+    my %opt = @_;
+
+    my $root    = $opt{root};
+    my $dir     = $opt{dir};
+    my $include = $opt{include} || qr//; # default include matches everything
+    my $exclude = $opt{exclude};
+    
+    $root =~ s{\\}{/}g;
+
+    my @found;
+
+    File::Find::find( {
+        no_chdir => 1,
+        wanted   => sub {
+            # skip non-files
+            return unless -f $File::Find::name;
+
+            # skip files matching exclude pattern, if any
+            return if $exclude && $File::Find::name =~ $exclude;
+
+            # include files matching include pattern
+            my $file = $File::Find::name;
+            $file =~ s{^$root/}{};
+            $file =~ s{\\}{/}g;
+            push @found, $file;
+        },
+    }, "$root/$dir" );
+
+    return @found;
+}

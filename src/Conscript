@@ -1,0 +1,104 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'platform',
+    'buildFlavour',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozBin',
+    'mozSrc',
+    'komodoPythonUtilsDir',
+    'unsiloedPythonExe',
+    'sdkDir',
+    'mozDevelDist',
+    'compiler',
+    'userDataDir',
+    'mozVersion',
+);
+
+# We use this "state" file as a HACK-around Cons' requirement to have
+# physical output for an command. Komodo build steps depending on regxpcom
+# having been run should depend on this state file. Komodo build steps
+# that need to happen before regxpcom is run should setup this state file
+# to depend on them.
+#
+# The deletion of the compreg.dat file is one of the few hacks that I
+# could find to trigger f*(#ing PyXPCOM re-registration. It *used* to be
+# that a "bk build" involving a change in our .idl files would result in
+# re-PyXPCOM-registration on next start, but something changed to stop
+# that. I've found this full reregistration is necessary to get a *new*
+# interface working via "bk build" -- i.e. without having to do
+# "bk clean && bk build".
+my $xre_dir = "$userDataDir/XRE";
+my $rm_cmd = "rm -f \"$xre_dir/compreg.dat\"";
+if ($platform eq "win") {
+    $xre_dir = "$userDataDir\\XRE";
+    $rm_cmd = "IF EXIST \"$xre_dir\\compreg.dat\" del \"$xre_dir\\compreg.dat\"";
+}
+# regxpcom is no longer useful, but we still want to make the state file
+# since that also ensures some other things build in the right order
+$cons->Command($ranRegxpcomStateFileName, qq(
+    $rm_cmd
+    @ echo yes> %0
+    ));
+
+# We put our PyXPCOM site-lib stuff in a "komodo" subdir of the actual
+# dir that PyXPCOM puts in sys.path (this is the "python" subdir in the
+# directory containing the main komodo/mozilla binary). We do this for
+# cleanliness. To get that subdir on sys.path we need to install a .pth
+# file pointing to that dir.
+$cons->Command("$komodoPythonUtilsDir.pth", "echo komodo> %0");
+
+
+# We put an indicator file in the mozBin dir to indicate that this is a
+# development tree layout. This is used by koDirs.py to properly find
+# certain support files in the Komodo tree: the install layout is
+# different for an install.
+my $isDevTree = "$mozBin/is_dev_tree.txt";
+$cons->Command($isDevTree, "echo This is a Komodo dev tree > %0");
+
+
+# Copy over extra parts of the Komodo SDK.
+# Notes:
+# - The Komodo idl files are handled by each $cons->BuildAndInstallXpt().
+# - To support C++ XPCOM components we'll also need the "bin" and "lib"
+#   Mozilla SDK dirs.
+# - Add as many of the xpidl.exe dependencies as we are able (some of them
+#   are GPL'd). For some case we'll just have prerequisites (e.g. MacPorts
+#   on OSX and certain packages on Linux).
+
+$cons->InstallRecursive($sdkDir, cwd()."/src/sdk", # must be abs, bug in InstallRecursive
+                        ('bin', '.*\.pyc', '\.svn', '\.consign'));
+if ($platform eq "win") {
+    $cons->InstallAs("$sdkDir/bin/komodo-config.py", "sdk/bin/komodo-config.py");
+    $cons->InstallAs("$sdkDir/bin/koext.py", "sdk/bin/koext.py");
+} else {
+    $cons->InstallAs("$sdkDir/bin/komodo-config", "sdk/bin/komodo-config.py");
+    $cons->InstallAs("$sdkDir/bin/koext", "sdk/bin/koext.py");
+}
+
+$cons->InstallRecursive("$sdkDir/pylib", "$mozDevelDist/sdk/bin", ('\.svn', '\.consign'));
+$cons->InstallRecursive("$sdkDir/idl", "$mozDevelDist/idl", ('\.svn'));
+
+if ($platform eq "win") {
+    my $mozillaBuildDir = $ENV{MOZILLABUILD} || "C:\\mozilla-build";
+    if (! -d $mozillaBuildDir) {
+        die "MozillaBuild dir could not be found: '$mozillaBuildDir' does not exist";
+    }
+    $cons->Install("$sdkDir/bin", "$mozillaBuildDir/info-zip/zip.exe");
+} else {
+    # On Linux and Mac OS X we just require the user to have libIDL and
+    # glib install from <insert-package-manager> and MacPorts, respectively.
+    # Need to document how to get those.
+}
+
+if ($platform eq "darwin") {
+    $cons->InstallRecursive("$mozBin/chrome/iconsets", cwd()."/src/chrome/iconsets", ('\.svn', '\.consign'));
+} else {
+    $cons->InstallRecursive("$mozBin/chrome/iconsets", cwd()."/src/chrome/iconsets", ('\.svn', '\.consign', 'hidpi'));
+}
+$cons->InstallRecursive("$mozBin/chrome/skins", cwd()."/src/chrome/skins", ('\.svn', '\.consign'));

@@ -1,0 +1,225 @@
+# blendTable --
+#
+#	This file contains the table of commands used to check blend.
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on blend commands.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+# 
+# RCS: @(#) $Id: blendTable,v 1.2 2000/05/30 22:24:42 wart Exp $
+
+set ::checkBlend1.2 {
+
+{autolock}			{ok}
+{java::autolock}		{ok}
+{autolock activate}		{ok}
+{autolock a}			{ok}
+{autolock foo}			{1 {0 12} badOption {9 3} {activate foo}}
+{autolock activate a}		{1 {0 19} numArgs {} {}}
+
+{bind a}			{ok}
+{java::bind a}			{ok}
+{bind a b}			{ok}
+{bind a b $c}			{ok}
+{bind a b {set}}		{1 {10 3} numArgs {} {}}
+{bind}				{1 {0 4} numArgs {} {}}
+{bind a b $c d}			{1 {0 13} numArgs {} {}}
+
+{call a a}			{ok}
+{java::call a a}		{ok}
+{call a a a}			{ok}
+{call a a a a a a}		{ok}
+{call -noconvert a a}		{ok}
+{call -n a a}			{ok}
+{call -noconvert a a a}		{ok}
+{call -noconvert a a a a a a a}	{ok}
+{call a}			{1 {0 6} numArgs {} {}}
+{call -foo a a}			{1 {0 13} badSwitch {5 4} -foo}
+{call -foo a}			{1 {0 11} badSwitch {5 4} -foo 1 {0 11} numArgs {} {}}
+{call -noconvert a}		{1 {0 17} numArgs {} {}}
+{call -noconvert [set] [set] [set] [set]}	{1 {17 3} numArgs {} {} 1 {23 3} numArgs {} {} 1 {29 3} numArgs {} {} 1 {35 3} numArgs {} {}}
+
+{cast a a}			{ok}
+{java::cast a a}		{ok}
+{cast $a}			{1 {0 7} numArgs {} {}}
+{cast a a $a}			{1 {0 11} numArgs {} {}}
+
+{defineclass a}			{ok}
+{defineclass a}			{ok}
+{defineclass}			{1 {0 11} numArgs {} {}}
+{defineclass a $a}		{1 {0 16} numArgs {} {}}
+
+{event}				{ok}
+{java::event}			{ok}
+{event a}			{ok}
+{event -index 5}		{ok}
+{event -index 5 a}		{ok}
+{event -i 0}			{ok}
+{event -i}			{1 {0 8} noSwitchArg {6 2} -i}
+{event -i a}			{1 {0 10} badWholeNum {9 1} a}
+{event -i -1}			{1 {0 11} badWholeNum {9 2} -1}
+{event -foo 5 a}		{1 {0 14} badSwitch {6 4} -foo 1 {0 14} numArgs {} {}}
+{event a $a}			{1 {0 10} numArgs {} {}}
+{event -index 5 a $a}		{1 {0 19} numArgs {} {}}
+
+{field a a}			{ok}
+{java::field a a}		{ok}
+{field a a a}			{ok}
+{field a a a a a}		{ok}
+{field a a a a a a a}		{ok}
+{field -noconvert a a}		{ok}
+{field -n a a}			{ok}
+{field -noconvert a a a}	{ok}
+{field -noconvert a a a a a a a}	{ok}
+{field a}			{1 {0 7} numArgs {} {}}
+{field a a a a}			{1 {0 13} numArgs {} {}}
+{field a a a a a a}		{1 {0 17} numArgs {} {}}
+{field -foo a a}		{1 {0 14} badSwitch {6 4} -foo}
+{field -foo a}			{1 {0 12} badSwitch {6 4} -foo 1 {0 12} numArgs {} {}}
+{field -noconvert a}		{1 {0 18} numArgs {} {}}
+{field -noconvert [set] [set]}	{1 {18 3} numArgs {} {} 1 {24 3} numArgs {} {}}
+{field -noconvert [set] [set] [set]}	{1 {18 3} numArgs {} {} 1 {24 3} numArgs {} {} 1 {30 3} numArgs {} {}}
+
+{getinterp}			{ok}
+{java::getinterp}		{ok}
+{getinterp $a}			{1 {0 12} numArgs {} {}}
+
+{instanceof a a}		{ok}
+{java::instanceof a a}		{ok}
+{instanceof $a}			{1 {0 13} numArgs {} {}}
+{instanceof a a $a}		{1 {0 17} numArgs {} {}}
+
+{info $a $b $c $d}		{ok}
+{java::info $a $b $c $d}	{ok}
+{info baseclass a}		{ok}
+{info baseclass [set]}		{1 {16 3} numArgs {} {}}
+{info baseclass a $b}		{1 {0 19} numArgs {} {}}
+{info class a}			{ok}
+{info class [set]}		{1 {12 3} numArgs {} {}}
+{info class a $b}		{1 {0 15} numArgs {} {}}
+{info constructors a}		{ok}
+{info constructors [set]}	{1 {19 3} numArgs {} {}}
+{info constructors a $b}	{1 {0 22} numArgs {} {}}
+{info dimensions a}		{ok}
+{info dimensions [set]}		{1 {17 3} numArgs {} {}}
+{info dimensions a $b}		{1 {0 20} numArgs {} {}}
+{info events a}			{ok}
+{info events [set]}		{1 {13 3} numArgs {} {}}
+{info events a $b}		{1 {0 16} numArgs {} {}}
+{info fields a}			{ok}
+{info fields [set]}		{1 {13 3} numArgs {} {}}
+{info fields -type a}		{ok}
+{info fields -type -static a}	{ok}
+{info fields -static [set]}	{1 {21 3} numArgs {} {}}
+{info fields -static -type [set]}	{1 {27 3} numArgs {} {}}
+{info fields a $b}		{1 {0 16} numArgs {} {}}
+{info fields $a $b c}		{1 {0 19} numArgs {} {}}
+{info fields -type}		{1 {0 17} numArgs {} {}}
+{info fields -static}		{1 {0 19} numArgs {} {}}
+{info methods a}		{ok}
+{info methods [set]}		{1 {14 3} numArgs {} {}}
+{info methods -type a}		{ok}
+{info methods -type -static a}	{ok}
+{info methods -static [set]}	{1 {22 3} numArgs {} {}}
+{info methods -static -type [set]}	{1 {28 3} numArgs {} {}}
+{info methods a $b}		{1 {0 17} numArgs {} {}}
+{info methods $a $b c}		{1 {0 20} numArgs {} {}}
+{info methods -type}		{1 {0 18} numArgs {} {}}
+{info methods -static}		{1 {0 20} numArgs {} {}}
+{info properties a}		{ok}
+{info properties a -type}	{ok}
+{info properties [set]}		{1 {17 3} numArgs {} {}}
+{info properties a -type $b}	{1 {0 26} numArgs {} {}}
+{info properties a $b}		{1 {0 20} numArgs {} {}}
+{info superclass a}		{ok}
+{info superclass [set]}		{1 {17 3} numArgs {} {}}
+{info superclass a $b}		{1 {0 20} numArgs {} {}}
+{info}				{1 {0 4} numArgs {} {}}
+{info foo}			{1 {0 8} badOption {5 3} {{baseclass class constructors dimensions events fields methods properties superclass} foo}}
+{info $a $b $c $d $e}		{1 {0 19} numArgs {} {}}
+
+{isnull a}			{ok}
+{java::isnull a}		{ok}
+{isnull}			{1 {0 6} numArgs {} {}}
+{isnull a $a}			{1 {0 11} numArgs {} {}}
+
+{load a}			{ok}
+{java::load a}			{ok}
+{load -classpath $a a}		{ok}
+{load -c $a a}			{ok}
+{load -classpath {a b c} a}	{ok}
+{load -classpath $a/b a}	{ok}
+{load -classpath {c $b/c} a}	{ok}
+{load -classpath $a $a/b}	{1 {0 23} nonPortFile {19 4} {}}
+{load -classpath $a}		{1 {0 18} numArgs {} {}}
+{load -classpath $a a $a}	{1 {0 23} numArgs {} {}}
+{load}				{1 {0 4} numArgs {} {}}
+
+{lock a}			{ok}
+{java::lock a}			{ok}
+{lock}				{1 {0 4} numArgs {} {}}
+{lock a $a}			{1 {0 9} numArgs {} {}}
+
+{null}				{ok}
+{java::null}			{ok}
+{null $a}			{1 {0 7} numArgs {} {}}
+
+{new a}				{ok}
+{java::new a}			{ok}
+{new a a}			{ok}
+{new a a a}			{ok}
+{new a a a a a a}		{ok}
+{new [set]}			{1 {5 3} numArgs {} {}}
+{new}				{1 {0 3} numArgs {} {}}
+
+{prop a a}			{ok}
+{java::prop a a}		{ok}
+{prop a a a}			{ok}
+{prop a a a a a}		{ok}
+{prop a a a a a a a}		{ok}
+{prop -noconvert a a}		{ok}
+{prop -n a a}			{ok}
+{prop -noconvert a a a}		{ok}
+{prop -noconvert a a a a a a a}	{ok}
+{prop a}			{1 {0 6} numArgs {} {}}
+{prop a a a a}			{1 {0 12} numArgs {} {}}
+{prop a a a a a a}		{1 {0 16} numArgs {} {}}
+{prop -foo a a}			{1 {0 13} badSwitch {5 4} -foo}
+{prop -foo a}			{1 {0 11} badSwitch {5 4} -foo 1 {0 11} numArgs {} {}}
+{prop -noconvert a}		{1 {0 17} numArgs {} {}}
+{prop -noconvert [set] [set]}	{1 {17 3} numArgs {} {} 1 {23 3} numArgs {} {}}
+{prop -noconvert [set] [set] [set]}	{1 {17 3} numArgs {} {} 1 {23 3} numArgs {} {} 1 {29 3} numArgs {} {}}
+
+{throw a}			{ok}
+{java::throw a}			{ok}
+{throw}				{1 {0 5} numArgs {} {}}
+{throw a $a}			{1 {0 10} numArgs {} {}}
+
+{try $a}			{ok}
+{java::try $a}			{ok}
+{try $a catch {a b} $a}		{ok}
+{try $a catch {a b} $a catch {a b} $a}	{ok}
+{try $a catch $b $a catch $b $a}	{ok}
+{try $a finally $a}			{ok}
+{try $a catch {a b} $a finally $a}	{ok}
+{try $a catch {a b} $a catch {a b} $a finally $a}	{ok}
+{try {set}}			{1 {5 3} numArgs {} {}}
+{try $a catch {a b} {set}}	{1 {20 3} numArgs {} {}}
+{try $a catch {a b c} $a}	{1 {0 23} numListElts {13 7} {}}
+{try $a catch {a} $a catch {a b c} $a}	{1 {0 36} numListElts {13 3} {} 1 {0 36} numListElts {26 7} {}}
+{try $a finally {set}}		{1 {16 3} numArgs {} {}}
+{try $a catch {a b} {set} catch {a b} {set} finally {set}}	{1 {20 3} numArgs {} {} 1 {38 3} numArgs {} {} 1 {52 3} numArgs {} {}}
+{try}				{1 {0 3} numArgs {} {}}
+{try $a $b}			{1 {0 9} numArgs {} {}}
+{try $a foo}			{1 {0 10} badKey {7 3} {foo {catch or finally}}}
+{try $a foo {set}}		{1 {0 16} badKey {7 3} {foo {catch or finally}}}
+{try $a catch}			{1 {0 12} numArgs {} {}}
+{try $a catch {a b}}		{1 {0 18} numArgs {} {}}
+{try $a finally}		{1 {0 14} numArgs {} {}}
+
+{unlock a}			{ok}
+{java::unlock a}			{ok}
+{unlock}			{1 {0 6} numArgs {} {}}
+{unlock a $a}			{1 {0 11} numArgs {} {}}
+}

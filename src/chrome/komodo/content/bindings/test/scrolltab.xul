@@ -1,0 +1,298 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+    <?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+
+<window title="XUL Periodic Table"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xonload="onloadTabTest();">
+<script src="chrome://komodo/content/library/timers.js"/>
+<script src="chrome://komodo/content/library/logging.js"/>
+<script src="chrome://global/content/nsDragAndDrop.js"/>
+<script src="chrome://global/content/nsTransferable.js"/>
+
+<script>
+<![CDATA[
+    var XULNS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+    function onloadTabTest() {
+        var panel = document.createElementNS(XULNS, "tabpanel");
+        var textbox = document.createElementNS(XULNS, 'textbox');
+        textbox.value="Test Tab 1";
+        panel.appendChild(textbox);
+
+        var tb = document.getElementById('test_tabbox');
+        var tab = tb._tabs.appendItem("Test Tab 1");
+        tab.id = "test_Tab_1";
+        tb._tabpanels.appendChild(panel);
+        tb.selectedTab = tab;
+        tb.selectedPanel = panel;
+
+    }
+]]>
+</script>
+
+<html:h1>Komodo Scrollable Tabs</html:h1>
+
+<vbox flex="1" style="overflow: auto">
+
+<groupbox>
+<description>
+  This is the tabbox using scrollable tabs
+</description>
+<groupbox>
+  <tabbox  flex="1" class="whiteout">
+    <tabs type="scrollable" collapsable="true">
+       <tab id="tab_1" label="Default"     />
+       <tab id="tab_2" label="Tab"         />
+       <tab id="tab_3" label="Orientation" />
+    </tabs>
+    <tabpanels flex="1" >
+        <tabpanel>
+            <label value="Default" />
+        </tabpanel>
+        <tabpanel>
+            <label value="Tab " />
+        </tabpanel>
+        <tabpanel>
+            <label value="Tab 2" />
+        </tabpanel>
+    </tabpanels>
+  </tabbox>
+</groupbox>
+</groupbox>
+
+<groupbox>
+<description>
+  This is the tabbox using scrollable tabs
+</description>
+<groupbox>
+  <tabbox  flex="1" class="tabs-bottom">
+    <tabpanels flex="1" >
+        <tabpanel>
+            <label value="Default" />
+        </tabpanel>
+        <tabpanel>
+            <label value="Tab " />
+        </tabpanel>
+        <tabpanel>
+            <label value="Tab 2" />
+        </tabpanel>
+    </tabpanels>
+    <tabs type="scrollable">
+       <tab id="tab_1" label="Default"     />
+       <tab id="tab_2" label="Tab"         />
+       <tab id="tab_3" label="Orientation" />
+    </tabs>
+  </tabbox>
+</groupbox>
+</groupbox>
+
+<groupbox>
+<description>
+  This is the draggable tabbox with normal tabs
+</description>
+<groupbox>
+  <tabbox type="draggable" orient="vertical" flex="1" class="whiteout">
+    <tabs xclass="fancy-tabs"
+          onmousedown="if (event.target.localName == 'tab') this.selectedItem = event.target;">
+       <tab id="otab_1" label="Default"     />
+       <tab id="otab_2" label="Tab"         />
+       <tab id="otab_3" label="Orientation" />
+    </tabs>
+    <tabpanels flex="1" >
+       <tabpanel>
+       <label value="Default" />
+       </tabpanel>
+       <tabpanel>
+       <label value="Tab " />
+       </tabpanel>
+       <tabpanel>
+       <label value="Orientation" />
+       </tabpanel>
+    </tabpanels>
+  </tabbox>
+</groupbox>
+</groupbox>
+
+<groupbox>
+<description>
+  This is the draggable tabbox with normal tabs
+</description>
+<groupbox>
+  <tabbox type="draggable" orient="vertical" flex="1" class="tabs-bottom">
+    <tabpanels flex="1" >
+       <tabpanel>
+       <label value="Default" />
+       </tabpanel>
+       <tabpanel>
+       <label value="Tab " />
+       </tabpanel>
+       <tabpanel>
+       <label value="Orientation" />
+       </tabpanel>
+    </tabpanels>
+    <tabs xclass="fancy-tabs"
+          onmousedown="if (event.target.localName == 'tab') this.selectedItem = event.target;">
+       <tab id="otab_1" label="Default"     />
+       <tab id="otab_2" label="Tab"         />
+       <tab id="otab_3" label="Orientation" />
+    </tabs>
+  </tabbox>
+</groupbox>
+</groupbox>
+
+<groupbox>
+<description>
+  This is the draggable tabbox with scrollable tabs
+</description>
+<groupbox>
+  <tabbox type="draggable" orient="vertical" flex="1" id='test_tabbox' class="whiteout">
+    <tabs type="scrollable">
+       <tab type="file-tab" id="xtab_1" label="Dirty"
+            status="chrome://komodo/skin/images/status_icon_ok.png"
+            action="chrome://komodo/skin/images/status_icon_add.png"
+            readonly="chrome://komodo/skin/images/status_icon_readonly.png"
+            clean="true"/>
+        <tab id="xtab_2" label="Tab" />
+        <tab id="xtab_3" label="Orientation 1" />
+        <tab id="xtab_4" label="Orientation 2" />
+        <tab id="xtab_5" label="Orientation 3" />
+        <tab id="xtab_6" label="Orientation 4" />
+        <tab id="xtab_7" label="Orientation 5" />
+        <tab id="xtab_8" label="Orientation 6" />
+        <tab id="xtab_9" label="Orientation 7" />
+    </tabs>
+    <tabpanels flex="1" >
+        <tabpanel>
+            <vbox>
+            </vbox>
+        </tabpanel>
+        <tabpanel>
+            <vbox>
+            </vbox>
+        </tabpanel>
+        <tabpanel>
+            <vbox>
+            </vbox>
+        </tabpanel>
+        <tabpanel>
+            <vbox>
+            </vbox>
+        </tabpanel>
+        <tabpanel>
+            <vbox>
+            </vbox>
+        </tabpanel>
+        <tabpanel>
+            <vbox>
+            </vbox>
+        </tabpanel>
+        <tabpanel>
+            <vbox>
+            </vbox>
+        </tabpanel>
+        <tabpanel>
+            <vbox>
+            </vbox>
+        </tabpanel>
+        <tabpanel>
+            <vbox>
+            </vbox>
+        </tabpanel>
+    </tabpanels>
+  </tabbox>
+</groupbox>
+</groupbox>
+
+<!--
+
+<groupbox>
+<description>
+  This is the draggable tabbox with scrollable tabs, and a styling
+  similar to our editor tab control
+</description>
+<groupbox>
+  <tabbox type="draggable" class="whiteout" orient="vertical" flex="1" id='test_tabbox_2'>
+    <tabs type="scrollable">
+       <tab type="file-tab" id="ytab_1" label="Default"
+            status="chrome://komodo/skin/images/status_icon_ok.png"
+            action="chrome://komodo/skin/images/status_icon_add.png"
+            readonly="chrome://komodo/skin/images/status_icon_readonly.png"
+            clean="false"/>
+       <tab type="file-tab" id="ytab_2" label="Tab"
+            status="chrome://komodo/skin/images/status_icon_sync.png"
+            action="chrome://komodo/skin/images/status_icon_edit.png"
+            readonly="chrome://komodo/skin/images/status_icon_readonly.png"
+            clean="true"/>
+       <tab type="file-tab" id="ytab_3" label="Orientation 1"
+            status="chrome://komodo/skin/images/status_icon_conflict.png"
+            action="chrome://komodo/skin/images/status_icon_delete.png"
+            readonly="chrome://komodo/skin/images/status_icon_readonly.png"
+            clean="false"/>
+       <tab type="file-tab" id="ytab_4" label="Orientation 2"
+            status="chrome://komodo/skin/images/status_icon_ok.png"
+            action="chrome://komodo/skin/images/status_icon_add.png"
+            clean="true"/>
+       <tab type="file-tab" id="ytab_5" label="Orientation 3"
+            status="chrome://komodo/skin/images/status_icon_ok.png"
+            clean="false"/>
+       <tab type="file-tab" id="ytab_6" label="Orientation 4"
+            action="chrome://komodo/skin/images/status_icon_add.png"
+            clean="true"/>
+       <tab type="file-tab" id="ytab_7" label="Orientation 5"
+            readonly="chrome://komodo/skin/images/status_icon_readonly.png"
+            clean="true"/>
+       <tab type="file-tab" id="ytab_8" label="Orientation 6"
+            status="chrome://komodo/skin/images/status_icon_ok.png"
+            readonly="chrome://komodo/skin/images/status_icon_readonly.png"
+            clean="true"/>
+       <tab type="file-tab" id="ytab_9" label="Orientation 7"
+            clean="true"/>
+    </tabs>
+    <tabpanels flex="1" >
+       <tabpanel>
+        <textbox value="Default"
+             onblur="this.setAttribute('value',this.value);"/>
+        <button label="Default"
+             count="0"
+             onclick="
+                 this.setAttribute('count',parseInt(this.getAttribute('count'))+1);
+                 this.setAttribute('label','clicked '+this.getAttribute('count'));
+             "/>
+       </tabpanel>
+       <tabpanel>
+       <textbox value="Tab " />
+       </tabpanel>
+       <tabpanel>
+       <textbox value="Orientation 1" />
+       </tabpanel>
+       <tabpanel>
+       <textbox value="Orientation 2" />
+       </tabpanel>
+       <tabpanel>
+       <textbox value="Orientation 3" />
+       </tabpanel>
+       <tabpanel>
+       <textbox value="Orientation 4" />
+       </tabpanel>
+       <tabpanel>
+       <textbox value="Orientation 5" />
+       </tabpanel>
+       <tabpanel>
+       <textbox value="Orientation 6" />
+       </tabpanel>
+       <tabpanel>
+       <textbox value="Orientation 7" />
+       </tabpanel>
+    </tabpanels>
+  </tabbox>
+</groupbox>
+</groupbox>
+
+-->
+
+</vbox>
+
+</window>

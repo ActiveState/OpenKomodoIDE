@@ -1,0 +1,293 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        class="kodialog pref-window" orient="vertical"
+        onload="parent.initPanel();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+
+  <script type="application/x-javascript;version=1.7">
+  <![CDATA[
+
+    var g_originalNetworkFileCheckValue = true;
+
+    function updateDoNotAskWidgets() {
+        if (document.getElementById('checkDiskFile').getAttribute('checked') == 'true') {
+            document.getElementById('checkNetworkDiskFile')
+                    .removeAttribute('disabled');
+            document.getElementById('reload_changed_files')
+                    .removeAttribute('disabled');
+            document.getElementById('close_deleted_files')
+                    .removeAttribute('disabled');
+        } else {
+            document.getElementById('checkNetworkDiskFile')
+                    .setAttribute('disabled', 'true');
+            document.getElementById('reload_changed_files')
+                    .setAttribute('disabled', 'true');
+            document.getElementById('close_deleted_files')
+                    .setAttribute('disabled', 'true');
+        }
+    }
+
+    function OnPreferencePageLoading() {
+        updateDoNotAskWidgets();
+        g_originalNetworkFileCheckValue = document.getElementById("checkNetworkDiskFile").checked;
+
+        if (navigator.platform.startsWith("Mac")) {
+            // scrollWidth is disabled on OS X - see bug 88586.
+            document.getElementById("scrollWidthBox").collapsed = true;
+        }
+    }
+
+    function OnPreferencePageOK() {
+        if (g_originalNetworkFileCheckValue != document.getElementById("checkNetworkDiskFile").checked) {
+            var bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
+                    .getService(Components.interfaces.nsIStringBundleService)
+                    .createBundle("chrome://komodo/locale/pref/pref-editor.properties");
+            var dialogMsg = bundle.GetStringFromName("Changing 'Detect when network files are changed' requires a restart.");
+            var dialogTitle = bundle.GetStringFromName("Restart Required");
+            ko.dialogs.alert(dialogMsg, null, dialogTitle);
+        }
+        return true;
+    }
+  ]]>
+  </script>
+
+  <!-- nothing on this page has accesskeys because this is a temporary debug
+       panel and you can damn well click the widgets! -->
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="editor-prefs-vbox" flex="1" class="autoscroll">
+
+        <!-- this function is not in place
+        <text value="Default Language"/>
+        -->
+        <groupbox orient="vertical">
+            <caption label="&general.label;"/>
+            <grid debug="false">
+                <columns>
+                    <column flex="50" autostretch="never"/>
+                    <column flex="50" autostretch="never"/>
+                </columns>
+                <rows>
+                    <row>
+                        <checkbox id="showWhitespace" label="&showWhitespaceCharacters.label;"
+                                  pref="true" prefstring="showWhitespace"
+                                  prefattribute="checked"/>
+                        <checkbox id="showEOL" label="&showEndOfLineCharacters.label;"
+                                  pref="true" prefstring="showEOL"
+                                  prefattribute="checked"/>
+                    </row>
+                    <row>
+                        <checkbox id="showLineNumbers" label="&showLineNumbers.label;"
+                                  pref="true" prefstring="showLineNumbers"
+                                  prefattribute="checked"/>
+                    </row>
+                </rows>
+            </grid>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="&cursorOptions.label;"/>
+            <hbox align="center" flex="1">
+                <hbox align="center" flex="1">
+                    <label value="&cursorStyle.label;"/>
+                    <menulist pref="true"
+                              id="caretStyle"
+                              prefattribute="data">
+                        <menupopup>
+                            <menuitem data="1" label="&lineCursor.label;"
+                                      tooltiptext="&cursorWillBeAVerticalLine.tooltiptext;"/>
+                            <menuitem data="2" label="&blockCursor.label;"
+                                      tooltiptext="&cursorWillBeACharacterSizedBlock.tooltiptext;"/>
+                            <menuitem data="0" label="&invisible.label;"
+                                      tooltiptext="&cursorWillNotBeShown.tooltiptext;"/>
+                        </menupopup>
+                    </menulist>
+                </hbox>
+                <hbox align="center" flex="1">
+                    <label value="&widthLineCursor.label;"/>
+                    <menulist pref="true"
+                              id="caretWidth"
+                              prefattribute="data"
+                              tooltiptext="&settingOnlyAppliesWhenTheCursorStyleIsLine.tooltiptext;">
+                        <menupopup>
+                            <menuitem data="1" label="&label.1px;"/>
+                            <menuitem data="2" label="&label.2px;"/>
+                            <menuitem data="3" label="&label.3px;"/>
+                        </menupopup>
+                    </menulist>
+                </hbox>
+            </hbox>
+        </groupbox>
+
+        <groupbox id="dragdrop_groupbox" orient="vertical"
+                  class="load-context-check" showIfLoadContext="global">
+            <caption id="dragdrop_caption" label="&dragdrop.label;"/>
+            <hbox id="dragdrop_ask_hbox" align="center">
+                <!-- When dropping a URL on Komodo: -->
+                <label id="dragdrop_ask_label" value="&droppingURL.label;"/>
+                <menulist id="dragdrop_ask_menulist"
+                          pref="true"
+                          prefattribute="data"
+                          prefstrings="donotask_dragdrop_uri,donotask_action_dragdrop_uri">
+                    <menupopup id="dragdrop_ask_menupopup">
+                        <menuitem id="dragdrop_ask_menuitem1" data="false,"   label="&askMeWhatToDo.label;"/>
+                        <menuitem id="dragdrop_ask_menuitem2" data="true,&viewSource.label;" label="&viewSource.label;"/>
+                        <menuitem id="dragdrop_ask_menuitem3" data="true,&addAURIMapping.label;" label="&addAURIMapping.label;"/>
+                        <menuitem id="dragdrop_ask_menuitem2" data="true,&dropAsText.label;" label="&dropAsText.label;"/>
+                    </menupopup>
+                </menulist>
+            </hbox>
+        </groupbox>
+
+        <groupbox orient="vertical"
+                  class="load-context-check advanced" showIfLoadContext="global">
+            <caption label="&confirmationDialogs.label;"/>
+            <checkbox id="checkDiskFile"
+                      label="&detectWhenFilesAreChangedOutsideTheEnvironment.label;"
+                      pref="true"
+                      oncommand="updateDoNotAskWidgets()"/>
+            <vbox id="detect_changed_files_vbox"
+                  style="margin-left: 27px;"
+                  >
+                <checkbox id="checkNetworkDiskFile"
+                          label="&detectWhenNetworkFilesAreChangedOutsideTheEnvironment.label;"
+                          pref="true"/>
+                <hbox align="center">
+                    <label value="&fileChanged.label;"/>
+                    <menulist pref="true"
+                              id="reload_changed_files"
+                              prefattribute="data"
+                              prefstrings="donotask_reload_changed_files,donotask_action_reload_changed_files">
+                        <menupopup>
+                            <menuitem data="false,"   label="&askMeWhatFilesToReload.label;"/>
+                            <menuitem data="true,All" label="&reloadAllFiles.label;"/>
+                            <menuitem data="true,None"  label="&reloadNoFiles.label;"/>
+                        </menupopup>
+                    </menulist>
+                </hbox>
+                <hbox align="center">
+                    <label value="&fileDeleted.label;"/>
+                    <menulist pref="true"
+                              prefattribute="data"
+                              id="close_deleted_files"
+                              prefstrings="donotask_close_deleted_files,donotask_action_close_deleted_files">
+                        <menupopup>
+                            <menuitem data="false,"   label="&askMeWhatFilesToClose.label;"/>
+                            <menuitem data="true,All" label="&closeAllFiles.label;"/>
+                            <menuitem data="true,None"  label="&closeNoFiles.label;"/>
+                        </menupopup>
+                    </menulist>
+                </hbox>
+            </vbox>
+            <checkbox id="showFileConflictAlertDialog"
+                      label="&doNotAlertMeIfTheBufferIsUnsavedAndTheFileOnDiskChanged.label;"
+                      style="padding-top: 5px;"
+                      pref="true" prefstring="donotask_buffer_conflicts_with_file_on_disk"
+                      prefattribute="checked"/>
+            <checkbox id="showFileRevertAreYouSureDialog"
+                      label="&doNotAlertMeOnBufferRevert.label;"
+                      style="padding-top: 5px;"
+                      pref="true" prefstring="donotask_revert_buffer"
+                      prefattribute="checked"/>
+            <checkbox id="treat_large_documents_as_text"
+                      label="&doNotAlertMeOnLargeFileLoad.label;"
+                      style="padding-top: 5px;"
+                      pref="true" prefstring="donotask_treat_large_documents_as_text"
+                      prefattribute="checked"/>
+        </groupbox>
+
+       <groupbox orient="vertical">
+            <caption label="&scrolling.label;"/>
+            <hbox id="editShowMinimap_hbox" align="center">
+                <checkbox id="editShowMinimap"
+                          label="&useMinimapScrollbar.label;"
+                          pref="true"
+                          prefstring="editShowMinimap"
+                          prefattribute="checked" />
+            </hbox>
+            <hbox id="editEnableMouseZoom_hbox" align="center"
+                  class="load-context-check advanced" showIfLoadContext="global">
+                <checkbox id="editEnableMouseZoom"
+                          label="&enableMouseZoom.label;"
+                          tooltiptext="&enableMouseZoomHow.tooltiptext;"
+                          pref="true" />
+            </hbox>
+            <!-- This is only used in scintilla.p.xml, and it can't
+                 see it's containing koDoc object, so it can only
+                 use the global prefs -->
+            <vbox class="load-context-check advanced" showIfLoadContext="global">
+                <checkbox id="scrollEndAtLastLine" label="&enableScrollingPastEndOfBufferOnlyAppliesToNewBuffers.label;"
+                          pref="true" prefstring="scrollEndAtLastLine"
+                          prefattribute="checked"/>
+                <description></description>
+            </vbox>
+            <hbox align="center"
+                  class="load-context-check" showIfLoadContext="global">
+                <label value="&minimumNumberLineAboveBelowCursor.label;"/>
+                <textbox id="ySlop"
+                            size="3"
+                            pref="true"
+                            prefstring="ySlop"
+                            prefattribute="value"/>
+            </hbox>
+            <hbox align="center"
+                  class="load-context-check" showIfLoadContext="global">
+                <label value="&minimumNumberColumnAfterCursor.label;"/>
+                <textbox id="xSlop"
+                            size="3"
+                            pref="true"
+                            prefstring="xSlop"
+                            prefattribute="value"/>
+            </hbox>
+            <hbox id="scrollWidthBox"
+                  align="center"
+                  class="load-context-check" showIfLoadContext="global">
+                <label value="&horizScrollWidth.label;"/>
+                <textbox id="scrollWidth"
+                            size="6"
+                            pref="true"
+                            prefstring="scrollWidth"
+                            prefattribute="value"/>
+            </hbox>
+            <hbox id="scrollWidthTracking_hbox" align="center"
+                  class="load-context-check advanced" showIfLoadContext="global">
+                <checkbox id="scrollWidthTracking"
+                          label="&horizScrollWidthTracking.label;"
+                          pref="true"
+                          prefstring="scrollWidthTracking"
+                          prefattribute="checked"
+                          tooltiptext="&horizScrollWidthTracking.tooltiptext;"/>
+            </hbox>
+        </groupbox>
+
+        <groupbox orient="vertical" class="advanced">
+            <caption label="&tabs.label;"/>
+            <vbox>
+                <checkbox id="select_most_recent_buffer_on_buffer_close"
+                          label="&returnToMostRecentBufferOnClose.label;"
+                          pref="true"
+                          prefstring="select_most_recent_buffer_on_buffer_close"
+                          prefattribute="checked"/>
+            </vbox>
+        </groupbox>
+
+    </vbox>
+
+</window>

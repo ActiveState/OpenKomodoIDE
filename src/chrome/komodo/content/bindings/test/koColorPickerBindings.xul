@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/colorpicker.css" type="text/css"?>
+
+<window title="XUL Periodic Table"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<script src="chrome://komodo/content/library/timers.js"/>
+<html:h1>Color Picker</html:h1>
+
+<vbox flex="1" style="overflow: auto">
+
+<groupbox>
+<description>
+  Color Picker
+</description>
+<groupbox>
+    <colorpicker/>
+    <hbox>
+    <colorpicker type="button"/>
+    </hbox>
+    <hbox>
+    <colorpicker type="button-flat" width="20" height="20"/>
+    </hbox>
+    <hbox>
+    <colorpicker type="dbl-button"/>
+    </hbox>
+</groupbox>
+</groupbox>
+</vbox>
+</window>

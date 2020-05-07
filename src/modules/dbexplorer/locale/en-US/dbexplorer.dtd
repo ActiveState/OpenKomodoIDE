@@ -1,0 +1,33 @@
+<!ENTITY databases.label "Databases">
+
+<!ENTITY addDatabaseConnection.caption "Add a Database Connection">
+<!ENTITY addDatabase.tooltiptext "Add a Database Connection">
+
+<!ENTITY databaseType.label "Database Type">
+<!ENTITY databaseFile.label "Database File">
+<!ENTITY ifNoPortIsGivenTheDefaultDBPortIsUsed.tooltiptext "If no port is given, the default DB connection port will be used.">
+<!ENTITY DBExplorer.label "Database Explorer">
+<!ENTITY DBExplorerShort.label "Databases">
+<!ENTITY DBExplorerShort.label.short "DB">
+<!ENTITY refreshTable.button "Refresh">
+<!ENTITY refreshTable.tooltiptext "Refresh contents of the database.">
+<!ENTITY hasPassword.button "Has Password">
+<!ENTITY showPassword.button "Show Password">
+
+<!ENTITY addRow.button "Add New Row...">
+<!ENTITY addRow.tooltiptext "Define a new row of values.">
+
+<!ENTITY allowRowDeletion.checkbox "Allow Row Deletions">
+<!ENTITY allowRowDeletion.tooltiptext "Since row deletions can happen with a slip of the mouse on a right-click, leaving this box unchecked is a good safety precaution.">
+<!ENTITY confirmRowDeletions.checkbox "Confirm Row Deletions">
+
+<!ENTITY options.label "Misc. Options">
+
+<!ENTITY fullTables.label "Full Table">
+<!ENTITY table.label "Table:">
+<!ENTITY query.label "Query">
+<!ENTITY schema.label "Schema">
+<!ENTITY run.label "Run">
+
+<!ENTITY socketNoStar.label "Socket">
+<!ENTITY socketReason.tooltip "Optional field for specifying an alternative socket.">

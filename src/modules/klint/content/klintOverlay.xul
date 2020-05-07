@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://klint/locale/klint.dtd" >
+
+<overlay id="klintOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <menupopup id="context_lint">
+        <menuitem id="show_klint_tab"
+                  class="statusbar-label"
+            oncommand="ko.uilayout.ensureTabShown('klint_tabpanel', true)"
+            label="&klint.open.tab.title;"
+            />
+    </menupopup>
+
+    <ko-pane id="workspace_bottom_area">
+        <browser insertafter="notifications-widget"
+                 type="ko-widget" id="klint_tabpanel"
+                 label="&klint.tab.title;"
+                 short-label="&klint.tab.title.short;"
+                 src="chrome://klint/content/klintPane.xul"
+                 icon="koicon://ko-svg/chrome/icomoon/skin/warning2.svg"/>
+    </ko-pane>
+
+</overlay>
+

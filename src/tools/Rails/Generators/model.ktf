@@ -1,0 +1,18 @@
+// komodo tool: model
+// ==================
+// async: 0
+// icon: chrome://famfamfamsilk/skin/icons/database_add.png
+// language: JavaScript
+// rank: 100
+// trigger: trigger_postopen
+// trigger_enabled: 0
+// type: macro
+// version: 1.0.12
+// ==================
+try {
+    ko.extensions.rails.generateRailsObject(window,
+                                        {'.rb':null}, // extensions
+                                        'model');
+} catch(ex) {
+    alert(ex + "\n");
+}

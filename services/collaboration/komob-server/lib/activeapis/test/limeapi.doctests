@@ -1,0 +1,40 @@
+
+# Use alternate API URL if in the environment.
+>>> import os
+>>> api_url = os.environ.get("LIME_API_URL")
+
+>>> from activeapis2.limeapi import LimeAPI
+>>> api = LimeAPI(api_url=api_url)
+>>> license_ids = api.license_ids_from_sso_id(23) # Trent's license ids
+>>> licenses = api.licenses(license_ids)
+
+>>> lic = licenses[0]
+>>> isinstance(lic.id, int)
+True
+>>> isinstance(lic.serial_num, unicode) and lic.serial_num.startswith("S")
+True
+>>> isinstance(lic.product_str, unicode)
+True
+>>> isinstance(lic.is_expired, bool)
+True
+
+>>> all_license_ids = api.all_license_ids_from_sso_id(23) # ...including deleted lics
+>>> len(all_license_ids) >= len(license_ids)
+True
+
+# `license.orders` get the associated orders info via the Store API
+# This will fail unless the LimeAPI instance was given a `StoreAPI`.
+>>> order = lic.orders[0]
+Traceback (most recent call last):
+  ...
+NoStoreAPIError
+
+# Try again with a properly configured LimeAPI.
+>>> store_api_url = os.environ.get("STORE_API_URL")
+>>> from activeapis2.storeapi import StoreAPI
+>>> api = LimeAPI(api_url=api_url, storeapi=StoreAPI(api_url=store_api_url))
+>>> lic = api.licenses([license_ids][0])[0]
+>>> order = lic.orders[0]
+>>> isinstance(order.order_id, int)
+True
+

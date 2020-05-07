@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/tree.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+                    id="languagesPrefWindow"
+		    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+		    class="kodialog pref-window" orient="vertical"
+                    onload="PrefLanguages_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/pref-languages.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="languages-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox id="pref-languages-intro-groupbox">
+            <caption label="&languageConfigurations.label;"/>
+            <description style="margin-top: 10px;">
+            &languagesSettings.description;
+            </description>
+    
+            <separator class="thin"/>
+        </groupbox>
+        <separator class="thin"/>
+        
+        <groupbox id="pref-languages-primary-selector-groupbox"
+				  flex="1">
+            <caption label="&primaryLanguages.label;"/>
+            <description>&primaryLanguages.description;</description>
+            <hbox align="center">
+                <spacer id="languageStatus-filter-textbox-spacer" flex="1" />
+                <label control="languageStatus-filter-textbox"
+                       value="&languageNames.label;"
+                       accesskey="&languageNames.accesskey;"/>
+                <textbox id="languageStatus-filter-textbox"
+                         timeout="300"
+                         type="search"
+                         oncommand="updateLanguageNames(this.value);"/>
+            </hbox>
+            <separator class="thin"/>
+            <tree id="languageStatus" flex="1"
+                  seltype="multiple" 
+                  hidecolumnpicker="true"
+                  editable="true"
+                  rows="8"
+                  onclick="return PrefLanguages_OnClick(event);"
+                  onkeypress="return PrefLanguages_OnKeyPress(event);">
+                <treecols>
+                    <treecol id="languageStatus-status"
+                             type="checkbox"
+                             fixed="true"
+                             editable="true"
+                             class="treecol-image"
+                             ignoreincolumnpicker="true"
+                             tooltiptext="&primaryLanguage.tooltip;"
+                             src="chrome://komodo/skin/images/cbox-check.gif" />
+                    <splitter class="tree-splitter"/>
+                    <treecol id="languageStatus-name"
+                             persist="width"
+                             label="&name.label;"
+                             flex="1"
+                             />
+                </treecols>
+                <treechildren id="languageStatus-body" flex="1"
+                              alternatingbackground="false"
+                              ondblclick="PrefLanguages_OnDblClick(event);"/>
+            </tree>
+       </groupbox>
+        
+        <hbox align="center" pack="center">
+            <button class="packages-icon with-icon"
+                    label="Get More Languages"
+                    oncommand="require('scope-packages/packages').openCategory('languages')"/>
+        </hbox>
+
+    </vbox>
+
+</window>
+

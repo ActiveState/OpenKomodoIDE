@@ -1,0 +1,15 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    "cons",
+    "mozChromeDir",
+    "supportDir",
+);
+
+$cons->InstallWriteable("$supportDir/samples/ruby_tutorials", "ruby_tutorial.komodoproject");
+$cons->InstallWriteable("$supportDir/samples/ruby_tutorials", "animals.yaml");
+$cons->InstallWriteable("$supportDir/samples/ruby_tutorials", "menagerie.rb");
+

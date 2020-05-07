@@ -1,0 +1,144 @@
+# blend_bb.test --
+#
+#	This file contains Black Box tests that run tclchecker on 
+#	Blend code that will produce all possible error and warning
+#	messages that are specific to Blend.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+#
+# RCS: @(#) $Id: blend_bb.test,v 1.8 2000/06/06 22:59:09 hershey Exp $
+
+if {[string compare test [info procs test]] == 1} {
+    lappend auto_path [file join [file dirname [info script]] ..]
+    package require protest
+    namespace import ::protest::*
+}
+
+set tclchecker [findExeFile tclchecker 1]
+
+set echo echo
+
+set pcxDir $::protest::sourceDirectory
+
+# Test for -verbose package name.
+
+test blend-1.1 {Test for -verbose package name} {
+    set script {superclass $a}
+    set result [catch {exec echo $script | $tclchecker -pcx $pcxDir -n -v} msg]
+    set i [lsearch -exact $msg blend]
+    if {$i != -1} {
+	set msg [lindex $msg [expr {$i + 1}]]
+    }
+    list $result $msg
+} [list 0 $::protest::supportedVersions(Blend)]
+
+# Test to see if bodies of control structures are scanned for
+# usere--defined procs.
+
+test blend-2.1 {test scanCmds (bug 2585)} {knownBug} {
+    set script {bind a b "proc foo {} {}" ; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+test blend-2.2 {test scanCmds} {} {
+    set script {java::bind a b {proc foo {} {}} ; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+test blend-2.3 {test scanCmds} {
+    set script {try {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+test blend-2.4 {test scanCmds} {
+    set script {try {set x} catch $a {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+test blend-2.5 {test scanCmds} {
+    set script {try {set x} catch $a {set x} catch $b {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+test blend-2.6 {test scanCmds} {
+    set script {try {set x} finally {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+test blend-2.7 {test scanCmds} {
+    set script {java::try {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+test blend-2.8 {test scanCmds} {
+    set script {java::try {set x} catch $a {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+test blend-2.9 {test scanCmds} {
+    set script {java::try {set x} catch $a {set x} catch $b {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+test blend-2.10 {test scanCmds} {
+    set script {java::try {set x} finally {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+# Run code that trigers blend-specific message IDs.
+# Currently, there are no blend-specific message IDs.
+
+# cleanup
+cleanupTests
+

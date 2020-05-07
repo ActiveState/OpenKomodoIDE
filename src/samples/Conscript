@@ -1,0 +1,35 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    "cons",
+    "mozChromeDir",
+    "supportDir",
+    "platform",
+    "unsiloedPythonExe",
+    "productType",
+    "buildFlavour",
+    "mozVersion",
+    "withDebugging",
+    "withCodeBrowser",
+);
+
+my @samples = (
+    ["sample_project.p.komodoproject", "sample_project.komodoproject"],
+    ["perl_sample.p.pl", "perl_sample.pl"],
+    ["python_sample.p.py", "python_sample.py"],
+    ["python3_sample.p.py", "python3_sample.py"],
+    ["ruby_sample.p.rb", "ruby_sample.rb"],
+    ["php_sample.p.php", "php_sample.php"],
+    ["tcl_sample.p.tcl", "tcl_sample.tcl"],
+    ["xslt_sample.p.xsl", "xslt_sample.xsl"],
+    ["birds.p.xml", "birds.xml"],
+    ["html_sample.p.html", "html_sample.html"],
+);
+for $i (0 .. $#samples) {
+    $cons->Preprocess($samples[$i][0], $samples[$i][1], undef, 1);
+    $cons->InstallWriteable("$supportDir/samples", $samples[$i][1]);
+}
+

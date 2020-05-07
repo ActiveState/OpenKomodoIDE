@@ -1,0 +1,163 @@
+:root:not(.modal-ui) wizard
+{
+    overflow: -moz-hidden-unscrollable !important;
+    
+    wizardpage > hbox,
+    wizardpage groupbox > hbox,
+    {
+        -moz-box-align: center;
+    }
+    
+    wizardpage .ui-radiogroup-wrapper
+    {
+        -moz-box-align: center;
+        -moz-box-pack: center;
+    }
+    
+    wizardpage .ui-label:not(.fullwidth)
+    {
+        width: 150px;
+        text-align: right;
+    }
+    
+    wizardpage .ui-checkbox:not(.fullwidth)
+    {
+        margin-left: 150px;
+    }
+    
+    view
+    {
+        height: 200px;
+    }
+    
+    span
+    {
+        padding: 0.2rem 4px;
+    }
+    
+}
+
+wizard:root
+{
+    padding: 6px !important;
+}
+
+.wizard-buttons
+{
+    button
+    {
+        margin-left: 4px !important;
+    }
+}
+
+.wizard-buttons,
+.wizard-buttons button
+{
+    -moz-appearance: none;
+}
+
+#startup-wizard
+{
+    max-width: 600px;
+
+    #sample scintilla
+    {
+        border: 2px solid @contrast;
+    }
+
+    #dependencyPage
+    {
+        description
+        {
+            width: 590px;
+        }
+
+        .ui-progress-parent
+        {
+            width: 590px;
+        }
+
+        label
+        {
+            width: inherit;
+            text-align: left;
+        }
+
+        checkbox
+        {
+            margin-left: 0;
+        }
+    
+        button
+        {
+            min-width: 0;
+            padding: 4px;
+        }
+
+        #dependencies
+        {
+            height: 350px;
+            width: 590px;
+            overflow: auto;
+
+            description
+            {
+                width: inherit;
+            }
+
+            & > hbox vbox
+            {
+                -moz-box-pack: center;
+            }
+        }
+
+        .dependency-col1
+        {
+            width: 18px;
+        }
+
+        .dependency-col2
+        {
+            -moz-box-flex: 1;
+        }
+
+        .dependency-col3
+        {
+            width: 250px;
+        }
+
+        .dependency-menu
+        {
+            width: 250px;
+            max-width: 250px;
+        }
+    }
+
+    &[os-name="Darwin"] #dependencies
+    {
+        padding-right: 18px;
+    }
+
+}
+
+
+
+wizard#updates
+{
+    
+    #licenseContent,
+    #historyItems,
+    {
+        -moz-appearance: none !important;
+    }
+    
+    .update-type
+    {
+        color: @foreground !important;
+    }
+    
+}
+
+wizard .ui-progress-parent .ui-label {
+    text-align: left !important;
+}

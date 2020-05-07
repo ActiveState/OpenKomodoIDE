@@ -1,0 +1,327 @@
+@import url("chrome://komodo/skin/global/colors.less");
+@import url("resource://profile/colors.less");
+
+*, *:before, *:after
+{
+    box-sizing: border-box;
+}
+
+html, body
+{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font: message-box;
+    font-size: 0.9rem;
+    text-rendering: optimizeLegibility;
+    line-height: 1.5;
+}
+
+body {
+    overflow: hidden;
+    border: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+ul, li
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+a, a:visited {
+    color: @secondary-special;
+    background-color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#console
+{
+    flex-grow: 1;
+    overflow: auto;
+}
+
+#output > li
+{
+    display: flex;
+    flex-direction: row;
+    font-family: monospace;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    
+    label
+    {
+        input[type="checkbox"]
+        {
+            position: absolute;
+            visibility: collapse;
+            clear: none;
+            float: left;
+            width: 0;
+            
+            & + *
+            {
+                cursor: pointer;
+                
+                &:after
+                {
+                    content: " -";
+                    font-weight: bold;
+                }
+                
+                &:hover
+                {
+                    text-decoration: underline;
+                }
+            }
+            
+            &:not(:checked)
+            {
+                & + * ~ *
+                {
+                    display: none !important;
+                }
+                
+                & + *
+                {
+                    &:after
+                    {
+                        content: " +";
+                    }
+                }
+            }
+            
+            &:checked
+            {
+                & + * ~ *
+                {
+                    display: block !important;
+                }
+            }
+        }
+    }
+    
+    &:before
+    {
+        display: inline-block;
+        width: 2rem;
+        text-align: center;
+        font-size: 0.9rem;
+        line-height: 1.5rem;
+        font-weight: bold;
+        margin: 0 4px;
+        flex-shrink: 0;
+    }
+    
+    &.input:before { content: '>'; color: @state-ok; }
+    &.output:before { content: '<'; color: @state-info; }
+    &.log:before { content: 'log'; color: @state-info; }
+    &.debug:before { content: 'dbg'; color: @state-info; }
+    &.info:before { content: 'nfo'; color: @state-info; }
+    &.warning:before { content: 'wrn'; color: @state-warning; }
+    &.warn:before { content: 'wrn'; color: @state-warning; }
+    &.error:before { content: 'err'; color: @state-error; }
+    &.exception:before { content: 'exc'; color: @state-error; }
+    
+    &.exception .message
+    {
+        font-style: italic;
+    }
+    
+    & > div
+    {
+        display: inline-block;
+        padding: 0 4px;
+        line-height: 1.5rem;
+    }
+    
+    .object-key
+    {
+        vertical-align: top;
+    }
+    
+    .expanded
+    {
+        margin: 6px;
+        font-style: italic;
+    }
+    
+    .type-indicator
+    {
+        vertical-align: top;
+        font-weight: bold;
+    }
+    
+    .message
+    {
+        flex-grow: 1;
+        
+        li.complex-format
+        {
+            ul
+            {
+                font-size: 0.8rem;
+                line-height: 1rem;
+                margin-left: 1rem;
+            }
+            
+            li.prototype
+            {
+                padding-left: 6px;
+                opacity: 0.6;
+                font-style: italic;
+            }
+            
+            & > *, label > *
+            {
+                display: inline-block;
+            }
+            
+            & > ul
+            {
+                display: block;
+            }
+        }
+    }
+    
+    &:not(.input) 
+    {
+        .message { color: @foreground; } /* default */
+        
+        .type-string { color: average(@foreground, #00FF00); }
+        .type-number { color: average(@foreground, #FFFF00); }
+        .type-object { color: average(@foreground, #00FFFF); }
+        .type-array { color: average(@foreground, #7D00FF); }
+        .type-undefined { color: average(@foreground, #969696); }
+        .type-boolean { color: average(@foreground, #FF00FF); }
+        .type-element { color: average(@foreground, #00FFAF); }
+        .type-function { color: average(@foreground, #0000FF); }
+        .type-exception { color: average(@foreground, #FF0000); }
+    }
+    
+    .timestamp
+    {
+        opacity: 0.6;
+        flex-shrink: 0;
+    }
+    
+}
+
+.widgetToolbarWrap
+{
+    display: flex;
+    align-items: center;
+    min-height: 1.5rem;
+    flex-shrink: 0;
+    
+    #input-wrapper
+    {
+        width: 100vw;
+        padding-left: 1rem;
+        margin: 4px;
+        
+        & > *
+        {
+            display: inline-block;
+        }
+        
+        &:before
+        {
+            float: left;
+            vertical-align: top;
+            content: '> ';
+            color: @state-ok;
+            font-size: 0.9rem;
+            line-height: 1.5rem;
+            font-weight: bold;
+            margin-left: -0.8rem;
+        }
+    }
+    
+    #input-mock
+    {
+        padding: 0 !important;
+    }
+    
+    #input, #input-mock
+    {
+        line-height: 1.5rem;
+        font-size: 0.9rem;
+        white-space: pre;
+        font-family: monospace;
+        
+        * { /* yay xbl bindings */
+            white-space: pre;
+        }
+    }
+    
+    #input
+    {
+        width: ~"calc(100vw - 25px)";
+        max-height: 6rem;
+        overflow: auto;
+        height: 1.5rem;
+        background: transparent;
+        border: 0;
+        margin: 0;
+        border: 0;
+        color: inherit;
+        resize: none;
+        vertical-align: middle;
+        
+        &:focus
+        {
+            outline: 0;
+        }
+    }
+    
+    #input-mock
+    {
+        visibility: hidden;
+        position: absolute;
+    }
+}
+
+.autocomplete-suggestions
+{
+    position: absolute;
+    display: none;
+    z-index: 9999;
+    max-height: 80vh;
+    overflow: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+.autocomplete-suggestion
+{
+    position: relative;
+    padding: 0 .6rem;
+    line-height: 23px;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 0.9rem;
+    width: auto;
+}
+.autocomplete-suggestion.selected
+{
+    background: @selected;
+    color: @selected-foreground;
+}
+.autocomplete-suggestion:not(.selected) b
+{
+    font-weight: normal;
+    color: @secondary-special;
+}
+
+.autocomplete-suggestion.selected b
+{
+    font-weight: normal;
+    color: average(@selected-foreground, @secondary-special);
+}

@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+    %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+    %prefDTD.INTERNAL;
+  <!ENTITY % gitDTD SYSTEM "chrome://git/locale/git-prefs.dtd">
+    %gitDTD;
+]>
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="PrefSCCGit_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/trace.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://git/content/pref-scc-git.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="scc-git-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox id="git_groupbox"
+                  orient="vertical">
+            <caption id="git_groupbox_caption">
+                <checkbox id="gitEnabled"
+                          label="&GitIntegration.label;"
+                          pref="true"
+                          preftype="boolean"
+                          prefdefault="true"
+                          oncommand="PrefSCCGit_UpdateEnabledUI();" />
+            </caption>
+            <vbox id="git_executable_vbox">
+                <label id="git_executable_label"
+                       value="&gitExecutableUsed.label;" />
+                <hbox id="git_executable_hbox">
+                    <menulist id="gitExecutable"
+                              flex="1"
+                              pref="true"
+                              preftype="string"
+                              prefdefault=""
+                              tooltiptext="&clickOnItemToSelectItAsTheDefault.tooltiptext;"
+                              oncommand="PrefSCCGit_CheckAgain();">
+                        <menupopup id="avail-exec-list" />
+                    </menulist>
+                    <button id='git_browse_executable_button'
+                            label="&browse.label;"
+                            oncommand="PrefSCCGit_getExecutable();" />
+                </hbox>
+            </vbox>
+            <separator id="git_deck_separator" class="thin"/>
+            <deck id="gitDeck"
+                  flex="1"
+                  selectedIndex='0'>
+                <vbox id="git_functional_vbox">
+                    <checkbox id="gitBackgroundCheck"
+                              label="&checkForStatusChangesFromOutsideOfKomodo.label;"
+                              pref="true"
+                              preftype="boolean"
+                              prefdefault="true"
+                              oncommand="PrefSCCGit_UpdateBackgroundEnabledUI();" />
+                    <vbox id="git_check_time_vbox"
+                          style="padding-left: 20px;">
+                        <hbox id="git_check_time_hbox"
+                              align="center">
+                            <label id="git_check_time_label"
+                                   value="Check every " />
+                            <textbox id="gitBackgroundMinutes"
+                                     size="3"
+                                     pref="true"
+                                     preftype="long"
+                                     prefdefault="15"
+                                     />
+                            <label id="git_minutes_label"
+                                   value=" minutes" />
+                        </hbox>
+                    </vbox>
+                    <hbox id="git_diff_options_hbox"
+                          align="center">
+                        <label id="git_diff_options_label"
+                               value="Diff options"/>
+                        <textbox id="gitDiffOptions"
+                                 size="25"
+                                 pref="true"
+                                 preftype="string"
+                                 prefdefault=""
+                                 />
+                    </hbox>
+                    <checkbox id="git_externaldiff_checkbox"
+                              label="&usesExternalDiff.checkbox.label;"
+                              tooltiptext="&usesExternalDiff.checkbox.tooltiptext;"
+                              pref="true"
+                              prefstring="git_uses_externaldiff"
+                              preftype="boolean"
+                              prefdefault="false"
+                              />
+                </vbox>
+                <vbox id="git_not_functional_vbox"
+                      flex="1">
+                    <description id="gitNotFunctional"
+                                 style="font-weight: bold;" />
+                    <vbox id="git_download_button_vbox"
+                          align="center">
+                        <button id="git_download_button"
+                                label="&downloadGit.label;"
+                                class="button-link-a"
+                                style="cursor:pointer;"
+                                oncommand="parent.opener.ko.browse.openUrlInDefaultBrowser('http://git-scm.com/')" />
+                    </vbox>
+                    <separator id="git_not_functional_separator"
+                               class="thin" />
+                    <vbox id="git_checkagain_vbox"
+                          align="right">
+                        <button id="git_checkagain_button"
+                                label="&checkAgain.label;"
+                                oncommand="PrefSCCGit_CheckAgain();" />
+                    </vbox>
+                </vbox>
+            </deck>
+            <separator id="git_final_separator" class="thin" />
+        </groupbox>
+
+    </vbox>
+
+</window>
+
+
+
+

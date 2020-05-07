@@ -1,0 +1,329 @@
+#container header,
+body.framed header
+{
+    position: relative;
+    width: 100%;
+    min-height: 75px;
+    background: $color-header-background;
+    color: $color-header-base;
+
+    h1, h2, h3
+    {
+        color: $color-header-textheading;
+    }
+
+    a
+    {
+        @include link($color-header-link, $color-header-link-hover);
+    }
+    
+    .outer
+    {
+        background: url(../images/layout/background-texture.png) repeat;
+        background-color: #BCBEC0;
+        min-height: 75px;
+
+        .inner
+        {
+            position: relative;
+            
+            @include outer-container;
+            
+            .promotion
+            {
+                position: absolute;
+                right: 5px;
+                top: 48px;
+                font-size: 11px;
+                padding: 2px;
+                z-index: 10;
+                @include transform(rotate(-5deg));
+            }
+        }
+    }
+
+    /* Logo */
+    figure#header-logo
+    {
+        display: inline-block;
+        width: 156px;
+        height: 50px;
+        margin-top: -7px;
+        margin-bottom: 7px;
+        margin-left: 5px;
+        background: url(../images/layout/komodo-logo.png) no-repeat;
+        background-size: 100%;
+    }
+    
+    figure#as-logo
+    {
+        display: inline-block;
+        width: 134px;
+        height: 25px;
+        background: url(../images/layout/activestate.png) no-repeat;
+        background-size: 100%;
+        float: left;
+        margin-top: 5px;
+        margin-right: 15px;
+        margin-left: 5px;
+    }
+
+    .button.collapser
+    {
+        display: none;
+    }
+    
+    .nav-wrap-global
+    {
+        text-align: left;
+        background: #FFF;
+        
+        nav > ul
+        {
+            list-style: none;
+            margin: 0;
+            padding: 10px 0;
+            
+            &.right
+            {
+                float: right;
+                
+                li
+                {
+                    margin-left: 15px;
+                }
+            }
+            
+            &.left
+            {
+                @include media(max-width 870px)
+                {
+                    display: none;
+                }
+                
+                li
+                {
+                    margin-right: 15px;
+                }
+            }
+            
+            & > li
+            {
+                display: inline-block;
+                position: relative;
+                
+                img
+                {
+                    width: 16px;
+                    height: 16px;
+                    margin-bottom: -3px;
+                }
+                
+                .icon-external-link
+                {
+                    font-size: 10px;
+                    color: $color-base-link;
+                }
+                
+                a
+                {
+                    color: $color-header-nav-link;
+                }
+            }
+        }
+    }
+    
+    .nav-wrap
+    {
+        padding-top: 20px;
+        
+        nav
+        {
+            position: relative;
+            float: right;
+        }
+    }
+    
+    .nav-wrap nav > ul,
+    .nav-wrap > ul
+    {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        & > li
+        {
+            display: inline-block;
+            position: relative;
+            text-transform: uppercase;
+
+            .badge
+            {
+                position: absolute;
+                top: -10px;
+                right: 15px;
+            }
+
+            .icon
+            {
+                position: relative;
+            }
+
+            ul
+            {
+                display: none;
+                position: absolute;
+                z-index: 15;
+                left: 0;
+                padding: 0;
+                margin: 0;
+                width: 150px;
+
+                li a
+                {
+                    display: block;
+                    padding: 5px;
+                    background: rgba(darken($color-header-background, 5%), 0.9);
+                    @include transition(color 0.2s ease-in-out, background 0.2s ease-in-out);
+                    color: $color-header-menu-link !important;
+
+                    &:hover
+                    {
+                        background: rgba(darken($color-header-background, 10%), 0.9);
+                    }
+                }
+            }
+
+            &.has-sub:hover
+            {
+                background: rgba(darken($color-header-background, 5%), 0.9);
+                
+                a
+                {
+                    color: $color-header-menu-link;
+                }
+
+                ul
+                {
+                    display: block;
+                }
+            }
+        }
+        
+        li a
+        {
+            font-family: $font-header-nav;
+            font-weight: 600;
+            font-size: 12pt;
+            color: $color-header-nav-link;
+            @include link($color-header-nav-link, $color-header-nav-link-hover);
+        }
+
+        & > li > a
+        {
+            display: block;
+            line-height: 35px;
+            vertical-align: middle;
+            padding: 0 15px;
+            border: 0;
+        }
+    }
+    
+    @include media(max-width 1280px)
+    {
+        .nav-wrap
+        {
+            position: relative;
+            margin-right: 25px;
+        }
+    }
+
+    @include media($nav-reduce)
+    {
+        nav > ul > li > a
+        {
+            font-size: 12pt;
+        }
+    }
+
+    @include media($nav-reduce-further)
+    {
+        nav > ul > li > a
+        {
+            font-size: 11.5pt;
+        }
+    }
+
+    @include media($nav-collapse)
+    {
+        .promotion
+        {
+            display: none;
+        }
+        
+        .nav-wrap nav > ul li a
+        {
+            @include link($color-header-menu-link !important, $color-header-menu-link-hover !important);
+        }
+        
+        .nav-wrap
+        {
+            display: relative;
+
+            .collapser
+            {
+                position: relative;
+                z-index: 110;
+                display: block;
+                font-size: 30px !important;
+                margin-top: -7px;
+                float: right;
+            }
+
+            nav:not(.expanded)
+            {
+                display: none;
+            }
+
+            nav
+            {
+                border-radius: 2px;
+                position: absolute;
+                z-index: 999;
+                background: rgba(39, 45, 44, 0.9);
+                text-align: right;
+                margin-top: -10px;
+                right: 0;
+
+                & > ul > li
+                {
+                    display: block;
+                    width: 220px;
+
+                    .badge
+                    {
+                        display: none;
+                    }
+
+                    &.has-sub ul
+                    {
+                        left: -150px;
+                        top: -15px;
+                    }
+
+                    & > a
+                    {
+                        @include transition(color 0.2s ease-in-out, background 0.2s ease-in-out);
+                        font-size: 13pt;
+
+                        &:hover
+                        {
+                            background: rgba(255,255,255,0.1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

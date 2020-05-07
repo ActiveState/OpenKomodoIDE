@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="14"
+   height="14"
+   viewBox="0 0 14 14"
+   id="svg2"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="CVAR.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1321"
+     inkscape:window-height="934"
+     id="namedview12"
+     showgrid="true"
+     inkscape:zoom="29.5"
+     inkscape:cx="1.2972613"
+     inkscape:cy="7.5053244"
+     inkscape:window-x="2155"
+     inkscape:window-y="114"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4140" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata13">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs11">
+    <linearGradient
+       id="linearGradient5254">
+      <stop
+         id="stop5256"
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0" />
+    </linearGradient>
+  </defs>
+  <g
+     id="icomoon-ignore"
+     transform="translate(-1.0169492,-1.0169492)">
+    <line
+       id="line5"
+       y2="0"
+       x2="0"
+       y1="0"
+       x1="0"
+       style="stroke:#449fdb;stroke-width:1" />
+  </g>
+  <path
+     d="m 10.983045,0.98305099 -7.999744,0 c -1.10025,0 -2.00025001,0.90000001 -2.00025001,2.00025001 l 0,7.999494 c 0,1.101 0.90000001,2.00025 2.00025001,2.00025 l 7.999494,0 c 1.10025,0 2.00025,-0.89925 2.00025,-2.00025 l 0,-7.999494 c 2.5e-4,-1.10025 -0.89975,-2.00025001 -2,-2.00025001 z"
+     id="path7"
+     style="fill:#009960;fill-opacity:1"
+     inkscape:connector-curvature="0" />
+  <g
+     transform="matrix(1.1363636,0,0,1.0775863,-2.0909088,-1.6206908)"
+     id="text4464"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:125%;font-family:Monospace;-inkscape-font-specification:Monospace;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none">
+    <path
+       d="m 10.64,5.2160004 c -0.144005,0.520005 -0.308005,1.0320045 -0.492,1.536 -0.184005,0.4960035 -0.3720048,0.984003 -0.564,1.464 C 9.3919956,8.6880025 9.1959958,9.140002 8.996,9.5720004 8.7959962,10.004001 8.6039964,10.408001 8.42,10.784 H 7.52 C 7.1439979,10.032001 6.7639982,9.176002 6.38,8.2160004 c -0.384001,-0.9599965 -0.7240007,-1.9599955 -1.02,-3 h 1.08 c 0.095998,0.3520052 0.2039984,0.7240048 0.324,1.116 0.1279981,0.3920041 0.259998,0.7840037 0.396,1.176 0.1359977,0.3920029 0.2719976,0.7720025 0.408,1.14 0.1439973,0.3600018 0.2839971,0.6840014 0.42,0.972 0.1359969,-0.2879986 0.2759967,-0.6119982 0.42,-0.972 0.1519964,-0.3679975 0.2999963,-0.7479971 0.444,-1.14 0.143996,-0.3919963 0.2799959,-0.7839959 0.408,-1.176 0.1359956,-0.3919952 0.2519955,-0.7639948 0.348,-1.116 h 1.032"
+       id="path4469"
+       style="font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';fill:#ffffff"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

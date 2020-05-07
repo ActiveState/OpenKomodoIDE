@@ -1,0 +1,10 @@
+<!ENTITY checkout.date.label "Specific date:">
+<!ENTITY checkout.date.tooltip "Used to checkout the repository from a specific date. Defaults to the most recent version.">
+<!ENTITY checkout.module.label "Module (*):">
+<!ENTITY checkout.module.tooltip "The name of the module you wish to checkout from the repository">
+<!ENTITY checkout.revision.label "Branch or Tag:">
+<!ENTITY checkout.revision.tooltip "Used to checkout a specific revision or tag. Defaults to the HEAD branch.">
+<!ENTITY checkout.type.export.radio.label "Export - for making a software release">
+<!ENTITY checkout.type.groupbox.caption "Checkout Type">
+<!ENTITY checkout.type.normal.radio.label "Normal - for working on the module">
+<!ENTITY required.fields.label "Required fields are marked with (*)">

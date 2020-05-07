@@ -1,0 +1,202 @@
+div.title>a {
+    color: #c32a1b !important;
+}
+
+
+
+/* Formatting for the ActiveState footer */
+
+body {
+    padding-bottom: 6rem;
+}
+
+.as_footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: .5rem;
+    /* background-color: white;*/
+    text-align: center;
+    font-size: .8em;
+}
+
+.as_footer a {
+    border-bottom: none;
+}
+
+
+
+/*div.as_download {
+    display:none;
+}*/
+
+.project .logo img {
+    background: #efefef;
+    /* border-radius: 100% */
+    /* Don't want the logo to be circular. */
+}
+
+.project .logo+.name {
+    font-size: 12px;
+    /*
+    ** Colors are langauage-specific
+    ** ActivePython     #f79435
+    ** ActiveTcl        #a8ba37
+    ** ActivePerl       #00a0a2
+    ** ActiveRuby       #d94d2b
+    ** ActiveGo         #f17027
+    ** ActiveRuby       #ebad4c
+    ** ActiveNode       #529872
+    ** Komodo           #fcb315
+    */
+}
+
+pre.eula {
+    background: white;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+}
+
+@media only screen and (max-width:959px) {
+    #toggle-drawer:checked~.overlay,
+    .toggle-drawer .overlay {
+        width: 100%;
+        height: 100%
+    }
+
+    .drawer {
+        -webkit-transform: translate3d(-262px, 0, 0);
+        transform: translate3d(-262px, 0, 0);
+        -webkit-transition: -webkit-transform .25s cubic-bezier(.4, 0, .2, 1);
+        transition: -webkit-transform .25s cubic-bezier(.4, 0, .2, 1);
+        transition: transform .25s cubic-bezier(.4, 0, .2, 1);
+        transition: transform .25s cubic-bezier(.4, 0, .2, 1), -webkit-transform .25s cubic-bezier(.4, 0, .2, 1)
+    }
+
+    .no-csstransforms3d .drawer {
+        display: none
+    }
+
+    .drawer {
+        background: #fff
+    }
+
+    .project {
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0);
+        background: #efefef;
+    }
+
+    .drawer {
+        position: fixed;
+        z-index: 4
+    }
+
+    #toggle-search:checked~.main .results,
+    .drawer,
+    .toggle-search .results {
+        height: 100%
+    }
+}
+
+div.copyright {
+    text-align: center;
+    color: white;
+}
+
+div.title {
+    float: right;
+}
+
+div.logo img {
+    float: left;
+    /* max-height: 40px;*/
+}
+
+div.stretch>div.logo img {
+    max-height: 40px;
+}
+
+div.toc a {
+    color: black;
+}
+
+
+.article h1 {
+    padding: 0;
+}
+
+article .data table {
+    display: table;
+}
+
+article ul>li:before {
+    color: rgb(195, 42, 27);
+    content: "";
+    left: 0px;
+}
+
+div#nav>div.data {
+    display: none;
+}
+
+
+
+/* TODO: Check if this is doing anything. I think I commented out the copyright code in the templates/partials */
+
+aside.copyright {
+    display: none;
+    /* Hide the Hugo generated information from the individual page bottoms */
+}
+
+div.wrapper h1 {
+    color: #333333;
+    font: 700 34px/42px "Montserrat", sans-serif;
+}
+
+div.toc ul {
+    margin: 0;
+}
+
+h1:empty {
+    display: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.admonition.warning {
+    background: #efefef !important;
+    color: #000000;
+}
+
+.admonition {
+    background: #efefef;
+    color: #000000;
+}
+
+.admonition .admonition-title:before {
+    font-size: 16px;
+}
+
+.admonition .admonition-title {
+    font-size: 15px;
+}
+
+.article h1 {
+    border: none;
+}
+
+.article table {
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0);
+    border-radius: 0;
+}
+
+.article blockquote {
+    border-left: 0;
+    color: #000000;
+    background: #efefef;
+}
+
+.article code, .article pre {
+    background: #f2f2f2;
+}

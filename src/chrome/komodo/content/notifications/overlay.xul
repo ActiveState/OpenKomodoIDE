@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+]>
+<overlay id="sync-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script type="application/x-javascript"
+            src="chrome://komodo/content/notifications/load-service.js"/>
+
+    <ko-pane id="workspace_bottom_area">
+        <browser type="ko-widget" id="notifications-widget"
+                 label="&notifications.label;"
+                 src="chrome://komodo/content/notifications/notificationsWidget.xul"
+                 icon="koicon://ko-svg/chrome/icomoon/skin/info2.svg"/>
+    </ko-pane>
+
+</overlay>

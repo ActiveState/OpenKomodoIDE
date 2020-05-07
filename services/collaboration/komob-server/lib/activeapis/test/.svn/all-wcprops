@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/test
+END
+test_activeapis2.py
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/test/test_activeapis2.py
+END
+fireflyapi.doctests
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/test/fireflyapi.doctests
+END
+test.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/test/test.py
+END
+limeapi.doctests
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/test/limeapi.doctests
+END
+basic.doctests
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/test/basic.doctests
+END
+notificationsapi.doctests
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/test/notificationsapi.doctests
+END
+codeapi.doctests
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/test/codeapi.doctests
+END
+exampleapi.doctests
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/test/exampleapi.doctests
+END
+accountapi.doctests
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/test/accountapi.doctests
+END
+storeapi.doctests
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/test/storeapi.doctests
+END
+testlib.py
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/test/testlib.py
+END

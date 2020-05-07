@@ -1,0 +1,35 @@
+/* Copyright (c) 2010-2011 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+/**
+ * CSS for overlaying the Places UI.
+ */
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, publish_file_in_sync) {
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-image: url("koicon://ko-svg/chrome/komodo/skin/images/filestatus/cloud.svg?size=10&scheme-name=widget&scheme-color=scc-ok") !important;
+  background-size: 10px !important;
+  padding-right: 18px;
+}
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, publish_file_added) {
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-image: url("koicon://ko-svg/chrome/komodo/skin/images/filestatus/cloud.svg?size=10&scheme-name=widget&scheme-color=scc-new") !important;
+  background-size: 10px !important;
+  padding-right: 18px;
+}
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, publish_file_edited) {
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-image: url("koicon://ko-svg/chrome/komodo/skin/images/filestatus/cloud.svg?size=10&scheme-name=widget&scheme-color=scc-modified") !important;
+  background-size: 10px !important;
+  padding-right: 18px;
+}
+treechildren#places-files-tree-body:-moz-tree-cell-text(places_file, publish_file_conflict) {
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-image: url("koicon://ko-svg/chrome/komodo/skin/images/filestatus/cloud.svg?size=10&scheme-name=widget&scheme-color=scc-conflict") !important;
+  background-size: 10px !important;
+  padding-right: 18px;
+}
+

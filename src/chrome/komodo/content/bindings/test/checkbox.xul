@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Checkboxes"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script>
+<![CDATA[
+
+function setText(textID,val)
+{
+  document.getElementById(textID).value=val;
+}
+
+]]>
+</script>
+
+<html:h1>XUL Checkboxes</html:h1>
+
+<vbox flex="1" style="overflow: auto">
+<hbox>
+ <groupbox flex="1">
+  <caption label="tabbing" />
+  <vbox flex="1">
+    <description value="These tab oddly" />
+    <checkbox flex="1" label="6" tabindex="6"
+              oncommand="setText('tab-text','6');" />
+    <checkbox flex="1" label="3" tabindex="3"
+              oncommand="setText('tab-text','3');" />
+    <checkbox flex="1" label="4" tabindex="4"
+              oncommand="setText('tab-text','4');" />
+    <checkbox flex="1" label="2" tabindex="2"
+              oncommand="setText('tab-text','2');" />
+    <checkbox flex="1" label="5" tabindex="5"
+              oncommand="setText('tab-text','5');" />
+    <checkbox flex="1" label="1" tabindex="1"
+              oncommand="setText('tab-text','1');" />
+    <separator flex="1" />
+    <description  id="tab-text" value="(no input)" />
+  </vbox>
+ </groupbox>
+
+ <groupbox flex="1">
+  <caption label="accesskeys" />
+  <vbox flex="1">
+    <description value="These have access keys." />
+    <description value="(Even if they're not marked)" />
+    <checkbox flex="1" label="Animal" accesskey="A"
+                     oncommand="setText('accesskey-text','Animal');" />
+    <checkbox flex="1" label="Bear"   accesskey="B"
+                     oncommand="setText('accesskey-text','Bear');" />
+    <checkbox flex="1" label="Cat"    accesskey="C"
+                     oncommand="setText('accesskey-text','Cat');" />
+    <checkbox flex="1" label="Dog"    accesskey="D"
+                     oncommand="setText('accesskey-text','Dog');" />
+    <checkbox flex="1" label="Deer"   accesskey="E"
+                     oncommand="setText('accesskey-text','Deer');" />
+    <checkbox flex="1" label="Fish"   accesskey="F"
+                     oncommand="setText('accesskey-text','Fish');" />
+    <separator flex="1" />
+    <description  id="accesskey-text" value="(no input)" />
+  </vbox>
+ </groupbox>
+
+ <groupbox flex="1">
+  <caption label="states" />
+  <vbox flex="1">
+    <description  value="These show states." />
+    <checkbox  flex="1" label="Default"  default="true"
+                      oncommand="setText('state-text','Default');" />
+    <checkbox  flex="1" label="Checked"  checked="true"
+                      oncommand="setText('state-text','Checked');" />
+    <checkbox  flex="1" label="Normal"
+                      oncommand="setText('state-text','Normal');" />
+    <checkbox  flex="1" label="Disabled" disabled="true"
+                      oncommand="setText('state-text','Disabled');" />
+    <separator flex="1" />
+    <description  id="state-text" value="(no input)" />
+  </vbox>
+ </groupbox>
+</hbox>
+
+ <groupbox>
+  <caption label="orientation" />
+  <vbox flex="1">
+    <description  value="These show different orientation." />
+    <checkbox label="Left"
+       oncommand="setText('label-text','A checkbox to the left of the label');" />
+    <checkbox label="Right" dir="reverse"
+       oncommand="setText('label-text','A checkbox to the right of the label');"/>
+    <checkbox label="Above" orient="vertical" dir="forward"
+       oncommand="setText('label-text','A checkbox above the label');"/>
+    <checkbox label="Below" orient="vertical" dir="reverse"
+       oncommand="setText('label-text','A checkbox below the label');"/>
+    <checkbox
+       oncommand="setText('label-text','A checkbox with no label');" />
+    <checkbox
+       oncommand="setText('label-text','Another checkbox with no label');" />
+    <separator flex="1" />
+    <description  id="label-text" value="(no input)" />
+  </vbox>
+ </groupbox>
+
+</vbox>
+
+</window>

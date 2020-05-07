@@ -1,0 +1,328 @@
+// komodo tool: The Toolbox
+// ========================
+// is_clean: true
+// type: tutorial
+// version: 1.1.5
+// ========================
+Description: A tutorial to introduce you to the tools located in the Komodo toolbox
+Author: ActiveState
+Version: 1.0
+# Placement can be floating or docked
+Placement: docked
+Callouts:
+    panels:
+        Element: "#workspace-toolbaritem1"
+        Message: Toggle panels using the panel buttons.
+    toolbox:
+        Element: "#workspace_right_area"
+        Message: The Toolbox can be found in the right panel (unless you moved it somewhere else).
+    uniMenuButton:
+        Element: "#unifiedMenuButton"
+        Message: Access Komodo menus in the Unified Menu.
+    toolboxCog:
+        Element: "#toolbox2_tools-a"
+        Message: This is the Toolbox cog menu.
+    macroRecord:
+        Element: "#macroRecord"
+        Message: This is the "Record Macro" button.
+        Fail: "Enable the Macro buttons via View > Toolbars > Customize .."
+    mainToolbar:
+        Element: "#main-toolboxrow-wrapper"
+        Message: "This is the Komodo main toolbar, you can toggle it by right clicking it and hitting 'Show Toolbars'."
+        Fail: "Enable the main toolbar using View > Toolbars > Show Toolbars"
+    macroButtons:
+        Element: "#macro-toolbaritem1"
+        Message: These are your macro buttons, use them to record and playback Macros.
+        Fail: "Enable the Macro buttons via View > Toolbars > Customize .."
+    toggleRPane:
+        Element: "#toggleRightPane"
+        Message: Toggle the right pane.
+    macroStop:
+        Element: "#macroStop"
+        Message: Stop the currently recording macr
+        Fail: "Enable the Macro buttons via View > Toolbars > Customize .."
+    macroPlay:
+        Element: "#macroPlay"
+        Message: Play the last recorded macro
+        Fail: "Enable the Macro buttons via View > Toolbars > Customize .."
+    macroSave:
+        Element: "#macroSave"
+        Message: Save the recorded macro
+        Fail: "Enable the Macro buttons via View > Toolbars > Customize .."
+Steps:
+    -
+        Title: The Toolbox
+        Summary: >
+            You need to start the tutorial with the <i class="icon icon-briefcase"></i>&nbsp;**[Toolbox][callback:showToolbox]**
+            open.
+            
+            The <i class="icon icon-briefcase"></i>&nbsp;**[Toolbox][callback:showToolbox]**
+            contains a variety of tools that can be used for many different tasks including
+            the following:
+            
+             * Custom menu and toolbar items
+             * Userscripts (written in Python or Javascript)
+             * Code Snippets
+             * Terminal Commands
+             * Tutorials
+             * Templates
+             * Links
+            
+            The <i class="icon icon-briefcase"></i>&nbsp;**[Toolbox][callback:showToolbox]**
+            comes preloaded with many example tools to get you
+            started making your own custom tools.
+		   
+        Task: >
+            1. Open the toolbox if it is not already visible:
+            - Use the [panel buttons][callout:panels] on your toolbar to show the right panel button.
+            - Select <% if (require("sdk/system").platform == "darwin") { %>
+            the **View** menu in your menubar
+            <% } else { %>
+            the <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:uniMenuButton]**,
+            <% } %>
+            then  select **View > Tabs & Sidebars > Toolbox**.
+        Validate: toolboxIsShowing
+    -
+        Title: Recording a Macro
+        Summary: >
+            You will create a tool by recording a macro and saving
+            it as a Userscript in your toolbox. Make sure the
+            [main toolbar][callout:mainToolbar] is showing and the
+            [Macro buttons][callout:macroButtons] are enabled.
+            
+            A macro is a series of actions that you perform which you can repeat simply by invoking the macro. For
+            example you could make a macro that deletes the last character off
+            of every line, or a macro that makes certain changes to your user interface.
+            
+            You will record a macro that toggles all your side panes at once.
+            
+        Task: >
+            1. Hide the <i class="icon icon-layout-left"></i> left,
+            <i class="icon icon-layout-right"></i> right and
+            <i class="icon icon-layout-bottom"></i> bottom panels using the [panel buttons][callout:panels].
+            2. Click the <i class="icon icon-record"></i>&nbsp;**[Record Macro][callout:macroRecord]** button.
+            3. Show the left, right and bottom panels using the [panel buttons][callout:panels].
+            4. Click the <i class="icon icon-stop"></i>&nbsp;**[Stop Recording Macro][callout:macroStop]** button.
+            
+        Tips:
+            - We will use the recorded macro and save it to your toolbox in the next steps
+    -
+        Title: Using Macros
+        Summary: >
+            Once you have recorded your macro you can use it by pressing the
+            <i class="icon icon-play3"></i>&nbsp;**[Play Last Macro][callout:macroPlay]**
+            button.
+            
+        Task: >
+            Click the <i class="icon icon-play3"></i>&nbsp;**[Play Last Macro][callout:macroPlay]**
+            button repeatedly to see what it does.
+            
+        Tips: 
+            - If your macro is not working, go back to the previous step and try again.
+    -
+        Title: Save for Future Use
+        Summary: >
+            Hopefully you can already see how useful Macros can be, however you
+            are likely also wondering what happens if you want to record another one. After
+            all, the **Play Last Macro** button only works for the most recently
+            recorded Macro.
+            
+            This is where the <i class="icon icon-briefcase"></i>&nbsp;**[Toolbox][callback:showToolbox]**
+            comes into play. Your toolbox can store your recorded Macros along with your other tools.
+            
+        Task: >
+            1. Click the <i class="icon icon-save-circle"></i>&nbsp;**[Save Macro to Toolbox as Userscript][callout:macroSave]**
+            button and give your Macro (now a Userscript) a name.
+            2. Find your saved Userscript in your <i class="icon icon-briefcase"></i>&nbsp;**[Toolbox][callback:showToolbox]** and double click it to run it.
+            
+        Tips: 
+            - See how Komodo recorded your interactions and customize them by **Right clicking** the Userscript and selecting **Edit Userscript**.
+            - You can assign a key binding to your Userscript by **Right clicking** the Userscript, selecting **Properties** and then navigating to the **Key Binding** tab.
+    -
+        Title: Custom Toolbars
+        Summary: >
+            You can add your custom tools to a custom toolbar, so you can access them easily.
+            A toolbar can contain any number of toolbox items. It serves as a way
+            to quickly access your toolbox items as well as to extend the
+            functionality of Komodo's UI to suit your workflow.
+            
+            <% if (require("sdk/system").platform != "darwin") { %>
+            Komodo allows you to create your own Toolbars using any
+            tool in your toolbox, without writing any code. We'll create a toolbar
+            to try it out.
+            <% } else {%>
+            Komodo allows you to create your own Toolbars and Menu's using any
+            tool in your toolbox, without writing any code. We'll create a toolbar
+            to try it out, but the workflow is the same for a menu.
+            <% } %>
+            
+   
+            
+        Task: >
+            1. In the <i class="icon icon-briefcase"></i>&nbsp;**[Toolbox][callback:showToolbox]**
+            click the <i class="icon icon-cog"></i> **Cog button**.
+            2. Create a **New Custom Toolbar** and give it a name.
+            3. Click **OK**.
+            
+        Tips:
+            - The toolbar won't appear until we add something to it, which we will do in the next step.
+    -
+        Title: Adding Tools To Your Toolbar
+        Summary: >
+            Finally, you will add your Userscript to your Toolbar. Once you do this you will
+            be able to access our Userscript from the Komodo toolbar.
+            
+            To complete this task,  you'll need to have your
+            <i class="icon icon-briefcase"></i>&nbsp;**[Toolbox][callback:showToolbox]**
+            open and locate the Userscript and Toolbar you created.
+        Task: >
+            1. Drag the Userscript you created onto the Toolbar you created.
+            2. Click your Userscript in your custom Toolbar to verify that it works.
+        Tips:
+            - You can change the icon of your Userscript tool by right clicking, then selecting **Properties** and then selecting **Change Icon**.
+        Success: >
+            # More Information
+            
+            That's it for this tutorial. The toolbox has may more tools to learn about including the following:
+            
+            * [Userscript](http://docs.activestate.com/komodo/12/ manual/macros.html) - Use the entire Komodo code base (easy SDKs) to extend and automate Komodo actions
+            * [Snippets](http://docs.activestate.com/komodo/12/ manual/snippets.html) - Code snippets with EJS and Auto-Abbreviations ability
+            * [Commands](http://docs.activestate.com/komodo/12/ manual/run.html) - Commands run in the terminal
+            * [Templates](http://docs.activestate.com/komodo/12/ manual/templates.html) - Bootstrap new files
+            * [URL](http://docs.activestate.com/komodo/12/ manual/urls.html) - Open a website quickly
+            * Tutorials - Like this one!
+            
+            Any tool you create can be shared on the [Komodo Packages Site](https://community.komodoide.com/packages/)
+            and once it's there, any other Komodo user can install it using
+            [Commando packages scope](http://docs.activestate.com/komodo/12/ manual/komodo-packages.html).
+            
+            If you get stuck or have any questions be sure to visit the [toolbox forum](http://docs.activestate.com/komodo/12/ manual/toolbox.html).
+
+
+
+
+
+
+// ========================
+// komodo meta: logic
+// ========================
+// Sample content, edit, delete, do whatever you like
+(function() {
+    const $ = require("ko/dom");
+    const tut = require("tutorials/tutorials");
+    const w = require("ko/windows").getMain();
+    const ko = w.ko;
+    
+    /**
+     * Called when the tutorial starts, right after the tutorial panel
+     * is initialized but before the first step is rendered
+     */
+    this.start = function() {}
+    
+    /**
+     * Called before the step is changed, you can get the current step
+     * with require("tutorials")._getActive().step.
+     *
+     * Steps are always incremental. To go back a step the active step
+     * counter is decreased and then this function gets called.
+     * 
+     * @returns {Boolean} Returning false stops execution
+     */
+    this.preStep = function() {}
+    
+    /**
+     * Called after a step has changed.
+     *
+     * See this.preStep() for further details
+     */
+    this.step = function() {}
+    
+    /**
+     * Called before the tutorial is closed and the tutorial ends.
+     * 
+     * @returns {Boolean} Returning false stops execution
+     */
+    this.preClose = function() {}
+    
+    /**
+     * Called after the tutorial is closed.
+     *
+     * See this.preClose() for further details.
+     */
+    this.close = function() {}
+    
+    /**
+     * A custom validation function that can be hooked up in
+     * your tutorial meta information.
+     * 
+     * @returns {Boolean|String} Return true to pass, anything else to fail
+     *
+     * If you return a string it will be used as the error message.
+     */
+    // this.myValidationFunction = function() {}
+    
+    /**
+     * Custom callback function, can be used in markdown
+     */
+    this.showToolbox = function()
+    {
+        ko.uilayout.ensureTabShown('toolbox2viewbox', true);
+        
+        // Above isn't completely sync
+        setTimeout(function() {
+            w.require("tutorials").logicCallout("toolbox");
+        }, 500);
+    };
+    
+    this.toolboxIsShowing = function()
+    {
+        if ( ko.widgets.getWidget("toolbox2viewbox", false).tab.selected) {
+            return true;
+        }
+        return "The toolbox isn't showing.  Open it.";
+    };
+    
+    this.launchToolDocs = function ()
+    {
+        ko.browse.openUrlInDefaultBrowser("http://docs.activestate.com/komodo/12/ manual/toolbox.html");
+    };
+    
+    this.userscriptDocs = function()
+    {
+        ko.browse.openUrlInDefaultBrowser("http://docs.activestate.com/komodo/12/ manual/macros.html");
+    };
+    
+    this.snippetDocs = function()
+    {
+        ko.browse.openUrlInDefaultBrowser("http://docs.activestate.com/komodo/12/ manual/snippets.html");
+    };
+    
+    this.commandDocs = function()
+    {        
+        ko.browse.openUrlInDefaultBrowser("http://docs.activestate.com/komodo/12/ manual/run.html");
+    };
+    
+    this.url_Docs = function()
+    {        
+        ko.browse.openUrlInDefaultBrowser("http://docs.activestate.com/komodo/12/ manual/urls.html");
+    };
+    this.openPackageWebsite = function()
+    {
+        ko.browse.openUrlInDefaultBrowser("http://komodoide.com/packages/");
+    };
+    
+    this.commandoPackageDocs = function()
+    {
+        ko.browse.openUrlInDefaultBrowser("http://docs.activestate.com/komodo/12/ manual/komodo-packages.html");
+    };
+    
+    this.sdkDocs = function()
+    {
+        ko.browse.openUrlInDefaultBrowser("http://docs.activestate.com/komodo/12/ sdk/");
+    };
+    
+    this.komodoForums = function()
+    {
+        ko.browse.openUrlInDefaultBrowser("https://community.komodoide.com/");
+    };
+}).apply(module.exports);

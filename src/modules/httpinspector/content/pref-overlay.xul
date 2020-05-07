@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % httpinspectorDTD SYSTEM "chrome://httpinspector/locale/overlay.dtd">
+  %httpinspectorDTD;
+]>
+
+<overlay id="fastopen_prefs_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <treechildren id="panelChildren">
+        <treeitem container="false" id="httpInspectorItem"  insertbefore="ishellItem" advanced="true">
+            <treerow>
+                <treecell class="treecell-indent"
+                          url="chrome://httpinspector/content/pref-http-inspector.xul"
+                          label="&HTTPInspector.label;"
+                          helptag="http_inspector_preferences"/>
+            </treerow>
+        </treeitem>
+    </treechildren>
+</overlay>

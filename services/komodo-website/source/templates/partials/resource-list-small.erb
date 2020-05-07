@@ -1,0 +1,18 @@
+<% resources.each() do |resource| %>
+    <li>
+        <a href="<%= resource.owner.html_url %>" class="push-left preview">
+            <% if resource.owner.has_key? "avatar_url" %>
+            <img src="<%= resource.owner.avatar_url %>?s=48">
+            <% elsif resource.owner.has_key? "gravatar_id" %>
+            <img src="http://gravatar.com/avatar/<%= resource.owner.gravatar_id %>?d=identicon&s=48">
+            <% end %>
+        </a>
+        <p>
+            <h2>
+                <a href="/packages/<%= resource.category.resource[0..-5] %>/<%= get_package_slug(resource) %>/" title="by <%= resource.owner.login %>"><%= resource.title %></a>
+            </h2>
+        <p>
+        <p class="description"><%= resource.description %></p>
+        <div class="clearfix"></div>
+    </li>
+<% end %>

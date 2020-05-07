@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+    %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+    %prefDTD.INTERNAL;
+  <!ENTITY % mercurialDTD SYSTEM "chrome://mercurial/locale/mercurial-prefs.dtd">
+    %mercurialDTD;
+]>
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="PrefSCCMercurial_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/trace.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://mercurial/content/pref-scc-hg.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="scc-hg-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox id="hg_groupbox"
+                  orient="vertical">
+            <caption id="hg_groupbox_caption">
+                <checkbox id="hgEnabled"
+                          label="&MercurialIntegration.label;"
+                          pref="true"
+                          preftype="boolean"
+                          prefdefault="true"
+                          oncommand="PrefSCCMercurial_UpdateEnabledUI();" />
+            </caption>
+            <vbox id="hg_executable_vbox">
+                <label id="hg_executable_label"
+                       value="&mercurialExecutableUsed.label;" />
+                <hbox id="hg_executable_hbox">
+                    <menulist id="hgExecutable"
+                              flex="1"
+                              pref="true"
+                              preftype="string"
+                              prefdefault=""
+                              tooltiptext="&clickOnItemToSelectItAsTheDefault.tooltiptext;"
+                              oncommand="PrefSCCMercurial_CheckAgain();">
+                        <menupopup id="avail-exec-list" />
+                    </menulist>
+                    <button id='hg_browse_executable_button'
+                            label="&browse.label;"
+                            oncommand="PrefSCCMercurial_getExecutable();" />
+                </hbox>
+            </vbox>
+            <separator id="hg_deck_separator" class="thin"/>
+            <deck id="hgDeck"
+                  flex="1"
+                  selectedIndex='0'>
+                <vbox id="hg_functional_vbox">
+                    <checkbox id="hgBackgroundCheck"
+                              label="&checkForStatusChangesFromOutsideOfKomodo.label;"
+                              pref="true"
+                              preftype="boolean"
+                              prefdefault="true"
+                              oncommand="PrefSCCMercurial_UpdateBackgroundEnabledUI();" />
+                    <vbox id="hg_check_time_vbox"
+                          style="padding-left: 20px;">
+                        <hbox id="hg_check_time_hbox"
+                              align="center">
+                            <label id="hg_check_time_label"
+                                   value="Check every " />
+                            <textbox id="hgBackgroundMinutes"
+                                     size="3"
+                                     pref="true"
+                                     preftype="long"
+                                     prefdefault="15"
+                                     />
+                            <label id="hg_minutes_label"
+                                   value=" minutes" />
+                        </hbox>
+                    </vbox>
+                    <hbox id="hg_diff_options_hbox"
+                          align="center">
+                        <label id="hg_diff_options_label"
+                               value="Diff options"/>
+                        <textbox id="hgDiffOptions"
+                                 size="25"
+                                 pref="true"
+                                 preftype="string"
+                                 prefdefault=""
+                                 />
+                    </hbox>
+                    <checkbox id="hg_externaldiff_checkbox"
+                              label="&usesExternalDiff.checkbox.label;"
+                              tooltiptext="&usesExternalDiff.checkbox.tooltiptext;"
+                              pref="true"
+                              prefstring="hg_uses_externaldiff"
+                              preftype="boolean"
+                              prefdefault="false"
+                              />
+                </vbox>
+                <vbox id="hg_not_functional_vbox"
+                      flex="1">
+                    <description id="hgNotFunctional"
+                                 style="font-weight: bold;" />
+                    <vbox id="hg_download_button_vbox"
+                          align="center">
+                        <button id="hg_download_button"
+                                label="&downloadMercurial.label;"
+                                class="button-link-a"
+                                style="cursor:pointer;"
+                                oncommand="parent.opener.ko.browse.openUrlInDefaultBrowser('http://mercurial.selenic.com/')" />
+                    </vbox>
+                    <separator id="hg_not_functional_separator"
+                               class="thin" />
+                    <vbox id="hg_checkagain_vbox"
+                          align="right">
+                        <button id="hg_checkagain_button"
+                                label="&checkAgain.label;"
+                                oncommand="PrefSCCMercurial_CheckAgain();" />
+                    </vbox>
+                </vbox>
+            </deck>
+            <separator id="hg_final_separator" class="thin" />
+        </groupbox>
+
+    </vbox>
+
+</window>
+
+
+
+

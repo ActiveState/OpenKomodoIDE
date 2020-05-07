@@ -1,0 +1,19 @@
+// komodo tool: scope
+// ==================
+// auto_abbreviation: true
+// indent_relative: false
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// ==================
+/**
+ * Scope a query to only include ${2:description}.
+ *
+ * @return \\\\Illuminate\\\\Database\\\\Eloquent\\\\Builder
+ */
+public function scope[[%tabstop:Name]]($query)
+{
+    return $this;
+}!@#_currentPos!@#_anchor

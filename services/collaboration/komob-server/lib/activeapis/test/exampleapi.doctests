@@ -1,0 +1,5 @@
+
+>>> from activeapis2.exampleapi import ExampleAPI
+>>> api = ExampleAPI()
+>>> api.ping()
+'pong'

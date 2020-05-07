@@ -1,0 +1,21 @@
+// komodo tool: copyright
+// ======================
+// auto_abbreviation: true
+// indent_relative: false
+// set_selection: false
+// treat_as_ejs: true
+// type: snippet
+// version: 1.0.12
+// ======================
+<% // Flask Snippets  %>
+"""
+    [[%tabstop:app name]]
+    --------------------------------------
+
+    [[%tabstop:app desc]]
+
+    :copyright: (c)  [[%tabstop:app creation date]] by  [[%tabstop:creator's name]].
+    :license:  [[%tabstop:app licence]]
+"""
+
+    !@#_currentPos!@#_anchor

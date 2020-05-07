@@ -1,0 +1,286 @@
+@import url("chrome://komodo/skin/global/colors.less");
+@import url("resource://profile/colors.less");
+@import url("chrome://komodo/skin/global/mixins.less");
+
+#completions-panel
+{
+    padding: 2px;
+    width: 400px;
+
+    .signature-wrapper
+    {
+        border-bottom: 1px solid @border;
+        -moz-box-align: center;
+    }
+
+    button
+    {
+        padding-left: 8px;
+        padding-right: 8px;
+        margin: 2px;
+        color: @state-info;
+    }
+
+    richlistbox
+    {
+        max-height: 250px;
+        width: 400px;
+        background: @background;
+
+        richlistitem
+        {
+            &:not([current="true"]),
+            &:not([selected="true"])
+            {
+                background: @background;
+            }
+
+            &:not([selected="true"]) .completion-info
+            {
+                visibility: collapse;
+                display: none;
+            }
+
+            &:not(:last-child)
+            {
+                border-bottom: 1px solid @contrast;
+            }
+
+            &.completion-show-all
+            {
+                -moz-box-align: center;
+                -moz-box-pack: center;
+
+                label
+                {
+                    opacity: 0.6;
+                }
+            }
+        }
+    }
+
+    .codeintel_image
+    {
+        margin-right: 2px;
+    }
+}
+
+#calltips-panel
+{
+    padding: 6px;
+
+    width: 400px;
+
+    description,
+    textbox
+    {
+        opacity: 0.7;
+        font-style: italic;
+    }
+
+    textbox
+    {
+        width: 100%;
+        max-height: 250px;
+    }
+}
+
+#completions-panel,
+#calltips-panel
+{
+    .calltip-signature
+    {
+        font-family: @editor-font;
+        width: 375px;
+    }
+
+    strong
+    {
+        color: @secondary-special !important;
+        font-weight: bold;
+    }
+}
+
+#symbolbrowser
+{
+    .codeintel_image
+    {
+        margin-right: 2px;
+        background-position: 0 3px;
+    }
+
+    .indentation
+    {
+        background-image: linear-gradient(@widget 1px, transparent 1px),
+                          linear-gradient(to right, transparent 0, transparent 6px, fade(@contrast-widget, 70%) 6px, fade(@contrast-widget, 70%) 7px, transparent 7px);
+        background-size: 100% 2px, 16px 16px;
+
+        padding-top: 0.1rem;
+        padding-bottom: ~"calc(0.1rem + 1px)";
+    }
+
+    richlistbox
+    {
+        max-height: ~"calc(100vh - 27px)";
+    }
+
+    richlistitem[selected]
+    {
+        /* Workaround issue caused by negative margin-bottom hack below */
+        position: relative;
+        z-index: 10;
+
+        .indentation
+        {
+            background-image: none;
+        }
+    }
+
+    richlistitem
+    {
+        padding-left: 8px;
+        padding-right: 24px;
+
+        /* Hack to make the indentation dots connect */
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: -1px;
+
+        & > *:not(.indentation)
+        {
+            margin-top: 0.1rem;
+            margin-bottom: ~"calc(0.1rem + 1px)";
+        }
+    }
+
+    deck > vbox > description
+    {
+        text-align: center;
+    }
+}
+
+.codeintel_image,
+toolbarbutton[anonid="symbollist"][symbol] .toolbarbutton-icon,
+#symbollist-menupopup menuitem[symbol] .menu-iconic-icon
+{
+    width: 14px;
+    height: 14px;
+    background-repeat: no-repeat;
+}
+
+toolbarbutton[anonid="symbollist"][symbol] .toolbarbutton-icon,
+#symbollist-menupopup menuitem[symbol] .menu-iconic-left
+{
+    margin-right: 2px;
+}
+
+#symbollist-menupopup
+{
+    min-width: 200px;
+
+    .menu-iconic-left,
+    .menu-iconic-icon
+    {
+        visibility: visible;
+        display: -moz-box;
+    }
+
+    .ui-textbox
+    {
+        margin-bottom: 3px;
+    }
+}
+
+.codeintel_image(@name)
+{
+  .codeintel_image[type="@{name}"],
+  toolbarbutton[anonid="symbollist"][symbol="@{name}"] .toolbarbutton-icon,
+  #symbollist-menupopup menuitem[symbol="@{name}"] .menu-iconic-icon
+    {
+      background-image: url("chrome://codeintel/skin/images/@{name}.svg");
+    }
+}
+
+.codeintel_image("ARG");
+.codeintel_image("BI");
+.codeintel_image("CLS");
+.codeintel_image("CVAR");
+.codeintel_image("PVCV");
+.codeintel_image("PTCV");
+.codeintel_image("AFUN");
+.codeintel_image("FUN");
+.codeintel_image("IVAR");
+.codeintel_image("PVIV");
+.codeintel_image("PTIV");
+.codeintel_image("KW");
+.codeintel_image("CMTH");
+.codeintel_image("MTH");
+.codeintel_image("SMTH");
+.codeintel_image("RMTH");
+.codeintel_image("MOD");
+.codeintel_image("VAR");
+.codeintel_image("IFC");
+.codeintel_image("STRU");
+.codeintel_image("IMP");
+.codeintel_image("node");
+.codeintel_image("CNST");
+.codeintel_image("CSSC");
+.codeintel_image("CSSI");
+.codeintel_image("CSSP");
+.codeintel_image("ELEM");
+.codeintel_image("GVAR");
+.codeintel_image("NMSP");
+.codeintel_image("SELF");
+.codeintel_image("STRU");
+.codeintel_image("CTOR");
+.codeintel_image("PROP");
+.codeintel_image("ARR");
+.codeintel_image("BOOL");
+.codeintel_image("EVNT");
+.codeintel_image("NUM");
+.codeintel_image("OBJ");
+.codeintel_image("STR");
+.codeintel_image("H1");
+.codeintel_image("H2");
+.codeintel_image("H3");
+.codeintel_image("H4");
+.codeintel_image("H5");
+.codeintel_image("H6");
+
+.codeintel_source_image
+{
+    width: 14px;
+    height: 14px;
+    background-size: 14px;
+    background-repeat: no-repeat;
+    margin-right: 2px;
+    opacity: 0.6;
+
+    &[source="buffer"]
+    {
+        background-image: url(koicon://ko-svg/chrome/fontawesome/skin/code.svg?size=14);
+    }
+
+    &[source="external"]
+    {
+        background-image: url(koicon://ko-svg/chrome/fontawesome/skin/external-link-square.svg?size=14);
+    }
+
+    &[source="cix"]
+    {
+        background-image: url(koicon://ko-svg/chrome/fontawesome/skin/book.svg?size=14);
+    }
+}
+
+toolbarbutton[anonid="symbollist"]
+{
+  min-width: 100px;
+}
+
+#prefWindow
+{
+    treechildren::-moz-tree-cell(Code_Intel_3)
+    {
+        background-image: url("koicon://ko-svg/chrome/fontawesome/skin/info-circle.svg?size=16");
+    }
+}

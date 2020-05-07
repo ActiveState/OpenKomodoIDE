@@ -1,0 +1,241 @@
+// komodo tool: Pyramid Setup
+// ==========================
+// is_clean: true
+// type: tutorial
+// version: 1.1.5
+// ==========================
+# Sample content, edit, delete, do whatever you like
+Description: Tutorial to quickly set up a Pyramid project in Komodo.
+Author: ActiveState
+Version: 1.0
+# Placement can be floating or docked
+Placement: docked
+Callouts:
+    placesWidget:
+        Element: "#placesViewbox"
+        Message: This is the Places widget.
+    projectCog:
+        Element: "#placesSubpanelProjectsTools_SPV"
+        Message: "This is the Project cog menu."
+    menuButton:
+        Element: "#unifiedMenuButton"
+        Message: "This is the Menu button."
+        Fail: "Enable the main toolbar using View > Toolbars > Show Toolbars"
+    uniMenuButton:
+        Element: "#unifiedMenuButton"
+        Message: Access Komodo menus in the Unified Menu.
+    toolboxWidget:
+        Element: "#toolbox2viewbox"
+        Message: "This is the Toolbox widget."
+        Fail: "Open Toolbox using View > Tabs & Sidebars > Toolbox or Ctrl + Shift + L"
+Steps:
+    -
+        Title: Before you begin
+        Summary: >
+            If you are new to the **Komodo IDE** you should complete the
+            **Getting Started** tutorial before continuing.  It is located
+            in the [toolbox][callout:toolboxWidget] in the Tutorials folder.
+            It teaches the basics of using Komodo.
+
+            ## Prerequisites
+
+            You must have the following items installed, and they must be on your system PATH:
+             - Python 3.4 or greater
+             - The `virtualenv` version that corresponds to the Python version you are using
+
+            ### Configuring Python
+
+            According to the [Pyramid docs](http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/install.html#installing-chapter)
+            you will need Python 3.4 or greater installed. We recommend that you use ActiveState's ActivePython distribution to complete this tutorial.
+            It includes additional packages and tools that simplify the setup. However, this tutorial
+            should work for most, if not all, Python distributions. You need to download and install Python
+            if it's not already installed:
+
+              * [Download ActivePython from ActiveState](http://downloads.activestate.com/ActivePython/releases/)
+              * [Download Python from Python.org](https://www.python.org/downloads/)
+
+            #### Configuring Komodo
+
+             1. Open the Preferences dialog box:
+                - Select <% if (require("sdk/system").platform == "darwin") { %>**Edit menu > <% } else { %> <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:uniMenuButton] > Edit <% } %>  Preferences > Languages**.
+                - Press `Ctrl + ,` (or `Cmd + ,` on Mac OS X)
+             1. Expand the **Languages** list in the sidebar, and select Python3.
+             1. Click the **Browse** button next to the **Use this interpreter**
+             field, select your Python installation directory, and
+             select the Python interpreter binary file.
+             1. Click the **Browse** button next to the **Pip Location** field
+             and select the 'pip3' binary file installed in the **Scripts**
+             folder for your Python installation.
+
+            ### Configuring virtualenv
+
+            1. Press `Ctrl + Shift + O` (or `Cmd + Shift + O` on Mac OS X)
+            to open Go to Anything.
+            1. Press 8 to select the Shell scope.
+            1. Enter **pip3 > install > virtualenv**.
+            Ensure that you use pip3.
+
+        #Validate: validPageOne -> isPythonFound && isVirtualenvFound
+
+    -
+        Title: Creating a Komodo project
+        Summary: >
+            Your first task is to create a Komodo project that provides the context for the
+            setup commands in this tutorial. All of these steps are completed in Komodo.
+        Task: >
+            1. Select <% if (require("sdk/system").platform == "darwin") { %>
+            Project menu >
+            <% } else { %>
+            <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:uniMenuButton] > Project >
+            <% } %>
+            New Project**.
+            1. Use the dialog box to navigate to your project folder and name the project file,
+            and then click *Save*.
+            1. Before continuing with the tutorial, you need to verify that
+            Python is configured properly in Komodo. Create a new Python3
+            file in your project to check the version:
+                1. Select <% if (require("sdk/system").platform == "darwin") { %>
+                **File** >
+                <% } else { %>
+                <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:uniMenuButton]** >
+                <% } %> **New** > **File From Template**.
+                1. Select the Python3 template.
+                1. Enter `test.py` in the filename text box and click **Open**.
+                1. Enter the following code in the file:
+                ```
+                import platform
+                print(platform.python_version())
+                ```
+                1. Press `Ctrl (Cmd) > B` to run the content.  The output should look similar to the following:
+                ```
+                Python 3.4.3
+                ```
+
+            Leave the file open. You will use it again later in the tutorial.
+
+        Tips:
+            - You can specify a custom **Project Base URL** in the **Project Preferences** dialog box.  Right click your project and select **Project Preferences** and then enter the custom URL in the **Project Base Directory** text box.
+            - Komodo uses your system path to find installed tools.  You can also manually configure the location at the Global, Project, or File level preferences.  Komodo prioritizes preferences in the following hierarchy, File > Project > Global.
+            - <% if (require("sdk/system").platform == "winnt") { %>Use `where [exectuableName]` in **Commando** to see what Komodo will find on your path.  Example `where pip`<% } else { %>Use `which [exectuableName]` in **Commando** to see what Komodo will find on your path, for example, `which pip`<% } %>
+    -
+        Title: Configuring virtualenv
+        Summary: >
+            You need to complete these steps to set up and activate your **virtualenv**:
+             - Use Go to Anything to create a new virtualenv
+             - Edit your preferences to have Komodo use a new system PATH
+
+        Task: >
+            1. Press `Ctrl + Shift + O` (or `Cmd + Shift + O` on Mac OS X)
+            to open Go to Anything.
+            1. Press 8 to select the Shell scope.
+            1. Enter *virtualenv VENV* to create a new virtualenv.
+            ```
+            ...
+            Installing setuptools, pip...done.
+            ```
+            1. Open the Preferences dialog box:
+                - Select <% if (require("sdk/system").platform == "darwin") { %>**Edit menu > <% } else { %> <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:uniMenuButton] > Edit <% } %>  Preferences > Languages**.
+                - Press `Ctrl + ,` (or `Cmd + ,` on Mac OS X).
+            1. Click the **Environment** section.
+            1. Locate and double click the **PATH** variable.
+                The values are copied into the **User Environmental Variables**.
+            1. Click OK to close the Preferences dialog box.
+            1. Right click your project in the **Project pane** and select **Project Preferences**.
+            1. Click the **Environment** section.  The **PATH** variable should already be populated.
+            1. Double click the **PATH** variable to edit it.
+            1. Paste the absolute path to your <% if (require("sdk/system").platform == "winnt") { %>
+            `VENV\scripts\
+            <% } else { %>
+            `VENV\bin\
+            <% } %>` folder at the beginning of the PATH string.  You must enter the <% if (require("sdk/system").platform == "winnt") { %>
+            `;`
+            <% } else { %>
+            `:`
+            <% } %> character to divide the paths.
+            1. Click **OK** to save the path.
+            1. Click **OK** to close the dialog box.
+
+        Tips:
+            - You can assign your `virtualenv` whatever name you like, but you must ensure that you use the same name throughout the tutorial.
+            - You can assign a key binding to the Shell Scope in the Key Bindings section in the Preferences dialog box and search for `cmd_scope-shell` to assign a binding.
+            - Press Backspace or Esc to back out of Go to Anything (Commando) commands or the Everything Scope of **Commando**.
+    -
+        Title: Configuring Pyramid
+        Summary: >
+            You need to complete the following steps to install and configure Pyramid:
+             - Configure Komodo to use your virtualenv `pip3``
+             - Install Pyramid
+             - Create your Pyramid project
+        Task: >
+            1. Right click your project in the Project pane and select **Project Preferences**.
+            1. Expand the Languages section and select Python3.
+            1. In the **Pip location** field specify the location of the **pip3** executable installed
+            in your virtualenv (Windows: `VENV\Scripts\pip3`, Unix: `VENV\bin\pip3`) and click **OK**.
+            1. Press `Ctrl + Shift + O` (or `Cmd + Shift + O` on Mac OS X)
+            to open Go to Anything.
+            1. Press 8 to select the Shell scope.
+            1. Enter **pip3 > install > Pyramid**. The output should finish with the following:
+            ```
+            Successfully installed...
+            ```
+            1. Press `Ctrl + Shift + O` (or `Cmd + Shift + O` on Mac OS X) and then press 8.
+            1. Enter `pcreate -s starter MyProject`. The output should look similar to the following:
+            ```
+            Welcome to Pyramid.  Sorry for the convenience.
+            ```
+
+        Tips:
+            - The output of commands in Go to Anything (Commando) tell you which executable was used at the start of the output.  You should verify that the expected executable is displayed.
+    -
+        Title: Starting Pyramid
+        Summary: >
+            You need to complete the following steps to start Pyramid:
+            - Create a Toolbox Command to start the server.
+            - Navigate to your site in your web browser.
+
+            **NOTE**: You will be saving the tool in your Project toolbox.  Locate the red toolbox icon with the same name as your project at the bottom of the [Toolbox][callout:toolboxWidget].
+        Task: >
+            1. In the [Toolbox][callout:toolboxWidget] right click your project toolbox  and select **Add > New Command**.
+            1. Name the tool `Start Pyramid Server`.
+            1. Enter the following into the command field: `pserve development.ini --reload`
+            1. Click the **Advanced Options** tab.
+            1. In the **Start in** field, enter `<% if (require("sdk/system").platform == "winnt") { %>
+            %i\mysite
+            <% } else { %>
+            %/mysite
+            <% } %>`. (`%i` is the current projects base directory).
+            1. From the `Run in` drop down list select `New Console`.
+            1. Click `OK`.
+            1. Double click the Start Pyramid toolbox command and
+            it will open a terminal window with output that looks
+            similar to the following:
+            ```
+            Starting server in PID 00000.
+            Serving on http://localhost:6543
+            ```
+            Open your web browser and navigate to the URL listed in the command output to see the site running.
+
+            See the [Pyramid Docs](http://docs.pylonsproject.org/en/latest/docs/pyramid.html#pyramid-documentation) for more information about Pyramid.
+// ==========================
+// komodo meta: logic
+// ==========================
+// Sample content, edit, delete, do whatever you like
+(function() {
+    var {Cc, Ci} = require("chrome");
+    var $ = require("ko/dom");
+    var w = require("ko/windows").getMain();
+    var ko = w.ko;
+    
+    this.start = function() {};
+    this.preStep = function() {};
+    this.step = function() {};
+    this.preClose = function() {};
+    this.close = function() {};
+
+    this.focusPlaces = function()
+    {
+        ko.uilayout.ensureTabShown('placesViewbox', true);
+        w.require("tutorials").logicCallout("placesWidget");
+    };
+    
+}).apply(module.exports);

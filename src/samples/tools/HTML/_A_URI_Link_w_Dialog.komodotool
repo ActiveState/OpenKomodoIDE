@@ -1,0 +1,13 @@
+{
+  "keyboard_shortcut": "", 
+  "name": "<a> URI Link w/ Dialog", 
+  "value": [
+    "<a href=\"[[%w:orask:URI]]\" name=\"[[%ask:Name]]\" target=\"[[%ask:Target:_self]]\">[[%w:orask:Text]]</a>!@#_currentPos!@#_anchor"
+  ], 
+  "set_selection": "true", 
+  "version": "1.0.12", 
+  "indent_relative": "true", 
+  "type": "snippet", 
+  "treat_as_ejs": "false", 
+  "auto_abbreviation": "false"
+}

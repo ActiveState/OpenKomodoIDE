@@ -1,0 +1,55 @@
+
+# Use alternate API URL if in the environment.
+>>> import os
+>>> api_url = os.environ.get("STORE_API_URL")
+>>> import datetime
+
+>>> from activeapis2.storeapi import StoreAPI
+>>> api = StoreAPI(api_url=api_url)
+
+>>> ipappsid = api.ipappsid(sso_id=23)  # Trent's IPApps account id
+>>> isinstance(ipappsid, int) and ipappsid > 0
+True
+
+>>> order_ids = api.order_ids_from_sso_id(sso_id=23)  # Trent's store orders
+>>> orders = api.orders(order_ids)
+>>> order = orders[0]   # Let's assert some data on one of the orders
+>>> order.order_id == order_ids[0]
+True
+>>> order.primary_email.lower()
+u'trentm@activestate.com'
+>>> isinstance(order.created_datetime, datetime.datetime)
+True
+
+# `order.items` is a list of line items in the order.
+>>> total = order.items[-1]  # every order has at least the total line item
+>>> total.type
+'total'
+>>> total.title_html
+'Total'
+>>> isinstance(total.total, float)
+True
+
+# `order.products` is a list of store product dicts
+>>> first_product = order.products[0]
+>>> "title" in first_product
+True
+>>> "qty" in first_product
+True
+
+# `order.licenses` get the associated license info via the Lime API.
+# This will fail unless the StoreAPI instance was given a `LimeAPI`.
+>>> order.licenses
+Traceback (most recent call last):
+  ...
+NoLimeAPIError
+
+# Try again with a properly setup StoreAPI
+>>> from activeapis2.limeapi import LimeAPI
+>>> lime_api_url = os.environ.get("LIME_API_URL")
+>>> limeapi = LimeAPI(api_url=lime_api_url)
+>>> api = StoreAPI(limeapi=limeapi, api_url=api_url)
+>>> order = api.orders([order_ids[0]])[0]
+>>> isinstance(order.licenses, list)
+True
+

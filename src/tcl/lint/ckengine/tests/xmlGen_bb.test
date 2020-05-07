@@ -1,0 +1,64 @@
+# xmlGen_bb.test --
+#
+#	This file contains Black Box tests that run tclchecker on 
+#	xmlGen code that will produce all possible error and warning
+#	messages that are specific to xmlGen.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+#
+# RCS: @(#) $Id: xmlGen_bb.test,v 1.7 2000/06/06 22:59:10 hershey Exp $
+
+if {[string compare test [info procs test]] == 1} {
+    lappend auto_path [file join [file dirname [info script]] ..]
+    package require protest
+    namespace import ::protest::*
+}
+
+set tclchecker [findExeFile tclchecker 1]
+
+set echo echo
+
+set pcxDir $::protest::sourceDirectory
+
+# Test for -verbose package name.
+
+test xmlGen-1.1 {Test for -verbose package name} {
+    set script {superclass $a}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -v} msg]
+    set i [lsearch -exact $msg xmlGen]
+    if {$i != -1} {
+	set msg [lindex $msg [expr {$i + 1}]]
+    }
+    list $result $msg 
+} [list 0 $::protest::supportedVersions(XmlGen)]
+
+# Test to see if bodies of control structures are scanned for
+# user--defined procs.
+
+test xmlGen-2.1 {test scanCmds: element (bug 2585)} {knownBugs} {
+    set script {element a a {} {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+test xmlGen-2.1 {test scanCmds: element} {} {
+    set script {xmlgen::element a a {} {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $tclchecker -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+# Run code that trigers xmlGen-specific message IDs.
+# Currently, there are no such message IDs.
+
+# cleanup
+cleanupTests
+

@@ -1,0 +1,15 @@
+{
+  "name": "github.commits.widget",
+  "main": "js/github.commits.widget.js",
+  "homepage": "https://github.com/Komodo/github-commits-widget",
+  "_release": "a87f886ca7",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "a87f886ca7f24885093455d7f3f4a0a71114e8be"
+  },
+  "_source": "https://github.com/Komodo/github-commits-widget.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/Komodo/github-commits-widget.git",
+  "_direct": true
+}

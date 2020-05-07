@@ -1,0 +1,13 @@
+// komodo tool: while
+// ==================
+// auto_abbreviation: true
+// indent_relative: true
+// language: JavaScript-common
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// ==================
+while [[%soft:(]][[%tabstop:test]][[%soft:) {]]
+	[[%tabstop://code]]
+}

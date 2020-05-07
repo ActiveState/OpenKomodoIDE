@@ -1,0 +1,17 @@
+{
+  "parseRegex": "", 
+  "insertOutput": "0", 
+  "name": "echo Hello World", 
+  "operateOnSelection": "0", 
+  "value": [
+    "echo Hello World"
+  ], 
+  "cwd": "", 
+  "version": "1.0.7", 
+  "env": "", 
+  "doNotOpenOutputWindow": "0", 
+  "showParsedOutputList": "0", 
+  "type": "command", 
+  "parseOutput": "0", 
+  "runIn": "command-output-window"
+}

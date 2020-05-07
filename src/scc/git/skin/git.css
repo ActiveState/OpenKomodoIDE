@@ -1,0 +1,4 @@
+/* scc checkout bindings */
+scc_checkout[type="git"] {
+    -moz-binding: url('chrome://git/content/bindings/git_checkout.xml#git_checkout');
+}

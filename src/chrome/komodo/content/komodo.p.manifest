@@ -1,0 +1,41 @@
+# #if WITH_JARRING
+# #define KO_BASE_CHROME jar:komodo.jar!
+# #else
+# #define KO_BASE_CHROME komodo
+# #endif
+
+content komodo KO_BASE_CHROME/content/
+locale komodo en-US KO_BASE_CHROME/locale/en-US/
+skin komodo classic/1.0 KO_BASE_CHROME/skin/
+
+overlay chrome://komodo/content/komodo.xul chrome://komodo/content/formatters/formatters-overlay.xul
+overlay chrome://komodo/content/komodo.xul chrome://komodo/content/morekomodo/overlay.xul
+overlay chrome://komodo/content/komodo.xul chrome://komodo/content/notifications/overlay.xul
+overlay chrome://komodo/content/pref/pref.xul chrome://komodo/content/formatters/pref-formatters-overlay.xul
+
+overlay chrome://komodo/content/formatters/pref-formatter-editor.xul chrome://komodo/content/formatters/generic/formatter-prefs-overlay.xul
+overlay chrome://komodo/content/formatters/pref-formatter-editor.xul chrome://komodo/content/formatters/javascript/formatter-prefs-overlay.xul
+
+overlay chrome://mozapps/content/extensions/extensions.xul chrome://komodo/content/extmgr/em-overlay.xul
+overlay chrome://mozapps/content/update/updates.xul chrome://komodo/content/update/overlay.xul
+
+category agent-style-sheets scrollbar-skinning less://komodo/skin/global/scrollbars.less
+
+# Todo: update the references rather than override
+override chrome://global/skin/global.css less://komodo/skin/global/global.less
+
+# Discard mozilla CSS sheets
+override chrome://komodo/skin/komodo.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/menu.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/button.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/tabbox.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/toolbarbutton.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/textbox.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/checkbox.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/radio.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/resizer.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/dropmarker.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/toolbar.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/menulist.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/numberbox.css chrome://komodo/skin/global/void.css
+override chrome://global/skin/wizard.css chrome://komodo/skin/global/void.css

@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2011 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/listbox.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<page xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      class="kodialog pref-window"
+      orient="vertical"
+      onload="PrefNodejs_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/pref-nodejs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="nodejs-prefs-vbox" flex="1" class="autoscroll">
+                
+        <groupbox orient="vertical" id="defaultNodejsInterpreterGroupBox">
+            <caption label="&defaultNodejsInterpreter.label;"/>
+            <vbox flex="1" align="center" id="no-avail-interps-message" collapsed="true">
+                <description style="font-weight: bold;">
+                    &noNodejsInterpreter.description;
+                </description>
+            </vbox>
+            <text value="&filePrefNodejsUseThisInterpreter.label;" style="padding: 2px 6px 2px 6px"/>
+            <hbox align="center">
+                <menulist id="nodejsDefaultInterpreter"
+                    flex="1"
+                    pref="true"
+                    prefstring="nodejsDefaultInterpreter"
+                          >
+                    <menupopup id="avail-interp-list"/>
+                </menulist>
+                <button label="&browse.label;" oncommand="loadNodejsExecutable();"/>
+            </hbox>
+        </groupbox>
+
+        <groupbox orient="vertical" >
+            <caption label="&nodejsDirectories.label;"/>
+            <description>
+                &nodejsFolder.description;
+            </description>
+            <pathlist id="nodejsExtraPaths"
+                      flex="1"
+                      seltype="multiple"
+                      rows="4"
+                      pref="true"
+                      prefwidget="true"
+                      prefstring="nodejsExtraPaths"/>
+            <vbox collapsed="true">
+              <!-- https://github.com/Komodo/KomodoEdit/issues/3000 -->
+              <description>
+                  &nodejsExcludeFolder.description;
+              </description>
+              <pathlist id="nodejsExcludePaths"
+                        flex="1"
+                        seltype="multiple"
+                        rows="4"
+                        pref="true"
+                        prefwidget="true"
+                        prefstring="nodejsExcludePaths"/>
+            </vbox>
+        </groupbox>
+        <groupbox orient="vertical" >
+            <caption label="&nodejsNamespaceMapping.label;"/>
+            <!-- Javascript and NodeJS are the same in this case, so the -->
+            <!-- same description may be used. -->
+            <description>
+                &javascriptNamespaceMapping.description;
+            </description>
+            <mappededitor id="mappings"
+                    column1="Namespace"
+                    column2="Path"
+                    local="true"
+                    pref="true" prefwidget="true"
+                    prefstring="nodejsNamespaceMapping" flex="1"/>
+        </groupbox>
+
+    </vbox>
+
+</page>

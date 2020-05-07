@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/listbox.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/pref-php.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        class="kodialog pref-window"
+        orient="vertical"
+        onload="PrefPhp_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/pref/pref-php.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="php-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical" id="defaultPHPInterpreterGroupBox">
+            <caption label="&defaultPHPInterpreter.label;"/>
+            <vbox id="no-avail-interps-message" collapsed="true">
+                <vbox flex="1" align="center">
+                    <description style="font-weight: bold;">&noPhpInterpreter.description;</description>
+                    <button label="&httpAspnActiveStateComASPNPHP.label;" class="button-link-a" style="cursor:pointer;"
+                            oncommand="alert('&noteRestartPhp.alert;'); getKoObject('browse').openUrlInDefaultBrowser('http://php.net/');"/>
+                </vbox>
+            </vbox>
+            <vbox flex="1">
+                <text value="&filePrefPhpUseThisInterpreter.label;" style="padding: 2px 6px 2px 6px"/>
+                <hbox align="center">
+                    <menulist id="phpDefaultInterpreter"
+                        flex="1"
+                        pref="true"
+                        prefstring="phpDefaultInterpreter"
+                        oncommand="PrefPhp_DebuggerConfiguredMessage();">
+                        <menupopup id="avail-interp-list"/>
+                    </menulist>
+                    <button label="&browse.label;" oncommand="loadPHPExecutable();"/>
+                </hbox>
+            </vbox>
+        </groupbox>
+    
+        <groupbox orient="vertical">
+            <caption label="&pathToAlternatePHPConfigurationFile.label;"/>
+            <vbox>
+                <description id="iniExplain">&filePrefPhpInifileDirectory.description;</description>
+        
+                <hbox align="center">
+                    <textbox id="phpConfigFile" flex="1"
+                             pref="true"
+                             prefstring="phpConfigFile"
+                             prefattribute="value"
+                             onblur="PrefPhp_SelectIni();"/>
+                    <button label="&browse.label;" oncommand="loadIniFile();"/>
+                </hbox>
+            </vbox>
+        </groupbox>
+<!-- #if WITH_DEBUGGING -->
+        <groupbox orient="vertical">
+            <caption label="&debuggerConfiguration.label;"/>
+            <vbox  flex="1">
+                <hbox id="php_debugger_config_status">
+                    <vbox id="php_debugger_config_status_image_vbox" pack="center">
+                        <image id="php_debugger_config_status_image" />
+                    </vbox>
+                    <description id="debugger-configured-msg"
+                                 style="font-weight: bold;"
+                                 flex="1"/>
+                </hbox>
+                <hbox align="center">
+                    <spring flex="1"/>
+                    <button label="&reCheckConfig.label;"
+                            oncommand="PrefPhp_DebuggerConfiguredMessage();"/>
+                    <spring flex="1"/>
+                </hbox>
+            </vbox>
+        </groupbox>
+<!-- #endif -->
+        <groupbox orient="vertical">
+            <caption label="&PHPDirectories.label;"/>
+            <description>
+                &phpFolder.description;
+            </description>
+            <pathlist
+                    id="phpExtraPaths"
+                    flex="1"
+                    seltype="multiple"
+                    rows="4"
+                    pref="true" prefwidget="true"
+                    prefstring="phpExtraPaths"/>
+            <vbox collapsed="true">
+              <!-- https://github.com/Komodo/KomodoEdit/issues/3000 -->
+              <description>
+                  &phpExcludeFolder.description;
+              </description>
+              <pathlist
+                      id="phpExcludePaths"
+                      flex="1"
+                      seltype="multiple"
+                      rows="4"
+                      pref="true" prefwidget="true"
+                      prefstring="phpExcludePaths"/>
+            </vbox>
+        </groupbox>
+        <groupbox orient="vertical" id="pref-php-other-options"
+                  class="load-context-check" showIfLoadContext="global">
+            <caption label="&otherOptions.label;"/>
+            <hbox align="center">
+                <label value="&commentStyle.label;"/>
+                <menulist id="commentStyle"
+                              pref="true" prefstring="phpCommentStyle"
+                              prefattribute="data">
+                    <menupopup>
+                        <menuitem data="//,#" label="&doubleSlash.label;"/>
+                        <menuitem data="#,//" label="&hash.label;"/>
+                    </menupopup>
+                </menulist>
+            </hbox>
+            <hbox align="center">
+                <vbox>
+                    <checkbox id="phpDoubleClickSelectsEntireVariable"
+                              label="&phpDoubleClickSelectsEntireVariable.label;"
+                              pref="true" prefstring="phpDoubleClickSelectsEntireVariable"
+                              prefattribute="checked"/>
+                    <description id="phpDoubleClickSelectsEntireVariableDescr">&phpDoubleClickSelectsEntireVariable.description;</description>
+                </vbox>
+            </hbox>
+        </groupbox>
+
+    </vbox>
+
+</window>
+

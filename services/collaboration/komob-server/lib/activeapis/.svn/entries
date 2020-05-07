@@ -1,0 +1,139 @@
+8
+
+dir
+61782
+https://svn.activestate.com/repos/activestate/webops/activeapis/tags/2.0.30
+https://svn.activestate.com/repos/activestate
+
+
+
+2010-12-16T19:39:09.819270Z
+59939
+damienp
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+17ce6b73-3e03-4ffb-a7e7-ebadc127e2c7
+
+test
+dir
+
+TODO.txt
+file
+
+
+
+
+2011-03-16T18:10:34.000000Z
+b7667396971009dfa0a297d815386685
+2010-01-21T22:36:06.086401Z
+39145
+trentm
+has-props
+
+Makefile.py
+file
+
+
+
+
+2011-03-16T18:10:34.000000Z
+6f0572a7ef6c55c4be9ac12149aa290c
+2010-02-02T21:41:46.265481Z
+39649
+trentm
+has-props
+
+externals
+dir
+
+distribute_setup.py
+file
+
+
+
+
+2011-03-16T18:10:34.000000Z
+d2de5d274bf9da8d60346a8b2cfe9b4b
+2010-01-21T01:16:01.532465Z
+39124
+sridharr
+
+lib
+dir
+
+CHANGES.md
+file
+
+
+
+
+2011-03-16T18:10:34.000000Z
+531507448863938922ea2a1c821061cc
+2010-12-16T19:38:34.408205Z
+59938
+damienp
+
+activeapis.kpf
+file
+
+
+
+
+2011-03-16T18:10:34.000000Z
+046ff8d31241533c2c44a56fee3c3208
+2009-10-20T18:27:32.040559Z
+35228
+trentm
+
+setup.py
+file
+
+
+
+
+2011-03-16T18:10:34.000000Z
+d22f2b5f934003c2028f52ca8eec97f1
+2010-01-21T19:15:52.121574Z
+39141
+trentm
+
+docs
+dir
+
+README.txt
+file
+
+
+
+
+2011-03-16T18:10:34.000000Z
+7834c47e468e1bbd2c9e7a2381f58733
+2010-12-16T19:38:34.408205Z
+59938
+damienp
+has-props
+
+setup.cfg
+file
+
+
+
+
+2011-03-16T18:10:34.000000Z
+7459e7c9863016973026c185510f8f67
+2010-01-21T01:16:01.532465Z
+39124
+sridharr
+

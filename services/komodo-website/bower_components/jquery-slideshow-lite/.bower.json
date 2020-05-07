@@ -1,0 +1,15 @@
+{
+  "name": "jquery-slideshow-lite",
+  "homepage": "https://github.com/fredwu/jquery-slideshow-lite",
+  "version": "0.8.1",
+  "_release": "0.8.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.8.1",
+    "commit": "b0860c63271d63f87c78dd3eef4abc9c971be22f"
+  },
+  "_source": "https://github.com/fredwu/jquery-slideshow-lite.git",
+  "_target": "~0.8.1",
+  "_originalSource": "https://github.com/fredwu/jquery-slideshow-lite.git",
+  "_direct": true
+}

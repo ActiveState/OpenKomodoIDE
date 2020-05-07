@@ -1,0 +1,9 @@
+<!ENTITY prefwindow.title "Extension Developer's Extension preferences">
+<!ENTITY pane1.title "Extension Developer's Extension preferences">
+<!ENTITY xuledit.startup.label "Live XUL Editor Default Contents:">
+<!ENTITY xuledit.startup.accesskey "X">
+<!ENTITY browse.label "Browse...">
+<!ENTITY jsenv.startup.label "JavaScript Environment Default Contents:">
+<!ENTITY jsenv.startup.accesskey "J">
+<!ENTITY htmledit.startup.label "Live HTML Editor Default Contents:">
+<!ENTITY htmledit.startup.accesskey "H">

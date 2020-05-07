@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<overlay id="perlappOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://perlapp/content/controller.js" type="application/x-javascript"/>
+    
+    <commandset id="allcommands">
+        <commandset
+            id="cmdset_perlapp"
+            oncommandupdate="ko.commands.updateCommandset(this)"
+            commandupdater="true"
+            events="language_changed,current_view_changed"
+            >
+        <command
+            id="cmd_toolsBuildPerlAppCommand" key="key_cmd_toolsBuildPerlAppCommand"
+            oncommand="ko.commands.doCommandAsync('cmd_toolsBuildPerlAppCommand', event)"
+            disabled="true"
+            desc="Tools: Build Standalone Perl Application..." />
+        </commandset>
+    </commandset>
+    
+    <menupopup id="popup_tools">
+        <menuitem label="Build Standalone Perl Application"
+                  id="menu_toolsBuildPerlAppCommand"
+                  accesskey="B"
+                  observes="cmd_toolsBuildPerlAppCommand"
+                  />
+    </menupopup>
+</overlay>

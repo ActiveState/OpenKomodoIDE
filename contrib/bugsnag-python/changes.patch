@@ -1,0 +1,26 @@
+--- /home/nathan/Projects/komodo-dev/contrib/bugsnag-python/2.3.1/handlers.py
++++ /home/nathan/Projects/komodo-dev/contrib/bugsnag-python/2.3.1/handlers.py (unsaved)
+@@ -14,8 +14,8 @@
+         # a fixed number of severity levels available server side
+         if record.levelname.lower() in ['error', 'critical']:
+             severity = 'error'
+-        elif record.levelname.lower() in ['warning', ]:
+-            severity = 'warning'
++        elif record.levelname.lower() in ['warning', 'info', 'debug']:
++            return # KOMODO: Don't report warnings, info or debug messages
+         else:
+             severity = 'info'
+ 
+--- /home/nathan/Projects/komodo-dev/contrib/bugsnag-python/2.3.1/__init__.py
++++ /home/nathan/Projects/komodo-dev/contrib/bugsnag-python/2.3.1/__init__.py (unsaved)
+@@ -51,6 +51,10 @@
+             Notification(exception[1], configuration,
+                         RequestConfiguration.get_instance(), **options).deliver()
+         else:
++            if exception.message is None and (exception.args.length == 0 or \
++                (exception.args.length == 1 and exception.args[0] == "None")):
++                return # KOMODO: Don't log exceptions without useful information
++            
+             # Exception objects
+             Notification(exception, configuration,
+                         RequestConfiguration.get_instance(), **options).deliver()

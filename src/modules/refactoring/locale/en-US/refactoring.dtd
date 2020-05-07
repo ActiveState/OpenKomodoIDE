@@ -1,0 +1,22 @@
+<!ENTITY confirmReplacement.title "Confirm Replacements">
+<!ENTITY confirmReplacement.descr "Refactoring: Confirm Replacements Descr">
+<!ENTITY extractMethod.desc "Refactoring: Extract a Method">
+<!ENTITY extractMethod.label "Extract a Method">
+<!ENTITY extractMethod.menuLabel "Extract Method...">
+<!ENTITY refactoring.label "Refactoring">
+<!ENTITY renameClassMember.desc "Refactoring: Rename the current class member">
+<!ENTITY renameClassMember.label "Rename the current class member">
+<!ENTITY renameClassMember.menuLabel "Rename Class Member">
+<!ENTITY renameClassMember.title "Rename Class Member">
+<!ENTITY renameVariable.desc "Refactoring: Rename the current variable">
+<!ENTITY renameVariable.label "Rename the current variable">
+<!ENTITY renameVariable.menuLabel "Rename Variable">
+<!ENTITY refactoringPrefs.label "Refactoring">
+<!ENTITY renameVariable_in_strings.label "Rename Occurrences in Strings">
+<!ENTITY renameVariable_in_comments.label "Rename Occurrences in Comments">
+<!ENTITY confirmReplace.label "Replace...">
+
+<!ENTITY refactoring.accessKey "R">
+<!ENTITY refactoring.renameClassMember.accessKey "A">
+<!ENTITY refactoring.renameVariable.accessKey "R">
+<!ENTITY refactoring.extractMethod.accessKey "M">

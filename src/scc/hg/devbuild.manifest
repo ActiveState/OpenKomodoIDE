@@ -1,0 +1,14 @@
+content mercurial content/
+
+locale	mercurial	en-US	locale/en-US/
+skin	mercurial	classic/1.0	skin/
+
+overlay	chrome://komodo/content/pref/pref.xul	    chrome://mercurial/content/pref-scc-hg-overlay.xul
+overlay	chrome://komodo/content/scc/checkout.xul    chrome://mercurial/content/checkout-overlay.xul
+
+component {62a562af-4c03-4b2d-83c0-6be411b76726} components/koHg.py
+contract @activestate.com/koSCC?type=hg;1 {62a562af-4c03-4b2d-83c0-6be411b76726}
+category category-komodo-scc hg @activestate.com/koSCC?type=hg;1
+component {c0727f00-0d19-4c89-8e2d-fa758185f19a} components/koHg.py
+contract @activestate.com/koFileStatusChecker?type=hg;1 {c0727f00-0d19-4c89-8e2d-fa758185f19a}
+category category-komodo-file-status hg @activestate.com/koFileStatusChecker?type=hg;1

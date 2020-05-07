@@ -1,0 +1,34 @@
+// komodo tool: register_event
+// ===========================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ===========================
+<% /* Register Single Event */ %>
+
+/**
+ * Action to run event on
+ * Doesn't need to be an existing WordPress action
+ *
+ * @param string - name of action
+ * @param string - name of function to run on this action
+ */
+add_action( '${1:event_action}', '${2:event_function}' );
+
+/**
+ * Function to be called when event is fired
+ *
+ * @return void
+ */
+function $2() {
+${0:// do neat stuff here}
+}
+
+/**
+ * Schedule the event
+ *
+ * @param int - unix timestamp of when to run the event
+ * @param string - action to fire at the timestamp
+ */
+wp_schedule_single_event( ${timestamp:time()}, '${1}' );

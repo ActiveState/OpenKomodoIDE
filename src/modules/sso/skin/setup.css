@@ -1,0 +1,42 @@
+dialog {
+  -moz-appearance: none;
+
+  background-color: Window;
+  padding: 0;
+  /*margin: 0;*/
+}
+
+.setup-content-vbox {
+  padding: 0 8em;
+}
+
+.setup-header {
+  font-size: 18pt;
+  font-weight: normal;
+  padding: 1em 0 1.5em 0;
+}
+
+.buttons-hbox {
+  border-top: 2px solid #ccd9ea;
+  background-color: #f1f5fb;
+  padding: 1em;
+}
+
+.buttons-hbox button {
+  font: menu;
+  text-align: center;
+}
+
+.success, .error {
+  padding: 2px;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+.error {
+  color: #FF0000 !important;
+}
+
+.success {
+  color: #44AA00 !important;
+}

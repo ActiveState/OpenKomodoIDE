@@ -1,0 +1,2836 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+]>
+
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xbl="http://www.mozilla.org/xbl"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<binding id="view-editor"
+    extends="chrome://komodo/content/bindings/views-buffer.xml#view-buffer-base">
+    <content orient="vertical" flex="6">
+        <xul:box anonid="outer" flex="1">
+            <xul:vbox anonid="wrapper" flex="1">
+                <xul:statusbar orient="horizontal">
+
+                    <xul:statusbarpanel anonid="statusbar-message-panel" flex="1">
+                        <xul:deck anonid="statusbar-message-deck" class="for-vi-mode" selectedIndex="0" flex="1">
+                            <xul:hbox anonid="statusbar-message-deck-default">
+                            </xul:hbox>
+                        </xul:deck>
+                    </xul:statusbarpanel>
+
+                    <xul:statusbarpanel anonid="statusbar-pos-info"
+                                    tooltiptext="&filePosition.tooltiptext;"
+                                    align="center"
+                                    pack="end">
+
+                        <xul:label anonid="statusbar-selection"/>
+                        <xul:label anonid="statusbar-line-col"/>
+
+                    </xul:statusbarpanel>
+
+                    <xul:statusbarpanel anonid="statusbar-encoding"
+                                        style="min-width: 5rem"
+                                    tooltiptext="&fileEncoding.tooltiptext;"
+                                    >
+                        <xul:toolbarbutton class="statusbar-label"
+                              anonid="statusbar-encoding-label"
+                              flex="1"
+                              orient="horizontal"
+                              type="menu"
+                              persist="buttonstyle"
+                              label="--"
+                              buttonstyle="text">
+                            <xul:menupopup anonid="statusbar-encoding-menupopup"
+                                       onpopupshowing="ko.statusBar.setupEncodingMenu(this);" />
+                        </xul:toolbarbutton>
+                    </xul:statusbarpanel>
+
+                    <xul:statusbarpanel anonid="statusbar-language"
+                                        style="min-width: 5rem"
+                                    pack="end"
+                                    >
+                        <xul:toolbarbutton class="statusbar-label languageicon"
+                              anonid="statusbar-language-menu"
+                              tooltiptext="&fileType.tooltiptext;"
+                              flex="1"
+                              orient="horizontal"
+                              type="menu"
+                              persist="buttonstyle"
+                              label="--"
+                              buttonstyle="text">
+                            <xul:menupopup anonid="statusbar-filetype-menu"
+                                       position="before_end"
+                                       onpopupshowing="ko.uilayout.updateViewAsLanguageMenu(this);" />
+                        </xul:toolbarbutton>
+                    </xul:statusbarpanel>
+
+                </xul:statusbar>
+                <xul:scintilla xbl:inherits="flex,focused,context,mozcontext" flex="1"
+                               anonid="scintilla"
+                               allowIME="true"
+                               mozcontext="editorContextMenu"/>
+                <xul:ko-findbar class="hud" anonid="findbar"/>
+            </xul:vbox>
+        </xul:box>
+        <children/>
+    </content>
+
+    <implementation name="vieweditor" implements="koIScintillaView, koIBookmarkableView, ISciMozEvents, nsIObserver">
+
+        <!-- We want Komodo editor views to send DOM events. -->
+        <field name="_dispatch_events">true</field>
+        
+        <property name="cwd">
+             <getter><![CDATA[
+                if (this.koDoc && ! this.koDoc.isUntitled) {
+                    return this.koDoc.file.dirName;
+                }
+                return null;
+            ]]></getter>
+        </property>
+        <property name="prefs">
+             <getter><![CDATA[
+                if (this.koDoc && this.koDoc.prefs) {
+                    return this.koDoc.prefs;
+                }
+                return null;
+            ]]></getter>
+        </property>
+        
+        <field name="lintingEnabled">false</field>
+        <field name="_everLinted">false</field>
+        <field name="_lintBuffer">null</field>
+        
+        <field name="lastTopLine">null</field>
+        <field name="_linkedView">null</field>
+        
+        <property name="linkedView">
+            <setter>
+                <![CDATA[
+                if(val && val.getAttribute("type") == "editor")
+                {
+                    // if it's not set, we're safe
+                    // or if val is NOT the already linked view
+                    // If val === _linkedView then it's either already been
+                    // called or this is coming from the first views `setter`
+                    // for view.linkedView, so skip.
+                    if(this._linkedView == null || val !== this._linkedView)
+                    {
+                        // if it's the second part of the if then unlink
+                        // anything that might have been linked
+                        try
+                        {
+                            this._linkedView._linkedView = null;
+                        } catch(e){/*Don't care, just means this._linkedView was null*/}
+                        this._linkedView = null;
+                        this._linkedView = val;
+                        val.linkedView = this;
+                    }
+                } else if (val == "" || val == null || val == 0)
+                {
+                    this._linkedView._linkedView = null;
+                    this._linkedView = null;
+                }
+                ]]>
+            </setter>
+            <getter>
+                <![CDATA[
+                   return this._linkedView; 
+                ]]>
+            </getter>
+        </property>
+        <property name="lintBuffer">
+            <setter><![CDATA[
+            if (this._lintBuffer)
+                this._lintBuffer.destructor();
+            this._lintBuffer = val;
+            ]]></setter>
+            <getter><![CDATA[
+            try {
+                if (!this._lintBuffer && this.lintingEnabled)
+                    this._lintBuffer = new ko.lint.lintBuffer(this);
+            } catch (e) {
+                // If we have not loaded lint.js into chrome, then we
+                // do not care about linting and we ignore this error.
+            }
+            return this._lintBuffer;
+            ]]></getter>
+        </property>
+
+        <method name="_requestLinting">
+        <parameter name="reason"/>
+        <body>
+        <![CDATA[
+            if (this.lintBuffer) {
+                this.lintBuffer.request(reason);
+                this._everLinted = true;
+            }
+        ]]>
+        </body>
+        </method>
+
+        <field name="_view_pref_observer_topics">
+            [
+                'colorizing_enabled',
+            ]
+        </field>
+
+        <field name="_koDoc_observer_topics">
+            [
+                'buffer_dirty',
+                'language_changed',
+                'encoding_changed',
+                'editUseLinting'
+            ]
+        </field>
+
+        <field name="_koDoc">null</field>
+        <property name="koDoc"
+            onget="return this._koDoc;">
+        <setter>
+        <![CDATA[
+            this.log.info("view-editor:document setter");
+            var hadKoDoc = false;
+            var viewPrefObserverService, obsSvc;
+            var minimap = this.minimap;
+            if (this._koDoc) {
+                hadKoDoc = true;
+                try {
+                // We are detaching a document from the view
+                xtk.domutils.fireEvent(this, 'view_document_detaching');
+                viewPrefObserverService = this.prefs.prefObserverService;
+                viewPrefObserverService.removeObserverForTopics(this,
+                                                                this._view_pref_observer_topics.length,
+                                                                this._view_pref_observer_topics);
+                this._koDoc.observerService.removeObserverForTopics(this,
+                                                                    this._koDoc_observer_topics.length,
+                                                                    this._koDoc_observer_topics);
+                // Remove old doc pref observer
+                if (this.prefs)
+                {
+                    if (this.initializedOwnDocPrefs)
+                    {
+                        this.initializedOwnDocPrefs = false;
+                        this.prefs.prefObserverService.removeObserverForTopics(this,
+                                                                    this._doc_pref_observer_topics.length,
+                                                                    this._doc_pref_observer_topics,
+                                                                    false);
+                    }
+                }
+                this._koDoc.releaseView(this);
+                if (minimap) {
+                    minimap.releaseKoDoc();
+                }
+                this._koDoc.releaseReference();
+                obsSvc = Components.classes["@mozilla.org/observer-service;1"].
+                                getService(Components.interfaces.nsIObserverService);
+                obsSvc.removeObserver(this, 'scheme-changed');
+                obsSvc.removeObserver(this, 'primary_languages_changed');
+                } catch(e) {
+                    this.log.exception(e);
+                }
+            }
+
+            // reset those items that are buffer dependent
+            // new objects will be recreated on request
+            this.item = null;
+            this.lintBuffer = null;
+            this.lintingEnabled = false;
+
+            this._koDoc = val;
+            if (val) {
+                // Remove the file from the MRU when it is opened... this may
+                // seem strange, it's because once you open the file you don't
+                // need it in the MRU - it will be re-added when the file is
+                // closed - bug 75381.
+                // Note: isSpecial typicaly denotes sockets and such, is also
+                //       used by us to identify things like dbgp files
+                //       we don't want special files in our mru
+                if (!val.isUntitled && val.file && !val.file.isSpecial) {
+                    ko.mru.removeURL("mruFileList", val.file.URI);
+                }
+
+                // We are attaching a document to this view
+                val.addReference();
+                val.addView(this);
+                // Bind a minimap view to the koDoc?
+                if (minimap) {
+                    //val.addView(minimap);
+                    minimap.attachKoDoc(val);
+                }
+                // we want to listen for any changes in the document
+                val.observerService.addObserverForTopics(this,
+                                                         this._koDoc_observer_topics.length,
+                                                         this._koDoc_observer_topics,
+                                                         0);
+                viewPrefObserverService = this.prefs.prefObserverService;
+                viewPrefObserverService.addObserverForTopics(this,
+                                                             this._view_pref_observer_topics.length,
+                                                             this._view_pref_observer_topics,
+                                                             false);
+
+                obsSvc = Components.classes["@mozilla.org/observer-service;1"].
+                                getService(Components.interfaces.nsIObserverService);
+                obsSvc.addObserver(this, 'scheme-changed', false);
+                obsSvc.addObserver(this, 'primary_languages_changed', false);
+                this.parentView.updateLeafName(this);
+                this.parentView.updateFileStatus(this);
+                this.parentView.updateDirtyStatus(this);
+                if (hadKoDoc) {
+                    // Have to update the title bar for the new document
+                    // path - bug 87615.
+                    ko.uilayout.updateTitlebar(this);
+                }
+
+                this.lintingEnabled = this.prefs.getBooleanPref("editUseLinting");
+                if (!ko.views.manager.batchMode) {
+                    this._requestLinting("reset the view's document");
+                }
+                let language = val.language;
+                this._setLanguage(language);
+                xtk.domutils.fireEvent(this, 'view_document_attached');
+
+                // Add new doc pref observer
+                if (hadKoDoc && this.prefs)
+                {
+                    if (!this.initializedOwnDocPrefs)
+                    {
+                        this.initializedOwnDocPrefs = true;
+                        this.prefs.prefObserverService.addObserverForTopics(this,
+                                                                    this._doc_pref_observer_topics.length,
+                                                                    this._doc_pref_observer_topics,
+                                                                    false);
+                    }
+                }
+            }
+        ]]>
+        </setter>
+        </property>
+
+        <field name="_languageObj">null</field>
+        <property name="languageObj"
+            onset="throw Components.results.NS_ERROR_NOT_IMPLEMENTED;"
+            onget="return this.koDoc.languageObj"/>
+
+        <field name="_global_pref_observer_topics">
+            [
+                'debuggerMaxTooltipSize',
+                'editor-scheme',
+                'editSmartWrapSelection',
+                'editSmartWrapSelectionKeep',
+                'wrapSelectionOnlyPlainText',
+                'wrapSelectionDelimiters',
+                'enableAutoAbbreviations',
+                'autoAbbreviationTriggerCharacters'
+            ]
+        </field>
+        <field name="_doc_pref_observer_topics">
+            [
+                'ySlop',
+                'foldSeparateBlockParts',
+                'select_most_recent_buffer_on_buffer_close',
+                'editShowMinimap'
+            ]
+        </field>
+        <field name="initializedGlobalPrefs">false</field>
+        <field name="initializedOwnDocPrefs">false</field>
+        <field name="initializedGlobalDocPrefs">false</field>
+        <field name="foldSeparateBlockParts"></field>
+    
+        <field name="firstDocLine">-1</field>
+        <field name="lastDocLine">-1</field>
+
+        <method name="init">
+        <body>
+        <![CDATA[
+            this.parentView.setContext(this, "tabContextMenu");
+            this.initPrefs();
+            this._currentFamily = "";
+            this._highlightColors = null;
+            this.lastTopLine = this.scimoz.firstVisibleLine;
+            // Duplicate of koUDLLanguageBase.familyAtPosition to avoid
+            // making the xpcom call on every call.  We know we're in
+            // a UDL file.
+            this._familyAtPosition = [];
+            var parts = [
+                ["M", Components.interfaces.ISciMoz.SCE_UDL_CSS_DEFAULT],
+                ["CSS", Components.interfaces.ISciMoz.SCE_UDL_CSL_DEFAULT],
+                ["CSL", Components.interfaces.ISciMoz.SCE_UDL_SSL_DEFAULT],
+                ["SSL", Components.interfaces.ISciMoz.SCE_UDL_TPL_DEFAULT],
+                ["TPL", Components.interfaces.ISciMoz.SCE_UDL_UPPER_BOUND + 1]
+            ];
+            for (var part, style = 0, i = 0; part = parts[i]; ++i) {
+                for (; style < part[1]; style++) {
+                    this._familyAtPosition[style] = part[0];
+                }
+            }
+            this.handle_current_view_linecol_changed = (function(event) {
+                // TODO: We shouldn't need to use this updateCurrentLineColor
+                //       hack, we should be using Scintilla caretLineBackAlpha
+                //       setting instead, removing the need for this function.
+                var view = event.originalTarget;
+                if (view != this) {
+                    return;
+                }
+                if (this._doHighlightColors && !view.updateCurrentLineColor()) {
+                    // It failed, so don't highlight anymore.
+                    this._doHighlightColors = false;
+                }
+                var transientMarkRingArray = this._transientMarkRing;
+                if (transientMarkRingArray && transientMarkRingArray.length) {
+                    this.displayTransientSelection();
+                }
+            }).bind(this); 
+            this.addModifiedHandler(this.onTextInserted,
+                                    this,
+                                    1000, // high numbers indicate low priority
+                                    Components.interfaces.ISciMoz.SC_MOD_INSERTTEXT);
+        ]]>
+        </body>
+        </method>
+
+        <method name="initWithDocument">
+        <parameter name="doc"/>
+        <body>
+        <![CDATA[
+        try {
+            const SME = Components.interfaces.ISciMozEvents;
+            this.log.info("view-editor:initWithDocument");
+            this.scintilla.language = doc.language;
+            this.scintilla.symbolMargin = true;
+            this.scintilla.encoding = doc.encoding.python_encoding_name;
+            this.scintilla.init();
+            this.koDoc = doc;
+            
+            this._genericController = Components.classes['@activestate.com/koGenericCommandHandler;1'].createInstance();
+            this._genericController.view = this;
+
+            this.scintilla.controllers.appendController(this._genericController);
+            // I'd like to do the latter instead of what is done above, but that doesn't
+            // work, for reasons which escape me but probably have to do with the
+            // special hack in commands.js to deal with focus on embed elements.
+            // this.controllers.appendController(this._genericController);
+            
+            this.initPrefs();
+
+            this._setupHighlightColors(this.scintilla);
+            
+            xtk.domutils.fireEvent(this, 'current_view_changed');
+            
+            this.addEventListener('current_view_linecol_changed',
+                                    this.handle_current_view_linecol_changed, false);
+            this._hookSciMozEvents(SME.SME_UPDATEUI | SME.SME_MARGINCLICK);
+            this._inInitPhase = false;
+            // This field is used by views-buffer.isCICplnEnabled
+            this._debuggerMaxTooltipSize = this.prefs.getLongPref('debuggerMaxTooltipSize');
+            if (!this.prefs.getBooleanPref('colorizing_enabled')) {
+                this._turnColourizingOff();
+            }
+            ko.lint.initializeGenericPrefs(this.prefs);
+            var editShowMinimap = this.prefs.getBooleanPref("editShowMinimap");
+            if (editShowMinimap) {
+                this.createMinimap();
+            }
+            // bug 98866: Let scintilla finish initializing this buffer
+            // before making sure it can scroll to the caret.
+            // Then call the post-file-open macros after, in case they
+            // change the caret position.
+            this.registerUpdateUICallback(function() {
+                this.scintilla.scimoz.scrollCaret();
+                ko.macros.eventHandler.hookPostFileOpen(this);
+            }.bind(this));
+            this.lastTopLine = this.scimoz.firstVisibleLine;
+        } catch (e) {
+            this.log.exception(e);
+        }
+        this.log.debug('scimoz code page after initWithDoc is '+this.scimoz.codePage);
+        this.log.debug('document code page after initWithDoc is '+this.koDoc.codePage);
+        this._setWrapSelectionDelimiters(); // initialize
+        this.enableAutoAbbreviations = ko.prefs.getBooleanPref("enableAutoAbbreviations");
+        
+        var evt = new CustomEvent("editor_view_opened", { detail: { view: this } });
+        window.dispatchEvent(evt);
+        ]]>
+        </body>
+        </method>
+
+        <field name="minimap">null</field>
+
+        <method name="finish_autocomplete">
+        <parameter name="position"/>
+        <body>
+        <![CDATA[
+          this._genericController.finish_autocomplete(position);
+        ]]>
+        </body>
+        </method>
+        
+        <method name="createMinimap">
+        <body><![CDATA[
+            var minimap = document.createElementNS(this.namespaceURI, 'minimap');
+            minimap.setAttribute('flex','1');
+            minimap.setAttribute('type', 'minimap'); // needed for view-list-base.log
+            this.parentNode.appendChild(minimap); // this.parentNode is the tabbox container
+            this.minimap = minimap;
+            window.setTimeout(window.updateCommands, 1, 'minimap_changed');
+            minimap.initWithView(this);
+            minimap.attachKoDoc(this.koDoc);
+            this.updateMinimapDisplay(true);
+            this.addModifiedHandler(this.updateMinimapOnBufferModified,
+                                    this,
+                                    1000, // high numbers indicate low priority
+                                    (Components.interfaces.ISciMoz.SC_MOD_INSERTTEXT
+                                     |Components.interfaces.ISciMoz.SC_MOD_DELETETEXT));
+        ]]>
+        </body>
+        </method>
+        
+        <method name="destroyMinimap">
+        <body><![CDATA[
+            this.removeModifiedHandler(this.updateMinimapOnBufferModified);
+            this.minimap.releaseKoDoc();
+            this.parentNode.removeChild(this.minimap);
+            this.minimap = null;
+            window.setTimeout(window.updateCommands, 1, 'minimap_changed');
+        ]]>
+        </body>
+        </method>
+        
+        <field name="_lastTimeoutId">0</field> 
+        <method name="updateMinimapOnBufferModified">
+        <body><![CDATA[
+	    clearTimeout(this._lastTimeoutId);
+	    this._lastTimeoutId = setTimeout(function(minimap) {
+		minimap.syncMinimapFromBuffer();
+	    }, 250, this.minimap);
+        ]]>
+        </body>
+        </method>
+        
+        <method name="initPrefs">
+        <body><![CDATA[
+            var prefObserverService = this.__globalPrefs.prefObserverService;
+            if (!this.initializedGlobalPrefs) {
+                this.initializedGlobalPrefs = true;
+                prefObserverService.addObserverForTopics(this,
+                                                         this._global_pref_observer_topics.length,
+                                                         this._global_pref_observer_topics,
+                                                         false);
+            }
+            if (!this.initializedGlobalDocPrefs) {
+                this.initializedGlobalDocPrefs = true;
+                prefObserverService.addObserverForTopics(this,
+                                                this._doc_pref_observer_topics.length,
+                                                this._doc_pref_observer_topics,
+                                                         false);
+            }
+            var docPrefsThisTime = this.__globalPrefs;
+            
+            if (this.prefs) {
+                if (!this.initializedOwnDocPrefs) {
+                    this.initializedOwnDocPrefs = true;
+                    this.prefs.prefObserverService.addObserverForTopics(this,
+                                                this._doc_pref_observer_topics.length,
+                                                this._doc_pref_observer_topics,
+                                                false);
+                }
+                docPrefsThisTime = this.prefs;
+            }
+            this.foldSeparateBlockParts = docPrefsThisTime.getBooleanPref('foldSeparateBlockParts');
+            this.scimoz.setProperty('fold.at.else', this.foldSeparateBlockParts ? 1 : 0);
+            this.scimoz.setYCaretPolicy(this.scimoz.CARET_SLOP |
+                                   this.scimoz.CARET_STRICT |
+                                   this.scimoz.CARET_EVEN,
+                                   docPrefsThisTime.getLongPref('ySlop'));
+            this.selectMostRecentBufferOnBufferClose =
+                docPrefsThisTime.getBooleanPref('select_most_recent_buffer_on_buffer_close');
+            this._setAutoAbbreviations();
+        ]]></body>
+        </method>
+        
+        <method name="_setWrapSelectionDelimiters">
+        <body>//<![CDATA[
+            this.editSmartWrapSelection = ko.prefs.getBooleanPref("editSmartWrapSelection");
+            this.editSmartWrapSelectionKeep = ko.prefs.getBooleanPref("editSmartWrapSelectionKeep");
+            this.wrapSelectionOnlyPlainText = ko.prefs.getBooleanPref("wrapSelectionOnlyPlainText");
+            this.wrapSelectionDelimiters = ko.prefs.getStringPref("wrapSelectionDelimiters");
+        //]]>
+        </body>
+        </method>
+            
+        <method name="_setAutoAbbreviations">
+        <body>//<![CDATA[
+            this.enableAutoAbbreviations = ko.prefs.getBooleanPref("enableAutoAbbreviations");
+            var autoAbbreviationTriggerCharacters = ko.prefs.getStringPref("autoAbbreviationTriggerCharacters");
+            this.autoAbbreviationTriggerCharacters_Processed = ko.stringutils.backslashUnescape(autoAbbreviationTriggerCharacters);
+        //]]>
+        </body>
+        </method>
+
+        <method name="_turnColourizingOff">
+        <body><![CDATA[
+            var languageRegistryService = Components.classes['@activestate.com/koLanguageRegistryService;1'].getService(Components.interfaces.koILanguageRegistryService);
+            var textLanguageService = languageRegistryService.getLanguage("Text");
+            var lexer = textLanguageService.getLanguageService(Components.interfaces.koILexerLanguageService);
+            this.koDoc.lexer = lexer;
+            // Going to text, we need to explicitly clear the styles.
+            var scimoz = this.scimoz;
+            scimoz.startStyling(0, 0x3f);
+            scimoz.setStyling(scimoz.length, 0);
+            this.koDoc.docSettingsMgr.applyDocumentSettingsToView(this);
+            scimoz.tabWidth = scimoz.tabWidth;
+        ]]>
+        </body>
+        </method>
+
+        <method name="getTooltipText">
+        <parameter name="x"/>
+        <parameter name="y"/>
+        <body><![CDATA[
+            var text = null;
+            this._last_tooltip_property_name = null;
+            try {
+                var sm = this.scintilla.scimoz;
+                var pos = sm.positionFromPoint(x, y);
+                var lineNo = sm.lineFromPosition(pos);
+
+                var margin = this.getMarginForCoord(x, y);
+                if (margin >= 0) {
+                    // Margin tooltip.
+                    var data = { x: x, y: y, view: this, margin: margin, pos: pos, line: lineNo, text: '' };
+                    var event = new CustomEvent('editor_margin_get_tooltiptext', { detail: data, bubbles: true, cancelable: true });
+                    if (!this.dispatchEvent(event)) {
+                        // Set by an event handler.
+                        return data.text;
+                    }
+                    if (margin == sm.MARGIN_SYMBOLS || margin == sm.MARGIN_LINENUMBERS) {
+                        return this.viewsPropertiesBundle.GetStringFromName("symbolMarginTooltip");
+                    }
+                    return null;
+                }
+
+                // Editor tooltip.
+                var data = { x: x, y: y, view: this, pos: pos, line: lineNo, text: '' };
+                var event = new CustomEvent('editor_get_tooltiptext', { detail: data, bubbles: true, cancelable: true });
+                if (!this.dispatchEvent(event)) {
+                    // Set by an event handler.
+                    return data.text;
+                }
+
+                if (pos > 0 && pos < sm.length) {
+                    if (this.lintBuffer && this.lintBuffer.lintResults) {
+                        var charOffset = pos - sm.positionFromLine(lineNo) + 1;
+                        var results = {};
+                        var numResults = {};
+                        this.lintBuffer.lintResults.
+                                getResultsInLineRange(lineNo + 1,
+                                                        lineNo + 1,
+                                                        results,
+                                                        numResults);
+                        for (var i = 0; i < numResults.value; i++) {
+                            var r = results.value[i];
+                            //XXX lintResult.column* are actually
+                            //    misnomers. They give character
+                            //    offsets from the begining of the
+                            //    line, not column numbers
+                            if (r.columnStart <= charOffset &&
+                                charOffset <= r.columnEnd) {
+                                if (text)
+                                    text += "\n" + r.description;
+                                else
+                                    text = r.description;
+                            }
+                        }
+                    }
+<!-- #if WITH_DEBUGGING -->
+                    // no syntax errors at this position, try the debugger
+                    if (!text && this.koDoc && ko.dbg.manager && ko.dbg.manager.currentSession &&
+                        !ko.dbg.manager.currentSession.isInteractive &&
+                        this.prefs.getBooleanPref("debuggerHoverValue")) {
+                        var start=0;
+                        var end=0;
+                        var str=null;
+                        if (pos >= sm.selectionStart && pos <= sm.selectionEnd) {
+                            // do we have a selection we are hovoring over, if
+                            // so, get the selected text
+                            str = sm.selText;
+                        } else {
+                            var line = {};
+                            sm.getLine(lineNo, line);
+                            line = line.value;
+                            var linepos = sm.positionFromLine(lineNo);
+    
+                            // figure out if this is a variable
+                            var styles = this.koDoc.languageObj.getVariableStyles({});
+                            var posStyle = sm.getStyleAt(pos);
+                            //dump("posStyle "+posStyle+"\n");
+                            var isVariable = false;
+                            for (var vs=0; vs < styles.length; vs++) {
+                                //dump("style? "+styles[vs]+"\n");
+                                if (styles[vs] == posStyle) {
+                                    isVariable = true;
+                                    break;
+                                }
+                            }
+                            if (!isVariable) return null;
+
+                            // get the variable word now
+                            start = sm.wordStartPosition(pos, true) - linepos;
+                            end = sm.wordEndPosition(pos, true) - linepos;
+                            // Bug 91785 - watch out for variable indicators at the end that
+                            // aren't actually part of the variable name
+                            // In the bug: $str =~ /^$var$/ -- the trailing $ has a diff style.
+                            while (end > start && sm.getStyleAt(linepos + end - 1) != posStyle) {
+                                end -= 1;
+                            }
+                            str = line.substring(start, end);
+                            if (start > 0) {
+                                var indicators = null;
+                                if (this.koDoc)
+                                    indicators = this.koDoc.languageObj.variableIndicators;
+                                if (indicators) {
+                                    var ch = line[start - 1];
+                                    if (indicators.indexOf(ch) >= 0)
+                                        str = ch + str;
+                                }
+                            }
+                        }
+
+                        // get the debugger to eval for us
+                        this._last_tooltip_property_name = str;
+                        if (str) {
+                            text = this._getPropertyFromDebugger(str);
+                        }
+                    }
+<!-- #endif -->
+                }
+            } catch(e) {
+                this.log.exception(e);
+            }
+            return text;
+        ]]></body>
+        </method>
+        
+        <method name="_getPropertyFromDebugger">
+        <parameter name="propertyName"/>
+        <body>
+        <![CDATA[
+            var text = null;
+            var p = ko.dbg.manager.currentSession.dbg.propertyGet(propertyName);
+            if (ko.dbg.is_exception_property(p, this.koDoc.language)) {
+                p = ko.dbg.manager.currentSession.dbg.evalString(propertyName);
+            }
+            if (p) {
+                try {
+                    text = p.getTooltip(this._debuggerMaxTooltipSize);
+                } catch(e) {
+                    // ignore a failure
+                }
+            }
+            return text;
+        ]]></body>
+        </method>
+        
+        <method name="updateTooltipText">
+        <body>
+        <![CDATA[
+            try {
+                var str = this._last_tooltip_property_name;
+                if (str) {
+                    var newValue = this._getPropertyFromDebugger(str);
+                    if (newValue !== null) {
+                        gEditorTooltipHandler.updateTooltip(newValue);
+                    } else {
+                        // Don't update the tooltip (old behavior before bug 91779)
+                    }
+                }
+            } catch(ex) {
+                this.log.exception("Failed to refresh tooltip: " + ex);
+            }
+        ]]></body>
+        </method>
+
+        <method name="doFocus">
+        <parameter name="event"/>
+        <body>
+        <![CDATA[
+            try {
+                if (!ko.views.manager.batchMode && !this._everLinted) {
+                    this._requestLinting("focussing view and have not yet linted");
+                }
+                this.updateCurrentLineColor();
+                if (typeof(gVimController) != 'undefined' &&
+                                       gVimController.enabled) {
+                    gVimController.onBufferFocus();
+                }
+            } catch (e) {
+                this.log.exception(e);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="_clearFoldLevels">
+        <parameter name="scimoz"/>
+        <body>
+        <![CDATA[
+            var lastLine = scimoz.lineCount;
+            for (var i = 0; i < lastLine; i++) {
+                scimoz.setFoldLevel(i, 0);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="_setLanguage">
+        <parameter name="language"/>
+        <body>
+        <![CDATA[
+            this.language = language;
+        ]]>
+        </body>
+        </method>
+
+        <field name="viewsPropertiesBundle">
+            Cc["@mozilla.org/intl/stringbundle;1"].
+                    getService(Ci.nsIStringBundleService).
+                    createBundle("chrome://komodo/locale/views.properties")
+        </field>
+
+        <!--nsIObserver implementation-->
+        <method name="observe">
+        <!-- Generally the subject of the notification is the view's
+             document (notifications sent directly on the private
+             nsIObserverService instance for that document instance).
+             However this is not *always* the case: this view does
+             register to observe some other notifications. -->
+        <parameter name="doc"/>
+        <parameter name="topic"/>
+        <parameter name="data"/>
+        <body>
+        <![CDATA[
+            // XXX we need to also observe changes in the file
+            // status so we can appropriately update our tab icons
+            this.log.debug("editor view for document '"+
+                           this.koDoc.baseName+"' observed '"+topic+"'\n");
+            switch (topic) {
+            case 'language_changed':
+                // Multi-window story: do this on the current view only.
+                if (!this.isCurrent) {
+                    return;
+                }
+                let language = doc.language;
+                this.log.info("Changed language to:" + language);
+                this._setLanguage(language);
+                // bug 34689, bug 81587: force syntax highlighting to re-lex,
+                // otherwise the syntax colouring is not correctly updated.
+                this._clearFoldLevels(this.scimoz);
+                this.scimoz.setProperty('fold',
+                                        doc.languageObj.foldable ? 1 : 0);
+                if (doc.languageObj.foldable) {
+                    this.scimoz.setProperty('fold.at.else', this.foldSeparateBlockParts);
+                }
+                this.scimoz.colourise(0,-1);
+                this.commandCompletionSvc = null;
+                this._languageObj = null;
+                if (this == ko.views.manager.currentView) {
+                    if (this.lintBuffer) {
+                        //XXX What if the language of a view other than the
+                        //    current is changed (not possible in Komodo
+                        //    right now?). This will not re-lint in that case.
+                        this.lintBuffer.request("language changed");
+                        this._everLinted = true;
+                    }
+                    xtk.domutils.fireEvent(this, 'current_view_language_changed');
+                    this.koDoc.docSettingsMgr.applyDocumentSettingsToView(this);
+
+                    // The change in language may affect controllers
+                    window.setTimeout("window.updateCommands('language_changed');", 1);
+                    window.setTimeout("window.updateCommands('foldability_changed');", 1);
+                }
+                this._setupHighlightColors(this.scintilla);
+                break;
+            case 'title_changed':
+                // XXX need a way to observer file/title changes
+                throw Components.results.NS_ERROR_NOT_IMPLEMENTED;
+                //this.parentView.updateLeafName(this);
+                //break;
+            case 'buffer_dirty':
+                // Multi-window story: the check on this.isCurrent is sufficient
+                // If the same file is current in more than one window, including
+                // the topmost, we'll update its title bar and status in each window.
+                // Weirdness:
+                // this.koDoc always points to the doc argument.
+                if (this.parentView && typeof(this.parentView.updateDirtyStatus) != 'undefined') {
+                    this.parentView.updateDirtyStatus(this);
+                    if (this.isCurrent) {
+                        ko.uilayout.updateTitlebar(this);
+                    }
+                    xtk.domutils.fireEvent(this, 'view_dirty_status_changed');
+                }
+                break;
+            case 'encoding_changed':
+                // got notification from document, update the statusbar
+                if (this.isCurrent) {
+                    xtk.domutils.fireEvent(window, 'current_view_encoding_changed');
+                }
+                break;
+            case 'editUseLinting':
+                this.lintBuffer = null;
+                this.lintingEnabled = this.prefs.getBooleanPref("editUseLinting");
+                this._requestLinting("linting preference enabled");
+                break;
+            case 'ySlop':
+                //multi-window: this applies to all windows, as it's a pref
+                this.scimoz.setYCaretPolicy(this.scimoz.CARET_SLOP |
+                                       this.scimoz.CARET_STRICT |
+                                       this.scimoz.CARET_EVEN,
+                                       (this.prefs || this.__globalPrefs).getLongPref('ySlop'));
+                break;
+            case 'editShowMinimap':
+                var editShowMinimap = this.prefs.getBooleanPref("editShowMinimap");
+                if (editShowMinimap) {
+                    if (!this.minimap) {
+                        this.createMinimap();
+                    } else if (this.showMinimap) {
+                        // Nothing to do, we're already showing the minimap
+                    } else {
+                        // It's created, but not being displayed (unexpected)
+                        this.updateMinimapDisplay(true);
+                    }
+                } else if (this.minimap) {
+                    this.updateMinimapDisplay(false);
+                    this.destroyMinimap();
+                }
+                // else:
+                    // There is no minimap, and the pref is to not show it, so
+                    // there's nothing to do (unexpected)
+                break;
+            case 'foldSeparateBlockParts':
+                //multi-window: this applies to all windows, as it's a pref
+                this.foldSeparateBlockParts = (this.prefs || this.__globalPrefs).getBooleanPref('foldSeparateBlockParts');
+                this.scimoz.setProperty('fold.at.else', this.foldSeparateBlockParts ? 1 : 0);
+                this.scimoz.colourise(0, -1);
+                break;
+            case 'select_most_recent_buffer_on_buffer_close':
+                this.selectMostRecentBufferOnBufferClose =
+                    (this.prefs || this.__globalPrefs).getBooleanPref('select_most_recent_buffer_on_buffer_close');
+                break;
+
+            case 'debuggerMaxTooltipSize':
+                this._debuggerMaxTooltipSize = this.prefs.getLongPref('debuggerMaxTooltipSize');
+                break;
+
+            case 'editSmartWrapSelection': // pref notification
+            case 'editSmartWrapSelectionKeep': // pref notification
+            case 'wrapSelectionOnlyPlainText': // pref notification
+            case 'wrapSelectionDelimiters': // pref notification
+                this._setWrapSelectionDelimiters();
+                break;
+
+            case 'enableAutoAbbreviations': // pref notification
+            case 'autoAbbreviationTriggerCharacters': // pref notification
+                this._setAutoAbbreviations();
+                break;
+                
+            case 'colorizing_enabled':
+                var locationInfo = {};
+                this.saveLocation(locationInfo);
+                var scimoz = this.scimoz;
+                var colorizing_enabled = this.prefs.getBooleanPref('colorizing_enabled');
+                if (!colorizing_enabled) {
+                    this._turnColourizingOff();
+                } else {
+                    this.koDoc.lexer = null;
+                    this.koDoc.docSettingsMgr.applyDocumentSettingsToView(this);
+                    var stylingPos = this.scimoz.endStyled;
+                    scimoz.colourise(0, -1);
+                }
+                // This forces a repaint.
+                scimoz.tabWidth = scimoz.tabWidth;
+                this.scintilla.focus();
+                this.restoreLocation(locationInfo);
+                break;
+
+            case 'editor-scheme': // Chose a different scheme
+            case 'scheme-changed': // Modified the current scheme
+                setTimeout(function(this_) {
+                    // view.scintilla is still using the old scheme.
+                    this_._setupHighlightColors(this_.scintilla);
+                }, 1, this);
+                break;
+
+            case 'primary_languages_changed':
+                // Menu gets rebuild if there is no "komodo_language_menu_already_built" attribute.
+                var languageMenupopup = document.getAnonymousElementByAttribute(this, "anonid", "language-menupopup");
+                languageMenupopup.removeAttribute("komodo_language_menu_already_built");
+                break;
+
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="updateMinimapDisplay">
+        <parameter name="editShowMinimap"/>
+        <body>
+        <![CDATA[
+        var minimap = this.minimap;
+        this.showMinimap = editShowMinimap;
+        var scimoz = this.scimoz;
+        if (editShowMinimap) {
+            this.scintilla.vScrollBar = false;
+            minimap.classList.remove("hideMinimap");
+            var obj = {};
+            this.updateEditorViewBoundaries();
+            minimap.syncMinimapFromBuffer();
+        } else {
+            minimap.classList.add("hideMinimap");
+            this.scintilla.vScrollBar = true;
+<!-- #if PLATFORM != "linux" -->
+            // Bug 97483: Make sure the scroll bar's position is correct.
+            if (scimoz.firstVisibleLine > 0) {
+                scimoz.lineScrollUp();
+                scimoz.lineScrollDown();
+            }
+<!-- #endif -->
+        }
+        ]]>
+        </body>
+        </method>
+
+        <method name="_setupHighlightColors">
+        <parameter name="scintilla"/>
+        <body>
+        <![CDATA[
+            var colorInfo = {};
+            var scheme = scintilla.scheme;
+            this._highlightColors = {};
+            if (scheme) {
+                scheme.getHighlightColorInfo(this.languageObj,
+                                             colorInfo, {});
+                colorInfo = colorInfo.value;
+                this._doHighlightColors = colorInfo.length > 0;
+                if (this._doHighlightColors) {
+                    for (var i = 0; i < colorInfo.length; i++) {
+                        var familyName, color;
+                        [familyName, color] = colorInfo[i].split(":");
+                        this._highlightColors[familyName] = parseInt(color, 10);
+                    }
+                    // Force an update so the sub-highlighting gets redone.
+                    // Fixes bug 84707
+                    this._currentFamily = "";
+                    this.updateCurrentLineColor();
+                }
+            } else {
+                this._doHighlightColors = false;
+                this.log.info("Couldn't get the scheme off the view");
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="updateCurrentLineColor">
+        <body>
+        <![CDATA[
+            if (!this._highlightColors) {
+                return false;
+            }
+            var family = this._familyAtPosition[this.scimoz.getStyleAt(this.scimoz.currentPos)];
+            if (family == this._currentFamily) {
+                return true;
+            }
+            this._currentFamily = family;
+            if (family in this._highlightColors) {
+                //var pos = this.scimoz.currentPos;
+                //var line = this.scimoz.lineFromPosition(pos);
+                this.scimoz.caretLineBack = this._highlightColors[family];
+            }
+            // otherwise don't change currentLine color
+            return true;
+        ]]>
+        </body>
+        </method>
+
+        <method name="getURI">
+        <body>
+        <![CDATA[
+            if (!this.koDoc.isUntitled)
+                return this.koDoc.file.URI;
+            return null;
+        ]]>
+        </body>
+        </method>
+
+        <property name="isDirty">
+            <getter><![CDATA[
+            return this.koDoc && this.koDoc.isDirty;
+            ]]>
+            </getter>
+        </property>
+
+        <method name="saveState">
+        <body>
+        <![CDATA[
+            if (this.koDoc && !this.koDoc.isUntitled) {
+                this.koDoc.saveState(this);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="closeUnconditionally">
+        <parameter name="shuttingDown"/>
+            <body><![CDATA[
+                var type = this.getAttribute('type');
+                var log = ko.logging.getLogger('view.'+type); // this.log will be gone by the end of this function
+                
+                if (typeof(shuttingDown) == "undefined") {
+                    shuttingDown = false;
+                }
+                log.time("closeUnconditionally-destroyMinimap");
+                if (this.minimap) {
+                    try {
+                        this.destroyMinimap();
+                    } catch(ex) {
+                        this.log.exception(ex, "problem in destroyMinimap");
+                    }
+                }
+                log.timeEnd("closeUnconditionally-destroyMinimap");
+                // isSpecial typically denotes sockets and such, is also
+                // used by us to identify things like dbgp files
+                // we don't want special files in our mru
+                //
+                // We also don't need to put files in the MRU during shutdown,
+                // because they'll be loaded at next startup (bug 98857), but
+                // only if we know we'll always load them.
+                if (!this.koDoc.isUntitled
+                    && this.koDoc.file
+                    && !this.koDoc.file.isSpecial
+                    && !(shuttingDown
+                         && ko.prefs.getBooleanPref("donotask_restore_workspace")
+                         && ko.prefs.getStringPref("donotask_action_restore_workspace") == "Yes"))
+                {
+                    ko.mru.addURL("mruFileList", this.koDoc.file.URI);
+                }
+
+                log.time("closeUnconditionally-saveState");
+                this.saveState();
+                log.timeEnd("closeUnconditionally-saveState");
+                this.koDoc = null;
+                if (this.preview) {
+                    try {
+                        this.preview.sourceView = null;
+                    } catch(ex) {
+                        // It's likely already gone.
+                    }
+                    this.preview = null;
+                }
+                var prefObserverService = this.__globalPrefs.prefObserverService;
+                if (this.initializedGlobalPrefs) {
+                    prefObserverService.removeObserverForTopics(this,
+                                                                this._global_pref_observer_topics.length,
+                                                                this._global_pref_observer_topics);
+                }
+                if (this.initializedOwnDocPrefs && this.prefs) {
+                    this.prefs.prefObserverService.removeObserverForTopics(this,
+                        this._doc_pref_observer_topics.length,
+                        this._doc_pref_observer_topics);
+                }
+                if (this.initializedGlobalDocPrefs) {
+                    prefObserverService.removeObserverForTopics(this,
+                        this._doc_pref_observer_topics.length,
+                        this._doc_pref_observer_topics);
+                }
+                this.removeEventListener('current_view_linecol_changed',
+                    this.handle_current_view_linecol_changed, false);
+
+                log.time("closeUnconditionally-close_viewbufferbase");
+                var res = this.close_viewbufferbase();
+                log.timeEnd("closeUnconditionally-close_viewbufferbase");
+                return res;
+            ]]></body>
+        </method>
+
+        <method name="close">
+        <parameter name="doNotOfferToSave"/>
+        <body>
+        <![CDATA[
+            if (typeof(doNotOfferToSave) == "undefined") doNotOfferToSave = false;
+        
+            // Return true if the view ends up closed.
+            try {
+                // Note: This isn't sent for other view types even
+                // though both "view_opened" and "view_closed" *are*.
+                xtk.domutils.fireEvent(this, 'view_closing');
+                this._isClosing = true;
+
+                var isLastDocumentInstance = (this.koDoc
+                            && this.koDoc.numScintillas == 1);
+                // if there's more than one view on the doc, we're not closing it
+                if (isLastDocumentInstance
+                    && this.getAttribute('type') == 'editor'
+                    && ko.macros.eventHandler.hookPreFileClose(this)) {
+                    var msg = this.viewsPropertiesBundle.GetStringFromName(
+                                "macroInterruptedFileClosingProcedure.message");
+                    require("notify/notify").send(msg, "macros");
+                    return false;
+                }
+                    
+                if (!doNotOfferToSave && isLastDocumentInstance &&
+                    this.koDoc.isDirty) {
+                    var res = ko.dialogs.yesNoCancel("Save changes to " +
+                                                    this.koDoc.baseName +
+                                                    "?");
+                    if (res == "Cancel") {
+                        return false;
+                    }
+                    if (res == "Yes") {
+                        if (this.koDoc.isUntitled) {
+                            if (! this.saveAs()) {
+                                return false;
+                            }
+                        } else {
+                            if (! this.save()) {
+                                return false;
+                            }
+                        }
+                    } else if (res == "No" && !this.koDoc.isUntitled) {
+                        // Clear the auto-save file.
+                        this.koDoc.removeAutoSaveFile();
+                    }
+                }
+                var uri;
+                try {
+                    uri = this.koDoc.file.URI;
+                } catch(e) {
+                    if (this.koDoc.file) {
+                        this.log.exception(e);
+                    }
+                    uri = null;
+                }
+                var newView = ((this == ko.views.manager.currentView
+                                && !doNotOfferToSave      // not shutting down
+                                && this.selectMostRecentBufferOnBufferClose)
+                               ? ko.views.manager.topView.viewhistory.getNextMostRecentView()
+                               : null);
+                var retval = this.closeUnconditionally(doNotOfferToSave);
+                if (newView && newView != ko.views.manager.currentView) {
+                    newView.makeCurrent();
+                    xtk.domutils.fireEvent(newView, 'current_view_changed');
+                }
+                ko.macros.eventHandler.hookPostFileClose(uri);
+                return retval;
+            } catch(e) {
+                this.log.exception(e);
+            }
+            return false;
+        ]]>
+        </body>
+        </method>
+
+        <method name="revertUnconditionally">
+        <body>
+        <![CDATA[
+            this.koDoc.revert();
+            if (this.koDoc && this.koDoc.file)
+            {
+                require("ko/dom")(window).trigger("folder_touched", {path: this.koDoc.file.dirName});
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="revert">
+        <body>
+        <![CDATA[
+            var baseName = this.koDoc.baseName;
+            if (ko.dialogs.yesNo("Do you wish to revert to the last saved version of '" + baseName + "'?",
+                                 "Yes", null, null, // default response, text, title
+                                 "revert_buffer"
+                                 ) == "Yes") {
+                this.revertUnconditionally();
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="reloadIfChanged">
+        <body>
+        <![CDATA[
+            if (!this.koDoc || !this.koDoc.file || this.koDoc.file.isRemoteFile || !this.koDoc.differentOnDisk()) return;
+            var baseName = this.koDoc.baseName;
+            var title;
+            var prompt;
+            if (this.koDoc.isDirty) {
+                prompt = 'The file ' + baseName + ' is unsaved, and the ' +
+                         'file changed on disk.  You can use '+
+                         '"Show Unsaved Changes" to view a diff of the ' +
+                         'changes, revert or save your changes.';
+                title = 'Current unsaved buffer has changed on disk';
+                if (this.prefs.getBooleanPref("donotask_buffer_conflicts_with_file_on_disk")) return;
+                var choice = ko.dialogs.customButtons(
+                    prompt,
+                    ["Ok", "&Show Changes"],
+                    "Ok", // default response
+                    null, // text
+                    title); // title
+                if (choice == "Show Changes") {
+                    ko.commands.doCommand('cmd_showUnsavedChanges');
+                }
+                return;
+            }
+
+            // The 'reload_changed_files' pref is also used in the views.js
+            // code. Both calls must use the same dialog type 'selectFromList'
+            // to ensure that the pref value remains consistent. See bug:
+            // http://bugs.activestate.com/show_bug.cgi?id=77900
+            title = 'Reload Changed Files';
+            prompt = 'Some open files and/or projects have changed on '+
+                     'disk, do you want to reload them?';
+            var items = ko.dialogs.selectFromList(title,
+                                              prompt,
+                                              [this.koDoc.file.displayPath],
+                                              'zero-or-more',
+                                              null,
+                                             'reload_changed_files');
+            if (items !== null && items.length > 0) {
+                this.revertUnconditionally();
+            } else {
+                this.koDoc.isDirty = true;
+            }
+        ]]>
+        </body>
+        </method>
+
+        <!-- Save the view's document and do associated actions.
+
+             Preconditions:
+                - view.koDoc is writeable
+
+             Returns true iff the file is successfully saved, false
+             otherwise. -->
+        <method name="_doSave">
+        <parameter name="forceSave"/>
+        <body>
+        <![CDATA[
+            if (typeof(forceSave) == 'undefined') forceSave = false;
+            window.dispatchEvent(new CustomEvent('file_saving', { bubbles: true, detail: {view: this} }));
+            try {
+                this.koDoc.save(forceSave);
+            } catch (ex) {
+                var lastErrorSvc = Components.classes["@activestate.com/koLastErrorService;1"].
+                                   getService(Components.interfaces.koILastErrorService);
+                var msg = lastErrorSvc.getLastErrorMessage();
+                if (!msg) {
+                    msg = ex.toString();
+                }
+                ko.dialogs.alert("There was an error attempting to save '"+
+                             this.koDoc.baseName+"': "+
+                             msg);
+                return false;
+            }
+            // reset those items that are buffer dependent
+            // new objects will be recreated on request
+            this.item = null;
+            if (this.preview) {
+                if (this.preview.reload) {
+                    try {
+                        this.preview.reload();
+                    } catch(ex) {
+                        // Bug 92875: We don't care about this exception, no point in
+                        // displaying it to user.
+                        this.log.debug("this.preview.reload: " + ex);
+                    }
+                } else if (this.preview.document) {
+                    // Reload in a separate window.
+                    this.preview.document.location = this.preview.document.location;
+                }
+            }
+
+<!-- #if WITH_DEBUGGING -->
+            // Update breakpoint data for line changes that may have happened.
+            try {
+                ko.dbg.breakpoints.manager.updateBreakpointsFromMarkers(this.koDoc, this);
+            } catch(ex) {
+                //XXX Bug 33150: getting to many bug reports for this. An
+                //    error here ends up as a ko.dialogs.internalError() in save
+                //    logic higher up in the stack. Don't have a proper fix.
+                //    For now we'll just silence the dialog.
+                this.log.exception(ex,
+                    "Unexpected error updatingBreakpointsFromMarkers in '"
+                    +this.koDoc.displayPath+"'");
+            }
+<!-- #endif -->
+            window.dispatchEvent(new CustomEvent('file_saved', { bubbles: true, detail: {view: this} }));
+            ko.macros.eventHandler.hookPostFileSave(this);
+            require("ko/dom")(window).trigger("folder_touched", {path: this.koDoc.file.dirName});
+
+            return true;
+        ]]>
+        </body>
+        </method>
+
+        <method name="_validateEncoding">
+        <body>
+        <![CDATA[
+            var baseName = this.koDoc.baseName;
+
+            // Ensure that the current file can actually be saved with the
+            // current encoding.
+            // XXX Untested: I don't know how to force this to test it.
+            var prompt;
+            if (! this.koDoc.isEncodable) {
+                prompt = "Some of the characters in '"+baseName+
+                         "' cannot be saved using the current encoding.  "+
+                         "Komodo can force the save by "+
+                         "replacing all unrepresentable "+
+                         "characters with a question mark, '?', or you "+
+                         "may Cancel and select a different encoding in "+
+                         "the 'Edit | Current File Settings' dialog.";
+                //XXX Really should offer to change the encoding in-line,
+                //    right here.
+                var choice = ko.dialogs.customButtons(prompt, ["&Force", "Cancel"],
+                                              "Cancel"); // default
+                if (choice != "Force") {
+                    return false;
+                } else {
+                    prompt = "You will lose data if you proceed. Are you " +
+                             "sure that you want to continue saving?";
+                    if (ko.dialogs.yesNo(prompt, "No") != "Yes") {
+                        return false;
+                    } else {
+                        //XXX koIDocument.removeUnencodeable() should specify
+                        //    possible failure modes and use koILastErrorService
+                        //    if there are any. Ideally this should share
+                        //    the code that currentViewPrefs.js is using
+                        //    when changing the encoding.
+                        this.koDoc.removeUnencodeable();
+                    }
+                }
+            }
+            return true;
+        ]]>
+        </body>
+        </method>
+
+        <!-- Save the document of the given view.
+             Set skipSccCheck to not perform the "scc edit on save" feature.
+
+             Return true iff the file was successfully saved, false
+             otherwise. -->
+        <method name="save">
+        <parameter name="skipSccCheck"/>
+        <body>
+        <![CDATA[
+            if (typeof(skipSccCheck) == 'undefined') skipSccCheck = false;
+            try {
+                if (ko.macros.eventHandler.hookPreFileSave(this)) {
+                    var msg = "Macro interrupted file saving procedure.";
+                    require("notify/notify").send(msg, "macros", {priority: "warning"});
+                    return false;
+                }
+                
+                // Emit an event when attempting to save a collab document so
+                // the appropriate action can be performed.
+                if (this.koDoc.isCollab()) {
+                    this.dispatchEvent(new CustomEvent('collab_file_save', { bubbles: true, detail: {view: this} }));
+                    return false;
+                }
+
+                // Untitled documents get "saved as".
+                if (this.koDoc.isUntitled) {
+                    return this.saveAs();
+                }
+
+                var choice;
+                var baseName = this.koDoc.baseName;
+                var file = this.koDoc.file;
+                var hasChanged = 0;
+
+                // If the disk file has changed under us on disk, then ask the
+                // user what to do.
+                try {
+                    hasChanged = this.koDoc.differentOnDisk();
+                } catch (ex) {
+                    var lastErrorSvc = Components.classes["@activestate.com/koLastErrorService;1"].
+                                       getService(Components.interfaces.koILastErrorService);
+                    ko.dialogs.alert("There was an error attempting to save '"+
+                                     baseName+"': "+
+                                     lastErrorSvc.getLastErrorMessage());
+                    return false;
+                }
+
+                if (hasChanged) {
+                    choice = ko.dialogs.customButtons(
+                        "The file '" + baseName + "' has changed on disk. " +
+                        "Are you sure you want to overwrite those changes?",
+                        ["&Yes", "&No", "No, &Show Changes"],
+                        "No", // default response
+                        null, // text
+                        "File Conflict"); // title
+                    if (choice == "No" || choice == "Cancel") {
+                        return false;
+                    } else if (choice == "No, Show Changes") {
+                        ko.commands.doCommand('cmd_showUnsavedChanges');
+                        return false;
+                    }
+                }
+
+                if (!this._validateEncoding()) return false;
+
+<!-- #if WITH_SCC -->
+                // If this file is under Perforce and not currently checked out
+                // then we should offer to 'p4 edit'. We might want to offer to
+                // 'cvs edit' at some point, though that is not too important.
+                // Saying NO will fall through and try to save it anyway
+                // XXX need an features supported function
+                var supportsEdit = file.sccType == 'p4' ||
+                                   (file.sccType =='cvs' &&
+                                    !file.isWriteable);
+                if (!skipSccCheck && supportsEdit && file.sccType &&
+                    (!file.sccAction || file.sccAction == 'integrate')) {
+                    var answer = ko.dialogs.yesNoCancel(
+                            "The file '"+baseName+"' is under source "+
+                                "control. Would you like Komodo to open it for edit "+
+                                "before saving it?",
+                            "Yes", // default response
+                            null, // extra text
+                            null, // title
+                            "p4_edit_on_save"); // don't ask pref
+
+                    if (answer == "Cancel") {
+                        return false;
+                    }
+
+                    // Since the dialog has been open for a while, the file may
+                    // have changed. Ensure the file info is refreshed. If the
+                    // file has changed in some way, check if the file contents
+                    // on the disk have changed and if it's changed, ask the
+                    // user what they want to do. Remote files don't have the
+                    // luxury of on-disk content checking, so they skip this
+                    // check.
+                    if (file.isLocal && this.koDoc.differentOnDisk()) {
+                        choice = ko.dialogs.customButtons(
+                            "The file '"+baseName+"' has changed on disk " +
+                            "while the scc edit dialog was open. Are you " +
+                            "sure you want to overwrite those changes?",
+                            ["Yes", "No", "No, Show Changes"],
+                            "No", // default response
+                            null, // text
+                            "File Conflict"); // title
+                        if (choice == "No" || choice == "Cancel") {
+                            return false;
+                        } else if (choice == "No, Show Changes") {
+                            ko.commands.doCommand('cmd_showUnsavedChanges');
+                            return false;
+                        }
+                    }
+
+                    // Now check the answer from the perform scc edit question.
+                    if (answer == "No") {
+                        // Let this continue the save, performing a forced save.
+                    } else if (answer == "Yes") {
+                        // Then perform the scc edit asynchronously.
+                        var self = this;
+                        var postCallback = function(result, data) {
+                            if (result == Components.interfaces.koIAsyncCallback.RESULT_SUCCESSFUL) {
+                                // We need to know the latest information about
+                                // this file, so refresh the file information
+                                // using the updateStats method. Don't do this for
+                                // non-local files. Fixes bug 75613.
+                                if (file.isLocal) {
+                                    file.updateStats();
+                                }
+                                // Just call our save function again, we are
+                                // right to go now! We must call save with the
+                                // value true, in order to skip the scc check
+                                // next time, as the asynchronous file status
+                                // service may not have yet updated the
+                                // file.scc* attributes. See bug:
+                                // http://bugs.activestate.com/show_bug.cgi?id=75217
+                                skipSccCheck = true;
+                                self.save(skipSccCheck);
+                            } else {
+                                var choice = ko.dialogs.customButtons(
+                                    "There was a problem opening '"+baseName+
+                                    "' for edit:\n"+data+".\n\nWould you like "+
+                                    "to save the file anyway?",
+                                    ["Save &As...", "&Force Save", "Cancel"],
+                                    "Save As...", null, "Source Control Error",
+                                    "force_save_on_error"); // default
+                                if (choice == "Cancel") {
+                                    // nada.
+                                } else if (choice == "Save As...") {
+                                    self.saveAs();
+                                } else /* else choice == "Force Save" */ {
+                                    self._doSave(true);
+                                }
+                            }
+                        };
+                        var sccSvc = ko.scc.getServiceForFile(file);
+                        ko.scc.Edit(sccSvc, [file.URI], postCallback);
+                        return true;
+                    }
+                }
+<!-- #endif -->
+
+                if (file.isWriteable || !file.exists) { // save it
+                    return this._doSave();
+                }
+
+                else if (!file.isLocal) { // offer "Save As"
+                    choice = ko.dialogs.customButtons(
+                        "The non-local file '"+baseName+"' cannot be saved. "+
+                        "Would you like to save your changes under a "+
+                        "different name?",
+                        ["Cancel", "Save Locally As...", "Save Remotely As..."],
+                        "Save Remotely As..."); // default
+                    if (choice == "Cancel") {
+                        return false;
+                    } else if (choice == "Save Locally As...") {
+                        // This brings up a local file dialog
+                        return this.saveAs();
+                    } else {
+                        // This brings up a remote file dialog
+                        return this.saveAsRemote();
+                    }
+                }
+
+                else { // offer forced save
+                    choice = ko.dialogs.customButtons(
+                        "The file '"+baseName+"' is read-only. Would you like to save "+
+                            "your changes under a different name or force the save?",
+                        ["Save As...", "Force Save", "Cancel"],
+                        "Save As..."); // default
+                    if (choice == "Cancel") {
+                        return false;
+                    } else if (choice == "Save As...") {
+                        return this.saveAs();
+                    } else /* else choice == "Force Save" */ {
+                        return this._doSave(true);
+                    }
+                }
+
+            } catch(ex) {
+                Components.utils.reportError(ex);
+                ko.dialogs.internalError("Unexpected internal error saving '"+this.title+"'.",
+                                         ex, ex);
+                this.log.exception(ex, "Error in editor view .save()");
+            }
+            return false;
+        ]]>
+        </body>
+        </method>
+
+        <!-- Open Remote path
+               - Determine the default path and default file name
+             No return value -->
+        <method name="openRemote">
+        <body>
+        <![CDATA[
+        try {
+            this.makeCurrent();
+            if (this.koDoc.file && !this.koDoc.file.isLocal) {
+                // Try and open to the same location as current file
+                ko.filepicker.openRemoteFiles(this.koDoc.file.URI, this.koDoc.file.baseName);
+            } else {
+                ko.filepicker.openRemoteFiles(null,this.koDoc.baseName);
+            }
+        } catch (e) {
+            this.log.exception(e);
+        }
+        ]]>
+        </body>
+        </method>
+
+        <!-- Save As Remote file
+             Return true if the file was successfully saved, false 
+             otherwise. -->
+        <method name="saveAsRemote">
+        <body>
+        <![CDATA[
+        try {
+            this.makeCurrent();
+            if (!this._validateEncoding()) return false;
+            var uri = null;
+            if (this.koDoc.file && !this.koDoc.file.isLocal) {
+                uri = ko.filepicker.saveAsRemoteFiles(this.koDoc.file.URI, this.koDoc.file.baseName);
+            } else {
+                uri = ko.filepicker.saveAsRemoteFiles(null, this.koDoc.baseName);
+            }
+            if (uri == null) {
+                return false;
+            }
+
+            return this.saveAsURI(uri);
+        } catch (e) {
+            this.log.exception(e);
+        }
+        return false;
+        ]]>
+        </body>
+        </method>
+
+        <!-- Save As
+             Return true iff the file was successfully saved, false
+             otherwise. -->
+        <method name="saveAs">
+        <parameter name="directory"/>
+        <body>
+        <![CDATA[
+        try {
+            if (typeof(directory)=='undefined') directory = null;
+            this.makeCurrent();
+            if (!this._validateEncoding()) return false;
+            var path = ko.filepicker.saveFile(
+                        directory, /* default directory */
+                        this.koDoc.displayPath, /* default name - knows about dirs */
+                        "Save '"+this.koDoc.baseName+"' As...",
+                        this.language);
+            if (path == null) {
+                return false;
+            }
+
+            // Need to create a new document, assign the file to it,
+            // and assign the view to it.
+            var uri = ko.uriparse.localPathToURI(path);
+            return this.saveAsURI(uri);
+        } catch (e) {
+            this.log.exception(e);
+        }
+        return false;
+        ]]>
+        </body>
+        </method>
+
+        <method name="_copyDocumentPrefs">
+        <parameter name="docNew"/>
+        <parameter name="docOld"/>
+        <body>
+        <![CDATA[
+            docNew.prefs.update(docOld.prefs);
+            // now delete some prefs that we do not want to copy
+            if (docNew.prefs.hasPrefHere("preview_path")) {
+                // the fact that there is a pref here means that the user
+                // choose to remember the path they last selected, there
+                // is no other associated pref
+                docNew.prefs.deletePref("preview_path");
+            }
+            // remove the filename from the invocation prefs
+            if (docNew.prefs.hasPrefHere("Invocations")) {
+                var root = docNew.prefs.getPref("Invocations");
+                var ids = root.getPrefIds();
+                for (var i=0; i < ids.length; i++) {
+                    var storedPrefs = root.getPref(ids[i]);
+                    if (docOld.file &&
+                        storedPrefs.getString("filename", "") == docOld.file.path) {
+                        storedPrefs.deletePref("filename");
+                    }
+                }
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="saveAsURI">
+        <parameter name="uri"/>
+        <body>
+        <![CDATA[
+        var views = ko.views.manager.topView.findViewsForURI(uri);
+        if ((views.length == 1 && views[0] != this) ||
+            views.length > 1) {
+            ko.dialogs.alert("Unable to save this file with the same name as "+
+                         "another open buffer.");
+            return false;
+        }
+        try {
+            var oldPerms = this.koDoc.file ? this.koDoc.file.permissions : null;
+            var oldLargeDocument = (this.koDoc.isLargeDocument
+                                    && (!this.koDoc.prefs.hasPrefHere("originalLanguage")
+                                        || this.koDoc.prefs.getStringPref("originalLanguage") != "Text"));
+
+            this.koDoc.docSettingsMgr.applyViewSettingsToDocument(this);
+
+            // Note: This will re-guess the language from the file extension.
+            var newdocument = this.__docsvc.createDocumentFromURI(uri);
+            if (newdocument.file.exists && newdocument.file.isReadOnly) {
+                ko.dialogs.alert("Unable to overwrite a readonly file.");
+                return false;
+            }
+
+            var isUntitled = this.koDoc.isUntitled;
+<!-- #if WITH_DEBUGGING -->
+            if (!isUntitled) {
+                // - The newdocument should inherit the breakpoints of this.koDoc.
+                ko.dbg.breakpoints.manager.copyBreakpointsToNewURI(this.koDoc.file.URI, uri);
+            }
+<!-- #endif -->
+
+            // Copy over document prefs and other settings.
+            this._copyDocumentPrefs(newdocument, this.koDoc);
+            newdocument.new_line_endings = this.koDoc.new_line_endings;
+
+            // XXX this buffer switching is not optimal, first we copy from
+            // scintilla to a non-scintilla buffer, then we turn the
+            // non-scintilla into a scintilla.
+            var locationInfo = {};
+            this.saveLocation(locationInfo);
+            this.saveFoldedLines(locationInfo);
+            var oldLanguage = this.koDoc.language;
+            newdocument.setBufferAndEncoding(this.koDoc.buffer, this.koDoc.encoding.python_encoding_name);
+            var codePage = this.koDoc.codePage;
+            if (oldLargeDocument) {
+                ko.views.manager.showLargeFileProblem(this.koDoc.file.displayPath, oldLanguage);
+                newdocument.language = 'Text';
+            }
+            var oldKoDoc = this.koDoc;
+            var oldKoDocIsDirty = oldKoDoc.isDirty;
+            this.koDoc = newdocument;
+            this.koDoc.codePage = codePage;
+            if (!oldLargeDocument) {
+                // IF new name has ext THEN set lang to "" to force guess of
+                // language
+                let newBasename = this.koDoc.baseName;
+                if( -1 != newBasename.lastIndexOf("."))
+                {
+                    this.koDoc.language = "";
+                }
+                // ELSE IF oldLang exists THEN use that
+                else
+                {
+                    this.koDoc.language = oldLanguage;
+                }
+            }
+            if (!this._doSave()) {
+                // Bug 100455: if _doSave fails, this method needs to fail
+                // restore the old document.
+                this.koDoc = oldKoDoc;
+                // And oldKoDoc.isDirty is reset, so explicitly reset it.
+                this.koDoc.isDirty = oldKoDocIsDirty;
+                return false;
+            }
+
+            // Update file permissions
+            if (oldPerms !== null && this.koDoc.file.permissions != oldPerms)
+            {
+                try
+                {
+                    this.koDoc.file.chmod(oldPerms);
+                } catch (ex) {
+                    var lastErrorSvc = Components.classes["@activestate.com/koLastErrorService;1"].
+                                       getService(Components.interfaces.koILastErrorService);
+                    var msg = lastErrorSvc.getLastErrorMessage();
+                    if (!msg)
+                        msg = ex.toString();
+                    ko.dialogs.alert("Failed to update file permissions: " + msg);
+                }
+            }
+
+            this.koDoc.docSettingsMgr.applyDocumentSettingsToView(this);
+            if (oldLanguage == newdocument.language) {
+                this.restoreFoldedLines(locationInfo);
+            }
+            this.restoreLocation(locationInfo);
+            this._requestLinting("save as");
+            return true;
+        } catch (ex) {
+            Components.utils.reportError(ex);
+            ko.dialogs.internalError("Unexpected internal error saving (Save As) '"+this.title+"'.",
+                                     ex, ex);
+            this.log.exception(ex, "Error in editor view .saveAs()");
+        }
+        return false;
+        ]]>
+        </body>
+        </method>
+
+        <method name="saveFoldedLines">
+        <parameter name="locationInfo" />
+        <body>
+        <![CDATA[
+            locationInfo.foldedLines = [];
+            var scimoz = this.scimoz;
+            for (let i = 0; i < scimoz.lineCount; ++i) {
+                let foldLevel = scimoz.getFoldLevel(i);
+                if ((foldLevel & scimoz.SC_FOLDLEVELHEADERFLAG) && !scimoz.getFoldExpanded(i)) {
+                    locationInfo.foldedLines.push(i);
+                }
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="restoreFoldedLines">
+        <parameter name="locationInfo" />
+        <body>
+        <![CDATA[
+            let lines = locationInfo.foldedLines;
+            if (!lines) {
+                return;
+            }
+            // Observed: sometimes there are no fold points in the new doc,
+            // So recolor the document.
+            setTimeout(function(scimoz) {
+                    let lastLine = lines[lines.length - 1];
+                    let endPoint = lastLine >= scimoz.lineCount ? -1 : scimoz.positionFromLine(lastLine + 1);
+                    scimoz.colourise(0, endPoint);
+                    lines.forEach(function(i) {
+                        if (scimoz.getFoldExpanded(i)) {
+                            scimoz.toggleFold(i);
+                        }
+                    });
+            }.bind(this), 1, this.scimoz);
+        ]]>
+        </body>
+        </method>
+        
+        <method name="getState">
+        <body>
+        <![CDATA[
+            if (this._koDoc.isUntitled || this._koDoc.file.isSpecial) { return null; }
+            var myState = Components.classes['@activestate.com/koPreferenceSet;1'].createInstance();
+            myState.setStringPref('viewtype', 'editor');
+            myState.setStringPref('URI', this._koDoc.file.URI);
+            return myState;
+        ]]>
+        </body>
+        </method>
+        
+        <method name="updateFirstVisibleLineAndUpdateBoundaries">
+        <parameter name="firstVisibleLine" />
+        <body>
+        <![CDATA[
+        var scimoz = this.scimoz;
+        scimoz.firstVisibleLine = firstVisibleLine;
+        this.updateEditorViewBoundaries();
+        ]]>
+        </body>
+        </method>
+        
+        <method name="_needsUpdate">
+        <parameter name="firstDocLine"/>
+        <parameter name="lastDocLineOnScreen"/>
+        <body>
+        <![CDATA[
+        if (this.firstDocLine !== firstDocLine
+            || this.lastDocLine !== lastDocLineOnScreen) {
+            return true;
+        }
+        // Is the minimap's fold points out of sync w.r.t. the editor's?
+        var scimoz = this.scimoz;
+        var msz = this.minimap.scimoz;
+        var conf1 = 0, conf2 = 0;
+        // Special case the first line
+        if (scimoz.getFoldExpanded(0) !== msz.getFoldExpanded(0)) {
+            // Fold at first line differs
+            return true;
+        }
+        // Whether line 0 is folded or not, we can start by
+        // looking at the next line.  Looking at scimoz.contractedFoldNext(1)
+        // for an empty file is harmless.
+        while (conf1 === conf2 && conf1 !== -1) {
+            conf1 = scimoz.contractedFoldNext(conf1 + 1);
+            conf2 = msz.contractedFoldNext(conf2 + 1);
+        }
+        return conf1 !== conf2;
+        ]]>
+        </body>
+        </method>
+        
+        <!-- Set to true when the editor is handling the onUpdateUI() call. -->
+        <field name="in_updateui">false</field>
+        <field name="last_line">0</field>
+
+        <field name="in_lite_multicaret">false</field>
+        <field name="cancel_lite_multicaret_on_modify">false</field>
+
+        <method name="onUpdateUI">
+        <parameter name="updated"/>
+        <body>
+        <![CDATA[
+            if (this.in_updateui)
+                return;
+
+            this.in_updateui = true;
+            //var firstDocLine, lastDocLineOnScreen;
+            var v1 = require("ko/views").getLeftView()
+            var v2 = require("ko/views").getRightView()
+            // ..............................Check the linked view is visible, otherwise skip
+            if((this.linkedView != null) && (this.linkedView === v1 || this.linkedView === v2))
+            {
+                var scrollAmount = this.scimoz.firstVisibleLine - this.lastTopLine;
+                if( ! this.linkedView.sendingScrollEvent)
+                {
+                    this.sendingScrollEvent = true;
+                    this.linkedView.scimoz.lineScroll(0, scrollAmount)
+                }
+            }
+            this.lastTopLine = this.scimoz.firstVisibleLine;
+            setTimeout(()=>{this.sendingScrollEvent = false},100);
+
+            if (this.minimap && this.showMinimap && !this.minimap.in_updateui) {
+                var firstDocLine, lastDocLineOnScreen;
+                [firstDocLine, lastDocLineOnScreen] = this.getEditorViewBoundaries();
+                var updateMinimap = this._needsUpdate(firstDocLine, lastDocLineOnScreen);
+                if (updateMinimap) {
+                    this.minimap.syncMinimapFromBuffer();
+                    this.updateEditorViewBoundaries(firstDocLine, lastDocLineOnScreen);
+                    this.minimap.updateEditorViewBoundaries();
+                }
+            }
+
+            var keepGoing = this.__proto__.__proto__.onUpdateUI.call(this, updated);
+            if (keepGoing === false)
+            {
+                this.in_updateui = false;
+                return;
+            }
+
+            if (((updated == this.scimoz.SC_UPDATE_SELECTION) ||
+                  this.cancel_lite_multicaret_on_modify &&
+                  (updated & this.scimoz.SC_UPDATE_CONTENT) > 0
+                ) &&
+                this.in_lite_multicaret)
+            {
+                for (let x=1;x<this.scimoz.selections;x++)
+                {
+                    this.scimoz.dropSelectionN(x);
+                }
+                this.in_lite_multicaret = false;
+                this.cancel_lite_multicaret_on_modify = false;
+            }
+            else if (this.in_lite_multicaret &&
+                     this.scimoz.selections <= 1)
+            {
+                this.in_lite_multicaret = false;
+                this.cancel_lite_multicaret_on_modify = false;
+            }
+            
+            this.onEditMatchingTags(updated);
+            this.onEditMatchingDelim(updated);
+            
+            this.in_updateui = false;
+        ]]>
+        </body>
+        </method>
+        
+        <method name="_onUpdateUI_debounced">
+        <parameter name="updated"/>
+        <body>
+        <![CDATA[
+            this._uiTimer = null;
+
+            var lineNo = this.scimoz.lineFromPosition(this.scimoz.currentPos);
+            if ( ! ko.history._marking && ! this.in_updateui &&
+                (updated & this.scimoz.SC_UPDATE_SELECTION) &&
+                Math.abs(lineNo - this.last_line) > 5)
+            {
+                ko.history.note_loc_unless_history_move(this, true);
+            }
+            
+            this.in_updateui = true;
+            this.last_line = lineNo;
+        
+            this.__proto__.__proto__._onUpdateUI_debounced.call(this, updated);
+            
+            this.in_updateui = false;
+
+        ]]>
+        </body>
+        </method>
+
+        <method name="onEditMatchingTags">
+        <parameter name="updated"/> <!-- Can be -1 to skip certain checks -->
+        <body>
+        <![CDATA[
+            // When an HTML/XML tag is selected, select its complement as
+            // a multiple selection to allow paired editing.
+            if (updated != -1 && this._mouseButton != -1) {
+                return;
+            }
+
+            // Stop if this isnt a selection event, pref is disabled or if there
+            // already is a multi-caret session
+            if ((updated != -1 && (updated & this.scimoz.SC_UPDATE_SELECTION) <= 0)
+                || ! this.prefs.getBooleanPref("editMatchingTags")
+                || this.scimoz.selections != 1)
+            {
+                return;
+            }
+
+            var scimoz = this.scimoz;
+            var startPos = scimoz.selectionStart;
+            var endPos = scimoz.selectionEnd;
+            
+            // Stop if we're not currently selecting the entirety of a tag
+            if (startPos == endPos
+                || scimoz.getStyleAt(startPos -1 ) == scimoz.SCE_UDL_M_TAGNAME
+                || scimoz.getStyleAt(startPos) != scimoz.SCE_UDL_M_TAGNAME
+                || scimoz.getStyleAt(endPos + 1) == scimoz.SCE_UDL_M_TAGNAME
+                || scimoz.wordStartPosition(startPos, true) != startPos
+                || scimoz.wordEndPosition(endPos, true) != endPos)
+            {
+                return;
+            }
+
+            // Stop if we aren't in an XML element
+            var actualLanguageObj = this.languageObj.supportsXMLIndentHere(scimoz, startPos);
+            if ( ! actualLanguageObj) {
+                return;
+            }
+
+            var result = {};
+            actualLanguageObj.getMatchingTagInfo(scimoz, startPos, false, result, {});
+            if (result.value && result.value.length == 5) {
+                if (result.value[0]
+                    && result.value[1] <= startPos && result.value[2] >= endPos) {
+                    // Selected start tag.
+                    scimoz.addSelection(result.value[4], result.value[3] + 2);
+                    this.in_lite_multicaret = true;
+                } else if (!result.value[0]
+                           && result.value[3] <= startPos && result.value[4] >= endPos) {
+                    // Selected end tag.
+                    scimoz.addSelection(result.value[2], result.value[1] + 1);
+                    this.in_lite_multicaret = true;
+                }
+                scimoz.mainSelection = 0;
+            }
+        ]]>
+        </body>
+        </method>
+        
+        <method name="onEditMatchingDelim">
+        <parameter name="updated"/> <!-- Can be -1 to skip certain checks -->
+        <body>
+        <![CDATA[
+            // When the delimiter of a styled text range is selected (e.g. a
+            // string, regex, etc.), select its complement as a multiple
+            // selection to allow paired editing. When continuing the
+            // selection beyond the delimiter, revert to single-selection.
+            // This only works with identical delimiter characters over
+            // unbroken style ranges.
+            
+            if (updated != -1 && this._mouseButton != -1) {
+                return;
+            }
+
+            if ((updated != -1 && (updated & this.scimoz.SC_UPDATE_SELECTION) <= 0)
+                || ! this.prefs.getBooleanPref("editMatchingDelimiter")
+                || this.scimoz.selections != 1
+                || this.scimoz.selText.length != 1
+                || this.scimoz.selText == " "
+                || this.scimoz.selections == 2)
+            {
+                return;
+            }
+            
+            var scimoz = this.scimoz;
+            var pos = scimoz.selectionStart;
+            var select_complement = scimoz.selections == 1;
+            if (!select_complement
+                && scimoz.currentPos < scimoz.anchor) {
+                // At a boundary like "fo[o"] selecting backwards
+                pos++;
+            }
+
+            var style = scimoz.getStyleAt(pos);
+            if (this.koDoc.languageObj
+                && this.koDoc.languageObj.getNamedStyles("operators").indexOf(style) != -1)
+            {
+                return; // ignore unbroken operator sequences like "==="
+            }
+            if (pos > 0 && scimoz.getStyleAt(pos - 1) != style) {
+                // At a boundary like ["]foo"
+                var end_pos = pos + 1;
+                while (end_pos < scimoz.length - 1
+                       && scimoz.getStyleAt(end_pos + 1) == style) {
+                    end_pos++;
+                }
+                if (scimoz.getCharAt(end_pos) == scimoz.getCharAt(pos)
+                    && end_pos - pos > 1) {
+                    if (select_complement) {
+                        scimoz.addSelection(end_pos, end_pos + 1);
+                        scimoz.mainSelection = 0;
+                        this.in_lite_multicaret = true;
+                        this.cancel_lite_multicaret_on_modify = true;
+                    } else {
+                        scimoz.cancel(); // return to 1 selection
+                    }
+                }
+            } else if (pos < scimoz.length - 1
+                       && scimoz.getStyleAt(pos + 1) != style) {
+                // At a boundary like 'foo[']
+                var end_pos = pos - 1;
+                while (end_pos > 0
+                       && scimoz.getStyleAt(end_pos - 1) == style) {
+                    end_pos--;
+                }
+                if (scimoz.getCharAt(end_pos) == scimoz.getCharAt(pos)
+                    && pos - end_pos > 1) {
+                    if (select_complement) {
+                        scimoz.addSelection(end_pos, end_pos + 1);
+                        scimoz.mainSelection = 0;
+                        this.in_lite_multicaret = true;
+                        this.cancel_lite_multicaret_on_modify = true;
+                    } else {
+                        scimoz.cancel(); // return to 1 selection
+                    }
+                }
+            }
+        ]]>
+        </body>
+        </method>
+
+        <!-- This method is called OFTEN (every time text is inserted). -->
+        <method name="onTextInserted">
+        <parameter name="position"/>
+        <parameter name="modificationType"/>
+        <parameter name="text"/>
+        <body>
+        <![CDATA[
+            // In onUpdateUI above, matching XML/HTML tag pairs are
+            // auto-selected in order to allow fast renaming. When a space
+            // character is typed, the two selections should be collapsed so
+            // attributes can only be added to the first tag.
+            var scimoz = this.scimoz;
+            if (scimoz.selections == 2 && text[0] == ' ') {
+                if (text.length == 1) {
+                    // A single space character was typed. When typing into
+                    // multiple selections, at this point when the SCN_MODIFIED
+                    // notification was sent, the "getSelectionNStart" positions
+                    // have not been updated yet -- they reflect the position
+                    // before the inserted space character. Need to account for
+                    // this.
+                    if (scimoz.getStyleAt(scimoz.getSelectionNStart(0) - 1) == scimoz.SCE_UDL_M_TAGNAME
+                        && scimoz.getStyleAt(scimoz.getSelectionNStart(0)) != scimoz.SCE_UDL_M_TAGNAME
+                        && scimoz.getStyleAt(scimoz.getSelectionNStart(1) - 1) == scimoz.SCE_UDL_M_TAGNAME
+                        && scimoz.getStyleAt(scimoz.getSelectionNStart(1)) != scimoz.SCE_UDL_M_TAGNAME) {
+                        if (scimoz.getSelectionNStart(0) < scimoz.getSelectionNStart(1)) {
+                            // The user is typing into the opening tag. The
+                            // selection will be condensed to the position after
+                            // the inserted space. Note the current position of
+                            // the end tag (+1 due to the upcoming space to be
+                            // inserted in the opening tag).
+                            var gotoPos = scimoz.getSelectionNStart(0) + 1;
+                            var targetStart = scimoz.getSelectionNStart(1) + 1;
+                        } else {
+                            // The user is typing into the closing tag. The
+                            // selection will be condensed to the position after
+                            // the inserted space in the opening tag. Note the
+                            // current position of the end tag (+1 due to the
+                            // upcoming space to be inserted in the opening
+                            // tag).
+                            var gotoPos = scimoz.getSelectionNStart(1) + 1;
+                            var targetStart = scimoz.getSelectionNStart(0) + 1;
+                        }
+                        setTimeout(function() {
+                            // Delete the extra space inserted in the closing
+                            // tag and consolidate the selection into the
+                            // opening tag. Needs to be done outside the
+                            // Scintilla notification.
+                            scimoz.setTargetRange(targetStart, targetStart + 1);
+                            scimoz.replaceTarget('');
+                            scimoz.gotoPos(gotoPos);
+                        }, 1);
+                    }
+                } else {
+                    // The user has pasted text that begins with a space
+                    // character. Unlike the case above, "getSelectionNStart"
+                    // returns the position after pasted text in selection 0,
+                    // but selection 1 is still the position before pasted text.
+                    var length = text.length;
+                    if (scimoz.getStyleAt(scimoz.getSelectionNStart(0) - length - 1) == scimoz.SCE_UDL_M_TAGNAME
+                        && scimoz.getStyleAt(scimoz.getSelectionNStart(0) - length) != scimoz.SCE_UDL_M_TAGNAME
+                        && scimoz.getStyleAt(scimoz.getSelectionNStart(1) - 1) == scimoz.SCE_UDL_M_TAGNAME
+                        && scimoz.getStyleAt(scimoz.getSelectionNStart(1)) != scimoz.SCE_UDL_M_TAGNAME) {
+                        if (scimoz.getSelectionNStart(0) < scimoz.getSelectionNStart(1)) {
+                            // The user is typing into the opening tag.
+                            // Both "getSelectionNStart" positions returned are
+                            // the ones needed (coincidentally).
+                            var targetStart = scimoz.getSelectionNStart(1);
+                            var gotoPos = scimoz.getSelectionNStart(0);
+                        } else {
+                            // The user is typing into the closing tag.
+                            // The selection needs to be condensed after pasted
+                            // text in the opening tag (hence the +length) and
+                            // the pasted text in the closing tag needs to be
+                            // removed (hence the -length).
+                            var targetStart = scimoz.getSelectionNStart(0) - length;
+                            var gotoPos = scimoz.getSelectionNStart(1) + length;
+                        }
+                        setTimeout(function() {
+                            // Delete the extra space inserted in the closing
+                            // tag and consolidate the selection into the
+                            // opening tag. Needs to be done outside the
+                            // Scintilla notification.
+                            scimoz.setTargetRange(targetStart,
+                                                  targetStart + length);
+                            scimoz.replaceTarget('');
+                            scimoz.gotoPos(gotoPos);
+                        }, 1);
+                    }
+                }
+            }
+        ]]>
+        </body>
+        </method>
+        
+        <method name="onMarginClick">
+        <parameter name="modifiers"/>
+        <parameter name="position"/>
+        <parameter name="margin"/>
+        <body>
+        <![CDATA[
+            var scimoz = this.scimoz;
+            var xPosition = scimoz.pointXFromPosition(position);
+            var res = this.__proto__.__proto__.onMarginClick.call(this, modifiers, position, margin);
+            var lineClicked = scimoz.lineFromPosition(position);
+            if (margin == scimoz.MARGIN_FOLDING) {
+                // do minimap stuff here
+                if (this.minimap
+                    && this.showMinimap
+                    && (scimoz.getFoldLevel(lineClicked) & scimoz.SC_FOLDLEVELHEADERFLAG)) {
+                    this.minimap.scimoz.toggleFold(lineClicked);
+                    this.minimap.syncMinimapFromBuffer();
+                }
+            }
+            return res;
+        ]]>
+        </body>
+        </method>
+
+        <method name="onFoldChanged">
+        <parameter name="lineNo"/>
+        <body>
+        <![CDATA[
+            if (this.minimap && this.showMinimap) {
+                this.minimap.scimoz.toggleFold(lineNo);
+                this.minimap.syncMinimapFromBuffer();
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="getNewFirstVisibleLineFromMinimap">
+        <parameter name="minimap" />
+        <body><![CDATA[
+            var scimoz = this.scimoz;
+            var msz = minimap.scimoz;
+            var numLines = scimoz.lineCount;
+            var linesOnScreen = scimoz.linesOnScreen;
+            var firstMSZVisibleLine = msz.firstVisibleLine;
+            var firstVisibleLine = scimoz.firstVisibleLine;
+            var numMSZVisibleLines = msz.visibleFromDocLine(msz.lineCount);
+            var lastTopMSZVisibleLine = numMSZVisibleLines - msz.linesOnScreen;
+            if (lastTopMSZVisibleLine <= 0) {
+                // bug98577: when the minimap is completely displayed,
+                // we don't want its first-visible-line to affect the
+		// editor's first-visible-line, because it's always 0.
+                // Just return the editor's current FVL.
+                // Otherwise it scrolls the editor to line 0.
+                return firstVisibleLine;
+            }
+            var msz_portion_covered = firstMSZVisibleLine / lastTopMSZVisibleLine;
+            var numVisibleLines = scimoz.visibleFromDocLine(numLines);
+            var lastTopVisibleLine = numVisibleLines - linesOnScreen;
+            firstVisibleLine = Math.round(lastTopVisibleLine * msz_portion_covered);
+            return firstVisibleLine;
+        //]]>
+        </body>
+        </method>
+        
+        <method name="syncBufferFromMinimap">
+        <parameter name="minimap" />
+        <body><![CDATA[
+            if (!this.showMinimap) {
+                return;
+            }
+            var firstVisibleLine = this.getNewFirstVisibleLineFromMinimap(minimap);
+            var scimoz = this.scimoz;
+            scimoz.firstVisibleLine = firstVisibleLine;
+            // And make sure the updateUI routine doesn't do anything.
+            var currentPos = scimoz.currentPos;
+            this._lastPosLineAndCol = [currentPos, scimoz.lineFromPosition(currentPos),
+                                       scimoz.getColumn(currentPos), firstVisibleLine];
+            this.updateEditorViewBoundaries();
+            ]]>
+        </body>
+        </method>
+
+        <method name="markerGet">
+        <parameter name="line"/>
+        <body>
+        <![CDATA[
+            return this.scimoz.markerGet(line);
+        ]]>
+        </body>
+        </method>
+
+        <method name="markerNext">
+        <parameter name="line"/>
+        <parameter name="mask"/>
+        <body>
+        <![CDATA[
+            return this.scimoz.markerNext(line, mask);
+        ]]>
+        </body>
+        </method>
+
+        <method name="markerAdd">
+        <parameter name="line"/>
+        <parameter name="type"/>
+        <body>
+        <![CDATA[
+        
+            let scimoz = this.scimoz;
+            // Check if the marker already exists - bug 104553.
+            if ((scimoz.markerGet(line) & (1 << type)) == 0) {
+               scimoz.markerAdd(line, type);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="markerDelete">
+        <parameter name="line"/>
+        <parameter name="type"/>
+        <body>
+        <![CDATA[
+            this.scimoz.markerDelete(line, type);
+        ]]>
+        </body>
+        </method>
+
+        <method name="markerDeleteAll">
+        <parameter name="type"/>
+        <body>
+        <![CDATA[
+            this.scimoz.markerDeleteAll(type);
+        ]]>
+        </body>
+        </method>
+
+        <method name="markerClearAll">
+        <parameter name="type"/>
+        <body>
+        <![CDATA[
+            this.scimoz.markerDeleteAll(type);
+        ]]>
+        </body>
+        </method>
+
+        <!-- koIBookmarkableView implementation -->
+        <method name="addBookmark">
+        <parameter name="line"/>
+        <body>
+        <![CDATA[
+            this.markerAdd(line, ko.markers.MARKNUM_BOOKMARK);
+        ]]>
+        </body>
+        </method>
+        <method name="removeBookmark">
+        <parameter name="line"/>
+        <body>
+        <![CDATA[
+            this.markerDelete(line, ko.markers.MARKNUM_BOOKMARK);
+        ]]>
+        </body>
+        </method>
+
+        <method name="removeAllBookmarks">
+        <parameter name="line"/>
+        <body>
+        <![CDATA[
+            this.markerClearAll(ko.markers.MARKNUM_BOOKMARK);
+        ]]>
+        </body>
+        </method>
+
+        <method name="hasBookmark">
+        <parameter name="line"/>
+        <body>
+        <![CDATA[
+            this.markerGet(line) && ko.markers.MARKNUM_BOOKMARK;
+        ]]>
+        </body>
+        </method>
+
+        <method name="_browserMethodAndPathForBrowserType">
+        <parameter name="browserType"/>
+        <body>
+        <![CDATA[
+            if (!browserType) {
+                browserType = "";
+            }
+            var browserMethod = this.__globalPrefs.getStringPref("browser_preview_method");
+            var browserPath;
+            switch(browserType) {
+                case "komodo":
+                    if (browserMethod == "external") {
+                        /* Default was external, but user wants it in Komodo. */
+                        browserMethod = "in-tab-other-group";
+                    }
+                    break;
+                case "configured":
+                case "default":
+                case "":
+                    /* Do nothing - will use the default values. */
+                    break;
+                default:
+                    /* Anything else must be an external browser request. */
+                    browserMethod = "external";
+                    var koWebbrowser = Components.classes["@activestate.com/koWebbrowser;1"].
+                                       getService(Components.interfaces.koIWebbrowser);
+                    var browsersObj = {};
+                    var browserTypesObj = {};
+                    koWebbrowser.get_possible_browsers_and_types(
+                            {} /* count */, browsersObj, browserTypesObj);
+                    var browsers = browsersObj.value;
+                    var browserTypes = browserTypesObj.value;
+                    var i = browserTypes.indexOf(browserType);
+                    if (i >= 0) {
+                        browserPath = browsers[i];
+                    }
+                    break;
+            }
+            return [browserMethod, browserPath];
+        ]]>
+        </body>
+        </method>
+
+        <method name="_getPreviewPathAndBrowserType">
+        <parameter name="browserType"/>
+        <body>
+        <![CDATA[
+            // Return the user's chosen preview path for this document,
+            // asking if necessary. This may return null, meaning the
+            // action calling this method should abort.
+            var previewPath = this.koDoc.prefs.getString("preview_path", "");
+            if (!browserType) {
+                browserType = this.koDoc.prefs.getString("preview_browser", "");
+            }
+            if (!previewPath) {
+                var pick = ko.dialogs.pickPreview(this.koDoc.file.displayPath,
+                                                  undefined, undefined,
+                                                  browserType);
+                if (pick == null)
+                    return [null, null];
+                previewPath = pick.preview;
+                if (pick.browserType) {
+                    browserType = pick.browserType;
+                }
+                if (pick.remember) {
+                    this.koDoc.prefs.setStringPref("preview_path", previewPath);
+                    if (browserType) {
+                        this.koDoc.prefs.setStringPref("preview_browser", browserType);
+                    }
+                }
+            }
+            if (browserType != "komodo" && this.koDoc.file.isRemoteFile &&
+                previewPath == this.koDoc.file.displayPath) {
+                // Must ensure the URI uses the hostname, not a Komodo server
+                // alias, as external applications won't understand Komodo
+                // server aliases - bug 91046.
+                var RCService = Components.classes["@activestate.com/koRemoteConnectionService;1"].
+                                    getService(Components.interfaces.koIRemoteConnectionService);
+                try {
+                    var koServerInfo = RCService.getServerInfoForAlias(this.koDoc.file.server);
+                    if (koServerInfo) {
+                        var fileSvc = Components.classes["@activestate.com/koFileService;1"]
+                                        .createInstance(Components.interfaces.koIFileService);
+                        var koFile = fileSvc.getFileFromURINoCache(this.koDoc.file.URI);
+                        koFile.server = koServerInfo.hostname;
+                        previewPath = koFile.URI;
+                    }
+                } catch(ex) {
+                    // No server info for this URI - ignore it.
+                }
+            }
+
+            return [previewPath, browserType];
+        ]]>
+        </body>
+        </method>
+
+        <method name="createInternalViewPreview">
+        <parameter name="previewURI"/>
+        <parameter name="viewlist"/>
+        <body>
+        <![CDATA[
+        if (!previewURI) {
+            var browserType;
+            // Ignore the browserType setting.
+            [previewURI, browserType] = this._getPreviewPathAndBrowserType("komodo");
+            if (previewURI === null) {
+                /* Action was cancelled by the user. */
+                return;
+            }
+            previewURI = ko.uriparse.pathToURI(previewURI);
+        }
+        if (!previewURI) {
+            // Default to the view's own document.
+            previewURI = this.koDoc.file.URI;
+        }
+        var doc = this.koDoc;
+        if (!doc.file || previewURI != doc.file.URI) {
+            doc = this.docSvc.createDocumentFromURI(previewURI);
+        }
+        this.preview = viewlist.createViewFromDocument(doc, 'browser', -1);
+        this.preview.sourceView = this;
+        this.preview.makeCurrent();
+        ]]>
+        </body>
+        </method>
+
+        <field name="preview">null</field>
+
+        <method name="viewPreview">
+        <parameter name="browserType"/>
+        <body>
+        <![CDATA[
+        // Open (if necessary) and switch to the browser preview for
+        // this view.
+        //
+        //  "browserType" is a type of browser to open with, if specified, must
+        //                be one of: "komodo", "default", "firefox, "chrome" or
+        //                other configured/platform browser type. If left null
+        //                or undefined (as is the case when the preview toolbar
+        //                button is just pressed) the "browserPreview" pref is
+        //                used to indicate where to open the view.
+        try {
+            if (this.koDoc.isUntitled) {
+                ko.dialogs.alert("You must save '"+this.title+
+                             "' before you can preview it in the browser.");
+                return;
+            }
+            try {
+                if (false === ko.views.manager.offerToSave([this.koDoc.file.URI],
+                              null, // title
+                              this.viewsPropertiesBundle.GetStringFromName("Save file before previewing"), // prompt
+                              "save_buffer_before_preview", // doNotAskPref,
+                              true, // skipProjects
+                              false // aboutToClose
+                              )) {
+                    // cancelled out
+                    return;
+                }
+            } catch(ex) {
+                this.log.exception(ex, "viewPreview error");
+            }
+
+            var previewPath;
+            // If a browser is specified then use it.
+            if (browserType) {
+                //XXX kind of a hack, see ko.uilayout.populatePreviewToolbarButton
+                [previewPath, browserType] = this._getPreviewPathAndBrowserType(browserType);
+            } else if (this.preview) {
+                // When the view already has an open browser preview, switch to it.
+                if (this.preview.makeCurrent) {
+                    this.preview.makeCurrent();
+                    try {
+                        this.preview.reload();
+                    } catch(ex) {
+                        // Bug 92875: We don't care about this exception, no point in
+                        // displaying it to user.
+                        this.log.debug("this.preview.reload: " + ex);
+                    }
+                } else if (this.preview.document) {
+                    this.preview.focus();
+                    // Reload in a separate window.
+                    this.preview.document.location = this.preview.document.location;
+                }
+            } else {
+                // Open the browser preview as specified by the user's prefs.
+                [previewPath, browserType] = this._getPreviewPathAndBrowserType();
+            }
+            if (previewPath) {
+                var browserMethod, browserPath, previewURI;
+                [browserMethod, browserPath] = this._browserMethodAndPathForBrowserType(browserType);
+                switch (browserMethod) {
+                    case "external":
+                        ko.browse.openUrlInDefaultBrowser(previewPath, browserPath);
+                        break;
+                    case "in-tab-other-group":
+                        previewURI = ko.uriparse.pathToURI(previewPath);
+                        this.createInternalViewPreview(previewURI, this.alternateViewList);
+                        break;
+                    case "in-tab-same-group":
+                        previewURI = ko.uriparse.pathToURI(previewPath);
+                        this.createInternalViewPreview(previewURI, this.parentView);
+                        break;
+                    case "in-separate-dialog":
+                        previewURI = ko.uriparse.pathToURI(previewPath);
+                        this.preview = window.openDialog(previewURI,
+                                          "_blank",
+                                          "chrome,titlebar,all,close=yes,resizable,scrollbars");
+                        break;
+                }
+            }
+        } catch(ex) {
+            this.log.exception(ex, "Error viewing preview.");
+        }
+        ]]>
+        </body>
+        </method>
+
+        <method name="canBeOpenedInAnotherWindow">
+        <body><![CDATA[
+            if (this.koDoc.isUntitled || !this.koDoc.file) {
+                return false;
+<!-- #if WITH_DEBUGGING -->
+            } else {
+                if (this.koDoc.file.scheme == "dbgp") {
+                    return false;
+                }
+<!-- #endif -->
+            }
+            return true;
+        ]]></body>
+        </method>
+
+    </implementation>
+    <handlers>
+        <handler event="keypress" phase="capturing">
+            <![CDATA[
+            if (!this.scintilla.isFocused) {
+                // something other than the <scintilla> is focused; ignore
+                // key presses for the purposes of vi key binding emulation
+                return undefined;
+            }
+
+            var vi_mode_enabled = (typeof(gVimController) != 'undefined' &&
+                                   gVimController.enabled);
+            // Ensure vi is enabled and no keypress catcher (like iSearch)
+            // has been set to handle keypress events.
+            if (vi_mode_enabled && !this.scintilla.key_handler) {
+                //dump("check for vi use of binding\n");
+                if (gVimController.handleKeypress(event)) {
+                    //dump("    yes, vi handles this, stop the event\n");
+                    event.stopPropagation();
+                    event.preventDefault();
+                    event.cancelBubble = true;
+                    return undefined;
+                }
+            }
+
+            const DOM_VK_RETURN = event.DOM_VK_RETURN;
+            const DOM_VK_TAB = event.DOM_VK_TAB;
+            const DOM_VK_ESCAPE = event.DOM_VK_ESCAPE;
+            var charCode = event.charCode;
+            var charCodeChar = null;
+            var keyCode = event.keyCode;
+            if (charCode) {
+                charCodeChar = String.fromCharCode(charCode);
+            } else if (keyCode && [DOM_VK_TAB, DOM_VK_RETURN].indexOf(keyCode) >= 0) {
+<!-- #if PLATFORM != "darwin" -->
+                var cmdkey = event.ctrlKey || event.altKey || event.metaKey || event.shiftKey;
+<!-- #else -->
+                // bug 79591, allow alt keys to get through since they
+                // are used for special key entry on osx.  This is dependent
+                // on our patches in nsChildView.mm, changing those patches
+                // may change the behaviour here as well.
+                var cmdkey = event.ctrlKey || event.metaKey || event.shiftKey;
+<!-- #endif -->
+                if (cmdkey) {
+                    // Do nothing
+                } else if (keyCode == DOM_VK_RETURN) {
+                    var haveChNEWLINE = this.autoAbbreviationTriggerCharacters_Processed.indexOf('\n');
+                    var haveChRETURN = this.autoAbbreviationTriggerCharacters_Processed.indexOf('\r');
+                    charCodeChar = (!haveChRETURN && haveChNEWLINE) ? '\n' : '\r';
+                } else {
+                    charCodeChar = '\t';
+                }
+            }
+            if (!(event.ctrlKey || event.altKey || event.metaKey)
+                && this.editSmartWrapSelection && charCodeChar !== null
+                && this.scimoz.selections == 1
+                && this.scimoz.selectionStart != this.scimoz.selectionEnd
+                && this.wrapSelectionDelimiters.indexOf(charCodeChar) >= 0) {
+                var wrap = true;
+                if (this.wrapSelectionOnlyPlainText) {
+                    // In order to be considered "plain-text", all text within
+                    // a selection must be of the same style.
+                    var style = this.scimoz.getStyleAt(this.scimoz.selectionStart);
+                    for (let i = this.scimoz.selectionStart + 1; i < this.scimoz.selectionEnd; i++) {
+                        if (this.scimoz.getStyleAt(i) != style) {
+                            wrap = false;
+                            break;
+                        }
+                    }
+                }
+                if (wrap) {
+                    let pairs = {'(': ')', '[': ']', '{': '}', '<': '>'};
+                    var replacement = charCodeChar + this.scimoz.selText + (pairs[charCodeChar] || charCodeChar)
+                    if (!this.editSmartWrapSelectionKeep) {
+                        this.scimoz.replaceSel(replacement);
+                    } else {
+                        this.scimoz.targetFromSelection();
+                        this.scimoz.replaceTarget(replacement);
+                        this.scimoz.setSel(this.scimoz.targetStart + 1,
+                                           this.scimoz.targetEnd - 1);
+                    }
+                    return false;
+                }
+            } else if (this.enableAutoAbbreviations && charCodeChar !== null
+                       && this.scimoz.selections == 1
+                       && !this.scimoz.selectionIsRectangle
+                       && ko.macros.recorder.mode != 'recording'
+                       && this.autoAbbreviationTriggerCharacters_Processed.indexOf(charCodeChar) >= 0) {
+                
+<!-- #if PLATFORM != "darwin" -->
+                var cmdkey = event.ctrlKey || event.altKey || event.metaKey;
+<!-- #else -->
+                // bug 79591, allow alt keys to get through since they
+                // are used for special key entry on osx.  This is dependent
+                // on our patches in nsChildView.mm, changing those patches
+                // may change the behaviour here as well.
+                var cmdkey = event.ctrlKey || event.metaKey;
+<!-- #endif -->
+                if (charCodeChar == ' ') {
+                    // Make sure shift-space doesn't trigger.
+                    cmdkey = cmdkey || event.shiftKey;
+                }
+                if (!cmdkey) {
+                    if (ko.abbrev.expandAbbrev()) {
+                       return false;
+                   }
+                }
+               return true;
+            } else if (event.keyCode == DOM_VK_ESCAPE && this.in_lite_multicaret) {
+                for (let x=1;x<this.scimoz.selections;x++)
+                {
+                    this.scimoz.dropSelectionN(x);
+                }
+                this.in_lite_multicaret = false;
+                this.cancel_lite_multicaret_on_modify = false;
+            }
+            return undefined;
+            ]]>
+        </handler>
+        
+        <handler event="mouseup" phase="bubbling">
+        <![CDATA[
+            // run on timeout so as not to conflict with scintilla mouseup events
+            setTimeout(function() {
+                this.onEditMatchingTags(-1);
+                this.onEditMatchingDelim(-1);
+            }.bind(this), 50);
+        ]]>
+        </handler>
+    </handlers>
+
+</binding>
+
+
+</bindings>
+

@@ -1,0 +1,78 @@
+# Installing Trac prerequisites on Mac OS X (10.5)
+
+- Python
+
+  Currently I'm using an ActivePython 2.6 installation, but Python 2.5 is
+  fine too.
+  
+- 'setuptools' and 'easy_install' Python packages
+
+        cd tmp
+        wget http://peak.telecommunity.com/dist/ez_setup.py
+        sudo python2.5 ez_setup.py
+
+- Append that Python's bin dir to your PATH. I have this Python
+  set as my current so have this:
+    
+        export PATH=$PATH:/Library/Frameworks/Python.framework/Versions/Current/bin
+
+  It is working if `which easy_install` points to the directory of the
+  Python installation you want to use.
+
+- Install trac 0.11.4
+
+        $ which easy_install
+        /Library/Frameworks/Python.framework/Versions/Current/bin/easy_install
+        $ sudo easy_install Trac
+
+  For me this installed Genshi 0.5.1 as well.
+  
+  TODO: Did this install Pygments as well? If not this can be installed
+  via `sudo easy_install Pygments`.
+  TODO: start here, integrating notes from Makefile.py::_make_mac()
+
+- Database connector: hoping this will work with SQLite3 for which APy 2.6
+  already has a connector.
+
+- (Optional.) Python bindings to Subversion. These are optional because
+  for tasks testing we are not using the scc parts of a Trac instance.
+  Without svn bindings you may (depending on your Trac config) get a
+  warning banner on Trac pages.
+
+  I had Subversion 1.6.1 from Collabnet installed. Python bindings in
+  "/opt/subversion/lib/svn-python/...".  While it looks like these link
+  against Python *2.3* (the system Python version on Mac OS 10.4), they
+  seem to at least *import* with Python 2.5 and 2.6.
+
+- `htpasswd` for create HTTP Basic auth entries. On Mac OS X I had this
+  already in `/usr/sbin/htpasswd`.
+
+
+
+# Some *old* out of date notes
+
+Here-in some *old* notes on setting up Trac on Mac OS X. First just try the
+steps above. If have trouble then you can try these notes.
+
+http://trac.edgewall.org/wiki/TracOnOsxNoFink
+
+- clearsilver (v0.10, templating system)
+    cd tmp
+    wget http://www.clearsilver.net/downloads/clearsilver-0.10.5.tar.gz
+    tar xzf clearsilver-0.10.5.tar.gz
+    cd clearsilver-0.10.5
+    # That '--build' option sometimes required for x86 boxen.
+    # TODO: Want /usr/local? Trying ~/opt/ for now. Come back to
+    #       it if that fails.
+    ./configure --disable-ruby --with-python=`which python2.5` \
+        --prefix=$HOME/opt/clearsilver-0.10 \
+        --build=i386
+        --prefix=/usr/local \
+- Genshi (0.11)
+    sudo easy_install-2.5 Genshi
+- Pygments
+    sudo easy_install-2.5 Pygments
+- Trac (0.11)
+    sudo easy_install-2.5 Trac
+
+

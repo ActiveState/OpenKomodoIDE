@@ -1,0 +1,12 @@
+Index: twisted/TwistedCore-2.4.0/twisted/python/versions.py
+===================================================================
+--- twisted/TwistedCore-2.4.0/twisted/python/versions.py        (revision 9014)
++++ twisted/TwistedCore-2.4.0/twisted/python/versions.py        (working copy)
+@@ -80,6 +80,7 @@
+                     other.micro))
+ 
+     def _getSVNVersion(self):
++        return None
+         mod = sys.modules.get(self.package)
+         if mod:
+             ent = os.path.join(os.path.dirname(mod.__file__),

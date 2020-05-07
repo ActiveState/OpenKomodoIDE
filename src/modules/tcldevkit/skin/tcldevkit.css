@@ -1,0 +1,115 @@
+/* Copyright (c) 2000-2011 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+/* tdk icons */
+
+#menu_tdkTclApp,
+#tb_tdkTclApp
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclApp-16-16-8.png");
+}
+#menu_tdkTclApp[disabled="true"],
+#tb_tdkTclApp[disabled="true"]
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclApp-16-16-8-disable.png");
+}
+
+#menu_tdkTclCompiler,
+#tb_tdkTclCompiler
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclCompiler-16-16-8.png");
+}
+#menu_tdkTclCompiler[disabled="true"],
+#tb_tdkTclCompiler[disabled="true"]
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclCompiler-16-16-8-disable.png");
+}
+
+#menu_tdkTclSvc,
+#tb_tdkTclSvc
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclSvc-16-16-8.png");
+}
+#menu_tdkTclSvc[disabled="true"],
+#tb_tdkTclSvc[disabled="true"]
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclSvc-16-16-8-disable.png");
+}
+
+#menu_tdkTclXref,
+#tb_tdkTclXref
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclXref-16-16-8.png");
+}
+#menu_tdkTclXref[disabled="true"],
+#tb_tdkTclXref[disabled="true"]
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclXref-16-16-8-disable.png");
+}
+
+#menu_tdkTclVFSE,
+#tb_tdkTclVFSE
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclVFSE-16-16-8.png");
+}
+#menu_tdkTclVFSE[disabled="true"],
+#tb_tdkTclVFSE[disabled="true"]
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclVFSE-16-16-8-disable.png");
+}
+
+#menu_tdkTclInspector,
+#tb_tdkTclInspector
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclInspector-16-16-8.png");
+}
+#menu_tdkTclInspector[disabled="true"],
+#tb_tdkTclInspector[disabled="true"]
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclInspector-16-16-8-disable.png");
+}
+
+#menu_tdkTclPE,
+#tb_tdkTclPE
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclPE-16-16-8.png");
+}
+#menu_tdkTclPE[disabled="true"],
+#tb_tdkTclPE[disabled="true"]
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclPE-16-16-8-disable.png");
+}
+
+#menu_tdkCommunity,
+#tb_tdkCommunity
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclDevKit-community.png");
+}
+#menu_tdkCommunity[disabled="true"],
+#tb_tdkCommunity[disabled="true"]
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclDevKit-community.png");
+}
+
+#menu_tdkBugs,
+#tb_tdkBugs
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclDevKit-bugs.png");
+}
+#menu_tdkBugs[disabled="true"],
+#tb_tdkBugs[disabled="true"]
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclDevKit-bugs.png");
+}
+
+#menu_tdkMailinglist,
+#tb_tdkMailinglist
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclDevKit-mailing-list.png");
+}
+#menu_tdkMailinglist[disabled="true"],
+#tb_tdkMailinglist[disabled="true"]
+{
+  list-style-image : url("chrome://tcldevkit/skin/images/TclDevKit-mailing-list.png");
+}
+

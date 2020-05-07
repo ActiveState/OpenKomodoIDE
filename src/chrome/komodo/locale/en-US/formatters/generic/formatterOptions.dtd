@@ -1,0 +1,7 @@
+<!ENTITY dialog.title "Generic Formatter Options">
+<!ENTITY formatterOptionsGroupbox.caption "Configurable Options">
+<!ENTITY generalFormatter.description "Specify the formatter executable that you wish to use for the formatting operation, as well as any additional command line arguments. Both the executable and arguments fields will be interpolated by Komodo's interpolation service at execution time. Note: The text will be passed to the application using stdin.">
+<!ENTITY applicationExecutable.label "Executable to use:">
+<!ENTITY applicationArguments.label "Command-line arguments:">
+<!ENTITY commandLineTextbox.tooltip "Specify the application executable you wish to use to perform the formatting">
+<!ENTITY argumentsTextbox.tooltip "Specify the application executable you wish to use to perform the formatting">

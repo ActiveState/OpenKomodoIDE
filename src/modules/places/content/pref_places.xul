@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+   <!ENTITY % placesDTD SYSTEM "chrome://komodo-places/locale/places.dtd">
+  %placesDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="&importFromFileSystem.title;"
+        orient="vertical"
+        onload="prefPlacesOnLoad();">
+
+<!--
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/filepickers.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/dialogs.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/windowManager.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/launch.js"/>
+-->
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/logging.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo-places/content/pref_places.js"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="folder-import-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox id="importFrame" name="importFrame" orient="vertical" >
+            <caption label="&defaultViewFilters.label;" class="kopadded"/>
+            <vbox flex="1">
+                <separator class="thin"/>
+                <label value="&filesToInclude.label;"/>
+                <textbox id="places_default_include_matches" value=""/>
+                <separator class="thin"/>
+                <label value="&filesToExclude.label;"/>
+                <textbox id="places_default_exclude_matches" value=""/>
+            </vbox>
+        </groupbox>
+        
+        <groupbox id="pref_places_projectDirectoryFilters"
+                  name="pref_places_projectDirectoryFilters" orient="vertical">
+            <caption label="&specifyDefaultProjectFilters.label;" class="kopadded"/>
+            <label value="&filesToInclude.label;"/>
+            <textbox id="import_include_matches" pref="true" value=""/>
+            <separator class="thin"/>
+            <label value="&filesToExclude.label;"/>
+            <textbox id="import_exclude_matches" pref="true" value=""/>
+            <separator class="thin"/>
+        </groupbox>
+        
+        <groupbox id="pref_places_dblClickToggleFrame"
+                  name="pref_places_dblClickToggleFrame" orient="vertical">
+          <caption label="&options.label;" class="kopadded"/>
+          <checkbox id="pref_places_dblClickRebases"
+                    label="&dblClickToRebase.label;"
+                    accesskey="&pref_places_dblClickRebases.accesskey;" />
+          <separator class="thin"/>
+          <checkbox id="pref_places_showProjectPath"
+                    label="&showProjectPath.label;"
+                    accesskey="&pref_places_showProjectPath.accesskey;" />
+          <separator class="thin"/>
+          <checkbox id="pref_places_show_fullPath_tooltip"
+                    label="&show_fullPath_tooltip.label;"
+                    accesskey="&places.show_fullPath_tooltip.accesskey;" />
+          <separator class="thin"/>
+          <checkbox id="pref_places_showProjectPathExtension"
+                    label="&showProjectPathExtension.label;"
+                    accesskey="&pref_places_showProjectPathExtension.accesskey;" />
+          <separator class="thin"/>
+          <checkbox id="places.multiple_project_view"
+                    label="&multiple_project_view.label;"
+                    accesskey="&places.multiple_project_view.accesskey;"
+                    pref="true"/>
+          <separator class="thin"/>
+          <hbox>
+          <label>&places.allowDragDrop.label;</label>
+          <menulist id="places.allowDragDropItemsToFolders"
+                    pref="true" prefattribute="data"
+                    flex="1"
+                    prefstrings="donotask_placesAllowDragDropItemsToFolders,donotask_action_placesAllowDragDropItemsToFolders">
+                    <menupopup>
+                        <menuitem data="false," label="&places.askMeWhatToDo.label;"/>
+                        <menuitem data="true,Yes" label="&places.alwaysDragItems.label;"/>
+                        <menuitem data="true,No" label="&places.neverDragItems.label;"/>
+                    </menupopup>
+                </menulist>
+          </hbox>
+        </groupbox>
+
+    </vbox>
+
+</window>
+

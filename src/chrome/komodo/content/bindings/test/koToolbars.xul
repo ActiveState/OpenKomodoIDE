@@ -1,0 +1,2567 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/toolbar.css" type="text/css"?>
+<!-- for rx-icon class -->
+<?xml-stylesheet href="chrome://komodo/skin/rxx/rxx-overlay.css" type="text/css"?>
+
+<!DOCTYPE window PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<window title="XUL Periodic Table"
+        width="400"
+        height="300"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="OnLoad();"
+        onresize="dump('got resize\n');">
+<script src="chrome://komodo/content/library/timers.js"/>
+<script src="chrome://komodo/content/library/logging.js"/>
+
+<script>
+<![CDATA[
+    const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+    window.onresize = function() {
+        var hb = document.getElementById('toolbox_main');
+        hb.update();
+    }
+
+    function do_html_appendChild() {
+        try {
+            var hb = document.getElementById('html-toolbarbox');
+
+            var tb = document.createElementNS(XUL_NS, 'toolbar');
+            var tbtn = document.createElementNS(XUL_NS, 'toolbarbutton');
+            tbtn.setAttribute('label','TextButton');
+            tb.appendChild(tbtn);
+            hb.appendChild(tb);
+        } catch(e) {
+            log.exception(e);
+        }
+    }
+
+    window.setTimeout('do_html_appendChild();',1000);
+]]>
+</script>
+
+    <toolbox id="toolbox_main" type="reflow"
+             context="context-toolbox-menu"
+             style="border: thin;
+                    margin: 0px;
+                    margin-bottom: 2px;
+                    padding: 0px;">
+        <menubar id="menubar_main"
+            grippyhidden="true"
+            fullscreentoolbar="true"
+            flex="1"
+            >
+            <menu id="menu_file" label="File" accesskey="F">
+                <menupopup id="popup_file">
+                    <menu label="New" accesskey="N">
+                        <menupopup id="popup_filenew"
+                                   onpopupshowing="ko.uilayout.updateMRUMenuIfNecessary('template');">
+                            <menuitem label="New File..."
+                                      observes="cmd_newTemplate"
+                                      />
+                            <menuitem label="New Project..."
+                                      id="menu_newProject"
+                                      observes="cmd_newProject"
+                                      />
+                            <menuseparator id="separator_mruTemplates"/>
+                            <!-- menuitems are added dynamically for each
+                                 entry in the file MRU -->
+                        </menupopup>
+                    </menu>
+                    <menu label="Open" accesskey="O">
+                        <menupopup id="koFileOpenPopup">
+                            <menuitem label="File..."
+                                      id="menu_open"
+                                      observes="cmd_open"
+                                      key="key_open"
+                                      />
+                            <menuitem label="Remote File..."
+                                      id="menu_openRemoteFile"
+                                      observes="cmd_open_remote"
+                                      />
+                            <menuseparator/>
+                            <menuitem label="Project..."
+                                      id="menu_openProject"
+                                      observes="cmd_openProject"
+                                      />
+                        </menupopup>
+                    </menu>
+                    <menuitem
+                        id="menu_bufferClose"
+                        label="Close"
+                        accesskey="C"
+                        observes="cmd_bufferClose"
+                        />
+                    <menuseparator/>
+                    <menuitem label="Save"
+                              id="menu_save"
+                              observes="cmd_save"
+                              accesskey="S"
+                              />
+                    <menuitem label="Show Unsaved Changes..."
+                              accesskey="W"
+                              id="menu_showUnsavedChanges"
+                              observes="cmd_showUnsavedChanges"
+                              />
+                    <menuitem label="Save As..."
+                              id="menu_saveAs"
+                              observes="cmd_saveAs"
+                              accesskey="A"
+                              />
+                    <menuitem label="Save Remotely As..."
+                              disabled="true"
+                              id="menu_saveAsRemote"
+                              observes="cmd_saveAs_remote"
+                              />
+                    <menuitem label="Save As Template..."
+                              id="menu_saveAsTemplate"
+                              observes="cmd_saveAsTemplate"
+                              />
+                    <menuitem label="Save All..."
+                              id="menu_saveAll"
+                              observes="cmd_saveAll"
+                              accesskey="l"
+                              />
+                    <menuitem label="Revert"
+                              id="menu_revert"
+                              observes="cmd_revert"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Close Project"
+                              id="menu_closeProject"
+                              observes="cmd_closeProject"
+                              />
+                    <menuitem label="Save Project"
+                              id="menu_saveProject"
+                              observes="cmd_saveProject"
+                              />
+                    <menuitem label="Rename Project..."
+                              id="menu_renameProject"
+                              observes="cmd_renameProject"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Refresh Status"
+                              id="menu_refreshStatus"
+                              observes="cmd_refreshStatus"
+                              >
+                    </menuitem>
+                    <menu
+                        id="menu_SCCmenu"
+                        label="Source Control"
+                        events="SCC"
+                        accesskey="U">
+                        <menupopup>
+                            <menuitem label="Edit"
+                                      id="menu_SCCedit"
+                                      observes="cmd_SCCedit"
+                                      />
+                            <menuitem label="Update"
+                                      id="menu_SCCupdate"
+                                      observes="cmd_SCCupdate"
+                                      />
+                            <menuitem label="Diff (Compare Files)"
+                                      id="menu_SCCdiff"
+                                      observes="cmd_SCCdiff"
+                                      />
+                            <menuitem label="Commit Changes"
+                                      id="menu_SCCcommit"
+                                      observes="cmd_SCCcommit"
+                                      />
+                            <menuitem label="Remove"
+                                      id="menu_SCCremove"
+                                      observes="cmd_SCCremove"
+                                      />
+                            <menuitem label="Revert Changes"
+                                      id="menu_SCCrevert"
+                                      observes="cmd_SCCrevert"
+                                      />
+                            <menuitem label="Add"
+                                      id="menu_SCCadd"
+                                      observes="cmd_SCCadd"
+                                      />
+                        </menupopup>
+                    </menu>
+                    <menuseparator/>
+                    <menuitem label="Page Setup"
+                              id="menu_printSetup"
+                              oncommand="NSPrintSetup()"
+                              />
+                    <menuitem label="Print Preview"
+                              id="menu_printPreview"
+                              observes="cmd_printPreview"
+                              accesskey="e"
+                              />
+                    <menuitem label="Print..."
+                              id="menu_print"
+                              observes="cmd_print"
+                              />
+                    <menuitem label="Print to HTML File..."
+                              id="menu_exportHTML"
+                              observes="cmd_exportHTML"
+                              />
+                    <menuseparator/>
+                    <menu
+                        id="menu_mruFiles"
+                        accesskey="F"
+                        label="Recent Files"
+                        class="menu_mru">
+                        <menupopup
+                            id="popup_mruFiles"
+                            class="popup_mru"
+                            onpopupshowing="ko.uilayout.updateMRUMenuIfNecessary('file');">
+                            <!-- menuitems are added dynamically for each entry
+                                            in the file MRU -->
+                            </menupopup>
+                    </menu>
+                    <menu
+                        id="menu_mruProjects"
+                        accesskey="t"
+                        label="Recent Projects"
+                        class="menu_mru">
+                        <menupopup
+                            id="popup_mruProjects"
+                            class="popup_mru"
+                            onpopupshowing="ko.uilayout.updateMRUMenuIfNecessary('project');">
+                            <!-- menuitems are added dynamically for each entry
+                                in the project MRU -->
+                        </menupopup>
+                    </menu>
+                    <menuseparator/>
+                    <menuitem
+                        id="menu_quit"
+                        label="Exit"
+                        accesskey="x"
+                        observes="cmd_quit"
+                        />
+                </menupopup>
+            </menu>
+
+            <menu id="menu_edit" label="Edit" accesskey="E">
+                <menupopup id="popup_edit">
+                    <menuitem label="Undo"
+                              id="menu_undo"
+                              accesskey="U"
+                              observes="cmd_undo"
+                              />
+                    <menuitem label="Redo"
+                              id="menu_redo"
+                              accesskey="O"
+                              observes="cmd_redo"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Cut"
+                              id="menu_cut"
+                              accesskey="T"
+                              observes="cmd_cut"
+                              />
+                    <menuitem label="Copy"
+                              id="menu_copy"
+                              accesskey="C"
+                              observes="cmd_copy"
+                              />
+                    <menuitem label="Paste"
+                              id="menu_paste"
+                              accesskey="P"
+                              observes="cmd_paste"
+                              />
+                    <menuitem label="Delete"
+                              id="menu_delete"
+                              observes="cmd_delete"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Select All"
+                              id="menu_editSelectAll"
+                              observes="cmd_selectAll"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Find..."
+                              id="menu_find"
+                              accesskey="F"
+                              observes="cmd_find"
+                              />
+                    <menuitem label="Find Next"
+                              id="menu_findNext"
+                              accesskey="N"
+                              observes="cmd_findNext"
+                              />
+                    <menuitem label="Replace..."
+                              id="menu_replace"
+                              accesskey="R"
+                              observes="cmd_replace"
+                              />
+                    <menuitem label="Incremental Search"
+                              id="menu_startIncrementalSearch"
+                              accesskey="I"
+                              observes="cmd_startIncrementalSearch"
+                              />
+                    <menuitem label="Find in Files..."
+                              id="menu_findInFiles"
+                              observes="cmd_findInFiles"
+                              />
+                    <menuitem label="Replace in Files..."
+                              id="menu_replaceInFiles"
+                              observes="cmd_replaceInFiles"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Preferences..."
+                              id="menu_editPrefs"
+                              observes="cmd_editPrefs"
+                              accesskey="e"
+                              />
+                    <menuitem label="Current File Settings..."
+                              id="menu_editPrefsCurrent"
+                              accesskey="l"
+                              observes="cmd_editPrefsCurrent"
+                              />
+                </menupopup>
+            </menu>
+            <menu id="menu_code" label="Code" accesskey="C">
+                <menupopup id="popup_sourcecode">
+                    <menuitem label="Reflow Paragraph"
+                              id="menu_reflow"
+                              observes="cmd_editReflow"
+                              />
+                    <menuitem label="Increase Line Indent"
+                              id="menu_indent"
+                              observes="cmd_indent"
+                              />
+                    <menuitem label="Decrease Line Indent"
+                              id="menu_dedent"
+                              observes="cmd_dedent"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Make Uppercase"
+                              id="menu_convertUpperCase"
+                              observes="cmd_convertUpperCase"
+                              />
+                    <menuitem label="Make Lowercase"
+                              id="menu_convertLowerCase"
+                              observes="cmd_convertLowerCase"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Comment Region"
+                              id="menu_comment"
+                              observes="cmd_comment"
+                              />
+                    <menuitem label="Un-comment Region"
+                              id="menu_uncomment"
+                              observes="cmd_uncomment"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Tabify Region"
+                              id="menu_tabify"
+                              observes="cmd_tabify"
+                              />
+                    <menuitem label="Untabify Region"
+                              id="menu_untabify"
+                              observes="cmd_untabify"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Complete Word"
+                              id="menu_completeWord"
+                              observes="cmd_completeWord"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Jump to Matching Brace"
+                              id="menu_jumpToMatchingBrace"
+                              observes="cmd_jumpToMatchingBrace"
+                              />
+                    <menuitem label="Select to Matching Brace"
+                              id="menu_selectToMatchingBrace"
+                              observes="cmd_selectToMatchingBrace"
+                              />
+                    <menuitem label="Select Block"
+                              id="menu_blockSelect"
+                              observes="cmd_blockSelect"
+                              />
+                    <menuitem id="editor-jump-corresponding"
+                              label="Jump to Corresponding Line"
+                              observes="cmd_jumpToCorrespondingLine"/>
+                    <menuseparator/>
+                    <menuitem label="Find Next Function"
+                              id="menu_findNextFunction"
+                              observes="cmd_findNextFunction"
+                              />
+                    <menuitem label="Find Previous Function"
+                              id="menu_findPreviousFunction"
+                              observes="cmd_findPreviousFunction"
+                              />
+                    <menuitem label="Find All Functions"
+                              id="menu_findAllFunctions"
+                              observes="cmd_findAllFunctions"
+                              />
+                </menupopup>
+            </menu>
+            <menu id="menu_view" label="View" accesskey="V">
+                <menupopup id="popup_view"
+                           onpopupshowing="ko.uilayout.updateFullScreen(this)">
+                    <menuitem label="Full Screen"
+                              id="menuitem_fullScreen"
+                              type="checkbox"
+                              oncommand="ko.uilayout.fullScreen();"
+                              />
+                    <menu label="Tabs">
+                        <menupopup
+                            onpopupshowing="ko.uilayout.updateTabpickerMenu(this)"
+                            type="menu"
+                            >
+                            <menuitem id="show_project_tab2"
+                                observes="show_project_tab"
+                                oncommand="ko.uilayout.ensureTabShown('placesViewbox', true)"
+                                label="Projects"
+                                />
+                            <menuitem id="show_codebrowser_tab2"
+                                observes="show_codebrowser_tab"
+                                oncommand="ko.uilayout.ensureTabShown('codebrowserviewbox', true)"
+                                label="Code Browser"
+                                />
+                            <menuitem id="show_toolbox2_tab2"
+                                observes="show_toolbox2_tab"
+                                oncommand="ko.uilayout.ensureTabShown('toolbox2viewbox', true)"
+                                label="Toolbox"
+                                />
+                            <menuseparator/>
+                            <!-- XXX TODO will need handling for the arbitrary number of
+                                 debug session tabs here -->
+                            <menuitem id="show_findresults1_tab2"
+                                observes="show_findresults1_tab"
+                                oncommand="ko.uilayout.ensureTabShown('findresults1_tabpanel', true)"
+                                label="Find Results 1"
+                                />
+                            <menuitem id="show_findresults2_tab2"
+                                observes="show_findresults2_tab"
+                                oncommand="ko.uilayout.ensureTabShown('findresults2_tabpanel', true)"
+                                label="Find Results 2"
+                                />
+                            <menuitem id="show_runoutput_tab2"
+                                observes="show_runoutput_tab"
+                                oncommand="ko.uilayout.ensureTabShown('runoutput-desc-tabpanel', true)"
+                                label="Command Output"
+                                />
+                            <menuitem id="show_sccoutput_tab2"
+                                observes="show_sccoutput_tab"
+                                oncommand="ko.uilayout.ensureTabShown('sccoutput_tab', true)"
+                                label="SCC Output"
+                                />
+                        </menupopup>
+                    </menu>
+                    <menu label="Toolbars">
+                        <menupopup id="popup_toolbars">
+                            <menuitem label="Standard"
+                                      id="menu_viewedittoolbar"
+                                      observes="cmd_viewedittoolbar"
+                                      persist="checked"
+                                      checked="true"
+                                      type="checkbox"
+                                      />
+                            <menuitem id="menu_viewworkspacetoolbar"
+                                      label="Workspace"
+                                      observes="cmd_viewworkspacetoolbar"
+                                      persist="checked"
+                                      checked="true"
+                                      type="checkbox"
+                                      />
+                            <menuitem label="Debug"
+                                      id="menu_viewdebugtoolbar"
+                                      observes="cmd_viewdebugtoolbar"
+                                      persist="checked"
+                                      checked="true"
+                                      type="checkbox"
+                                      />
+                            <menuitem label="Source Code Control"
+                                      id="menu_viewscctoolbar"
+                                      observes="cmd_viewscctoolbar"
+                                      persist="checked"
+                                      checked="true"
+                                      type="checkbox"
+                                      />
+                            <menuitem label="Find/Jump"
+                                      id="menu_viewfindtoolbar"
+                                      observes="cmd_viewfindtoolbar"
+                                      persist="checked"
+                                      checked="true"
+                                      type="checkbox"
+                                      />
+                        </menupopup>
+                    </menu>
+                    <menuseparator/>
+                    <menuitem label="Goto Line..."
+                              id="menu_gotoLine"
+                              observes="cmd_gotoLine"
+                              />
+                    <menu label="Bookmarks">
+                        <menupopup id="popup_bookmarks">
+                            <menuitem label="Toggle Bookmark"
+                                      id="menu_bookmarkToggle"
+                                      observes="cmd_bookmarkToggle"
+                                      />
+                            <menuitem label="Remove All Bookmarks"
+                                      id="menu_bookmarkRemoveAll"
+                                      observes="cmd_bookmarkRemoveAll"
+                                      />
+                            <menuitem label="Next Bookmark"
+                                      id="menu_bookmarkGotoNext"
+                                      observes="cmd_bookmarkGotoNext"
+                                      />
+                            <menuitem label="Previous Bookmark"
+                                      id="menu_bookmarkGotoPrevious"
+                                      observes="cmd_bookmarkGotoPrevious"
+                                      />
+                        </menupopup>
+                    </menu>
+                    <menu label="View As Language"
+                          observes="cmd_viewAsLanguage">
+                        <menupopup id="popup_viewAsLanguage"
+                                   onpopupshowing="ko.uilayout.updateViewAsMenuIfNecessary();"
+                                   />
+                    </menu>
+                    <menuitem label="Preview in Browser"
+                              accesskey="v"
+                              observes="cmd_browserPreview"/>
+                    <menuseparator/>
+                    <menuitem label="View Whitespace"
+                              observes="cmd_viewWhitespace"
+                              />
+                    <menuitem label="View Indentation Guides"
+                              observes="cmd_viewIndentationGuides"
+                              />
+                    <menuitem label="View Line Numbers"
+                              observes="cmd_viewLineNumbers"
+                              />
+                    <menuitem label="View EOL Markers"
+                              observes="cmd_viewEOL"
+                              />
+                    <menuitem label="Word Wrap"
+                              observes="cmd_wordWrap"
+                              />
+                    <menu label="Font">
+                        <menupopup id="popup_font">
+                            <menuitem label="Increase"
+                                      id="menu_fontZoomIn"
+                                      observes="cmd_fontZoomIn"
+                                      />
+                            <menuitem label="Decrease"
+                                      id="menu_fontZoomOut"
+                                      observes="cmd_fontZoomOut"
+                                      />
+                            <menuitem label="Toggle Fixed/Proportional Fonts"
+                                      id="menu_fontFixed"
+                                      observes="cmd_fontFixed"
+                                      />
+                        </menupopup>
+                    </menu>
+                    <menu label="Fold">
+                        <menupopup id="popup_fold">
+                            <menuitem label="Expand"
+                                      id="menu_foldExpand"
+                                      observes="cmd_foldExpand"
+                                      />
+                            <menuitem label="Expand All"
+                                      id="menu_foldExpandAll"
+                                      observes="cmd_foldExpandAll"
+                                      />
+                            <menuitem label="Expand Recursively"
+                                      id="menu_foldExpandRecursive"
+                                      observes="cmd_foldExpandRecursive"
+                                      />
+                            <menuitem label="Collapse"
+                                      id="menu_foldCollapse"
+                                      observes="cmd_foldCollapse"
+                                      />
+                            <menuitem label="Collapse All"
+                                      id="menu_foldCollapseAll"
+                                      observes="cmd_foldCollapseAll"
+                                      />
+                            <menuitem label="Collapse Recursively"
+                                      id="menu_foldCollapseRecursive"
+                                      observes="cmd_foldCollapseRecursive"
+                                      />
+                        </menupopup>
+                    </menu>
+                </menupopup>
+            </menu>
+            <menu label="Debug" accesskey="D">
+                <menupopup id="popup_debug">
+                    <menuitem label="Run Without Debugging"
+                              id="menu_dbgRun"
+                              observes="cmd_dbgRun"
+                              />
+                    <menuitem label="Start"
+                              id="menu_dbgGo"
+                              observes="cmd_dbgGo"
+                              />
+                    <menuitem label="Start New Session"
+                              id="menu_dbgNewSession"
+                              observes="cmd_dbgNewSession"
+                              />
+                    <menuitem label="Break Now"
+                              id="menu_dbgBreakNow"
+                              observes="cmd_dbgBreakNow"
+                              />
+                    <menuitem label="Detach"
+                              id="menu_dbgDetach"
+                              observes="cmd_dbgDetach"
+                              />
+                    <menuitem label="Stop"
+                              id="menu_dbgStop"
+                              observes="cmd_dbgStop"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Step In"
+                              id="menu_dbgStepIn"
+                              observes="cmd_dbgStepIn"
+                              />
+                    <menuitem label="Step Over"
+                              id="menu_dbgStepOver"
+                              observes="cmd_dbgStepOver"
+                              />
+                    <menuitem label="Step Out"
+                              id="menu_dbgStepOut"
+                              observes="cmd_dbgStepOut"
+                              />
+                    <menuitem label="Disable/Enable Breakpoint"
+                              id="menu_dbgBreakpointToggle"
+                              observes="cmd_dbgBreakpointToggle"
+                              />
+                    <menuitem label="Add/Edit Breakpoint..."
+                              id="menu_dbgBreakpointAddOrEdit"
+                              observes="cmd_dbgBreakpointAddOrEdit"
+                              />
+                    <menuitem label="Add/Edit Spawnpoint..."
+                              id="menu_dbgSpawnpointAddOrEdit"
+                              observes="cmd_dbgSpawnpointAddOrEdit"
+                              />
+                    <menuitem label="Clear All Breakpoints"
+                              id="menu_dbgBreakpointClearAllInURI"
+                              observes="cmd_dbgBreakpointClearAllInURI"
+                              />
+                    <menuitem label="Show Current Statement"
+                              id="menu_dbgShowCurrentStatement"
+                              observes="cmd_dbgShowCurrentStatement"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Listen for Remote Debugger..."
+                              id="menu_dbgListen"
+                              observes="cmd_debuggerListener"
+                              />
+                    <menuitem label="Listener Status"
+                              id="menu_dbgListenStatus"
+                              oncommand="debugger_status();"
+                              />
+                </menupopup>
+            </menu>
+            <menu label="Window" accesskey="W">
+                <menupopup id="popup_window"
+                    onpopupshowing="ko.uilayout.updateWindowList(this);">
+                    <menuitem
+                        id="menu_bufferClose2"
+                        label="Close"
+                        accesskey="C"
+                        observes="cmd_bufferClose"
+                    />
+                    <menuitem
+                        id="menu_closeAll"
+                        label="Close All"
+                        accesskey="l"
+                        observes="cmd_closeAll"
+                    />
+                    <menuseparator/>
+                    <menuitem
+                        id="menu_bufferNext"
+                        label="Next File"
+                        accesskey="N"
+                        observes="cmd_bufferNext"
+                    />
+                    <menuitem
+                        id="menu_bufferPrevious"
+                        label="Previous File"
+                        accesskey="P"
+                        observes="cmd_bufferPrevious"
+                    />
+                    <menuseparator/>
+                    <menuitem
+                        id="menu_moveTab"
+                        label="Move to Other Tab Group"
+                        accesskey="M"
+                        observes="cmd_movetab"
+                    />
+                    <menuitem
+                        id="menu_splitTab"
+                        label="Split View"
+                        accesskey="S"
+                        observes="cmd_splittab"
+                    />
+                    <menuitem
+                        id="menu_rotateSplitter"
+                        label="Rotate Tab Groups"
+                        accesskey="R"
+                        observes="cmd_rotateSplitter"
+                    />
+                    <menuseparator id="window-menu-separator" collapsed="true"/>
+
+
+                </menupopup>
+            </menu>
+            <menu id="help_menu" label="Help" accesskey="H"
+                komodo_priority="1000">
+                <menupopup id="popup_help">
+                    <menuitem
+                        id="menu_helpHelp"
+                        label="Help"
+                        observes="cmd_helpHelp"
+                        accesskey="H"
+                        />
+                    <menuitem
+                        id="menu_helpTutorials"
+                        label="Tutorials"
+                        observes="cmd_helpTutorials"
+                        accesskey="T"
+                        />
+                    <menu
+                        id="helpLanguagesMenu"
+                        label="Help for Languages"
+                        accesskey="L"
+                        >
+                        <menupopup
+                            id="help-languages-popup">
+                            <menuitem
+                                id="menu_helpPerlRef_Web"
+                                label="Perl Reference (web)"
+                                observes="cmd_helpPerlRef_Web"
+                            />
+                            <menuitem
+                                id="menu_helpPerlMailingLists"
+                                label="Perl Mailing Lists"
+                                observes="cmd_helpPerlMailingLists"
+                            />
+                            <menuseparator/>
+                            <menuitem
+                                id="menu_helpPythonRef_Web"
+                                label="Python Reference (web)"
+                                observes="cmd_helpPythonRef_Web"
+                            />
+                            <menuitem
+                                id="menu_helpPythonMailingLists"
+                                label="Python Mailing Lists"
+                                observes="cmd_helpPythonMailingLists"
+                            />
+                            <menuseparator/>
+                            <menuitem
+                                id="menu_helpPHPRef_Web"
+                                label="PHP Reference (web)"
+                                observes="cmd_helpPHPRef_Web"
+                            />
+                            <menuitem
+                                id="menu_helpPHPMailingLists"
+                                label="PHP Mailing Lists"
+                                observes="cmd_helpPHPMailingLists"
+                            />
+                            <menuseparator/>
+                            <menuitem
+                                id="menu_helpTclRef_Web"
+                                label="Tcl Reference (web)"
+                                observes="cmd_helpTclRef_Web"
+                            />
+                            <menuitem
+                                id="menu_helpTclMailingLists"
+                                label="Tcl Mailing Lists"
+                                observes="cmd_helpTclMailingLists"
+                            />
+                            <menuseparator/>
+                            <menuitem
+                                id="menu_helpXSLTMailingLists"
+                                label="XSLT Mailing Lists"
+                                observes="cmd_helpXSLTMailingLists"
+                            />
+                        </menupopup>
+                    </menu>
+                    <menuitem
+                        id="menu_helpTipOfTheDay"
+                        label="Tip of the day"
+                        observes="cmd_helpTipOfTheDay"
+                        accesskey="p"
+                    />
+                    <menuitem
+                        id="menu_helpShowKeybindings"
+                        label="List Key Bindings"
+                        accesskey="K"
+                        oncommand="ko.browse.showKeybindings()"
+                        />
+                    <menuseparator/>
+                    <menuitem
+                        id="menu_helpActiveState"
+                        label="ActiveState Website"
+                        observes="cmd_helpActiveState"
+                    />
+                    <menuitem
+                        id="menu_helpASPN"
+                        label="ActiveState Programmer Network (ASPN)"
+                        observes="cmd_helpASPN"
+                    />
+                    <menuseparator/>
+                    <menuitem
+                        id="menu_helpSupport"
+                        label="ActiveState Support"
+                        observes="cmd_helpSupport"
+                    />
+                    <menuitem
+                        id="menu_helpViewBugs"
+                        label="Komodo Bug Database"
+                        observes="cmd_helpViewBugs"
+                        />
+                    <menuseparator/>
+                    <menuitem
+                        id="menu_helpAbout"
+                        label="About"
+                        observes="cmd_helpAbout"
+                        accesskey="A"
+                        />
+                </menupopup>
+            </menu>
+            <hbox id="menubar_hbox" flex="1"/>
+            <hbox id="window-controls" hidden="true" fullscreencontrol="true">
+            <toolbarbutton id="minimize-button" class="toolbarbutton-1"
+                            oncommand="window.minimize();"/>
+
+            <toolbarbutton id="restore-button" class="toolbarbutton-1"
+                            oncommand="ko.uilayout.fullScreen();"/>
+
+            <toolbarbutton id="close-button" class="toolbarbutton-1"
+                            oncommand="window.close();"/>
+            </hbox>
+        </menubar>
+        <toolboxrow id="main-toolboxrow" flex="1">
+        <toolbar
+            id="standardToolbar"
+            class="toolbar-primary"
+            align="stretch"
+            persist="hidden collapsed buttonstyle"
+            buttonstyle="pictures"
+            grippyhidden="true"
+            broadcaster="cmd_viewedittoolbar"
+            tooltiptext="Standard Toolbar">
+            <toolbarbutton id="newButton"
+                tooltiptext="New File Using Default Language"
+                observes="cmd_new"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                label="New"/>
+            <toolbarbutton id="openButton"
+                tooltiptext="Open File"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_open"
+                label="Open..."/>
+            <toolbarbutton id="saveButton"
+                tooltiptext="Save File"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_save"
+                label="Save File"/>
+            <toolbarbutton id="saveAllButton"
+                tooltiptext="Save All Files"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_saveAll"
+                label="Save All"/>
+            <toolbarseparator/>
+            <toolbarbutton id="cutButton"
+                tooltiptext="Cut"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_cut"
+                label="Cut"/>
+            <toolbarbutton id="copyButton"
+                tooltiptext="Copy"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_copy"
+                label="Copy"/>
+            <toolbarbutton id="pasteButton"
+                tooltiptext="Paste"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_paste"
+                label="Paste"/>
+            <toolbarseparator/>
+            <toolbarbutton id="undoButton"
+                tooltiptext="Undo Last Action"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_undo"
+                label="Undo"/>
+            <toolbarbutton id="redoButton"
+                tooltiptext="Redo Last Action"
+                observes="cmd_redo"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                label="Redo"/>
+            <toolbarseparator/>
+            <toolbarbutton id="buttonBrowserPreview"
+                           tooltiptext="Preview Buffer in Browser"
+                           type="menu-button"
+                           persist="buttonstyle"
+                           buttonstyle="pictures"
+                           observes="cmd_browserPreview"
+                           label="Preview">
+                <menupopup onpopupshowing="ko.uilayout.populatePreviewToolbarButton(this);"/>
+            </toolbarbutton>
+            <toolbarseparator/>
+            <toolbarbutton class="rx-icon"
+                label="Rx"
+                tooltiptext="Regular Expression Toolkit"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_toolsRx"/>
+            <toolbarseparator/>
+            <toolbarbutton id="printButton"
+                tooltiptext="Print"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_print"
+                label="Print..."/>
+            <toolbarbutton id="helpButton"
+                tooltiptext="Help"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                class="help-icon"
+                observes="cmd_helpHelp"
+                label="Help"/>
+        </toolbar>
+        <toolbar class="toolbar-primary"
+                id="workspaceToolbar"
+                broadcaster="cmd_viewworkspacetoolbar"
+                grippyhidden="true"
+                persist="hidden collapsed buttonstyle"
+                buttonstyle="pictures"
+                tooltiptext="Workspace Toolbar">
+            <toolbarbutton id="toggleLeftPane"
+               tooltiptext="Show/Hide Left Pane"
+               persist="buttonstyle"
+               buttonstyle="pictures"
+               type="checked"
+               observes="cmd_viewLeftPane"
+               oncommand="ko.uilayout.togglePane('workspace_left_splitter', 'project_toolbox_tabs', 'cmd_viewLeftPane', true)"
+               label="Toggle Left Pane">
+            </toolbarbutton>
+            <toolbarbutton id="toggleBottomPane"
+               tooltiptext="Show/Hide Output Pane"
+               persist="buttonstyle"
+               buttonstyle="pictures"
+               type="checked"
+               observes="cmd_viewBottomPane"
+               oncommand="ko.uilayout.togglePane('bottom_splitter', 'output_tabs', 'cmd_viewBottomPane', true)"
+               label="Toggle Bottom Pane">
+            </toolbarbutton>
+            <toolbarbutton id="toggleRightPane"
+               tooltiptext="Show/Hide Right Pane"
+               persist="buttonstyle"
+               buttonstyle="pictures"
+               type="checked"
+               observes="cmd_viewRightPane"
+               oncommand="ko.uilayout.togglePane('workspace_right_splitter', 'right_toolbox_tabs', 'cmd_viewLeftPane', true)"
+               label="Toggle Right Pane">
+            </toolbarbutton>
+            <toolbarbutton id="tabPicker"
+               tooltiptext="Show Specific Tab"
+               persist="buttonstyle"
+               orient="horizontal"
+               class="rightarrow-button-a"
+               buttonstyle="pictures"
+               onpopupshowing="ko.uilayout.updateTabpickerMenu(this)"
+               type="menu"
+               label="Toggle Bottom Pane">
+               <menupopup>
+                   <menuitem id="show_codebrowser_tab"
+                       oncommand="ko.uilayout.ensureTabShown('codebrowserviewbox', true)"
+                       label="Code Browser"
+                       />
+                   <menuitem id="show_toolbox2_tab"
+                       oncommand="ko.uilayout.ensureTabShown('toolbox2viewbox', true)"
+                       label="Toolbox"
+                       />
+                   <menuseparator/>
+                   <!-- XXX TODO will need handling for the arbitrary number of
+                        debug session tabs here -->
+                   <menuitem id="show_findresults1_tab"
+                       oncommand="ko.uilayout.ensureTabShown('findresults1_tabpanel', true)"
+                       label="Find Results 1"
+                       />
+                   <menuitem id="show_findresults2_tab"
+                       oncommand="ko.uilayout.ensureTabShown('findresults2_tabpanel', true)"
+                       label="Find Results 2"
+                       />
+                   <menuitem id="show_runoutput_tab"
+                       oncommand="ko.uilayout.ensureTabShown('runoutput-desc-tabpanel', true)"
+                       label="Command Output"
+                       />
+<!-- #if PRODUCT_TYPE == "ide" -->
+                   <menuitem id="show_sccoutput_tab"
+                       oncommand="ko.uilayout.ensureTabShown('sccoutput_tab', true)"
+                       label="SCC Output"
+                       />
+<!-- #endif -->
+                   <menuitem id="show_breakpoints_tab"
+                       oncommand="ko.uilayout.ensureTabShown('breakpoints-tabpanel', true)"
+                       label="Breakpoints"
+                       />
+                </menupopup>
+            </toolbarbutton>
+        </toolbar>
+        <toolbar id="debuggerToolbar" align="stretch"
+                     class="toolbar-primary"
+                     persist="hidden collapsed buttonstyle"
+                     buttonstyle="pictures"
+                     broadcaster="cmd_viewdebugtoolbar"
+                     tooltiptext="Debug Toolbar">
+            <toolbarbutton id="buttondbgNewSession"
+                label="New Session"
+                tooltiptext="New Debugger Session"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_dbgNewSession"/>
+            <toolbarbutton id="buttondbgStepIn"
+                label="Step In"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                tooltiptext="Step In"
+                observes="cmd_dbgStepIn" />
+            <toolbarbutton id="buttondbgStepOver"
+                label="Step Over"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                tooltiptext="Step Over"
+                observes="cmd_dbgStepOver"/>
+            <toolbarbutton id="buttondbgStepOut"
+                label="Step Out"
+                tooltiptext="Step Out"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_dbgStepOut"/>
+            <toolbarseparator/>
+            <toolbarbutton id="buttondbgGo"
+                label="Go"
+                tooltiptext="Go/Continue Debugging"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_dbgGo"/>
+            <toolbarbutton id="buttondbgBreakNow"
+                label="Break"
+                tooltiptext="Break Now"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_dbgBreakNow"/>
+            <toolbarbutton id="buttondbgStop"
+                label="Stop"
+                tooltiptext="End Execution"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_dbgStop"/>
+            <toolbarbutton id="buttondbgDetach"
+                label="Detach"
+                tooltiptext="Detach Debugging"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_dbgDetach"/>
+        </toolbar>
+        <toolbar
+                id="sccToolbar" align="stretch"
+                class="toolbar-primary"
+                persist="hidden collapsed buttonstyle"
+                buttonstyle="pictures"
+                broadcaster="cmd_viewscctoolbar"
+                tooltiptext="Source Code Control Toolbar">
+            <toolbarbutton id="sccButtonAdd"
+                tooltiptext="Source Code Control: Add"
+                observes="cmd_SCCadd"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                label="Add"/>
+            <toolbarbutton id="sccButtonEdit"
+                tooltiptext="Source Code Control: Edit"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_SCCedit"
+                label="Edit"/>
+            <toolbarbutton id="sccButtonRevert"
+                tooltiptext="Source Code Control: Revert"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_SCCrevert"
+                label="Revert"/>
+            <toolbarbutton id="sccButtonRemove"
+                tooltiptext="Source Code Control: Remove"
+                observes="cmd_SCCremove"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                label="Remove"/>
+            <toolbarbutton id="sccButtonUpdate"
+                tooltiptext="Source Code Control: Update"
+                observes="cmd_SCCupdate"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                label="Update"/>
+            <toolbarbutton id="sccButtonDiff"
+                tooltiptext="Source Code Control: Diff"
+                observes="cmd_SCCdiff"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                label="Diff"/>
+            <toolbarbutton id="sccButtonCommit"
+                tooltiptext="Source Code Control: Commit"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_SCCcommit"
+                label="Commit"/>
+        </toolbar>
+        </toolboxrow>
+        <toolbar class="toolbar-primary"
+                 id="findToolbar"
+                 align="center"
+                 flex="1"
+                 broadcaster="cmd_viewfindtoolbar"
+                 persist="hidden collapsed buttonstyle"
+                 buttonstyle="pictures"
+                 tooltiptext="Find/Jump Toolbar">
+            <image id="openButton" style="margin-left: 7px;"/>
+            <label value="Open"
+                   accesskey="o"
+                   control="textbox_open"
+                   style="margin-right: 0px"/>
+            <textbox id="textbox_open"
+                     tooltiptext="Open"
+                     flex="1"
+                     size="30"
+                     onfocus="Findtoolbar_ResetFindTextbox(this);"
+                     maxrows="10"
+                     style="height: 18px;"
+                     onkeypress="ko.findtoolbar.openTextboxKeyPress(this, event);"/>
+            <toolbarseparator/>
+            <label value="Find"
+                   accesskey="i"
+                   control="textbox_find"
+                   style="margin-right: 0px"/>
+            <textbox id="textbox_find"
+                     tooltiptext="Press Enter to Find"
+                     size="20"
+                     flex="1"
+                     style="height: 18px;"
+                     onfocus="this.setSelectionRange(0, this.value.length);"
+                     onkeypress="ko.findtoolbar.findTextboxKeyPress(this, event);"
+                />
+            <label value="in"
+                   style="margin-left: 0px; margin-right: 0px"/>
+            <textbox id="textbox_findInFiles"
+                     tooltiptext="Press Enter to Find in Files"
+                     flex="1"
+                     onfocus="this.setSelectionRange(0, this.value.length);"
+                     size="40"
+                     style="height: 18px;"
+                     onkeypress="ko.findtoolbar.findFilesKeyPress(this, event);"
+                />
+        </toolbar>
+    </toolbox>
+
+    <toolbox id="toolbox_main"  collapsed="true"
+             context="context-toolbox-menu"
+             style="border: thin;
+                    margin: 0px;
+                    margin-bottom: 2px;
+                    padding: 0px;">
+        <menubar id="menubar_main"
+            grippyhidden="true"
+            fullscreentoolbar="true"
+            flex="1"
+            >
+            <menu id="menu_file" label="File" accesskey="F">
+                <menupopup id="popup_file">
+                    <menu label="New" accesskey="N">
+                        <menupopup id="popup_filenew"
+                                   onpopupshowing="ko.uilayout.updateMRUMenuIfNecessary('template');">
+                            <menuitem label="New File..."
+                                      observes="cmd_newTemplate"
+                                      />
+                            <menuitem label="New Project..."
+                                      id="menu_newProject"
+                                      observes="cmd_newProject"
+                                      />
+                            <menuseparator id="separator_mruTemplates"/>
+                            <!-- menuitems are added dynamically for each
+                                 entry in the file MRU -->
+                        </menupopup>
+                    </menu>
+                    <menu label="Open" accesskey="O">
+                        <menupopup id="koFileOpenPopup">
+                            <menuitem label="File..."
+                                      id="menu_open"
+                                      observes="cmd_open"
+                                      key="key_open"
+                                      />
+                            <menuitem label="Remote File..."
+                                      id="menu_openRemoteFile"
+                                      observes="cmd_open_remote"
+                                      />
+                            <menuitem label="Template File..."
+                                      id="menu_openTemplateFile"
+                                      observes="cmd_openTemplate"
+                                      />
+                            <menuseparator/>
+                            <menuitem label="Project..."
+                                      id="menu_openProject"
+                                      observes="cmd_openProject"
+                                      />
+                        </menupopup>
+                    </menu>
+                    <menuitem
+                        id="menu_bufferClose"
+                        label="Close"
+                        accesskey="C"
+                        observes="cmd_bufferClose"
+                        />
+                    <menuseparator/>
+                    <menuitem label="Save"
+                              id="menu_save"
+                              observes="cmd_save"
+                              accesskey="S"
+                              />
+                    <menuitem label="Show Unsaved Changes..."
+                              accesskey="W"
+                              id="menu_showUnsavedChanges"
+                              observes="cmd_showUnsavedChanges"
+                              />
+                    <menuitem label="Save As..."
+                              id="menu_saveAs"
+                              observes="cmd_saveAs"
+                              accesskey="A"
+                              />
+                    <menuitem label="Save Remotely As..."
+                              disabled="true"
+                              id="menu_saveAsRemote"
+                              observes="cmd_saveAs_remote"
+                              />
+                    <menuitem label="Save As Template..."
+                              id="menu_saveAsTemplate"
+                              observes="cmd_saveAsTemplate"
+                              />
+                    <menuitem label="Save All..."
+                              id="menu_saveAll"
+                              observes="cmd_saveAll"
+                              accesskey="l"
+                              />
+                    <menuitem label="Revert"
+                              id="menu_revert"
+                              observes="cmd_revert"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Close Project"
+                              id="menu_closeProject"
+                              observes="cmd_closeProject"
+                              />
+                    <menuitem label="Rename Project"
+                              id="menu_renameProject"
+                              observes="cmd_renameProject"
+                              />
+                    <menuitem label="Save Project As..."
+                              id="menu_saveProjectAs"
+                              observes="cmd_saveProjectAs"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Refresh Status"
+                              id="menu_refreshStatus"
+                              observes="cmd_refreshStatus"
+                              >
+                    </menuitem>
+                    <menu
+                        id="menu_SCCmenu"
+                        label="Source Control"
+                        events="SCC"
+                        accesskey="U">
+                        <menupopup>
+                            <menuitem label="Edit"
+                                      id="menu_SCCedit"
+                                      observes="cmd_SCCedit"
+                                      />
+                            <menuitem label="Update"
+                                      id="menu_SCCupdate"
+                                      observes="cmd_SCCupdate"
+                                      />
+                            <menuitem label="Diff (Compare Files)"
+                                      id="menu_SCCdiff"
+                                      observes="cmd_SCCdiff"
+                                      />
+                            <menuitem label="Commit Changes"
+                                      id="menu_SCCcommit"
+                                      observes="cmd_SCCcommit"
+                                      />
+                            <menuitem label="Remove"
+                                      id="menu_SCCremove"
+                                      observes="cmd_SCCremove"
+                                      />
+                            <menuitem label="Revert Changes"
+                                      id="menu_SCCrevert"
+                                      observes="cmd_SCCrevert"
+                                      />
+                            <menuitem label="Add"
+                                      id="menu_SCCadd"
+                                      observes="cmd_SCCadd"
+                                      />
+                        </menupopup>
+                    </menu>
+                    <menuseparator/>
+                    <menuitem label="Page Setup"
+                              id="menu_printSetup"
+                              oncommand="NSPrintSetup()"
+                              />
+                    <menuitem label="Print Preview"
+                              id="menu_printPreview"
+                              observes="cmd_printPreview"
+                              accesskey="e"
+                              />
+                    <menuitem label="Print..."
+                              id="menu_print"
+                              observes="cmd_print"
+                              />
+                    <menuitem label="Print to HTML File..."
+                              id="menu_exportHTML"
+                              observes="cmd_exportHTML"
+                              />
+                    <menuseparator/>
+                    <menu
+                        id="menu_mruFiles"
+                        accesskey="F"
+                        label="Recent Files"
+                        class="menu_mru">
+                        <menupopup
+                            id="popup_mruFiles"
+                            class="popup_mru"
+                            onpopupshowing="ko.uilayout.updateMRUMenuIfNecessary('file');">
+                            <!-- menuitems are added dynamically for each entry
+                                            in the file MRU -->
+                            </menupopup>
+                    </menu>
+                    <menu
+                        id="menu_mruProjects"
+                        accesskey="t"
+                        label="Recent Projects"
+                        class="menu_mru">
+                        <menupopup
+                            id="popup_mruProjects"
+                            class="popup_mru"
+                            onpopupshowing="ko.uilayout.updateMRUMenuIfNecessary('project');">
+                            <!-- menuitems are added dynamically for each entry
+                                in the project MRU -->
+                        </menupopup>
+                    </menu>
+                    <menuseparator/>
+                    <menuitem
+                        id="menu_quit"
+                        label="Exit"
+                        accesskey="x"
+                        observes="cmd_quit"
+                        />
+                </menupopup>
+            </menu>
+
+            <menu id="menu_edit" label="Edit" accesskey="E">
+                <menupopup id="popup_edit">
+                    <menuitem label="Undo"
+                              id="menu_undo"
+                              accesskey="U"
+                              observes="cmd_undo"
+                              />
+                    <menuitem label="Redo"
+                              id="menu_redo"
+                              accesskey="O"
+                              observes="cmd_redo"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Cut"
+                              id="menu_cut"
+                              accesskey="T"
+                              observes="cmd_cut"
+                              />
+                    <menuitem label="Copy"
+                              id="menu_copy"
+                              accesskey="C"
+                              observes="cmd_copy"
+                              />
+                    <menuitem label="Paste"
+                              id="menu_paste"
+                              accesskey="P"
+                              observes="cmd_paste"
+                              />
+                    <menuitem label="Delete"
+                              id="menu_delete"
+                              observes="cmd_delete"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Select All"
+                              id="menu_editSelectAll"
+                              observes="cmd_selectAll"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Find..."
+                              id="menu_find"
+                              accesskey="F"
+                              observes="cmd_find"
+                              />
+                    <menuitem label="Find Next"
+                              id="menu_findNext"
+                              accesskey="N"
+                              observes="cmd_findNext"
+                              />
+                    <menuitem label="Replace..."
+                              id="menu_replace"
+                              accesskey="R"
+                              observes="cmd_replace"
+                              />
+                    <menuitem label="Incremental Search"
+                              id="menu_startIncrementalSearch"
+                              accesskey="I"
+                              observes="cmd_startIncrementalSearch"
+                              />
+                    <menuitem label="Find in Files..."
+                              id="menu_findInFiles"
+                              observes="cmd_findInFiles"
+                              />
+<!-- #if 0 -->
+                    <menuitem label="Replace in Files..."
+                              id="menu_replaceInFiles"
+                              observes="cmd_replaceInFiles"
+                              />
+<!-- #endif -->
+                    <menuseparator/>
+                    <menuitem label="Preferences..."
+                              id="menu_editPrefs"
+                              observes="cmd_editPrefs"
+                              accesskey="e"
+                              />
+                    <menuitem label="Current File Settings..."
+                              id="menu_editPrefsCurrent"
+                              accesskey="l"
+                              observes="cmd_editPrefsCurrent"
+                              />
+                </menupopup>
+            </menu>
+            <menu id="menu_code" label="Code" accesskey="C">
+                <menupopup id="popup_sourcecode">
+                    <menuitem label="Reflow Paragraph"
+                              id="menu_reflow"
+                              observes="cmd_editReflow"
+                              />
+                    <menuitem label="Increase Line Indent"
+                              id="menu_indent"
+                              observes="cmd_indent"
+                              />
+                    <menuitem label="Decrease Line Indent"
+                              id="menu_dedent"
+                              observes="cmd_dedent"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Make Uppercase"
+                              id="menu_convertUpperCase"
+                              observes="cmd_convertUpperCase"
+                              />
+                    <menuitem label="Make Lowercase"
+                              id="menu_convertLowerCase"
+                              observes="cmd_convertLowerCase"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Comment Region"
+                              id="menu_comment"
+                              observes="cmd_comment"
+                              />
+                    <menuitem label="Un-comment Region"
+                              id="menu_uncomment"
+                              observes="cmd_uncomment"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Tabify Region"
+                              id="menu_tabify"
+                              observes="cmd_tabify"
+                              />
+                    <menuitem label="Untabify Region"
+                              id="menu_untabify"
+                              observes="cmd_untabify"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Complete Word"
+                              id="menu_completeWord"
+                              observes="cmd_completeWord"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Jump to Matching Brace"
+                              id="menu_jumpToMatchingBrace"
+                              observes="cmd_jumpToMatchingBrace"
+                              />
+                    <menuitem label="Select to Matching Brace"
+                              id="menu_selectToMatchingBrace"
+                              observes="cmd_selectToMatchingBrace"
+                              />
+                    <menuitem label="Select Block"
+                              id="menu_blockSelect"
+                              observes="cmd_blockSelect"
+                              />
+                    <menuitem id="editor-jump-corresponding"
+                              label="Jump to Corresponding Line"
+                              observes="cmd_jumpToCorrespondingLine"/>
+                    <menuseparator/>
+                    <menuitem label="Find Next Function"
+                              id="menu_findNextFunction"
+                              observes="cmd_findNextFunction"
+                              />
+                    <menuitem label="Find Previous Function"
+                              id="menu_findPreviousFunction"
+                              observes="cmd_findPreviousFunction"
+                              />
+                    <menuitem label="Find All Functions"
+                              id="menu_findAllFunctions"
+                              observes="cmd_findAllFunctions"
+                              />
+                </menupopup>
+            </menu>
+            <menu id="menu_view" label="View" accesskey="V">
+                <menupopup id="popup_view"
+                           onpopupshowing="ko.uilayout.updateFullScreen(this)">
+                    <menuitem label="Full Screen"
+                              id="menuitem_fullScreen"
+                              type="checkbox"
+                              oncommand="ko.uilayout.fullScreen();"
+                              />
+                    <menu label="Tabs">
+                        <menupopup
+                            onpopupshowing="ko.uilayout.updateTabpickerMenu(this)"
+                            type="menu"
+                            >
+                            <menuitem id="show_codebrowser_tab2"
+                                observes="show_codebrowser_tab"
+                                oncommand="ko.uilayout.ensureTabShown('codebrowserviewbox', true)"
+                                label="Code Browser"
+                                />
+                            <menuitem id="show_toolbox2_tab2"
+                                observes="show_toolbox2_tab"
+                                oncommand="ko.uilayout.ensureTabShown('toolbox2viewbox', true)"
+                                label="Toolbox"
+                                />
+                            <menuseparator/>
+                            <!-- XXX TODO will need handling for the arbitrary number of
+                                 debug session tabs here -->
+                            <menuitem id="show_findresults1_tab2"
+                                observes="show_findresults1_tab"
+                                oncommand="ko.uilayout.ensureTabShown('findresults1_tabpanel', true)"
+                                label="Find Results 1"
+                                />
+                            <menuitem id="show_findresults2_tab2"
+                                observes="show_findresults2_tab"
+                                oncommand="ko.uilayout.ensureTabShown('findresults2_tabpanel', true)"
+                                label="Find Results 2"
+                                />
+                            <menuitem id="show_runoutput_tab2"
+                                observes="show_runoutput_tab"
+                                oncommand="ko.uilayout.ensureTabShown('runoutput-desc-tabpanel', true)"
+                                label="Command Output"
+                                />
+<!-- #if PRODUCT_TYPE == "ide" -->
+                            <menuitem id="show_sccoutput_tab2"
+                                observes="show_sccoutput_tab"
+                                oncommand="ko.uilayout.ensureTabShown('sccoutput_tab', true)"
+                                label="SCC Output"
+                                />
+<!-- #endif -->
+                        </menupopup>
+                    </menu>
+                    <menu label="Toolbars">
+                        <menupopup id="popup_toolbars">
+                            <menuitem label="Standard"
+                                      id="menu_viewedittoolbar"
+                                      observes="cmd_viewedittoolbar"
+                                      persist="checked"
+                                      checked="true"
+                                      type="checkbox"
+                                      />
+                            <menuitem id="menu_viewworkspacetoolbar"
+                                      label="Workspace"
+                                      observes="cmd_viewworkspacetoolbar"
+                                      persist="checked"
+                                      checked="true"
+                                      type="checkbox"
+                                      />
+                            <menuitem label="Debug"
+                                      id="menu_viewdebugtoolbar"
+                                      observes="cmd_viewdebugtoolbar"
+                                      persist="checked"
+                                      checked="true"
+                                      type="checkbox"
+                                      />
+<!-- #if PRODUCT_TYPE == "ide" -->
+                            <menuitem label="Source Code Control"
+                                      id="menu_viewscctoolbar"
+                                      observes="cmd_viewscctoolbar"
+                                      persist="checked"
+                                      checked="true"
+                                      type="checkbox"
+                                      />
+<!-- #endif -->
+                            <menuitem label="Find/Jump"
+                                      id="menu_viewfindtoolbar"
+                                      observes="cmd_viewfindtoolbar"
+                                      persist="checked"
+                                      checked="true"
+                                      type="checkbox"
+                                      />
+                        </menupopup>
+                    </menu>
+                    <menuseparator/>
+                    <menuitem label="Goto Line..."
+                              id="menu_gotoLine"
+                              observes="cmd_gotoLine"
+                              />
+                    <menu label="Bookmarks">
+                        <menupopup id="popup_bookmarks">
+                            <menuitem label="Toggle Bookmark"
+                                      id="menu_bookmarkToggle"
+                                      observes="cmd_bookmarkToggle"
+                                      />
+                            <menuitem label="Remove All Bookmarks"
+                                      id="menu_bookmarkRemoveAll"
+                                      observes="cmd_bookmarkRemoveAll"
+                                      />
+                            <menuitem label="Next Bookmark"
+                                      id="menu_bookmarkGotoNext"
+                                      observes="cmd_bookmarkGotoNext"
+                                      />
+                            <menuitem label="Previous Bookmark"
+                                      id="menu_bookmarkGotoPrevious"
+                                      observes="cmd_bookmarkGotoPrevious"
+                                      />
+                        </menupopup>
+                    </menu>
+                    <menu label="View As Language"
+                          observes="cmd_viewAsLanguage">
+                        <menupopup id="popup_viewAsLanguage"
+                                   onpopupshowing="ko.uilayout.updateViewAsMenuIfNecessary();"
+                                   />
+                    </menu>
+                    <menuitem label="Preview in Browser"
+                              accesskey="v"
+                              observes="cmd_browserPreview"/>
+                    <menuseparator/>
+                    <menuitem label="View Whitespace"
+                              observes="cmd_viewWhitespace"
+                              />
+                    <menuitem label="View Indentation Guides"
+                              observes="cmd_viewIndentationGuides"
+                              />
+                    <menuitem label="View Line Numbers"
+                              observes="cmd_viewLineNumbers"
+                              />
+                    <menuitem label="View EOL Markers"
+                              observes="cmd_viewEOL"
+                              />
+                    <menuitem label="Word Wrap"
+                              observes="cmd_wordWrap"
+                              />
+                    <menu label="Font">
+                        <menupopup id="popup_font">
+                            <menuitem label="Increase"
+                                      id="menu_fontZoomIn"
+                                      observes="cmd_fontZoomIn"
+                                      />
+                            <menuitem label="Decrease"
+                                      id="menu_fontZoomOut"
+                                      observes="cmd_fontZoomOut"
+                                      />
+                            <menuitem label="Toggle Fixed/Proportional Fonts"
+                                      id="menu_fontFixed"
+                                      observes="cmd_fontFixed"
+                                      />
+                        </menupopup>
+                    </menu>
+                    <menu label="Fold">
+                        <menupopup id="popup_fold">
+                            <menuitem label="Expand"
+                                      id="menu_foldExpand"
+                                      observes="cmd_foldExpand"
+                                      />
+                            <menuitem label="Expand All"
+                                      id="menu_foldExpandAll"
+                                      observes="cmd_foldExpandAll"
+                                      />
+                            <menuitem label="Expand Recursively"
+                                      id="menu_foldExpandRecursive"
+                                      observes="cmd_foldExpandRecursive"
+                                      />
+                            <menuitem label="Collapse"
+                                      id="menu_foldCollapse"
+                                      observes="cmd_foldCollapse"
+                                      />
+                            <menuitem label="Collapse All"
+                                      id="menu_foldCollapseAll"
+                                      observes="cmd_foldCollapseAll"
+                                      />
+                            <menuitem label="Collapse Recursively"
+                                      id="menu_foldCollapseRecursive"
+                                      observes="cmd_foldCollapseRecursive"
+                                      />
+                        </menupopup>
+                    </menu>
+                </menupopup>
+            </menu>
+            <menu label="Debug" accesskey="D">
+                <menupopup id="popup_debug">
+                    <menuitem label="Run Without Debugging"
+                              id="menu_dbgRun"
+                              observes="cmd_dbgRun"
+                              />
+                    <menuitem label="Start"
+                              id="menu_dbgGo"
+                              observes="cmd_dbgGo"
+                              />
+                    <menuitem label="Start New Session"
+                              id="menu_dbgNewSession"
+                              observes="cmd_dbgNewSession"
+                              />
+                    <menuitem label="Break Now"
+                              id="menu_dbgBreakNow"
+                              observes="cmd_dbgBreakNow"
+                              />
+                    <menuitem label="Detach"
+                              id="menu_dbgDetach"
+                              observes="cmd_dbgDetach"
+                              />
+                    <menuitem label="Stop"
+                              id="menu_dbgStop"
+                              observes="cmd_dbgStop"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Step In"
+                              id="menu_dbgStepIn"
+                              observes="cmd_dbgStepIn"
+                              />
+                    <menuitem label="Step Over"
+                              id="menu_dbgStepOver"
+                              observes="cmd_dbgStepOver"
+                              />
+                    <menuitem label="Step Out"
+                              id="menu_dbgStepOut"
+                              observes="cmd_dbgStepOut"
+                              />
+                    <menuitem label="Disable/Enable Breakpoint"
+                              id="menu_dbgBreakpointToggle"
+                              observes="cmd_dbgBreakpointToggle"
+                              />
+                    <menuitem label="Add/Edit Breakpoint..."
+                              id="menu_dbgBreakpointAddOrEdit"
+                              observes="cmd_dbgBreakpointAddOrEdit"
+                              />
+                    <menuitem label="Add/Edit Spawnpoint..."
+                              id="menu_dbgSpawnpointAddOrEdit"
+                              observes="cmd_dbgSpawnpointAddOrEdit"
+                              />
+                    <menuitem label="Clear All Breakpoints"
+                              id="menu_dbgBreakpointClearAllInURI"
+                              observes="cmd_dbgBreakpointClearAllInURI"
+                              />
+                    <menuitem label="Show Current Statement"
+                              id="menu_dbgShowCurrentStatement"
+                              observes="cmd_dbgShowCurrentStatement"
+                              />
+                    <menuseparator/>
+                    <menuitem label="Listen for Remote Debugger..."
+                              id="menu_dbgListen"
+                              observes="cmd_debuggerListener"
+                              />
+                    <menuitem label="Listener Status"
+                              id="menu_dbgListenStatus"
+                              oncommand="debugger_status();"
+                              />
+                </menupopup>
+            </menu>
+            <menu label="Project" accesskey="P">
+                <menupopup id="popup_project">
+                    <menuitem label="New Project..."
+                              id="menu_projectNewProject"
+                              observes="cmd_newProject"
+                              />
+                    <menuitem label="Open Project..."
+                              id="menu_projectOpenProject"
+                              observes="cmd_openProject"
+                              />
+                    <menuitem label="Close Project"
+                              id="menu_closeProject"
+                              observes="cmd_closeProject"
+                              />
+                    <menuitem label="Save Project"
+                              id="menu_saveProject"
+                              observes="cmd_saveProject"
+                              />
+                    <menuitem label="Save Project As..."
+                              id="menu_saveProjectAs"
+                              observes="cmd_saveProjectAs"
+                              />
+                    <menuitem label="Revert Project"
+                              id="menu_revertProject"
+                              observes="cmd_revertProject"
+                              />
+                </menupopup>
+            </menu>
+            <!--XXX update to toolbox2 -->
+            <menu label="Tools" accesskey="T">
+                <menupopup id="popup_tools">
+                    <menuitem label="Run Command..."
+                              id="menu_toolsRunCommand"
+                              observes="cmd_toolsRunCommand"
+                              accesskey="u"/>
+                    <menu label="Recent Commands"
+                          id="menu_toolsRecentCommands"
+                          accesskey="e">
+                        <menupopup onpopupshowing="Run_BuildRecentCommandsMenu(this);"/>
+                    </menu>
+                    <menuseparator/>
+                    <menu label="Macros"
+                          accesskey="M">
+                        <menupopup id="popup_macros">
+                            <menuitem label="Start Recording"
+                                      id="menu_startMacroMode"
+                                      observes="cmd_startMacroMode"
+                                      />
+                            <menuitem label="End Recording"
+                                      id="menu_stopMacroMode"
+                                      observes="cmd_stopMacroMode"
+                                      />
+                            <menuitem label="Execute Last Macro"
+                                      id="menu_executeLastMacro"
+                                      observes="cmd_executeLastMacro"
+                                      />
+                            <menuitem label="Save to Toolbox"
+                                      id="menu_saveMacroToToolbox"
+                                      observes="cmd_saveMacroToToolbox"
+                                      />
+                        </menupopup>
+                    </menu>
+                    <menuseparator/>
+                    <menuitem label="Watch File..."
+                              accesskey="W"
+                              id="menu_watchThread"
+                              observes="cmd_toolsWatchFile"
+                              />
+                    <menuitem label="Build Standalone Application"
+                              id="menu_toolsBuildPerlAppCommand"
+                              accesskey="B"
+                              observes="cmd_toolsBuildPerlAppCommand"
+                              />
+                    <menuitem label="Rx Toolkit"
+                              accesskey="R"
+                              id="menu_toolsRx"
+                              observes="cmd_toolsRx"
+                              />
+                    <menuitem label="Compare Files..."
+                              accesskey="C"
+                              id="menu_compareFiles"
+                              oncommand="window.openDialog('chrome://komodo/content/dialogs/compare.xul', '_blank', 'chrome,modal,titlebar');"
+                              />
+                </menupopup>
+            </menu>
+            <menu label="Window" accesskey="W">
+                <menupopup id="popup_window"
+                    onpopupshowing="ko.uilayout.updateWindowList(this);">
+                    <menuitem
+                        id="menu_bufferClose2"
+                        label="Close"
+                        accesskey="C"
+                        observes="cmd_bufferClose"
+                    />
+                    <menuitem
+                        id="menu_closeAll"
+                        label="Close All"
+                        accesskey="l"
+                        observes="cmd_closeAll"
+                    />
+                    <menuseparator/>
+                    <menuitem
+                        id="menu_bufferNext"
+                        label="Next File"
+                        accesskey="N"
+                        observes="cmd_bufferNext"
+                    />
+                    <menuitem
+                        id="menu_bufferPrevious"
+                        label="Previous File"
+                        accesskey="P"
+                        observes="cmd_bufferPrevious"
+                    />
+                    <menuseparator/>
+                    <menuitem
+                        id="menu_moveTab"
+                        label="Move to Other Tab Group"
+                        accesskey="M"
+                        observes="cmd_movetab"
+                    />
+                    <menuitem
+                        id="menu_splitTab"
+                        label="Split View"
+                        accesskey="S"
+                        observes="cmd_splittab"
+                    />
+                    <menuitem
+                        id="menu_rotateSplitter"
+                        label="Rotate Tab Groups"
+                        accesskey="R"
+                        observes="cmd_rotateSplitter"
+                    />
+                    <menuseparator id="window-menu-separator" collapsed="true"/>
+
+
+                </menupopup>
+            </menu>
+            <menu id="help_menu" label="Help" accesskey="H"
+                komodo_priority="1000">
+                <menupopup id="popup_help">
+                    <menuitem
+                        id="menu_helpHelp"
+                        label="Help"
+                        observes="cmd_helpHelp"
+                        accesskey="H"
+                        />
+                    <menuitem
+                        id="menu_helpTutorials"
+                        label="Tutorials"
+                        observes="cmd_helpTutorials"
+                        accesskey="T"
+                        />
+                    <menu
+                        id="helpLanguagesMenu"
+                        label="Help for Languages"
+                        accesskey="L"
+                        >
+                        <menupopup
+                            id="help-languages-popup">
+                            <menuitem
+                                id="menu_helpPerlRef_Web"
+                                label="Perl Reference (web)"
+                                observes="cmd_helpPerlRef_Web"
+                            />
+                            <menuitem
+                                id="menu_helpPerlMailingLists"
+                                label="Perl Mailing Lists"
+                                observes="cmd_helpPerlMailingLists"
+                            />
+                            <menuseparator/>
+                            <menuitem
+                                id="menu_helpPythonRef_Web"
+                                label="Python Reference (web)"
+                                observes="cmd_helpPythonRef_Web"
+                            />
+                            <menuitem
+                                id="menu_helpPythonMailingLists"
+                                label="Python Mailing Lists"
+                                observes="cmd_helpPythonMailingLists"
+                            />
+                            <menuseparator/>
+                            <menuitem
+                                id="menu_helpPHPRef_Web"
+                                label="PHP Reference (web)"
+                                observes="cmd_helpPHPRef_Web"
+                            />
+                            <menuitem
+                                id="menu_helpPHPMailingLists"
+                                label="PHP Mailing Lists"
+                                observes="cmd_helpPHPMailingLists"
+                            />
+                            <menuseparator/>
+                            <menuitem
+                                id="menu_helpTclRef_Web"
+                                label="Tcl Reference (web)"
+                                observes="cmd_helpTclRef_Web"
+                            />
+                            <menuitem
+                                id="menu_helpTclMailingLists"
+                                label="Tcl Mailing Lists"
+                                observes="cmd_helpTclMailingLists"
+                            />
+                            <menuseparator/>
+                            <menuitem
+                                id="menu_helpXSLTMailingLists"
+                                label="XSLT Mailing Lists"
+                                observes="cmd_helpXSLTMailingLists"
+                            />
+                        </menupopup>
+                    </menu>
+                    <menuitem
+                        id="menu_helpTipOfTheDay"
+                        label="Tip of the day"
+                        observes="cmd_helpTipOfTheDay"
+                        accesskey="p"
+                    />
+                    <menuitem
+                        id="menu_helpShowKeybindings"
+                        label="List Key Bindings"
+                        accesskey="K"
+                        oncommand="ko.browse.showKeybindings()"
+                        />
+                    <menuseparator/>
+                    <menuitem
+                        id="menu_helpActiveState"
+                        label="ActiveState Website"
+                        observes="cmd_helpActiveState"
+                    />
+                    <menuitem
+                        id="menu_helpASPN"
+                        label="ActiveState Programmer Network (ASPN)"
+                        observes="cmd_helpASPN"
+                    />
+                    <menuseparator/>
+                    <menuitem
+                        id="menu_helpSupport"
+                        label="ActiveState Support"
+                        observes="cmd_helpSupport"
+                    />
+                    <menuitem
+                        id="menu_helpUpdates"
+                        label="Software Updates"
+                        observes="cmd_helpUpdates"
+                        />
+                    <menuitem
+                        id="menu_helpViewBugs"
+                        label="Komodo Bug Database"
+                        observes="cmd_helpViewBugs"
+                        />
+                    <menuseparator/>
+                    <menuitem
+                        id="menu_helpAbout"
+                        label="About"
+                        observes="cmd_helpAbout"
+                        accesskey="A"
+                        />
+                </menupopup>
+            </menu>
+<!-- #if BUILD_FLAVOUR == "dev" -->
+            <menu
+                id="menu_developer_test"
+                label="Test"
+                accesskey="s"
+                >
+                <menupopup id="popup_test">
+                    <menuitem label="JavaScript Console"
+                            oncommand="ko.windowManager.openOrFocusDialog('chrome://toolkit/content/global/console.xul',
+                             'navigator:console',
+                             'chrome,all,resizable,dialog=no');"/>
+                    <menuitem label="DOM inspector"
+                            oncommand="ko.windowManager.openOrFocusDialog('chrome://inspector/content/',
+                             'navigator:inspector',
+                             'chrome,all,resizable,dialog=no');"/>
+                    <menuitem label="Component Viewer"
+                            oncommand="ko.windowManager.openOrFocusDialog('chrome://cview/content/',
+                             'navigator:cview',
+                             'chrome,all,resizable,dialog=no');"/>
+                    <menuitem label="JavaScript Debugger"
+                            oncommand="ko.windowManager.openOrFocusDialog('chrome://venkman/content/',
+                             'navigator:venkman',
+                             'chrome,all,resizable,dialog=no');"/>
+                    <menuitem label="JavaScript Telnet"
+                            oncommand="ko.windowManager.openOrFocusDialog('chrome://jssh/content/configure.xul',
+                             'navigator:jssh',
+                             'chrome,all,resizable,dialog=no');"/>
+                    <menuseparator/>
+                    <menuitem label="XUL Toolbars test" oncommand="window.openDialog('chrome://komodo/content/bindings/test/koToolbars.xul',
+                             'navigator:browser',
+                             'chrome,all,resizable,dialog=no');"/>
+                    <menuitem label="XUL bindings test" oncommand="window.openDialog('chrome://komodo/content/bindings/test/top.xul',
+                             'navigator:browser',
+                             'chrome,all,resizable,dialog=no');"/>
+                    <menuitem label="XUL reference website" oncommand="window.openDialog('http://www.hevanet.com/acorbin/xul/top.xul',
+                             'navigator:browser',
+                             'chrome,all,resizable,dialog=no');"/>
+                    <menuseparator/>
+                    <menuitem label="Test Debug Session Tab"
+                              accesskey="S"
+                              oncommand="test_debugSessionTab();"/>
+                    <menuitem label="Open File..."
+                              oncommand="view_openFilesWithPicker();"/>
+                    <menuitem label="Split View"
+                              oncommand="view_openFilesWithPicker('spliteditor');"/>
+                    <menuitem label="Browser View"
+                              oncommand="gViewMgr.newViewFromURIAsync('http://www.mozilla.org', 'browser');"/>
+                    <menuitem label="XUL View" accesskey="X"
+                              oncommand="view_openFilesWithPicker('xul');"/>
+                    <menuitem label="Multieditor View"
+                              oncommand="view_openFilesWithPicker('multieditor');"/>
+                    <menuitem label="Logging Control"
+                        accesskey="l"
+                        oncommand="window.openDialog('chrome://komodo/content/library/logging_control.xul', 'titlebar,chrome,resizable,close');"/>
+                    <menuitem label="Start UI Unit Tests"
+                              oncommand="test_startUIUnitTests()"/>
+                    <menu label="Prefs" accesskey="P">
+                        <menupopup id="popup_test_prefs">
+                            <menuitem label="Edit Global Prefs"
+                                      accesskey="G"
+                                      oncommand="test_editGlobalPrefs();"/>
+                            <menuitem label="Edit Current View Prefs"
+                                      accesskey="V"
+                                      oncommand="test_editCurrentViewPrefs();"/>
+                        </menupopup>
+                    </menu>
+                    <menuitem label="Test Key handling"
+                        accesskey="K"
+                        oncommand="window.openDialog('chrome://komodo/content/testkeys.xul',
+                                  'titlebar,chrome,resizable,close');"/>
+                    <menuitem label="Test Scintilla Sizing"
+                        accesskey="S"
+                        oncommand="window.openDialog('chrome://komodo/content/testscintilla.xul',
+                                  'titlebar,chrome,resizable,close');"/>
+                    <menu label="Dialogs" accesskey="D">
+                        <menupopup id="popup_test_dialogs">
+                            <menuitem label="Pick Preview"
+                                      accesskey="v"
+                                      oncommand="test_dialog_pickPreview();"/>
+                            <menuitem label="Edit Env Var"
+                                      accesskey="v"
+                                      oncommand="test_dialog_editEnvVar();"/>
+                            <menuitem label="Custom Buttons"
+                                      accesskey="b"
+                                      oncommand="test_dialog_customButtons();"/>
+                            <menuitem label="SCC commit"
+                                      accesskey="c"
+                                      oncommand="test_sccdialog_commit();"/>
+                            <menuitem label="select URLs"
+                                      accesskey="s"
+                                      oncommand="test_dialog_selectFromList();"/>
+                            <menuitem label="authenticate"
+                                      accesskey="a"
+                                      oncommand="test_dialog_authenticate();"/>
+                            <menuitem label="alert"
+                                      oncommand="test_dialog_alert();"/>
+                            <menuitem label="okCancel"
+                                      accesskey="o"
+                                      oncommand="test_dialog_okCancel();"/>
+                            <menuitem label="yesNo"
+                                      accesskey="y"
+                                      oncommand="test_dialog_yesNo();"/>
+                            <menuitem label="yesNoCancel"
+                                      accesskey="n"
+                                      oncommand="test_dialog_yesNoCancel();"/>
+                            <menuitem label="prompt"
+                                      accesskey="p"
+                                      oncommand="test_dialog_prompt();"/>
+                            <menuitem label="internal error"
+                                      accesskey="i"
+                                      oncommand="test_dialog_internalError();"/>
+                            <menuitem label="templates (new file dialog)"
+                                      accesskey="t"
+                                      oncommand="test_templates();"/>
+                            <menuitem label="Pick Icon"
+                                      accesskey="p"
+                                      oncommand="test_dialog_pickicon();"/>
+                        </menupopup>
+                    </menu>
+                    <menuitem label="uriparse.js"
+                              accesskey="u"
+                              oncommand="test_uriparse();"/>
+                    <menu label="File Pickers" accesskey="F">
+                        <menupopup id="popup_test_filepickers">
+                            <menuitem label="getFolder"
+                                      accesskey="d"
+                                      oncommand="test_filepicker_getFolder();"/>
+                            <menuitem label="openFiles"
+                                      oncommand="test_filepicker_openFiles();"/>
+                            <menuitem label="saveFile"
+                                      accesskey="s"
+                                      oncommand="test_filepicker_saveFile();"/>
+                            <menuitem label="openFile"
+                                      accesskey="f"
+                                      oncommand="test_filepicker_openFile();"/>
+                            <menuitem label="openExeFile"
+                                      accesskey="e"
+                                      oncommand="test_filepicker_openExeFile();"/>
+                        </menupopup>
+                    </menu>
+                    <menuitem label="Get Event/Command Map"
+                              accesskey="M"
+                              oncommand="test_createEventCommandMap();"/>
+                    <menuitem label="Time Commands"
+                              accesskey="C"
+                              oncommand="test_TimeCommands();"/>
+                    <menuitem label="Time Events"
+                              accesskey="E"
+                              oncommand="test_TimeEvents();"/>
+                    <menuitem label="Dump Current View" accesskey="V"
+                              oncommand="ko.logging.dumpView(gViewMgr.currentView);"/>
+                </menupopup>
+            </menu>
+<!-- #endif -->
+            <hbox id="menubar_hbox" flex="1"/>
+            <hbox id="window-controls" hidden="true" fullscreencontrol="true">
+            <toolbarbutton id="minimize-button" class="toolbarbutton-1"
+                            oncommand="window.minimize();"/>
+
+            <toolbarbutton id="restore-button" class="toolbarbutton-1"
+                            oncommand="ko.uilayout.fullScreen();"/>
+
+            <toolbarbutton id="close-button" class="toolbarbutton-1"
+                            oncommand="window.close();"/>
+            </hbox>
+        </menubar>
+
+        <!-- We use an html:body tag here to allow our toolbars to reflow with
+             the size of the window rather than slide off the edge of the
+             window.
+
+             Anything inside html:body MUST consider TEXT_NODES as a BAD THING!
+             The HTML renderer will actually show whitespace between elements!
+             So you have to do:
+
+                <html:body><el
+                /><el2
+                /><el2/></html:body>
+
+            instead of:
+
+                <html:body>
+                <el/>
+                <el2/>
+                </html:body>
+
+            This is only really important between toolbars, and not so
+            inbetween toolbar children.  Just one of those weird html
+            layout issues.
+        -->
+
+        <description id="html-toolbarbox"
+          style="margin: 0px; padding: 0px"
+          ><toolbar
+            id="standardToolbar"
+            class="toolbar-primary"
+            align="stretch"
+            persist="hidden collapsed buttonstyle"
+            buttonstyle="pictures"
+            grippyhidden="true"
+            broadcaster="cmd_viewedittoolbar"
+            flex="1"
+            tooltiptext="Standard Toolbar">
+            <toolbarbutton id="newButton"
+                tooltiptext="New File Using Default Language"
+                observes="cmd_new"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                label="New"/>
+            <toolbarbutton id="openButton"
+                tooltiptext="Open File"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_open"
+                label="Open..."/>
+            <toolbarbutton id="saveButton"
+                tooltiptext="Save File"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_save"
+                label="Save File"/>
+            <toolbarbutton id="saveAllButton"
+                tooltiptext="Save All Files"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_saveAll"
+                label="Save All"/>
+            <toolbarseparator/>
+            <toolbarbutton id="cutButton"
+                tooltiptext="Cut"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_cut"
+                label="Cut"/>
+            <toolbarbutton id="copyButton"
+                tooltiptext="Copy"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_copy"
+                label="Copy"/>
+            <toolbarbutton id="pasteButton"
+                tooltiptext="Paste"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_paste"
+                label="Paste"/>
+            <toolbarseparator/>
+            <toolbarbutton id="undoButton"
+                tooltiptext="Undo Last Action"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_undo"
+                label="Undo"/>
+            <toolbarbutton id="redoButton"
+                tooltiptext="Redo Last Action"
+                observes="cmd_redo"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                label="Redo"/>
+            <toolbarseparator/>
+            <toolbarbutton id="buttonBrowserPreview"
+                           tooltiptext="Preview Buffer in Browser"
+                           type="menu-button"
+                           persist="buttonstyle"
+                           buttonstyle="pictures"
+                           observes="cmd_browserPreview"
+                           label="Preview">
+                <menupopup onpopupshowing="ko.uilayout.populatePreviewToolbarButton(this);"/>
+            </toolbarbutton>
+            <toolbarseparator/>
+            <toolbarbutton class="rx-icon"
+                label="Rx"
+                tooltiptext="Regular Expression Toolkit"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_toolsRx"/>
+            <toolbarseparator/>
+            <toolbarbutton id="printButton"
+                tooltiptext="Print"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_print"
+                label="Print..."/>
+            <toolbarbutton id="helpButton"
+                tooltiptext="Help"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_helpHelp"
+                label="Help"/>
+        </toolbar><toolbar class="toolbar-primary"
+                id="workspaceToolbar"
+                broadcaster="cmd_viewworkspacetoolbar"
+                grippyhidden="true"
+                persist="hidden collapsed buttonstyle"
+                buttonstyle="pictures"
+                tooltiptext="Workspace Toolbar">
+            <toolbarbutton id="toggleLeftPane"
+               tooltiptext="Show/Hide Left Pane"
+               persist="buttonstyle"
+               buttonstyle="pictures"
+               type="checked"
+               observes="cmd_viewLeftPane"
+               oncommand="ko.uilayout.togglePane('workspace_left_splitter', 'project_toolbox_tabs', 'cmd_viewLeftPane', true)"
+               label="Toggle Left Pane">
+            </toolbarbutton>
+            <toolbarbutton id="toggleBottomPane"
+               tooltiptext="Show/Hide Output Pane"
+               persist="buttonstyle"
+               buttonstyle="pictures"
+               type="checked"
+               observes="cmd_viewBottomPane"
+               oncommand="ko.uilayout.togglePane('bottom_splitter', 'output_tabs', 'cmd_viewBottomPane', true)"
+               label="Toggle Bottom Pane">
+            </toolbarbutton>
+            <toolbarbutton id="toggleRightPane"
+               tooltiptext="Show/Hide Right Pane"
+               persist="buttonstyle"
+               buttonstyle="pictures"
+               type="checked"
+               observes="cmd_viewRightPane"
+               oncommand="ko.uilayout.togglePane('workspace_right_splitter', 'right_toolbox_tabs', 'cmd_viewLeftPane', true)"
+               label="Toggle Right Pane">
+            </toolbarbutton>
+            <toolbarbutton id="tabPicker"
+               tooltiptext="Show Specific Tab"
+               persist="buttonstyle"
+               orient="horizontal"
+               class="rightarrow-button-a"
+               buttonstyle="pictures"
+               onpopupshowing="ko.uilayout.updateTabpickerMenu(this)"
+               type="menu"
+               label="Toggle Bottom Pane">
+               <menupopup>
+                   <menuitem id="show_codebrowser_tab"
+                       oncommand="ko.uilayout.ensureTabShown('codebrowserviewbox', true)"
+                       label="Code Browser"
+                       />
+                   <menuitem id="show_toolbox2_tab"
+                       oncommand="ko.uilayout.ensureTabShown('toolbox2viewbox', true)"
+                       label="Toolbox"
+                       />
+                   <menuseparator/>
+                   <!-- XXX TODO will need handling for the arbitrary number of
+                        debug session tabs here -->
+                   <menuitem id="show_findresults1_tab"
+                       oncommand="ko.uilayout.ensureTabShown('findresults1_tabpanel', true)"
+                       label="Find Results 1"
+                       />
+                   <menuitem id="show_findresults2_tab"
+                       oncommand="ko.uilayout.ensureTabShown('findresults2_tabpanel', true)"
+                       label="Find Results 2"
+                       />
+                   <menuitem id="show_runoutput_tab"
+                       oncommand="ko.uilayout.ensureTabShown('runoutput-desc-tabpanel', true)"
+                       label="Command Output"
+                       />
+<!-- #if PRODUCT_TYPE == "ide" -->
+                   <menuitem id="show_sccoutput_tab"
+                       oncommand="ko.uilayout.ensureTabShown('sccoutput_tab', true)"
+                       label="SCC Output"
+                       />
+<!-- #endif -->
+                   <menuitem id="show_breakpoints_tab"
+                       oncommand="ko.uilayout.ensureTabShown('breakpoints-tabpanel', true)"
+                       label="Breakpoints"
+                       />
+                </menupopup>
+            </toolbarbutton>
+        </toolbar><toolbar id="debuggerToolbar" align="stretch"
+                     class="toolbar-primary"
+                     persist="hidden collapsed buttonstyle"
+                     buttonstyle="pictures"
+                     broadcaster="cmd_viewdebugtoolbar"
+                     tooltiptext="Debug Toolbar">
+            <toolbarbutton id="buttondbgNewSession"
+                label="New Session"
+                tooltiptext="New Debugger Session"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_dbgNewSession"/>
+            <toolbarbutton id="buttondbgStepIn"
+                label="Step In"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                tooltiptext="Step In"
+                observes="cmd_dbgStepIn" />
+            <toolbarbutton id="buttondbgStepOver"
+                label="Step Over"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                tooltiptext="Step Over"
+                observes="cmd_dbgStepOver"/>
+            <toolbarbutton id="buttondbgStepOut"
+                label="Step Out"
+                tooltiptext="Step Out"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_dbgStepOut"/>
+            <toolbarseparator/>
+            <toolbarbutton id="buttondbgGo"
+                label="Go"
+                tooltiptext="Go/Continue Debugging"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_dbgGo"/>
+            <toolbarbutton id="buttondbgBreakNow"
+                label="Break"
+                tooltiptext="Break Now"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_dbgBreakNow"/>
+            <toolbarbutton id="buttondbgStop"
+                label="Stop"
+                tooltiptext="End Execution"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_dbgStop"/>
+            <toolbarbutton id="buttondbgDetach"
+                label="Detach"
+                tooltiptext="Detach Debugging"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_dbgDetach"/>
+        </toolbar><!-- #if PRODUCT_TYPE == "ide" --><toolbar
+                id="sccToolbar" align="stretch" flex="1"
+                class="toolbar-primary"
+                persist="hidden collapsed buttonstyle"
+                buttonstyle="pictures"
+                broadcaster="cmd_viewscctoolbar"
+                tooltiptext="Source Code Control Toolbar">
+            <toolbarbutton id="sccButtonAdd"
+                tooltiptext="Source Code Control: Add"
+                observes="cmd_SCCadd"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                label="Add"/>
+            <toolbarbutton id="sccButtonEdit"
+                tooltiptext="Source Code Control: Edit"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_SCCedit"
+                label="Edit"/>
+            <toolbarbutton id="sccButtonRevert"
+                tooltiptext="Source Code Control: Revert"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_SCCrevert"
+                label="Revert"/>
+            <toolbarbutton id="sccButtonRemove"
+                tooltiptext="Source Code Control: Remove"
+                observes="cmd_SCCremove"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                label="Remove"/>
+            <toolbarbutton id="sccButtonUpdate"
+                tooltiptext="Source Code Control: Update"
+                observes="cmd_SCCupdate"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                label="Update"/>
+            <toolbarbutton id="sccButtonDiff"
+                tooltiptext="Source Code Control: Diff"
+                observes="cmd_SCCdiff"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                label="Diff"/>
+            <toolbarbutton id="sccButtonCommit"
+                tooltiptext="Source Code Control: Commit"
+                persist="buttonstyle"
+                buttonstyle="pictures"
+                observes="cmd_SCCcommit"
+                label="Commit"/>
+        </toolbar><!-- #endif --><toolbar class="toolbar-primary"
+                 id="fileOpenToolbar" flex="1"
+                 broadcaster="cmd_viewfileopentoolbar"
+                 persist="hidden collapsed buttonstyle"
+                 buttonstyle="pictures"
+                 tooltiptext="File Open Toolbar">
+            <hbox align="center" pack="center" style="min-height: 26px">
+            <image id="openButton" style="margin-left: 7px;"/>
+            <label value="Open"
+                   accesskey="o"
+                   control="textbox_open"
+                   style="margin-right: 0px"/>
+            <textbox id="textbox_open"
+                     tooltiptext="Open"
+                     flex="1"
+                     size="30"
+                     onfocus="Findtoolbar_ResetFindTextbox(this);"
+                     maxrows="10"
+                     style="height: 18px;"
+                     onkeypress="ko.findtoolbar.openTextboxKeyPress(this, event);"/>
+            </hbox>
+            </toolbar><toolbar class="toolbar-primary"
+                 id="findToolbar" align="stretch"
+                 broadcaster="cmd_viewfindtoolbar"
+                 persist="hidden collapsed buttonstyle"
+                 buttonstyle="pictures"
+                 tooltiptext="Find/Jump Toolbar">
+            <hbox align="center" pack="center" style="min-height: 26px">
+            <label value="Find"
+                   accesskey="i"
+                   control="textbox_find"
+                   style="margin-right: 0px"/>
+            <textbox id="textbox_find"
+                     tooltiptext="Press Enter to Find"
+                     size="20"
+                     flex="1"
+                     style="height: 18px;"
+                     onfocus="this.setSelectionRange(0, this.value.length);"
+                     onkeypress="ko.findtoolbar.findTextboxKeyPress(this, event);"
+                />
+            <label value="in"
+                   style="margin-left: 0px; margin-right: 0px"/>
+            <textbox id="textbox_findInFiles"
+                     tooltiptext="Press Enter to Find in Files"
+                     flex="1"
+                     onfocus="this.setSelectionRange(0, this.value.length);"
+                     size="40"
+                     style="height: 18px;"
+                     onkeypress="ko.findtoolbar.findFilesKeyPress(this, event);"
+                />
+            </hbox>
+        </toolbar></description>
+    </toolbox>
+</window>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://extensiondev/locale/extensiondev.dtd">
+<window id="jrx"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        contenttitlesetting="true"
+	title="&jrx.title;">
+  <browser id="content" flex="1" type="content-primary" src="&jrx.html.url;"/>
+</window>

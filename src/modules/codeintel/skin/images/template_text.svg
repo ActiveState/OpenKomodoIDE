@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="14"
+   height="14"
+   viewBox="0 0 14 14"
+   id="svg2"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="template_text.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1527"
+     inkscape:window-height="816"
+     id="namedview12"
+     showgrid="true"
+     inkscape:zoom="29.5"
+     inkscape:cx="6.7173233"
+     inkscape:cy="6.5161151"
+     inkscape:window-x="185"
+     inkscape:window-y="155"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4139" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata13">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs11">
+    <linearGradient
+       id="linearGradient5254">
+      <stop
+         id="stop5256"
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0" />
+    </linearGradient>
+  </defs>
+  <path
+     d="m 7,1.0093086 c -3.3134999,0 -5.9999999,2.6865 -5.9999999,6 0,3.3135004 2.6865,5.9999994 5.9999999,5.9999994 3.3135,0 6,-2.686499 6,-5.9999994 0,-3.3135 -2.6865,-6 -6,-6 z"
+     id="path7-3"
+     inkscape:connector-curvature="0"
+     style="fill:#3366cc"
+     sodipodi:nodetypes="sssss" />
+  <text
+     sodipodi:linespacing="125%"
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.93671513px;line-height:125%;font-family:'Ubuntu Sans Mono';-inkscape-font-specification:'Ubuntu Sans Mono';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none"
+     x="3.5054452"
+     y="11.476226"
+     id="text4140"
+     transform="scale(1.1573191,0.86406593)"><tspan
+       sodipodi:role="line"
+       id="tspan4142"
+       x="3.5054452"
+       y="11.476226"
+       style="fill:#ffffff;fill-opacity:1">k</tspan></text>
+</svg>

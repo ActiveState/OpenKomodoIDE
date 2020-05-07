@@ -1,0 +1,39 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'build',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'mozBin',
+    'version',
+    'buildNum',
+    'buildType',
+    'buildFlavour',
+    'komodoPythonUtilsDir',
+    'productType',
+    'platform',
+    'unsiloedPythonExe',
+    'mozVersion',
+    'withSCC',
+    'sdkDir',
+    'mozSrc',
+);
+
+if ($withSCC) {
+    $cons->Install($idlExportDir, 'koISCC.idl');
+    $cons->BuildAndInstallXpt('koISCC.idl');
+    $cons->InstallXpcomComponent('koSCCHistoryItem.py');
+    $cons->InstallXpcomComponent('koSCCFileStatus.py');
+    $cons->InstallPythonUtility('koSCCBase.py');
+    $cons->InstallPythonUtility('koSCCHistoryItem.py');
+    $cons->InstallPythonUtility('koSCCFileStatus.py');
+    $cons->InstallXpcomComponent('KoSCCPushAutoComplete.js',
+                                 {'@mozilla.org/autocomplete/search;1?name=scc-push-known' =>
+                                    '{95012774-5ec9-4fcf-8ed9-31e6ef8263a3}'});
+}

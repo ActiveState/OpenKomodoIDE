@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://komob/locale/komob.dtd">
+
+<?xml-stylesheet href="chrome://komob/skin/komob.css" type="text/css"?>
+
+<overlay id="komob-overlay" 
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <ko-pane id="workspace_left_area">
+        <browser type="ko-widget" insertafter="collaboration_tab"
+                 id="collab-panel"
+                 label="&Collaboration;"
+                 short-label="&CollaborationShort.label;"
+                 src="chrome://komob/content/collab-pane.xul"
+                 icon="koicon://ko-svg/chrome/icomoon/skin/users.svg"/>
+    </ko-pane>
+
+    <menupopup id="tabContextMenu">
+        <menu id="collab-tabContext-menu"
+            insertbefore="buffertab-context-sep-properties"
+            label="&Collaboration;"
+            class="menuitem-iconic"
+            onpopupshowing="ko.collaboration.ui.tabContextPopupHandler()">
+            <menupopup id="collab-tabContext-popup">
+                <menuitem id="collab-tabContext-new-session"
+                    label="&share_in_new_session;"
+                    onclick="ko.collaboration.shareCurrentTabInNewSession()"/>
+                <menu id="collab-tabContext-existing-session"
+                    label="&share_in_existing_session;"
+                    class="menuitem-iconic">
+                    <menupopup id="collab-tabContext-existing-session-popup"/>
+                </menu>
+                <menuitem id="collab-tabContext-disabled"
+                    label="&tab_already_shared;"
+                    disabled="true"
+                    hidden="true"/>
+            </menupopup>
+        </menu>
+    </menupopup>
+</overlay>

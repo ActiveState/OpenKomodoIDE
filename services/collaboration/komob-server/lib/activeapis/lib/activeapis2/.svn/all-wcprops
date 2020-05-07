@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2
+END
+fireflyhubapi.py
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/fireflyhubapi.py
+END
+fireflyapi.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/fireflyapi.py
+END
+VERSION.txt
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/VERSION.txt
+END
+marketoapi.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/marketoapi.py
+END
+dateutils.py
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/dateutils.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/__init__.py
+END
+limeapi.py
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/limeapi.py
+END
+utils.py
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/utils.py
+END
+notificationsapi.py
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/notificationsapi.py
+END
+apibase.py
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/apibase.py
+END
+codeapi.py
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/codeapi.py
+END
+exampleapi.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/exampleapi.py
+END
+accountapi.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/accountapi.py
+END
+storeapi.py
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/lib/activeapis2/storeapi.py
+END

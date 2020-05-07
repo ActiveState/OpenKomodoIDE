@@ -1,0 +1,7 @@
+# designated requirements for Mac OSX code signing
+designated =>
+        identifier "com.activestate.KomodoIDE"
+    and
+        cert leaf[subject.O] = "Todd Whiteman"
+    and
+        anchor trusted

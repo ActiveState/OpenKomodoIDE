@@ -1,0 +1,60 @@
+breakpoints:
+  set_breakpoint_to_line: "Breakpoint {id} file {file}, line {line}"
+  set_breakpoint_to_method: "Breakpoint {id} at {class}::{method}"
+  stop_at_breakpoint: "Breakpoint {id} at {file}:{line}"
+  delete: "Breakpoint {id} has been deleted"
+
+conditions:
+  set_condition: "Condition '{expr}' is set for the breakpoint {id}"
+  unset_condition: "Condition is cleared for the breakpoint {id}"
+
+display:
+  result: "{n}: {exp} = {result}"
+
+eval:
+  exception: "{text_message}"
+  result: "{result}"
+
+frame:
+  line: "{mark}#{pos} {call_str}at line {file}:{line}"
+
+method:
+  methods: "{name}|c"
+
+stop:
+  suspend: "{file}:{line_number}\n{line}"
+
+toggle:
+  breakpoint_enabled: "Breakpoint {id} is enabled"
+  breakpoint_disabled: "Breakpoint {id} is disabled"
+
+restart:
+  success: "Re exec'ing:\n\t{cmd}"
+
+set:
+  errors:
+    no_subcommand: "\"set\" must be followed by the name of an set command:\nList of set subcommands:\n\n{subcommands}"
+
+show:
+  errors:
+    no_subcommand: "\"show\" must be followed by the name of an show command:\nList of show subcommands:\n\n{subcommands}"
+
+thread:
+  context: "{status_flag}{debug_flag}{id} {thread}\t{file_line}"
+
+tmate:
+  errors:
+    wrong_frame: "Wrong frame number"
+
+trace:
+  messages:
+    all_threads: "Tracing {status} all threads"
+    current_thread: "Tracing {status} on current thread"
+  errors:
+    wrong_var_subcommand: "expecting 'stop' or 'nostop'; got {subcmd}"
+    var_is_not_global: "{name} is not a global variable"
+    wrong_subcommand: "expecting 'on', 'off', 'var' or 'variable'; got: {subcmd}"
+  trace: "traced variable {name} has value {value}"
+
+variable:
+  variable: "{key} = {value}"

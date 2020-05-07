@@ -1,0 +1,13 @@
+# #if MODE == "dev"
+content komob content/
+skin komob classic/1.0 skin/
+locale komob en-US locale/en-US/
+# #else
+content komob jar:komob.jar!/content/
+skin komob classic/1.0 jar:komob.jar!/skin/
+locale komob en-US jar:komob.jar!/locale/en-US/
+# #endif
+resource komob modules/
+
+overlay chrome://komodo/content/komodo.xul chrome://komob/content/overlay.xul
+overlay chrome://komodo/content/pref/pref-editsmart.xul chrome://komob/content/pref-editsmart-overlay.xul

@@ -1,0 +1,96 @@
+<!ENTITY F.accesskey "F">
+<!ENTITY H.accesskey "H">
+<!ENTITY M.accesskey "M">
+<!ENTITY SCCHistoryChangesMadeForSelectedRevision.desc "SCC History: Changes made by the selected revision">
+<!ENTITY SCCHistoryDefaultDiffAction.desc "SCC History: Default diff action">
+<!ENTITY SCCHistoryDifferenceBetweenTheSelectedVersions.desc "SCC History: Difference between the selected versions">
+<!ENTITY SCCHistoryDifferenceToTheCurrentVersion.desc "SCC History: Difference to the current version">
+<!ENTITY SCCHistoryDifferenceToTheLocalVersion.desc "SCC History: Difference to the local version">
+<!ENTITY action.label "Action">
+<!ENTITY buttonAddDirectory.accesskey "R">
+<!ENTITY buttonAddDirectory.label "Add Dir">
+<!ENTITY buttonAddFile.accesskey "F">
+<!ENTITY buttonAddFile.label "Add File">
+<!ENTITY buttonCancel.accesskey "C">
+<!ENTITY buttonCancel.label "Cancel">
+<!ENTITY buttonCommit.accesskey "o">
+<!ENTITY buttonCommit.label "Commit">
+<!ENTITY buttonDiff.accesskey "D">
+<!ENTITY buttonDiff.label "Show Diff">
+<!ENTITY change.label "Change">
+<!ENTITY changelistName.accesskey "N">
+<!ENTITY changelistName.label "Changelist Name">
+<!ENTITY checkAll.accesskey "a">
+<!ENTITY checkAll.label "Check All">
+<!ENTITY checkboxOnlyShowChecked.label "Only show checked files">
+<!ENTITY commitBaseLocation.label "Base path: ">
+<!ENTITY commitBranch.label "Branch: ">
+<!ENTITY commitMessage.accesskey "M">
+<!ENTITY commitMessage.label "Commit Message">
+<!ENTITY commitMessageHistory.accesskey "H">
+<!ENTITY commitMessageHistory.label "History">
+<!ENTITY commitMessageHistory.tooltiptext "Re-use a previous message">
+<!ENTITY context_menu_check.label "Check">
+<!ENTITY context_menu_diff.label "Diff">
+<!ENTITY context_menu_remove.label "Remove from list">
+<!ENTITY context_menu_stop.label "Stop">
+<!ENTITY context_menu_uncheck.label "Uncheck">
+<!ENTITY date.label "Date">
+<!ENTITY diffSelectedChange.accesskey "D">
+<!ENTITY diffSelectedChange.label "Diff of Changes">
+<!ENTITY diffSelectedRevisions.label "Diff selected revisions">
+<!ENTITY diffWithLocalCopy.label "Diff with local copy">
+<!ENTITY copySelectedRevision.label "Copy revision number">
+<!ENTITY filter.accesskey "F">
+<!ENTITY filter.label "Filter:">
+<!ENTITY message.label "Message">
+<!ENTITY revision.label "Revision">
+<!ENTITY sccCheckout.label "Checkout / Clone">
+<!ENTITY clone.label "Clone">
+<!ENTITY sccPush.label "Push">
+<!ENTITY sccPull.label "Push">
+<!ENTITY sccPullRebase.label "Push">
+<!ENTITY sccHistoryDiffBetweenVersionsButton.accesskey "v">
+<!ENTITY sccHistoryDiffToLocalVersionButton.accesskey "L">
+<!ENTITY uncheckAll.accesskey "L">
+<!ENTITY uncheckAll.label "Uncheck All">
+<!ENTITY user.label "User">
+<!ENTITY SCCCommit.accesskey "c">
+<!ENTITY SCCCommit.label "SCC commit">
+<!ENTITY menuSCCmenu.accesskey "U">
+<!ENTITY menuSCCmenuContext.accesskey "U">
+<!ENTITY menuSCCmenuFolderContext.accesskey "U">
+<!ENTITY userInterfaceShowHideSCCToolbar.desc "User Interface: Show/Hide SCC Toolbar">
+<!ENTITY sourceCodeControl.label "Source Code Control">
+<!ENTITY sourceCodeControlMenu.tooltiptext "Source Code Control Menu">
+<!ENTITY sourceCodeControlAdd.tooltiptext "Source Code Control: Add">
+<!ENTITY sourceCodeControlCheckout.tooltiptext "Source Code Control: Checkout">
+<!ENTITY sourceCodeControlCommit.tooltiptext "Source Code Control: Commit">
+<!ENTITY sourceCodeControlDiff.tooltiptext "Source Code Control: Diff">
+<!ENTITY sourceCodeControlEdit.tooltiptext "Source Code Control: Edit">
+<!ENTITY sourceCodeControlHistory.tooltiptext "Source Code Control: History">
+<!ENTITY sourceCodeControlPush.tooltiptext "Source Code Control: Push">
+<!ENTITY sourceCodeControlRemove.tooltiptext "Source Code Control: Remove">
+<!ENTITY sourceCodeControlRevert.tooltiptext "Source Code Control: Revert">
+<!ENTITY sourceCodeControlToolbar.label "Source Code Control Toolbar">
+<!ENTITY sourceCodeControlToolbar.tooltiptext "Source Code Control Toolbar">
+<!ENTITY sourceCodeControlUpdate.tooltiptext "Source Code Control: Update">
+<!ENTITY sourceControl.label "Source Code Control">
+<!ENTITY sourceControlAddFile.desc "Source Code Control: Add File">
+<!ENTITY sourceControlCheckout.desc "Source Code Control: Checkout Repository">
+<!ENTITY sourceControlCommitChanges.desc "Source Code Control: Commit Changes">
+<!ENTITY sourceControlCompare.desc "Source Code Control: Compare">
+<!ENTITY sourceControlCompareFile.desc "Source Code Control: Compare File">
+<!ENTITY sourceControlEdit.desc "Source Code Control: Edit">
+<!ENTITY sourceControlHistory.desc "Source Code Control: History">
+<!ENTITY openWebServiceFile.desc "Source Code Control: Open Web Service">
+<!ENTITY sourceControlHistoryFile.desc "Source Code Control: History of File">
+<!ENTITY sourceControlOnContents.label "Source Code Control on Contents">
+<!ENTITY sourceControlPush.desc "Source Code Control: Push Repository">
+<!ENTITY sourceControlPull.desc "Source Code Control: Pull Repository">
+<!ENTITY sourceControlPullRebase.desc "Source Code Control: Pull Repository with Rebase">
+<!ENTITY sourceControlClone.desc "Source Code Control: Clone Repository">
+<!ENTITY sourceControlRemoveFile.desc "Source Code Control: Remove File">
+<!ENTITY sourceControlRevertChanges.desc "Source Code Control: Revert Changes">
+<!ENTITY sourceControlRevertChangesFile.desc "Source Code Control: Revert Changes in File">
+<!ENTITY sourceControlUpdate.desc "Source Code Control: Update">

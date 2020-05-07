@@ -1,0 +1,75 @@
+/* Copyright (c) 2000-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+// Find contexts (i.e., in what to search)
+
+#include "nsISupports.idl"
+
+interface koIContainer;
+interface koIPart_file;
+
+
+[scriptable, uuid(DC6E2856-3B9B-4d7a-A9D1-92102DDCDC0A)]
+interface koIFindContext : nsISupports {
+    // context types
+    const long FCT_CURRENT_DOC = 0;   // in the current document
+    const long FCT_SELECTION = 1;     // in the current selection
+    const long FCT_ALL_OPEN_DOCS = 2; // in all open documents
+    const long FCT_IN_FILES = 3;      // in files
+    const long FCT_IN_COLLECTION = 4; // in a collection of search targets
+
+    attribute unsigned long type;
+    readonly attribute wstring name;   // a human readable name
+};
+
+[scriptable, uuid(AC460813-782F-40e4-887F-B9B2BFBD5DF6)]
+interface koIRangeFindContext : koIFindContext {
+    // These are *character* offsets (as opposed to *byte* offsets).
+    attribute unsigned long startIndex;
+    attribute unsigned long endIndex;
+};
+
+[scriptable, uuid(4F9ECE5C-D88C-46A2-B087-5E159CC3177D)]
+interface koIFindInFilesContext : koIFindContext {
+    // A working directory from which to base relative paths.
+    attribute wstring cwd;
+    // A pathsep-separated list of folders to search in.
+    attribute wstring encodedFolders;
+};
+
+
+/**
+ * A find context which groups a bunch of possibly complex search targets.
+ *
+ * Usage:
+ *  var coll = Components.classes["@activestate.com/koCollectionFindContext;1"]
+ *          .createInstance(Components.interfaces.koICollectionFindContext);
+ *  // Add one or more items.
+ *  coll.add_koIContainer(<koIContainer instance>); // e.g. a project, live folder, folder
+ *  coll.add_file(<koIPart_file>);
+ *  coll.add_path(<path>);
+ *  
+ *  // Then, use the normal find JS api...
+ *  Find_FindAllInCollection(editor, coll, pattern, ...);
+ *  // ...or pass it to the find dialog to fill out the details.
+ *  ko.launch.findInCollection(coll, ...);
+ */
+[scriptable, uuid(84a0ab4c-b9c0-45c7-aded-7a9e5fb2d0cc)]
+interface koICollectionFindContext : koIFindContext {
+    // A short description of the find context (generally for display
+    // in the Komodo UI).
+    readonly attribute wstring desc;
+    
+    // Methods to add things in which to search to the collections.
+    void add_koIContainer(in koIContainer container);
+    void add_file(in koIPart_file file);
+    void add_path(in wstring path);
+    // Method to set extra includes and excludes
+    void set_koIContainerExtraIncludesAndExcludes(in wstring extraIncludes, in wstring extraExcludes);
+    
+    // Generate the paths for this collection. This is a generator so
+    // you need to UnwrapObject and use this from Python.
+    //attribute generator paths;
+};
+
+

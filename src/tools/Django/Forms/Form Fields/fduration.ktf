@@ -1,0 +1,10 @@
+# komodo tool: fduration
+# ======================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ======================
+<% /* DurationField (fduration) */ %>
+[[%tabstop1:FIELDNAME]] = forms.DurationField([[%tabstop2:2]])

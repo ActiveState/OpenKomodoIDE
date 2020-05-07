@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="67476ef2-c5a3-45e1-b8e3-b0b318305a1d" kpf_version="4" name="module_builder.kpf">
+<macro async="0" icon="chrome://famfamfamsilk/skin/icons/lightning_go.png" id="7f0d18c9-cf5c-4a53-bddd-7857d8c45023" idref="05307159-dab2-4b1e-9f69-652d0aec2703" keyboard_shortcut="" language="JavaScript" name="Build" rank="100" trigger="trigger_postopen" trigger_enabled="0">
+try {
+  
+var project = ko.macros.current.project;
+if (!('extensions' in ko)
+    || !('perlModuleStarter' in ko.extensions)
+    || !(project.url in ko.extensions.perlModuleStarter)
+    || !('data' in ko.extensions.perlModuleStarter[project.url])) {
+  throw new Error("Please run Configure first: data not found");
+}
+data = ko.extensions.perlModuleStarter[project.url].data;
+if (!data.configured) {
+  throw new Error("Not configured (data.configured is false).  Please run Configure first, then Build.");
+}
+var sysUtils = Components.classes["@activestate.com/koSysUtils;1"].
+  getService(Components.interfaces.koISysUtils);
+var osPath = Components.classes["@activestate.com/koOsPath;1"].
+  getService(Components.interfaces.koIOsPath);
+var perlInfo = Components.classes["@activestate.com/koAppInfoEx?app=Perl;1"].
+  getService(Components.interfaces.koIPerlInfoEx);
+var perlPath = perlInfo.executablePath;
+if (!perlPath) {
+    perlPath = sysUtils.Which("perl");
+    if (!perlPath) throw new Error("Can't find Perl in path or prefs");
+}
+var perlDir = osPath.dirname(perlPath);
+var msPath = osPath.join(perlDir, "module-starter");
+var i;
+if (!osPath.exists(msPath)) {
+  // Try all the Perl's
+  var perlPaths = sysUtils.WhichAll('perl', {}, {});
+  for (i = 0; i &lt; perlPaths.length; i++) {
+    perlDir = osPath.dirname(perlPath);
+    //XXX What's the extension for module-starter on Windows?
+    msPath = osPath.join(perlDir, "module-starter");
+    if (osPath.exists(msPath)) {
+      break;
+    }
+  }
+  if (!i) {
+    throw new Error("Can't find a version of Perl with module-starter installed");
+  }
+}
+
+function quoteIfNecessary(s) {
+  if (s.match(/[^\w\d._]/)) {
+    return "'" + s.replace(/\\/g, '\\\\').replace(/\'/g, '\\') + "'";
+  }
+  return s;
+}
+
+var commandArray = [msPath];
+var options = ko.extensions.perlModuleStarter[project.url].data.vars;
+for (var p in options) {
+  var item = options[p];
+  if (p == 'force' || p == 'verbose') {
+    if (item[0]) {
+      commandArray.push("--" + p);
+    }
+  } else if (item[0]) {
+    var key = item[2];
+    if (!key) {
+      key = "--" + p;
+    }
+    commandArray.push(key + "=" + quoteIfNecessary(item[0]));
+  }
+}
+
+var currentProject = ko.projects.manager.currentProject;
+var currentPath = currentProject.getFile().dirName;
+var callBack = function() {
+  ko.statusBar.AddMessage('Build complete', 'projects', 5000, true);
+  currentProject.save();
+  
+}
+dump("Go run command " + commandArray.join(" ") + "\n");
+ko.run.runCommand(window, // editor
+                  commandArray.join(" "), // command
+                  ko.projects.manager.currentProject.getFile().dirName, // cwd
+                  null, //env
+                  false,  // insertOutput
+                  false, //operateOnSelection
+                  false, //doNotOpenOutputWindow
+                  "command-output-window",//runIn
+                  null, null, null, null, null,
+                  callBack);
+return true;
+} catch(ex) {
+  alert("Error in Build: " + ex)
+}
+</macro>
+<macro async="0" icon="chrome://famfamfamsilk/skin/icons/wrench.png" id="a29d4133-1125-4527-b34c-c229c4e38c5b" idref="05307159-dab2-4b1e-9f69-652d0aec2703" keyboard_shortcut="" language="JavaScript" name="Configure" rank="100" trigger="trigger_postopen" trigger_enabled="0">
+try {
+if (!('extensions' in ko)) {
+    ko.extensions = {};
+}
+if (!('perlModuleStarter' in ko.extensions)) {
+    ko.extensions.perlModuleStarter = {};
+}
+var project = ko.macros.current.project;
+if (!(project.url in ko.extensions.perlModuleStarter)) {
+    ko.extensions.perlModuleStarter[project.url] = {};
+}
+var setupWin = project.getChildByAttributeValue('name','setup.xul', 1);
+if (!setupWin) {
+    throw new Error("Couldn't find file setup.xul");
+}
+
+var defaultModuleName = 'My::CPAN::Module';
+var currView = ko.views.manager.currentView;
+if (currView &amp;&amp; currView.koDoc &amp;&amp; currView.koDoc.file
+    &amp;&amp; currView.koDoc.file.ext == ".pm") {
+    var src = currView.scimoz.text;
+    // Find the first package declaration
+    var m = src.match(/^\s*package\s+((?:::)?\w+(?:::\w+)*)\s*(?:[;#]|$)/m);
+    if (m &amp;&amp; m[1]) {
+        defaultModuleName = m[1];
+    }
+    
+}
+var data = ko.extensions.perlModuleStarter[project.url].data;
+var currDir = ko.macros.current.project.getFile().dirName;
+var buildDir = currDir + "/" + 'build';
+if (!data || !data.vars) {
+    data = {
+    'configured': false,
+    'vars': {
+        // [value, required, cmdLineArg]
+        'modules':      [defaultModuleName, 1, '--module'],
+        'distribution': [defaultModuleName.replace(/::/g, '-'), 0, '--distro'],
+        'builder':      ['', 1],
+        'author':       ['', 1],
+        'email':        ['', 1],
+        'license':      ['Artistic', 1],
+        'directory':    [buildDir, 1, '--dir'],
+        'force':        ['', 0, ],
+        'verbose':      ['', 0, ]
+    }
+    };
+    ko.extensions.perlModuleStarter[project.url].data = data;
+};
+data.valid = false;
+data.configured = false;
+var uri = setupWin.getFile().URI;
+window.openDialog(
+    uri,
+    "_blank",
+    "centerscreen,chrome,resizable,scrollbars,dialog=no,close,modal=yes",
+    data, ko
+);
+dump("End of configure: data.valid: " +data.valid
+     + ", data.configured: " + data.configured + "\n");
+} catch(ex) {
+    alert("Error in Configure macro: " + ex);
+}</macro>
+<macro async="0" id="cbf87aae-8cd0-4b91-a76e-1161964d57f7" idref="05307159-dab2-4b1e-9f69-652d0aec2703" keyboard_shortcut="" language="JavaScript" name="oncreate" rank="100" trigger="trigger_postopen" trigger_enabled="0">
+try {
+    var currentProject = ko.macros.current.project;
+    
+    function doMacro(macroName) {
+        var macroPart = currentProject.getChildByAttributeValue('name', macroName, 1);
+        ko.projects.executeMacro(macroPart, 0);
+    }
+    
+    function doWork() {
+        doMacro("Configure");
+        var data = ko.extensions.perlModuleStarter.data;
+        if (!data) return true;
+        if (data.configured &amp;&amp; data.valid) {
+            doMacro("Build");
+        }
+        return false;
+    }
+    function removeThisMacro(project, macro_name) {
+        // delete the creation macro
+        var macro = project.getChildWithTypeAndStringAttribute('macro', 'name', macro_name, 1);
+        if (macro) {
+            // ko.projects.manager.removeItem(macro, true);
+            macro.parent.removeChild(macro);
+        } else {
+            ko.dialogs.alert("couldn't find the macro '" + macro_name + "' in " +
+                             project.name);
+        }
+    }
+    
+    var deleteEverything = doWork();
+    // Always delete the supporting stuff.
+    var projectManager = ko.projects.manager;
+    projectManager.currentProject = currentProject;
+    removeThisMacro(currentProject, "Build");
+    removeThisMacro(currentProject, "Configure");
+    removeThisMacro(currentProject, "oncreate");
+    
+    var item = currentProject.getChildWithTypeAndStringAttribute('folder', 'name', "Project", 1);
+    if (item) {
+        // ko.projects.manager.removeItem(macro, true);
+        item.parent.removeChild(item);
+    }
+    var shutil = Components.classes["@activestate.com/koShUtil;1"].
+            getService(Components.interfaces.koIShUtil);
+    var koOsPath = Components.classes["@activestate.com/koOsPath;1"].
+            getService(Components.interfaces.koIOsPath);
+    var koOs = Components.classes["@activestate.com/koOs;1"].
+            getService(Components.interfaces.koIOs);
+    var projPath = currentProject.getFile().dirName;
+    var prjInternal = koOsPath.join(projPath, "_prj_internal");
+    shutil.rmtree(prjInternal, 1);
+    shutil.rmtree(koOsPath.join(projPath, "junk"), 1);
+    if (deleteEverything) {
+        var files = koOs.listdir(projPath, {}, {});
+        if (files.length == 1 &amp;&amp; files[0] == currentProject.getFile().baseName()) {
+            shutil.rmtree(projPath, 1);
+        }
+    } else {
+        projectManager.viewMgr.view.refresh(currentProject);
+    }
+    
+} catch(e) {
+    alert("Error in oncreate macro: " + e);
+}
+</macro>
+<folder id="05307159-dab2-4b1e-9f69-652d0aec2703" idref="67476ef2-c5a3-45e1-b8e3-b0b318305a1d" name="Project">
+</folder>
+<preference-set idref="67476ef2-c5a3-45e1-b8e3-b0b318305a1d">
+  <boolean id="configured">1</boolean>
+  <string id="import_exclude_matches">*.*~;*.bak;*.tmp;CVS;.#*;*.pyo;*.pyc;.svn;*%*;tmp*.html;.DS_Store;</string>
+  <string id="import_include_matches"></string>
+  <boolean id="import_live">1</boolean>
+  <boolean id="import_recursive">1</boolean>
+  <string id="import_type">useFolders</string>
+  <string id="lastTestPlanName_pref">New test plan #1</string>
+<preference-set id="testPlans">
+<preference-set id="New test plan #1">
+  <string id="command_line"></string>
+  <string relative="url" id="directory"></string>
+  <string id="language">Perl - TAP (*.t)</string>
+</preference-set>
+</preference-set>
+</preference-set>
+</project>

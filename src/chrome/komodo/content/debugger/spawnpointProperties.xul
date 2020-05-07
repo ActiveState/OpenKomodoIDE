@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % debuggerDTD SYSTEM "chrome://komodo/locale/debugger.dtd">
+  %debuggerDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!-- Spawnpoint properties dialog. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+
+<dialog id="dialog-spawnpointproperties"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="&spawnpointProperties.title;"
+        onload="OnLoad()"
+        orient="vertical"
+        flex="1"
+        persist="screenX screenY width height"
+        buttons="accept,cancel,help"
+        ondialogaccept="return OK();"
+        ondialogcancel="return Cancel();"
+        ondialoghelp="ko.help.open('debugger.html#breakpoints-and-tcl-spawnpoints');">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/launch.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/debugger/spawnpointProperties.js" type="application/x-javascript;version=1.7"/>
+
+    <description>
+        Start a new Tcl debug session for each new process spawned when the
+        program reaches this location.
+    </description>
+    <separator class="groovy-thin"
+               style="margin-top: 10px; margin-bottom: 10px;"/>
+    <grid>
+        <columns>
+            <column style="width: 50px;"/>
+            <column flex="1"/>
+        </columns>
+        <rows>
+            <row align="center" style="padding-bottom: 5px;">
+                <label value="Language"/>
+                <textbox value="Tcl" readonly="true"
+                         style="min-height: 2em;"/>
+            </row>
+            <row align="center" style="padding-bottom: 5px;">
+                <label value="File" control="filename"
+                       accesskey="&F.accesskey;"/>
+                <hbox flex="1">
+                    <textbox id="filename"
+                             onkeyup="UpdateAttribute('filename');"
+                             style="min-height: 2em;"
+                             flex="1"/>
+                    <button label="&ellipsis.label;" accesskey="&ellipsis.accesskey;"
+                            style="min-width: 0px; margin-top: 0px; margin-bottom: 0px;"
+                            tooltiptext="&browseForFile.tooltiptext;"
+                            oncommand="BrowseForFile();"/>
+                </hbox>
+            </row>
+            <row align="center">
+                <label value="Line" control="lineno" accesskey="&n.accesskey;"/>
+                <textbox id="lineno"
+                         style="min-height: 2em;"
+                         onkeyup="UpdateAttribute('lineno');"/>
+            </row>
+        </rows>
+    </grid>
+
+    <separator class="thin"/>
+
+    <checkbox id="state" label="&enable.label;"
+              oncommand="UpdateAttribute('state');"
+              accesskey="&state.accesskey;"
+              style="padding-left: -3px;"/>
+
+    <spacer flex="1"/>
+</dialog>
+

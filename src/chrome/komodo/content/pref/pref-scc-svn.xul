@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="PrefSCCSVN_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/pref/pref-scc-svn.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="scc-svn-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical">
+            <caption>
+                <checkbox id="svnEnabled" label="&SVNIntegration.label;"
+                          pref="true" prefstring="svnEnabled"
+                          prefattribute="checked"
+                          oncommand="PrefSCCSVN_UpdateEnabledUI();"/>
+            </caption>
+            <vbox>
+                <hbox align="center">
+                    <label value="SVN executable used: "/>
+                </hbox>
+                <hbox>
+                <menulist id="svnExecutable"
+                    flex="1"
+                    pref="true"
+                    prefstring="svnExecutable"
+                    tooltiptext="&clickOnItemToSelectItAsTheDefault.tooltiptext;"
+                    oncommand="PrefSCCSVN_CheckAgain();">
+                    <menupopup id="avail-exec-list"/>
+                </menulist>
+                <button id='browse1' label="&browse.label;"
+                    oncommand="PrefSCCSVN_getExecutable();"/>
+                </hbox>
+            </vbox>
+            <separator class="thin"/>
+            <deck id="svnDeck" flex="1" selectedIndex='0'>
+                <vbox>
+                    <checkbox label="&checkForStatusChangesFromOutsideOfKomodo.label;"
+                              id="svnBackgroundCheck" pref="true"
+                              prefstring="svnBackgroundCheck"
+                              prefattribute="checked"
+                              oncommand="PrefSCCSVN_UpdateBackgroundEnabledUI();"/>
+                    <vbox style="padding-left: 20px;">
+                        <hbox align="center">
+                            <label value="Check every "/>
+                            <textbox id="svnBackgroundMinutes"
+                                     size="3"
+                                     pref="true"
+                                     prefstring="svnBackgroundMinutes"
+                                     prefattribute="value"/>
+                            <label value=" minutes"/>
+                        </hbox>
+                    </vbox>
+                    <hbox align="center">
+                        <label value="Diff options"/>
+                        <textbox id="svnDiffOptions"
+                                    size="25"
+                                    pref="true"
+                                    prefstring="svnDiffOptions"
+                                    prefattribute="value"/>
+                    </hbox>
+                    <checkbox id="svn_externaldiff_checkbox"
+                              label="&usesExternalDiff.checkbox.label;"
+                              tooltiptext="&usesExternalDiff.checkbox.tooltiptext;"
+                              pref="true"
+                              prefstring="svn_uses_externaldiff"
+                              prefattribute="checked" />
+                    <checkbox label="&doNotWarnAboutSVNExternalProtocolsSVNSSHAtStartup.label;"
+                              id="donotask_svn_ssh_setup_warning" pref="true"
+                              prefstring="donotask_svn_ssh_setup_warning"
+                              prefattribute="checked"/>
+                </vbox>
+                <vbox flex="1">
+                    <description id="svnNotFunctional"
+                                 style="font-weight: bold;"/>
+                    <vbox align="center">
+                        <button label="&downloadSVN.label;"
+                                class="button-link-a" style="cursor:pointer;"
+                                oncommand="getKoObject('browse').openUrlInDefaultBrowser('http://subversion.apache.org/packages.html')"/>
+                    </vbox>
+                    <separator class="thin"/>
+                    <vbox align="right">
+                        <button label="&checkAgain.label;"
+                                oncommand="PrefSCCSVN_CheckAgain();"/>
+                    </vbox>
+                </vbox>
+            </deck>
+            <separator class="thin"/>
+        </groupbox>
+
+    </vbox>
+
+</window>
+
+
+
+

@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl">
+
+<!--
+TODO:
+look at mozilla\xpfe\global\resources\content\bindings\button.xml
+and see if we really need *ANY* of this stuff.  I think we can
+use moz bindings with CSS to acheive everything we have here.
+-->
+
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xbl="http://www.mozilla.org/xbl"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <!-- include our css, but inherit from mozilla's button base
+         which includes access controls -->
+    <binding id="button-base" extends="chrome://global/content/bindings/button.xml#button-base">
+        <resources>
+            <stylesheet src="chrome://komodo/skin/bindings/buttons.css"/>
+        </resources>
+    </binding>
+
+  <!-- XUL <button>s -->
+  <!-- used for button menus in several places
+    style class: rightarrow-button -->
+  <binding id="rightarrow-button" display="xul:menu"
+    extends="chrome://komodo/content/bindings/buttons.xml#button-base">
+    <content>
+      <xul:box class="button-internal-box" align="center" pack="center" flex="1">
+        <xul:image class="button-icon" xbl:inherits="src=image"/>
+      </xul:box>
+      <children includes="menupopup"/>
+    </content>
+  </binding>
+
+  <!-- USED! style: button-toolbar-a -->
+  <binding id="button-toolbar-a" display="xul:button"
+    extends="chrome://komodo/content/bindings/buttons.xml#button-base">
+    <content>
+      <xul:vbox class="button-internal-box" align="center" pack="center" flex="1">
+        <xul:image class="button-icon" xbl:inherits="src=image"/>
+      </xul:vbox>
+    </content>
+  </binding>
+
+  <!-- USED! style: button-toolbar-b,c,d; button-link; button-link-a -->
+  <binding id="button-toolbar-b" display="xul:button"
+    extends="chrome://komodo/content/bindings/buttons.xml#button-base">
+    <content>
+    <xul:vbox class="button-internal-box" align="center" pack="center" flex="1">
+        <xul:image class="button-icon" xbl:inherits="src=image"/>
+        <xul:vbox class="button-text-container" align="center" pack="center" flex="1">
+          <xul:label class="button-text" xbl:inherits="value=label,accesskey,crop,dragover-top"/>
+        </xul:vbox>
+      </xul:vbox>
+    </content>
+  </binding>
+
+  <!-- USED! style: button-link-b
+     gettingstarted page -->
+  <binding id="button-link-b" display="xul:button"
+    extends="chrome://komodo/content/bindings/buttons.xml#button-base">
+    <content>
+    <xul:hbox class="button-internal-box" xbl:inherits="align=valign"
+              pack="center" flex="1">
+        <xul:image class="button-icon" xbl:inherits="src=image"/>
+        <xul:vbox class="button-text-container" xbl:inherits="align=halign"
+                  pack="center" flex="1">
+          <xul:label class="button-text" xbl:inherits="value=label,accesskey,crop,dragover-top"/>
+        </xul:vbox>
+      </xul:hbox>
+    </content>
+  </binding>
+
+  <binding id="button-menu-a" display="xul:menu"
+           extends="chrome://komodo/content/bindings/buttons.xml#button-base">
+    <content>
+      <children includes="observes|template|menupopup|tooltip"/>
+      <xul:hbox class="button-internal-box box-inherit button-box" xbl:inherits="align,dir,pack,orient"
+                align="center" pack="center" flex="1">
+        <children>
+          <xul:image class="button-icon" xbl:inherits="src=image"/>
+          <xul:dropmarker class="button-menu-dropmarker" xbl:inherits="open,disabled"/>
+        </children>
+      </xul:hbox>
+    </content>
+  </binding>
+  
+    <binding id="dynamic-toolbarbutton" extends="chrome://global/content/bindings/toolbarbutton.xml#toolbarbutton">
+    <content>
+        <children/>
+        <xul:label class="toolbarbutton-counter" crop="none" xbl:inherits="value=counter"/>
+        <xul:image class="toolbarbutton-icon" xbl:inherits="validate,src=image,label,consumeanchor"/>
+    </content>
+    </binding>
+    
+    <binding id="dynamic-toolbarbutton-menu-button" extends="chrome://global/content/bindings/toolbarbutton.xml#menu-button">
+    <content>
+      <children includes="observes|template|menupopup|panel|tooltip"/>
+      <xul:vbox align="center" pack="center" flex="1">
+        <xul:hbox align="center" pack="center" flex="1">
+          <xul:toolbarbutton class="box-inherit toolbarbutton-menubutton-button"
+                             anonid="button" flex="1" allowevents="true"
+                             xbl:inherits="disabled,crop,image,accesskey,command,wrap,
+                                           align,dir,pack,orient,tooltiptext=buttontooltiptext,counter"/>
+          <xul:dropmarker type="menu-button" class="toolbarbutton-menubutton-dropmarker"
+                          anonid="dropmarker" xbl:inherits="align,dir,pack,orient,disabled,label,open"/>
+        </xul:hbox>
+        <xul:label class="toolbarbutton-text" crop="right" flex="1"
+                   xbl:inherits="value=label,accesskey,crop,dragover-top,wrap"/>
+      </xul:vbox>
+    </content>
+    <implementation>
+        <field name="button">
+            document.getAnonymousElementByAttribute(this, "anonid", "button")
+        </field>
+        <constructor>
+          <![CDATA[
+            var classes = this.getAttribute("class").split(/\s+/);
+            for (let cls of classes) {
+                if (cls.indexOf("icon-") === 0)
+                {
+                    setTimeout(function() {
+                        this.button.classList.add(cls);
+                    }.bind(this), 0);
+                    
+                    break;
+                }
+            }
+          ]]>
+        </constructor>
+    </implementation>
+    </binding>
+    
+    <binding id="dynamic-toolbarbutton-menu" extends="chrome://global/content/bindings/toolbarbutton.xml#menu">
+    <content>
+        <children includes="observes|template|menupopup|panel|tooltip"/>
+        <xul:label class="toolbarbutton-text" crop="right" flex="1"
+                   xbl:inherits="value=label,accesskey,crop,dragover-top,wrap"/>
+        <xul:image class="toolbarbutton-icon" xbl:inherits="validate,src=image,label,consumeanchor"/>
+        <xul:stack>
+            <xul:box anonid="toolbarbutton-icon-box"/>
+            <xul:label class="toolbarbutton-counter" crop="none" xbl:inherits="value=counter"/>
+        </xul:stack>
+    </content>
+    <implementation>
+        <field name="icon-box">
+            document.getAnonymousElementByAttribute(this, "anonid", "toolbarbutton-icon-box")
+        </field>
+        <constructor>
+          <![CDATA[
+            var classes = this.getAttribute("class").split(/\s+/);
+            for (let cls of classes) {
+                if (cls.indexOf("icon-") === 0)
+                {
+                    setTimeout(function() {
+                        this["icon-box"].classList.add(cls);
+                    }.bind(this), 0);
+
+                    break;
+                }
+            }
+          ]]>
+        </constructor>
+    </implementation>
+    </binding>
+
+    <binding id="menu" display="xul:menu"
+             extends="chrome://global/content/bindings/toolbarbutton.xml#toolbarbutton">
+      <content>
+        <children includes="observes|template|menupopup|panel|tooltip"/>
+        <xul:box class="toolbarbutton-icon-box"/>
+        <xul:image class="toolbarbutton-icon" xbl:inherits="validate,src=image,label,type,consumeanchor"/>
+        <xul:label class="toolbarbutton-text" crop="right" flex="1"
+                   xbl:inherits="value=label,accesskey,crop,dragover-top,wrap"/>
+        <xul:label class="toolbarbutton-multiline-text" flex="1"
+                   xbl:inherits="xbl:text=label,accesskey,wrap"/>
+        <xul:dropmarker anonid="dropmarker" type="menu"
+                        class="toolbarbutton-menu-dropmarker" xbl:inherits="disabled,label"/>
+      </content>
+    </binding>
+    
+
+</bindings>

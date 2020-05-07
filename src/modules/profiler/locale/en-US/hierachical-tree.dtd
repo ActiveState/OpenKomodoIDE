@@ -1,0 +1,12 @@
+<!ENTITY profiler_hierachical_tree_layout.label "Hierarchical">
+
+<!ENTITY profiler_treecol_name.label "Function">
+<!ENTITY profiler_treecol_num_calls.label "Num Calls">
+<!ENTITY profiler_treecol_total_num_calls.label "Total Calls">
+<!ENTITY profiler_treecol_total_time.label "Own Time">
+<!ENTITY profiler_treecol_cumulative_time.label "Cumulative Time">
+<!ENTITY profiler_treecol_progressmeter.label "Chart">
+
+<!ENTITY profiler_file_path.label "Path:">
+<!ENTITY profiler_show_file_in_editor.buttonlabel "Open in Editor">
+<!ENTITY profiler_show_file_in_editor.tooltiptext "Opens this file in the main Komodo editor window.">

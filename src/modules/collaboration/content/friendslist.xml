@@ -1,0 +1,108 @@
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % bindingsDTD SYSTEM "chrome://komodo/locale/bindings.dtd">
+  %bindingsDTD;
+  <!ENTITY % komobDTD SYSTEM "chrome://komob/locale/komob.dtd">
+  %komobDTD;
+]>
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+    <binding id="friendsListFriend"
+             extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+        <content>
+            <xul:label value="(username)"/>
+            <xul:label class="text-link" onclick="document.getBindingParent(this).deleteFriend()">&remove.label;</xul:label>
+        </content>
+        
+        <implementation>
+            <property name="userId"/>
+            <property name="userName"
+                      onget="return document.getAnonymousNodes(this)[0].getAttribute('value')"
+                      onset="return document.getAnonymousNodes(this)[0].setAttribute('value', val);"/>
+            
+            <method name="deleteFriend">
+                <body>
+                    let successCallback = function() {
+                        ko.collaboration.friends.update();
+                    };
+                    let errorCallback = function() {
+                        ko.collaboration.friends._displayError();
+                    };
+                    if (ko.dialogs.yesNo("Do you really want to remove " +
+                        this.userName + " from your contact list?", null, null,
+                        "Collaboration") == "Yes") {
+                        ko.collaboration.api.deleteFriendAsync(this.userId, true,
+                            successCallback, errorCallback)
+                    }
+                </body>
+            </method>
+        </implementation>
+    </binding>
+    
+    <binding id="friendsListRequest"
+             extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+        <content>
+            <xul:label value="(friend request)" />
+            <xul:label class="text-link" onclick="document.getBindingParent(this).updateRequest(true)">&confirm.label;</xul:label>
+            <xul:label class="text-link" onclick="document.getBindingParent(this).updateRequest(false)">&deny.label;</xul:label>
+        </content>
+        
+        <implementation>
+            <property name="userId"/>
+            <property name="userName"
+                      onget="return document.getAnonymousNodes(this)[0].getAttribute('value')"
+                      onset="return document.getAnonymousNodes(this)[0].setAttribute('value', val);"/>
+            
+            <method name="updateRequest">
+                <parameter name="confirm"/>
+                <body>
+                    ko.collaboration.api.updateFriendRequestAsync(this.userId,
+                                                                  !!confirm);
+                    function successCallback() {
+                        // do nothing, we should get a push notification
+                    };
+                    function errorCallback() {
+                        ko.collaboration.friends._displayError();
+                    };
+                </body>
+            </method>
+        </implementation>
+    </binding>
+    
+    <binding id="friendsListPending"
+             extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+        <content>
+            <xul:label value="(pending)" />
+            <xul:label class="text-link" onclick="document.getBindingParent(this).cancelRequest()">&cancelRequest.label;</xul:label>
+        </content>
+        
+        <implementation>
+            <property name="userId"/>
+            <property name="userName"
+                      onget="return document.getAnonymousNodes(this)[0].getAttribute('value')"
+                      onset="return document.getAnonymousNodes(this)[0].setAttribute('value', val + ' (pending)');"/>
+            
+            <method name="cancelRequest">
+                <body>
+                    let successCallback = function () {
+                        // do nothing, we should get a push notification
+                    };
+                    let errorCallback = function () {
+                        ko.collaboration.friends._displayError();
+                    };
+                    ko.collaboration.api.deletePendingRequestAsync(this.userId, successCallback, errorCallback);
+                </body>
+            </method>
+        </implementation>
+    </binding>
+    
+    <binding id="friendsListMessage">
+        <content>
+            <xul:vbox flex="1">
+                <xul:label xbl:inherits="xbl:text=description"/>
+            </xul:vbox>
+        </content>
+    </binding>
+</bindings>

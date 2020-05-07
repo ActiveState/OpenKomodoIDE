@@ -1,0 +1,72 @@
+# JavaScript UDL definition
+# 
+# Copyright (C) 2007 ActiveState Software Inc.
+# Author(s):
+#   Eric Promislow <ericp@activestate.com>
+
+# Lexer description for javascript
+
+# First we need to tell the lexer a bit about this language
+
+family csl # client-side language
+sublanguage JavaScript
+
+# Quote any keywords that collide with tpl's keywords:
+# family keywords keyword_style pattern initial state paint redo
+
+# From http://www.mozilla.org/js/language/E262-3.pdf
+
+keywords [as break case catch class const continue default delete do else
+export extends false finally for function if import in instanceof is let 'namespace'
+new null package private public return super switch this throw true try typeof
+use var void while with
+get "include" set
+abstract debugger enum goto implements interface native of protected short synchronized throws transient volatile
+] 
+# rows 1 - 4 - reserved
+# row 5  - non-reserved
+# row 6 - "future reserved"
+
+include "ecmascript_262.udl"
+
+# This is a stripped down variant of everything else to get
+# JS code-completion inside HTML onXXX="" strings.
+
+state IN_CSL_STAG_ATTR_DEFAULT_DOUBLEQUOTE:
+delimiter: paint(upto, CSL_DEFAULT), paint(include, M_STRING) => IN_M_STAG_POST_TAGNAME
+'/*' : paint(upto, CSL_DEFAULT) =>  IN_CSL_STAG_ATTR_COMMENT_DOUBLEQUOTE
+'\'' : paint(upto, CSL_DEFAULT), => IN_CSL_STAG_ATTR_SSTRING
+/\/\*.*?\*\//: paint(upto, CSL_DEFAULT), paint(include, CSL_COMMENT)
+/[$WS]+/  : #stay
+/0[Xx][0-9a-fA-F]+/ : paint(upto, CSL_DEFAULT), paint(include, CSL_NUMBER)
+/[-+]?\.?\d+/ : paint(upto, CSL_DEFAULT), paint(include, CSL_NUMBER)
+/[$NMSTART][$CS]*/ : paint(upto, CSL_DEFAULT), paint(include, CSL_IDENTIFIER)
+/[$OP]/: paint(upto, CSL_DEFAULT), paint(include, CSL_OPERATOR)
+
+state IN_CSL_STAG_ATTR_COMMENT_DOUBLEQUOTE:
+'*/' : paint(include, CSL_COMMENT), => IN_CSL_STAG_ATTR_DEFAULT_DOUBLEQUOTE
+
+# Paint to the end of the string, return back to the double quote attr state.
+state IN_CSL_STAG_ATTR_SSTRING:
+'\'' : paint(include, CSL_STRING), => IN_CSL_STAG_ATTR_DEFAULT_DOUBLEQUOTE
+
+
+# Same oxXXX handling again, but attribute is using single quotes this time.
+
+state IN_CSL_STAG_ATTR_DEFAULT_SINGLEQUOTE:
+delimiter: paint(upto, CSL_DEFAULT), paint(include, M_STRING) => IN_M_STAG_POST_TAGNAME
+'/*' : paint(upto, CSL_DEFAULT) =>  IN_CSL_STAG_ATTR_COMMENT_SINGLEQUOTE
+'"' : paint(upto, CSL_DEFAULT), => IN_CSL_STAG_ATTR_DSTRING
+/\/\*.*?\*\//: paint(upto, CSL_DEFAULT), paint(include, CSL_COMMENT)
+/[$WS]+/  : #stay
+/0[Xx][0-9a-fA-F]+/ : paint(upto, CSL_DEFAULT), paint(include, CSL_NUMBER)
+/[-+]?\.?\d+/ : paint(upto, CSL_DEFAULT), paint(include, CSL_NUMBER)
+/[$NMSTART][$CS]*/ : paint(upto, CSL_DEFAULT), paint(include, CSL_IDENTIFIER)
+/[$OP]/: paint(upto, CSL_DEFAULT), paint(include, CSL_OPERATOR)
+
+state IN_CSL_STAG_ATTR_COMMENT_SINGLEQUOTE:
+'*/' : paint(include, CSL_COMMENT), => IN_CSL_STAG_ATTR_DEFAULT_SINGLEQUOTE
+
+# Paint to the end of the string, return back to the single quote attr state.
+state IN_CSL_STAG_ATTR_DSTRING:
+'"' : paint(include, CSL_STRING), => IN_CSL_STAG_ATTR_DEFAULT_SINGLEQUOTE

@@ -1,0 +1,458 @@
+// komodo tool: Getting Started
+// ============================
+// is_clean: true
+// trigger_enabled: 0
+// type: tutorial
+// version: 1.1.5
+// ============================
+# Sample content, edit, delete, do whatever you like
+Description: An introduction to Komodo IDE
+Author: ActiveState
+Version: 1.0
+# Placement can be floating or docked
+Placement: docked
+Callouts:
+    panels:
+        Element: "#workspace-toolbaritem1"
+        Message: Toggle panels using the panel buttons.
+    focusMode:
+        Element: "#sdk_button_toggleLeftPanetoggleFocusMode"
+        Message: Press the Eye icon to enter focus mode.
+    sideToolbar:
+        Element: "#toolbox_side"
+        Message: "This is the Komodo side toolbar, you can toggle it by right clicking it and hitting 'Customize'."
+        Fail: "Enable the side toolbar using View > Toolbars > Show Side Toolbar"
+    mainToolbar:
+        Element: "#main-toolboxrow-wrapper"
+        Message: "This is the Komodo main toolbar, you can toggle it by right clicking it and hitting 'Show Toolbars'."
+        Fail: "Enable the main toolbar using View > Toolbars > Show Toolbars"
+    placesWidget:
+        Element: "#placesViewbox"
+        Message: This is the Places widget.
+    openfilesWidget:
+        Element: "#openfilesViewbox"
+        Message: This is the Open Files widget.
+    toolboxWidget:
+        Element: "#toolbox2viewbox"
+        Message: This is the Toolbox widget.
+    menuButton:
+        Element: "#unifiedMenuButton"
+        Message: This is the Menu button.
+        Fail: "Enable the main toolbar using View > Toolbars > Show Toolbars"
+    newFileButton:
+        Element: "#newButton"
+        Message: This is the New File button.
+        Fail: "Enable the New File button via View > Toolbars > Customize .."
+    saveFileButton:
+        Element: "#saveButton"
+        Message: This is the Save File button.
+        Fail: "Enable the Save File button via View > Toolbars > Customize .."
+    gotoAnything:
+        Element: "#notification-widget"
+        Message: This is the Go to Anything tool.
+        Fail: "Enable the Notification Box via View > Toolbars > Customize .."
+Steps: 
+    -
+        Title: Introduction
+        Summary: >
+          This tutorial is an introduction to the Komodo user interface.  Its
+          purpose is to quickly get you comfortable using Komodo's
+          menus, tools, and functionality.
+          
+          After finishing this tutorial you will know how to:
+          
+           * Find your way around Komodo
+           * Customize Komodo
+           * Open files and projects
+           * Launch tools
+             
+        Task: >
+            1. Ensure the [main toolbar][callout:mainToolbar] is enabled. You can enable it by selecting `View > Toolbars > Show Toolbars`.
+            2. Ensure the [side toolbar][callout:sideToolbar] is enabled. You can enable it by selecting `View > Toolbars > Show Side Toolbar`.
+        Validate: validateEnableToolbars
+        
+        Tips:
+            - The menu can be accessed by clicking the burger icon at the top right, or by pressing ALT.
+    -
+        Title: The Toolbar
+        Summary: >
+            Komodo's [main toolbar][callout:mainToolbar] enables quick access to
+            your most commonly used actions. Komodo keeps this area clean and simple.
+            You can easily enable and disable any of the default
+            toolbar buttons, or add custom buttons to the toolbar to suit your workflow. 
+            You will learn how to customize the toolbar later in this tutorial.
+            
+            An important part of the toolbar for new users is the set of icons for toggling panels:
+            
+            ![element:#workspace-toolbaritem1]
+            
+            These icons allow you to quickly show or hide Komodo's side and bottom panes. These panes hold widgets
+            that can be moved around or combined.
+        Task: >
+            Try [toggling Komodo's panels][callout:panels] and note the different "widgets"
+            available within these panels.
+    -
+        Title: Focus Mode
+        Summary: >
+            The [eye icon][callout:focusMode] displayed on the right side of the toolbar allows you
+            to toggle Komodo's "focus mode".
+            
+            Focus mode hides all visible panels and lets you focus on your code. This is a very useful feature for times
+            when you want to focus your attention on one or two files without the distraction of having all of the Komodo
+            panels displayed.
+        Task: >
+            1. Toggle focus mode by clicking the [eye icon][callout:focusMode].
+            2. Untoggle focus mode either by clicking the [eye icon][callout:focusMode]
+            again, or by selecting `View > Toggle Focus Mode`. 
+        Tip:
+            - You can always access the Komodo menubar by pressing ALT.
+    -
+        Title: Customizing the Toolbar
+        Summary: >
+            You can customize the toolbar by right clicking it.
+            
+            **NOTE** When you right click the toolbar you can also change show or hide
+            the toolbar, the side toolbar, or the editor tabs.
+            
+            When you right click the toolbar and select "Customize.." Komodo will
+            enter toolbar customization mode.
+            
+            In this mode you can toggle buttons, tweak tab appearances, and access
+            various other preferences that allow you to customize Komodo's toolbars.
+            
+            You can also move "widgets" by dragging them to other panels
+            or by combining them with other widgets.
+        Task: >
+            1. Enter [Customization Mode][callback:customizationMode] by right
+            clicking the toolbar and selecting "Customize..".
+            2. Change the settings to suit your preferences.
+            3. Try combining the  <i class="icon icon-file"></i>&nbsp;**[Open Files widget][callback:focusOpenfiles]**
+            with the <i class="icon icon-folder-open"></i>&nbsp;**[Places widget][callback:focusPlaces]** by
+            dragging it on top.
+            4. When you are done, click "Done" at the bottom of the customization view.
+        Tips:
+            - You can move widgets around by dragging their tab, or by right clicking the tab.
+            - If you get stuck in Focus mode you can return to regular mode by selecting View > Focus Mode.
+            - You can access the Komodo menubar by pressing ALT.
+    -
+        Title: Changing Preferences
+        Summary: >
+            Komodo has a large selection of preferences that you can tweak to your
+            liking. Many of these preferences are contextual and "baked in" to
+            the user experience. But you can also access them via the Preferences
+            window.
+        Task: >
+            <% if (require("sdk/system").platform == "darwin") { %>
+            Open Komodo's Preferences window by selecting **Komodo > Preferences** in your menubar.
+            <% } else { %>
+            Open Komodo's Preferences window by clicking the
+            <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:menuButton]**,
+            then selecting **Edit > Preferences**.
+            <% } %>
+        Tips:
+            - If you are using the default keybindings you can also access your Preferences by pressing `Ctrl + ,` (`Cmd + ,` on OS X)
+        Validate: validatePrefsOpen
+    -
+        Title: Changing Preferences
+        Summary: >
+            Komodo has a large number of preferences you can configure. Komodo
+            tries to use sensible defaults that work for most users, but you may
+            want to make changes to match your individual preferences.
+            Many of the options are covered in Komodo's startup
+            wizard, but if you want to customize more settings you can
+            explore the options in the **Preferences** dialog box by choosing a category or by
+            searching for a term in the search box.
+            
+            In particular, you may want to look at the Appearance category,
+            which lets you personalize Komodo's appearance.
+            
+        Task: >
+            1. Navigate to the "Appearance" category.
+            2. Modify the Appearance preferences to suit your preferences.
+            3. Click OK to save your changes.
+        Validate: validatePrefsClosed
+        Tips:
+            - The Appearance category is at the top of the list on the left side of the Preferences dialog box.
+    -
+        Title: Creating a Project
+        Summary: >
+            A Project gives Komodo "context". It tells Komodo where to start
+            looking for contextual cues and where to stop. In other editors and IDEs
+            this is often referred to as a "Workspace".
+            
+            To start a new Project, find the Project section in your
+            <i class="icon icon-folder-open"></i>&nbsp;**[Places widget][callback:focusPlaces]**.
+            By default this is located in the panel on left side.
+            
+            ![element:#placesSubpanelSplitter,chrome://komodo-places/content/places_panel.xul]
+            
+            **Note** You can expand or collapse the Projects section by double clicking the
+            title or by dragging the title border to resize it.
+            
+        Task: >
+            1. Click the <i class="icon icon-cog"></i>&nbsp;**Cog button** in the Projects section.
+            2. Select **New Project**.
+            3. Save the project file in the directory where you want to save your project files.
+        Tips:
+            - You can create a project either in an empty directory or in an existing directory. Komodo does not alter your files and will use them as the source files for your project.
+            - You can save the project file in one directory and then point to different directory for the source files.  We will cover this option in the next step.
+        Validate: validateHasProject
+    -
+        Title: Configuring your Project
+        Summary: >
+            Once you have created a project you can then configure it by customizing the project preferences.
+            
+            You can expand or collapse the Projects section by double clicking the section title.
+            
+        Task: >
+            1. Click the <i class="icon icon-cog"></i>&nbsp;**Cog button** in the Projects section and select **Project Preferences**.
+            1. If your source files are located elsewhere on your system, change the **Project base directory** to the correct location.
+            1. Explore the available categories.
+            1. Click OK to save your changes.
+            
+            **NOTE** You can also access the project preferences by selecting 
+            <% if (require("sdk/system").platform == "darwin") { %>
+            **Project > Project Preferences**  from the menubar.
+            <% } else { %>
+            the <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:menuButton]**
+            and then clicking **Project Preferences**, or by pressing ALT and then selecting **Project > Project Preferences**.
+            <% } %>
+        Tips:
+            - Preferences that are modified at the Project level override the global preferences for files in the project.
+    -
+        Title: Creating Files
+        Summary: >
+            You can quickly create a new, blank file, or you can select a template to base the new file on. Creating a file
+            from a template creates the required file format for the language you are coding in. 
+            
+        Task: >
+            1. Create a new file:
+                - Create a new, blank file: <i class="icon icon-file-plus2"></i>&nbsp;**[New File button][callout:newFileButton]**,
+                or use the keyboard shortcut `<%= require("sdk/system").platform == "darwin" ? "Cmd" : "Ctrl" %>+N`.
+                - Create a new file from a template: Select the
+                <% if (require("sdk/system").platform != "darwin") { %>
+                <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:menuButton]**, then the 
+                <% } %> **File** menu and then select **New** and then **File from Template**.
+            1. Save the new file using `<%= require("sdk/system").platform == "darwin" ? "Cmd" : "Ctrl" %>+S`
+            or by using the <i class="icon icon-save"></i>&nbsp;**[Save File button][callout:saveFileButton]**.
+        Tips:
+            - Komodo will automatically match your file with the appropriate language when you save it.
+            - You can manually change the language of a file by using the language dropdown in your statusbar.
+        Validate: validateFileOpen
+    -
+        Title: Opening files using Go to Anything
+        Summary: >
+            You can quickly open files by double clicking them in the <i class="icon icon-folder-open"></i>&nbsp;**[Places widget][callback:focusPlaces]**.
+            
+            You also have the option to use Komodo's **[Go to Anything][callout:gotoAnything]** tool (also known as Commando) to quickly
+            access your files using your keyboard.
+            
+            ![element:#notification-widget]
+            
+            The **[Go to Anything][callout:gotoAnything]** tool 
+            lets you navigate Komodo with your keyboard and quite literally "go to anything".
+            
+            When you search using this tool Komodo searches all its available
+            "scopes". A scope defines what type of result you are searching for.
+            When you open the **[Go to Anything][callout:gotoAnything]** tool you
+            can either select a specific scope to search in, or just start typing
+            to search in all scopes.
+            
+        Task: >
+            1. Close any open files.
+            2. Open **[Go to Anything][callout:gotoAnything]** by clicking it or by pressing
+            `<%= require("sdk/system").platform == "darwin" ? "Cmd" : "Ctrl" %>+Shift+O`
+            (available when you use the default key bindings).
+            3. Search for the file you created in the previous task.
+            4. Press Enter to open the file.
+        Tips:
+            - Go to Anything (Commando) is easy to get started with, but it is a powerful tool with lots of advanced features.
+            - Try pressing the **right arrow key** when you have a file selected.
+            - You can search for files using partial non-sequential matches. For example `bar.txt foo` would match `/path/too/foo/bar.txt`.
+        Validate: validateFileOpen
+    -
+        Title: File Preferences
+        Summary: >
+            Komodo has three levels of preferences: Global, Project, and File.
+            File preferences override Project and Global preferences, and Project
+            preferences override Global preferences.
+            
+            Sometimes you may want to customize preferences for a specific file
+            so that it has a different configuration than either the Global or
+            Project preferences. In these cases, you can customize the File preferences.
+            
+        Task: >
+            1. Open the preferences of for an open file by right clicking the
+            tab for the file and then selecting **File Preferences**.
+            2. Explore the preferences that you can customize.
+            3. Click OK when you are done.
+        Tips:
+            - Komodo supports .EditorConfig files, which you can use to customize your preferences without using the Preferences user interface, or to share your preferences with other Komodo users.
+    -
+        Title: Your Toolbox
+        Summary: >
+            Before you complete this tutorial and start using Komodo, you should be aware of 
+            the <i class="icon icon-briefcase"></i>&nbsp;**[Komodo Toolbox][callback:focusToolbox]**. It is
+            located in the right side panel by default.
+            The Komodo Toolbox holds a large selection of custom tools that you can use
+            to support your workflow. Komodo is all about facilitating you to
+            use your workflow, rather than forcing you into its own workflow.
+            
+            By default your toolbox includes sample tools, which
+            you can use to familiarize yourself with the capabilities feature. All of these tools can be modified
+            or deleted without affecting the core stability of Komodo (with the
+            notable exception of **Userscript**, which you can use to change Komodo's
+            logic or add new logic).
+            
+            You can use the toolbox to create new toolbar buttons or menu items. 
+            Select the **New Custom Toolbar** menu item under the <i class="icon icon-cog"></i>&nbsp;**Cog button** to access this functionality.
+            
+        Task: >
+            Explore the <i class="icon icon-briefcase"></i>&nbsp;**[Komodo Toolbox][callback:focusToolbox]**.
+        Tips:
+            - The Komodo toolbox is extremely versatile and this tutorial does not cover all of the features. See the Komodo documentation for more information.
+            - You can share tools you create in the packages section on <a href="javascript:topWindow.ko.browse.openUrlInDefaultBrowser('https://community.komodoide.com/packages/')">the Komodo website</a>
+        Success: >
+            # Have fun!
+            
+            That's all folks! Hopefully this tutorial taught you the basic knowledge you
+            need to get started with Komodo. Above all, Komodo prides itself in
+            providing a user experience that is easy to understand. If you
+            would still like to find out more, here are some more resources for
+            you to explore:
+            
+            ## Tutorials
+            
+             * [Commando (Go to Anything)]()
+             * [The Toolbox]()
+             * [Open Files Widget]()
+             * [Debugging]()
+            
+            ## Documentation
+            
+             * [Manual](http://docs.activestate.com/komodo/)
+             * [Troubleshooting](http://docs.activestate.com/komodo/12/ manual/trouble.html)
+             * [SDK](http://docs.activestate.com/komodo/12/ sdk)
+            
+            ## Support
+            
+             * [Forums](http://forum.komodoide.com/)
+             * [Bug Tracker](https://github.com/Komodo/KomodoEdit/issues/new)
+             * [Contact Us](http://www.activestate.com/company/developer-sales-support-contact)
+
+
+
+
+
+// ============================
+// komodo meta: logic
+// ============================
+(function() {
+    
+    var {Cc, Ci} = require("chrome");
+    var $ = require("ko/dom");
+    var w = require("ko/windows").getMain();
+    var ko = w.ko;
+    
+    var partSvc = Cc["@activestate.com/koPartService;1"].getService(Ci.koIPartService);
+
+    this.start = function() {}
+    this.preStep = function() {}
+    this.step = function() {}
+    this.preClose = function() {}
+    this.close = function() {}
+    
+    this.enableToolbars = function()
+    {
+        if ( ! $("#main-toolboxrow-wrapper").visible() ||
+             ! $("#toolbox_side").visible() ||
+             ! $("#middle-toolboxrow").visible())
+        {
+            ko.uilayout.setToolbarsVisibility(true, 'main-toolboxrow-wrapper');
+            ko.uilayout.setToolbarsVisibility(true, 'toolbox_side');
+            $("#middle-toolboxrow", w).attr("kohidden", "false");
+        }
+        
+    };
+    
+    this.customizationMode = function()
+    {
+        ko.commands.doCommand('cmd_CustomizeToolbars');
+    };
+    
+    this.focusToolbox = function()
+    {
+        ko.uilayout.ensureTabShown('toolbox2viewbox', true);
+        w.require("tutorials").logicCallout("toolboxWidget");
+    };
+    
+    this.focusPlaces = function()
+    {
+        ko.uilayout.ensureTabShown('placesViewbox', true);
+        w.require("tutorials").logicCallout("placesWidget");
+    };
+    
+    this.focusOpenfiles = function()
+    {
+        ko.uilayout.ensureTabShown('openfilesViewbox', true);
+        w.require("tutorials").logicCallout("openfilesWidget");
+    };
+    
+    this.validateEnableToolbars = function()
+    {
+        var result = $("#main-toolboxrow-wrapper").visible() &&
+                     $("#toolbox_side").visible() &&
+                     $("#middle-toolboxrow").visible();
+                     
+        if (result)
+            return true;
+        
+        var link = "javascript:topWindow.require('tutorials').logicCallback('enableToolbars')";
+        return "Please <a href=\""+link+"\">enable the Komodo toolbars</a> before you continue";
+    };
+    
+    this.validatePrefsOpen = function()
+    {
+        var prefWindow = require("ko/windows").getWindowByUrl("chrome://komodo/content/pref/pref.xul");
+        if (prefWindow)
+            return true;
+        
+        return "You need to open the Preferences window first";
+    };
+    
+    this.validatePrefsClosed = function()
+    {
+        var prefWindow = require("ko/windows").getWindowByUrl("chrome://komodo/content/pref/pref.xul");
+        if (prefWindow)
+            return "You need to close the Preferences window first";
+        
+        return this.validateIsMainWindow();
+    };
+    
+    this.validateIsMainWindow = function()
+    {
+        var focus = require("ko/windows").getMostRecent() == require("ko/windows").getMain();
+        if (focus)
+            return true;
+        
+        return "Please select the main Komodo window";
+    };
+    
+    this.validateHasProject = function()
+    {
+        if (partSvc.currentProject)
+            return true;
+        
+        return "Please create a new Project first";
+    };
+    
+    this.validateFileOpen = function()
+    {
+        var view = require("ko/views").current();
+        if (view.file && view.scintilla)
+            return true;
+        
+        return "Please ensure you have a file open";
+    };
+    
+}).apply(module.exports);

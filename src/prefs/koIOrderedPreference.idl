@@ -1,0 +1,81 @@
+/* Copyright (c) 2000-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "koIPrefs.idl"
+
+/* A preference containing ordered subelements, addressable
+   by an integer index.
+   i.e. an array preference. */
+
+[scriptable, uuid(956aabe1-79cb-4672-9e38-d6d646aca74b)]
+interface koIOrderedPreference : koIPreferenceContainer {
+  // Append a preference to the end of the collection.
+  void appendPref(in koIPreferenceContainer pref);
+  void appendString(in wstring pref);
+  void appendLong(in long pref);
+  void appendDouble(in double pref);
+  void appendBoolean(in boolean pref);
+
+  // Insert a preference at a particular index in the collection,
+  // pushing elements to "the right" as necessary.
+  void insertPref(in long index, in koIPreferenceContainer pref);
+  void insertString(in long index, in wstring pref);
+  void insertLong(in long index, in long pref);
+  void insertDouble(in long index, in double pref);
+  void insertBoolean(in long index, in boolean pref);
+  
+  // Retrieve a particular preference from the preference set.
+  // It is an error to "get" a preference which does not exist or is of the
+  // wrong type. Use "has*Pref" to ensure the pref exists.
+  string getPrefType(in long index);
+  koIPreferenceContainer getPref(in long index);
+  wstring getString(in long index);
+  long getLong(in long index);
+  double getDouble(in long index);
+  boolean getBoolean(in long index);
+
+  // Utility methods for finding strings in an ordered preference, returns the
+  // index at which the string was found, or -1 when not found.
+  long findString(in wstring pref);
+  long findStringFuzzy(in wstring pref);
+  long findStringIgnoringCase(in wstring pref);
+  // Utility methods for finding and deleting strings in an ordered preference,
+  // returns true when the string found, or false when not found.
+  boolean findAndDeleteString(in wstring pref);
+  boolean findAndDeleteStringIgnoringCase(in wstring pref);
+
+  // The number of preferences contained in the ordered collection.
+  readonly attribute long length;
+
+  // Remove a preference from the collection.
+  void deletePref(in long index);
+  // Reset to an empty preference collection.
+  void reset();
+
+
+  /***********************************************************************
+   * @deprecated since Komodo 8.5
+   * Use the shorter versions (appendString, insertString, etc...)
+   */
+  void appendStringPref(in wstring pref);
+  void appendLongPref(in long pref);
+  void appendDoublePref(in double pref);
+  void appendBooleanPref(in boolean pref);
+
+  void insertStringPref(in long index, in wstring pref);
+  void insertLongPref(in long index, in long pref);
+  void insertDoublePref(in long index, in double pref);
+  void insertBooleanPref(in long index, in boolean pref);
+
+  wstring getStringPref(in long index);
+  long getLongPref(in long index);
+  double getDoublePref(in long index);
+  boolean getBooleanPref(in long index);
+
+  boolean findAndDeleteStringPref(in wstring pref);
+  boolean findAndDeleteStringPrefIgnoringCase(in wstring pref);
+  long findStringPref(in wstring pref);
+  long findStringPrefIgnoringCase(in wstring pref);
+  /**********************************************************************/
+};

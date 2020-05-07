@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Komodo IDE SDK Module: ko/share</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cosmo.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Komodo IDE SDK</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			<li>
+				<a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs" target="_blank">Mozilla SDK</a>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-ko_ajax.html">ko/ajax</a></li><li><a href="module-ko_benchmark.html">ko/benchmark</a></li><li><a href="module-ko_button.html">ko/button</a></li><li><a href="module-ko_color.html">ko/color</a></li><li><a href="module-ko_colorscheme.html">ko/colorscheme</a></li><li><a href="module-ko_commands.html">ko/commands</a></li><li><a href="module-ko_console.html">ko/console</a></li><li><a href="module-ko_debug.html">ko/debug</a></li><li><a href="module-ko_dependencies.html">ko/dependencies</a></li><li><a href="module-ko_dialogs.html">ko/dialogs</a></li><li><a href="module-ko_dom.html">ko/dom</a></li><li><a href="module-ko_dynamic-button.html">ko/dynamic-button</a></li><li><a href="module-ko_editor.html">ko/editor</a></li><li><a href="module-ko_file.html">ko/file</a></li><li><a href="module-ko_filestatus.html">ko/filestatus</a></li><li><a href="module-ko_fonts.html">ko/fonts</a></li><li><a href="module-ko_icons.html">ko/icons</a></li><li><a href="module-ko_keybindings.html">ko/keybindings</a></li><li><a href="module-ko_locale.html">ko/locale</a></li><li><a href="module-ko_logging.html">ko/logging</a></li><li><a href="module-ko_menu.html">ko/menu</a></li><li><a href="module-ko_modal.html">ko/modal</a></li><li><a href="module-ko_prefs.html">ko/prefs</a></li><li><a href="module-ko_printing.html">ko/printing</a></li><li><a href="module-ko_profiler.html">ko/profiler</a></li><li><a href="module-ko_progress.html">ko/progress</a></li><li><a href="module-ko_promise.html">ko/promise</a></li><li><a href="module-ko_session-storage.html">ko/session-storage</a></li><li><a href="module-ko_share.html">ko/share</a></li><li><a href="module-ko_share_kopy.html">ko/share/kopy</a></li><li><a href="module-ko_share_slack.html">ko/share/slack</a></li><li><a href="module-ko_share_slack_api.html">ko/share/slack/api</a></li><li><a href="module-ko_share_slack_dialog.html">ko/share/slack/dialog</a></li><li><a href="module-ko_shell.html">ko/shell</a></li><li><a href="module-ko_simple-storage.html">ko/simple-storage</a></li><li><a href="module-ko_simpledebug.html">ko/simpledebug</a></li><li><a href="module-ko_stylesheet.html">ko/stylesheet</a></li><li><a href="module-ko_views.html">ko/views</a></li><li><a href="module-ko_windows.html">ko/windows</a></li><li><a href="module-ko_windows_draggable.html">ko/windows/draggable</a></li><li><a href="module-template_publish.html">template/publish</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">UI Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-ko_ui_button.html">ko/ui/button</a></li><li><a href="module-ko_ui_caption.html">ko/ui/caption</a></li><li><a href="module-ko_ui_checkbox.html">ko/ui/checkbox</a></li><li><a href="module-ko_ui_column.html">ko/ui/column</a></li><li><a href="module-ko_ui_container.html">ko/ui/container</a></li><li><a href="module-ko_ui_deck.html">ko/ui/deck</a></li><li><a href="module-ko_ui_description.html">ko/ui/description</a></li><li><a href="module-ko_ui_element.html">ko/ui/element</a></li><li><a href="module-ko_ui_filepath.html">ko/ui/filepath</a></li><li><a href="module-ko_ui_groupbox.html">ko/ui/groupbox</a></li><li><a href="module-ko_ui_interpolation-button.html">ko/ui/interpolation-button</a></li><li><a href="module-ko_ui_label.html">ko/ui/label</a></li><li><a href="module-ko_ui_link.html">ko/ui/link</a></li><li><a href="module-ko_ui_list.html">ko/ui/list</a></li><li><a href="module-ko_ui_listbox.html">ko/ui/listbox</a></li><li><a href="module-ko_ui_listcell.html">ko/ui/listcell</a></li><li><a href="module-ko_ui_listcol.html">ko/ui/listcol</a></li><li><a href="module-ko_ui_listcols.html">ko/ui/listcols</a></li><li><a href="module-ko_ui_listhead.html">ko/ui/listhead</a></li><li><a href="module-ko_ui_listheader.html">ko/ui/listheader</a></li><li><a href="module-ko_ui_listitem.html">ko/ui/listitem</a></li><li><a href="module-ko_ui_menu.html">ko/ui/menu</a></li><li><a href="module-ko_ui_menuitem.html">ko/ui/menuitem</a></li><li><a href="module-ko_ui_menulist.html">ko/ui/menulist</a></li><li><a href="module-ko_ui_menupopup.html">ko/ui/menupopup</a></li><li><a href="module-ko_ui_menuseparator.html">ko/ui/menuseparator</a></li><li><a href="module-ko_ui_panel.html">ko/ui/panel</a></li><li><a href="module-ko_ui_radio.html">ko/ui/radio</a></li><li><a href="module-ko_ui_radiogroup.html">ko/ui/radiogroup</a></li><li><a href="module-ko_ui_richlistbox.html">ko/ui/richlistbox</a></li><li><a href="module-ko_ui_richlistitem.html">ko/ui/richlistitem</a></li><li><a href="module-ko_ui_row.html">ko/ui/row</a></li><li><a href="module-ko_ui_separator.html">ko/ui/separator</a></li><li><a href="module-ko_ui_spacer.html">ko/ui/spacer</a></li><li><a href="module-ko_ui_span.html">ko/ui/span</a></li><li><a href="module-ko_ui_spinner.html">ko/ui/spinner</a></li><li><a href="module-ko_ui_textbox.html">ko/ui/textbox</a></li><li><a href="module-ko_ui_toolbarbutton.html">ko/ui/toolbarbutton</a></li><li><a href="module-ko_ui_tooltip.html">ko/ui/tooltip</a></li><li><a href="module-ko_ui_wizardpage.html">ko/ui/wizardpage</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-ko_dom-Constructor.html">ko/dom~Constructor</a></li><li><a href="module-ko_dom-QueryObject.html">ko/dom~QueryObject</a></li><li><a href="module-ko_logging-Logger.html">ko/logging~Logger</a></li><li><a href="module-ko_progress-Progress.html">ko/progress~Progress</a></li><li><a href="module-ko_promise-Promise.html">ko/promise~Promise</a></li><li><a href="module-ko_ui_button-Model.html">ko/ui/button~Model</a></li><li><a href="module-ko_ui_caption-Model.html">ko/ui/caption~Model</a></li><li><a href="module-ko_ui_checkbox-Model.html">ko/ui/checkbox~Model</a></li><li><a href="module-ko_ui_column-Model.html">ko/ui/column~Model</a></li><li><a href="module-ko_ui_container-Model.html">ko/ui/container~Model</a></li><li><a href="module-ko_ui_deck-Model.html">ko/ui/deck~Model</a></li><li><a href="module-ko_ui_description-Model.html">ko/ui/description~Model</a></li><li><a href="module-ko_ui_element-Model.html">ko/ui/element~Model</a></li><li><a href="module-ko_ui_filepath-Model.html">ko/ui/filepath~Model</a></li><li><a href="module-ko_ui_groupbox-Model.html">ko/ui/groupbox~Model</a></li><li><a href="module-ko_ui_interpolation-button-Model.html">ko/ui/interpolation-button~Model</a></li><li><a href="module-ko_ui_label-Model.html">ko/ui/label~Model</a></li><li><a href="module-ko_ui_link-Model.html">ko/ui/link~Model</a></li><li><a href="module-ko_ui_listbox-Model.html">ko/ui/listbox~Model</a></li><li><a href="module-ko_ui_listcell-Model.html">ko/ui/listcell~Model</a></li><li><a href="module-ko_ui_listcols-Model.html">ko/ui/listcols~Model</a></li><li><a href="module-ko_ui_listcol-Model.html">ko/ui/listcol~Model</a></li><li><a href="module-ko_ui_listheader-Model.html">ko/ui/listheader~Model</a></li><li><a href="module-ko_ui_listhead-Model.html">ko/ui/listhead~Model</a></li><li><a href="module-ko_ui_listitem-Model.html">ko/ui/listitem~Model</a></li><li><a href="module-ko_ui_list-Model.html">ko/ui/list~Model</a></li><li><a href="module-ko_ui_menuitem-Model.html">ko/ui/menuitem~Model</a></li><li><a href="module-ko_ui_menulist-Model.html">ko/ui/menulist~Model</a></li><li><a href="module-ko_ui_menupopup-Model.html">ko/ui/menupopup~Model</a></li><li><a href="module-ko_ui_menuseparator-Model.html">ko/ui/menuseparator~Model</a></li><li><a href="module-ko_ui_menu-Model.html">ko/ui/menu~Model</a></li><li><a href="module-ko_ui_panel-Model.html">ko/ui/panel~Model</a></li><li><a href="module-ko_ui_radiogroup-Model.html">ko/ui/radiogroup~Model</a></li><li><a href="module-ko_ui_radio-Model.html">ko/ui/radio~Model</a></li><li><a href="module-ko_ui_richlistbox-Model.html">ko/ui/richlistbox~Model</a></li><li><a href="module-ko_ui_richlistitem-Model.html">ko/ui/richlistitem~Model</a></li><li><a href="module-ko_ui_row-Model.html">ko/ui/row~Model</a></li><li><a href="module-ko_ui_separator-Model.html">ko/ui/separator~Model</a></li><li><a href="module-ko_ui_spacer-Model.html">ko/ui/spacer~Model</a></li><li><a href="module-ko_ui_span-Model.html">ko/ui/span~Model</a></li><li><a href="module-ko_ui_spinner-Model.html">ko/ui/spinner~Model</a></li><li><a href="module-ko_ui_textbox-Model.html">ko/ui/textbox~Model</a></li><li><a href="module-ko_ui_toolbarbutton-Model.html">ko/ui/toolbarbutton~Model</a></li><li><a href="module-ko_ui_tooltip-Model.html">ko/ui/tooltip~Model</a></li><li><a href="module-ko_ui_wizardpage-Model.html">ko/ui/wizardpage~Model</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-10">
+	
+		<div id="main">
+			
+
+	<h1 class="page-title">Module: ko/share</h1>
+<section>
+
+<header>
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Easily add new sharing tool to the Komodo command set and UI</p></div>
+        
+
+        
+
+        
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id=".register">
+        <span class="type-signature">require("ko/share").</span><strong>register</strong>(name, namespace, label)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Register a new sharing tool
+Registers the modules namespace and adds available menu items
+The UI elements that are augmented with the Share menu are:</p>
+<ul>
+<li>Editor context menu</li>
+<li>Dynamic toolbar</li>
+<li>trackchanges button</li>
+<li>diff dialogs</li>
+<li>RX generator?</li>
+<li>logs dialog</li>
+</ul>
+<p>Modules share function should take (content, filename, fileType)</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>name of the module</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>namespace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>namespace/path used to require your module that implements your share library</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>label</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Label for menuitems</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".share">
+        <span class="type-signature">require("ko/share").</span><strong>share</strong>(name, content, meta)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Share content on specified module</p>
+    </div>
+    
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">meta =
+   {
+       title: &quot;myfile.js&quot;,
+       language: &quot;javascript&quot;
+   }
+   This is passed to the submodules &#x60;share&#x60; function to do with what it
+   pleases</pre>
+
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>module name to share on</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>content</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>content to share</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>meta</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>(optional) additional meta information</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-2">
+			<div id="toc" class="col-md-2 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	&copy; 2018 ActiveState Software Inc. All rights reserved.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	
+		on 2018-06-19T18:28:56-07:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

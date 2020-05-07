@@ -1,0 +1,62 @@
+/* Copyright (c) 2000-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "nsIObserverService.idl"
+#include "nsITreeView.idl"
+
+interface koIProject;
+interface koIPart;
+
+[scriptable, uuid(1A75CE5D-D15B-11DA-9B14-000D935D3368)]
+interface koIKPFTreeView : nsITreeView {
+    void initialize();
+    void terminate();
+
+    // save tree-specific prefs for the project
+    // this happens automatically when adding/removing a project in the tree
+    void restorePrefs(in koIProject prj);
+    void savePrefs(in koIProject prj);
+
+    // Specify the sort order.
+    // directions:
+    //  0 = natural
+    //  1 = normal
+    //  -1 = reverse
+    void sortBy(in wstring key, in long direction);
+    readonly attribute long sortDirection;
+    void sortRows();
+
+    void addProject(in koIProject prj);
+    void addProjectAtPosition(in koIProject prj, in long newProjectIndex);
+    void addUnopenedProject(in koIProject prj);
+    void addUnopenedProjectAtPosition(in koIProject prj, in long newProjectIndex);
+    void removeProject(in koIProject prj);
+    void clearTree();
+    
+    attribute nsIObserver statusObserver;
+    
+    // get/set the current project for the tree, throws an exception if
+    // the project is not in the tree.
+    attribute koIProject currentProject;
+    
+    // refreshes the rows in the tree.  This is not the same as invalidate, it
+    // actually removes rows from the tree and regenerates the row list
+    void refresh(in koIPart part);
+    void removeItems([array, size_is(count)] in koIPart part,
+                     in unsigned long count);
+    void showChild(in koIPart parentPart, in koIPart part);
+    
+    void getSelectedItems(in boolean rootsOnly,
+                          [array, size_is(count)] out koIPart child,
+                          out unsigned long count);
+    koIPart getSelectedItem();
+    long    getIndexByPart(in koIPart part);
+    koIPart getRowItem(in long index);
+    koIPart getRowItemByURI(in wstring uri);
+    void    selectPart(in koIPart part);
+    
+    // internal api
+    void invalidate();
+};
+

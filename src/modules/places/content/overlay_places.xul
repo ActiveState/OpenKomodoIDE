@@ -1,0 +1,234 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2010 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % placesDTD SYSTEM "chrome://komodo-places/locale/places.dtd">
+  %placesDTD;
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+]>
+
+<overlay id="placesOverlay"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+
+  <!-- ****************    Commands    ****************** -->
+
+    <!-- All place-related commands are context-dependent.
+         Is there a place already loaded?  Is it dirty?
+         XXX:Is the set updated at startup? -->
+  <commandset id="allcommands">
+
+    <broadcasterset id="broadcasterset_global">
+      <broadcaster
+            id="cmd_viewPlaces" key="key_cmd_viewPlaces"
+            desc="&userInterfaceShowHidePlacesTab.desc;"
+            autoCheck="false"
+            oncommand="ko.commands.doCommandAsync('cmd_viewPlaces', event)"/>
+    </broadcasterset>
+
+    <commandset
+        id="cmdset_place_main"
+        oncommandupdate="ko.commands.updateCommandset(this, event)"
+        commandupdater="true"
+        events="place_dirty,current_place_changed,current_place_opened,current_place_closed,some_projects_open,popupshowing">
+      <command
+          id="cmd_openDirectory" key="key_cmd_openDirectory"
+          oncommand="ko.commands.doCommand('cmd_openDirectory', event)"
+          desc="&placesLoadPlace.desc;"/>
+      <command
+          id="cmd_openRemoteDirectory" key="key_cmd_openRemoteDirectory"
+          oncommand="ko.commands.doCommand('cmd_openRemoteDirectory', event)"
+          desc="&placesLoadRemotePlace.desc;"/>
+      <command
+          id="cmd_findInPlace"
+          key="key_cmd_findInPlace"
+          oncommand="ko.commands.doCommand('cmd_findInPlace', event)"
+          disabled="true"
+          desc="&findInPlace.desc;"/>
+      <command
+          id="cmd_replaceInPlace"
+          key="key_cmd_replaceInPlace"
+          oncommand="ko.commands.doCommand('cmd_replaceInPlace', event)"
+          disabled="true"
+          desc="&replaceInPlace.desc;"/>
+      <command
+          id="cmd_deletePlaceItem"
+          key="key_cmd_deletePlaceItem"
+          oncommand="ko.commands.doCommand('cmd_deletePlaceItem', event)"
+          disabled="true"
+          desc="&deletePlaceItem.desc;"/>
+      <command
+          id="cmd_places_showInFinder"
+          key="key_cmd_places_showInFinder"
+          oncommand="ko.commands.doCommand('cmd_places_showInFinder', event)"
+          disabled="true"
+          desc="&showInFinder.desc;"/>
+      <command
+          id="cmd_renamePlace_File"
+          key="key_cmd_renamePlace_File"
+          oncommand="ko.commands.doCommand('cmd_renamePlace_File', event)"
+          disabled="true"
+          desc="&renamePlaceItem.desc;"/>
+      <command
+          id="cmd_places_showFileIcons"
+          key="key_cmd_places_showFileIcons"
+          oncommand="ko.commands.doCommand('cmd_places_showFileIcons', event)"
+          disabled="true"
+          desc="&showFileIcons.desc;"/>
+      <command
+          id="cmd_places_singleClickExpand"
+          key="key_cmd_places_singleClickExpand"
+          oncommand="ko.commands.doCommand('cmd_places_singleClickExpand', event)"
+          disabled="true"
+          desc="&singleClickExpand.desc;"/>
+      <command
+          id="cmd_placeView_defaultView"
+          key="key_cmd_placeView_defaultView"
+          oncommand="ko.commands.doCommand('cmd_placeView_defaultView', event)"
+          disabled="true"
+          desc="&placeView_defaultView.desc;"/>
+      <command
+          id="cmd_placeView_currentProject"
+          key="key_cmd_placeView_currentProject"
+          oncommand="ko.commands.doCommand('cmd_placeView_currentProject', event)"
+          disabled="true"
+          desc="&placeView_currentProject.desc;"/>
+      <command
+          id="cmd_placeView_viewAll"
+          key="key_cmd_placeView_viewAll"
+          oncommand="ko.commands.doCommand('cmd_placeView_viewAll', event)"
+          disabled="true"
+          desc="&placeView_viewAll.desc;"/>
+      <command
+          id="cmd_placeView_customView"
+          key="key_cmd_placeView_customView"
+          oncommand="ko.commands.doCommand('cmd_placeView_customView', event)"
+          disabled="true"
+          desc="&placeView_customView.desc;"/>
+      <command
+          id="cmd_places_goUpOneFolder"
+          key="key_cmd_places_goUpOneFolder"
+          oncommand="ko.commands.doCommand('cmd_places_goUpOneFolder', event)"
+          disabled="true"
+          desc="&placesUpFolder.desc;"/>
+      <command
+          id="cmd_placeView_sortNatural"
+          key="key_cmd_placeView_sortNatural"
+          oncommand="ko.commands.doCommand('cmd_placeView_sortNatural', event)"
+          disabled="true"
+          desc="&placeView_sortNatural.desc;"/>
+      <command
+          id="cmd_placeView_sortAscending"
+          key="key_cmd_placeView_sortAscending"
+          oncommand="ko.commands.doCommand('cmd_placeView_sortAscending', event)"
+          disabled="true"
+          desc="&placeView_sortAscending.desc;"/>
+      <command
+          id="cmd_placeView_sortDescending"
+          key="key_cmd_placeView_sortDescending"
+          oncommand="ko.commands.doCommand('cmd_placeView_sortDescending', event)"
+          disabled="true"
+          desc="&placeView_sortDescending.desc;"/>
+      <command
+          id="cmd_sortProjectsDescending"
+          key="key_cmd_sortProjectsDescending"
+          oncommand="ko.commands.doCommand('cmd_sortProjectsDescending', event)"
+          disabled="true"
+          desc="&sortProjectsDescending.desc;"/>
+      <command
+          id="cmd_sortProjectsAscending"
+          key="key_cmd_sortProjectsAscending"
+          oncommand="ko.commands.doCommand('cmd_sortProjectsAscending', event)"
+          disabled="true"
+          desc="&sortProjectsAscending.desc;"/>
+    </commandset>
+    <commandset
+        id="cmdset_place_contextMenu"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="clipboard,current_place_changed,current_place_opened">
+    </commandset>
+    <commandset
+        id="cmdset_place_historyMenu"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="place_history_changed">
+      <command
+          id="cmd_goNextPlace"
+          key="key_cmd_goNextPlace"
+          oncommand="ko.commands.doCommand('cmd_goNextPlace', event)"
+          disabled="true"
+          desc="&goNextPlace.desc;"/>
+      <command
+          id="cmd_goPreviousPlace"
+          key="key_cmd_goPreviousPlace"
+          oncommand="ko.commands.doCommand('cmd_goPreviousPlace', event)"
+          disabled="true"
+          desc="&goPreviousPlace.desc;"/>
+    </commandset>
+    <commandset
+        id="cmdset_place_treeOperations"
+        oncommandupdate="ko.commands.updateCommandset(this, event)"
+        commandupdater="true"
+        events="current_view_changed,place_dirty,current_place_changed,current_place_opened,current_place_closed,did_tree_operation">
+      <command
+          id="cmd_placeView_undoTreeOperation"
+          key="key_cmd_placeView_undoTreeOperation"
+          oncommand="ko.commands.doCommand('cmd_placeView_undoTreeOperation', event)"
+          disabled="true"
+         />
+    </commandset>
+    <commandset
+        id="cmdset_place_bufferOperations"
+        oncommandupdate="ko.commands.updateCommandset(this, event)"
+        commandupdater="true"
+        events="current_view_changed,current_place_changed,current_place_opened,current_place_closed">
+      <command
+          id="cmd_placeView_showCurrent_TabInPlaces"
+          key="key_cmd_placeView_showCurrent_TabInPlaces"
+          oncommand="ko.commands.doCommand('cmd_placeView_showCurrent_TabInPlaces', event)"
+          disabled="true"
+	  desc="&showCurrentFileInPlaces.desc;"
+         />
+    </commandset>
+
+  </commandset>
+
+  <!-- ****************    Menus    ****************** -->
+
+<!--
+    Insertion position: project_tab is now gone, and on Komodo Edit,
+    there's no codebrowser, so we can fall back to the first position
+    (position="1") if the insertbefore element isn't found.    
+-->
+    
+    <menupopup id="tabContextMenu">
+     <menuitem id="tabContextMenu_show_in_places"
+               observes="cmd_placeView_showCurrent_TabInPlaces"
+               insertafter="buffertab-context-sep-properties"
+               label="&showInPlaces.label;" />
+    </menupopup>
+    
+    <menu id="navigation_menu">
+     <menupopup id="naviation_menupopup">
+          <menuitem id="places_trackCurrentTab"
+                    insertbefore="naviation_menupopup_separator_editor_nav"
+                    oncommand="ko.places.manager.trackCurrentTab(this);"
+                    label="&trackCurrentTab.label;"
+                    type="checkbox" />
+     </menupopup>
+    </menu>
+
+  <!-- ****************    Content    ****************** -->
+
+  <ko-pane id="workspace_left_area">
+    <browser type="ko-widget" id="placesViewbox" label="&Places.label;"
+             position="1" icon="koicon://ko-svg/chrome/icomoon/skin/folder5.svg"
+             tab_oncommand="ko.places.viewMgr.focus(); ko.places.viewMgr.updateView();"
+             tab_onfocus="ko.places.viewMgr.focus(); ko.places.viewMgr.updateView();"
+	     src="chrome://komodo-places/content/places_panel.xul"/>
+  </ko-pane>
+</overlay>

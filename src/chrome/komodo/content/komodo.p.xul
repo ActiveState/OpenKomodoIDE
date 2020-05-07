@@ -1,0 +1,2333 @@
+<?xml version="1.0"?>
+<!DOCTYPE window PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+  <!ENTITY % komodoDTD.INTERNAL SYSTEM "chrome://komodo/locale/komodo-internal.dtd">
+  %komodoDTD.INTERNAL;
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+  %brandDTD;
+]>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/scintilla.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/partviewer.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/hyperlinks.css" type="text/css"?>
+<!-- #if WITH_RX -->
+<?xml-stylesheet href="chrome://komodo/skin/rxx/rxx-overlay.css" type="text/css"?>
+<!-- #endif -->
+<?xml-stylesheet href="chrome://komodo/skin/autocomplete.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/find.css" type="text/css"?>
+
+<?xul-overlay href="chrome://komodo/content/commandsOverlay.xul"?>
+<!-- #if WITH_DEBUGGING -->
+<?xul-overlay href="chrome://komodo/content/debugger/overlay.xul"?>
+<!-- #endif -->
+<!-- #if WITH_SCC -->
+<?xul-overlay href="chrome://komodo/content/scc/overlay.xul"?>
+<!-- #endif -->
+<!-- #if BUILD_FLAVOUR == "dev" -->
+<?xul-overlay href="chrome://komodo/content/test/overlay.xul"?>
+<!-- #endif -->
+
+<!-- #ifndef PP_KO_TITLE_BAR_NAME -->
+<!-- #define PP_KO_TITLE_BAR_NAME ActiveState Komodo -->
+<!-- #endif -->
+<window id="komodo_main"
+        windowtype="Komodo"
+        title="&titleBar.title;"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        width="1150"
+        height="700"
+        screenX="20"
+        screenY="20"
+        persist="screenX screenY width height"
+        ondragover="return ko.dragdrop.onDragOver(event);"
+        ondrop="return ko.dragdrop.onDrop(event);"
+        toggletoolbar="true"
+        fullscreenbutton="true"
+        >
+
+    <script src="chrome://komodo/content/globals.js" type="application/x-javascript"/>
+
+<!-- #if BUILD_FLAVOUR == "dev" -->
+    <script type="application/x-javascript;version=1.8">
+        require("ko/benchmark").startTiming("komodo.xul - js load");
+    </script>
+<!-- #endif -->
+
+    <!-- Various startup performance tweaks. -->
+    <script src="chrome://komodo/content/library/performance_tweaks.js" type="application/x-javascript;version=1.7"/>
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <!--Mozilla sources-->
+    <!--globalOverlay.js contains application shutdown and controller code-->
+    <script src="chrome://global/content/globalOverlay.js"                type="application/x-javascript;version=1.7"/>
+    <script src="chrome://global/content/printUtils.js"                   type="application/x-javascript;version=1.7"/>
+    <script src="chrome://global/content/nsDragAndDrop.js"                   type="application/x-javascript;version=1.7"/>
+
+    <!--Contributed library resources-->
+<!-- #if 0 -->
+<!-- #if BUILD_FLAVOUR == "dev" -->
+    <script src="chrome://komodo/content/contrib/jquery.js" type="application/x-javascript;version=1.7"/>
+<!-- #endif -->
+<!-- #endif -->
+
+    <!--Komodo library resources-->
+    <!-- "komodo.js" must be the first Komodo .js file included so that its
+         top-level code can be sure that it is run first. -->
+    <script src="chrome://komodo/content/library/prefs.js"                type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/komodo.js"                       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/timers.js"               type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dragdrop.js"             type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js"              type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/otherdialogs.js"         type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/controller.js"           type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js"        type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uilayout.js"             type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js"             type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js"          type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/open.js"                 type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/mru.js"                  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/commands.js"             type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/macros.js"               type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/findController.js"       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/repeatController.js"     type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/stringutils.js"          type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/treeutils.js"            type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/widgets.js"              type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/utils.js"                type="application/x-javascript;version=1.7"/>
+
+    <script src="chrome://komodo/content/find/findResultsTab.js"          type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/find/find_functions.js"          type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/find/findtoolbar.js"             type="application/x-javascript;version=1.7"/>
+
+    <script src="chrome://komodo/content/run/run_functions.js"            type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/run/interpolate.js"              type="application/x-javascript;version=1.7"/>
+
+    <script src="chrome://komodo/content/library/viewhistory.js"          type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/tabstops.js"            type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/encodingmenu.js"         type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/prefs.js"                   type="application/x-javascript;version=1.7"/>
+
+    <script src="chrome://komodo/content/keybindings/viKeyBinder.js"      type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/keybindings/keybindings.js"      type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/browse.js"                       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/launch.js"                       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/views.js"                        type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/workspace.js"                    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/workspace2.js"                   type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/statusbar.js"                    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/editor.js"                       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/markers.js"                      type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/history.js"                      type="application/x-javascript;version=1.7"/>
+
+    <script src="chrome://komodo/content/project/partutils.js"            type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/baseManager.js"          type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/projectManager.js"       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/projectExtensionManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/toolboxManager.js"       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/peFile.js"               type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/peFolder.js"             type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/peSnippet.js"            type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/pePrintdebug.js"            type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/peCommand.js"            type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/peURL.js"                type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/peMenu.js"               type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/peMacro.js"              type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/peTutorial.js"              type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/peTemplate.js"              type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/peFolderTemplate.js"              type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/lint/lint.js"                    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/lint/lintDisplay.js"                    type="application/x-javascript;version=1.7"/>
+<!-- #if 0 -->
+    <script src="chrome://komodo/content/tipoftheday/tipoftheday.js"      type="application/x-javascript;version=1.7"/>
+<!-- #endif -->
+    <script src="chrome://komodo/content/library/eggs.js"                 type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/abbrev.js"                 type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/snippets.js"                 type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/ejs.js"                 type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/login/auth.js"                 type="application/x-javascript;version=1.7"/>
+    
+
+    <script src="chrome://komodo/content/hyperlinks/loader.js"            type="application/x-javascript"/>
+
+<!-- #if BUILD_FLAVOUR == "dev" -->
+    <script type="application/x-javascript;version=1.8">
+        require("ko/benchmark").endTiming("komodo.xul - js load");
+    </script>
+<!-- #endif -->
+
+    <stringbundleset id="komodo_strbundles">
+        <stringbundle id="komodo_strings" src="chrome://komodo/locale/komodo.properties"/>
+    </stringbundleset>
+
+<!-- bunmp -->
+    <!-- This is used by the view editor for displaying
+         scintilla tooltips -->
+    <popupset id="editorTooltipSet">
+        <tooltip id="editorTooltip" flex="1">
+            <description multiline="true" id="editorTooltip-tooltipText" class="tooltip-label" flex="1"/>
+        </tooltip>
+        <panel type="autocomplete" id="popupTextboxAutoComplete" noautofocus="true" crop="start"/>
+        <panel type="autocomplete" id="popupSectionsTextboxAutoComplete"
+               width="300" noautofocus="true"/>
+
+        <panel id="gotoLine_panel" class="hud"
+               onpopupshown="document.getElementById('gotoLine_textbox').focus(); document.getElementById('gotoLine_error_hbox').setAttribute('collapsed', 'true'); ">
+            <vbox id="gotoLine_vbox" maxwidth="420">
+                <!--<description id="gotoLine_description">&gotoLine.prompt.description;</description>-->
+                <hbox id="gotoLine_hbox" align="center">
+                    <label id="gotoLine_label" class="desc" value="&gotoLine.prompt.label;" />
+                    <textbox id="gotoLine_textbox"
+                             onkeypress="ko.views.gotoLine_onkeypress_handler(event);" />
+                </hbox>
+                <hbox id="gotoLine_error_hbox"
+                      align="center"
+                      collapsed="true">
+                    <image id="gotoLine_error_image" />
+                    <label id="gotoLine_error_label" />
+                </hbox>
+            </vbox>
+        </panel>
+
+    </popupset>
+    
+    <panel id="hidden-placeholder" collapsed="true">
+    </panel>
+
+    <popupset id="extensionPopupSet"/>
+
+    <popupset id="komodoMainPopupSet">
+    </popupset>
+
+    <menupopup id="context-toolbox-menu"
+               onpopupshowing="ko.uilayout.updateToolboxContextMenu();">
+        <!-- This menu is built on popup showing by cloning #popup_toolbars -->
+    </menupopup>
+    
+    <menupopup id="unifiedMenuPopup" position="after_end">
+        <hbox id="unifiedMenuPopupHbox">
+            <vbox id="unifiedMenuPrimaryPane"/>
+            <vbox id="unifiedMenuSecondaryPane">
+                <menuseparator id="unifiedMenuMruSeparator" ordinal="9999" preserve="true"/>
+                <vbox id="unifiedMenuMru" preserve="true" ordinal="9999"></vbox>
+            </vbox>
+        </hbox>
+    </menupopup>
+
+    <!-- this toolbox is used to provide a document link to menus we dynamicaly display -->
+    <menu id="hidden-toolbox" collapsed="true">
+        <menupopup id="hidden-toolbox-popup"/>
+    </menu>
+
+<!-- Popup for clicking on the *content area* in the Editor -->
+    <menupopup id="editorContextMenu"
+               class="has-iconic-menuitems"
+               onpopupshowing="window.updateCommands('buffer_context_menu_showing');"
+               >
+        <menuitem id="editor-context-cut"
+                label="&cut.label;"
+                accesskey="&cutButton.accesskey;"
+                class="menuitem-iconic native-cut-icon"
+                observes="cmd_cut"/>
+        <menuitem id="editor-context-copy"
+                label="&copy.label;"
+                accesskey="&copyButton.accesskey;"
+                class="menuitem-iconic native-copy-icon"
+                observes="cmd_copy"/>
+        <menuitem id="editor-context-paste"
+                label="&paste.label;"
+                accesskey="&pasteButton.accesskey;"
+                class="menuitem-iconic native-paste-icon"
+                observes="cmd_paste"/>
+        <menuitem label="&pasteHtml.label;"
+                  id="menu_editPasteHtml"
+                  class="menuitem-iconic"
+                  accesskey="&pasteHtml.menu.accesskey;"
+                  observes="cmd_pasteHtml"
+                  />
+
+        <menuseparator id="editor_context_find_separator"/>
+        <menu id="editor_context_select_menu"
+              label="&select.menu.label;"
+              accesskey="&select.menu.accesskey;">
+            <menupopup id="editor_context_select_menupopup">
+                <menuitem label="&selectAll.label;"
+                          id="menu_editSelectAll"
+                          accesskey="&selectAll.menu.accesskey;"
+                          observes="cmd_selectAll"
+                          />
+                <menuitem label="&selectBlock.label;"
+                          id="menu_blockSelect"
+                          accesskey="&menuBlockSelect.accesskey;"
+                          observes="cmd_blockSelect"
+                          />
+                <menuitem label="&selectDelimitedBlock.label;"
+                          id="menu_delimitedBlockSelect"
+                          accesskey="&menuDelimitedBlockSelect.accesskey;"
+                          observes="cmd_delimitedBlockSelect"
+                          />
+                <menuitem label="&selectToMatchingBrace.label;"
+                          id="menu_selectToMatchingBrace"
+                          accesskey="&selectToMatchingBrace.menu.accesskey;"
+                          observes="cmd_selectToMatchingBrace"
+                          />
+                <menuitem id="editor-context-addNextWordToCaretSet"
+                          label="&addNextWordToCaretSet.label;"
+                          observes="cmd_addNextWordToCaretSet"/>
+                <menuitem id="editor-context-removePrevWordInCaretSet"
+                          label="&removePrevWordInCaretSet.label;"
+                          observes="cmd_removePrevWordInCaretSet"/>
+            </menupopup>
+        </menu>
+        <menuitem id="editor-context-find"
+                label="&find.label;"
+                observes="cmd_find"
+                class="menuitem-iconic"
+                />
+        <menuitem id="editor-context-replace"
+                label="&replace.label;"
+                observes="cmd_replace"
+                class="menuitem-iconic"
+                />
+        <menuseparator id="editor_context_select_separator"/>
+             
+        <menu id="editor_context_quick_bookmarks_menu"
+              label="&quickbookmark.menu.label;"
+              accesskey="&quickbookmark.menu.accesskey;">
+            <menupopup id="editor-context-quick-bookmarks"
+                onpopupshowing="ko.commands.updateCommandset(document.getElementById('cmdset_quickbookmarks'));">
+                <menuitem
+                    label="&quickbookmarkToggle_1.lable;"
+                    observes="cmd_toggleQuickBookmark_1"/>
+                <menuitem
+                    label="&quickbookmarkToggle_2.lable;"
+                    observes="cmd_toggleQuickBookmark_2"/>
+                <menuitem
+                    label="&quickbookmarkToggle_3.lable;"
+                    observes="cmd_toggleQuickBookmark_3"/>
+                <menuitem
+                    label="&quickbookmarkToggle_4.lable;"
+                    observes="cmd_toggleQuickBookmark_4"/>
+                <menuitem
+                    label="&quickbookmarkToggle_5.lable;"
+                    observes="cmd_toggleQuickBookmark_5"/>
+                <menuitem
+                    label="&quickbookmarkToggle_6.lable;"
+                    observes="cmd_toggleQuickBookmark_6"/>
+                <menuitem
+                    label="&quickbookmarkToggle_7.lable;"
+                    observes="cmd_toggleQuickBookmark_7"/>
+                <menuitem
+                    label="&quickbookmarkToggle_8.lable;"
+                    observes="cmd_toggleQuickBookmark_8"/>
+                <menuitem
+                    label="&quickbookmarkToggle_9.lable;"
+                    observes="cmd_toggleQuickBookmark_9"/>
+                <menuitem
+                    label="&quickbookmarkToggle_0.lable;"
+                    observes="cmd_toggleQuickBookmark_0"/>
+                
+                <menuseparator id="editor-context-sep-bookmarks"/>
+                
+                <menuitem
+                    class="go-to-bookmark"
+                    label="&quickbookmarkGoTo_1.lable;"
+                    observes="cmd_goToQuickBookmark_1"/>
+                <menuitem
+                    class="go-to-bookmark"
+                    label="&quickbookmarkGoTo_2.lable;"
+                    observes="cmd_goToQuickBookmark_2"/>
+                <menuitem
+                    class="go-to-bookmark"
+                    label="&quickbookmarkGoTo_3.lable;"
+                    observes="cmd_goToQuickBookmark_3"/>
+                <menuitem
+                    class="go-to-bookmark"
+                    label="&quickbookmarkGoTo_4.lable;"
+                    observes="cmd_goToQuickBookmark_4"/>
+                <menuitem
+                    class="go-to-bookmark"
+                    label="&quickbookmarkGoTo_5.lable;"
+                    observes="cmd_goToQuickBookmark_5"/>
+                <menuitem
+                    class="go-to-bookmark"
+                    label="&quickbookmarkGoTo_6.lable;"
+                    observes="cmd_goToQuickBookmark_6"/>
+                <menuitem
+                    class="go-to-bookmark"
+                    label="&quickbookmarkGoTo_7.lable;"
+                    observes="cmd_goToQuickBookmark_7"/>
+                <menuitem
+                    class="go-to-bookmark"
+                    label="&quickbookmarkGoTo_8.lable;"
+                    observes="cmd_goToQuickBookmark_8"/>
+                <menuitem
+                    class="go-to-bookmark"
+                    label="&quickbookmarkGoTo_9.lable;"
+                    observes="cmd_goToQuickBookmark_9"/>
+                <menuitem
+                    class="go-to-bookmark"
+                    label="&quickbookmarkGoTo_0.lable;"
+                    observes="cmd_goToQuickBookmark_0"/>
+                
+            </menupopup>
+         </menu>
+        
+        <menuseparator id="editor-context-sep-extensions"/>
+        <menuitem id="editor-context-makeSnippet"
+                label="&addAsSnippetInToolbox.label;"
+                observes="cmd_makeSnippetFromSelection"/>
+    </menupopup>
+
+    <menupopup id="minimapContextMenu"
+               class="has-iconic-menuitems">
+        <menuitem label="&increaseFont.label;"
+                  id="menu_minimap_fontZoomIn"
+                  accesskey="&increaseFont.accesskey;"
+                  observes="cmd_minimap_fontZoomIn"
+                  />
+        <menuitem label="&decreaseFont.label;"
+                  id="menu_minimap_fontZoomOut"
+                  accesskey="&decreaseFont.accesskey;"
+                  observes="cmd_minimap_fontZoomOut"
+                  />
+        <menuitem label="&resetFontSize.label;"
+                  id="menu_minimap_fontZoomReset"
+                  accesskey="&resetFontSize.accesskey;"
+                  observes="cmd_minimap_fontZoomReset"
+                  />
+        <menuitem label="&hideMinimap.label;"
+                  id="menu_minimap_hide"
+                  accesskey="&hideMinimap.accesskey;"
+                  observes="cmd_minimap_hide"
+                  />
+    </menupopup>
+
+<!-- Popup for clicking on the *tab* in the Editor -->
+    <menupopup id="tabContextMenu"
+               onpopupshowing="window.updateCommands('buffertab_context_menu_showing');"
+               >
+        <menuitem id="buffertab-context-close"
+                  observes="cmd_bufferClose"
+                  accesskey="&menuBufferClose.accesskey;"
+                  label="&close.label;"/>
+        <menuitem id="buffertab-context-close-others"
+                  observes="cmd_bufferCloseOthers"
+                  accesskey="&menuCloseOtherBuffers.accesskey;"
+                  label="&menuCloseOtherBuffers.label;"/>
+        <menuitem id="buffertab-context-close-all"
+                  observes="cmd_closeAll"
+                  accesskey="&menuCloseAll.accesskey;"
+                  label="&menuCloseAll.label;"/>
+        <menuseparator id="tabContextMenu_separator_1" />
+        <menu id="menu_tab_placement"
+                label="&tabPlacement.label;">
+            <menupopup>
+                <menuitem id="menu_openTabInNewWindow"
+                            observes="cmd_openTabInNewWindow"
+                            label="&openTabInNewWindow.label;"/>
+                <menuitem id="menu_moveTabToNewWindow"
+                            observes="cmd_moveTabToNewWindow"
+                            label="&moveTabToNewWindow.label;"/>
+                <menuitem id="menu_splittab"
+                            observes="cmd_splittab"
+                            label="&splitView.label;"/>
+                <menuitem id="menu_movetab"
+                            observes="cmd_movetab"
+                            label="&moveToOtherTabGroup.label;"/>
+            </menupopup>
+        </menu>
+        <menu id="menu_tab_actions"
+                label="&tabFileActions.label;">
+            <menupopup id="menu_tab_actions_popup">
+
+                <menuitem id="menu_save2"
+                          observes="cmd_save"
+                          label="&save.label;"/>
+                <menuitem label="&saveAsDotDotDot.label;"
+                          id="menu_saveAs2"
+                          observes="cmd_saveAs"
+                          accesskey="&menuSaveAs.accesskey;"
+                          />
+                <menu id="menu_saveAsSubMenu"
+                      accesskey="&menuSaveAsOther.accesskey;"
+                      label="&saveAsOther.label;">
+                    <menupopup id="menu_saveAsSubPopup">
+                        <menuitem id="menu_saveAs_remote2"
+                            observes="cmd_saveAs_remote"
+                            label="&remoteFile.label;"/>
+                        <menuitem id="menu_saveAsTemplate2"
+                            observes="cmd_saveAsTemplate"
+                            label="&template.label;"/>
+                    </menupopup>
+                </menu>
+                <menuitem id="menu_showUnsavedChanges2"
+                          label="&showUnsavedChanges.label;"
+                          observes="cmd_showUnsavedChanges"/>
+                <menuitem id="menu_tab_revert"
+                          label="&revert.label;"
+                          accesskey="&menuRevert.accesskey;"
+                          observes="cmd_revert"
+                          />
+
+                <menuseparator id="tabContextMenu_separator_file_action_changes" />
+
+                <menuseparator id="tabContextMenu_separator_advanced" />
+
+                <menuitem id="buffertab-context-mapuri"
+                          label="&createMappedURI.label;"
+                          observes="cmd_createMappedURI"/>
+            </menupopup>
+        </menu>
+
+        <menuseparator id="tabContextMenu_separator_2" />
+
+        <menuseparator id="buffertab-context-sep-properties"/>
+
+        <menuitem id="menu_refreshStatus3"
+                  label="&refreshStatus.label;"
+                  observes="cmd_refreshStatus"/>
+
+        <menuitem id="buffertab-context-properties"
+                  label="&filePreferences.label;"
+                  observes="cmd_editPrefsCurrent"/>
+    </menupopup>
+
+<!-- Popup for clicking on the buffer windows -->
+    <menupopup id="bufferContextMenu"
+               onpopupshowing="window.updateCommands('buffer_context_menu_showing');">
+        <menuitem id="buffer-context-copy"
+                label="&copy.label;"
+                class="menuitem-iconic native-copy-icon"
+                observes="cmd_copy"/>
+        <menuitem id="buffer-context-paste"
+                label="&paste.label;"
+                class="menuitem-iconic native-paste-icon"
+                observes="cmd_paste"/>
+        <menuitem id="buffer-context-editSelectAll"
+                label="&selectAll.label;"
+                observes="cmd_selectAll"/>
+        <menuseparator id="context-buffer-sep-paste"/>
+        <menuitem id="buffer-view-whitespace"
+                  label="&viewWhitespace.label;"
+                  observes="cmd_viewWhitespace"/>
+        <menuitem id="buffer-view-indentation-guides"
+                  label="&viewIndentationGuides.label;"
+                  observes="cmd_viewIndentationGuides"/>
+        <menuitem id="buffer-view-line-numbers"
+                  label="&viewLineNumbers.label;"
+                  observes="cmd_viewLineNumbers"/>
+        <menuitem id="buffer-view-eol-markers"
+                  label="&viewEOLMarkers.label;"
+                  observes="cmd_viewEOL"/>
+        <menuitem id="buffer-view-word-wrap"
+                  label="&wordWrap.label;"
+                  observes="cmd_wordWrap"/>
+        <menuitem id="buffer-view-jump-to-line"
+                  label="&jumpToCorrespondingLine.label;"
+                  observes="cmd_jumpToCorrespondingLine"/>
+    </menupopup>
+
+
+    <!-- name note: this is not a Komodo toolbox, but the top-level
+      toolbar
+      -->
+    <toolbox id="toolbox_main"
+             context="context-toolbox-menu"
+             persist="mode"
+             mode="icons"
+             class="chromeclass-toolbar toolbox-top">
+
+        <hbox class="resizer-box top">
+          <resizer dir="topleft"/>
+          <resizer dir="top" flex="1"   />
+          <resizer dir="topright"/>
+        </hbox>
+
+        <hbox flex="1" id="toolbox_main_inner">
+
+            <resizer dir="left"/>
+            <vbox id="toolbox_main_inner_vbox" flex="1">
+
+        <hbox id="titlebar" pack="center" align="center">
+            <spacer id="windowButtonsSpacer"/>
+            
+            <label id="alt-title" flex="1" style="text-align: center" value="Komodo"/>
+          
+            <hbox id="windowButtons" align="center" pack="end">
+                <!-- #if PLATFORM != "darwin" -->
+                <hbox ordinal="0" align="center" id="windowButtonsPrefix">
+                    <toolbarbutton id="unifiedMenuButtonTitlebar"
+                        tooltiptext="&menu.tooltiptext;"
+                        class="menu-icon"
+                        oncommand="document.getElementById('unifiedMenuPopup').openPopup(event.target, 'after_end')"
+                        buttonstyle="pictures"
+                    />
+                </hbox>
+                <!-- #endif -->
+                        
+                <toolbarbutton buttonstyle="pictures" id="min" class="icon-minus-circle2" oncommand="window.minimize();"/>
+                <toolbarbutton buttonstyle="pictures" id="max" class="icon-plus-circle2" oncommand="window.windowState === 1 ? window.restore() : window.maximize();"/>
+                <toolbarbutton buttonstyle="pictures" id="close" class="icon-cancel-circle2" oncommand="window.close();"/>
+            </hbox>
+        </hbox>
+        
+        <toolbar id="toolbar-menubar"
+                 type="menubar"
+                 autohide="true"
+                 fullscreentoolbar="true"
+                 customizable="false"
+                 <!-- #if PLATFORM == "darwin" -->
+                 collapsed="true"
+                 <!-- #endif -->
+                 >
+            <toolbaritem id="menubar-items"
+                         flex="1">
+                <menubar id="menubar_main"
+                         class="chromeclass-menubar"
+                         grippyhidden="true"
+                         fullscreentoolbar="true"
+                         align="start"
+                         flex="1"
+                    >
+                    <menu id="menu_file"
+                          label="&file.label;"
+                          accesskey="&menuFile.accesskey;"
+                          onpopupshowing="ko.commands.updateCommandset(document.getElementById('cmdset_workspace2'));">
+                        <menupopup id="popup_file">
+                            <menu id="menu_file_new" label="&new.label;"
+                                  accesskey="&menuFileNew.accesskey;">
+                                <menupopup id="popup_filenew">
+                                    <menuitem id="menu_file_newTab"
+                                              label="&newTab.label;"
+                                              class="menuitem-iconic newtab-icon"
+                                              observes="cmd_newTab"
+                                              />
+                                    <menuitem id="menu_file_newFile"
+                                              label="&newFile.label;"
+                                              accesskey="&newFile.accesskey;"
+                                              class="menuitem-iconic native-new-file-icon"
+                                              observes="cmd_new"
+                                              />
+                                    <menuitem id="menu_file_newFileFromTemplate"
+                                              label="&newFileFromTemplate.label;"
+                                              accesskey="&newFileFromTemplate.accesskey;"
+                                              class="menuitem-iconic new-template-icon"
+                                              observes="cmd_newTemplate"
+                                              />
+                                    <menuitem id="menu_newWindow"
+                                              label="&newWindow.label;"
+                                              accesskey="&newWindow.accesskey;"
+                                              class="menuitem-iconic new-window-icon"
+                                              observes="cmd_newWindow"
+                                              />
+                                </menupopup>
+                            </menu>
+                            <menu id="menu_file_open" label="&open.label;"
+                                  accesskey="&menuFileOpen.accesskey;">
+                                <menupopup id="popup_file_open">
+                                    <menuitem label="&fileOpen.label;"
+                                              id="menu_openFile"
+                                              class="menuitem-iconic native_open_icon"
+                                              observes="cmd_open"
+                                              key="key_open"
+                                              />
+                                    <menuitem label="&menuOpenWorkspace.label;"
+                                              id="menu_open_workspace"
+                                              accesskey="&menuWorkspaceOpen.accesskey;" 
+                                              class="menuitem-iconic wordspace_open_icon"
+                                              observes="cmd_openWorkspace"
+                                              />
+                                    <menuitem label="&remoteFile.label;"
+                                              id="menu_openRemoteFile"
+                                              observes="cmd_open_remote"
+                                              />
+                                </menupopup>
+                            </menu>
+                            <menu id="close_menu"
+                                  label="&close.menu.label;"
+                                  accesskey="&close.menu.accesskey;"
+                                  >
+                                <menupopup id="close_menupopup">
+                                    <menuitem id="close_tab_menuitem"
+                                              label="&closeFile.menuitem.label;"
+                                              accesskey="&closeFile.menuitem.accesskey;"
+                                              observes="cmd_bufferClose"
+                                        />
+                                    <menuitem id="close_other_tabs_menuitem"
+                                              label="&closeOtherFiles.menuitem.label;"
+                                              accesskey="&closeOtherFiles.menuitem.accesskey;"
+                                              observes="cmd_bufferCloseOthers"
+                                              />
+                                    <menuitem id="menu_closeAll"
+                                              label="&closeAllFiles.menuitem.label;"
+                                              accesskey="&closeAllFiles.menuitem.accesskey;"
+                                              observes="cmd_closeAll"
+                                    />
+                                </menupopup>
+                            </menu>
+
+                            <menuseparator id="file_recent_menuseparator"/>
+
+                            <menu
+                                id="menu_recentlyClosedTabs"
+                                accesskey="&menuRecentlyClosedTabs.accesskey;"
+                                class="menu_mru"
+                                label="&recentlyClosedTabs.label;">
+                                <menupopup
+                                    id="popup_recentlyClosedTabs"
+                                    class="popup_mru"
+                                    onpopupshowing="ko.history.rctabs_build_menu(this);" />
+                            </menu>
+                            <menu
+                                id="menu_mruFiles"
+                                accesskey="&menuMruFiles.accesskey;"
+                                class="menu_mru"
+                                label="&recentFiles.label;">
+                                <menupopup
+                                    id="popup_mruFiles"
+                                    class="popup_mru"
+                                    onpopupshowing="ko.uilayout.updateMRUMenuIfNecessary('file');">
+                                    <!-- menuitems are added dynamically for each entry
+                                                    in the file MRU -->
+                                    </menupopup>
+                            </menu>
+                            <menu
+                                id="menu_mruWindows"
+                                accesskey="&menuMruWindows.accesskey;"
+                                class="menu_mru"
+                                label="&recentWindows.label;">
+                                <menupopup
+                                    id="popup_mruWindows"
+                                    class="popup_mru"
+                                    onpopupshowing="ko.uilayout.updateMRUMenuIfNecessary('window');">
+                                    <!-- menuitems are added dynamically for each entry
+                                                    in the window MRU -->
+                                 </menupopup>
+                            </menu>
+
+                            <menuseparator id="file_save_menuseparator"/>
+
+                            <menuitem label="&save.label;"
+                                      id="menu_save"
+                                      observes="cmd_save"
+                                      accesskey="&menuSave.accesskey;"
+                                      />
+                            <menuitem label="&saveAsDotDotDot.label;"
+                                      id="menu_saveAs"
+                                      observes="cmd_saveAs"
+                                      accesskey="&menuSaveAs.accesskey;"
+                                      />
+                            <menu id="file_saveAs_menu"
+                                  accesskey="&menuSaveAsOther.accesskey;"
+                                  label="&saveAsOther.label;">
+                                <menupopup id="file_saveAs_menupopup">
+                                    <menuitem label="&remoteFile.label;"
+                                              disabled="true"
+                                              id="menu_saveAsRemote"
+                                              observes="cmd_saveAs_remote"
+                                              />
+                                    <menuitem label="&template.label;"
+                                              id="menu_saveAsTemplate"
+                                              observes="cmd_saveAsTemplate"
+                                              />
+                                </menupopup>
+                            </menu>
+                            <menuitem label="&showUnsavedChanges.label;"
+                                      accesskey="&menuShowUnsavedChanges.accesskey;"
+                                      id="menu_showUnsavedChanges"
+                                      observes="cmd_showUnsavedChanges"
+                                      />
+                            <menuitem label="&revert.label;"
+                                      id="menu_revert"
+                                      accesskey="&menuRevert.accesskey;"
+                                      observes="cmd_revert"
+                                      />
+                            <menuitem label="&saveAll.label;"
+                                      id="menu_saveAll"
+                                      observes="cmd_saveAll"
+                                      accesskey="&menuSaveAll.accesskey;"
+                                      />
+                            
+                            <menuitem label="&menuSaveWorkspace.label;"
+                                      id="menu_save_workspace"
+                                      accesskey="&menuWorkspaceSave.accesskey;" 
+                                      observes="cmd_saveWorkspace"
+                                      />
+                            <menuitem label="&menuManWorkspace.label;"
+                                      id="menu_manage_workspace"
+                                      accesskey="&menuWorkspaceManage.accesskey;" 
+                                      observes="cmd_manageWorkspaces"
+                                      />
+
+                            <menuseparator id="file_refresh_menuseparator"/>
+
+                            <menuitem label="&refreshStatus.label;"
+                                      id="menu_refreshStatus"
+                                      accesskey="&menuRefreshStatus.accesskey;"
+                                      observes="cmd_refreshStatus"
+                                      >
+                            </menuitem>
+
+                            <menuseparator id="file_print_menuseparator"/>
+
+                            <menu id="menu_Printmenu"
+                                  accesskey="&menuPrint.accesskey;"
+                                  label="&print.label;">
+                                <menupopup id="popup_Printmenu">
+                                    <menuitem label="&pageSetup.label;"
+                                              id="menu_printSetup"
+                                              oncommand="require('ko/printing').showPageSetup();"
+                                              />
+                                    <menuitem id="menu_PrintSettings"
+                                        oncommand="prefs_doGlobalPrefs('printItem');"
+                                        label="&printSettings.label;"
+                                        accesskey="&menuPrintSettings.accesskey;"
+                                        />
+<!-- #if PLATFORM != "darwin" -->
+                                    <menuitem label="&printPreview.label;"
+                                              id="menu_printPreview"
+                                              observes="cmd_printPreview"
+                                              accesskey="&menuPrintPreview.accesskey;"
+                                              />
+                                    <menuitem label="&printPreviewSelection.label;"
+                                              id="menu_printPreviewSelection"
+                                              observes="cmd_printPreviewSelection"
+                                              accesskey=""
+                                              />
+<!-- #endif -->
+                                    <menuitem label="&print.label;"
+                                              id="menu_print"
+                                              accesskey="&menuPrint.accesskey;"
+                                              class="menuitem-iconic native-print-icon"
+                                              observes="cmd_print"
+                                              />
+                                    <menuitem label="&printSelectedText.label;"
+                                              id="menu_printSelected"
+                                              class="menuitem-iconic native-print-icon"
+                                              observes="cmd_printSelection"
+                                              />
+                                    <menuitem label="&printToHTMLFile.label;"
+                                              id="menu_exportHTML"
+                                              accesskey="&menuExportHTML.accesskey;"
+                                              observes="cmd_exportHTML"
+                                              />
+                                    <menuitem label="&printSelectedTextToHTMLFile.label;"
+                                              id="menu_exportHTMLSelection"
+                                              accesskey="&menuExportHTMLSelection.accesskey;"
+                                              observes="cmd_exportHTMLSelection"
+                                              />
+                                </menupopup>
+                            </menu>
+                            <!-- more mozilla menu magic for osx.  FileQuit id's are
+                                 necessary for proper aqua menu's -->
+                            <menuseparator id="menu_FileQuitSeparator"/>
+<!-- #if PLATFORM == "darwin" -->
+<!-- #define QUIT_LABEL_ENTITY &quitApplicationCmdMac.label; -->
+<!-- #define QUIT_ACCESSKEY_ENTITY &quitApplicationCmdMac.accesskey; -->
+<!-- #elif PLATFORM == "win" -->
+<!-- #define QUIT_LABEL_ENTITY &quitApplicationCmdWin.label; -->
+<!-- #define QUIT_ACCESSKEY_ENTITY &quitApplicationCmdWin.accesskey; -->
+<!-- #else -->
+<!-- #define QUIT_LABEL_ENTITY &quitApplicationCmd.label; -->
+<!-- #define QUIT_ACCESSKEY_ENTITY &quitApplicationCmd.accesskey; -->
+<!-- #endif -->
+                            <menuitem
+                                id="menu_FileQuitItem"
+                                label="QUIT_LABEL_ENTITY"
+                                accesskey="QUIT_ACCESSKEY_ENTITY"
+                                observes="cmd_quit"
+                                />
+                        </menupopup>
+                    </menu>
+
+                    <menu id="menu_edit" label="&edit.label;" accesskey="&menuEdit.accesskey;">
+                        <menupopup id="popup_edit">
+                            <menuitem label="&undo.label;"
+                                      class="menuitem-iconic native-undo-icon"
+                                      id="menu_editUndo"
+                                      accesskey="&undoButton.accesskey;"
+                                      observes="cmd_undo"
+                                      />
+                            <menuitem label="&redo.label;"
+                                      id="menu_editRedo"
+                                      class="menuitem-iconic native-redo-icon"
+                                      accesskey="&redoButton.accesskey;"
+                                      observes="cmd_redo"
+                                      />
+
+                            <menuseparator id="edit_cut_menuseparator"/>
+
+                            <menuitem label="&cut.label;"
+                                      id="menu_editCut"
+                                      class="menuitem-iconic native-cut-icon"
+                                      accesskey="&cutButton.accesskey;"
+                                      observes="cmd_cut"
+                                      />
+                            <menuitem label="&copy.label;"
+                                      id="menu_editCopy"
+                                      class="menuitem-iconic native-copy-icon"
+                                      accesskey="&copyButton.accesskey;"
+                                      observes="cmd_copy"
+                                      />
+                            <menuitem label="&paste.label;"
+                                      id="menu_editPaste"
+                                      class="menuitem-iconic native-paste-icon"
+                                      accesskey="&pasteButton.accesskey;"
+                                      observes="cmd_paste"
+                                      />
+                            <menuitem label="&pasteHtml.label;"
+                                      id="menu_editPasteHtml"
+                                      class="menuitem-iconic"
+                                      accesskey="&pasteHtml.menu.accesskey;"
+                                      observes="cmd_pasteHtml"
+                                      />
+
+                            <menuseparator id="edit_menu_select_separator"/>
+
+                            <menu id="edit_menu_select_menu"
+                                  label="&select.menu.label;"
+                                  accesskey="&select.menu.accesskey;">
+                                <menupopup id="edit_menu_select_menupopup">
+                                    <menuitem label="&selectAll.label;"
+                                              id="menu_editSelectAll"
+                                              accesskey="&selectAll.menu.accesskey;"
+                                              observes="cmd_selectAll"
+                                              />
+                                    <menuitem label="&selectBlock.label;"
+                                              id="menu_blockSelect"
+                                              accesskey="&menuBlockSelect.accesskey;"
+                                              observes="cmd_blockSelect"
+                                              />
+                                    <menuitem label="&selectDelimitedBlock.label;"
+                                              id="menu_delimitedBlockSelect"
+                                              accesskey="&menuDelimitedBlockSelect.accesskey;"
+                                              observes="cmd_delimitedBlockSelect"
+                                              />
+                                    <menuitem label="&selectToMatchingBrace.label;"
+                                              id="menu_selectToMatchingBrace"
+                                              accesskey="&selectToMatchingBrace.menu.accesskey;"
+                                              observes="cmd_selectToMatchingBrace"
+                                              />
+                                    <menuitem label="&addNextWordToCaretSet.label;"
+                                              id="menu_addNextWordToCaretSet"
+                                              observes="cmd_addNextWordToCaretSet"
+                                              />
+                                    <menuitem label="&removePrevWordInCaretSet.label;"
+                                              id="menu_removePrevWordInCaretSet"
+                                              observes="cmd_removePrevWordInCaretSet"
+                                              />
+                                </menupopup>
+                            </menu>
+
+                            <menuseparator id="edit_find_menuseparator"/>
+
+                            <menuitem label="&find.label;"
+                                      id="menu_find"
+                                      accesskey="&menuFind.accesskey;"
+                                      observes="cmd_find"
+                                      />
+                            <menuitem label="&replace.label;"
+                                      id="menu_replace"
+                                      accesskey="&menuReplace.accesskey;"
+                                      observes="cmd_replace"
+                                      />
+                            <menuitem label="&findInFiles.label;"
+                                      id="menu_findInFiles"
+                                      observes="cmd_findInFiles"
+                                      />
+                            <menuitem label="&replaceInFiles.label;"
+                                      id="menu_replaceInFiles"
+                                      observes="cmd_replaceInFiles"
+                                      />
+                            <menuitem label="&findInCurrProject.label;"
+                                      id="menu_findInCurrProject"
+                                      observes="cmd_findInCurrProject"
+                                      />
+                            <menuitem label="&replaceInCurrProject.label;"
+                                      id="menu_replaceInCurrProject"
+                                      observes="cmd_replaceInCurrProject"
+                                      />
+                            <menuitem label="&findNext.label;"
+                                      id="menu_findNext"
+                                      accesskey="&menuFindNext.accesskey;"
+                                      observes="cmd_findNext"
+                                      />
+                            <menuitem label="&findNextWordUnderCursor.label;"
+                                      id="menu_findNextWordUnderCursor"
+                                      accesskey="&findNextWordUnderCursor.accesskey;"
+                                      observes="cmd_findNextSelected"
+                                      />
+                            <menuitem label="&incrementalSearch.label;"
+                                      id="menu_startIncrementalSearch"
+                                      accesskey="&menuStartIncrementalSearch.accesskey;"
+                                      observes="cmd_startIncrementalSearch"
+                                      />
+                            <menuitem label="&clearSearchHighlighting.label;"
+                                      id="menu_clearSearchHighlighting"
+                                      accesskey="&menuClearSearchHighlighting.accesskey;"
+                                      observes="cmd_cancel"
+                                      />
+
+                            <menuseparator id="edit_pref_menuseparator"/>
+
+                            <!-- mozilla magic...menu_preferences id makes the preference
+                                menu appear in the proper place on osx -->
+                            <menuitem label="&preferences.label;"
+                                      id="menu_preferences"
+                                      observes="cmd_editPrefs"
+                                      accesskey="&menuPreferences.accesskey;"
+                                      />
+                            <menuitem label="&currentFilePreferences.label;"
+                                      id="menu_editPrefsCurrent"
+                                      accesskey="&menuEditPrefsCurrent.accesskey;"
+                                      observes="cmd_editPrefsCurrent"
+                                      />
+<!-- #if PLATFORM == "darwin" -->
+                            <!-- Taken from  http://mxr.mozilla.org/mozilla/source/browser/base/content/baseMenuOverlay.xul
+                                 Moz finds these id attributes and moves them to the App menu.
+                                 No keybindings for these menuitems because we don't assign them
+                                 command IDs.
+                                 See http://mxr.mozilla.org/mozilla/source/widget/src/cocoa/nsMenuBarX.mm#148
+                                 for an example. -->
+
+                            <menuitem id="menu_mac_services" label="&menuSysMacServices.label; "/>
+                            <menuitem id="menu_mac_hide_app" label="&menuSysMacHideApp.label;" key="key_hideThisAppCmdMac" />
+                            <menuitem id="menu_mac_hide_others" label="&menuSysMacHideOtherApps.label;" key="key_hideOtherAppsCmdMac" />
+                            <menuitem id="menu_mac_show_all" label="&menuSysMacShowAllApps.label;" />
+<!-- #endif -->
+                        </menupopup>
+                    </menu>
+
+                    <menu id="menu_code" label="&code.label;" accesskey="&menuCode.accesskey;">
+                        <menupopup id="popup_sourcecode">
+                            <menuitem label="&commentRegion.label;"
+                                      id="menu_comment"
+                                      accesskey="&menuComment.accesskey;"
+                                      observes="cmd_comment"
+                                      />
+                            <menuitem label="&unCommentRegion.label;"
+                                      id="menu_uncomment"
+                                      accesskey="&menuUncomment.accesskey;"
+                                      observes="cmd_uncomment"
+                                      />
+                            <menuitem label="&increaseLineIndent.label;"
+                                      id="menu_indent"
+                                      accesskey="&menuIndent.accesskey;"
+                                      observes="cmd_indent"
+                                      />
+                            <menuitem label="&decreaseLineIndent.label;"
+                                      id="menu_dedent"
+                                      accesskey="&menuDedent.accesskey;"
+                                      observes="cmd_dedent"
+                                      />
+                            <menuitem label="&tabifyRegion.label;"
+                                      id="menu_tabify"
+                                      accesskey="&menuTabify.accesskey;"
+                                      observes="cmd_tabify"
+                                      />
+                            <menuitem label="&untabifyRegion.label;"
+                                      id="menu_untabify"
+                                      accesskey="&menuUntabify.accesskey;"
+                                      observes="cmd_untabify"
+                                      />
+
+                            <menuseparator id="menu_code_separator_1"/>
+
+                            <menuitem label="&joinLines.label;"
+                                      id="menu_join"
+                                      accesskey="&menuJoin.accesskey;"
+                                      observes="cmd_join"
+                                      />
+                            <menuitem label="&reflowParagraph.label;"
+                                      accesskey="&menuReflow.accesskey;"
+                                      id="menu_reflow"
+                                      observes="cmd_editReflow"
+                                      />
+                            <menuitem label="&cleanLineEndings.label;"
+                                      id="menu_cleanLineEndings"
+                                      accesskey="&menuCleanLineEndings.accesskey;"
+                                      observes="cmd_cleanLineEndings"
+                                      />
+                            <menuitem label="&menuRemoveTrailingWhitespace.label;"
+                                      id="menu_removeTrailingWhitespace"
+                                      accesskey="&menuRemoveTrailingWhitespace.accesskey;"
+                                      observes="cmd_removeTrailingWhitespace"
+                                      />
+
+                            <menuseparator id="codeConvert_menuseparator"/>
+
+                            <menu id="codeConvert_menu"
+                                  label="&codeConvertSelectedTextMenu.label;"
+                                  accesskey="&codeConvertSelectedTextMenu.accesskey;">
+                                <menupopup id="codeConvert_menupopup">
+                                    <menuitem label="&makeUppercase.label;"
+                                              id="menu_convertUpperCase"
+                                              observes="cmd_convertUpperCase"
+                                              />
+                                    <menuitem label="&makeLowercase.label;"
+                                              id="menu_convertLowerCase"
+                                              observes="cmd_convertLowerCase"
+                                              />
+                                    <menuitem label="&makeTitleCase.label;"
+                                              id="menu_convertTitleCase"
+                                              observes="cmd_convertTitleCase"
+                                              />
+
+                                    <menuseparator id="codeConvertHex_menuseparator"/>
+
+                                    <menuitem label="&codeConvertToHexMenu.label;"
+                                              id="menu_convertToHex"
+                                              observes="cmd_convertToHex"
+                                              />
+                                    <menuitem label="&codeConvertFromHexMenu.label;"
+                                              id="menu_convertFromHex"
+                                              observes="cmd_convertFromHex"
+                                              />
+                                </menupopup>
+                            </menu>
+
+                            <menuseparator id="code_keys_menuseparator"/>
+
+                            <menuitem label="&enterNextCharacterAsRawLiteral.label;"
+                                      id="menu_rawKey"
+                                      observes="cmd_rawKey"
+                                      />
+                            <menuitem label="&repeatNextKeystrokeNTimes.label;"
+                                      id="menu_repeatNextCommandBy"
+                                      observes="cmd_repeatNextCommandBy"
+                                      />
+                        </menupopup>
+                    </menu>
+
+
+                    <menu id="navigation_menu" label="&navigation.menu.label;" accesskey="&navigation.menu.accesskey;">
+                        <menupopup id="naviation_menupopup">
+                            <menuitem label="&historyBack.label;"
+                                      id="menu_historyBack"
+                                      accesskey="&historyBack.accesskey;"
+<!-- #if PLATFORM != "darwin" -->
+                                      class="menuitem-iconic history-back-icon"
+<!-- #endif -->
+                                      observes="cmd_historyBack"
+                                      />
+                            <menuitem label="&historyForward.label;"
+                                      id="menu_historyForward"
+                                      accesskey="&historyForward.accesskey;"
+<!-- #if PLATFORM != "darwin" -->
+                                      class="menuitem-iconic history-forward-icon"
+<!-- #endif -->
+                                      observes="cmd_historyForward"
+                                      />
+
+
+                            <menuseparator id="naviation_menupopup_separator_editor_nav"/>
+
+                            <menuitem label="&gotoLine.label;"
+                                      id="menu_gotoLine"
+                                      accesskey="&gotoLine.accesskey;"
+                                      observes="cmd_gotoLine"
+                                      />
+                            <menuitem label="&jumpToMatchingBrace.label;"
+                                      id="menu_jumpToMatchingBrace"
+                                      observes="cmd_jumpToMatchingBrace"
+                                      />
+                            <menuitem id="editor-jump-corresponding"
+                                      label="&jumpToCorrespondingLineForDiffMode.label;"
+                                      observes="cmd_jumpToCorrespondingLine"/>
+
+                            <menuseparator id="naviation_menupopup_find_separator"/>
+
+                            <menuseparator id="naviation_menupopup_bookmarks_separator"/>
+
+                            <menuitem label="&toggleBookmark.label;"
+                                      id="menu_bookmarkToggle"
+                                      accesskey="&menuBookmarkToggle.accesskey;"
+                                      observes="cmd_bookmarkToggle"
+                                      />
+                            <menuitem label="&nextBookmark.label;"
+                                      id="menu_bookmarkGotoNext"
+                                      accesskey="&menuBookmarkGotoNext.accesskey;"
+                                      observes="cmd_bookmarkGotoNext"
+                                      />
+                            <menuitem label="&previousBookmark.label;"
+                                      accesskey="&menuBookmarkGotoPrevious.accesskey;"
+                                      id="menu_bookmarkGotoPrevious"
+                                      observes="cmd_bookmarkGotoPrevious"
+                                      />
+                            <menuitem label="&removeAllBookmarks.label;"
+                                      id="menu_bookmarkRemoveAll"
+                                      accesskey="&menuBookmarkRemoveAll.accesskey;"
+                                      observes="cmd_bookmarkRemoveAll"
+                                      />
+
+                            <menuseparator id="naviation_menupopup_scroll_separator"/>
+
+                            <menuitem label="&scrollCurrentLineToCenterOfScreen.label;"
+                                      id="menu_editCenterVertically"
+                                      observes="cmd_editCenterVertically"
+                                      />
+                            <menuitem label="&scrollCurrentLineToTopOfScreen.label;"
+                                      id="move_editMoveCurrentLineToTop"
+                                      observes="cmd_editMoveCurrentLineToTop"
+                                      />
+                        </menupopup>
+                    </menu>
+
+
+                    <menu id="menu_view" label="&view.label;" accesskey="&menuView.accesskey;">
+                        <menupopup id="popup_view"
+                                   onpopupshowing="ko.uilayout.updateFullScreen(this)">
+                            <menu label="&tabs.label;" id="menu_view_tabs">
+                                <menupopup
+                                    id="menu_view_tabs_popup"
+                                    onpopupshowing="ko.widgets.updateMenu(this);"
+                                    oncommand="ko.widgets.onMenuCommand(event);"
+                                    type="menu"
+                                    >
+                                    <!--
+                                      - The contents of this menu is built by
+                                      - ko.widgets.updateMenu
+                                      -->
+                                </menupopup>
+                            </menu>
+                            <menu id="menu_toolbars" label="&toolbars.label;">
+                                <menupopup id="popup_toolbars">
+                                    <menuitem label="&showToolbars.label;"
+                                              id="menu_toggleToolbars"
+                                              observes="cmd_toggleToolbars"
+                                              checked="true"
+                                              persist="checked"
+                                              type="checkbox"
+                                              />
+                                    <menuitem label="&showSideToolbar.label;"
+                                              id="menu_toggleSideToolbar"
+                                              observes="cmd_toggleSideToolbar"
+                                              checked="true"
+                                              persist="checked"
+                                              type="checkbox"
+                                              />
+<!-- #if PLATFORM != "darwin" -->
+                                    <menuitem label="&showMenubar.label;"
+                                              id="menu_toggleMenubar"
+                                              command="cmd_toggleMenubar"
+                                              type="checkbox"
+                                              />
+<!-- #endif -->
+                                    <menuseparator id="popup_toolbars_custom_separator"
+                                                   collapsed="true"/>
+                                    <menuitem id="menu_customizeToolbars"
+                                              command="cmd_CustomizeToolbars"
+                                              label="&customizeToolbars.menu.label;"
+                                              accesskey="&customizeToolbars.menu.accesskey;"
+                                              ordinal="9993"/>
+                                </menupopup>
+                            </menu>
+                            <menuitem id="menu_previewInBrowser"
+                                      label="&browserPreview.menu.label;"
+                                      accesskey="&browserPreview.menu.accesskey;"
+                                      observes="cmd_browserPreview"/>
+                            <menuitem id="menu_reloadBrowserPreview"
+                                      label="&reloadBrowserPreview.menu.label;"
+                                      accesskey="&reloadBrowserPreview.menu.accesskey;"
+                                      observes="cmd_reloadBrowserPreview"/>
+
+                            <menuseparator id="view_menu_splitview_menuseparator"/>
+
+                            <menuitem id="menu_moveTab"
+                                      label="&moveToOtherTabGroup.label;"
+                                      accesskey="&menuMoveTab.accesskey;"
+                                      observes="cmd_movetab"
+                                      />
+                            <menuitem id="menu_splitTab"
+                                      label="&splitView.label;"
+                                      accesskey="&menuSplitTab.accesskey;"
+                                      observes="cmd_splittab"
+                                      />
+                            <menuitem id="menu_rotateSplitter"
+                                      label="&rotateTabGroups.label;"
+                                      accesskey="&menuRotateSplitter.accesskey;"
+                                      observes="cmd_rotateSplitter"
+                                      />
+
+                            <menuseparator id="view_menu_editor_settings_menuseparator"/>
+
+                            <menuitem id="menu_viewWhitespace"
+                                      label="&viewWhitespace.label;"
+                                      accesskey="&viewWhitespace.accesskey;"
+                                      observes="cmd_viewWhitespace"
+                                      />
+                            <menuitem id="menu_viewIndentationGuides"
+                                      label="&viewIndentationGuides.label;"
+                                      accesskey="&viewIndentationGuides.accesskey;"
+                                      observes="cmd_viewIndentationGuides"
+                                      />
+                            <menuitem id="menu_viewLineNumbers"
+                                      label="&viewLineNumbers.label;"
+                                      accesskey="&viewLineNumbers.accesskey;"
+                                      observes="cmd_viewLineNumbers"
+                                      />
+                            <menuitem id="menu_viewEOLMarkers"
+                                      label="&viewEOLMarkers.label;"
+                                      accesskey="&viewEOLMarkers.accesskey;"
+                                      observes="cmd_viewEOL"
+                                      />
+                            <menuitem id="menu_wordWrap"
+                                      label="&wordWrap.label;"
+                                      accesskey="&wordWrap.accesskey;"
+                                      observes="cmd_wordWrap"
+                                      />
+                            <menuitem id="menu_showHideMinimap"
+                                      label="&showHideMinimap.label;"
+                                      accesskey="&showHideMinimap.accesskey;"
+                                      observes="cmd_showHideMinimap"
+                                      type="checkbox"
+                                      />
+                            <menu id="editor_context_scrolling_menu"
+                                  label="&scrolling.menu.label;">
+                                <menupopup id="editor_context_select_menupopup"
+                                    onpopupshowing="ko.commands.updateCommand('cmd_linkViews');ko.commands.updateCommand('cmd_unlinkViews');">
+                                    <menuitem label="&linkViews.label;"
+                                              tooltiptext="Requires active splitview"
+                                              disabled="true"
+                                              id="menu_scrolling_linkviews"
+                                              accesskey="&linkViews.menu.accesskey;"
+                                              observes="cmd_linkViews"
+                                              />
+                                    <menuitem label="&unlinkViews.label;"
+                                              tooltiptext="Requires active splitview"
+                                              disabled="true"
+                                              id="menu_scrolling_unlinkviews"
+                                              accesskey="&unlinkViews.menu.accesskey;"
+                                              observes="cmd_unlinkViews"
+                                              />
+                                </menupopup>
+                            </menu>
+                            <menuseparator id="view_menu_menuseparator_2"/>
+                            <menu id="menu_viewAsLanguage"
+                                  label="&viewAsLanguage.label;"
+                                  accesskey="&viewAsLanguage.accesskey;"
+                                  observes="cmd_viewAsLanguage">
+                                <menupopup id="popup_viewAsLanguage"
+                                           onpopupshowing="ko.uilayout.updateViewAsLanguageMenu(this);"
+                                           />
+                            </menu>
+                            <menuitem label="&increaseFont.label;"
+                                      id="menu_fontZoomIn"
+                                      accesskey="&increaseFont.accesskey;"
+                                      observes="cmd_fontZoomIn"
+                                      />
+                            <menuitem label="&decreaseFont.label;"
+                                      id="menu_fontZoomOut"
+                                      accesskey="&decreaseFont.accesskey;"
+                                      observes="cmd_fontZoomOut"
+                                      />
+                            <menuitem label="&fullScreen.label;"
+                                      id="menuitem_fullScreen"
+                                      accesskey="&fullScreen.accesskey;"
+                                      type="checkbox"
+                                      observes="cmd_viewFullScreen"
+                                      />
+                            <menuseparator id="view_menu_fold_separator"/>
+                            <menu id="menu_fold"
+                                  label="&fold.label;"
+                                  accesskey="&fold.accesskey;">
+                                <menupopup id="popup_fold">
+                                    <menuitem label="&expand.label;"
+                                              id="menu_foldExpand"
+                                              observes="cmd_foldExpand"
+                                              />
+                                    <menuitem label="&expandAll.label;"
+                                              id="menu_foldExpandAll"
+                                              observes="cmd_foldExpandAll"
+                                              />
+                                    <menuitem label="&expandRecursively.label;"
+                                              id="menu_foldExpandRecursive"
+                                              observes="cmd_foldExpandRecursive"
+                                              />
+                                    <menuitem label="&collapse.label;"
+                                              id="menu_foldCollapse"
+                                              observes="cmd_foldCollapse"
+                                              />
+                                    <menuitem label="&collapseAll.label;"
+                                              id="menu_foldCollapseAll"
+                                              observes="cmd_foldCollapseAll"
+                                              />
+                                    <menuitem label="&collapseRecursively.label;"
+                                              id="menu_foldCollapseRecursive"
+                                              observes="cmd_foldCollapseRecursive"
+                                              />
+                                </menupopup>
+                            </menu>
+                        </menupopup>
+                    </menu>
+
+                    <menu id="menu_project"
+                          label="&project.label;"
+                          accesskey="&menuProject.accesskey;">
+                        <menupopup id="popup_project"
+                                   onpopupshowing="ko.projects.manager.updateProjectMenu(event, this, 'current')">
+                            <menuitem label="&openProject.label;"
+                                      id="menu_openProject"
+                                      observes="cmd_openProject"
+                                      />
+                            
+                            <menuitem label="&openProjectInNewWindow.label;"
+                                      id="menu_projectOpenProject"
+                                      observes="cmd_openProjectNewWindow"
+                                      />
+<!--   XXX Implement this
+                            <menuitem label="&openRemoteProject.label;"
+                                      id="menu_projectOpenRemoteProject"
+                                      observes="cmd_openRemoteProject"
+                                      />
+-->
+                            <menu id="menu_recentProjects"
+                                  skipCopyToCogMenu="true"
+                                  label="&recentProjects.label;">
+                                <menupopup id="recentProjects_menupopup"
+                                           onpopupshowing="ko.uilayout.updateMRUMenuIfNecessary('project', 5);"/>
+                            </menu>
+                            
+                            <menuitem label="&sampleProject.label;"
+                                      id="menu_sampleProject"
+                                      observes="cmd_sampleProject"
+                                      />
+
+                            <menuseparator id="menu_project_separator_1"/>
+
+                            <menu id="menu_project_templates"
+                                  label="&newFromTemplate.label;"
+                                  skipCopyToCogMenu="true"
+                                  accesskey="&templates.accesskey;">
+                                <menupopup id="popup_project_templates"
+                                          onpopupshowing="ko.projects.manager.loadTemplateMenuItems(event, this)">
+                                    <menuseparator id="menu_project_builtin_templates_separator" collapsed="true"/>
+                                </menupopup>
+                            </menu>
+
+                            <menuseparator id="menu_project_separator_2"/>
+
+                            <menuitem label="&closeProject.label;"
+                                      id="menu_closeProject"
+                                      observes="cmd_closeProject"
+                                      addProjectName="true"
+                                      disableIfCurrentProjectIsClosed="true"
+                                      />
+                            <menuitem label="&closeAllProjects.label;"
+                                      id="menu_closeAllProjects"
+                                      observes="cmd_closeAllProjects"
+                                      />
+                            <menuitem label="&showProjectInPlaces.label;"
+                                      id="menu_showProjectInPlaces"
+                                      observes="cmd_showProjectInPlaces"
+                                      addProjectName="true"
+                                      disableIfCurrentProjectIsClosed="true"
+                                      />
+                            <menuitem label="&saveProject.label;"
+                                      id="menu_saveProject"
+                                      observes="cmd_saveProject"
+                                      addProjectName="true"
+                                      disableIfCurrentProjectIsClosed="true"
+                                      />
+                            <menuitem label="&saveProjectAs.label;"
+                                      id="menu_saveProjectAs"
+                                      observes="cmd_saveProjectAs"
+                                      disableIfCurrentProjectIsClosed="true"
+                                      />
+                            <menuitem label="&renameProject.label;"
+                                      id="menu_renameProject"
+                                      observes="cmd_renameProject"
+                                      disableIfCurrentProjectIsClosed="true"
+                                      />
+                            <menuitem label="&revertProject.label;"
+                                      id="menu_revertProject"
+                                      observes="cmd_revertProject"
+                                      disableIfCurrentProjectIsClosed="true"
+                                      />
+
+                            <menuseparator id="menu_project_separator_3"/>
+
+                            <menuitem label="&projectPreferences.label;"
+                                      id="menu_projectProperties"
+                                      observes="cmd_projectProperties"
+                                      disableIfCurrentProjectIsClosed="true"
+                                      accesskey="&projectPreferences.accesskey;"/>
+                        </menupopup>
+                    </menu>
+
+                    <menu id="menu_tools" label="&tools.label;" accesskey="&menuTools.accesskey;">
+                        <menupopup id="popup_tools">
+                            <menuitem label="&runCommand.label;"
+                                      class="menuitem-iconic run-command-icon"
+                                      id="menu_toolsRunCommand"
+                                      observes="cmd_toolsRunCommand"
+                                      accesskey="&menuToolsRunCommand.accesskey;"/>
+                            <menu label="&recentCommands.label;"
+                                  id="menu_toolsRecentCommands"
+                                  accesskey="&menuToolsRecentCommands.accesskey;">
+                                <menupopup id="menu_toolsRecentCommands_popup" onpopupshowing="ko.run.buildRecentCommandsMenu(this);"/>
+                            </menu>
+                            <menu id="menu_macros" label="&macros.label;"
+                                  accesskey="&menuMacros.accesskey;">
+                                <menupopup id="popup_macros">
+                                    <menuitem id="macroNew_menuitem"
+                                              label="&macroNew.menu.label;"
+                                              accesskey="&macroNew.menu.accesskey;"
+                                              tooltiptext="&macroNew.tooltiptext;"
+                                              class="menuitem-iconic macro-new-icon"
+                                              observes="cmd_macroNew"/>
+                                    <menuitem label="&startRecording.label;"
+                                              id="menu_startMacroMode"
+                                              observes="cmd_startMacroMode"
+                                              class="menuitem-iconic macro-record-icon"
+                                              />
+                                    <menuitem label="&pauseRecording.label;"
+                                              id="menu_pauseMacroMode"
+                                              observes="cmd_pauseMacroMode"
+                                              class="menuitem-iconic macro-pause-icon"
+                                              />
+                                    <menuitem label="&stopRecording.label;"
+                                              id="menu_stopMacroMode"
+                                              observes="cmd_stopMacroMode"
+                                              class="menuitem-iconic macro-stop-icon"
+                                              />
+                                    <menuitem label="&runLastMacro.label;"
+                                              id="menu_executeLastMacro"
+                                              observes="cmd_executeLastMacro"
+                                              class="menuitem-iconic macro-play-icon"
+                                              />
+                                    <menuitem label="&saveToToolbox.label;"
+                                              id="menu_saveMacroToToolbox"
+                                              observes="cmd_saveMacroToToolbox"
+                                              class="menuitem-iconic macro-save-icon"
+                                              />
+                                </menupopup>
+                            </menu>
+                            <menuseparator id="menu_addons_separator"/>
+                            <menuitem label="&extensionManager.label;"
+                                      id="menu_extensionmanager"
+                                      accesskey="&extensionManager.accesskey;"
+                                      observes="cmd_openextmgr" />
+                            <menuitem label="&extensionManagerLegacy.label;"
+                                      id="menu_extensionmanagerLegacy"
+                                      oncommand="ko.windowManager.openOrFocusDialog('chrome://mozapps/content/extensions/extensions.xul', 'Addons:Manager')" />
+
+
+                            <menuseparator id="menu_tools_separator"/>
+                            <menuitem label="&watchFile.label;"
+                                      accesskey="&menuWatchThread.accesskey;"
+                                      id="menu_watchThread"
+                                      observes="cmd_toolsWatchFile"
+                                      />
+<!-- #if WITH_RX -->
+                            <menuitem label="&rxToolkit.label;"
+                                      accesskey="&rxToolkit.accesskey;"
+                                      class="menuitem-iconic rx-icon"
+                                      observes="cmd_toolsRx"
+                                      />
+<!-- #endif -->
+                            <menuitem label="&compareFiles.label;"
+                                      accesskey="&menuCompareFiles.accesskey;"
+                                      id="menu_compareFiles"
+                                      oncommand="window.openDialog('chrome://komodo/content/dialogs/compare.xul', '_blank', 'chrome,modal,titlebar,resizable');"
+                                      />
+                            <menuitem label="&colorSchemeEditor.label;"
+                                      id="menu_colorSchemeEditor"
+                                      oncommand="window.openDialog('chrome://komodo/content/dialogs/colorscheme.xul', 'Komodo:ColorSchemeEditor', 'chrome,resizable,close,centerscreen');"
+                                      />
+                        </menupopup>
+                    </menu>
+
+                    <menu id="help_menu" label="&help.label;" accesskey="&helpMenu.accesskey;"
+                        ordinal="9996">
+                        <menupopup id="popup_help">
+                            <menuitem
+                                id="menu_helpHelp"
+                                label="&help.label;"
+                                observes="cmd_helpHelp"
+                                accesskey="&menuHelpHelp.accesskey;"
+                                class="menuitem-iconic help-icon"
+                                />
+                            <menu
+                                id="helpTutorialsMenu"
+                                label="&tutorials.label;"
+                                accesskey="&helpTutorialsMenu.accesskey;"
+                                >
+                                <menupopup id="help-tutorials-popup">
+<!-- #if PRODUCT_TYPE != "edit" -->
+                                    <menuitem
+                                        id="menu_helpPerlTutorials"
+                                        label="&perlTutorial.label;"
+                                        oncommand="ko.help.tutorials('perl');"
+                                        />
+                                    <menuitem
+                                        id="menu_helpPHPTutorials"
+                                        label="&PHPTutorial.label;"
+                                        oncommand="ko.help.tutorials('php');"
+                                        />
+                                    <menuitem
+                                        id="menu_helpPythonTutorials"
+                                        label="&pythonTutorial.label;"
+                                        oncommand="ko.help.tutorials('python');"
+                                        />
+                                    <menuitem
+                                        id="menu_helpRubyTutorials"
+                                        label="&rubyTutorial.label;"
+                                        oncommand="ko.help.tutorials('ruby');"
+                                        />
+                                    <menuitem
+                                        id="menu_helpRailsTutorials"
+                                        label="&rubyOnRailsTutorial.label;"
+                                        oncommand="ko.help.tutorials('ruby');"
+                                        />
+                                    <menuitem
+                                        id="menu_helpXSLTTutorials"
+                                        label="&XSLTTutorial.label;"
+                                        oncommand="ko.help.tutorials('xslt');"
+                                        />
+                                    <menuitem
+                                        id="menu_helpRxTutorials"
+                                        label="&regularExpressionsPrimer.title;"
+                                        oncommand="ko.help.open('regex-intro.html');"
+                                        />
+<!-- #endif -->
+                                    <menuitem
+                                        id="menu_helpRunCMDTutorials"
+                                        label="&runCommandTutorial.label;"
+                                        oncommand="ko.help.tutorials('runcmd');"
+                                        />
+
+                                </menupopup>
+                            </menu>
+                            <menu
+                                id="helpLanguagesMenu"
+                                label="&helpForLanguages.label;"
+                                accesskey="&helpLanguagesMenu.accesskey;"
+                                >
+                                <menupopup
+                                    id="help-languages-popup">
+                                    <menuitem
+                                        id="menu_helpPerlRef_Web"
+                                        label="&perlReferenceWeb.label;"
+                                        observes="cmd_helpPerlRef_Web"
+                                    />
+                                    <menuitem
+                                        id="menu_helpPerlMailingLists"
+                                        label="&perlMailingLists.label;"
+                                        observes="cmd_helpPerlMailingLists"
+                                    />
+                                    <menuseparator/>
+                                    <menuitem
+                                        id="menu_helpPythonRef_Web"
+                                        label="&pythonReferenceWeb.label;"
+                                        observes="cmd_helpPythonRef_Web"
+                                    />
+                                    <menuitem
+                                        id="menu_helpPythonMailingLists"
+                                        label="&pythonMailingLists.label;"
+                                        observes="cmd_helpPythonMailingLists"
+                                    />
+                                    <menuseparator/>
+                                    <menuitem
+                                        id="menu_helpPython3Ref_Web"
+                                        label="&python3ReferenceWeb.label;"
+                                        observes="cmd_helpPython3Ref_Web"
+                                    />
+                                    <menuseparator/>
+                                    <menuitem
+                                        id="menu_helpPHPRef_Web"
+                                        label="&PHPReferenceWeb.label;"
+                                        observes="cmd_helpPHPRef_Web"
+                                    />
+                                    <menuitem
+                                        id="menu_helpPHPMailingLists"
+                                        label="&PHPMailingLists.label;"
+                                        observes="cmd_helpPHPMailingLists"
+                                    />
+                                    <menuseparator/>
+                                    <menuitem
+                                        id="menu_helpRubyRef_Web"
+                                        label="&rubyReferenceWeb.label;"
+                                        observes="cmd_helpRubyRef_Web"
+                                    />
+                                    <menuitem
+                                        id="menu_helpRubyMailingLists"
+                                        label="&rubyMailingLists.label;"
+                                        observes="cmd_helpRubyMailingLists"
+                                    />
+                                    <menuseparator/>
+                                    <menuitem
+                                        id="menu_helpTclRef_Web"
+                                        label="&tclReferenceWeb.label;"
+                                        observes="cmd_helpTclRef_Web"
+                                    />
+                                    <menuitem
+                                        id="menu_helpTclMailingLists"
+                                        label="&tclMailingLists.label;"
+                                        observes="cmd_helpTclMailingLists"
+                                    />
+                                    <menuseparator/>
+                                    <menuitem
+                                        id="menu_helpXSLTRef_Web"
+                                        label="&XSLTReferenceWeb.label;"
+                                        observes="cmd_helpXSLTRef_Web"
+                                    />
+                                    <menuitem
+                                        id="menu_helpXSLTMailingLists"
+                                        label="&XSLTMailingLists.label;"
+                                        observes="cmd_helpXSLTMailingLists"
+                                    />
+                                </menupopup>
+                            </menu>
+<!-- #if 0 -->
+                            <menuitem
+                                id="menu_helpTipOfTheDay"
+                                label="&tipOfTheDay.label;"
+                                observes="cmd_helpTipOfTheDay"
+                                accesskey="&menuHelpTipOfTheDay.accesskey;"
+                            />
+<!-- #endif -->
+                            <menuitem
+                                id="menu_helpShowKeybindings"
+                                label="&listKeyBindings.label;"
+                                accesskey="&menuHelpShowKeybindings.accesskey;"
+                                oncommand="ko.browse.showKeybindings()"
+                                />
+                            <menuitem
+                                id="menu_helpCheckConfig"
+                                label="&checkConfig.label;"
+                                oncommand="window.openDialog('chrome://komodo/content/dialogs/featureControlPanel.xul','Komodo:FeatureControlPanel','chrome,titlebar')"
+                                />
+                            <menuseparator/>
+                            <menuitem
+                                id="menu_helpActiveState"
+                                label="&activeStateWebsite.label;"
+                                observes="cmd_helpActiveState"
+                            />
+                            <menuitem
+                                id="menu_helpASPN"
+                                label="&activeStateCode.label;"
+                                observes="cmd_helpASPN"
+                            />
+                            <menuitem
+                                id="menu_helpCommunity"
+                                label="&komodoCommunity.label;"
+                                observes="cmd_helpCommunity"
+                            />
+                            <menuseparator id="support_separator"/>
+                            <menu
+                                id="troubleshootingMenu"
+                                label="&helpTroubleshootingMenu.label;"
+                                accesskey="&helpTroubleshootingMenu.accesskey;"
+                                >
+                                <menupopup id="help-troubleshooting-popup">
+                                    <menuitem
+                                        id="troubleshootingViewErrorLogMenuItem"
+                                        accesskey="&helpTroubleshootingViewErrorLog.accesskey;"
+                                        label="&helpTroubleshootingViewErrorLog.label;"
+                                        observes="cmd_helpViewErrorLog"
+                                    />
+                                    <menuitem
+                                        id="troubleshootingAboutMemory"
+                                        accesskey="&helpTroubleshootingAboutMemory.accesskey;"
+                                        label="&helpTroubleshootingAboutMemory.label;"
+                                        observes="cmd_komodoMemoryUsage"
+                                    />
+                                    <menuitem
+                                        id="troubleshootingViewBugsMenuItem"
+                                        accesskey="&komodoBugDatabase.accesskey;"
+                                        label="&komodoBugDatabase.label;"
+                                        tooltiptext="&komodoBugDatabase.tooltiptext;"
+                                        observes="cmd_helpViewBugs"
+                                        />
+                                    <menuseparator/>
+                                    <menuitem
+                                        label="Restart in Safe-Mode"
+                                        oncommand="ko.main.restartWithFlag('tempProfile')"
+                                    />
+                                    <menuitem
+                                        label="Restart Without Addons"
+                                        oncommand="ko.main.restartWithFlag('tempNoAddons')"
+                                    />
+                                    <menuitem
+                                        label="Restart Without Tools"
+                                        oncommand="ko.main.restartWithFlag('tempNoToolbox')"
+                                    />
+                                    <menuseparator/>
+                                    <menuitem
+                                        label="Reset Everything"
+                                        oncommand="ko.main.restartWithFlag('cleanProfile')"
+                                    />
+                                    <menuitem
+                                        label="Reset File Preferences"
+                                        oncommand="ko.main.restartWithFlag('cleanDocState')"
+                                    />
+                                    <menuitem
+                                        label="Reset UI Setup"
+                                        oncommand="ko.main.restartWithFlag('cleanViewState')"
+                                    />
+                                    <menuitem
+                                        label="Reset CodeIntel Database"
+                                        oncommand="ko.main.restartWithFlag('cleanCodeintel')"
+                                    />
+                                    <menuitem
+                                        label="Reset Caches"
+                                        oncommand="ko.main.restartWithFlag('cleanCaches')"
+                                    />
+                                </menupopup>
+                            </menu>
+<!-- #if BUILD_FLAVOUR != "dev" -->
+                            <menuitem
+                                id="menu_helpUpdates"
+                                label="&checkForUpdates.label;"
+                                accesskey="&menuHelpCheckForUpdates.accesskey;"
+                                oncommand="ko.launch.checkForUpdates()"
+                                />
+<!-- #endif -->
+                            <menuitem
+                                id="menu_runStartupWizard"
+                                label="&runStartupWizard.label;"
+                                oncommand="ko.windowManager.openDialog('chrome://komodo/content/startupWizard/startupWizard.xul')"
+                            />
+<!-- #if PLATFORM != "darwin" -->
+                            <menuseparator/>
+                            <menuitem
+                                id="about_menu"
+                                label="&aboutKomodo.label;"
+                                observes="cmd_helpAbout"
+                                accesskey="&aboutMenu.accesskey;"
+                                />
+<!-- #else -->
+                            <!-- more moz magic for osx aqua menu's, 'aboutName' id
+                                 required for aqua menu 'about komodo' to work.
+                            -->
+                            <menuitem
+                                id="aboutName"
+                                label="&aboutKomodo.label;"
+                                hidden="true"
+                                observes="cmd_helpAbout"
+                                accesskey="&aboutName.accesskey;"
+                                />
+<!-- #endif -->
+                        </menupopup>
+                    </menu>
+                    <hbox id="fullscreenflex" flex="1" fullscreencontrol="true" ordinal="9998"/>
+                    <hbox id="window-controls" fullscreencontrol="true"
+                          ordinal="9999" align="center" pack="end">
+                        <toolbarbutton id="minimize-button" class="rightarrow-button-a"
+                                        oncommand="window.minimize();"/>
+
+                        <toolbarbutton id="restore-button" class="rightarrow-button-a"
+                                        oncommand="ko.uilayout.fullScreen();"/>
+
+                        <toolbarbutton id="close-button" class="rightarrow-button-a"
+                                        oncommand="window.close();"/>
+                    </hbox>
+                </menubar>
+            </toolbaritem>
+        </toolbar>
+
+        <hbox id="main-toolboxrow-wrapper" class="windowDragHandler" persist="collapsed">
+            <toolboxrow id="main-toolboxrow" align="start" persist="hidden mode collapsed" mode="icons">
+                
+                <toolbar
+                    id="standardToolbar"
+                    class="chromeclass-toolbar"
+                    toolboxid="toolbox_main"
+                    align="center"
+                    mode="icons"
+                    persist="kohidden collapsed buttonstyle mode"
+                    buttonstyle="pictures"
+                    grippyhidden="true"
+                    customizable="true"
+                    broadcaster="cmd_viewedittoolbar"
+                    tooltiptext="&standardToolbar.tooltiptext;">
+
+                    <toolbaritem id="standard-toolbaritem1" persist="kohidden">
+
+                        <toolbarbutton id="historyBackButton"
+                                tooltiptext="&historyBack.tooltiptext;"
+                                class="history-back-icon"
+                                persist="buttonstyle"
+                                buttonstyle="pictures"
+                                observes="cmd_historyBack"
+                                label="&historyBack.label;"/>
+                        <toolbarbutton id="historyForwardButton"
+                                class="history-forward-icon"
+                                tooltiptext="&historyForward.tooltiptext;"
+                                observes="cmd_historyForward"
+                                persist="buttonstyle"
+                                buttonstyle="pictures"
+                                label="&historyForward.label;"/>
+                        <toolbarbutton id="historyRecentLocations"
+                                type="menu"
+                                tooltiptext="&historyRecentLocations.tooltiptext;">
+                            <menupopup id="historyRecentLocationsMenu"
+                                       position="after_start"
+                                       onpopupshowing="ko.history.init_popup_menu_recent_locations(event);"
+                                       oncommand="event.stopPropagation();"
+                                       />
+                        </toolbarbutton>
+                        <toolbarbutton id="undoButton"
+                                tooltiptext="&undoLastAction.tooltiptext;"
+                                persist="buttonstyle"
+                                buttonstyle="pictures"
+                                class="native-undo-icon"
+                                observes="cmd_undo"
+                                label="&undo.label;"/>
+                        <toolbarbutton id="redoButton"
+                                tooltiptext="&redoLastAction.tooltiptext;"
+                                observes="cmd_redo"
+                                persist="buttonstyle"
+                                buttonstyle="pictures"
+                                class="native-redo-icon"
+                                label="&redo.label;"/>
+
+                    </toolbaritem>
+
+                    <toolbaritem id="standard-toolbaritem2" persist="kohidden">
+
+                        <toolbarbutton id="newTabButton"
+                                kohidden="true" 
+                                tooltiptext="&newTab.tooltiptext;"
+                                observes="cmd_newTab"
+                                persist="buttonstyle"
+                                buttonstyle="pictures"
+                                class="newtab-icon"
+                                label="&newTab.label;"/>
+                        <toolbarbutton id="newButton"
+                                tooltiptext="&newFileUsingDefaultLanguage.tooltiptext;"
+                                observes="cmd_new"
+                                 persist="buttonstyle"
+                                 buttonstyle="pictures"
+                                class="native-new-file-icon"
+                                label="&new.label;"/>
+                        <toolbarbutton id="openButton"
+                                tooltiptext="&openFile.tooltiptext;"
+                                persist="buttonstyle"
+                                buttonstyle="pictures"
+                                class="native_open_icon"
+                                observes="cmd_open"
+                                label="&open.label;"/>
+                        
+                        <toolbarbutton id="saveButton"
+                                tooltiptext="&saveFile.tooltiptext;"
+                                persist="buttonstyle"
+                                buttonstyle="pictures"
+                                observes="cmd_save"
+                                class="native-save-icon"
+                                label="&saveFile.label;"/>
+                        <toolbarbutton id="saveAllButton"
+                                tooltiptext="&saveAllFiles.tooltiptext;"
+                                kohidden="true"
+                                persist="buttonstyle kohidden"
+                                buttonstyle="pictures"
+                                observes="cmd_saveAll"
+                                class="save-all-buffers-icon"
+                                label="&saveAll.label;"/>
+
+                    </toolbaritem>
+                    <toolbaritem id="standard-toolbaritem3" persist="kohidden">
+
+                        <toolbarbutton id="cutButton"
+                                tooltiptext="&cut.tooltiptext;"
+                                kohidden="true"
+                                persist="buttonstyle kohidden"
+                                buttonstyle="pictures"
+                                observes="cmd_cut"
+                                class="native-cut-icon"
+                                label="&cut.label;"/>
+                        <toolbarbutton id="copyButton"
+                                tooltiptext="&copy.tooltiptext;"
+                                kohidden="true"
+                                persist="buttonstyle kohidden"
+                                buttonstyle="pictures"
+                                observes="cmd_copy"
+                                class="native-copy-icon"
+                                label="&copy.label;"/>
+                        <toolbarbutton id="pasteButton"
+                                tooltiptext="&paste.tooltiptext;"
+                                kohidden="true"
+                                persist="buttonstyle kohidden"
+                                buttonstyle="pictures"
+                                observes="cmd_paste"
+                                class="native-paste-icon"
+                                label="&paste.label;"/>
+
+                    </toolbaritem>
+                    <toolbaritem id="standard-toolbaritem4" persist="kohidden">
+
+                        <toolbarbutton id="printButton"
+                                tooltiptext="&print.tooltiptext;"
+                                kohidden="true"
+                                persist="buttonstyle kohidden"
+                                buttonstyle="pictures"
+                                class="native-print-icon"
+                                observes="cmd_print"
+                                label="&print.label;"/>
+                        <toolbarbutton id="helpButton"
+                                tooltiptext="&help.tooltiptext;"
+                                kohidden="true"
+                                persist="buttonstyle kohidden"
+                                buttonstyle="pictures"
+                                class="help-icon"
+                                observes="cmd_helpHelp"
+                                label="&help.label;"/>
+
+                    </toolbaritem>
+                </toolbar>
+            </toolboxrow>
+            
+            <toolboxrow id="middle-toolboxrow" persist="kohidden mode collapsed" mode="icons">
+                <toolbar id="notification-widget"
+                         align="end"
+                         valign="middle"
+                         kohidden="false"
+                         not-draggable="true"
+                         insertafter="main-toolboxrow"
+                         flex="1"
+                        >
+                        
+                        <hbox id="notification-widget-textbox" flex="1">
+                            <hbox id="notification-widget-default" flex="1" align="center">
+                                <label anonid="notification-widget-text" id="notification-widget-default-text" flex="1" value=""/>
+                                <button anonid="notification-widget-button" class="notification-icon unstyled" oncommand="ko.uilayout.toggleTab('notifications-widget', false)"/>
+                            </hbox>
+                        </hbox>
+                </toolbar>
+            </toolboxrow>
+            
+            <toolboxrow id="second-toolboxrow" pack="end" persist="hidden mode collapsed" mode="icons">
+                <spacer flex="1"/>
+                <toolbar class="chromeclass-toolbar"
+                         id="macrosToolbar"
+                         toolboxid="toolbox_main"
+                         grippyhidden="true"
+                         align="center"
+                         mode="icons"
+                         ordinal="1000"
+                         persist="buttonstyle mode"
+                         buttonstyle="pictures"
+                         tooltiptext="&macroToolbar.tooltiptext;">
+
+                    <toolbaritem id="macro-toolbaritem1" persist="kohidden">
+
+                        <toolbarbutton id="macroNew"
+                                label="&macroNew.toolbar.label;"
+                                tooltiptext="&macroNew.tooltiptext;"
+                                class="macro-new-icon"
+                                kohidden="true"
+                                buttonstyle="pictures"
+                                persist="buttonstyle kohidden"
+                                observes="cmd_macroNew"/>
+                        <toolbarbutton id="macroRecord"
+                                label="&record.label;"
+                                tooltiptext="&recordMacro.tooltiptext;"
+                                persist="buttonstyle kohidden"
+                                class="macro-record-icon"
+                                buttonstyle="pictures"
+                                observes="cmd_startMacroMode"/>
+                        <toolbarbutton id="macroPause"
+                                label="&pause.label;"
+                                tooltiptext="&pauseMacroRecording.tooltiptext;"
+                                persist="buttonstyle"
+                                buttonstyle="pictures"
+                                class="macro-pause-icon"
+                                kohidden="true"
+                                observes="cmd_pauseMacroMode"/>
+                        <toolbarbutton id="macroStop"
+                                label="&stop.label;"
+                                tooltiptext="&stopRecordingMacro.tooltiptext;"
+                                persist="buttonstyle kohidden"
+                                class="macro-stop-icon"
+                                buttonstyle="pictures"
+                                observes="cmd_stopMacroMode"/>
+                        <toolbarbutton id="macroPlay"
+                                label="&runLast.label;"
+                                tooltiptext="&playLastMacro.tooltiptext;"
+                                persist="buttonstyle kohidden"
+                                buttonstyle="pictures"
+                                class="macro-play-icon"
+                                observes="cmd_executeLastMacro"/>
+                        <toolbarbutton id="macroSave"
+                                label="&save.label;"
+                                tooltiptext="&saveLastMacroToToolbox.tooltiptext;"
+                                persist="buttonstyle kohidden"
+                                class="macro-save-icon"
+                                buttonstyle="pictures"
+                                observes="cmd_saveMacroToToolbox"/>
+
+                    </toolbaritem>
+
+                </toolbar>
+                
+                <toolbar class="chromeclass-toolbar"
+                         id="workspaceToolbar"
+                         toolboxid="toolbox_main"
+                         grippyhidden="true"
+                         align="center"
+                         ordinal="2000"
+                         mode="icons"
+                         persist="buttonstyle mode"
+                         buttonstyle="pictures"
+                         tooltiptext="&workspaceToolbar.tooltiptext;">
+
+                    <toolbaritem id="workspace-toolbaritem1" persist="kohidden">
+                        <toolbarbutton id="toggleLeftPane"
+                            tooltiptext="&showHideLeftPane.tooltiptext;"
+                            persist="buttonstyle kohidden"
+                            buttonstyle="pictures"
+                            type="checkbox"
+                            observes="cmd_viewLeftPane"
+                            label="&toggleLeft.label;">
+                        </toolbarbutton>
+                        <toolbarbutton id="toggleBottomPane"
+                            tooltiptext="&showHideBottomPane.tooltiptext;"
+                            persist="buttonstyle kohidden"
+                            buttonstyle="pictures"
+                            type="checkbox"
+                            observes="cmd_viewBottomPane"
+                            label="&toggleBottom.label;">
+                        </toolbarbutton>
+                        <toolbarbutton id="toggleRightPane"
+                            tooltiptext="&showHideRightPane.tooltiptext;"
+                            persist="buttonstyle kohidden"
+                            buttonstyle="pictures"
+                            type="checkbox"
+                            observes="cmd_viewRightPane"
+                            label="&toggleRight.label;">
+                        </toolbarbutton>
+                        <toolbarbutton id="tabPicker"
+                            tooltiptext="&showSpecificTab.tooltiptext;"
+                            type="menu"
+                            orient="horizontal"
+                            persist="buttonstyle"
+                            class="tabPicker-icon"
+                            buttonstyle="pictures"
+                            label="&showTab.label;">
+                            <menupopup onpopupshowing="ko.widgets.updateMenu(this);"
+                                       oncommand="ko.widgets.onMenuCommand(event);"/>
+                        </toolbarbutton>
+
+                    </toolbaritem>
+                </toolbar>
+                
+            </toolboxrow>
+            
+            <toolbarbutton id="unifiedMenuButton"
+                tooltiptext="&menu.tooltiptext;"
+                class="menu-icon"
+                buttonstyle="pictures"
+                oncommand="document.getElementById('unifiedMenuPopup').openPopup(event.target, 'after_end')"
+                collapsed="true"
+                ordinal="100"
+            />
+            
+            <!-- #if PLATFORM == "darwin" -->
+                <toolbarbutton id="fullscreen-restore-button" fullscreencontrol="true"
+                               oncommand="ko.uilayout.fullScreen();" ordinal="110" />
+            <!-- #endif -->
+            
+            <hbox id="windowButtons" align="center" pack="right" ordinal="120">
+                <toolbarbutton buttonstyle="pictures" id="min" class="icon-minus-circle2" onclick="window.minimize();"/>
+                <toolbarbutton buttonstyle="pictures" id="max" class="icon-plus-circle2" onclick="window.windowState === 1 ? window.restore() : window.maximize();"/>
+                <toolbarbutton buttonstyle="pictures" id="close" class="icon-cancel-circle2" onclick="ko.main.close()"/>
+            </hbox>
+        </hbox>
+
+        <toolbarpalette id="komodo-toolbarpalette"/>
+        <toolbarset id="customToolbars" context="context-toolbox-menu"/>
+        
+            </vbox>
+
+            <resizer dir="right"/>
+        
+        </hbox>
+
+    </toolbox>
+
+    <!-- main window box -->
+    <notificationbox id="komodo-notificationbox"/>
+    <deck id="komodo-box" selectedIndex="0" flex="1">
+    <vbox id="komodo-vbox" flex="1">
+        <hbox id="komodo-hbox" flex="1">
+            <resizer dir="left" />
+            <toolbox id="toolbox_side"
+                     context="context-toolbox-menu"
+                     persist="mode"
+                     mode="icons">
+                <toolbar
+                         id="side-top-toolbar"
+                         flex="1"
+                         toolboxid="toolbox_side"
+                         grippyhidden="true"
+                         align="stretch"
+                         pack="start"
+                         mode="icons"
+                         persist="buttonstyle mode"
+                         buttonstyle="pictures">
+                </toolbar>
+                <toolbar 
+                         id="side-bottom-toolbar"
+                         flex="1"
+                         toolboxid="toolbox_side"
+                         grippyhidden="true"
+                         align="stretch"
+                         pack="end"
+                         mode="icons"
+                         persist="buttonstyle mode"
+                         buttonstyle="pictures">
+                    <toolbaritem id="toolsToolbarGroup" persist="kohidden">
+        <!-- #if WITH_RX -->
+                        <toolbarbutton id="buttonRxToolkit"
+                                       class="rx-icon"
+                                       label="&rx.label;"
+                                       tooltiptext="&rxToolkit.tooltiptext;"
+                                       persist="buttonstyle"
+                                       buttonstyle="pictures"
+                                       observes="cmd_toolsRx"/>
+        <!-- #endif -->
+                    </toolbaritem>
+                </toolbar>
+            </toolbox>
+            <ko-pane id="workspace_left_area"
+                     width="200"
+                     rotation="270"
+                     class="native"
+                     pref="ui.tabs.sidepanes.left.layout"
+                     label="&paneNameLeft;"
+                     orient="vertical"
+                     persist="width type">
+            </ko-pane>
+            <splitter id="workspace_left_splitter"
+                      class="workspace_splitter workspace_splitter_left"
+                      orient="horizontal"
+                      collapse="before"
+                      splitterCmdId="cmd_viewLeftPane">
+                <observes element="workspace_left_area" attribute="collapsed"/>
+            </splitter>
+            <vbox id="komodo-editor-vbox" flex="1">
+                <vbox id="komodo-editor-vbox-inner" flex="1">
+                    <deck id="editorviewbox" flex="1" class="blank-workspace">
+                        <vbox id="editorvbox">
+                            <view id="topview"
+                                  type="multiview"
+                                  orient="vertical"
+                                  persist="orient"
+                                  flex="1"/>
+                        </vbox>
+                        <!-- This is used for capturing user input while slow dialogs
+                        (e.g. the find dialog) load. -->
+                        <textbox id="hidden-input-buffer" collapsed="true"
+                             onfocus="ko.inputBuffer.focus(event);"/>
+                        <vbox id="customizingPlaceHolder">
+                            <!-- This box is used in the widget/pane customization mode
+                               - (hiding the main text editing area).
+                               -->
+                            <browser id="customizeToolbarBrowser" src="chrome://komodo/content/dialogs/customizeToolbar.xul" flex="1" style="width: 100vw"/>
+                            <hbox pack="center" align="center" class="statusbar">
+                                <description>&pane.customize.placeholder.label;</description>
+                                <button label="&pane.customize.done.label;"
+                                        oncommand="ko.uilayout._customizeComplete(true);"/>
+                            </hbox>
+                        </vbox>
+                    </deck>
+                    
+                    <hbox id="findReplaceWrap" height="200" collapsed="true" class="statusbar">
+                        <browser id="findReplaceBrowser" type="chrome" flex="1"/>
+                    </hbox>
+
+                </vbox>
+
+                <splitter id="bottom_splitter"
+                          collapse="after"
+                          splitterCmdId="cmd_viewBottomPane"
+                          class="workspace_splitter"
+                          orient="vertical">
+                    <observes element="workspace_bottom_area" attribute="collapsed"/>
+                </splitter>
+
+                <!-- Output Area -->
+                <!--Persisting of collapsed disabled because of http://bugs.activestate.com/show_bug.cgi?id=25918-->
+                <ko-pane id="workspace_bottom_area" height="200" collapsed="true"
+                         persist="height type" label="&paneNameBottom;"
+                         class="native" orient="horizontal">
+                    <!-- Run output tab of the output pane. This pane is made
+                        of two levels: (1) a scintilla terminal to show
+                        unparsed output and (2) an tree to show parsed
+                        output.
+                    -->
+                    <browser type="ko-widget"
+                             id="runoutput-desc-tabpanel"
+                             label="&commandOutput.label;"
+                             src="chrome://komodo/content/run/runOutputPane.xul"
+                             tab_onmousedown="document.getElementById('runoutput-desc-tabpanel').focus();"
+                             tab_onfocus="document.getElementById('runoutput-desc-tabpanel').focus();"
+                             icon="koicon://ko-svg/chrome/icomoon/skin/console.svg"/>
+                </ko-pane>
+            </vbox>
+            <splitter id="workspace_right_splitter"
+                      orient="horizontal"
+                      class="workspace_splitter workspace_splitter_right"
+                      collapse="after"
+                      splitterCmdId="cmd_viewRightPane">
+                <observes element="workspace_right_area" attribute="collapsed"/>
+            </splitter>
+            <ko-pane id="workspace_right_area"
+                     width="200"
+                     collapsed="true"
+                     persist="width type"
+                     class="native"
+                     label="&paneNameRight;"
+                     orient="vertical"
+                     rotation="90">
+                <browser type="ko-widget"
+                         id="toolbox2viewbox"
+                         label="&toolbox2.label;"
+                         locktip="&thisToolboxIsReadOnly.locktip;"
+                         src="chrome://komodo/content/toolbox/toolboxPanel.xul"
+                         icon="koicon://ko-svg/chrome/icomoon/skin/briefcase3.svg"/>
+            </ko-pane>
+            <resizer dir="right"/>
+        </hbox>
+        
+        <hbox class="resizer-box bottom">
+          <resizer dir="bottomleft"/>
+          <resizer dir="bottom" flex="1"   />
+          <resizer dir="bottomright"/>
+        </hbox>
+
+    </vbox> <!-- main window box -->
+    <!-- we need a browser widget to do our printing for us, unfortunatly
+        if we collapse or hide it, printing still fails.  So we have to
+        hide it somehow, thus a deck widget will hide the browser behind
+        the main window box.  -->
+    <browser id="printBrowser" type="content-primary" flex="1" disablehistory="true"/>
+    </deck>
+
+    <commandset id="allcommands">
+        <command id="cmd_CustomizeToolbars"
+                 oncommand="ko.uilayout.customizeToolbars('toolbox_main');"/>
+    </commandset>
+    <keyset id="widekeyset" persist="persisted_kb" persisted_kb="false"/>
+<!-- #if PLATFORM == "darwin" -->
+    <keyset id="macAppMenuKeys">
+        <key id="key_hideThisAppCmdMac"
+             key="&hideThisAppCmdMac.commandkey;"
+             modifiers="&hideThisAppCmdMac.modifiers;"/>
+        <key id="key_hideOtherAppsCmdMac"
+             key="&hideOtherAppsCmdMac.commandkey;"
+             modifiers="&hideOtherAppsCmdMac.modifiers;"/>
+    </keyset>
+<!-- #endif -->
+</window>

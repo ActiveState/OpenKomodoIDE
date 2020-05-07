@@ -1,0 +1,29 @@
+Index: /as/komodo-devel/contrib/tinyjsd/chrome.manifest
+--- chrome.manifest
++++ chrome.manifest (unsaved)
+@@ -8,6 +8,9 @@
+ 
+ ## Firefox
+ overlay chrome://browser/content/browser.xul chrome://tinyjsd/content/tinyjsd-overlay.xul
++
++## Komodo
++overlay chrome://komodo/content/komodo.xul chrome://tinyjsd/content/tinyjsd-overlay.xul
+ 
+ # Components registration
+ 
+Index: /as/.komodoide/9.0/XRE/extensions/content/tinyjsd-overlay.xul
+--- content/tinyjsd-overlay.xul
++++ content/tinyjsd-overlay.xul (unsaved)
+@@ -53,5 +53,12 @@
+       class="menuitem-iconic"/>
+   </menupopup>
+ 
++  <!-- Komodo Tools menu -->
++  <menupopup id="popup_tools">
++    <menuitem id="menu_tools_tinyjsd" label="&TinyJsd.openWindow.label;"
++      insertbefore="menu_tools_separator"
++      oncommand="TinyJsd.openDebugger();"/>
++  </menupopup>
++
+   <script type="application/x-javascript" src="chrome://tinyJsd/content/tinyjsd-overlay.js"/>
+ </overlay>

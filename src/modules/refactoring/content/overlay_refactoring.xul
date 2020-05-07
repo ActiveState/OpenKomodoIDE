@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2013 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % refactoringDTD SYSTEM "chrome://refactoring/locale/refactoring.dtd">
+  %refactoringDTD;
+]>
+
+<overlay id="overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="chrome://refactoring/content/refactoringController.js"
+          type="application/x-javascript"/>
+  <script src="chrome://refactoring/content/refactoring.js"
+          type="application/x-javascript"/>
+
+    <menu id="menu_code">
+     <menupopup id="popup_sourcecode">
+      <menu id="code_refactoring_menu"
+            accesskey="&refactoring.accessKey;"
+            label="&refactoring.label;"
+            insertbefore="code_codeintel_menuseparator">
+       <menupopup id="refactoring-sub-menu-2"
+                      onpopupshowing="ko.refactoring.showPopupMenu(event, this);" />
+      </menu >
+     </menupopup>
+    </menu>
+    
+    <menupopup id="editorContextMenu">
+      <menu id="editorContext_refactoring_menu"
+            accesskey="&refactoring.accessKey;"
+            label="&refactoring.label;"
+            insertbefore="editor-context-sep-extensions">
+        <menupopup id="refactoring-sub-menu"
+                   onpopupshowing="ko.refactoring.showPopupMenu(event, this);" >
+         <menuitem id="refactor_renameClassMember"
+                   label="&renameClassMember.menuLabel;"
+                   accesskey="&refactoring.renameClassMember.accessKey;"
+                   disabled="true"
+                   tooltiptext=""
+                   observes="cmd_refactoring_renameClassMember" />
+         <menuitem id="refactor_renameVariable"
+                   label="&renameVariable.menuLabel;"
+                   accesskey="&refactoring.renameVariable.accessKey;"
+                   disabled="true"
+                   tooltiptext=""
+                   observes="cmd_refactoring_renameVariable" />
+         <menuitem id="refactor_extractMethod"
+                   label="&extractMethod.menuLabel;"
+                   accesskey="&refactoring.extractMethod.accessKey;"
+                   disabled="true"
+                   tooltiptext=""
+                   observes="cmd_refactoring_extractMethod" />
+        </menupopup>
+       </menu >
+    </menupopup>
+
+    <commandset id="allcommands">
+     <commandset
+         id="cmdset_refactoring"
+         oncommandupdate="ko.commands.updateCommandset(this)"
+         commandupdater="true"
+         events="some_files_open"
+         >
+         <command
+             id="cmd_refactoring_renameClassMember" key="key_cmd_refactoring_renameClassMember"
+             oncommand="ko.commands.doCommandAsync('cmd_refactoring_renameClassMember', event)"
+             desc="&renameClassMember.desc;"
+             disabled="true"
+             />
+         <command
+             id="cmd_refactoring_renameVariable" key="key_cmd_refactoring_renameVariable"
+             oncommand="ko.commands.doCommandAsync('cmd_refactoring_renameVariable', event)"
+             desc="&renameVariable.desc;"
+             disabled="true"
+             />
+         <command
+             id="cmd_refactoring_extractMethod" key="key_cmd_refactoring_extractMethod"
+             oncommand="ko.commands.doCommandAsync('cmd_refactoring_extractMethod', event)"
+             desc="&extractMethod.desc;"
+             disabled="true"
+             />
+     </commandset>
+    </commandset>
+</overlay>

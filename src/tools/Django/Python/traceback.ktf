@@ -1,0 +1,10 @@
+# komodo tool: traceback
+# ======================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ======================
+<% /* traceback print exception */ %>
+import traceback; traceback.print_exc();

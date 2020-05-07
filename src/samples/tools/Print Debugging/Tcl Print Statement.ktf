@@ -1,0 +1,10 @@
+# komodo tool: Tcl Print Statement
+# ================================
+# active: 1
+# is_clean: true
+# language: Tcl
+# treat_as_ejs: 1
+# type: printdebug
+# version: 1.1.6
+# ================================
+puts "[[%t]]"

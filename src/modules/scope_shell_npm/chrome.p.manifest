@@ -1,0 +1,5 @@
+# #if MODE == "dev"
+content scope-shell-npm content/
+# #else
+content scope-shell-npm jar:scope-shell-npm.jar!/content/
+# #endif

@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/listbox.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        class="kodialog pref-window"
+        orient="vertical"
+        onload="PrefTcl_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/pref-tcl-debug.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="tcl-debug-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical">
+            <caption label="&defaultTclInterpreter.label;"/>
+            <radiogroup id="tclInterpreterType" flex="1" pref="true"
+                        prefattribute="value">
+                <description>&defaultTclInterpreter.description;</description>
+                <radio value="tclsh"
+                       label="tclsh"
+                       selected="true"/>
+                <radio value="wish"
+                       label="wish"/>
+            </radiogroup>
+        </groupbox>
+    
+        <groupbox orient="vertical" class="load-context-check" showIfLoadContext="global">
+            <caption label="&tclInstrumentedFiles.label;"/>
+            <description>
+                Specify any files which you want to have the Tcl debugger
+                to explicitly instrument or not. By default, all files are
+                instrumented.  Uncheck the module entry to prevent instrumenting
+                the module.
+            </description>
+            <checklistbox
+                    id="tclInstrument"
+                    flex="1"
+                    seltype="multiple"
+                    rows="4"
+                    pref="true"
+                    prefwidget="true"
+                    prefstring="tclInstrument"/>
+        </groupbox>
+    
+        <groupbox orient="vertical">
+            <caption label="&logging.label;"/>
+            <checkbox id="tcl_debuggerlogenabled" label="&enableDebuggerLog.label;"
+                  pref="true" prefstring="tcl_debuggerlogenabled"
+                  prefattribute="checked"/>
+            <label value="Debugger Log Path (TEMP environment if empty)" />
+            <hbox align="center">
+                <textbox id="tcl_debuggerlogpath" pref="true" prefstring="tcl_debuggerlogpath" flex="1"/>
+                <button label="&browse.label;" oncommand="loadTclLogpath();"/>
+            </hbox>
+        </groupbox>
+
+    </vbox>
+
+</window>
+

@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        class="kodialog"
+        orient="vertical"
+        onload="parent.initPanel();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script type="application/x-javascript;version=1.7">
+    <![CDATA[
+
+function OnPreferencePageLoading(prefset) {
+    //try {
+    //    matchingTag_toggle(document.getElementById("showMatchingTagsOnClick"));
+    //    const { classes: Cc, interfaces: Ci } = Components;
+    //    var catSvc = Cc["@activestate.com/koXMLCatalogService;1"]
+    //                   .getService(Ci.koIXMLCatalogService);
+    //    catSvc.getPublicIDList(function(result, idlist) {
+    //        try {
+    //            var decl = prefset.getStringPref("defaultHTMLDecl");
+    //            var popup = document.getElementById("doctypePopup");
+    //            var selected = null;
+    //            for (let id of idlist) {
+    //                // is this an HTML decl?
+    //                if (/DTD X?HTML/.test(id)) {
+    //                    var el = document.createElement("menuitem");
+    //                    el.setAttribute("label", id);
+    //                    popup.appendChild(el);
+    //                    if (id == decl) {
+    //                        selected = el;
+    //                    }
+    //                }
+    //            }
+    //            popup.parentNode.selectedItem = selected;
+    //        } catch (e) {
+    //            log.exception(e);
+    //        }
+    //    });
+    //} catch(e) {
+    //    log.exception(e);
+    //}
+}
+
+function OnPreferencePageOK(prefset) {
+    //var popup = document.getElementById("doctypePopup");
+    //var decl = popup.parentNode.selectedItem;
+    //
+    //if (decl) {
+    //    prefset.setStringPref("defaultHTMLDecl", decl.getAttribute("label"));
+    //}
+    
+    return true;
+}
+
+function matchingTag_toggle(checkbox) {
+    if (checkbox.checked) {
+        document.getElementById("tag_highlight_settings_vbox").removeAttribute("collapsed");
+    } else {
+        document.getElementById("tag_highlight_settings_vbox").setAttribute("collapsed", "true");
+    }
+}
+
+    // ]]>
+    </script>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="html-prefs-vbox" flex="1" class="autoscroll">
+
+       <!-- <groupbox orient="vertical">
+            <caption label="&defaultHTMLDocumentType.label;"/>
+            <menulist id="doctypeList"
+                      flex="1">
+                <menupopup id="doctypePopup"/>
+            </menulist>
+        </groupbox>-->
+
+        <groupbox>
+            <caption label="Tag Highlighting"/>
+            <checkbox id="showMatchingTagsOnClick"
+                      label="&highlightMatchingTag.label;"
+                      pref="true"
+                      oncommand="matchingTag_toggle(this);"
+                      />
+            <vbox id="tag_highlight_settings_vbox" style="margin-left: 27px;">
+                <hbox align="center">
+                    <label value="&highlightMatchingTagRemoveAfter.label;"/>
+                    <textbox id="showMatchingTags_clearInterval" size="4" pref="true"/>
+                    <label value="&msecs.label;"/>
+                </hbox>
+                <checkbox id="showMatchingTags_constrainSearchInViewPort"
+                          label="&highlightMatchingTagConstrain.label;"
+                          pref="true"
+                          />
+            </vbox>
+        </groupbox>
+        
+        <groupbox>
+            <caption label="Tag Editing"/>
+            <checkbox id="editMatchingTags"
+                      label="&editMatchingTags.label;"
+                      pref="true"/>
+        </groupbox>
+
+    </vbox>
+
+</window>
+

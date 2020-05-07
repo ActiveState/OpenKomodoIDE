@@ -1,0 +1,52 @@
+# Developer Guide for ActiveAPIs
+
+Here-in some notes/guidelines/rules on maintaining and developing ActiveAPIs.
+
+## How to cut a release
+
+Currently there are two deployment methods for ActiveAPI releases: 
+
+- an svn tag for each release: The majority of current ActiveAPI users just
+  use an svn:externals setting to get a particular ActiveAPI version.
+
+- Python "sdist" packages released to
+    
+        http://languages.nas.activestate.com/python/packages/
+
+  This allows integrating an ActiveAPIs release into a Python build process
+  that uses "buildout" and installation via easy_install/pip/pypm.  See
+  <http://bugs.activestate.com/show_bug.cgi?id=85910#c5> for more notes
+  on this.
+
+That said, here is how you cut a release:
+
+1. Edit "CHANGES.md": Remove "(not yet released)" from the header for this
+   version.
+2. Edit "README.txt": Update the line saying "The latest current releases
+   are: ..." to mention this new release.
+3. Commit those to svn with a message something like "preparing $VERSION
+   release".
+4. Tag the release:
+
+        svn cp \
+            https://svn.activestate.com/repos/activestate/webops/activeapis/trunk \
+            https://svn.activestate.com/repos/activestate/webops/activeapis/tags/$VERSION \
+            -m "tag activeapis $VERSION"
+
+5. Release an 'sdist' package to
+   <http://languages.nas.activestate.com/python/packages/> by running:
+
+        mk release_sdist
+
+6. Increment version for subsequent development. Edit
+   "lib/activeapis2/VERSION.txt": increment version patch level.
+
+7. Edit "CHANGES.md": Add a section for the new version:
+
+        ## activeapis $NEWVERSION (not yet released)
+
+        (nothing yet)
+
+8. Commit these changes to svn with a message something like "prepare for
+   future development"
+

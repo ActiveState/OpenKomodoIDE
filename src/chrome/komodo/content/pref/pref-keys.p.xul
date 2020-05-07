@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/keybinding.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window id="KeyPrefWindow"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        windowtype="komodo_KeyPrefs"
+        orient="vertical"
+        onload="PrefKeys_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/pref-keys.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="keybinding-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox style="padding:6px;" orient="vertical" flex="1">
+            <caption label="&keyBindings.label;" />
+            <description>&keyBindingsConfiguration.description;</description>
+<!-- #if PLATFORM != 'darwin' -->
+            <separator class="thin"/>
+            <checkbox id="keybindingDisableAccesskeys"
+                      label="&removeAltKeyFromMenu.label;"
+                      pref="true"
+                      prefstring="keybindingDisableAccesskeys"
+                      prefattribute="checked"/>
+<!-- #endif -->
+            <checkbox id="enableViKeybindings"
+                      label="&enableViEmulation.label;"
+                      oncommand="setViKeybindings(this);"/>
+            <separator class="thin"/>
+            <label value="&keyBindingsSchemes.label;"
+                    accesskey="&keyBindingsSchemes.accesskey;" control="configurations"/>
+            <hbox>
+                <menulist flex="1" id="configurations">
+                    <menupopup id="configpopup"/>
+                </menulist>
+                <button class="packages-icon"
+                        tooltip="Get More Color Schemes"
+                        oncommand="require('scope-packages/packages').openCategory('keybinds')"/>
+                <button id="newConfiguration"
+                        accesskey="&newConfiguration.accesskey;"
+                        oncommand="newConfiguration()"
+                        label="&new.label;"/>
+                <button id="deleteConfiguration"
+                        accesskey="&deleteConfiguration.accesskey;"
+                        oncommand="deleteConfiguration()"
+                        label="&delete.label;"
+                        disabled="true"/>
+            </hbox>
+            <separator class="thin"/>
+            <hbox align="center">
+                <label value="&filePrefKeysCommands.label;" flex="1" accesskey="&filePrefKeysCommands.accesskey;" control="commands-filter-textbox"/>
+                <textbox id="commands-filter-textbox"
+                         style="min-height: 16px;"
+                         flex="1"
+                         type="search"
+                         timeout="200"
+                         oncommand="updateCommandList()"
+                         tooltiptext="&filterCommands.tooltiptext;"/>
+            </hbox>
+            <deck id="deck" style="min-height: 100px" flex="1">
+                <description id="nohits" style="padding: 5px">
+                    &noCommandsMatch.description;
+                </description>
+                <listbox id="keybinding-tree"
+                    tooltip="aTooltip"
+                    Xrows="10"
+                    flex="1"
+                    tooltiptext="&selectACommand.tooltiptext;"
+                    onselect="selectKey(event)"
+                    onclick="selectKey(event)"
+                    hidecolumnpicker="true"
+                    seltype="single">
+                    <listcols>
+                        <listcol flex="1"/>
+                    </listcols>
+                </listbox>
+            </deck>
+            <separator class="thin"/>
+            <editkeybinding id="keybinding" prefsdialog="true"
+                            onselect="selectCommandFromSelectedUseBy(event);"/>
+        </groupbox>
+
+    </vbox>
+
+</window>
+

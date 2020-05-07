@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Lists"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script>
+<![CDATA[
+
+function selectAll(listID)
+{
+  document.getElementById(listID).selectAll();
+}
+
+function clearAll(listID)
+{
+  document.getElementById(listID).selectItem(-1);
+}
+
+function setText(listID,textID)
+{
+  var listBox = document.getElementById(listID);
+  var selectedItem = listBox.getSelectedItem(0);
+  var newText = selectedItem.getAttribute("label");
+  document.getElementById(textID).value = newText;
+}
+
+function setCount(listID,textID)
+{
+  var listBox = document.getElementById(listID);
+  document.getElementById(textID).value = listBox.selectedCount;
+}
+
+]]>
+</script>
+
+<html:h1>XUL Lists</html:h1>
+
+  <vbox flex="1" style="overflow: auto">
+
+   <hbox>
+    <groupbox flex="1">
+    <caption label="states" />
+    <listbox rows="5">
+      <listitem label="Normal"/>
+      <listitem label="Selected" selected="true" />
+      <listitem label="Disabled" disabled="true" />
+      <listitem label="Checkbox" type="checkbox" />
+      <listitem label="Checked"  type="checkbox" checked="true" />
+    </listbox>
+    </groupbox>
+
+    <groupbox flex="1">
+    <caption label="with single selection" />
+    <listbox id="single-box" rows="5" flex="1"
+             onselect="setText('single-box','single-text');">
+      <listitem label="Pearl"   />
+      <listitem label="Aramis"  />
+      <listitem label="Yakima"  />
+      <listitem label="Tribble" />
+      <listitem label="Cosmo"   />
+    </listbox>
+    <hbox pack="center">
+      <description  id="single-text" value="(no input yet)" />
+    </hbox>
+    </groupbox>
+
+    <groupbox flex="1">
+    <caption label="with multiple selection" />
+    <listbox id="multi-box" rows="5" flex="1" seltype="multiple"
+             onselect="setCount('multi-box', 'multi-text');">
+      <listitem label="Gray"   />
+      <listitem label="Black"  />
+      <listitem label="Holstein"  />
+      <listitem label="Orange"  />
+      <listitem label="White"   />
+    </listbox>
+    <hbox align="center">
+      <button label="Select All" oncommand="selectAll('multi-box');" />
+      <button label="Clear All" oncommand="clearAll('multi-box');" />
+      <spacer flex="1" />
+      <description  value="#" />
+      <description  id="multi-text" value="0" />
+    </hbox>
+    </groupbox>
+   </hbox>
+
+    <groupbox>
+    <caption label="with multiple columns and a scrollbar" />
+    <listbox rows="5">
+      <listcols>
+	<listcol flex="1" />
+	<splitter class="tree-splitter" />
+	<listcol flex="1" />
+	<splitter class="tree-splitter" />
+	<listcol flex="1" />
+      </listcols>
+      <listhead>
+	<listheader label="Name" />
+	<listheader label="Sex" />
+	<listheader label="Color" />
+      </listhead>
+      <listitem>
+	<listcell label="Pearl" />
+	<listcell label="Female" />
+	<listcell label="Gray" />
+      </listitem>
+      <listitem>
+	<listcell label="Aramis" />
+	<listcell label="Male" />
+	<listcell label="Black" />
+      </listitem>
+      <listitem>
+	<listcell label="Yakima" />
+	<listcell label="Male" />
+	<listcell label="Holstein" />
+      </listitem>
+      <listitem>
+	<listcell label="Cosmo" />
+	<listcell label="Female" />
+	<listcell label="White" />
+      </listitem>
+      <listitem>
+	<listcell label="Fergus" />
+	<listcell label="Male" />
+	<listcell label="Black" />
+      </listitem>
+      <listitem>
+	<listcell label="Clint" />
+	<listcell label="Male" />
+	<listcell label="Black" />
+      </listitem>
+      <listitem>
+	<listcell label="Tribble" />
+	<listcell label="Female" />
+	<listcell label="Orange" />
+      </listitem>
+      <listitem>
+	<listcell label="Zippy" />
+	<listcell label="Male" />
+	<listcell label="Orange" />
+      </listitem>
+      <listitem>
+	<listcell label="Feathers" />
+	<listcell label="Male" />
+	<listcell label="Tabby" />
+      </listitem>
+      <listitem>
+	<listcell label="Butter" />
+	<listcell label="Male" />
+	<listcell label="Orange" />
+      </listitem>
+    </listbox>
+    </groupbox>
+
+  </vbox>
+
+</window>

@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Layout"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript;version=1.7"
+	  src="chrome://global/content/dialogOverlay.js" />
+
+<html:h1>XUL Box Layout</html:h1>
+
+<vbox flex="1" style="overflow: auto">
+
+ <groupbox>
+  <caption label="flexiness" />
+  <hbox>
+    <button label="No Flex" />
+    <button label="No Flex" />
+    <button label="No Flex" />
+    <button label="No Flex" />
+    <button label="No Flex" />
+  </hbox>
+
+  <hbox>
+    <button label="There's a" />
+    <button label="spacer" />
+    <spacer flex="1" />
+    <button label="in the" />
+    <button label="middle." />
+  </hbox>
+
+  <hbox>
+    <button label="This spacer ->" />
+    <spacer flex="2" />
+    <button label="is bigger than this spacer, ->" />
+    <spacer flex="1" />
+    <button label="so there!" />
+  </hbox>
+
+  <hbox>
+    <button label="No Flex" />
+    <button label="No Flex" />
+    <button flex="1" label="flex=1" />
+    <button label="No Flex" />
+    <button label="No Flex" />
+  </hbox>
+
+  <hbox>
+    <button flex="1" label="flex=1" />
+    <button flex="2" label="flex=2" />
+    <button flex="3" label="flex=3" />
+    <button flex="4" label="flex=4" />
+    <button flex="5" label="flex=5" />
+  </hbox>
+
+  <hbox>
+    <button flex="1" label="flex=1" />
+    <button flex="1" label="flex=1" />
+    <button flex="1" label="flex=1" />
+    <button flex="1" label="flex=1" />
+    <button flex="1" label="flex=1" />
+  </hbox>
+
+ </groupbox>
+
+
+ <groupbox>
+  <caption label="direction" />
+  <hbox dir="forward">
+    <button label="Here" />
+    <button label="the" />
+    <button label="direction" />
+    <button label="is" />
+    <button label="forward" />
+  </hbox>
+  <hbox dir="reverse">
+    <button label="Here" />
+    <button label="the" />
+    <button label="direction" />
+    <button label="is" />
+    <button label="reverse" />
+  </hbox>
+  <hbox>
+    <button label="Here the"        ordinal="4" />
+    <button label="ordinal"         ordinal="1" />
+    <button label="attribute"       ordinal="3" />
+    <button label="sets the order." ordinal="2"  />
+  </hbox>
+ </groupbox>
+
+ <groupbox>
+  <caption label="packing" />
+  <hbox pack="start">
+    <button label="Here" />
+    <button label="the" />
+    <button label="packing" />
+    <button label="is" />
+    <button label="start" />
+  </hbox>
+  <hbox pack="center">
+    <button label="Here" />
+    <button label="the" />
+    <button label="packing" />
+    <button label="is" />
+    <button label="center" />
+  </hbox>
+  <hbox pack="end">
+    <button label="Here" />
+    <button label="the" />
+    <button label="packing" />
+    <button label="is" />
+    <button label="end" />
+  </hbox>
+  <hbox pack="start">
+    <button label="Here" />
+    <button label="packing" />
+    <button label="yields" />
+    <button label="to" />
+    <button label="flex" flex="1" />
+  </hbox>
+ </groupbox>
+
+ <groupbox>
+  <caption label="alignment" />
+  <hbox align="start">
+    <button label="Here" image="images/betty_boop.xbm" orient="vertical" />
+    <button orient="vertical">
+       <label value="the" />
+       <label value="alignment" />
+    </button>
+    <button label="is" image="images/betty_boop.xbm" />
+    <button label="start" />
+  </hbox>
+  <hbox align="center">
+    <button label="Here" image="images/betty_boop.xbm" orient="vertical" />
+    <button orient="vertical">
+       <label value="the" />
+       <label value="alignment" />
+    </button>
+    <button label="is"  image="images/betty_boop.xbm" />
+    <button label="center" />
+  </hbox>
+  <hbox align="end">
+    <button label="Here" image="images/betty_boop.xbm" orient="vertical" />
+    <button orient="vertical">
+       <label value="the" />
+       <label value="alignment" />
+    </button>
+    <button label="is" image="images/betty_boop.xbm" />
+    <button label="end" />
+  </hbox>
+  <hbox align="baseline">
+    <button label="Here" image="images/betty_boop.xbm" orient="vertical" />
+    <button orient="vertical">
+       <label value="the" />
+       <label value="alignment" />
+    </button>
+    <button label="is" image="images/betty_boop.xbm" />
+    <button label="baseline" />
+  </hbox>
+  <hbox align="stretch">
+    <button label="Here" image="images/betty_boop.xbm" orient="vertical" />
+    <button orient="vertical">
+       <label value="the" />
+       <label value="alignment" />
+    </button>
+    <button label="is" image="images/betty_boop.xbm" />
+    <button label="stretch" />
+  </hbox>
+ </groupbox>
+
+ <groupbox orient="horizontal">
+  <caption label="equality" />
+  <vbox equalsize="always">
+    <button label="Here" image="images/betty_boop.xbm" orient="vertical" />
+    <button orient="vertical">
+       <label value="the" />
+       <label value="equalsize" />
+       <label value="attribute" />
+    </button>
+    <button label="is" image="images/betty_boop.xbm" />
+    <button label="always" />
+  </vbox>
+  <vbox equalsize="never">
+    <button label="Here" image="images/betty_boop.xbm" orient="vertical" />
+    <button orient="vertical">
+       <label value="the" />
+       <label value="equalsize" />
+       <label value="attribute" />
+    </button>
+    <button label="is" image="images/betty_boop.xbm" />
+    <button label="never" />
+  </vbox>
+ </groupbox>
+
+
+ <groupbox>
+  <caption label="hiddeness" />
+  <hbox>
+    <label value="Every other button in the line below is hidden" />
+  </hbox>
+  <hbox>
+    <button label="Every" />
+    <button label="other" hidden="true" />
+    <button label="button" />
+    <button label="in" hidden="true" />
+    <button label="the" />
+    <button label="line" hidden="true" />
+    <button label="below" />
+    <button label="is" hidden="true" />
+    <button label="hidden" />
+  </hbox>
+ </groupbox>
+
+</vbox>
+
+</window>

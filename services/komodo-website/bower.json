@@ -1,0 +1,37 @@
+{
+  "name": "komodo-website",
+  "version": "0.0.0",
+  "authors": [
+    "Nathan Rijksen <nathanr@activestate.com>"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "consolelog": "*",
+    "modernizr": "~2.7.1",
+    "github-fork-ribbon-css": "~0.1.0",
+    "jReject": "https://github.com/TurnWheel/jReject.git#~1.0.2",
+    "underscore": "~1.5.2",
+    "jquery-cookie": "~1.4.0",
+    "jquery-ui": "~1.10.3",
+    "highlightjs": "~8.0.0",
+    "textFit": "~2.1.0",
+    "tooltipster": "~3.0.5",
+    "magnific-popup": "~0.9.9",
+    "github.commits.widget": "https://github.com/Komodo/github-commits-widget.git",
+    "handlebars": "~1.3.0",
+    "jquery-slideshow-lite": "https://github.com/fredwu/jquery-slideshow-lite.git#~0.8.1",
+    "moment": "~2.5.1",
+    "jquery-visible": "https://github.com/teamdf/jquery-visible.git#~1.1.0",
+    "Font-Awesome": "~4.0.3",
+    "selectize": "~0.9.0",
+    "stickyfloat": "~7.5.0"
+  }
+}

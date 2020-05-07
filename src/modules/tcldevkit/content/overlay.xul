@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2009 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<?xml-stylesheet href="chrome://tcldevkit/skin/tcldevkit.css" type="text/css"?>
+
+<overlay id="TDKOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://tcldevkit/content/info.js" type="application/x-javascript"/>
+    <script src="chrome://tcldevkit/content/controller.js" type="application/x-javascript"/>
+  
+    <commandset id="allcommands">
+        <commandset
+            id="cmdset_TDK"
+            oncommandupdate="ko.commands.updateCommandset(this)"
+            commandupdater="true"
+            events="language_changed,current_view_changed,tdk_prefchange"
+            >
+        <command
+            id="cmd_tdkLaunchTclApp"
+            oncommand="ko.commands.doCommandAsync('cmd_tdkLaunchTclApp')" 
+            disabled="true"
+            desc="TDK: Launch TclApp"/>
+        <command
+            id="cmd_tdkLaunchTclCompiler"
+            oncommand="ko.commands.doCommandAsync('cmd_tdkLaunchTclCompiler')" 
+            disabled="true"
+            desc="TDK: Launch TclCompiler"/>
+        <command
+            id="cmd_tdkLaunchTclSvc"
+            oncommand="ko.commands.doCommandAsync('cmd_tdkLaunchTclSvc')" 
+            disabled="true"
+            desc="TDK: Launch TclSvc"/>
+        <command
+            id="cmd_tdkLaunchTclXref"
+            oncommand="ko.commands.doCommandAsync('cmd_tdkLaunchTclXref')" 
+            disabled="true"
+            desc="TDK: Launch TclXref"/>
+        <command
+            id="cmd_tdkLaunchTclVFSE"
+            oncommand="ko.commands.doCommandAsync('cmd_tdkLaunchTclVFSE')" 
+            disabled="true"
+            desc="TDK: Launch TclVFSE"/>
+        <command
+            id="cmd_tdkLaunchTclInspector"
+            oncommand="ko.commands.doCommandAsync('cmd_tdkLaunchTclInspector')" 
+            disabled="true"
+            desc="TDK: Launch TclInspector"/>
+        <command
+            id="cmd_tdkLaunchTclPE"
+            oncommand="ko.commands.doCommandAsync('cmd_tdkLaunchTclPE')" 
+            desc="TDK: Launch Tcl Package Editor"/>
+        <command
+            id="cmd_tdkCommunity"
+            oncommand="ko.commands.doCommandAsync('cmd_tdkCommunity')" 
+            desc="TDK Community"/>
+        <command
+            id="cmd_tdkMailinglist"
+            oncommand="ko.commands.doCommandAsync('cmd_tdkMailinglist')" 
+            desc="TDK Email Lists"/>
+        <command
+            id="cmd_tdkBugs"
+            oncommand="ko.commands.doCommandAsync('cmd_tdkBugs')" 
+            desc="TDK Bug Database"/>
+        </commandset>
+    </commandset>
+
+    <menupopup id="popup_tools">
+        <menu label="Tcl Dev Kit"
+              insertbefore="menu_watchThread">
+            <menupopup id="popup_tdk">
+                <menuitem label="TclApp"
+                          id="menu_tdkTclApp"
+                          observes="cmd_tdkLaunchTclApp"
+                          class="menuitem-iconic tdk-tclapp-icon"
+                          />
+                <menuitem label="TclCompiler"
+                          id="menu_tdkTclCompiler"
+                          observes="cmd_tdkLaunchTclCompiler"
+                          class="menuitem-iconic tdk-tclcompiler-icon"
+                          />
+                <menuitem label="TclSvc"
+                          id="menu_tdkTclSvc"
+                          observes="cmd_tdkLaunchTclSvc"
+                          class="menuitem-iconic tdk-tclsvc-icon"
+                          />
+                <menuitem label="TclCtrl"
+                          id="menu_tdkTclXref"
+                          observes="cmd_tdkLaunchTclXref"
+                          class="menuitem-iconic tdk-tclxref-icon"
+                          />
+                <menuitem label="TclTray"
+                          id="menu_tdkTclVFSE"
+                          observes="cmd_tdkLaunchTclVFSE"
+                          class="menuitem-iconic tdk-tclvfse-icon"
+                          />
+                <menuitem label="TclInspector"
+                          id="menu_tdkTclInspector"
+                          observes="cmd_tdkLaunchTclInspector"
+                          class="menuitem-iconic tdk-tclinspector-icon"
+                          />
+                <menuitem label="Tcl Package Editor"
+                          id="menu_tdkTclPE"
+                          observes="cmd_tdkLaunchTclPE"
+                          class="menuitem-iconic tdk-tclpe-icon"
+                          />
+                <menuitem label="TDK Community"
+                          id="menu_tdkCommunity"
+                          observes="cmd_tdkCommunity"
+                          class="menuitem-iconic tdk-community-icon"
+                          />
+                <menuitem label="TDK Email Lists"
+                          id="menu_tdkMailinglist"
+                          observes="cmd_tdkMailinglist"
+                          class="menuitem-iconic tdk-mailinglist-icon"
+                          />
+                <menuitem label="TDK Bug Database"
+                          id="menu_tdkBugs"
+                          observes="cmd_tdkBugs"
+                          class="menuitem-iconic tdk-bugs-icon"
+                          />
+            </menupopup>
+        </menu>
+    </menupopup>
+            
+    <toolbaritem id="toolsToolbarGroup">
+        
+        <toolbarbutton id="tb_tdkTclMenu"
+                class="tcl-toolbar-icon"
+                label="Tcl Dev Kit"
+                tooltiptext="Tcl Dev Kit"
+                buttonstyle="pictures"
+                kohidden="true"
+                persist="kohidden"
+                type="menu-button">
+                
+            <menupopup id="tb_tdkTclMenuPopup">
+                <menuitem id="tb_tdkTclApp"
+                        label="Run TclApp"
+                        observes="cmd_tdkLaunchTclApp"/>
+                <menuitem id="tb_tdkTclCompiler"
+                        label="Run TclCompiler"
+                        observes="cmd_tdkLaunchTclCompiler"/>
+                <menuitem id="tb_tdkTclSvc"
+                        label="Run TclSvc"
+                        observes="cmd_tdkLaunchTclSvc"/>
+                <menuitem id="tb_tdkTclXref"
+                        label="Run TclXref"
+                        observes="cmd_tdkLaunchTclXref"/>
+                <menuitem id="tb_tdkTclVFSE"
+                        label="Run TclVFSE"
+                        observes="cmd_tdkLaunchTclVFSE"/>
+                <menuitem id="tb_tdkTclInspector"
+                        label="Run TclInspector"
+                        observes="cmd_tdkLaunchTclInspector"/>
+                <menuitem id="tb_tdkTclPE"
+                        label="Run Tcl Package Editor"
+                        observes="cmd_tdkLaunchTclPE"/>
+                <menuitem id="tb_tdkCommunity"
+                        label="TDK Community"
+                        observes="cmd_tdkCommunity"/>
+                <menuitem id="tb_tdkMailinglist"
+                        label="TDK Email Lists"
+                        observes="cmd_tdkMailinglist"/>
+                <menuitem id="tb_tdkBugs"
+                        label="TDK Bug Database"
+                        observes="cmd_tdkBugs"/>
+            </menupopup>    
+        </toolbarbutton>
+    
+    </toolbaritem>
+			
+</overlay>

@@ -1,0 +1,128 @@
+/* Copyright (c) 2000-2009 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+interface koIAsyncCallback;
+
+[scriptable, uuid(5e95b65f-af60-4a7f-b3a4-afd8dc3ca9e0)]
+interface koIProfilerItem : nsISupports {
+    readonly attribute AString name;
+    readonly attribute AString path;
+    readonly attribute long line;
+    readonly attribute long num_calls;
+    readonly attribute long total_num_calls;
+    readonly attribute double own_cpu_time;
+    readonly attribute double cumulative_cpu_time;
+    readonly attribute long own_cpu_percentage;
+    readonly attribute long cumulative_cpu_percentage;
+    readonly attribute boolean hasChildren;
+    void getChildren(out unsigned long count,
+                     [array, size_is(count), retval] out koIProfilerItem profile_items);
+    // Caller's are the functions that call/execute this item.
+    void getAllCallers(out unsigned long count,
+                       [array, size_is(count), retval] out koIProfilerItem profile_items);
+    // Callee's are the functions called by this item.
+    void getAllCallees(out unsigned long count,
+                       [array, size_is(count), retval] out koIProfilerItem profile_items);
+};
+
+
+[scriptable, uuid(e6c2a706-0695-4ca3-b9e0-d307073f5522)]
+interface koIProfilerInstance : nsISupports {
+
+        /**
+         * The type name of the profiling data. Examples:
+         *   "python pstats"
+         *   "callgrind"
+         */
+    readonly attribute AString type_name;
+
+        /**
+         * The primary language name for this profiling instance.
+         */
+    readonly attribute AString language;
+
+    readonly attribute double total_cpu_time;
+
+        /**
+         * Load the given profile data from the given data.
+         */
+    void load(in AString name, in AString data);
+
+        /**
+         * Save the profile data to the given filepath.
+         */
+    void save(in AString filepath);
+
+        /**
+         * Return the top level hierachy of koIProfileItem's.
+         *
+         * Use the getChildren() method to find the methods called by these items.
+         */
+    void getHierachicalItems(out unsigned long count,
+                             [array, size_is(count), retval] out koIProfilerItem profile_items);
+
+        /**
+         * Return a flat list of all koIProfileItem's.
+         * 
+         * Use getAllCallees and getAllCallers methods to determine relationships.
+         */
+    void getAllItems(out unsigned long count,
+                     [array, size_is(count), retval] out koIProfilerItem profile_items);
+};
+
+[scriptable, uuid(69617177-f206-449c-96da-c3ce8cbe12ad)]
+interface koIProfilerService : nsISupports {
+        /**
+         * Load the given profile data from the given filepath or data.
+         */
+    koIProfilerInstance loadFromFile(in AString fileuri);
+    koIProfilerInstance loadFromString(in AString name, in AString data);
+    koIProfilerInstance loadFromBase64String(in AString name, in AString data);
+
+        /**
+         * Asynchronously load the given profile data from the given filepath or
+         * data.
+         */
+    void loadFromFileAsync(in AString fileuri, in koIAsyncCallback callback);
+    void loadFromStringAsync(in AString name, in AString data, in koIAsyncCallback callback);
+    void loadFromBase64StringAsync(in AString name, in AString data, in koIAsyncCallback callback);
+};
+
+
+[scriptable, uuid(b0d874a0-4f18-454e-8c23-630862b481f0)]
+interface koIProfilerView : nsISupports {
+    /**
+     * Note: The implementor of koIProfilerView must also provide a
+     *       "profilerview" XBL binding, with type set to be the same as the
+     *       koIProfilerView name.
+     */
+
+    readonly attribute AString name;
+
+    /**
+     * Load the profiler data.
+     * @param profiler - Instance of the profile data.
+     * @param state - Session state as returned by save_state, may be null.
+     */
+    void load(in koIProfilerInstance profiler, in AString state);
+
+    void setSelectedProfileItem(in koIProfilerItem item);
+
+    /**
+     * Save/Restore state must use JSON format to save and restore profile
+     * session information for the view. The contents of this JSON data is
+     * controlled by the view (i.e. there is no set structure).
+     */
+    AString save_state();
+    void restore_state(in AString session);
+
+    /**
+     * Highlight and/or expand to show the most prominent code.
+     * @param hotspot_type - Must be one of the following:
+     *           'num_calls',  'total_num_calls',
+     *           'own_cpu_time', 'own_cpu_percentage'
+     *           'cumulative_cpu_time',  'comulative_cpu_percentage'
+     */
+    void show_hotspots(in AString hotspot_type);
+};

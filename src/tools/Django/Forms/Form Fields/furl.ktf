@@ -1,0 +1,10 @@
+# komodo tool: furl
+# =================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# =================
+<% /* URLField (furl) */ %>
+[[%tabstop1:FIELDNAME]] = forms.URLField([[%tabstop2:2]])

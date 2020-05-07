@@ -1,0 +1,226 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        class="kodialog pref-window"
+        orient="vertical"
+        onload="parent.initPanel();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/otherdialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/encodingmenu.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/launch.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/file-properties.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/project-folderImport.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="file-properties-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox id="importFrame" name="importFrame" orient="vertical"
+                  class="load-context-check" showIfLoadContext="project">
+            <caption label="&specifyTheProjectsActualLocation.label;" class="kopadded"/>
+            <vbox flex="1">
+               <grid align="center" id="baseDirPickerGrid">
+                  <columns>
+                     <column flex="4" />
+                     <column flex="1" />
+                  </columns>
+                  <rows>
+                     <row>
+                        <textbox id="import_dirname" pref="true" prefstring="import_dirname" flex="1" />
+                        <button label="&browse.label;" id="browse_import_dirname" oncommand="PrefFolderImport_doBrowseForDir()" />
+                     </row>
+                     <row><label value=""/>
+                     <button label="Browse Remote" id="browse_import_remote_dirname" oncommand="PrefFolderImport_doBrowseForRemoteDir()" />
+                     </row>
+                  </rows>
+               </grid>
+                <separator class="thin"/>
+                <label value="&primaryLanguage.label;"/>
+                <langlist id="primaryLanguage" flex="1" default="None" default-value="-1"
+                          oncommand="setField('primaryLanguage', this.selection);"/>
+                <separator class="thin"/>
+                <label value="&filesToInclude.label;"/>
+                <textbox id="import_include_matches" pref="true" value=""/>
+                <separator class="thin"/>
+                <label value="&filesToExclude.label;"/>
+                <textbox id="import_exclude_matches" pref="true" value=""/>
+            </vbox>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="&fileProperties.label;"/>
+                <grid flex="1">
+                    <columns>
+                        <column style="min-width: 90px;"/>
+                        <!--<column/>-->
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row align="center">
+                            <label value="&filePropertiesName.label;"/>
+                            <textbox id="properties-name" readonly="true" flex="1"/>
+                        </row>
+                        <separator style="height: 8px;"/>
+    
+                        <separator class="groovy-thin"/>
+    
+                        <separator class="thin"/>
+                        <row align="center">
+                            <label value="&filePropertiesLocation.label;"/>
+                            <textbox id="location" readonly="true"/>
+                        </row>
+                        <separator class="thin"/>
+                        <row align="center">
+                            <label value="&filePropertiesSize.label;"/>
+                            <label id="size"/>
+                        </row>
+                        <separator class="thin"/>
+    
+                        <separator class="groovy-thin"/>
+    
+    <!-- #if PLATFORM == "win" -->
+                        <separator class="thin"/>
+                        <row align="center">
+                            <label value="&filePropertiesCreated.label;"/>
+                            <label id="created"/>
+                        </row>
+    <!-- #endif -->
+                        <separator class="thin"/>
+                        <row align="center">
+                            <label value="&filePropertiesModified.label;"/>
+                            <label id="modified"/>
+                        </row>
+                        <separator class="thin"/>
+                        <row align="center">
+                            <label value="&filePropertiesAccessed.label;"/>
+                            <label id="accessed"/>
+                        </row>
+                        <separator class="thin"/>
+    
+                        <separator class="groovy-thin"/>
+    
+                        <separator class="thin"/>
+                        <row align="center">
+                            <label value="&filePropertiesAttributes.label;"/>
+                            <hbox id="file_permissions_hbox"
+                                  align="center">
+                                <!-- The readonly checkbox is shown for local files
+                                     on Windows, a Unix-style file mode is shown on
+                                     Mac and Linux as well as on remote files. -->
+                                <checkbox id="readonly" style="padding-left: 0px;"
+                                          label="&readOnly.label;" accesskey="&readonly.accesskey;"
+                                          oncommand="setField('readonly', this.checked);"/>
+                                <label id="file_permissions_label" />
+                                <button id="file_permissions_button"
+                                        label="&filePropertiesChangePermissions.button;"
+                                        oncommand="changeFilePermissions();" />
+                            </hbox>
+                        </row>
+                     </rows>
+                </grid>
+    
+        </groupbox>
+        <groupbox id="file-settings" orient="vertical">
+           <caption label="&fileSettings.label;"/>
+                <grid flex="1">
+                    <columns>
+                        <column style="min-width: 90px;"/>
+                        <!--<column/>-->
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row align="center">
+                            <label value="&filePropertiesLanguage.label;" control="language"
+                                   accesskey="&filePropertiesLanguage.accesskey;"/>
+                            <hbox align="center" flex="1">
+                                <langlist id="language" flex="1"
+                                          oncommand="setField('language', this.selection);"/>
+                                <button id="btn-reset" label="&reset.label;" accesskey="&btnReset.accesskey;"
+                                        tooltiptext="&resetLanguageToTheDefaultForThisFileType.tooltiptext;"
+                                        oncommand="resetLanguage();"/>
+                            </hbox>
+                        </row>
+                        <separator class="thin"/>
+                        <row align="center">
+                            <label value="&filePropertiesEncoding.label;" control="encoding"
+                                   accesskey="&filePropertiesEncoding.accesskey;"/>
+                            <menulist id="encoding"/>
+                        </row>
+                        <row>
+                            <spacer/>
+                            <checkbox id="bom" accesskey="&bom.accesskey;"
+                                      style="padding-left: 0px;"
+                                      oncommand="setField('encoding_and_or_bom', this.checked);"
+                                      label="&useSignatureBOM.label;"/>
+                        </row>
+                        <separator class="thin"/>
+                        <row align="center">
+                            <label value="&filePropertiesLineEndings.label;" control="lineEndings"
+                                   accesskey="&filePropertiesLineEndings.accesskey;"/>
+                            <menulist id="lineEndings"
+                                      oncommand="setLineEnding(this.value);">
+                                <menupopup>
+                                    <menuitem label="&DOSWindowsRN.label;"
+                                              value="EOL_CRLF"/>
+                                    <menuitem label="&UNIXN.label;"
+                                              value="EOL_LF"/>
+                                    <menuitem label="&macClassicR.label;"
+                                              value="EOL_CR"/>
+                                </menupopup>
+                            </menulist>
+                        </row>
+                        <row align="center">
+                            <spacer/>
+                            <vbox>
+                                <checkbox id="preserveLineEndings" accesskey="&preserveLineEndings.accesskey;"
+                                          style="padding-left: 0px;"
+                                          label="&preserveExistingLineEndings.label;"
+                                          oncommand="setField('lineEndings', document.getElementById('lineEndings').value);"/>
+                                <description id="mixedLineEndings"
+                                             value="&filePropertiesMixedEndings.description;"
+                                             style="color: #CC3333; margin-top: 0px; padding-left: 20px;"
+                                             collapsed="true"/>
+                            </vbox>
+                        </row>
+                    </rows>
+                </grid>
+        </groupbox>
+        <groupbox orient="vertical" id="markupSettings">
+            <caption label="&documentMarkupSettings.label;"/>
+            <!--<label value="&filePropertiesDefaultDoctype.label;"/>
+            <menulist id="doctypeList"
+                      flex="1">
+                <menupopup id="doctypePopup">
+                    <menuitem label="&determineFromContent.label;"/>
+                </menupopup>
+            </menulist>-->
+            <label value="&filePropertiesDefaultNamespace.label;"/>
+            <menulist id="namespaceList"
+                      flex="1">
+                <menupopup id="namespacePopup">
+                    <menuitem label="&determineFromContent.label;"/>
+                </menupopup>
+            </menulist>
+        </groupbox>
+
+    </vbox>
+
+</window>

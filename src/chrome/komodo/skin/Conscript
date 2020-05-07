@@ -1,0 +1,65 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'platform',
+    'mozChromeDir',
+    'mozBin',
+    'mozSrc',
+    'unsiloedPythonExe',
+    'jarring',
+    'productType',
+    'unsiloedPythonExe',
+    'buildFlavour',
+    'mozVersion',
+    'withSCC',
+    'withDebugging',
+);
+
+$cons->InstallInChrome('splitter.css');
+$cons->InstallInChrome('browser.less');
+if ($withDebugging) {
+    $cons->InstallInChrome('debugger.css');
+    $cons->InstallInChrome('prefs/pref-php.css');
+}
+$cons->InstallInChrome('extmgr.css');
+$cons->InstallInChrome('hyperlinks.css');
+$cons->InstallInChrome('tree.css');
+$cons->InstallInChrome('autocomplete.css');
+$cons->InstallInChrome('find.css');
+$cons->InstallInChrome('feature_control_panel.css');
+$cons->InstallInChrome('notifications.css');
+$cons->InstallInChrome('_helpers/shortcuts.less');
+
+$cons->Preprocess('templates/new.p.css', 'templates/new.css');
+$cons->InstallInChrome('templates/new.css');
+
+$cons->InstallInChrome('formatters/pref-formatters.css');
+$cons->InstallInChrome('formatters/generic/formatter.css');
+$cons->InstallInChrome('formatters/javascript/formatter.css');
+
+$cons->InstallInChrome('prefs/pref-window.less');
+$cons->InstallInChrome('prefs/prefs.css');
+
+$cons->InstallInChrome('dialogs/customizeToolbar.css');
+$cons->InstallInChrome('dialogs/find2.less');
+$cons->InstallInChrome('dialogs/diff.css');
+$cons->InstallInChrome('dialogs/login.less');
+
+if ($withSCC) {
+    $cons->InstallInChrome('commit_dialog.less');
+    $cons->InstallInChrome('scc_history.css');
+    $cons->InstallInChrome('scc_widget.css');
+}
+
+if ($withSCC) {
+    $cons->InstallInChrome('SCC.css');
+}
+
+$cons->InstallInChrome('dialogs/colorscheme.less');
+$cons->InstallInChrome('dialogs/internalError.css');
+$cons->InstallInChrome('colorpicker/wrapper.less');
+$cons->InstallInChrome('colorpicker/colorpicker.less'); 

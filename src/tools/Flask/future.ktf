@@ -1,0 +1,13 @@
+// komodo tool: future
+// ===================
+// auto_abbreviation: true
+// indent_relative: false
+// set_selection: false
+// treat_as_ejs: true
+// type: snippet
+// version: 1.0.12
+// ===================
+<% // Flask "In Separate File" route  %>
+from __future__ import absolute_import, print_function, unicode_laterals
+
+    !@#_currentPos!@#_anchor

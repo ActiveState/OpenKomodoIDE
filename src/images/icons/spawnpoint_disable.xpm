@@ -1,0 +1,20 @@
+/* XPM */
+static char *spawn_d[] = {
+/* columns rows colors chars-per-pixel */
+"16 12 2 1",
+"  c #008000",
+"O c None",
+/* pixels */
+"OO      OOOOOOOO",
+"OOO  OO  OOOOOOO",
+"OOOO  OO  OOOOOO",
+"OOOOO  OO  OOOOO",
+"OOOOOO  OO  OOOO",
+"OOOOOOO  OO  OOO",
+"OOOOOOO  OO  OOO",
+"OOOOOO  OO  OOOO",
+"OOOOO  OO  OOOOO",
+"OOOO  OO  OOOOOO",
+"OOO  OO  OOOOOOO",
+"OO      OOOOOOOO"
+};

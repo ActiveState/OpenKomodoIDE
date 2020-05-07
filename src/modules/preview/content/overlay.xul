@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2017 ActiveState Software Inc. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<overlay id="previewOverlay"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://preview/content/overlay.js"
+            type="application/x-javascript;version=1.7"/>
+
+</overlay>

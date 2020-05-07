@@ -1,0 +1,1504 @@
+commit 1954a0b23f6a698804289aefa9dbe8d627ccba05
+Author: Carey Hoffman <cgchoffman@gmail.com>
+Date:   Tue Mar 3 16:46:53 2020 -0800
+
+    Remove analytics
+
+diff --git a/Construct b/Construct
+index 2b0b7b1de..b24b91e7b 100644
+--- a/Construct
++++ b/Construct
+@@ -458,7 +458,6 @@ Build(
+     "$build/modules/trackchanges/Conscript",
+     # CITODO: Enable when ready
+     #"$build/modules/zendframework/Conscript",
+-    "$build/modules/analytics/Conscript",
+     "$build/modules/commando/Conscript",
+     "$build/modules/scope_files/Conscript",
+     "$build/modules/scope_tools/Conscript",
+diff --git a/src/chrome/komodo/content/sdk/logging.js b/src/chrome/komodo/content/sdk/logging.js
+index 3b8e41fd2..1ce7d1df5 100644
+--- a/src/chrome/komodo/content/sdk/logging.js
++++ b/src/chrome/komodo/content/sdk/logging.js
+@@ -526,7 +526,7 @@ Logger.prototype.report = function(e, message, level = "EXCEPTION") {
+                     }
+                 ],
+                 user: {
+-                    id: prefs.getString('analytics_ga_uid', "")
++                    id: prefs.getString('analytics_ga_id', "")
+                 }
+             }
+         ]
+diff --git a/src/chrome/komodo/content/startupWizard/startupWizard.js b/src/chrome/komodo/content/startupWizard/startupWizard.js
+index 265a480c6..5491f5465 100644
+--- a/src/chrome/komodo/content/startupWizard/startupWizard.js
++++ b/src/chrome/komodo/content/startupWizard/startupWizard.js
+@@ -153,10 +153,6 @@ if (typeof window.startupWizard == "undefined")
+         
+         fields.snippetBehavior.value("auto"); // This is hard to detect given the way this is currently stored
+         
+-        fields.analytics = require("ko/ui/checkbox").create("Help make Komodo even better by providing anonymous statistics about your usage");
+-        fields.analytics.$element.addClass("fullwidth");
+-        fields.analytics.checked( prefs.getBoolean("analytics_enabled") );
+-        
+         fields.runTutorial = require("ko/ui/checkbox").create('Start the "Getting Started" Tutorial when I finish this wizard');
+         fields.runTutorial.$element.addClass("fullwidth");
+         fields.runTutorial.checked(true);
+@@ -310,7 +306,6 @@ if (typeof window.startupWizard == "undefined")
+         
+         var indentGroupbox = page.addGroupbox({caption: "Indentation"});
+         var autoGroupbox = page.addGroupbox({caption: "Automation"});
+-        var helpKomodoGroupbox = page.addGroupbox({caption: "Analytics (Attention!)"});
+         
+         indentGroupbox.addRow([
+             require("ko/ui/label").create("Indentation Width: "),
+@@ -327,25 +322,6 @@ if (typeof window.startupWizard == "undefined")
+         
+         autoGroupbox.addRow(fields.showLineNumbers);
+         
+-        helpKomodoGroupbox.addRow(fields.analytics);
+-        
+-        var textStyle = {attributes: { style: "width: 500px; display: inline-block; text-align: center; opacity: 0.7;" }};
+-        helpKomodoGroupbox.addRow([
+-            require("ko/ui/span").create(
+-                "Komodo tracks very basic non-identifiable user data (such as what features or languages are used). " +
+-                "This information is used to focus the development efforts for Komodo. " +
+-                "The analytics code is open source and can be inspected on github.",
+-                textStyle
+-            )
+-        ]);
+-        
+-        helpKomodoGroupbox.addRow([
+-            require("ko/ui/link").create("View Analytics Code", { attributes: {
+-                href: "https://github.com/Komodo/KomodoEdit/tree/master/src/modules/analytics",
+-                style: "width: 500px; display: inline-block; text-align: center;" 
+-            } })
+-        ]);
+-                
+         return page;
+     };
+     
+@@ -476,7 +452,6 @@ if (typeof window.startupWizard == "undefined")
+         prefs.setBoolean("editSmartSoftCharacters", fields.softchars.checked());
+         prefs.setLong("tabWidth", fields.indentWidth.value());
+         prefs.setLong("indentWidth", fields.indentWidth.value());
+-        prefs.setBoolean("analytics_enabled", fields.analytics.checked());
+         
+         prefs.setBoolean("enableAutoAbbreviations", true);
+         if (fields.snippetBehavior.value() == "auto")
+diff --git a/src/components/koInitService.p.py b/src/components/koInitService.p.py
+index 562e60447..c01b2cb55 100644
+--- a/src/components/koInitService.p.py
++++ b/src/components/koInitService.p.py
+@@ -560,7 +560,7 @@ class KoInitService(object):
+                 "version": i.version,
+                 "build": i.buildNumber,
+                 "releaseStage": i.buildFlavour
+-            }, user = {"id": prefs.getString("analytics_ga_uid", "")})
++            }, user = {"id": prefs.getString("analytics_ga_id", "")})
+             
+             # Hook it up to our loggers
+             logger = logging.getLogger()
+diff --git a/src/install/wix/feature-core.ini b/src/install/wix/feature-core.ini
+index df3313f77..fede0fa34 100644
+--- a/src/install/wix/feature-core.ini
++++ b/src/install/wix/feature-core.ini
+@@ -1884,7 +1884,6 @@ feature-core/INSTALLDIR/lib/sdk/udl/mustache/js2mustache.udl
+ feature-core/INSTALLDIR/lib/sdk/udl/mustache/mustache2html.udl
+ feature-core/INSTALLDIR/lib/sdk/udl/mustache/mustachelex.udl
+ feature-core/INSTALLDIR/lib/sdk/udl/r-mainlex.udl
+-feature-core/INSTALLDIR/lib/mozilla/extensions/analytics@activestate.com.xpi
+ feature-core/INSTALLDIR/lib/mozilla/extensions/breadcrumbs@activestate.com.xpi
+ feature-core/INSTALLDIR/lib/mozilla/extensions/lintresults@activestate.com.xpi
+ feature-core/INSTALLDIR/lib/mozilla/extensions/editorconfig@activestate.com/chrome.manifest
+diff --git a/src/modules/analytics/Conscript b/src/modules/analytics/Conscript
+deleted file mode 100644
+index 6643042a6..000000000
+--- a/src/modules/analytics/Conscript
++++ /dev/null
+@@ -1,32 +0,0 @@
+-#!/usr/local/bin/perl
+-# Copyright (c) 2010 ActiveState Software Inc.
+-# See the file LICENSE.txt for licensing information.
+-
+-Import(
+-    'cons',
+-    'platform',
+-    'productType',
+-    'buildFlavour',
+-    'sdkDir',
+-    'idlExportDir',
+-    'build',
+-    'mozBin',
+-    'unsiloedPythonExe',
+-    'mozVersion',
+-    'mozExtensionDir',
+-    'mozIdlIncludePath',
+-);
+-
+-$cons->KoExt("koinstall --packed");
+-
+-# For quick development, comment out the "KoExt" call above and 
+-# use the following. The first time this is run, it will setup the
+-# appropriate extension link. Then you need to *manually* do
+-# a local "koext" dev build via:
+-#       python ../../sdk/bin/koext.py build --dev
+-# You need to re-run "koext build --dev" every time you change or add
+-# files that are built, e.g.: preprocessed files, idl files. However for
+-# files that are not built -- e.g. XUL, CSS, JS, Python -- you don't
+-# need to build at all, just re-start Komodo.
+-#
+-#$cons->KoExtSourceDevInstall();
+diff --git a/src/modules/analytics/chrome.p.manifest b/src/modules/analytics/chrome.p.manifest
+deleted file mode 100644
+index 1bdb8962a..000000000
+--- a/src/modules/analytics/chrome.p.manifest
++++ /dev/null
+@@ -1,9 +0,0 @@
+-# #if MODE == "dev"
+-content analytics content/
+-locale analytics en-US locale/en-US/
+-# #else
+-content analytics jar:analytics.jar!/content/
+-locale analytics en-US jar:analytics.jar!/locale/en-US/
+-# #endif
+-
+-overlay chrome://komodo/content/komodo.xul chrome://analytics/content/overlay.xul
+diff --git a/src/modules/analytics/content/analytics.js b/src/modules/analytics/content/analytics.js
+deleted file mode 100644
+index 59438531c..000000000
+--- a/src/modules/analytics/content/analytics.js
++++ /dev/null
+@@ -1,553 +0,0 @@
+-/* This Source Code Form is subject to the terms of the Mozilla Public
+- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+- * You can obtain one at http://mozilla.org/MPL/2.0/. */
+-
+-if (typeof(ko) == 'undefined')
+-{
+-    var ko = require("ko/windows").getMain().ko;
+-}
+-
+-ko.analytics = new function()
+-{
+-
+-    const CAT_FILE_METRIC    = 'File Metrics';
+-    const CAT_INSTALL_METRIC = 'Install Metrics';
+-    const CAT_SYSTEM_METRIC  = 'System Metrics';
+-    const CAT_PREF_METRIC    = 'Pref Metrics';
+-    const CAT_BUTTONS_METRIC    = 'Button Metrics';
+-    const CAT_WIDGET_METRIC    = 'Widget Metrics';
+-
+-    const DIM_PRODUCT     = 'dimension1';
+-    const DIM_VERSION     = 'dimension2';
+-    const DIM_BUILD       = 'dimension3';
+-    const DIM_BUILDTYPE   = 'dimension4';
+-
+-    const { classes: Cc, interfaces: Ci, utils: Cu } = Components;
+-
+-    const { logging }       = Cu.import("chrome://komodo/content/library/logging.js", {});
+-    const { DownloadUtils } = Cu.import("resource://gre/modules/DownloadUtils.jsm", {});
+-    
+-    var prefs   = Cc['@activestate.com/koPrefService;1'].getService(Ci.koIPrefService).prefs;
+-
+-    var log = logging.getLogger('analytics');
+-    //log.setLevel(10);
+-
+-    var sectionRegex = /^[a-z]*\:\//i;
+-
+-    /**
+-     * Constructor
+-     */
+-    this.init = () =>
+-    {
+-        //this.debug();
+-
+-        // Retrieve unique user id
+-        var firstRun = false;
+-        var uid = prefs.getString('analytics_ga_uid', '');
+-        if (uid == '')
+-        {
+-            var uuidGenerator = Cc["@mozilla.org/uuid-generator;1"]
+-                                .getService(Ci.nsIUUIDGenerator);
+-            uid = new String(uuidGenerator.generateUUID());
+-            uid = uid.substr(1).substr(0,uid.length-2);
+-            prefs.setStringPref('analytics_ga_uid', uid);
+-            firstRun = true;
+-        }
+-
+-        if ( ! prefs.getBoolean('analytics_enabled', false))
+-        {
+-            return;
+-        }
+-
+-        // Init Ganalytics
+-        this._getProxy().ga_initialize();
+-
+-        this._proxyGa('create', prefs.getStringPref('analytics_ga_id'), {
+-          'cookieDomain': 'activestate.com', // gotta use something
+-          'clientId': uid
+-        });
+-        this._proxyGa('set', 'checkProtocolTask', function(){});
+-        this._proxyGa('set', 'checkStorageTask', function(){});
+-
+-        // Init DeskMetrics
+-        this._proxyDm('start', { appId: prefs.getString("analytics_deskmetrics_id") });
+-        
+-        // Set custom dimensions
+-        var infoSvc = Cc["@activestate.com/koInfoService;1"].getService(Ci.koIInfoService);
+-
+-        this.setGaProperty(DIM_PRODUCT,       infoSvc.productType);
+-        this.setGaProperty(DIM_VERSION,       infoSvc.version);
+-        this.setGaProperty(DIM_BUILD,         infoSvc.buildNumber);
+-        this.setGaProperty(DIM_BUILDTYPE,     infoSvc.buildType);
+-
+-        this.setDmProperty("client_uid", uid);
+-        this.setDmProperty("tracking_id", [infoSvc.version, infoSvc.buildType].join("_"));
+-        this.setDmProperty("sub_id", infoSvc.buildType);
+-        this.setDmProperty("ko_version",       infoSvc.version);
+-        this.setDmProperty("ko_build",         infoSvc.buildNumber);
+-        this.setDmProperty("ko_type",          infoSvc.buildType);
+-
+-        this.trackDmEvent("launch");
+-
+-        // Track installs / upgrades
+-        var lastVersion = prefs.getString('analyticsLastVersion', '');
+-        if (lastVersion != infoSvc.version)
+-        {
+-            prefs.setStringPref('analyticsLastVersion', infoSvc.version);
+-            if (lastVersion == '')
+-            {
+-                this.trackGaEvent(CAT_INSTALL_METRIC, "Fresh Install", infoSvc.version);
+-                this.trackDmEvent("install", {state: "succeeded"});
+-            }
+-            else
+-            {
+-                this.trackGaEvent(CAT_INSTALL_METRIC, "Update", infoSvc.version);
+-                this.trackDmEvent("ko_updated", 1);
+-
+-                this.trackGaEvent(CAT_INSTALL_METRIC, "Install", "from " + lastVersion + " to " + infoSvc.version);
+-                this.trackGaEvent("ko_updated_from", lastVersion);
+-            }
+-        }
+-
+-        // Track system info, don't want to waste dimensions on this
+-        var sysInfo = Cc["@mozilla.org/system-info;1"].getService(Ci.nsIPropertyBag2);
+-        var memSize = Math.round(sysInfo.getPropertyAsInt64("memsize") / 1073741824, 2);
+-        var cpucount = sysInfo.getPropertyAsInt32("cpucount");
+-
+-        if (firstRun)
+-        {
+-            this.trackGaEvent(CAT_SYSTEM_METRIC, "memory", memSize, memSize);
+-            this.trackGaEvent(CAT_SYSTEM_METRIC, "arch", sysInfo.getPropertyAsAString("arch"));
+-            this.trackGaEvent(CAT_SYSTEM_METRIC, "cpucount", cpucount, cpucount);
+-        }
+-
+-        this.trackDmEvent("ko_memory", memSize);
+-        this.trackDmEvent("ko_arch", sysInfo.getPropertyAsAString("arch"));
+-        this.trackDmEvent("ko_cpucount", cpucount);
+-
+-        var startupTime = Math.floor(Date.now() / 1000);
+-        var interval = 43200;
+-        var lastHeartBeat = prefs.getLong("analytics_last_heartbeat", 0);
+-
+-        var heartBeat = () =>
+-        {
+-            var now = Math.floor(Date.now() / 1000);
+-            if (now - lastHeartBeat >= 43200)
+-                this.trackDmEvent("heart_beat", { run_time: startupTime - now });
+-            lastHeartBeat = now;
+-
+-            setTimeout(heartBeat, interval+60); // offset by 60, just to be safe
+-        };
+-        heartBeat();
+-
+-        ko.main.addWillCloseHandler(() =>
+-        {
+-            var now = Math.floor(Date.now() / 1000);
+-            this.trackDmEvent("exit", { state: "succeeded", run_time: startupTime - now });
+-        });
+-
+-        this.bindListeners();
+-    };
+-
+-    /**
+-     * Debug helper, when called this starts listening for debug messages from ganalytics
+-     * Helps tracking ganalytics debug info, but also allows users to track
+-     * what data is being send
+-     */
+-    this.debug = () =>
+-    {
+-        log.setLevel(10);
+-        var proxy = document.getElementById('analyticsProxy').contentWindow;
+-        var debug = proxy.document.getElementById('debug');
+-        if (debug.textContent.length) log.debug(debug.textContent);
+-        debug.textContent = '';
+-
+-        setTimeout(this.debug, 500);
+-    };
+-
+-    /**
+-     * Event listeners 
+-     */
+-    this.bindListeners = () =>
+-    {
+-        window.addEventListener('editor_view_opened', this._eventProxy.bind(this, this.onViewOpened));
+-        window.addEventListener('focus', this._eventProxy.bind(this, this.onWindowFocus));
+-        document.getElementById('toolbox_side').addEventListener('click', this._eventProxy.bind(this, this.onSidetoolbarClick));
+-        window.addEventListener('current_widget_changed', this._eventProxy.bind(this, this.onWidgetChanged));
+-        //window.addEventListener('loadDialog', e => e.detail["dialog"]
+-        //                                            .addEventListener('focus',_proxy.bind(this, this.onWindowFocus)) );
+-
+-        var ww = Cc["@mozilla.org/embedcomp/window-watcher;1"].getService(Ci.nsIWindowWatcher);
+-        ww.registerNotification(this.onWindowOpened);
+-
+-        prefs.prefObserverService.addObserver(this.onPrefChanged, "__all__", false);
+-    };
+-
+-    ///**
+-    // * Listen to changes on deck elems for pageviews
+-    // *
+-    // * @param {Window} _window
+-    // */
+-    //this.bindDeckListeners = (_window) =>
+-    //{
+-    //    if (_window._hasDeckListeners) return;
+-    //    _window._hasDeckListeners = true;
+-    //
+-    //    // Get deck id's that we want to track
+-    //    if ( ! ("_trackDecks" in this))
+-    //    {
+-    //        this._trackDecks = [];
+-    //        var _decks = prefs.getPref('analytics_track_decks');
+-    //        for (let x=0;x<_decks.length;x++)
+-    //        {
+-    //            this._trackDecks.push(_prefs.getString(x));
+-    //        }
+-    //    }
+-    //
+-    //    // Iterate over all decks in the window and track "select" event on those
+-    //    // that we opted in to track
+-    //    var elem = _window.document.getElementsByTagName("deck");
+-    //    for (let [,elem] in Iterator(elems))
+-    //    {
+-    //        if (this._trackDecks.indexOf(elem.getAttribute("id")) == -1) continue;
+-    //        ((_elem) => {
+-    //            _elem.addEventListener("select", (e) => {
+-    //                if (e.target!=e.originalTarget) return;
+-    //                this.trackPageView(section + "#deck-" + _elem.getAttribute("id") + "-" + _elem.selectedIndex)
+-    //            });
+-    //        })(elem);
+-    //    }
+-    //};
+-
+-    /**
+-     * Triggered when a pref has been changed, holds the observe key used by
+-     * the prefobserver
+-     */
+-    this.onPrefChanged = { observe: (subject, topic, data) => {
+-        var val;
+-        switch (topic) {
+-            // Scheme prefs
+-            case 'keybinding-scheme':
+-            case 'editor-scheme':
+-            case 'interface-scheme':
+-            case 'widget-scheme':
+-                val = ko.prefs.getStringPref(topic);
+-                this.trackEvent(CAT_PREF_METRIC, "global_" + data, val);
+-                break;
+-
+-            // Track the string value for these prefs
+-            case 'ui.tabs.sidepanes.left.layout':
+-            case 'ui.tabs.sidepanes.right.layout':
+-            case 'ui.tabs.sidepanes.bottom.layout':
+-                val = ko.prefs.getStringPref(data);
+-                this.trackEvent(CAT_PREF_METRIC, "global_" + data, val);
+-                break;
+-
+-            // Track boolean state, int value or otherwise just track that the pref was set
+-            default:
+-                if (prefs.getPrefType(data) == 'boolean')
+-                {
+-                    val = ko.prefs.getBooleanPref(data);
+-                    this.trackEvent(CAT_PREF_METRIC, "global_" + data, val, val ? 1 : 0);
+-                }
+-                else if (prefs.getPrefType(data) == 'long')
+-                {
+-                    val = ko.prefs.getLongPref(data);
+-                    this.trackEvent(CAT_PREF_METRIC, "global_" + data, val, val);
+-                }
+-                else
+-                {
+-                    this.trackEvent(CAT_PREF_METRIC, "global_" + data);
+-                }
+-                break;
+-        }
+-    }};
+-
+-    /**
+-     * Triggered when a view (editor) has been opened
+-     */
+-    this.onViewOpened = (e) =>
+-    {
+-        var view = e.detail.view;
+-        this.trackPageView("/editor/" + view.koDoc.language);
+-        if ("koDoc" in view && "file" in view.koDoc && view.koDoc.file && "scimoz" in view)
+-        {
+-            this.trackEvent(CAT_FILE_METRIC, "Opened");
+-            this.trackEvent(CAT_FILE_METRIC, "Language", view.koDoc.language);
+-
+-            // Track filesize, but standarize it a bit so we can group similar
+-            // filesizes together
+-            var size = DownloadUtils.convertByteUnits(view.scimoz.textLength);
+-            var bins = [10,50,100,200,300,400,500,600,700,800,900];
+-            var binIndex = this._getNumberBin(size[0], bins);
+-
+-            this.trackEvent(CAT_FILE_METRIC, "Size",
+-                            (binIndex > 0 ? bins[binIndex-1] : 0) + "-" + bins[binIndex] + " " + size[1]);
+-
+-            if (view.koDoc.file.isLocal)
+-            {
+-                this.trackEvent(CAT_FILE_METRIC, "Location", "Local");
+-            }
+-            else
+-            {
+-                this.trackEvent(CAT_FILE_METRIC, "Location", "Remote");
+-            }
+-        }
+-    };
+-
+-    this.onWindowOpened = { observe: (_window, topic) => //aSubject, aTopic, aData
+-    {
+-        var docElem = _window.document.documentElement;
+-        var windowId = docElem.getAttribute("id");
+-        var section = _window.location.href.replace(sectionRegex, '');
+-
+-        if (windowId == "commonDialog")
+-            return;
+-
+-        if (windowId == "prefWindow")
+-        {
+-            this.trackPageView(section);
+-        }
+-
+-        if (docElem.nodeType == 'wizard')
+-        {
+-            var onWizardPageStep = () => this.trackPageView(section + "#wizard-step-" + docElem.pagestep);
+-            var onWizardFinish = () => this.trackPageView(section + "#wizard-finish");
+-            var onWizardCancel = () => this.trackPageView(section + "#wizard-cancel");
+-            
+-            docElem.addEventListener("wizardnext", onWizardPageStep);
+-            docElem.addEventListener("wizardback", onWizardPageStep)
+-            docElem.addEventListener("wizardfinish", onWizardPageStep)
+-            docElem.addEventListener("wizardcancel", onWizardPageStep)
+-        }
+-
+-        _window.addEventListener('focus', this._eventProxy.bind(this, this.onWindowFocus));
+-    }};
+-
+-    /**
+-     * Track "page" views on window focus
+-     */
+-    this.onWindowFocus = (e) =>
+-    {
+-        var _window = e.view;
+-        var windowId = _window.document.documentElement.getAttribute("id");
+-        
+-        // Don't track page views if the "page" didnt change (panels can cause repeat focus events)
+-        if (this.onWindowFocus._previous == windowId)
+-            return;
+-        this.onWindowFocus._previous = windowId;
+-        
+-        var section = _window.location.href.replace(sectionRegex, '');
+-        // Document title may disclose personal information (file / project name)
+-        // Disabled this entirely for now as the document title isn't that relevant
+-        //var title = ("document" in _window) ? window.document.title : null;
+-
+-        if (_window.document.documentElement.nodeType == 'wizard')
+-        {
+-            section += "#wizard-step-" + _window.document.documentElement.pagestep;
+-        }
+-
+-        if (windowId == "prefWindow")
+-        {
+-            var panelFrame = _window.document.getElementById('panelFrame');
+-            var frame = panelFrame.children[panelFrame.selectedIndex];
+-            var section = frame.getAttribute("src").replace(sectionRegex, '');
+-        }
+-
+-        this.trackPageView(section);
+-    };
+-    this.onWindowFocus._previous = null;
+-    
+-    this.onSidetoolbarClick = (e) =>
+-    {
+-        if (e.target.nodeName != "toolbarbutton")
+-            return;
+-        
+-        if (e.target.classList.contains("dynamic-button"))
+-        {
+-            this.trackEvent(CAT_BUTTONS_METRIC, "dynamic-button", e.target.getAttribute("label") || e.target.getAttribute("id"));
+-        }
+-        
+-        if (e.target.parentNode.getAttribute("id") == "toolsToolbarGroup")
+-        {
+-            this.trackEvent(CAT_BUTTONS_METRIC, "static-tool-button", e.target.getAttribute("label") || e.target.getAttribute("id"));
+-        }
+-    };
+-    
+-    this.onWidgetChanged = (e) =>
+-    {
+-        var label = e.detail.getAttribute("label") || e.detail.getAttribute("id");
+-        
+-        // Debug widget labels include the filename, so force the label
+-        if (label.indexOf("Debug:") === 0)
+-            label = "Debugging";
+-        
+-        this.trackEvent(CAT_WIDGET_METRIC, "widget-accessed", label);
+-    };
+-
+-    var _lastPageView = null;
+-    /**
+-     * Track page view by location and title
+-     *
+-     * @param {String} section
+-     * @param {String} title
+-     */
+-    this.trackPageView = (section, title) =>
+-    {
+-        if (_lastPageView == section) return;
+-        _lastPageView = section;
+-        
+-        log.debug("Tracking pageview. Section: " + section);
+-
+-        var event = {
+-            hitType: 'pageview',
+-            page: section,
+-            location: section
+-        };
+-
+-        if (title) event.title = title;
+-
+-        this._proxyGa("send", event);
+-
+-        var dmEvent = {
+-            page: event.page,
+-            location: event.location,
+-            title: event.title || undefined
+-        };
+-
+-        this._proxyDm("send", "opened", dmEvent);
+-    };
+-
+-    this.trackEvent = (category, action, label, value) =>
+-    {
+-        this.trackGaEvent(category, action, label, value);
+-        this.trackDmEvent([category, action, label].filter((v) => !! v).join("_"), value);
+-    };
+-
+-    /**
+-     * Track a custom event
+-     *
+-     * @param {String} category     Typically the object that was interacted with (e.g. file)
+-     * @param {String} action       The type of interaction (e.g. opened)
+-     * @param {String} label        Useful for categorizing events (e.g. python)
+-     * @param {Integer} value       Values must be non-negative. Useful to pass counts (e.g. filename length)
+-     */
+-    this.trackGaEvent = (category, action, label, value) =>
+-    {
+-        log.debug("Tracking event.\n\nCategory: " + category +
+-                  ",\nAction: " + action + "\nLabel: " + label +
+-                  ",\nValue: " + value + "\n");
+-
+-        var event = {
+-            hitType: 'event',
+-            eventCategory: category,
+-            eventAction: action
+-        };
+-
+-        if (label) event.eventLabel = new String(label);
+-        if (value) event.eventValue = parseInt(value);
+-
+-        this._proxyGa("send", event);
+-    };
+-
+-    /**
+-     * Track a DM event
+-     */
+-    this.trackDmEvent = (event, value) =>
+-    {
+-        return; // disabled for the time being
+-        log.debug("Tracking DM event : " + event);
+-        this._proxyDm("send", event, value);
+-    };
+-    
+-    /**
+-     * Set a deskmetrics user/session property
+-     *
+-     * @param {String|Object} properties
+-     * @param {String} value
+-     */
+-    this.setDmProperty = (key, value) =>
+-    {
+-        return; // disabled for the time being
+-        this._proxyDm("setProperty", key, value);
+-    };
+-
+-    /**
+-     * Set a google analytics user/session property
+-     *
+-     * @param {String|Object} properties
+-     * @param {String} value
+-     */
+-    this.setGaProperty = (properties, value) =>
+-    {
+-        if (value)
+-        {
+-            var _properties = {};
+-            _properties[properties] = new String(value);
+-            properties = _properties;
+-        }
+-
+-        this._proxyGa("set", properties);
+-    };
+-
+-    this._getProxy = () =>
+-    {
+-        if ( ! this._getProxy._window)
+-        {
+-            var elem = document.getElementById('analyticsProxy');
+-            if (elem)
+-                this._getProxy._window = elem.contentWindow;
+-        }
+-
+-        return this._getProxy._window || null;
+-    };
+-
+-    /**
+-     * Send data over the deskmetrics proxy
+-     */
+-    this._proxyDm = (...args) =>
+-    {
+-        return // disabled for the time being
+-        var method = args.shift()
+-        this._getProxy().$dm[method].apply(this._getProxy(), args);
+-    };
+-
+-    /**
+-     * Send data over the GA proxy
+-     */
+-    this._proxyGa = (...args) =>
+-    {
+-        this._getProxy().ga.apply(this._getProxy(), args);
+-    };
+-
+-    /**
+-     * Group "amount" under relevant "bin"
+-     *
+-     * @param {Integer} amount
+-     * @param {Array} bins      Must be sorted ASC, eg. [1024, 10240, 102400]
+-     *
+-     * @returns index of matching bin
+-     */
+-    this._getNumberBin = (amount, bins) =>
+-    {
+-        for (let [x,bin] in Iterator(bins))
+-        {
+-            if (amount < bin) return x;
+-        }
+-        return bins.length-1;
+-    }
+-
+-    this._eventProxy = (cb, ...args) =>
+-    {
+-        try {
+-            cb.apply(this, args);
+-        } catch (e) {
+-            log.exception(e);
+-        }
+-    };
+-
+-};
+-
+-// Start after the workspace_restored even is fired, as we don't want to track any
+-// events triggered by the restore
+-window.addEventListener("workspace_restored", ko.analytics.init.bind(ko.analytics));
+diff --git a/src/modules/analytics/content/overlay.xul b/src/modules/analytics/content/overlay.xul
+deleted file mode 100644
+index f2786f5e0..000000000
+--- a/src/modules/analytics/content/overlay.xul
++++ /dev/null
+@@ -1,23 +0,0 @@
+-<?xml version="1.0"?>
+-<!-- Copyright (c) 2000-2012 ActiveState Software Inc. -->
+-<!-- See the file LICENSE.txt for licensing information. -->
+-<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+-
+-<overlay id="analyticsOverlay"
+-         xmlns:html="http://www.w3.org/1999/xhtml"
+-         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+-
+-    <script src="chrome://analytics/content/analytics.js"
+-            type="application/x-javascript;version=1.7"/>
+-    
+-
+-    <deck id="komodo-box">
+-        <browser    id="analyticsProxy"
+-                    type="content"
+-                    src="chrome://analytics/content/proxy.html"
+-                    insertafter="printBrowser"/>
+-        
+-    </deck>
+-
+-</overlay>
+diff --git a/src/modules/analytics/content/proxy.html b/src/modules/analytics/content/proxy.html
+deleted file mode 100644
+index 98826ea7f..000000000
+--- a/src/modules/analytics/content/proxy.html
++++ /dev/null
+@@ -1,40 +0,0 @@
+-<!DOCTYPE html>
+-<html>
+-<head>
+-</head>
+-<body>
+-<div id="debug"></div>
+-<script type="text/javascript">
+-    /**
+-     * Replace window.console with our debugging version.
+-     *
+-     * Note: This must be done before window.onload, otherwise it will throw an
+-     *       exception.
+-     */
+-    var elem = document.getElementById("debug");
+-    var debug = function(text) {
+-        elem.textContent = elem.textContent + "\n" + text;
+-    }
+-    window.console = {
+-        log: (msg) => debug("proxy log: " + msg),
+-        debug: (msg) => debug("proxy debug: " + msg),
+-        error: (msg) => debug("proxy error: " + msg),
+-        info: (msg) => debug("proxy info: " + msg)
+-    }
+-
+-    /**
+-     * Load the google analytics script.
+-     */
+-    function ga_initialize() {
+-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+-        })(window,document,'script','https://www.google-analytics.com/analytics_debug.js','ga');
+-    }
+-</script>
+-<!--
+-disabled for the time being
+-<script src="http://cdn.pingstatsnet.com/sdk/deskmetrics-2.1.0-min.js"></script>
+--->
+-</body>
+-</html>
+diff --git a/src/modules/analytics/install.rdf b/src/modules/analytics/install.rdf
+deleted file mode 100644
+index f2952662c..000000000
+--- a/src/modules/analytics/install.rdf
++++ /dev/null
+@@ -1,29 +0,0 @@
+-<?xml version="1.0"?>
+-<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+-     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+-  <Description about="urn:mozilla:install-manifest">
+-    <em:id>analytics@activestate.com</em:id>
+-    <em:name>Analytics</em:name>
+-    <em:version>1.0.0</em:version>
+-    <em:description>Provide anonymous analytics to the Komodo devs to improve Komodo</em:description>
+-    <em:creator>Nathan Rijksen</em:creator>
+-    <em:homepageURL></em:homepageURL>
+-    <em:type>2</em:type> <!-- type=extension --> 
+-    <em:unpack>false</em:unpack>
+-
+-    <em:targetApplication> <!-- Komodo IDE -->
+-      <Description>
+-        <em:id>{36E66FA0-F259-11D9-850E-000D935D3368}</em:id>
+-        <em:minVersion>7.0</em:minVersion>
+-        <em:maxVersion>12.*</em:maxVersion>
+-      </Description>
+-    </em:targetApplication>
+-    <em:targetApplication> <!-- Komodo Edit -->
+-      <Description>
+-        <em:id>{b1042fb5-9e9c-11db-b107-000d935d3368}</em:id>
+-        <em:minVersion>7.0</em:minVersion>
+-        <em:maxVersion>12.*</em:maxVersion>
+-      </Description>
+-    </em:targetApplication>
+-  </Description>
+-</RDF>
+diff --git a/src/modules/analytics/locale/en-US/analytics.properties b/src/modules/analytics/locale/en-US/analytics.properties
+deleted file mode 100644
+index c7629485a..000000000
+--- a/src/modules/analytics/locale/en-US/analytics.properties
++++ /dev/null
+@@ -1,6 +0,0 @@
+-analytics.optin.ask.message=Please help us make Komodo even better by providing anonymous statistics about your usage
+-analytics.optin.confirm.label=Sure thing!
+-analytics.optin.confirm.accessKey=s
+-analytics.optin.deny.label=I'd rather not
+-analytics.optin.deny.accessKey=n
+-analytics.optin.thanks.message=Thanks for helping us make Komodo better! You rock!
+diff --git a/src/prefs/prefs.p.xml b/src/prefs/prefs.p.xml
+index be3c86dcc..a857cd3b4 100644
+--- a/src/prefs/prefs.p.xml
++++ b/src/prefs/prefs.p.xml
+@@ -1601,7 +1601,7 @@ SSL_CLIENT_I_C=
+   <boolean id="places.multiple_project_view">0</boolean>
+ 
+   <!-- Analytics -->
+-  <string id="analytics_ga_id">UA-47685083-3</string>
++  <string id="analytics_ga_id">3d09d7e1-ec13-40a6-8307-f22a41c15bcf</string>
+   <string id="analytics_deskmetrics_id">6r25977273</string>
+   <boolean id="analytics_enabled">1</boolean> <!-- Analytics is opt-out, not opt-in -->
+ 
+
+commit 265f7509154efd80d3463144987ad8e915c82f81
+Author: Carey Hoffman <cgchoffman@gmail.com>
+Date:   Tue Mar 3 16:12:12 2020 -0800
+
+    Delete pad files
+
+diff --git a/Blackfile.py b/Blackfile.py
+index bc4781a0d..544d4f123 100644
+--- a/Blackfile.py
++++ b/Blackfile.py
+@@ -2096,9 +2096,7 @@ def UploadKomodoPackages(cfg, argv):
+         for dirpath, dirnames, filenames in os.walk(cfg.packagesRelDir):
+             reldir = _relpath(dirpath, cfg.packagesRelDir).replace('\\', '/')
+             for filename in filenames:
+-                if "pad" in reldir.split('/'):
+-                    pass
+-                elif fnmatch(filename, "dbgp-*.tar.gz"):
++                if fnmatch(filename, "dbgp-*.tar.gz"):
+                     pass
+                 elif filename in [
+                         "komodo_javascript_debugger.xpi",
+@@ -2131,7 +2129,6 @@ def PackageKomodo(cfg, argv):
+         remotedebugging the remote debugging packages for this plat
+         mozpatches      a zip of the Mozilla patches for the used moz build
+         updates         update package(s) for the autoupdate system
+-        pad             PAD file
+         symbols         breakpad crash report symbol files
+ 
+     Sets of packages:
+@@ -2146,10 +2143,10 @@ def PackageKomodo(cfg, argv):
+     """
+     args = argv[1:] or ["std"]
+     if "all" in args:
+-        packages = ["installer", "pad", "remotedebugging",
++        packages = ["installer", "remotedebugging",
+                     "mozpatches", "updates", "crashreportsymbols"]
+     elif "std" in args:
+-        packages = ["installer", "pad", "crashreportsymbols"]
++        packages = ["installer", "crashreportsymbols"]
+         if cfg.productType == "ide":
+             if cfg.buildPlatform.startswith("linux") \
+                and cfg.buildPlatform.endswith("x86"):
+@@ -2183,8 +2180,6 @@ def PackageKomodo(cfg, argv):
+                 retval = _PackageKomodoDMG(cfg) 
+             else:
+                 retval = _PackageKomodoASPackage(cfg)
+-        elif package == "pad":
+-            retval = _PackageKomodoPAD(cfg)
+         elif package == "updates":
+             retval = _PackageKomodoUpdates(cfg)
+         elif package == "crashreportsymbols":
+@@ -2194,30 +2189,6 @@ def PackageKomodo(cfg, argv):
+         if retval:
+             raise Error("error packaging '%s': retval=%r" % (package, retval))
+ 
+-
+-def _PackageKomodoPAD(cfg):
+-    genpad_path = join("src", "pad", "genpad.py")
+-    output_dir = join(cfg.packagesAbsDir, "internal", "pad",
+-                      "komodo_%s" % cfg.productType)
+-    license_text_path = join("src", "license_text",
+-                             "LICENSE.%s.txt" % cfg.licenseTextType)
+-    if not exists(output_dir):
+-        os.makedirs(output_dir)
+-
+-    # The PAD file.
+-    cmd = 'python %s -d "%s" -L "%s"' % (
+-        genpad_path, output_dir, license_text_path)
+-    _run(cmd)
+-
+-    # The screenshot file.
+-    plat_os = cfg.buildPlatform.split('-', 1)[0]
+-    _cp(join("src", "pad", "komodo_%s_%s.png" % (cfg.productType, plat_os)),
+-        output_dir)
+-
+-    # The icon file.
+-    _cp(join("src", "main", "komodo32.%s.png" % cfg.productType),
+-        join(output_dir, "komodo_orb_32.png"))
+-
+ def _PackageKomodoMozillaPatches(cfg):
+     """The Komodo "mozpatches" package is just a simple packaging up of the
+     mozilla patches applied to the moz build for the used moz build.
+diff --git a/bin/mkrc.py b/bin/mkrc.py
+index f679c18e1..f3b5c6e7e 100755
+--- a/bin/mkrc.py
++++ b/bin/mkrc.py
+@@ -101,11 +101,10 @@ Build Master: %(builder)s
+ 
+ class _BuildInfo(object):
+     """Info on a particular Komodo build."""
+-    def __init__(self, proj, pkg_prefix, pad_name, log_prefix, short_ver, rev,
++    def __init__(self, proj, pkg_prefix, log_prefix, short_ver, rev,
+             devbuild_dir, platnames=None, exclude_auto_update=False):
+         self.proj = proj
+         self.pkg_prefix = pkg_prefix
+-        self.pad_name = pad_name
+         self.log_prefix = log_prefix
+         self.short_ver = short_ver
+         self.major_ver = int(short_ver.split('.', 1)[0])
+@@ -238,9 +237,6 @@ def mkrc(branch="rel", ide_revision=None, edit_revision=None, dry_run=False,
+         t = Tree()
+         t.add("internal")
+         t.add("internal/log")
+-        t.add("internal/pad")
+-        t.add("internal/pad/komodo_ide")
+-        t.add("internal/pad/komodo_edit")
+         t.add("internal/crashreportsymbols")
+         t.add("remotedebugging")
+         if not exclude_auto_update:
+@@ -435,26 +431,6 @@ def get_rc_manifest(builds):
+                 # are named 'macosx'.
+                 platname = "macosx"
+ 
+-            # PAD files
+-            pad_name = build.pad_name
+-            pad_plat = platname.replace('-', '_')
+-            pad_os = platname.split('-', 1)[0]
+-            rc_manifest.add(    # PAD file
+-                ("internal/pad/%s/%s_%s.xml" % (pad_name, pad_name, pad_plat),
+-                 ujoin(devbuild_dir, "internal", "pad", pad_name)))
+-            rc_manifest.add(    # PAD screenshot
+-                ("internal/pad/%s/%s_%s.png" % (pad_name, pad_name, pad_os),
+-                 ujoin(devbuild_dir, "internal", "pad", pad_name)))
+-            
+-            if pad_name == "komodo_ide":
+-                rc_manifest.add(    # PAD icon
+-                    ("internal/pad/%s/komodo_orb_32.png" % (pad_name),
+-                     ujoin(devbuild_dir, "internal", "pad", pad_name)))
+-            elif pad_name == "komodo_edit":
+-                rc_manifest.add(    # PAD icon
+-                    ("internal/pad/%s/komodoedit_orb_32.png" % (pad_name),
+-                     ujoin(devbuild_dir, "internal", "pad", pad_name)))
+-
+             # Crash report symbols zip file.
+             symbols_filename = crashreportsymbols_zip_name(pkg_prefix, pkg_ver, platname)
+             rc_manifest.add(
+diff --git a/src/pad/README.txt b/src/pad/README.txt
+deleted file mode 100644
+index 6e9df43a7..000000000
+--- a/src/pad/README.txt
++++ /dev/null
+@@ -1,6 +0,0 @@
+-PAD files are used by some app aggregation sites to define software
+-and software releases. This dir holds the stuff for building PAD files
+-for a Komodo build.
+-
+-<http://www.asp-shareware.org/pad/padgen.php> Is a graphical tool for
+-building PAD files.
+diff --git a/src/pad/genpad.py b/src/pad/genpad.py
+deleted file mode 100755
+index ddfe8447a..000000000
+--- a/src/pad/genpad.py
++++ /dev/null
+@@ -1,270 +0,0 @@
+-#!/usr/bin/env python
+-# Copyright (c) 2000-2008 ActiveState Software Inc.
+-# See the file LICENSE.txt for licensing information.
+-
+-"""Generate a PAD file for distribution on sites for this Komodo build."""
+-
+-__version_info__ = (1, 0, 0)
+-__version__ = '.'.join(map(str, __version_info__))
+-
+-import os
+-from os.path import join, dirname, abspath, basename, exists
+-import sys
+-import re
+-import datetime
+-from pprint import pprint
+-import traceback
+-import optparse
+-import codecs
+-import logging
+-
+-
+-
+-#---- exceptions and globals
+-
+-log = logging.getLogger("genpad")
+-# Careyh: Needed the 64 bit lines for testing on my machine for some reason
+-# Decided to not remove just incase they are needed later and in case I want to
+-# test and make more edits later.
+-g_sysreqs_from_os = {
+-     "win32": "1GHz (or faster) x86 or x86_64 processor with 1 GB RAM, 250 MB hard disk space and 350 MB of temporary hard disk space during installation.",
+-     #"win64": "1GHz (or faster) x86 or x86_64 processor with 1 GB RAM, 250 MB hard disk space and 350 MB of temporary hard disk space during installation.",
+-     "linux": "Intel processor, 1 GB RAM, 250 MB hard disk space and 350 MB of temporary hard disk space during installation.",
+-     "macosx": "1GHz (or faster) x86 or x86_64 processor with 1 GB RAM, 250 MB hard disk space and 350 MB of temporary hard disk space during installation.",
+-}
+-
+-g_os_support_from_os = {
+-    "win32": "Windows Server 2008 or later, Win7 x32, Win7 x64, Win8, Win10",
+-    #"win64": "Windows Server 2008 or later, Win7 x32, Win7 x64, Win8, Win10",
+-    "macosx": "Mac OS X 10.9 (Mavericks) or later",
+-    "linux": "Red Hat Enterprise Linux 6 or later, CentOS 6.0 or later, Fedora Core 15 or later, OpenSUSE 12.1 or later, SuSE Linux Enterprise Desktop/Server 11.3 or later, Ubuntu 12.04 or later"
+-}
+-
+-g_pretty_platname_from_platname = {
+-    "win32-x86": "Windows",
+-    #"win64-x64": "Windows",
+-    "macosx": "Mac OS X",
+-    "macosx-x86": "Mac OS X/Intel",
+-    "macosx-powerpc": "Mac OS X/PowerPC",    
+-    "linux-x86": "Linux/x86",
+-    "linux-x86_64": "Linux/x86_64",
+-}
+-
+-g_simple_platform_name_from_os = {
+-    "win32": "windows",
+-    #"win64": "windows",
+-    "macosx": "mac",
+-    "linux": "linux",
+-}
+-
+-g_EUAL_link_from_editor = {
+-     "Edit": "http://www.activestate.com/komodo-edit/license-agreement",
+-     "IDE": "http://www.activestate.com/komodo-ide/license-agreement"
+-}
+-
+-class GenPadError(Exception):
+-    pass
+-
+-
+-
+-#---- main functionality
+-
+-def genpad(output_dir=None):
+-    DEBUG = False
+-    if output_dir is None:
+-        output_dir = dirname(__file__)
+-    num_errors = 0
+-
+-    top_dir = _get_top_dir()
+-    sys.path.insert(0, top_dir)
+-    sys.path.insert(0, join(top_dir, "util"))
+-    import preprocess
+-    import platinfo
+-    import bkconfig
+-    
+-    # Some general info.
+-    today = datetime.date.today()
+-    ver_info = _ver_info_from_long_ver_str(bkconfig.version)
+-    pi = platinfo.PlatInfo()
+-
+-    # Gather PAD info.
+-    if len(ver_info) > 3 and ver_info[3] == 'a':
+-        release_status = "Alpha"
+-    elif len(ver_info) > 3 and ver_info[3] in ('b', 'c'):
+-        release_status = "Beta"
+-    elif ver_info[2] == 0:
+-        release_status = "Major Update"
+-    else:
+-        release_status = "Minor Update"
+-    platname = bkconfig.buildPlatform
+-    os_support = g_os_support_from_os.get(pi.os)
+-    if os_support is None:
+-        raise GenPadError("what is appropriate PAD <Program_OS_Support> "
+-                          "for %r (see http://www.asp-shareware.org/pad/specs.php)"
+-                          % platname)
+-    install_pkg_path = join(top_dir, bkconfig.komodoInstallerPackage)
+-    if not exists(install_pkg_path):
+-        num_errors += 1
+-        log.error("`%s' installer package doesn't exist (run `bk build`)",
+-                  install_pkg_path)
+-        size_bytes = 0
+-    else:
+-        size_bytes = os.stat(install_pkg_path).st_size
+-    short_ver = _short_ver_str_from_ver_info(ver_info)
+-    pad_basename = "komodo_%s_%s.xml" % (
+-        bkconfig.productType, bkconfig.buildPlatform.replace('-', '_'))
+-    pretty_platname = g_pretty_platname_from_platname[platname]
+-    pad_info = {
+-        "$PAD_PROGRAM_NAME": "Komodo %s (%s)" % (
+-            bkconfig.prettyProductType, pretty_platname),
+-        "$PAD_VERSION": bkconfig.komodoVersion,
+-        "$PAD_MAJOR_VERSION": bkconfig.komodoShortVersion.split(".")[0],
+-        "$PAD_RELEASE_YEAR": today.year,
+-        "$PAD_RELEASE_MONTH": "%02d" % today.month,
+-        "$PAD_RELEASE_DAY": "%02d" % today.day,
+-        "$PAD_RELEASE_STATUS": release_status,
+-        "$PAD_OS_SUPPORT": os_support,
+-        "$PAD_SYSREQ": g_sysreqs_from_os[pi.os],
+-        "$PAD_SIMPLE_PLATFORM_NAME": g_simple_platform_name_from_os[pi.os],
+-        "$PAD_SIZE_BYTES": size_bytes,
+-        "$PAD_SIZE_K": int(float(size_bytes) / 1024.0),
+-        "$PAD_SIZE_MB": "%.1f" % (float(size_bytes) / 1024.0 / 1024.0),
+-        "$PAD_RELEASES_VER": short_ver,
+-        "$PAD_INSTALLER_PKG_NAME": basename(bkconfig.komodoInstallerPackage),
+-        "$PAD_PAD_BASENAME": pad_basename,
+-        "$PAD_SCREENSHOT_BASENAME": "komodo_%s_%s.png" % (bkconfig.productType, pi.os),
+-        "$PAD_ICON_BASENAME": "komodo_orb_32.png",
+-        "$PAD_EULA": g_EUAL_link_from_editor.get(bkconfig.prettyProductType)
+-    }
+-
+-    # Preprocess the template.
+-    template_path = join(dirname(__file__), "komodo_pad.p.xml")
+-    output_path = join(output_dir, pad_basename)
+-    log.info("genpad `%s'", output_path)
+-    output_file = codecs.open(output_path, 'w', "utf-8")
+-    preprocess.preprocess(template_path, outfile=output_file,
+-                          defines=pad_info, substitute=True)
+-    output_file.close()
+-    
+-    # Sanity check that add "$PAD_*" vars were handled.
+-    content = codecs.open(output_path, 'r', "utf-8").read()
+-    if "$PAD" in content:
+-        pad_pat = re.compile(r"\$PAD_\w+\b")
+-        for hit in pad_pat.findall(content):
+-            num_errors += 1
+-            log.error("'%s' from template not replaced", hit)
+-    
+-    return num_errors
+-    
+-
+-#---- internal support stuff
+-
+-def _get_top_dir():
+-    dir = dirname(abspath(__file__))
+-    while True:
+-        if exists(join(dir, "Blackfile.py")):
+-            return dir
+-
+-        up_dir = dirname(dir)
+-        if up_dir == dir:
+-            break
+-        dir = up_dir
+-    else:
+-        raise GenPadError("couldn't find top Komodo dir (with Blackfile.py)")
+-
+-def _short_ver_str_from_ver_info(ver_info):
+-    def isint(s):
+-        try:
+-            int(s)
+-        except ValueError:
+-            return False
+-        else:
+-            return True
+-
+-    dotted = []
+-    for bit in ver_info:
+-        if bit is None:
+-            continue
+-        if dotted and isint(dotted[-1]) and isint(bit):
+-            dotted.append('.')
+-        dotted.append(str(bit))
+-    return ''.join(dotted)    
+-
+-def _ver_info_from_long_ver_str(long_ver_str):
+-    """Return a version info tuple for the given long version string.
+-    
+-    Examples of a "long" version string are:
+-        4.0.0-alpha3-12345, 1.2.3-beta-54321, 4.2.5-2598, 5.0.0-43251
+-    "Short" would be more like:
+-        4.0.0a3, 1.2.3b, 4.2.5
+-    
+-    The returned tuple will be:
+-        (<major>, <minor>, <patch>, <quality>, <quality-num>, <build-num>)
+-    where <quality> is a letter ('a' for alpha, 'b' for beta, 'c' if not
+-    given). <quality-num> and <build-num> default to None. The defaults are
+-    chosen to make sorting result in a natural order.
+-    """
+-    def _isalpha(ch):
+-        return 'a' <= ch <= 'z' or 'A' <= ch <= 'Z'
+-    def _isdigit(ch):
+-        return '0' <= ch <= '9'
+-    def _split_quality(s):
+-        for i in reversed(range(1, len(s)+1)):
+-            if not _isdigit(s[i-1]):
+-                break
+-        if i == len(s):
+-            quality_name, quality_num = s, None
+-        else:
+-            quality_name, quality_num = s[:i], int(s[i:])
+-        quality = {'alpha': 'a', 'beta': 'b', 'rc': 'c', 'devel': 'd'}[quality_name]
+-        return quality, quality_num
+-
+-    bits = []
+-    for i, undashed in enumerate(long_ver_str.split('-')):
+-        for undotted in undashed.split('.'):
+-            if len(bits) == 3:
+-                # This is the "quality" section: 2 bits
+-                if _isalpha(undotted[0]):
+-                    bits += list(_split_quality(undotted))
+-                    continue
+-                else:
+-                    bits += ['c', None]
+-            try:
+-                bits.append(int(undotted))
+-            except ValueError:
+-                bits.append(undotted)
+-        # After first undashed segment should have: (major, minor, patch)
+-        if i == 0:
+-            while len(bits) < 3:
+-                bits.append(0)
+-    return tuple(bits)
+-
+-
+-
+-#---- mainline
+-
+-def main(argv):
+-    usage = """usage: %prog [OPTIONS]
+-     
+-    NOTE: Many config settings are within this file.  Make sure to review the
+-    source for potential updates needed."""
+-    version = "%prog "+__version__
+-    parser = optparse.OptionParser(usage=usage,
+-        version=version, description=__doc__)
+-    parser.add_option("-d", "--output-dir",
+-                      help="output dir for generate PAD file")
+-    parser.add_option("-L", "--license-text-path",
+-                      help="path to License text to use *DEPRECATED*")
+-    opts, args = parser.parse_args()
+-    if(opts.license_text_path):
+-        log.warn("'-L' option deprecated.  Update scripts to not use it.\
+-                 That option is being ignored.")
+-    if args:
+-        raise GenPadError("no args at accepted by genpad")
+-    return genpad(output_dir=opts.output_dir)
+-
+-
+-if __name__ == '__main__':
+-    logging.basicConfig(level=logging.INFO)
+-    sys.exit( main(sys.argv) )
+-
+diff --git a/src/pad/komodo_ide_linux.png b/src/pad/komodo_ide_linux.png
+deleted file mode 100644
+index 6e2e59a70..000000000
+Binary files a/src/pad/komodo_ide_linux.png and /dev/null differ
+diff --git a/src/pad/komodo_ide_macosx.png b/src/pad/komodo_ide_macosx.png
+deleted file mode 100644
+index 518c9a9ec..000000000
+Binary files a/src/pad/komodo_ide_macosx.png and /dev/null differ
+diff --git a/src/pad/komodo_ide_win32.png b/src/pad/komodo_ide_win32.png
+deleted file mode 100644
+index fa1d0c357..000000000
+Binary files a/src/pad/komodo_ide_win32.png and /dev/null differ
+diff --git a/src/pad/komodo_pad.p.xml b/src/pad/komodo_pad.p.xml
+deleted file mode 100644
+index dd4b526da..000000000
+--- a/src/pad/komodo_pad.p.xml
++++ /dev/null
+@@ -1,201 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8" ?>
+-<XML_DIZ_INFO>
+-	<MASTER_PAD_VERSION_INFO>
+-		<MASTER_PAD_VERSION>3.01</MASTER_PAD_VERSION>
+-		<MASTER_PAD_EDITOR>PADGen 3.0.1.35 http://www.padgen.org</MASTER_PAD_EDITOR>
+-		<MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://www.asp-shareware.org/pad</MASTER_PAD_INFO>
+-	</MASTER_PAD_VERSION_INFO>
+-	<Company_Info>
+-		<Company_Name>ActiveState Software Inc.</Company_Name>
+-		<Address_1>1700 - 409 Granville Street</Address_1>
+-		<Address_2 />
+-		<City_Town>Vancouver</City_Town>
+-		<State_Province>BC</State_Province>
+-		<Zip_Postal_Code>V6C 1T2</Zip_Postal_Code>
+-		<Country>Canada</Country>
+-		<Company_WebSite_URL>http://www.activestate.com/</Company_WebSite_URL>
+-		<Contact_Info>
+-			<Author_First_Name>Komodo</Author_First_Name>
+-			<Author_Last_Name>Team</Author_Last_Name>
+-			<Author_Email>komodo@activestate.com</Author_Email>
+-			<Contact_First_Name>Komodo</Contact_First_Name>
+-			<Contact_Last_Name>Team</Contact_Last_Name>
+-			<Contact_Email>komodo@activestate.com</Contact_Email>
+-		</Contact_Info>
+-		<Support_Info>
+-			<Sales_Email>sales@activestate.com</Sales_Email>
+-			<Support_Email>support@activestate.com</Support_Email>
+-			<General_Email>sales@activestate.com</General_Email>
+-			<Sales_Phone>1.778.786.1103</Sales_Phone>
+-			<Support_Phone />
+-			<General_Phone>1.778.786.1100</General_Phone>
+-			<Fax_Phone>1.778.786.1133</Fax_Phone>
+-		</Support_Info>
+-	</Company_Info>
+-	<Program_Info>
+-		<Program_Name>$PAD_PROGRAM_NAME</Program_Name>
+-		<Program_Version>$PAD_VERSION</Program_Version>
+-		<Program_Release_Month>$PAD_RELEASE_MONTH</Program_Release_Month>
+-		<Program_Release_Day>$PAD_RELEASE_DAY</Program_Release_Day>
+-		<Program_Release_Year>$PAD_RELEASE_YEAR</Program_Release_Year>
+-		<Program_Cost_Dollars>295.00</Program_Cost_Dollars>
+-		<Program_Cost_Other_Code />
+-		<Program_Cost_Other />
+-		<Program_Type>Commercial</Program_Type>
+-		<Program_Release_Status>$PAD_RELEASE_STATUS</Program_Release_Status>
+-		<Program_Install_Support>Install and Uninstall</Program_Install_Support>
+-		<Program_OS_Support>$PAD_OS_SUPPORT</Program_OS_Support>
+-		<Program_Language>English, Russian</Program_Language>
+-		<Program_Change_Info>Commando: Go-to anything (Fast-Open advanced), Track changes, go-lang support</Program_Change_Info>
+-		<Program_Specific_Category>Development Tools</Program_Specific_Category>
+-		<Program_Category_Class>Development::Source Editors</Program_Category_Class>
+-		<Program_System_Requirements>$PAD_SYSREQ</Program_System_Requirements>
+-		<File_Info>
+-			<File_Size_Bytes>$PAD_SIZE_BYTES</File_Size_Bytes>
+-			<File_Size_K>$PAD_SIZE_K</File_Size_K>
+-			<File_Size_MB>$PAD_SIZE_MB</File_Size_MB>
+-		</File_Info>
+-		<Expire_Info>
+-			<Has_Expire_Info>N</Has_Expire_Info>
+-			<Expire_Count />
+-			<Expire_Based_On>Days</Expire_Based_On>
+-			<Expire_Other_Info />
+-			<Expire_Month />
+-			<Expire_Day />
+-			<Expire_Year />
+-		</Expire_Info>
+-	</Program_Info>
+-	<Program_Descriptions>
+-		<English>
+-			<Keywords>komodo,komodo ide, activestate komodo,ide,development environment,komodo linux,komodo mac, komodo mac os, komodo windows,linux ide,mac ide, mac os ide,windows ide,activestate ide,perl komodo ide,ide software,perl ide,python ide,ide python,tcl ide,integrated development environment,php ide,ruby ide,css ide,javascript ide,html ide,django ide,go ide,golang ide, node ide, nodejs ide,perl,python,tcl,ruby,php,css,html,javascript,go,django,google go,golang</Keywords>
+-			<Char_Desc_45>Komodo IDE for Python, PHP, Ruby, web, more</Char_Desc_45>
+-			<Char_Desc_80>Komodo IDE for Python, PHP, Go, Ruby, Perl, Tcl, NodeJS, HTML, CSS, JavaScript, more.</Char_Desc_80>
+-			<Char_Desc_250>ActiveState Komodo IDE is a cross-platform IDE for individuals and teams, for all your major languages and frameworks including Python, PHP, Go, Ruby, Perl, Tcl, NodeJS, HTML, CSS and JavaScript, and more.</Char_Desc_250>
+-			<Char_Desc_450>Komodo IDE is a single cross-platform IDE for individuals and teams, for all your major languages including Python, PHP, Go, Ruby, Perl, Tcl, NodeJS, HTML, CSS and JavaScript, and more. Komodo includes an advanced editor with track changes and markdown viewer, code intelligence with refactoring and autocomplete/calltips, graphical debugger, version control and code profiling, workflow and file management, and hundreds of macros/add-ons, and more.</Char_Desc_450>
+-			<Char_Desc_2000>Komodo IDE is a powerful cross-platform IDE for individuals and teams, for all your major languages including Python, PHP, Go, Ruby, Perl, Tcl, NodeJS, HTML, CSS and JavaScript, and more. Komodo includes an advanced editor with track changes and markdown viewer, code intelligence with refactoring and autocomplete/calltips, graphical debugger, version control and code profiling, rx toolkit, workflow and file management, and hundreds of macros/add-ons, and more. The result is a powerful coding environment: a single license covers you across Windows, Mac OS X and Linux machines, and all your languages and frameworks.Development teams benefit from code collaboration, coding standards and control, shared toolbox, extended functionality and easy adoption (including keybindings for Vim and Emacs). Komodo supports editing for Python, PHP, Perl, Tcl, Go NEW, Ruby, Node.js, JavaScript, CoffeeScript, HTML, CSS, LESS, SCSS, various web templates, and more; Komodo has code intel for Python, PHP, Perl, Tcl, Go NEW, Ruby, Node.js, JavaScript, HTML, CSS, various web templates, and more; debugging in KOmodo covers Python, PHP, Perl, Ruby, Node.js, Tcl, XSLT.</Char_Desc_2000>
+-		</English>
+-	</Program_Descriptions>
+-	<Web_Info>
+-		<Application_URLs>
+-			<Application_Info_URL>https://www.activestate.com/komodo-ide/</Application_Info_URL>
+-			<Application_Order_URL>https://www.activestate.com/komodo-ide/</Application_Order_URL>
+-			<Application_Screenshot_URL>http://www.activestate.com/padfiles/images/$PAD_SCREENSHOT_BASENAME</Application_Screenshot_URL>
+-			<Application_Icon_URL>http://www.activestate.com/padfiles/images/$PAD_ICON_BASENAME</Application_Icon_URL>
+-			<Application_XML_File_URL>http://www.activestate.com/padfiles/komodo_ide/$PAD_PAD_BASENAME</Application_XML_File_URL>
+-		</Application_URLs>
+-		<Download_URLs>
+-			<Primary_Download_URL>http://downloads.activestate.com/Komodo/releases/$PAD_RELEASES_VER/$PAD_INSTALLER_PKG_NAME</Primary_Download_URL>
+-			<Secondary_Download_URL />
+-			<Additional_Download_URL_1 />
+-			<Additional_Download_URL_2 />
+-		</Download_URLs>
+-	</Web_Info>
+-	<Permissions>
+-		<Distribution_Permissions />
+-		<EULA>$PAD_EULA</EULA>
+-	</Permissions>
+-	<Affiliates>
+-		<Affiliates_FORM>Y</Affiliates_FORM>
+-		<Affiliates_VERSION>1.2</Affiliates_VERSION>
+-		<Affiliates_URL>http://www.asp-shareware.org/pad/extensions/Affiliates.htm</Affiliates_URL>
+-		<Affiliates_Information_Page />
+-		<Affiliates_Avangate_Order_Page />
+-		<Affiliates_Avangate_Vendor_ID />
+-		<Affiliates_Avangate_Product_ID />
+-		<Affiliates_Avangate_Maximum_Commission_Rate />
+-		<Affiliates_BMTMicro_Order_Page />
+-		<Affiliates_BMTMicro_Vendor_ID />
+-		<Affiliates_BMTMicro_Product_ID />
+-		<Affiliates_BMTMicro_Maximum_Commission_Rate />
+-		<Affiliates_clixGalore_Order_Page />
+-		<Affiliates_clixGalore_Vendor_ID />
+-		<Affiliates_clixGalore_Product_ID />
+-		<Affiliates_clixGalore_Maximum_Commission_Rate />
+-		<Affiliates_CommissionJunction_Order_Page />
+-		<Affiliates_CommissionJunction_Vendor_ID />
+-		<Affiliates_CommissionJunction_Product_ID />
+-		<Affiliates_CommissionJunction_Maximum_Commission_Rate />
+-		<Affiliates_DigiBuy_Order_Page />
+-		<Affiliates_DigiBuy_Vendor_ID />
+-		<Affiliates_DigiBuy_Product_ID />
+-		<Affiliates_DigiBuy_Maximum_Commission_Rate />
+-		<Affiliates_DigitalCandle_Order_Page />
+-		<Affiliates_DigitalCandle_Vendor_ID />
+-		<Affiliates_DigitalCandle_Product_ID />
+-		<Affiliates_DigitalCandle_Maximum_Commission_Rate />
+-		<Affiliates_Emetrix_Order_Page />
+-		<Affiliates_Emetrix_Vendor_ID />
+-		<Affiliates_Emetrix_Product_ID />
+-		<Affiliates_Emetrix_Maximum_Commission_Rate />
+-		<Affiliates_eSellerate_Order_Page />
+-		<Affiliates_eSellerate_Vendor_ID />
+-		<Affiliates_eSellerate_Product_ID />
+-		<Affiliates_eSellerate_Maximum_Commission_Rate />
+-		<Affiliates_Kagi_Order_Page />
+-		<Affiliates_Kagi_Vendor_ID />
+-		<Affiliates_Kagi_Product_ID />
+-		<Affiliates_Kagi_Maximum_Commission_Rate />
+-		<Affiliates_LinkShare_Order_Page />
+-		<Affiliates_LinkShare_Vendor_ID />
+-		<Affiliates_LinkShare_Product_ID />
+-		<Affiliates_LinkShare_Maximum_Commission_Rate />
+-		<Affiliates_NorthStarSol_Order_Page />
+-		<Affiliates_NorthStarSol_Vendor_ID />
+-		<Affiliates_NorthStarSol_Product_ID />
+-		<Affiliates_NorthStarSol_Maximum_Commission_Rate />
+-		<Affiliates_Order1_Order_Page />
+-		<Affiliates_Order1_Vendor_ID />
+-		<Affiliates_Order1_Product_ID />
+-		<Affiliates_Order1_Maximum_Commission_Rate />
+-		<Affiliates_Osolis_Order_Page />
+-		<Affiliates_Osolis_Vendor_ID />
+-		<Affiliates_Osolis_Product_ID />
+-		<Affiliates_Osolis_Maximum_Commission_Rate />
+-		<Affiliates_Plimus_Order_Page />
+-		<Affiliates_Plimus_Vendor_ID />
+-		<Affiliates_Plimus_Product_ID />
+-		<Affiliates_Plimus_Maximum_Commission_Rate />
+-		<Affiliates_Regnet_Order_Page />
+-		<Affiliates_Regnet_Vendor_ID />
+-		<Affiliates_Regnet_Product_ID />
+-		<Affiliates_Regnet_Maximum_Commission_Rate />
+-		<Affiliates_Regnow_Order_Page />
+-		<Affiliates_Regnow_Vendor_ID />
+-		<Affiliates_Regnow_Product_ID />
+-		<Affiliates_Regnow_Maximum_Commission_Rate />
+-		<Affiliates_Regsoft_Order_Page />
+-		<Affiliates_Regsoft_Vendor_ID />
+-		<Affiliates_Regsoft_Product_ID />
+-		<Affiliates_Regsoft_Maximum_Commission_Rate />
+-		<Affiliates_ShareIt_Order_Page />
+-		<Affiliates_ShareIt_Vendor_ID />
+-		<Affiliates_ShareIt_Product_ID />
+-		<Affiliates_ShareIt_Maximum_Commission_Rate />
+-		<Affiliates_Shareasale_Order_Page />
+-		<Affiliates_Shareasale_Vendor_ID />
+-		<Affiliates_Shareasale_Product_ID />
+-
+-		<Affiliates_Shareasale_Maximum_Commission_Rate />
+-		<Affiliates_SWReg_Order_Page />
+-		<Affiliates_SWReg_Vendor_ID />
+-		<Affiliates_SWReg_Product_ID />
+-		<Affiliates_SWReg_Maximum_Commission_Rate />
+-		<Affiliates_V-Share_Order_Page />
+-		<Affiliates_V-Share_Vendor_ID />
+-		<Affiliates_V-Share_Product_ID />
+-		<Affiliates_V-Share_Maximum_Commission_Rate />
+-		<Affiliates_VFree_Order_Page />
+-		<Affiliates_VFree_Vendor_ID />
+-		<Affiliates_VFree_Product_ID />
+-		<Affiliates_VFree_Maximum_Commission_Rate />
+-		<Affiliates_Yaskifo_Order_Page />
+-		<Affiliates_Yaskifo_Vendor_ID />
+-		<Affiliates_Yaskifo_Product_ID />
+-		<Affiliates_Yaskifo_Maximum_Commission_Rate />
+-	</Affiliates>
+-	<ASP>
+-		<ASP_FORM>Y</ASP_FORM>
+-		<ASP_Member>N</ASP_Member>
+-		<ASP_Member_Number />
+-	</ASP>
+-</XML_DIZ_INFO>

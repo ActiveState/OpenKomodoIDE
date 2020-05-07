@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % tailDTD SYSTEM "chrome://komodo/locale/tail.dtd">
+  %tailDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xul-overlay href="chrome://komodo/content/bindings/scintilla-overlay.xul"?>
+
+<window  
+  id="dialog-tail"
+  title="&watchFileViewer.title;"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  buttons="cancel"
+  buttonlabelcancel="&closeButton.Label;"
+  width="600"
+  height="400"
+  screenX="20"
+  screenY="20"
+  persist="screenX screenY width height"
+  onload="TailOnLoad();"
+  onblur="TailOnBlur();"
+  onfocus="TailOnFocus();"
+  onunload = "TailOnUnload();"
+  windowtype="komodo_tail"
+>
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/open.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- Scintilla overlay - required files. -->
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/timers.js"       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/stringutils.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/commands.js"     type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dragdrop.js"     type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/markers.js"              type="application/x-javascript;version=1.7"/>
+
+    <script src="chrome://komodo/content/tail/tail.js" type="application/x-javascript;version=1.7"/>
+
+    <hbox id="scintillaOverlayXul"/>
+
+    <vbox flex="1">
+        <hbox align="center">
+            <label id="tail_path_label" value="&filePath.label;"/>
+            <textbox id="dialogheader" readonly="true" flex="1"/>
+        </hbox>
+        <separator />
+        <view type="buffer"
+              id="view"
+              flex="1"
+              pluginPaintHack="true"
+              />
+    </vbox>
+
+</window>

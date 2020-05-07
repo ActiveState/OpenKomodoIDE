@@ -1,0 +1,223 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="OnLoad()">
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <script type="application/x-javascript;version=1.7"><![CDATA[
+    var log = ko.logging.getLogger("pref-debugger-connection");
+    var gDBGListener = null;
+    
+    function OnLoad() {
+        try {
+            gDBGListener = Components.classes["@activestate.com/koDBGPManager;1"].
+               getService(Components.interfaces.koIDBGPManager);
+            parent.initPanel();
+        } catch(ex) {
+            log.exception(ex);
+        }
+    }
+
+    function OnPreferencePageLoading(prefset) {
+        try {
+            var debuggerListenerPortType = document.getElementById('debuggerListenerPortType');
+            UpdatePortTypeUI(debuggerListenerPortType.value);
+            UpdateProxyUI(prefset.getBooleanPref("dbgpProxyEnabled"));
+            UpdateSummaryUI();
+        } catch(ex) {
+            log.exception(ex);
+        }
+    }
+
+    function UpdateProxyUI(enabled) {
+        try {
+            var i;
+            var ids = ["dbgpProxyListenAddressLabel",
+                       "dbgpProxyListenAddress",
+                       "dbgpProxyKeyLabel",
+                       "dbgpProxyKey"];
+            if (enabled) {
+                for (i in ids) {
+                    document.getElementById(ids[i]).removeAttribute("disabled");
+                }
+            } else {
+                for (i in ids) {
+                    document.getElementById(ids[i]).setAttribute("disabled", "true");
+                }
+            }
+        } catch(ex) {
+            log.exception(ex);
+        }
+    }
+
+    function UpdatePortTypeUI(type) {
+        try {
+            var debuggerListenerPort = document.getElementById("debuggerListenerPort");
+            if (type == "specific") {
+                if (debuggerListenerPort.hasAttribute("disabled"))
+                    debuggerListenerPort.removeAttribute("disabled");
+            } else {
+                debuggerListenerPort.setAttribute("disabled", "true");
+            }
+        } catch (ex) {
+            log.exception(ex);
+        }
+    }
+    
+    function UpdateSummaryUI() {
+        try {
+            var debuggerListenerPortType = document.getElementById("debuggerListenerPortType").value;
+            var debuggerListenerPort = null;
+            if (debuggerListenerPortType == "specific") {
+                debuggerListenerPort = document.getElementById("debuggerListenerPort").value;
+            }
+            var dbgpProxyEnabled = document.getElementById("dbgpProxyEnabled").checked;
+            
+            // Dev Notes:
+            // - no mention of listener off if proxy enabled
+            var status = null;
+            if (dbgpProxyEnabled) {
+                var dbgpProxyKey = document.getElementById("dbgpProxyKey").value;
+                status = "Summary: Komodo will register ";
+                if (dbgpProxyKey)
+                    status += "(as '" + dbgpProxyKey + "') ";
+                var dbgpProxyListenAddress = document.getElementById("dbgpProxyListenAddress").value;
+                status += "with your debugger proxy at "+
+                          dbgpProxyListenAddress+
+                          " and listen for connections from it on ";
+                if (debuggerListenerPortType == "specific")
+                    status += "port " + debuggerListenerPort + ".";
+                else
+                    status += "a system-provided port.";
+                status += " You should configure your remote connections "+
+                          "to talk to the other address and port on which "+
+                          "your proxy is running.";
+            } else {
+                status = "Summary: Komodo will listen for debugging connections on ";
+                if (debuggerListenerPortType == "specific")
+                    status += "port " + debuggerListenerPort + ".";
+                else
+                    status += "a system-provided port.";
+                status += " Currently Komodo is ";
+                if (gDBGListener.isListening())
+                    status += "listening on port " + gDBGListener.port + ".";
+                else
+                    status += "not listening. "+
+                              "(Starting debugging inside Komodo will "+
+                              "automatically start the listener, or select "+
+                              "'Debug | Listen for Debugging Connections' "+
+                              "to start it manually.";
+            }
+
+            var summaryDesc = document.getElementById("summaryDesc");
+            if (summaryDesc.firstChild.nodeType == summaryDesc.TEXT_NODE) {
+                summaryDesc.removeChild(summaryDesc.firstChild);
+            }
+            var node = document.createTextNode(status);
+            summaryDesc.insertBefore(node, summaryDesc.firstChild);
+            
+        } catch (ex) {
+            log.exception(ex);
+        }
+    }
+    
+    function OpenListenerStatusDialog() {
+        ko.windowManager.openOrFocusDialog(
+            "chrome://komodo/content/debugger/listener.xul",
+            "Komodo:Listener",
+            "chrome,resizable=yes",
+            ko.windowManager.getMainWindow().ko.dbg.listener
+        );
+    }
+    
+    function OpenProxyHelp() {
+        try {
+            ko.windowManager.getMainWindow().ko.help.open("debugger.html#debugger-proxy");
+        } catch(ex) {
+            log.exception(ex);
+        }
+    }
+    ]]></script>
+
+    <groupbox orient="vertical">
+        <caption label="&debuggerConnection.label;"/>
+        <description>
+            Komodo should listen for debugging connections on:
+        </description>
+        <radiogroup id="debuggerListenerPortType"
+                    pref="true"
+                    flex="1"
+                    prefattribute="value"
+                    orient="horizontal"
+                    oncommand="UpdateSummaryUI();">
+            <vbox flex="1">
+                <radio group="debuggerListenerPortType"
+                       id="system" value="system"
+                       label="&aSystemProvidedFreePort.label;"
+                       oncommand="UpdatePortTypeUI('system')"/>
+                <hbox align="center">
+                    <radio group="debuggerListenerPortType"
+                           id="specific" value="specific"
+                           label="&aSpecificPort.label;"
+                           oncommand="UpdatePortTypeUI('specific')"/>
+                    <textbox id="debuggerListenerPort"
+                             pref="true"
+                             size="5"
+                             onkeyup="UpdateSummaryUI()"/>
+                </hbox>
+            </vbox>
+        </radiogroup>
+
+        <separator/>
+        <hbox>
+            <checkbox id="dbgpProxyEnabled"
+                      label="&IAmRunningADebuggerProxyAndKomodoShouldUseIt.label;"
+                      pref="true" prefstring="dbgpProxyEnabled"
+                      prefattribute="checked"
+                      oncommand="UpdateProxyUI(this.checked); UpdateSummaryUI();"/>
+            <separator flex="1"/>
+            <vbox> <!-- vbox necessary to not have help button image squished -->
+                <button tooltiptext="&helpOnTheDebuggerProxy.tooltiptext;"
+                        buttonstyle="pictures"
+                        class="help-icon button-text-link"
+                        oncommand="OpenProxyHelp();"/>
+            </vbox>
+        </hbox>
+        <vbox style="padding-left: 25px; padding-top: 5px;">
+            <label id="dbgpProxyListenAddressLabel"
+                   value="Proxy Listener Address (e.g. 127.0.0.1:9001):"/>
+            <textbox id="dbgpProxyListenAddress" size="20" pref="true"
+                     onkeyup="UpdateSummaryUI()"/>
+            <description id="dbgpProxyKeyLabel">
+                Proxy Key (the name by which the proxy identifies this
+                instance of Komodo; if left empty your username is used):
+            </description>
+            <textbox id="dbgpProxyKey" size="20" pref="true"
+                     onkeyup="UpdateSummaryUI()"/>
+        </vbox>
+        
+        <separator/>
+        <description id="summaryDesc">
+            <button label="&currentConnectionStatus.label;"
+                    class="button-text-link"
+                    oncommand="OpenListenerStatusDialog()"/>
+        </description>
+    </groupbox>
+
+</window>
+

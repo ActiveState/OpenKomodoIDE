@@ -1,0 +1,134 @@
+/* Icon Wrappers */
+
+.ui-button-icon-only
+{
+    border: 0;
+    background: transparent;
+}
+
+.ui-icon
+{
+    text-indent: inherit;
+    overflow: auto;
+}
+
+.ui-button-icon-only .ui-icon
+{
+    position: inherit;
+    top: auto;
+    left: auto;
+    margin: 0;
+}
+
+/* Icon Definitions */
+
+.ui-icon-closethick
+{
+    @include icon($fa-var-times);
+}
+
+/* Dialogs */
+
+.ui-dialog
+{
+    border: 1px solid #494949;
+    box-shadow: 0 0 6px 0 rgba(0,0,0,0.2);
+    border-radius: 3px;
+    padding: 10px;
+    @include linear-gradient(#F2F2F2, #EAEAEA);
+    z-index: 110;
+
+    .ui-dialog-title
+    {
+        overflow: inherit;
+    }
+
+    .ui-dialog-titlebar
+    {
+        font-weight: bold;
+        border-bottom: 1px solid rgba(0,0,0,0.2);
+        padding-bottom: 10px;
+    }
+
+    .ui-dialog-titlebar-close
+    {
+        position: inherit;
+        top: auto;
+        right: auto;
+        float: right;
+        padding: 0;
+    }
+
+    .ui-dialog-content
+    {
+        font-size: 11pt;
+        
+        ul
+        {
+            list-style-type: disc;
+        }
+    }
+}
+
+/* Wrapper - blackout */
+
+#blackout
+{
+    display: none;
+}
+
+.ui-widget-overlay,
+#blackout
+{
+    @include background-image(url(../images/layout/header-bg.png));
+    background-size: 1550px 480px;
+    opacity: 0.9;
+    
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+}
+
+/* Tabs */
+
+.ui-tabs
+{
+    & > ul:first-child
+    {
+        border-bottom: 2px solid lighten($color-base-text, 10%);
+        margin: 0;
+        padding: 0;
+
+        li
+        {
+            display: inline-block;
+            padding: 5px;
+            
+            a
+            {
+                border: 0;
+                color: lighten($color-base-text, 15%);
+                font-weight: bold;
+                opacity: 0.6;
+
+                @include transition(opacity 0.2s ease-in-out);
+            }
+
+            &.ui-tabs-active a,
+            &:hover a
+            {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+[data-modal]
+{
+    display: none;
+}

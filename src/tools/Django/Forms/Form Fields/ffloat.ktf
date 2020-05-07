@@ -1,0 +1,10 @@
+# komodo tool: ffloat
+# ===================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ===================
+<% /* FloatField (ffloat) */ %>
+[[%tabstop1:FIELDNAME]] = forms.FloatField([[%tabstop2:2]])

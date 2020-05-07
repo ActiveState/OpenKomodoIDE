@@ -1,0 +1,174 @@
+/* Copyright (c) 2004-2009 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "nsITreeView.idl"
+
+interface koIDBXTableDumpTreeView;
+
+// Interface for objects that convert data in columns into 
+// a more readable form.
+[scriptable, uuid(8eb0ee2a-ea11-49c6-a7dc-e829a0e1c1a6)]
+interface koIDBXCellDataConverter: nsISupports {
+    wstring convert(in wstring data);
+    // For use in popup menus
+    attribute wstring label;
+
+    // Name of a type, like "INTEGER"
+    attribute wstring supportedType;
+};
+
+// Simple object for wrapping data in an XPCOM interface.
+[scriptable, uuid(07a043f4-efed-4f10-9140-189b4f7bb192)]
+interface koIDBXIndexInfo: nsISupports {
+    readonly attribute wstring tableName;
+    readonly attribute wstring sql;
+};
+
+// Defined for XPCOM, but looks like these will all be used
+// as pure-Python classes.  Later on we can refactor the
+// classes to allow non-Python implementations.
+
+[scriptable, uuid(983aef77-58b4-4881-832c-113ea92f25f5)]
+interface koIDBXConnection: nsISupports {
+    wstring getConnectionDisplayInfo();
+    wstring getDatabaseDisplayTypeName();
+    wstring getDatabaseInternalName();
+    wstring getImageSrc(in wstring col_id);
+    wstring getName();
+    wstring getNodeTypeName();
+    readonly attribute boolean loaded;
+};
+
+// Info for the preferences widget.  Used to get a list
+// of installed supported DB interfaces
+[scriptable, uuid(d54e2871-8350-4404-9875-a6dfee4d8fe8)]
+interface koIDBXPreference: nsISupports {
+    readonly attribute wstring name;
+    readonly attribute wstring displayName;
+    readonly attribute boolean fileBased;
+    boolean is_enabled();
+    readonly attribute wstring disabled_reason;
+};
+
+interface koIDBXTableConnector;
+
+[scriptable, uuid(8778c44f-13ee-41d0-b424-23a3dff92edf)]
+interface koIDBXSchemaTreeView: nsITreeView {
+    void getSchemaColumnNames(out unsigned long count,
+                              [retval, array, size_is(count)] out wstring names);
+    void getSchemaColumnIds(out unsigned long count,
+                              [retval, array, size_is(count)] out wstring names);
+    void getTableColumnNames(out unsigned long count,
+                             [retval, array, size_is(count)] out wstring names);
+    boolean columnTypeIsInteger(in unsigned long columnIndex);
+    
+    boolean columnTypeIsReal(in unsigned long columnIndex);
+    boolean columnTypeIsBlob(in unsigned long columnIndex);
+    void setupTableConnector(in koIDBXTableConnector connector);
+};
+
+/**
+ * This is the main interface used to get at the db/table connection
+ */
+[scriptable, uuid(a28c37bd-1957-4cec-875e-53f571fc48c7)]
+interface koIDBXTableConnector: nsISupports {
+    void getColumnNames(out unsigned long count,
+                       [retval, array, size_is(count)] out wstring names);
+    wstring getDatabaseDisplayTypeName();
+    wstring getConnectionDisplayInfo();
+    
+    wstring deleteRows(in koIDBXTableDumpTreeView dbxTreeView,
+                       in unsigned long count,
+                       [array, size_is(count)] in unsigned long rowNums);
+    void getRawRow(in unsigned long key_name_count,
+                   [array, size_is(key_name_count)] in wstring key_names,
+                   in unsigned long key_value_count,
+                   [array, size_is(key_value_count)] in wstring key_values,
+                   out unsigned long result_value_count,
+                   [array, size_is(result_value_count)] out wstring result_values);
+
+    // converters
+    wstring setConverter(in wstring columnName,
+                         in wstring className,
+                         in koIDBXCellDataConverter converter);
+    wstring removeConverter(in wstring columnName);
+    // This one returns either the className from setConverter, or nothing
+    wstring getConverterClassName(in wstring columnName);
+    koIDBXIndexInfo getIndexInfo(in wstring indexName);
+    koIDBXIndexInfo getTriggerInfo(in wstring triggerName);
+    boolean updateRow(in unsigned long target_name_count,
+                      [array, size_is(target_name_count)] in wstring target_names,
+                      in unsigned long target_value_count,
+                      [array, size_is(target_value_count)] in wstring target_values,
+                      in unsigned long key_name_count,
+                      [array, size_is(key_name_count)] in wstring key_names,
+                      in unsigned long key_value_count,
+                      [array, size_is(key_value_count)] in wstring key_values);
+    boolean addRow(in unsigned long target_name_count,
+                   [array, size_is(target_name_count)] in wstring target_names,
+                   in unsigned long target_value_count,
+                   [array, size_is(target_value_count)] in wstring target_values);
+                   
+    void updateSortInfo(in wstring columnName, in unsigned long sortDirection);
+
+    readonly attribute wstring tableViewTitle;
+};
+
+/** Description of the interface to the Database Explorer backend
+    This is for the tree widget in the project pane.
+ */
+[scriptable, uuid(c073dc7d-f2c2-405e-b18b-2ba30d8e4907)]
+interface koIDatabaseExplorerTreeView: nsITreeView {
+    // constants used by testConnection
+    const long TARGET_DATABASE_OK = 0;
+    const long TARGET_DATABASE_IS_EMPTY = 1;
+    const long TARGET_DATABASE_HAS_ERROR = 2;
+    void initialize();
+    void finalize();
+    void addConnection(in wstring connectionURI);
+    void getConnectionInfo(in long row,
+                           out unsigned long nameCount,
+                           [array, size_is(nameCount)] out wstring names,
+                           out unsigned long valueCount,
+                           [array, size_is(valueCount)] out wstring values);
+    wstring getNodeName(in long row);
+    wstring getNodeType(in long row);
+    void refreshDatabases();
+    void refreshChildrenInfo(in long row);
+    void removeConnection(in long row);
+    void testConnection(in wstring connectionURI,
+                        out long status,
+                        out wstring message);
+    void updatePassword(in long row, in wstring password);
+    koIDBXTableConnector getDBConnectionForTable(in long tableIndex);
+
+    void handleCallback(in wstring callback,
+                        in long rc,
+                        in wstring rv,
+                        in long rowIndex,
+                        in long numAffectedRows);
+};
+
+[scriptable, uuid(bee0cb8f-8aaf-4d2c-b966-ad539ad556c8)]
+interface koIDBXTableDumpTreeView: nsITreeView {
+    void initialize(in koIDBXTableConnector koDBExplorerTable);
+    attribute koIDBXSchemaTreeView schemaTreeView;
+
+    // This function also clears the cache, so any data that
+    // needs to be converted will be rerun through the conversion code.
+    void refreshTable();
+    attribute long numVisibleRows;
+};
+
+
+[scriptable, uuid(d7730ea8-5275-4195-ac52-99c7a31dc085)]
+interface koIDBXTableQueryTreeView: nsITreeView {
+    void clearQuery();
+    boolean executeCustomAction(in wstring action);
+    void getTableColumnNames(out unsigned long count,
+                             [retval, array, size_is(count)] out wstring names);
+    void initialize(in koIDBXTableConnector koDBExplorerTable);
+    void refreshView();
+    void runCustomQuery(in wstring query);
+};

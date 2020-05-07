@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/listbox.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        class="kodialog pref-window"
+        orient="vertical"
+        onload="PrefRuby_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/pref-ruby.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/windowManager.js"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="ruby-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical" id="defaultRubyInterpreterGroupBox">
+            <caption label="&defaultRubyInterpreter.label;"/>
+            <vbox id="no-avail-interps-message" collapsed="true" flex="1" align="center">
+                <description style="font-weight: bold;">
+                    &noRubyInterpreter.description;
+                </description>
+                <button label="&httpWwwRubyLangOrg.label;"
+                        class="button-link-a" style="cursor:pointer;"
+                        oncommand="alert('&noteRestartRuby.alert;'); getKoObject('browse').openUrlInDefaultBrowser('http://www.ruby-lang.org/');"/>
+            </vbox>
+            <vbox id="invalid-version-message" collapsed="true" flex="1" align="center">
+                <description style="font-weight: bold;">
+                    &rubyDebuggerNotWorking.description;
+                </description>
+                <button label="&httpWwwRubyLangOrg.label;"
+                        class="button-link-a" style="cursor:pointer;"
+                        oncommand="alert('&noteRestartRuby.alert;'); getKoObject('browse').openUrlInDefaultBrowser('http://www.ruby-lang.org/');"/>
+            </vbox>
+            <text value="&filePrefRubyUseThisInterpreter.label;" style="padding: 2px 6px 2px 6px"/>
+            <hbox align="center">
+                <menulist id="rubyDefaultInterpreter"
+                    flex="1"
+                    pref="true"
+                    prefstring="rubyDefaultInterpreter"
+                    oncommand="PrefRuby_checkVersion();">
+                    <menupopup id="avail-interp-list"/>
+                </menulist>
+                <button label="&browse.label;" oncommand="loadRubyExecutable();"/>
+            </hbox>
+        </groupbox>
+        <separator class="thin"/>
+<!-- #if WITH_DEBUGGING -->
+        <separator class="thin"/>
+        <groupbox orient="vertical">
+            <caption label="&debuggerLogging.label;"/>
+            <checkbox id="ruby_debuggerlogenabled" label="&enableDebuggerLog.label;"
+                  pref="true" prefstring="ruby_debuggerlogenabled"
+                  prefattribute="checked"/>
+            <label value="Debugger Log Path (TEMP environment if empty)" />
+            <hbox align="center">
+                <textbox id="ruby_debuggerlogpath" pref="true" prefstring="ruby_debuggerlogpath" flex="1"/>
+                <button label="&browse.label;" oncommand="loadRubyLogpath();"/>
+            </hbox>
+        </groupbox>
+<!-- #endif -->
+
+
+        <separator class="thin"/>
+    
+        <groupbox orient="vertical">
+            <caption label="&additionalRubyImportDirectories.label;"/>
+            <description>
+                &filePrefRubyAdditionalDirectory.description;
+            </description>
+            <pathlist
+                    id="rubyExtraPaths"
+                    flex="1"
+                    seltype="multiple"
+                    rows="4"
+                    pref="true" prefwidget="true"
+                    prefstring="rubyExtraPaths"/>
+            <vbox collapsed="true">
+              <!-- https://github.com/Komodo/KomodoEdit/issues/3000 -->
+              <description>
+                  &filePrefRubyExcludeDirectory.description;
+              </description>
+              <pathlist
+                      id="rubyExcludePaths"
+                      flex="1"
+                      seltype="multiple"
+                      rows="4"
+                      pref="true" prefwidget="true"
+                      prefstring="rubyExcludePaths"/>
+            </vbox>
+        </groupbox>
+
+    </vbox>
+
+</window>
+

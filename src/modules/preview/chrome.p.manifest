@@ -1,0 +1,11 @@
+# #if MODE == "dev"
+content preview content/
+locale preview en-US locale/en-US/
+skin preview classic/1.0 skin/
+# #else
+content preview jar:preview.jar!/content/
+locale preview en-US jar:preview.jar!/locale/en-US/
+skin preview classic/1.0 jar:preview.jar!/skin/
+# #endif
+
+overlay chrome://komodo/content/komodo.xul chrome://preview/content/overlay.xul

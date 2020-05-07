@@ -1,0 +1,8 @@
+launch
+redirectStdout(6666)
+hello()
+resumeExecution(1)
+getFrames()
+getNumFrames()
+resumeExecution(0)
+getDebugPropertyInfo(1,'foo',10)

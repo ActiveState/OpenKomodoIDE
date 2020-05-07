@@ -1,0 +1,263 @@
+#!/bin/bash
+
+# Default docker image to use.
+if [ -z "$DOCKER_IMAGE_NAME" ]; then
+    DOCKER_IMAGE_NAME="komodo"
+fi
+
+# local name for the container
+if [ -z "$DOCKER_CONTAINER_NAME" ]; then
+    DOCKER_CONTAINER_NAME="${DOCKER_IMAGE_NAME}-container"
+fi
+
+DOCKLETPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+KOPATH="$( cd $DOCKLETPATH/../../ && pwd)"
+
+if [ "$(id -u)" != "0" ]; then
+    USERNAME=$(whoami)
+else
+    if [ -n "$SUDO_USER" ]; then
+        USERNAME=$SUDO_USER
+    else
+        USERNAME=$(whoami)
+    fi
+fi
+
+CONTAINER_CMD="docker exec ${DOCKER_CONTAINER_NAME} /bin/sh -c "
+CONTAINER_USER_CMD="docker exec --user ${USERNAME} ${DOCKER_CONTAINER_NAME} /bin/sh -c "
+REALHOME="/home/${USERNAME}"
+
+function retrieveContainerStatus {
+    # check if container already present
+    TMP=$(docker ps -a | grep ${DOCKER_CONTAINER_NAME})
+    CONTAINER_FOUND=$?
+
+    TMP=$(docker ps | grep ${DOCKER_CONTAINER_NAME})
+    CONTAINER_RUNNING=$?
+}
+
+retrieveContainerStatus
+
+function retrieveSshInfo {
+    # find ssh port
+    SSH_URL=$(docker port ${DOCKER_CONTAINER_NAME} 22)
+
+    #SSH_URL_REGEX="(.*):(.*)"
+    #SSH_INTERFACE=$(echo $SSH_URL | awk -F  ":" '/1/ {print $1}')
+    #SSH_PORT=$(echo $SSH_URL | awk -F  ":" '/1/ {print $2}')
+
+    IFS=':' read SSH_INTERFACE SSH_PORT <<< "$SSH_URL"
+}
+
+function start {
+
+    if [ $CONTAINER_FOUND -eq 0 ]; then
+
+        echo -n "container '${DOCKER_CONTAINER_NAME}' found, "
+
+        if [ $CONTAINER_RUNNING -eq 0 ]; then
+            echo "already running"
+        else
+            echo -n "not running, starting..."
+            TMP=$(docker start ${DOCKER_CONTAINER_NAME})
+            sleep 2
+            echo "done"
+        fi
+
+    else
+        echo -n "container '${DOCKER_CONTAINER_NAME}' not found, creating..."
+        TMP=$(docker run -d -P --name ${DOCKER_CONTAINER_NAME} -v ${KOPATH}:${KOPATH} -v /home/${USERNAME}/.ActiveState:${REALHOME}/.ActiveState -v /home/${USERNAME}/.komodoide:${REALHOME}/.komodoide -v /home/${USERNAME}/.komodo-dev-docker:${REALHOME}/.komodo-dev ${DOCKER_IMAGE_NAME})
+
+        sleep 2
+
+        echo "done"
+        retrieveContainerStatus
+
+        # Create komodo user which maps to our local user, so as to preserve file permissions
+        setSshCmd
+        local PASSWORD=$(perl -e'print crypt("komodo", "aa")')
+        local _UID=$(id -u ${USERNAME})
+        ${CONTAINER_CMD} "useradd -d ${REALHOME} -u ${_UID} -g 100 -p ${PASSWORD} -s /bin/bash ${USERNAME} && \
+                        usermod -a -G sudo ${USERNAME} && \
+                        chown ${_UID}:100 ${REALHOME} && chown -R ${_UID}:100 ${REALHOME}/.komodo-dev && \
+                        cp -R /root/.ssh ${REALHOME}/.ssh && chown -R ${_UID}:100 ${REALHOME}/.ssh && \
+                        echo \"PATH=${KOPATH}/util/black:/opt/ActivePerl/site/bin:/opt/ActivePerl/bin:\\\$PATH\" >> ${REALHOME}/.bash_profile && \
+                        chown ${_UID}:100 ${REALHOME}/.bash_profile"
+
+    fi
+
+    status
+    
+}
+
+function stop {
+    if [ $CONTAINER_RUNNING -eq 0 ]; then
+        echo -n "Stopping Container.. "
+        TMP=$(docker stop ${DOCKER_CONTAINER_NAME})
+        TMP=$(docker rm ${DOCKER_CONTAINER_NAME})
+        echo "done"
+    else
+        echo "Container already stopped"
+    fi
+
+    retrieveContainerStatus
+}
+
+function status {
+    retrieveSshInfo
+
+    if [ $CONTAINER_FOUND -eq 0 ]; then
+
+        if [ $CONTAINER_RUNNING -eq 0 ]; then
+            echo "port: " $(docker port ${DOCKER_CONTAINER_NAME} 22)
+        else
+            echo "container '${DOCKER_CONTAINER_NAME}' found but not running"
+        fi
+
+    else
+        echo "container '${DOCKER_CONTAINER_NAME}' not found"
+    fi
+}
+
+function setSshCmd {
+    if [ $CONTAINER_RUNNING -ne 0 ]; then
+        echo "Container is not running"
+        exit 0
+    fi
+    retrieveSshInfo
+    SSH_CMD=$(echo ssh -4 -i "${DOCKLETPATH}/id_rsa" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -Y ${USERNAME}@${SSH_INTERFACE} -p ${SSH_PORT})
+    SSH_CMD_ROOT=$(echo ssh -4 -i "${DOCKLETPATH}/id_rsa" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -Y root@${SSH_INTERFACE} -p ${SSH_PORT})
+}
+
+function _ssh {
+    setSshCmd
+    echo ${SSH_CMD}
+    ${SSH_CMD}
+}
+
+function _sshroot {
+    setSshCmd
+    ${SSH_CMD_ROOT}
+}
+
+function clean {
+    ${CONTAINER_USER_CMD} "PATH=${KOPATH}/util/black:\$PATH && cd ${KOPATH} && bk distclean"
+}
+
+function build {
+    ${CONTAINER_USER_CMD} "PATH=${KOPATH}/util/black:\$PATH && cd ${KOPATH} && bk build"
+}
+
+function build-quick {
+    ${CONTAINER_USER_CMD} "PATH=${KOPATH}/util/black:\$PATH && cd ${KOPATH} && bk build quick"
+}
+
+function run {
+    cd $KOPATH
+    # https://askubuntu.com/questions/1184774/some-applications-on-ubuntu-19-10-very-slow-to-start
+    dbus-launch --exit-with-session ./mozilla/build/moz3500-ko12.10/mozilla/ko-rel/dist/bin/komodo # Todo: auto-detect path
+    pkill -f "dbus-daemon --syslog --fork"
+    pkill -f "dbus-launch --exit-with-session"
+}
+
+function image {
+    flavour=$1
+    if [ -z "${flavour}" ]; then
+        flavour="."
+    fi
+    cd ${DOCKLETPATH}
+    docker build -t ${DOCKER_IMAGE_NAME} $flavour
+}
+
+function deleteBuild {
+    stop
+    docker rmi -f ${DOCKER_IMAGE_NAME}
+}
+
+function help {
+    echo "Manage Komodo-Dev container"
+    echo " "
+    echo "options:"
+    echo "image [--flavour DIR]     build the image; flavour defaults to the current dir"
+    echo "reimage                   rebuild the image (deletes image and containers)"
+    echo "destroy                   destroy image"
+    echo "start                     start container"    
+    echo "stop                      stop container"
+    echo "clean                     bk distclean"
+    echo "build                     build Komodo"
+    echo "build-quick               build quick Komodo"
+    echo "run                       run Komodo on host"
+    echo "status                    show container status"    
+    echo "ssh                       ssh into container"
+    echo "-h, --help                show brief help"
+    exit 0
+}
+
+while true; do
+    case "$1" in
+        start)
+            start
+            shift
+            ;;
+        status)
+            status
+            shift
+            ;;
+        ssh)
+            _ssh
+            break
+            ;;
+        sshroot)
+            _sshroot
+            break
+            ;;
+        stop)
+            stop
+            shift
+            ;;
+        clean)
+            clean
+            shift
+            ;;
+        build)
+            build
+            shift
+            ;;
+        build-quick)
+            build-quick
+            shift
+            ;;
+        run)
+            run
+            shift
+            ;;
+        image)
+            flavour=""
+            if [ "$2" == "--flavour" ]; then
+                flavour=$3
+                shift 2
+            fi
+            image $flavour
+            shift
+            ;;
+        destroy)
+            deleteBuild
+            shift
+            ;;
+        reimage)
+            deleteBuild
+            image
+            shift
+            ;;
+        -h|--help)
+            help
+            break
+            ;;
+    esac
+    sleep 1
+    if [ -z "$1" ]; then
+        break
+    fi
+done;
+
+

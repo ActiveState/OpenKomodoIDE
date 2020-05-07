@@ -1,0 +1,26 @@
+
+# Use alternate API URL if in the environment.
+>>> import os
+>>> api_url = os.environ.get('NOTIFICATIONS_API_URL')
+
+>>> from activeapis2.notificationsapi import NotificationsAPI
+>>> api = NotificationsAPI(api_url=api_url)
+
+>>> ntypes = api.notificationtypes()
+>>> len(ntypes) > 0
+True
+>>> list(sorted(ntypes[0].keys()))
+[u'id', u'name']
+
+>>> icanhaz = api.notificationtype('_icanhaz')
+>>> icanhaz["name"]
+u'_icanhaz'
+>>> 'from_header' in icanhaz
+True
+>>> 'updated_time' in icanhaz
+True
+>>> 'subject_template' in icanhaz
+True
+>>> 'body_text_template' in icanhaz
+True
+

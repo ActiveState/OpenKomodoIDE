@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc.
+   - See the file LICENSE.txt for licensing information. -->
+
+<!-- A 'Test' menu for Komodo development. -->
+
+<overlay id="overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="chrome://komodo/content/library/test.js"          type="application/x-javascript;version=1.7" />
+
+  <menubar id="menubar_main">
+    <menu id="menu_developer_test"
+          label="Test"
+          accesskey="s"
+          ordinal="9997"
+          insertafter="help_menu">
+      <menupopup id="popup_test">
+        <menu label="Tools" accesskey="T">
+          <menupopup id="popup_test_tools">
+            <menuitem label="Error Console"
+                    oncommand="ko.windowManager.openOrFocusDialog('chrome://global/content/console.xul',
+                     'global:console',
+                     'chrome,all,resizable');"/>
+            <menuitem label="DOM Inspector"
+                    oncommand="ko.windowManager.openOrFocusDialog('chrome://inspector/content/',
+                     'navigator:inspector',
+                     'chrome,all,resizable');"/>
+            <menuitem label="Component Viewer"
+                    oncommand="ko.windowManager.openOrFocusDialog('chrome://cview/content/',
+                     'navigator:cview',
+                     'chrome,all,resizable');"/>
+            <menuitem label="Venkman JavaScript Debugger"
+                    oncommand="ko.windowManager.openOrFocusDialog('chrome://venkman/content/',
+                     'navigator:venkman',
+                     'chrome,all,resizable');"/>
+            <menuitem label="JavaScript Telnet (jssh)"
+                    oncommand="ko.windowManager.openOrFocusDialog('chrome://jssh/content/configure.xul',
+                     'navigator:jssh',
+                     'chrome,all,resizable');"/>
+            <menuitem label="Logging Control"
+                accesskey="L"
+                oncommand="window.openDialog('chrome://komodo/content/library/logging_control.xul', 'Komodo:LoggingControl', 'titlebar,chrome,resizable,close');"/>
+          </menupopup>
+        </menu>
+        <menu label="XUL" accesskey="X">
+          <menupopup id="popup_test_xul">
+            <menuitem label="XUL Bindings Test" oncommand="window.openDialog('chrome://komodo/content/bindings/test/top.xul',
+                     'navigator:browser',
+                     'chrome,all,resizable');"/>
+            <menuitem label="XUL Reference Site" oncommand="window.openDialog('http://www.hevanet.com/acorbin/xul/top.xul',
+                     'navigator:browser',
+                     'chrome,all,resizable');"/>
+          </menupopup>
+        </menu>
+        <menu label="Views" accesskey="V">
+          <menupopup id="popup_test_views">
+            <menuitem label="Open File"
+                      oncommand="ko.open.filePicker();"/>
+            <menuitem label="Split View"
+                      oncommand="ko.open.filePicker('spliteditor');"/>
+            <menuitem label="Browser View"
+                      oncommand="ko.views.manager.doFileOpenAsync('http://www.mozilla.org', 'browser');"/>
+            <menuitem label="XUL View" accesskey="X"
+                      oncommand="ko.open.filePicker('xul');"/>
+            <menuitem label="Multi-editor View"
+                      oncommand="ko.open.filePicker('multieditor');"/>
+          </menupopup>
+        </menu>
+        <menu label="Dialogs" accesskey="D">
+          <menupopup id="popup_test_dialogs">
+            <menuitem label="progress"
+                      oncommand="test_dialog_progress();"/>
+            <menuitem label="pickPreview"
+                      oncommand="test_dialog_pickPreview();"/>
+            <menuitem label="editEnvVar"
+                      oncommand="test_dialog_editEnvVar();"/>
+            <menuitem label="customButtons"
+                      oncommand="test_dialog_customButtons();"/>
+            <menuitem label="selectFromList"
+                      oncommand="test_dialog_selectFromList();"/>
+            <menuitem label="authenticate"
+                      oncommand="test_dialog_authenticate();"/>
+            <menuitem label="alert"
+                      oncommand="test_dialog_alert();"/>
+            <menuitem label="okCancel"
+                      oncommand="test_dialog_okCancel();"/>
+            <menuitem label="yesNo"
+                      oncommand="test_dialog_yesNo();"/>
+            <menuitem label="yesNoCancel"
+                      oncommand="test_dialog_yesNoCancel();"/>
+            <menuitem label="prompt"
+                      oncommand="test_dialog_prompt();"/>
+            <menuitem label="internalError"
+                      oncommand="test_dialog_internalError();"/>
+            <menuitem label="templates ('New File...' dialog)"
+                      oncommand="test_templates();"/>
+            <menuitem label="pickIcon"
+                      oncommand="test_dialog_pickicon();"/>
+            <menuitem label="Wait for command termination"
+                      oncommand="test_dialog_waitfortermination();"/>
+          </menupopup>
+        </menu>
+        <menu label="File Pickers" accesskey="F">
+          <menupopup id="popup_test_filepickers">
+            <menuitem label="raw test (without using filepickers.js caching)"
+                      oncommand="test_ko.filepicker.raw();"/>
+            <menuitem label="getFolder"
+                      oncommand="test_ko.filepicker.getFolder();"/>
+            <menuitem label="openFiles"
+                      oncommand="test_ko.filepicker.browseForFiles();"/>
+            <menuitem label="saveFile"
+                      oncommand="test_ko.filepicker.saveFile();"/>
+            <menuitem label="openFile"
+                      oncommand="test_ko.filepicker.browseForFile();"/>
+            <menuitem label="openExeFile"
+                      oncommand="test_ko.filepicker.browseForExeFile();"/>
+          </menupopup>
+        </menu>
+        <menu label="Prefs" accesskey="P">
+          <menupopup id="popup_test_prefs">
+            <menuitem label="Edit Global Prefs"
+                      accesskey="G"
+                      oncommand="test_editGlobalPrefs();"/>
+            <menuitem label="Edit Current View Prefs"
+                      accesskey="V"
+                      oncommand="test_editCurrentViewPrefs();"/>
+          </menupopup>
+        </menu>
+        <menuseparator/>
+        <menuitem label="Test Firefox Textbox Autocomplete"
+                  accesskey="A"
+                  oncommand="test_firefoxAutoComplete();"/>
+        <menuitem label="Test Debug Session Tab"
+                  accesskey="S"
+                  oncommand="test_debugSessionTab();"/>
+        <menuitem label="Start UI Unit Tests"
+                  oncommand="test_startUIUnitTests()"/>
+        <menuitem label="Test Key Handling"
+            accesskey="K"
+            oncommand="window.openDialog('chrome://komodo/content/testkeys.xul', 'Komodo:TestKeys',
+                      'titlebar,chrome,resizable,close');"/>
+        <menuitem label="Test Scintilla Sizing"
+            accesskey="Z"
+            oncommand="window.openDialog('chrome://komodo/content/testscintilla.xul', 'Komodo:TestScintilla',
+                      'titlebar,chrome,resizable,close');"/>
+        <menuitem label="Test Refactoring"
+            accesskey="R"
+            oncommand="window.openDialog('chrome://komodo/content/test/test_refactoring.xul', 'Komodo:TestRefactoring',
+                      'titlebar,chrome,resizable,close');"/>
+        <menuitem label="uriparse.js"
+                  oncommand="test_uriparse();"/>
+        <menuitem label="Get Event/Command Map"
+                  oncommand="test_createEventCommandMap();"/>
+        <menuitem label="Time Commands"
+                  accesskey="C"
+                  oncommand="test_TimeCommands();"/>
+        <menuitem label="Time Events"
+                  accesskey="E"
+                  oncommand="test_TimeEvents();"/>
+        <menuitem label="Dump Current View" accesskey="V"
+                  oncommand="ko.logging.dumpView(ko.views.manager.currentView);"/>
+        <menuitem label="SciMoz Tests"
+                  oncommand="test_scimoz();"/>
+        <menuitem label="SciMoz Auto-Indent Tests"
+                  oncommand="test_auto_indent_scimoz();"/>
+        <menuitem label="SciMoz Soft-Character Tests"
+                  oncommand="test_soft_chars();"/>
+        <menuitem label="Generate Command ID Table"
+                  oncommand="ko.browse.showCommandIds()" />
+    </menupopup>
+
+    </menu>
+  </menubar>
+</overlay>

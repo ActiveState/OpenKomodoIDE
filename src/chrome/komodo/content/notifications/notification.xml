@@ -1,0 +1,312 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE bindings [
+<!ENTITY % notificationDTD SYSTEM "chrome://global/locale/notification.dtd">
+%notificationDTD;
+]>
+
+<bindings id="notificationBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <binding id="notificationMessage"
+           extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+    <!--
+      - This is one message in the list of notifications
+      -->
+    <content>
+      <xul:vbox flex="1" contextmenu="notification-context-menu">
+        <xul:hbox class="row" align="center" onclick="toggleTwisty()">
+          <xul:hbox class="twisty" anonid="twisty">
+            <xul:box class="twistyImageWrapper">
+              <xul:image class="twistyImage"/>
+            </xul:box>
+            <xul:box class="messageImageWrapper">
+              <xul:image class="messageImage" xbl:inherits="src=iconURL"/>
+            </xul:box>
+          </xul:hbox>
+          <xul:description anonid="text" crop="end"/>
+          <xul:progressmeter anonid="progress" collapsed="true"/>
+          <xul:hbox anonid="actions">
+            <!-- actions inserted here dynamically -->
+          </xul:hbox>
+          <xul:hbox anonid="tags-container">
+            <!-- tags inserted here dynamically -->
+          </xul:hbox>
+          <xul:description anonid="time" crop="start"/>
+        </xul:hbox>
+        <xul:hbox anonid="details">
+          <xul:description anonid="detail-text"/>
+        </xul:hbox>
+      </xul:vbox>
+    </content>
+
+    <implementation>
+      <property name="type" onget="return this.getAttribute('type')"
+                onset="this.setAttribute('type', val);"/>
+      <property name="text">
+        <getter>
+          return this._text.value
+        </getter>
+        <setter>
+          return this._text.value = this._text.tooltipText = val;
+        </setter>
+      </property>
+      <property name="details">
+        <setter><![CDATA[
+          if (!val) {
+            this.removeAttribute("details");
+            return;
+          }
+          this.setAttribute("details", true);
+          // Set the detail text.  This really isn't useful with _lots_ of lines,
+          // so just show the first 10 + the last 30 (... but don't repeat)
+          const CHUNK_START = 10;
+          const CHUNK_END = 30;
+          const CHUNK_SKIP_MIN = 10;
+          var lines = val.split("\n");
+          if (lines.length > CHUNK_START + CHUNK_END + CHUNK_SKIP_MIN) {
+            var filler = "(..." + (lines.length - CHUNK_START - CHUNK_END) + " more lines; copy to clipboard to view full text...)";
+            var text = lines.slice(0, CHUNK_START)
+                            .concat([filler])
+                            .concat(lines.slice(-CHUNK_END));
+            this._detailText.textContent = text.join("\n");
+          } else {
+            this._detailText.textContent = val;
+          }
+          // Manually set the height. This is needed in order to get scrolling
+          // for horizontal overflow, but size-to-fit vertically.
+          // Note that this needs to include the height of the horizontal scroll
+          // bar; we get that by looking at the boxObject after forcing it to
+          // show up.
+          this._detailContainer.setAttribute("style",
+                                             "overflow-x: scroll");
+          var scrollbarHeight = this._detailContainer.boxObject.height;
+          this._detailContainer.setAttribute("style", "");
+          
+          var style = getComputedStyle(this._detailText);
+          var height = this._detailText.scrollHeight +
+                       parseInt(style.marginTop, 10) +
+                       parseInt(style.marginBottom, 10);
+          this._detailContainer.setAttribute("style",
+              "height: " + (height + scrollbarHeight) + "px");
+        ]]></setter>
+      </property>
+      <property name="time" onget="return this._timeVal">
+        <setter>
+          this._timeVal = val;
+          this._time.tooltipText = val.toLocaleString();
+          this._time.textContent = val.toLocaleTimeString();
+          this.setAttribute("ordinal", val);
+        </setter>
+      </property>
+
+      <property name="searchText">
+        <!-- text used for quick searching -->
+        <getter>
+          return this._text.value.toLowerCase().replace(/\W/g, '');
+        </getter>
+      </property>
+
+      <property name="tags">
+        <setter>
+        <![CDATA[
+          while (this._tagsContainer.firstChild) {
+            this._tagsContainer.removeChild(this._tagsContainer.firstChild);
+          }
+          Array.slice(val).sort().forEach((function(tag) {
+            var elem = document.createElement("label");
+            elem.setAttribute("class", "tag");
+            elem.setAttribute("value", tag);
+            this._tagsContainer.appendChild(elem);
+            elem.addEventListener("click", function() {
+              var filter = document.getElementById("filter-search");
+              var values = filter.value.split(" ");
+              if (values.indexOf("[" + tag + "]") != -1) {
+                // already have the tag
+                return;
+              }
+              values = values.concat("[" + tag + "]");
+              values = values.filter(function(v)!!v);
+              filter.value = values.join(" ");
+              NotificationsWidgetController.updateFilters();
+            }, false);
+          }).bind(this));
+        ]]>
+        </setter>
+      </property>
+
+      <property name="maxProgress">
+        <!-- The maximum progress possible; setting it to
+           - koINotificationProgress.PROGRESS_NOT_APPLICABLE will hide the
+           - progress metere, and setting to
+           - koINotificationProgress.PROGRESS_INDETERMINATE will result in an
+           - indeterminate progress meter. Otherwise should be a positive
+           - integer.
+           -->
+        <getter>
+          return this._progress.max;
+        </getter>
+        <setter>
+        <![CDATA[
+          const koINotificationProgress = Components.interfaces.koINotificationProgress;
+          this._progress.max = val;
+          switch (val) {
+            case koINotificationProgress.PROGRESS_NOT_APPLICABLE:
+              this._progress.collapsed = true;
+              return;
+            case koINotificationProgress.PROGRESS_INDETERMINATE:
+              this._progress.mode = "undetermined";
+              this._progress.collapsed = false;
+              return;
+            default:
+              this._progress.mode = "determined";
+              this._progress.collapsed = false;
+          }
+        ]]>
+        </setter>
+      </property>
+
+      <property name="progress">
+        <getter>
+          return this._progress.value;
+        </getter>
+        <setter>
+          return this._progress.value = val;
+        </setter>
+      </property>
+
+      <property name="open">
+        <setter>
+        <![CDATA[
+          if (val && this.hasAttribute("details")) {
+            this.setAttribute("open", true);
+            if (this.parentNode && this.parentNode.ensureElementIsVisible) {
+              this.parentNode.ensureElementIsVisible(this);
+            }
+          } else {
+            this.removeAttribute("open");
+          }
+        ]]>
+        </setter>
+        <getter>
+          return this.hasAttribute("open");
+        </getter>
+      </property>
+
+      <property name="iconURL">
+        <setter>
+        <![CDATA[
+          if (val) {
+            this.setAttribute("iconURL", val);
+          } else {
+            this.removeAttribute("iconURL");
+          }
+        ]]>
+        </setter>
+        <getter>
+          return this.getAttribute("iconURL") || null;
+        </getter>
+      </property>
+
+      <field name="notification">
+        /* a reference to the notification */
+      </field>
+
+      <field name="_text">
+        document.getAnonymousElementByAttribute(this, "anonid", "text");
+      </field>
+      <field name="_time">
+        document.getAnonymousElementByAttribute(this, "anonid", "time");
+      </field>
+      <field name="_detailContainer">
+        document.getAnonymousElementByAttribute(this, "anonid", "details");
+      </field>
+      <field name="_detailText">
+        document.getAnonymousElementByAttribute(this, "anonid", "detail-text");
+      </field>
+      <field name="_tagsContainer">
+        document.getAnonymousElementByAttribute(this, "anonid", "tags-container");
+      </field>
+      <field name="_progress">
+        document.getAnonymousElementByAttribute(this, "anonid", "progress");
+      </field>
+
+      <!-- actions, as a dict of identifier -> { "element": element,
+         -                                       "action": koINotificationAction,
+         -                                       "listener": function }
+         -->
+      <field name="_actions">({})</field>
+
+      <property name="actions">
+        <!-- The list of actions, as an Array of koINotificationAction -->
+        <getter>
+          return [x.action for ([,x] in Iterator(this._actions))];
+        </getter>
+      </property>
+
+      <method name="toggleTwisty">
+        <body>
+        <![CDATA[
+          this.open = !this.open;
+        ]]>
+        </body>
+      </method>
+
+      <method name="addAction">
+        <parameter name="action"/>
+        <body>
+        <![CDATA[
+          var info, elem;
+          if (action.identifier in this._actions) {
+            // action update
+            info = this._actions[action.identifier];
+            elem = info.element;
+            elem.removeEventListener("command", info.listener, false);
+          } else {
+            // new action
+            var container = 
+              document.getAnonymousElementByAttribute(this, "anonid", "actions");
+            elem = document.createElement("button");
+            container.appendChild(elem);
+            info = { element: elem };
+            this._actions[action.identifier] = info
+          }
+          elem.label = action.label;
+          elem.accessKey = action.accessKey || "";
+          elem.image = action.iconURL;
+          elem.collapsed = !action.visible;
+          elem.disabled = !action.enabled;
+          elem.setAttribute("action-id", action.identifier);
+          info.action = action;
+          info.listener = (function() {
+              action.handler.handleAction(this.notification, action.identifier);
+            }).bind(this);
+          elem.addEventListener("command", info.listener, false);
+        ]]>
+        </body>
+      </method>
+
+      <method name="removeAction">
+        <!-- Remove the given action
+           - @param actionId {String} The identifier of the action to remove.
+           - If the action is not found, this is a no-op.
+          -->
+        <parameter name="actionId"/>
+        <body>
+        <![CDATA[
+          var info = this._actions[actionId];
+          if (!info) {
+            return;
+          }
+          info.element.parentNode.removeChild(info.element);
+          delete this._actions[actionId];
+        ]]>
+        </body>
+      </method>
+
+    </implementation>
+  </binding>
+
+</bindings>

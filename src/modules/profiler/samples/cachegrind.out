@@ -1,0 +1,8 @@
+events: Instructions Stuff
+
+fn=main
+0 200 100
+fn=func1
+0 200 100
+fn=func2
+0 200 100

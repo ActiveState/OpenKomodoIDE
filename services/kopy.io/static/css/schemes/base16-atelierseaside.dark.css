@@ -1,0 +1,114 @@
+/*
+
+    Name:       Base16 Atelier Seaside Dark
+    Author:     Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/seaside/)
+
+    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-chrome-devtools)
+    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+*/
+
+.cm-s-base16-atelierseaside-dark.CodeMirror {background: #131513; color: #cfe8cf;}
+.cm-s-base16-atelierseaside-dark div.CodeMirror-selected {background: #242924 !important;}
+.cm-s-base16-atelierseaside-dark .CodeMirror-gutters {background: #131513; border-right: 0px;}
+.cm-s-base16-atelierseaside-dark .CodeMirror-linenumber {color: #687d68;}
+.cm-s-base16-atelierseaside-dark .CodeMirror-cursor {border-left: 1px solid #809980 !important;}
+
+.cm-s-base16-atelierseaside-dark span.cm-header {color: #687d68;}
+.cm-s-base16-atelierseaside-dark span.cm-comment {color: #687d68;}
+.cm-s-base16-atelierseaside-dark span.cm-atom {color: #ad2bee;}
+.cm-s-base16-atelierseaside-dark span.cm-number {color: #87711d;}
+
+.cm-s-base16-atelierseaside-dark span.cm-property {color: #cfe8cf;}
+.cm-s-base16-atelierseaside-dark span.cm-attribute {color: #87711d;}
+.cm-s-base16-atelierseaside-dark span.cm-keyword {color: #ad2bee;}
+.cm-s-base16-atelierseaside-dark span.cm-string {color: #29a329;}
+
+.cm-s-base16-atelierseaside-dark span.cm-variable {color: #e6193c;}
+.cm-s-base16-atelierseaside-dark span.cm-variable-2 {color: #3d62f5;}
+.cm-s-base16-atelierseaside-dark span.cm-def {color: #3d62f5;}
+.cm-s-base16-atelierseaside-dark span.cm-error {background: #e6193c; color: #809980;}
+.cm-s-base16-atelierseaside-dark span.cm-bracket {color: #242924;}
+.cm-s-base16-atelierseaside-dark span.cm-tag {color: #e6193c;}
+.cm-s-base16-atelierseaside-dark span.cm-link {color: #ad2bee;}
+.cm-s-base16-atelierseaside-dark span.cm-builtin {color: #ad2bee;}
+
+.cm-s-base16-atelierseaside-dark .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
+
+.cm-s-base16-atelierseaside-dark .CodeMirror-activeline-background { background: #242924 !important; }
+
+
+
+body,
+textarea {
+  background: #131513;
+  color: #8ca68c;
+}
+
+#sidebar, .modal {
+  background: #242924;
+  color: #cfe8cf;
+}
+
+a, a:hover {
+    color: #e619c3;
+}
+
+a.option {
+    color: #e619c3 !important;
+}
+
+#logos {
+  background: #0f110f;
+  color: #8ca68c;
+}
+
+#buttons {
+  background: #242924;
+  color: #809980;
+}
+
+#buttons .function.enabled:hover {
+  color: #cfe8cf;
+}
+
+#buttonTips {
+  background: #e619c3;
+  color: #f0fff0;
+}
+
+#pointer:after {
+    border-bottom-color: #e619c3 !important;
+}
+
+#linenos {
+  background: #242924;
+  border-color: #5e6e5e !important;
+}
+
+#linenos a {
+    color: #809980 !important;
+}
+
+.option {
+    background: #131513 !important;
+    color: #809980 !important;
+}
+
+.option:hover {
+    background: #0f110f !important;
+}
+
+.dropdown:after {
+    border-top-color: #687d68 !important;
+}
+
+#messages li {
+  background: #3d62f5;
+  color: #f0fff0;
+}
+
+#messages li.error {
+  background: #e6193c;
+  color: #f0fff0;
+}

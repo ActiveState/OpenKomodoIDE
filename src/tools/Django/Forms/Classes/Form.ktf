@@ -1,0 +1,13 @@
+# komodo tool: Form
+# =================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# =================
+<% /* Form */ %>
+
+class [[%tabstop1:FORMNAME]](forms.Form):
+    [[%tabstop2:# TODO: Define form fields here]]
+    

@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % debuggerDTD SYSTEM "chrome://komodo/locale/debugger.dtd">
+  %debuggerDTD;
+]>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/debugger.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/scintilla.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/debugger.css" type="text/css"?>
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://global/skin/tabbox.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/tabs/tabs.css" type="text/css"?>
+<?xul-overlay href="chrome://komodo/content/bindings/scintilla-overlay.xul"?>
+
+<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <DebuggerPanel id="debuggerPanel" flex="1"/>
+    <commandset id="debugger-panel-commandset"/>
+    <popupset id="debugger-panel-popupset">
+        <menupopup id="context_variableViewer">
+            <menuitem id="context_editVariable"
+                      label="&edit.label;"
+                      class="menuitem-iconic list-item-edit-icon"
+                      observes="cmd_dbgEditVariable"
+                      />
+            <menuitem id="context_addVariable"
+                      label="&addToWatch.label;"
+                      observes="cmd_dbgMakeWatchedVariable"
+                      />
+            <menuitem id="context_copyVariableValues"
+                      label="&copyValue.label;"
+                      observes="cmd_dbgCopyVariableValues"
+                      />
+            <menuitem id="context_viewAsHex"
+                      label="&viewAsHex.label;"
+                      type="checkbox"
+                      autocheck="true"
+                      observes="cmd_dbgViewAsHex"
+                      />
+        </menupopup>
+
+        <menupopup id="context_watchedViewer">
+            <menuitem id="context_newWatchedVariable"
+                      label="&new.label;"
+                      class="menuitem-iconic list-item-add-icon"
+                      observes="cmd_dbgAddVariable"
+                      />
+            <menuitem id="context_editVariable"
+                      label="&edit.label;"
+                      class="menuitem-iconic list-item-edit-icon"
+                      observes="cmd_dbgEditVariable"
+                      />
+            <menuitem id="context_dbgWatchedVariable"
+                      label="&editWatchExpression.label;"
+                      observes="cmd_dbgWatchedVariable"
+                      />
+            <menuitem id="context_deleteVariable"
+                      label="&removeWatch.label;"
+                      class="menuitem-iconic list-item-remove-icon"
+                      observes="cmd_dbgDeleteVariable"
+                      />
+            <menuitem id="context_copyVariableValues"
+                      label="&copyValue.label;"
+                      observes="cmd_dbgCopyVariableValues"
+                      />
+            <menuitem id="context_viewAsHex"
+                      label="&viewAsHex.label;"
+                      type="checkbox"
+                      autocheck="true"
+                      observes="cmd_dbgViewAsHex"
+                      />
+        </menupopup>
+
+        <menupopup id="breakpointManagerContext">
+            <menu id="contextMenu_addMenu" label="&add.label;"
+                class="menu-iconic breakpoint-new-icon">
+                <menupopup id="contextMenuPopup_addMenu">
+                    <menuitem id="contextMenu_addBreakpoint"
+                              class="menuitem-iconic breakpoint-new-icon"
+                              observes="cmd_breakpoint_add"
+                              label="&newBreakpoint.label;"/>
+                    <menuitem id="contextMenu_addSpawnpoint"
+                              class="menuitem-iconic spawnpoint-new-icon"
+                              observes="cmd_spawnpoint_add"
+                              label="&newTclSpawnpoint.label;"/>
+                </menupopup>
+            </menu>
+            <menuitem id="contextMenu_showBreakopint"
+                      class="menuitem-iconic breakpoint-go-to-source-code-icon"
+                      observes="cmd_breakpoint_goto"
+                      label="&gotoSource.label;"
+                      />
+            <menuitem id="contextMenu_toggleBreakpoint"
+                      class="menuitem-iconic breakpoint-toggle-state-icon"
+                      observes="cmd_breakpoint_toggle"
+                      label="&enableDisable.label;"
+                      />
+            <menuitem id="contextMenu_deleteBreakpoint"
+                      class="menuitem-iconic breakpoint-delete-icon"
+                      observes="cmd_breakpoint_delete"
+                      label="&delete.label;"
+                      />
+            <menuitem id="contextMenu_editBreakpoint"
+                      class="menuitem-iconic breakpoint-properties-icon"
+                      observes="cmd_breakpoint_properties"
+                      label="&properties.label;"
+                      />
+        </menupopup>
+    </popupset>
+    <hbox id="scintillaOverlayXul"/>
+
+    <script>
+        addEventListener("load", function() scintillaOverlayOnLoad(), false);
+    </script>
+
+</page>

@@ -1,0 +1,14 @@
+/* Copyright (c) 2004-[[%date:%Y]] ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+
+/* ...description of component/service...
+ *
+ */
+
+[scriptable, uuid([[%guid]])]
+interface [[%tabstop1:koIFoo]]: nsISupports {
+    // attributes, constants, methods, ...
+};
+

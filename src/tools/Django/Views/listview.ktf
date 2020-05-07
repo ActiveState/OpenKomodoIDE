@@ -1,0 +1,12 @@
+# komodo tool: listview
+# =====================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# =====================
+
+class [[%tabstop1:MODEL_NAME]]ListView(ListView):
+    model = [[%tabstop1:MODEL_NAME]]
+    template_name = "[[%tabstop2:TEMPLATE_NAME]]"

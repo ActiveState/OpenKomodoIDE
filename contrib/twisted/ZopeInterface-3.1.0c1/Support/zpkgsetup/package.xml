@@ -1,0 +1,36 @@
+<schema prefix="zpkgsetup">
+  <description>
+    Schema for zpkg SETUP.cfg files, used to provide distutils
+    metadata for individual packages.
+  </description>
+
+  <sectiontype name="extension">
+    <key name="language" datatype="basic-key"/>
+    <multikey name="define" datatype=".package.cpp_definition"/>
+    <multikey name="undefine" datatype=".package.cpp_names"/>
+    <multikey name="source" datatype=".package.path_ref" required="yes"/>
+    <multikey name="depends-on" datatype=".package.path_ref"/>
+  </sectiontype>
+
+  <sectiontype name="data-files"
+               keytype=".package.path_ref"
+               datatype=".package.data_file_section">
+    <key name="+" attribute="files" datatype=".package.empty_string"/>
+  </sectiontype>
+
+  <multisection name="+" attribute="extensions" type="extension"/>
+  <multisection name="+" attribute="data_files" type="data-files"/>
+
+  <multikey name="documentation"
+            datatype=".package.path_ref">
+  </multikey>
+
+  <multikey name="header"
+            datatype=".package.path_ref">
+  </multikey>
+
+  <multikey name="script"
+            datatype=".package.path_ref">
+  </multikey>
+
+</schema>

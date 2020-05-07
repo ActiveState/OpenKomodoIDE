@@ -1,0 +1,362 @@
+/* Copyright (c) 2003-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information.
+   
+   Authors: David Ascher, Shane Caraveo
+   
+*/
+
+#include "nsISupports.idl"
+interface koIAsyncCallback;
+
+/*
+  koIFile represents a file on disk.
+  
+  this is very close to the nsIFile interface, we could
+  consider inheriting from that
+*/
+
+[scriptable, uuid(46D252D6-1A08-49AA-9396-338034BA537B)]
+interface koIFileEx : nsISupports
+{
+    /* Permissions: as XPIDL no longer supports octal constants, they are
+     * expressed in hex; they have the same values as normal. */
+    const long PERM_ISUID = 0x800;  /* set user id bit                       */
+    const long PERM_ISGID = 0x400;  /* set group id bit                      */
+    const long PERM_ISVTX = 0x200;  /* set sticky bit                        */
+
+    const long PERM_IRUSR = 0x100;  /* read permission, owner                */
+    const long PERM_IWUSR = 0x080;  /* write permission, owner               */
+    const long PERM_IXUSR = 0x040;  /* execute/search permission, owner      */
+
+    const long PERM_IRGRP = 0x020;  /* read permission, group                */
+    const long PERM_IWGRP = 0x010;  /* write permission, group               */
+    const long PERM_IXGRP = 0x008;  /* execute/search permission, group      */
+
+    const long PERM_IROTH = 0x004;  /* read permission, others               */
+    const long PERM_IWOTH = 0x002;  /* write permission, others              */
+    const long PERM_IXOTH = 0x001;  /* execute/search permission, others     */
+
+    const long PERM_IRWXU = 0x1c0;  /* read, write, execute/search by owner  */
+    const long PERM_IRWXG = 0x038;  /* read, write, execute/search by group  */
+    const long PERM_IRWXO = 0x007;  /* read, write, execute/search by others */
+
+    /**
+     * Open the file for reading or writing
+     * @param mode The mode, "r", "w", "a", etc.; see python's open() builtin.
+     */
+    boolean open(in string mode);
+    /**
+     * Read from this file
+     * @precondition The file must be opened for reading
+     * @param aCount the number of bytes to read; use -1 to read everything.
+     * @return The read data
+     */
+    void read(in long aCount,
+              [optional] out unsigned long count,
+              [array, size_is(count), retval] out octet text);
+    /**
+     * Write to this file.
+     * @precondition The file must be opened for writing.
+     * @param text The data to write
+     * @param count The number of bytes to write
+     */
+    void write([array, size_is(count)] in octet text, in unsigned long count);
+    /**
+     * Write a string to this file.
+     * @precondition The file must be opened for writing.
+     * @param text The string to write.
+     */
+    void puts(in AString text);
+    /**
+     * Read the whole file as a string.
+     * @precondition The file must be opened for reading
+     * @return The file contents as a string.
+     */
+    AString readfile();
+    /**
+     * Flush buffers to disk
+     * @note This is internal buffers only; fsync is not used.
+     */
+    void flush();
+    /**
+     * Close this file.
+     */
+    void close();
+    /**
+     * Change the permissions of this file
+     * @param permissions The target permissions; should be a combination of the
+     *      PERM_* constants above.
+     */
+    void chmod(in unsigned long permissions);
+
+    // changing any one of the following three affects the following 6
+    /**
+     * Pretty path for displaying to the user; will use the abosolute path if
+     * this is a file:// scheme URI, or the URI otherwise.
+     */
+    attribute AString displayPath;
+    /**
+     * The URI of this file.
+     */
+    attribute AString URI;
+    /**
+     * The server/host name of this URI
+     */
+    attribute AString server;
+    /**
+     * The server-relative path; for a file:// scheme file, this is the absolute
+     * path.
+     */
+    attribute AString path;
+    /**
+     * The leaf name of this file.  This is not well-defined for non-file://
+     * scheme URIs.  Prefer using baseName instead.
+     */
+    [deprecated] attribute AString leafName;
+    /**
+     * Everything before the path; typically includes scheme, server, port.
+     */
+    readonly attribute AString prePath;
+    /**
+     * The base name of this file.  This is not well-defined for non-file://
+     * scheme URIs.
+     */
+    readonly attribute AString baseName;
+    /**
+     * The directory name of this file; includes the path excluding the base
+     * name.  Does not include scheme, server, etc.
+     */
+    readonly attribute AString dirName;
+    /**
+     * The scheme of this URI/file.
+     */
+    readonly attribute ACString scheme;
+    /**
+     * The extension of this file.  Includes a leading period (if the base name
+     * has any extensions at all).
+     */
+    readonly attribute AString ext;
+    /**
+     * A hash of of this path.
+     */
+    readonly attribute ACString md5name;
+    
+    /**
+     * The URI in the OS native filesystem encoding.
+     * This is likely MBCS on Windows, UTF-8 on Darwin and (most) Linux.
+     */
+    attribute ACString encodedURI;
+    /**
+     * The path in the OS native filesystem encoding.
+     * This is likely MBCS on Windows, UTF-8 on Darwin and (most) Linux.
+     */
+    attribute ACString encodedPath;
+    
+    /**
+     * The permission bits ("mode") of this file.
+     */
+    attribute unsigned long permissions;
+    
+    /**
+     * Whether this file is a local file.  This effectively only checks the
+     * scheme, not whether the file is on local disk; see isNetworkFile.
+     */
+    readonly attribute boolean isLocal;
+    /**
+     * Whether this file is a remote file. (FTP, SCP, SFTP, etc.)
+     */
+    readonly attribute boolean isRemoteFile;    // FTP, SCP, SFTP etc...
+    /**
+     * Whether this file is a network file.  A network file is a file for which
+     * isLocal is true, but is actually residing on a mounted network drive,
+     * such as Samba, SSHFS, etc...
+     * The user is able to customize through Komodo's preferences which file
+     * locations are to be treated as network shares.
+     * @note Network shared are automatically detected on Windows.
+     */
+    readonly attribute boolean isNetworkFile;
+    /**
+     * The last modified time of this file, in seconds from epoch.
+     */
+    readonly attribute long long lastModifiedTime;
+    /**
+     * The file creation time, in seconds from epoch.
+     */
+    readonly attribute long long createdTime;
+    /**
+     * The last accessed time of this file, in seconds from epoch.
+     */
+    readonly attribute long long lastAccessedTime;
+    /**
+     * The size of this file, in bytes.  Might be nonsensical for things that
+     * are not regular files.
+     */
+    readonly attribute long long fileSize;
+    /**
+     * Whether a file exists at the specified URI/path.
+     */
+    readonly attribute boolean exists;
+    /**
+     * Whether this file is open (i.e. open() has been called).
+     */
+    readonly attribute boolean closed;
+    /**
+     * Whether it is possible to write to this file.
+     */
+    readonly attribute boolean isWriteable;
+    /**
+     * Whether it is possible to read from this file.
+     */
+    readonly attribute boolean isReadable;
+    /**
+     * Shortcut for isReadable && !isWriteable
+     */
+    readonly attribute boolean isReadOnly;
+    /**
+     * Shortcut for isReadOnly && isWriteable; just use the expression instead,
+     * it's clearer.
+     */
+    [deprecated] readonly attribute boolean isReadWrite;
+    /**
+     * Whether this file is executable.  This refers only to the permission bit,
+     * and does not take into account the file contents.
+     */
+    readonly attribute boolean isExecutable;
+    /**
+     * Whether this file is hidden.
+     */
+    readonly attribute boolean isHidden;
+    /**
+     * Whether this file is a directory.
+     */
+    readonly attribute boolean isDirectory;
+    /**
+     * Whether this file is a regular file.
+     */
+    readonly attribute boolean isFile;
+    /**
+     * Whether this file is a symbolic link.
+     */
+    readonly attribute boolean isSymlink;
+    
+    /**
+     * This is a FIFO, SOCKET, etc. file type on linux.  Basicly, it is an
+     * alternate protocol using the file descriptor.  We also mark it true for
+     * the DBGP file spec.
+     */
+    readonly attribute boolean isSpecial; 
+
+    /**
+     * hasChanged does a stat, checks to see if our cached stat info
+     * is different than a current stat call.  If it is, then the
+     * new stat info is saved into the cache.
+     *
+     * @deprecated since Komodo 8.0.0 - use the updateStats() method.
+     */
+    [deprecated] readonly attribute boolean hasChanged;
+
+    /**
+     * hasChangedNoStatUpdate does a stat, checks to see if our cached stat info
+     * is different than a current stat call, but does not update the current
+     * stat info with the new one.
+     *
+     * @deprecated since Komodo 8.0.0 - no longer used.
+     */
+    [deprecated] readonly attribute boolean hasChangedNoStatUpdate;
+
+    /**
+     * Updates the stat information.
+     *
+     * @returns {boolean} true if the stats changed.
+     */
+    boolean updateStats();
+    
+    /**
+     * Updates the stat information asynchronously.
+     *
+     * @returns {boolean} true if the stats changed.
+     */
+    void updateStatsAsync(in koIAsyncCallback callback);
+
+    // various attributes used by scc
+    /**
+     * The SCC integration type; examples are "p4", "cvs".  Blank if not in SCC.
+     */
+    readonly attribute ACString sccType;
+    /**
+     * The SCC integration type of the containing directory.
+     * @see sccType
+     */
+    readonly attribute ACString sccDirType;
+    /**
+     * Whether this file is excluded from SCC integration.  If true, will not be
+     * checked for SCC in the future.
+     */
+    readonly attribute boolean sccExclude;
+    /**
+     * Whether file is in local copy of repository
+     * @deprecated since Komodo 8.1
+     */
+    [deprecated] readonly attribute boolean sccHaveOnDisk;
+    /**
+     * The local revision identifier of the file on disk.
+     */
+    readonly attribute ACString sccLocalRevision;
+    /**
+     * The date of the SCC commit for the file on disk.
+     * @deprecated Since Komodo 8.5.0: This is unused.
+     */
+    [deprecated] readonly attribute ACString sccRevDate;
+    /**
+     * The last revision (on the server) which modified this file.
+     */
+    readonly attribute ACString sccDepotRevision;
+    /**
+     * Whether the local and depot revisions differ
+     */
+    readonly attribute boolean sccNeedSync;
+    /**
+     * Whether this file has a conflict from updating
+     */
+    readonly attribute boolean sccConflict;
+    /**
+     * A action that is queued to take place; possible values are "edit", "add",
+     * "delete", "integrate", "conflict", etc.
+     */
+    readonly attribute ACString sccAction;
+    /**
+     * A status message about this file; for example, "up-to-date".
+     */
+    readonly attribute ACString sccStatus;
+    /**
+     * Perforce: Change list number.
+     */
+    readonly attribute ACString sccChange;
+    /**
+     * Used by the controller system:
+     * Combination of sccType, sccDirType, sccNeedSync and sccAction.
+     * This needs to differ for two files if the set of SCC actions that can be
+     * applied to the two files is different.
+     */
+    readonly attribute ACString sccSummary;
+
+    /**
+     * If under publishing control - its current publishing status.
+     */
+    attribute long publishingStatus;
+    
+    /**
+     * If a remote file, it's current connection status.
+     * It's either 0 (good) or 1(something wrong, check your connection or logs)
+     */
+    attribute long remoteFileConnectionStatus;
+
+    /**
+     * A method to retreive keys and values for all status attributes; this is
+     * an optimization for JS when we need to retreive all of it.
+     */
+    void getStatusMap([array, size_is(key_count)] out wstring keys,
+                      out unsigned long key_count,
+                      [array, size_is(val_count)] out wstring values,
+                      out unsigned long val_count);
+};

@@ -1,0 +1,32 @@
+// komodo tool: cptm
+// =================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// =================
+<% /* Custom Post Type: Admin Messages */ %>
+
+/**
+ * Registers admin messages for a custom post type
+ *
+ * @see wp-admin/edit-form-advanced.php for $messages format
+ */
+function [[%tabstop1:my_post_type_messages]]( $messages ) {
+$messages['[[%tabstop2:custom-post-type-id]]'] = array(
+1 => sprintf( __( '[[%tabstop3:Post Type Name]] updated. <a href="%s">View book</a>', '[[%tabstop4:my_plugin_text_domain]]' ), esc_url( get_permalink( $post_ID ) ) ),
+2 => $messages['post'][2],
+3 => $messages['post'][3],
+4 => __( '[[%tabstop3:Post Type Name]] updated.', '[[%tabstop4:my_plugin_text_domain]]' ),
+5 => isset( $_GET['revision'] ) ? sprintf( __( 'Book restored to revision from %s', '[[%tabstop4:my_plugin_text_domain]]' ), wp_post_revision_title( (int) $_GET['revision'], false) ) : false,
+6 => sprintf( __( '[[%tabstop3:Post Type Name]] published. <a href="%s">View [[%tabstop3:Post Type Name]]</a>', '[[%tabstop4:my_plugin_text_domain]]' ), esc_url( get_permalink( $post_ID ) ) ),
+7 => __( 'Book saved.', '[[%tabstop4:my_plugin_text_domain]]' ),
+8 => sprintf( __( '[[%tabstop3:Post Type Name]] submitted. <a target="_blank" href="%s">Preview [[%tabstop3:Post Type Name]]</a>', '[[%tabstop4:my_plugin_text_domain]]' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID) ) ) ),
+9 => sprintf( __( '[[%tabstop3:Post Type Name]] scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview [[%tabstop3:Post Type Name]]</a>', '[[%tabstop4:my_plugin_text_domain]]' ),
+date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ),
+esc_url( get_permalink( $post_ID ) ) ),
+10 => sprintf( __( '[[%tabstop3:Post Type Name]] draft updated. <a target="_blank" href="%s">Preview [[%tabstop3:Post Type Name]]</a>', '[[%tabstop4:my_plugin_text_domain]]' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) )
+);
+return $messages;
+}
+add_filter( 'post_updated_messages', '[[%tabstop1:my_post_type_messages]]' );

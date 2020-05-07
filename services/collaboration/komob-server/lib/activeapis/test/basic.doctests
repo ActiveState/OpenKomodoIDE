@@ -1,0 +1,39 @@
+
+>>> import activeapis2
+>>> hasattr(activeapis2, "get_version")
+True
+
+>>> factory = activeapis2.APIFactory()
+>>> factory.get("accountapi")
+<AccountAPI: https://account.activestate.com/api/>
+>>> factory.get("limeapi")
+<LimeAPI: http://lime.activestate.com/>
+
+# Created anew each time property is accessed
+>>> factory.get("accountapi") is not factory.get("accountapi")
+True
+
+# Ensure settings work.
+>>> settings = {
+...     "accountapi.api_url": "http://account.as-beta.com/api/",
+...     "limeapi.api_url": "http://lime.as-beta.com/",
+...     "storeapi.api_url": "http://store.as-beta.com/as/api/",
+...     "limeapi.timeout": 42,
+... }
+>>> factory = activeapis2.APIFactory(settings)
+>>> factory.get("accountapi")
+<AccountAPI: http://account.as-beta.com/api/>
+>>> limeapi = factory.get("limeapi")
+>>> limeapi
+<LimeAPI: http://lime.as-beta.com/>
+>>> limeapi._get_accountapi()
+<AccountAPI: http://account.as-beta.com/api/>
+>>> limeapi._get_storeapi()
+<StoreAPI: http://store.as-beta.com/as/api/>
+>>> limeapi._http.timeout
+42
+
+# Ensure direct kwargs work.
+>>> limeapi = factory.get("limeapi", _sso_id=32)
+>>> limeapi._sso_id
+32

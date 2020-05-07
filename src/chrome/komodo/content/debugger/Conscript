@@ -1,0 +1,36 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'mozChromeDir',
+    'platform',
+    'productType',
+    'buildFlavour',
+    'unsiloedPythonExe',
+    'mozVersion',
+);
+
+$cons->Preprocess("overlay.p.xul", "overlay.xul");
+$cons->InstallInChrome('overlay.xul');
+$cons->InstallInChrome('debuggerController.js');
+$cons->InstallInChrome('debuggerPanel.xul');
+$cons->InstallInChrome('debugger.js');
+$cons->InstallInChrome('listener.xul');
+$cons->InstallInChrome('koDebuggerWidgets.xml');
+$cons->Preprocess("variableOutlinerView.p.js", "variableOutlinerView.js");
+$cons->InstallInChrome('variableOutlinerView.js');
+$cons->Preprocess("debugSessionTab.p.js", "debugSessionTab.js");
+$cons->InstallInChrome('debugSessionTab.js');
+$cons->InstallInChrome('breakpoints.js');
+$cons->Preprocess("breakpointsTab.p.js", "breakpointsTab.js");
+$cons->InstallInChrome('breakpointsTab.js');
+$cons->InstallInChrome('breakpointsTab.xul');
+$cons->InstallInChrome('breakpointProperties.xul');
+$cons->InstallInChrome('breakpointProperties.js');
+$cons->InstallInChrome('spawnpointProperties.xul');
+$cons->InstallInChrome('spawnpointProperties.js');
+$cons->InstallInChrome('variableEditor.xul');
+$cons->InstallInChrome('variableEditor.js');

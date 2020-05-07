@@ -1,0 +1,118 @@
+@mixin gradient($color1, $color2, $angle: top)
+{
+    @include background-image(linear-gradient($angle, $color1, $color2));
+}
+
+/* Font Icons */
+%icns
+{
+    &:before
+    {
+        display: inline-block;
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+@mixin icon($char, $color: '', $size: '')
+{
+    @extend %icns;
+    &:before
+    {
+        content: '#{$char} ';
+        @if $color != ''
+        {
+            color: $color;
+        }
+        @if $size != ''
+        {
+            font-size: $size;
+        }
+        @content;
+    }
+}
+
+/* Links */
+
+@mixin link($color: $color-base-link, $color-hover: $color-base-link-hover)
+{
+    @include transition(color 0.2s ease-in-out, border 0.1s ease-in-out);
+    color: $color;
+    text-decoration: none;
+
+    &:hover
+    {
+        color: $color-hover;
+        text-decoration: underline;
+    }
+}
+
+@mixin link-forced($color: $color-base-link, $color-hover: $color-base-link-hover)
+{
+    @include transition(color 0.2s ease-in-out, border 0.1s ease-in-out);
+    color: $color !important;
+    text-decoration: none !important;
+
+    &:hover
+    {
+        color: $color-hover !important;
+        text-decoration: underline !important;
+    }
+}
+
+@mixin block-link($color: $color-base-link-block, $color-hover: $color-base-link-block-hover)
+{
+    border: 0;
+    
+    & > img,
+    & > figure,
+    & > div
+    {
+        @include transition(border 0.2s ease-in-out);
+        border: 1px solid $color;
+    }
+
+    &:hover > img,
+    &:hover > figure,
+    &:hover > div
+    {
+        border: 1px solid $color-hover;
+    }
+}
+
+/* Class Helpers */
+
+/* Clearfix by - http://nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom: 1;
+}
+
+
+@-webkit-keyframes fadeInFromNone {
+    0% {
+        display:none; 
+        opacity: 0;
+    }
+
+    1% {
+        display: block; 
+        opacity: 0;
+    }
+
+    100% {
+        display: block; 
+        opacity: 0.9;
+    }
+}

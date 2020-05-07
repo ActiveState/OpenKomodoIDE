@@ -1,0 +1,10 @@
+# komodo tool: utfc
+# =================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# =================
+<% /* coding: utf-8 */ %>
+# -*- coding: utf-8 -*-

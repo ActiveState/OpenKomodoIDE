@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % dbexplorerDTD SYSTEM "chrome://dbexplorer/locale/dbexplorer.dtd">
+  %dbexplorerDTD;
+]>
+
+<!-- Copyright (c) 2000-2010 ActiveState Software Inc.
+  See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<dialog id="addDatabaseConnection"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    orient="vertical"
+    title="&addDatabaseConnection.caption;"
+    buttons="accept,cancel"
+    buttonlabelcancel="Cancel"
+    buttonlabelaccept="Add"
+    persist="screenX screenY height width"
+    ondialogaccept="return doOK();"
+    ondialogcancel="return doCancel();"
+    onload="onLoad();"
+    onunload="onUnload();"
+    >
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/trace.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/editor/fileops.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://dbexplorer/content/addConnection.js" type="application/x-javascript;version=1.7"/>
+
+    <menupopup id="dialogTooltip" /> <!-- for tooltips -->
+    <vbox id="server-prefs-vbox" flex="1" class="autoscroll"> <!-- for scrolling -->
+        <vbox style="margin-top: 10px;">
+            <hbox>
+                <vbox>
+                    <label value="&databaseType.label;" class="kopadded"/>
+                    <menulist id="db_types" oncommand="onSelectDatabaseType(this);">
+                        <menupopup id ="db_typesPopup" />
+                    </menulist>
+                </vbox>
+            </hbox>
+        </vbox>
+        <vbox id="errorMessageBox" collapsed="true" style="border: red 1px solid;">
+            <description id="errorMessage" />
+            <hbox>
+                <spacer flex="1" />
+                <button id="errorMessageBoxHide" label="Hide"
+                        oncommand="document.getElementById('errorMessageBox').collapsed = true" />
+            </hbox>
+        </vbox>
+        <deck id="dbInfoDeck" style="margin-top: 10px;">
+            <vbox id="db_info_file_based">
+                <label value="&databaseFile.label;" />
+                <hbox align="center">
+                    <textbox id="dbPath" flex="1"
+                             oninput="checkAddButtonStatus();"
+                             type="autocomplete"
+                             style="min-height: 16px;"
+                             maxrows="10"
+                             size="30"
+                             enablehistory="false"
+                             autocompletesearch="filepath"
+                             autocompletesearchparam="mru:sqlite_mru; cwd:/;"
+                             autocompletepopup="popupTextboxAutoComplete"
+                             tabscrolling="true"
+                             completeselectedindex="true"
+                             ontextentered="this.focus();
+                                    this.setSelectionRange(this.textLength, this.textLength);"
+                     />
+                    <button label="&browse.label;" oncommand="browseToFile('dbPath');"/>
+                </hbox>
+            </vbox>
+            <vbox id="db_info_connection_based">
+                <hbox>
+                    <vbox flex="1">
+                        <label value="&hostName.label;" class="kopadded"/>
+                        <textbox id="hostname" flex="1"
+                                 oninput="checkAddButtonStatus();"
+                                 tooltiptext="&theServerNameToConnectToEitherADomainNameOrAIPAddress.tooltiptext;" />
+                    </vbox>
+                    <vbox>
+                        <label value="&portNumber.label;" class="kopadded"/>
+                        <textbox id="port" flex="1" cols="8"
+                                 oninput="checkAddButtonStatus();"
+                                 tooltiptext="&ifNoPortIsGivenTheDefaultDBPortIsUsed.tooltiptext;" />
+                    </vbox>
+                </hbox>
+                <hbox>
+                    <vbox flex="1">
+                        <label value="&userName.label;" class="kopadded"/>
+                        <textbox id="username" oninput="checkAddButtonStatus();"
+                                  flex="1"
+                                 tooltiptext="&usernameUsedToLoginToTheRemoteServer.tooltiptext;" />
+                    </vbox>
+                    <vbox flex="1">
+                        <label value="&password.label;" class="kopadded"/>
+                        <textbox id="password" type="password"
+                                 oninput="updateOnPassword();"
+                                flex="1"
+                                 tooltiptext="&ifNoPasswordIsGivenYouLlBePromptedForItUponFirstConnecting.tooltiptext;"/>
+                        
+                    </vbox>
+                </hbox>
+                <hbox>
+                    <vbox flex="1">
+                        <label value="&socketNoStar.label;" class="kopadded"/>
+                        <textbox id="socket"
+                                  flex="1"
+                tooltiptext="&socketReason.tooltip;" />
+                    </vbox>
+                    <spacer flex="1" />
+                    <vbox>
+                        <checkbox id="hasPassword" label="&hasPassword.button;"
+                        oncommand="handleHasPasswordClick(this);" />
+                        <checkbox id="showPassword" label="&showPassword.button;"
+                                  oncommand="handleShowPassword(this);" />
+                    </vbox>
+                </hbox>
+            </vbox>
+        </deck>
+    </vbox>
+</dialog>

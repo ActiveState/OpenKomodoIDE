@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % invocationsDTD SYSTEM "chrome://komodo/locale/invocations.dtd">
+  %invocationsDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/prefwidgets.css" type="text/css"?>
+
+<?xul-overlay href="chrome://komodo/content/pref/invocations/debugging-properties-overlay.xul"?>
+
+<dialog id="dialog-debugging-properties"
+        title="&debuggingOptions.title;"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        orient="vertical"
+        class="modal"
+        buttons="accept,cancel,help"
+        ondialogaccept="return Ok();"
+        ondialoghelp="ko.windowManager.getMainWindow().ko.help.open('debugger.html');"
+        ondialogcancel="return Cancel();"
+        onload="SetupDialog();"
+        persist="screenX screenY width height"
+        style="width: 37em;">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+
+    <vbox id="contentOverlay"/>
+</dialog>

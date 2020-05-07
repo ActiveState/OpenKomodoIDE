@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="PrefSCCPerforce_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/pref/pref-scc-perforce.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="scc-perforce-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical">
+            <caption>
+                <checkbox id="p4Enabled" label="&perforceIntegration.label;"
+                          pref="true" prefstring="p4Enabled"
+                          prefattribute="checked"
+                          oncommand="PrefSCCPerforce_UpdateEnabledUI('p4');"/>
+            </caption>
+            <vbox>
+                <hbox align="center">
+                    <label value="Perforce executable used: "/>
+                </hbox>
+                <hbox>
+                <menulist id="p4Executable"
+                    flex="1"
+                    pref="true"
+                    prefstring="p4Executable"
+                    tooltiptext="&clickOnItemToSelectItAsTheDefault.tooltiptext;"
+                    oncommand="PrefSCCPerforce_CheckAgain();">
+                    <menupopup id="avail-exec-list"/>
+                </menulist>
+                <button id='browse1' label="&browse.label;"
+                    oncommand="PrefSCCPerforce_getExecutable();"/>
+                </hbox>
+            </vbox>
+            <separator class="thin"/>
+            <deck id="p4Deck" selectedIndex='0'>
+                <vbox>
+                    <checkbox label="&checkForStatusChangesFromOutsideOfKomodo.label;"
+                              id="p4BackgroundCheck" pref="true"
+                              prefstring="p4BackgroundCheck"
+                              prefattribute="checked"
+                              oncommand="PrefSCCPerforce_UpdateBackgroundEnabledUI('p4');"/>
+                    <vbox style="padding-left: 20px;">
+                        <hbox align="center">
+                            <label value="Check every "/>
+                            <textbox id="p4BackgroundMinutes"
+                                     size="3"
+                                     pref="true"
+                                     prefstring="p4BackgroundMinutes"
+                                     prefattribute="value"/>
+                            <label value=" minutes"/>
+                        </hbox>
+                        <checkbox label="&doRecursiveStatusChecks.label;"
+                                  id="p4Recursive" pref="true"
+                                  prefstring="p4Recursive"
+                                  prefattribute="checked"/>
+                    </vbox>
+    
+                    <separator class="thin"/>
+                    <radiogroup style="margin-top: 10px;" id="p4_diff_type" pref="true" prefattribute="value" orient="vertical" >
+                        <hbox align="center">
+                            <radio group="p4_diff_type" id="komododiff" value="komododiff"
+                                    label="&showDiffInKomodo.label;" oncommand="UpdateDiffType('komododiff')"/>
+                            <menulist id="p4DiffOptions" pref="true" prefattribute="data">
+                                <menupopup>
+                                    <menuitem data="" label="&default.label;"/>
+                                    <menuitem data="u" label="&unifiedDu.label;"/>
+                                    <menuitem data="n" label="&RCSDn.label;"/>
+                                    <menuitem data="c" label="&contextDc.label;"/>
+                                    <menuitem data="s" label="&summaryDs.label;"/>
+                                </menupopup>
+                            </menulist>
+                        </hbox>
+                        <hbox align="center">
+                            <radio group="p4_diff_type" id="externaldiffchoice" value="externaldiffchoice"
+                                    label="&useExternalDiffTool.label;" oncommand="UpdateDiffType('externaldiffchoice')"/>
+                            <textbox id="externaldiff" size="20" pref="true" prefstring="externaldiff" prefattribute="value"/>
+                        </hbox>
+                    </radiogroup>
+    
+                    <separator style="height: 10px;"/>
+                    <label value="Automatically open files for edit before save:"/>
+                    <menulist pref="true"
+                              prefattribute="data"
+                              prefstrings="donotask_p4_edit_on_save,donotask_action_p4_edit_on_save">
+                        <menupopup>
+                            <menuitem data="false,"   label="&askMeEachTime.label;"/>
+                            <menuitem data="true,Yes" label="&yes.label;"/>
+                            <menuitem data="true,No"  label="&no.label;"/>
+                        </menupopup>
+                    </menulist>
+    
+                </vbox>
+                <vbox flex="1">
+                    <description id="p4NotFunctional"
+                                 style="font-weight: bold;"/>
+                    <hbox id="p4NotFunctional_hbox" pack="center">
+                        <button label="&downloadPerforce.label;"
+                                class="button-link-a" style="cursor:pointer;"
+                                oncommand="getKoObject('browse').openUrlInDefaultBrowser('http://www.perforce.com/downloads/')"/>
+                        <button label="&checkAgain.label;"
+                                oncommand="PrefSCCPerforce_CheckAgain('p4');"/>
+                    </hbox>
+                </vbox>
+            </deck>
+        </groupbox>
+
+    </vbox>
+
+</window>
+
+
+
+

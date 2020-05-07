@@ -1,0 +1,4 @@
+/* Profiling flat view. */
+profilerview[type="flat"] {
+    -moz-binding: url('chrome://profiler/content/views/flat/tree.xml#flat-view');
+}

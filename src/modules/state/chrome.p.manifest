@@ -1,0 +1,9 @@
+# #if MODE == "dev"
+content state content/
+locale state en-US locale/en-US/
+skin state classic/1.0 skin/
+# #else
+content state jar:state.jar!/content/
+locale state en-US jar:state.jar!/locale/en-US/
+skin state classic/1.0 jar:state.jar!/skin/
+# #endif

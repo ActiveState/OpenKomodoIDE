@@ -1,0 +1,196 @@
+<!-- no doctype - it makes IE ignore the height: 100%. -->
+<html>
+<head>
+<title>toolbarFrame</title>
+<style type="text/css">
+html,body { width: 100%; height: 100%; border: none; margin: 0px; padding: 0px; }
+button { height: 100%; }
+</style>
+
+<script type="text/javascript">
+
+var outputFrame = parent.outputFrame;
+var inputFrame = parent.inputFrame;
+var framesetElement = parent.document.documentElement.getElementsByTagName("frameset")[0];
+
+var savedRows;
+
+
+// Need to use C-style comments in handleError() and print() 
+// because IE retains them when decompiling a function.
+
+
+
+function print(s, c) {
+  var outputFrame = parent.outputFrame; /* duplicated here in case this function is elsewhere */
+  var doc = outputFrame.document;
+
+  var newdiv = doc.createElement("div");
+  newdiv.appendChild(doc.createTextNode(s));
+  if (c)
+    newdiv.style.color = c;
+  doc.body.appendChild(newdiv);
+}
+
+function handleError(er, file, lineNumber) 
+{
+  print("Error on line " + lineNumber + ": " + er, "red"); 
+    
+  /* Find the character offset for the line */
+  /* (code adapted from blogidate xml well-formedness bookmarklet) */
+  var ta = inputFrame.document.getElementById("input");
+  var lines = ta.value.split("\n");
+  var cc = 0; 
+  var i;
+  for(i=0; i < (lineNumber - 1); ++i) 
+    cc += lines[i].length + 1;
+
+  /* Hacky(?) workaround for IE's habit of including \r's in strings */
+  if (ta.value.split("\r").length > 1)
+    cc -= lineNumber - 1;
+
+  /* Select the line */
+  if(document.selection) { 
+    /* IE (Leonard Lin gave me this code) */
+    var sel = ta.createTextRange(); 
+    sel.moveStart("character", cc); 
+    sel.collapse(); 
+    sel.moveEnd("character", lines[i].length); 
+    sel.select();
+  } else { 
+    /* Mozilla */
+    ta.selectionStart = cc; 
+    ta.selectionEnd = cc + lines[i].length; 
+  }
+ 
+  /* return true; */ /* nah, let the error go through to IE's js consolish thing! */
+}
+
+
+
+
+
+function showHideOutput()
+{
+  if (outputFrame.document.body.clientHeight > 100) {
+    // hide
+    savedRows = framesetElement.rows;    
+    framesetElement.rows = "25,*,0";
+  }
+  else {
+    // show. use the previous size, if possible
+    if (savedRows) {
+      framesetElement.rows = savedRows;
+      savedRows = null;
+    }
+    else {
+      framesetElement.rows = "25,*,*";
+    }
+  }
+}
+
+function refocus()
+{
+  inputFrame.document.getElementById("input").focus();
+}
+
+
+function clearOutput()
+{
+  var b = outputFrame.document.body;
+  while(b.firstChild)
+    b.removeChild(b.firstChild);
+}
+
+function stripLineBreaks(s)
+{
+  return s.replace(/\n/g, "").replace(/\r/g, ""); // stripping \r is for IE
+}
+
+function execute()
+{
+  var js = inputFrame.document.getElementById("input").value;
+
+  var useOpener = parent.opener && !parent.opener.closed;
+  var oldStyle = !! document.all; // lame but meh.
+  var useScope = parent.scope;
+  
+  print("Running" + (useOpener ? " in bookmarklet mode" : "") + (oldStyle ? " in make-IE-happy mode" : "") + "...", "orange");
+
+  if (useOpener)
+    executeWithJSURL(js, parent.opener); // only way to execute against another frame
+  else if (oldStyle)
+    executeWithDW(js, execFrame); // only way to get line numbers in IE
+  else if (useScope)
+    executeWithJSURL(js, parent.scope); // running in extensiondev
+  else
+    executeWithJSURL(js, execFrame); // faster in Mozilla  
+}
+
+// Advantages: can get line numbers in IE.
+function executeWithDW(js, win)
+{
+  win.document.open();
+  win.inputFrame = inputFrame;
+  win.outputFrame = outputFrame;
+  win.document.write(
+    stripLineBreaks(
+        '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">' +
+        '<html><head><title>execFrame<\/title><script type="text/javascript">'
+      + print         // yay for decompilation!
+      + handleError 
+      + "window.onerror = handleError;"
+      + "<\/script><\/head>"
+      ) 
+    + '<body><script type="text/javascript">'
+    + js         // should escape it a little to remove the string <\/script> at least...
+    + "<\/script><\/body><\/html>"
+    );
+  win.document.close();
+}
+
+// Advantages: can be used to inject a script into another window, faster in Mozilla.
+function executeWithJSURL(js, win)
+{
+  // isolate scope
+  js = "(function(){ " + js + " \n })()";
+
+  win.print = print;
+  win.onerror = handleError;
+
+  // double encodeURIComponent because javascript: URLs themselves are encoded!
+  win.location.href = 'javascript:eval(decodeURIComponent("' + encodeURIComponent(encodeURIComponent(js)) + '")); void 0;';
+  
+  refocus();
+}
+
+// Other ideas I haven't tried lately: create a <script> element, eval.
+
+
+function makeUserScript(userScriptLink)
+{
+    userScriptLink.href = 
+        "data:text/javascript;charset=utf-8," + 
+        encodeURIComponent(inputFrame.document.getElementById("input").value + "//.user.js");
+}
+
+</script>
+
+</head>
+
+<body>
+
+<button accesskey="E" onclick="execute(); refocus();"><u>E</u>xecute</button>
+<!-- <button accesskey="R" onclick="reloadAndExecute(); refocus();"><u>R</u>eload and execute</button> -->
+<button accesskey="C" onclick="clearOutput(); refocus();"><u>C</u>lear output</button>
+<button accesskey="S" onclick="showHideOutput(); refocus();"><u>S</u>how/hide output</button>
+<!-- <button accesskey="H" onclick="help(); refocus();"><u>H</u>elp</button> -->
+
+<a href="data:text/html,..." onfocus="makeUserScript(this);" onmouseover="makeUserScript(this);" target="_blank">Install as user script</a>
+
+<div style="visibility: hidden">
+<iframe name="execFrame" width="5" height="5" src="about:blank"></iframe>
+</div>
+
+</body>
+</html>

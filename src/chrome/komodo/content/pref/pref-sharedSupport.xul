@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2003-2006 ActiveState Software Inc. .
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="PrefSharedSupport_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/pref/pref-sharedSupport.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="shared-support-prefs-vbox" flex="1" class="autoscroll">
+
+        <!-- XXX:HACK <textbox width="1000" .../> is being use because for some
+             reason (at least in moz 1.4), textboxes inside of groupboxes don't
+             flex properly. -->
+    
+        <groupbox orient="vertical">
+            <caption label="&commonDataDirectory.label;"/>
+            <description>
+                The "Common Data Directory" is a location for Komodo
+                configuration data that can be shared among multiple
+                users. For example, this is where Komodo will look for a
+                Shared Toolbox.
+            </description>
+            <radiogroup id="commonDataDirMethod"
+                        oncommand="PrefSharedSupport_UpdateCDDUI();"
+                        pref="true" prefattribute="value"
+                        flex="1">
+                <radio id="defaultCDDRadio"
+                       accesskey="&defaultCDDRadio.accesskey;" value="default"
+                       label="&useDefaultCommonDataDirLocation.label;"/>
+                <textbox id="defaultCDDTextbox" crop="center"
+                         style="margin-left: 26px; min-height: 2em;"
+                         flex="1" width="1000" readonly="true"/>
+                <radio id="customCDDRadio"
+                       label="&useCustomCommonDataDirLocation.label;"
+                       accesskey="&customCDDRadio.accesskey;" value="custom"/>
+                <hbox align="center">
+                    <textbox id="customCDDTextbox"
+                             style="margin-left: 26px; min-height: 2em;"
+                             pref="true" prefstring="customCommonDataDir"
+                             onfocus="this.setSelectionRange(0, this.value.length);"
+                             width="1000" flex="1"/>
+                    <button id="pickCustomCDDButton"
+                            label="&choose.label;"
+                            accesskey="&pickCustomCDDButton.accesskey;"
+                            oncommand="PrefSharedSupport_ChooseCustomCDD()"/>
+                </hbox>
+            </radiogroup>
+    
+            <separator style="height: 15px;"/>
+            <hbox>
+                <checkbox id="useST" label="&enableSharedToolbox.label;"
+                          pref="true" prefstring="useSharedToolbox"
+                          prefattribute="checked"
+                          accesskey="&useST.accesskey;"/>
+            </hbox>
+        </groupbox>
+
+    </vbox>
+
+</window>
+
+
+
+

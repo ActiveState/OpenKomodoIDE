@@ -1,0 +1,19 @@
+{
+  "name": "collaboration-push",
+  "description": "Komodo Collaboration Push Gateway",
+  "version": "0.1.0",
+  "author": "Martin Kreichgauer <martink@activestate.com>",
+  "main": "app",
+  "engines": {
+    "node": "=0.4.x"
+  },
+  "dependencies": {
+    "cluster": "=0.7.7",
+    "socket.io": "=0.8.5",
+    "redis": "=0.7.1",
+    "log": "=1.2.0"
+  },
+  "bin": {
+    "collaboration-push": "./server.js"
+  }
+}

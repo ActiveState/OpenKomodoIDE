@@ -1,0 +1,67 @@
+<?xml version="1.0"?> 
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/listbox.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	class="kodialog"
+	orient="vertical"
+	onload="PrefPDK_OnLoad();">
+
+    <script src="chrome://komodo/content/library/trace.js" type="application/x-javascript"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript"/>
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript"/>
+    <script src="chrome://perldevkit/content/prefs.js" type="application/x-javascript"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="pdk-prefs-vbox" flex="1" class="autoscroll">
+
+        <box class="kobox-smallheader" title="Perl Dev Kit "/>
+    
+        <groupbox orient="vertical">
+            <caption label="PDK Install Locations"/>
+            <vbox flex="1" align="center" id="no-avail-interps-message" collapsed="true">
+                <description style="font-weight: bold;">
+                    The PDK was not found on your system.
+                </description>
+                <button label="http://www.activestate.com/perl-dev-kit"
+                        class="button-link-a" style="cursor:pointer;"
+                        oncommand="alert('Note: Komodo must be restarted for it to recognize new PDK installations.');
+                                   parent.opener.ko.browse.OpenUrlInDefaultBrowser('http://www.activestate.com/perl-dev-kit');"/>
+            </vbox>
+            <text value="PDK Deployment or Pro location" style="padding: 2px 6px 2px 6px"/>
+            <hbox align="center">
+                <menulist id="pdkLocation"
+                    flex="1"
+                    pref="true"
+                    prefstring="pdkLocation">
+                    <menupopup id="avail-interp-list"/>
+                </menulist>
+                <button label="Browse..." oncommand="locatePDK('pdkLocation');"/>
+            </hbox>
+            <text value="PDK Productivity Location" style="padding: 2px 6px 2px 6px"/>
+            <hbox align="center">
+                <menulist id="pdkGuiLocation"
+                    flex="1"
+                    pref="true"
+                    prefstring="pdkGuiLocation">
+                    <menupopup id="avail-interp-list"/>
+                </menulist>
+                <button label="Browse..." oncommand="locatePDK('pdkGuiLocation');"/>
+            </hbox>
+        </groupbox>
+
+    </vbox>
+
+</window>
+
+

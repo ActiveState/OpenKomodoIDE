@@ -1,0 +1,21 @@
+# komodo tool: Model
+# ==================
+# auto_abbreviation: true
+# indent_relative: false
+# language: Python
+# set_selection: false
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ==================
+<% /* Model */ %>
+
+class [[%tabstop1:MODELNAME]](models.Model):
+
+    class Meta:
+        verbose_name = "[[%tabstop1:MODELNAME]]"
+        verbose_name_plural = "[[%tabstop1:MODELNAME]]s"
+
+    def __str__(self):
+        pass
+    !@#_currentPos!@#_anchor

@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2013 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+    %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+    %prefDTD.INTERNAL;
+  <!ENTITY % javascriptFormatterDTD SYSTEM "chrome://komodo/locale/formatters/javascript/formatterOptions.dtd">
+  %javascriptFormatterDTD;
+]>
+
+<bindings id="javascriptFormatterOptionsBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="js_beautifier">
+        <resources>
+            <stylesheet src="chrome://komodo/skin/bindings/buttons.css"/>
+        </resources>
+        <content>
+            <children>
+                <xul:groupbox id="jsbeautify_formatter_options_groupbox">
+                    <xul:caption id="jsbeautify_formatter_options_groupbox_caption"
+                                 label="&formatterOptionsGroupbox.caption;" />
+                    <!--
+                        XXX: Wierd.
+                        The maxwidth attribute must be specified, otherwise the
+                        text will not wrap correctly, causing the text to
+                        disappear on the right side.
+                    -->
+                    <xul:description maxwidth="500px">
+                        &formatterOptions.description;
+                    </xul:description>
+
+                    <xul:separator class="thin"/>
+
+                    <xul:hbox align="center">
+                        <xul:label value="&braceStyle.label;" />
+                        <xul:menulist anonid="brace_style_menulist">
+                            <xul:menupopup>
+                                <xul:menuitem value="collapse"
+                                              label="&braceStyleCollapse.label;"
+                                              tooltiptext="&braceStyleCollapse.tooltiptext;"
+                                              />
+                                <xul:menuitem value="expand"
+                                              label="&braceStyleExpand.label;"
+                                              tooltiptext="&braceStyleExpand.tooltiptext;"
+                                              />
+                                <xul:menuitem value="end expand"
+                                              label="&braceStyleEndExpand.label;"
+                                              tooltiptext="&braceStyleEndExpand.tooltiptext;"
+                                              />
+                            </xul:menupopup>
+                        </xul:menulist>
+                    </xul:hbox>
+
+                    <xul:checkbox anonid="preserve_newlines_checkbox"
+                                  label="&preserveNewlines.checkbox.label;"
+                                  tooltiptext="&preserveNewlines.checkbox.tooltiptext;"
+                                  />
+
+                    <xul:checkbox anonid="jslint_stricter_mode_checkbox"
+                                  label="&jslintStricterMode.checkbox.label;"
+                                  tooltiptext="&jslintStricterMode.checkbox.tooltiptext;"
+                                  />
+
+                    <xul:checkbox anonid="break_chained_methods_checkbox"
+                                  label="&breakChainedMethods.checkbox.label;"
+                                  tooltiptext="&breakChainedMethods.checkbox.tooltiptext;"
+                                  />
+
+                    <xul:checkbox anonid="preserve_array_indentation_checkbox"
+                                  label="&preserveArrayIndentation.checkbox.label;"
+                                  tooltiptext="&preserveArrayIndentation.checkbox.tooltiptext;"
+                                  />
+
+                    <xul:checkbox anonid="preserve_function_indentation_checkbox"
+                                  label="&preserveFunctionIndentation.checkbox.label;"
+                                  tooltiptext="&preserveFunctionIndentation.checkbox.tooltiptext;"
+                                  />
+
+                    <xul:checkbox anonid="unescape_strings_checkbox"
+                                  label="&unescapeStrings.checkbox.label;"
+                                  tooltiptext="&unescapeStrings.checkbox.tooltiptext;"
+                                  />
+
+                    <xul:checkbox anonid="space_before_conditional_checkbox"
+                                  label="&spaceBeforeConditional.checkbox.label;"
+                                  tooltiptext="&spaceBeforeConditional.checkbox.tooltiptext;"
+                                  />
+
+                    <xul:separator class="thin"/>
+
+                    <xul:button label="&jsBeautifyWebsite.label;"
+                                class="button-text-link"
+                                style="cursor:pointer;"
+                                oncommand="opener.getKoObject('browse').openUrlInDefaultBrowser('https://github.com/einars/js-beautify/');"/>
+
+                </xul:groupbox>
+            </children>
+        </content>
+
+        <implementation>
+
+            <field name="_prefs">null</field>
+
+            <method name="loadFromPrefs">
+            <parameter name="prefset"/>
+            <body>
+            <![CDATA[
+              try {
+                // Get the formatter's specific preferences.
+                var brace_style =  "collapse";
+                var preserve_newlines = true;
+                var jslint_happy = false;
+                var break_chained_methods = false;
+                var keep_array_indentation = false;
+                var keep_function_indentation = false;
+                var unescape_strings = false;
+                var space_before_conditional = true;
+
+                if (prefset.hasPref("jsBeautifyFormatterPrefs")) {
+                    this._prefs = prefset.getPref("jsBeautifyFormatterPrefs");
+
+                    brace_style = this._prefs.getString("brace_style", "collapse");
+                    preserve_newlines = this._prefs.getBoolean("preserve_newlines", true);
+                    jslint_happy = this._prefs.getBoolean("jslint_happy", false);
+                    break_chained_methods = this._prefs.getBoolean("break_chained_methods", false);
+                    keep_array_indentation = this._prefs.getBoolean("keep_array_indentation", false);
+                    keep_function_indentation = this._prefs.getBoolean("keep_function_indentation", false);
+                    unescape_strings = this._prefs.getBoolean("unescape_strings", false);
+                    space_before_conditional = this._prefs.getBoolean("space_before_conditional", true);
+                }
+
+                document.getAnonymousElementByAttribute(this, "anonid", "brace_style_menulist").value = brace_style;
+                document.getAnonymousElementByAttribute(this, "anonid", "preserve_newlines_checkbox").checked = preserve_newlines;
+                document.getAnonymousElementByAttribute(this, "anonid", "jslint_stricter_mode_checkbox").checked = jslint_happy;
+                document.getAnonymousElementByAttribute(this, "anonid", "break_chained_methods_checkbox").checked = break_chained_methods;
+                document.getAnonymousElementByAttribute(this, "anonid", "preserve_array_indentation_checkbox").checked = keep_array_indentation;
+                document.getAnonymousElementByAttribute(this, "anonid", "preserve_function_indentation_checkbox").checked = keep_function_indentation;
+                document.getAnonymousElementByAttribute(this, "anonid", "unescape_strings_checkbox").checked = unescape_strings;
+                document.getAnonymousElementByAttribute(this, "anonid", "space_before_conditional_checkbox").checked = space_before_conditional;
+              } catch(ex) {
+                if (ko.logging) {
+                    ko.logging.getLogger('js_beautifier::prefs').exception(ex);
+                } else {
+                    dump("js_beautifier::prefs:: " + ex);
+                }
+              }
+            ]]>
+            </body>
+            </method>
+
+            <method name="saveToPrefs">
+            <parameter name="prefset"/>
+            <body>
+            <![CDATA[
+                if (!prefset.hasPref("jsBeautifyFormatterPrefs")) {
+                    this._prefs = Components.classes['@activestate.com/koPreferenceSet;1'].createInstance();
+                }
+                // Get the formatter's specific preferences.
+                this._prefs.setStringPref("brace_style", document.getAnonymousElementByAttribute(this, "anonid", "brace_style_menulist").value);
+                this._prefs.setBooleanPref("preserve_newlines", document.getAnonymousElementByAttribute(this, "anonid", "preserve_newlines_checkbox").checked);
+                this._prefs.setBooleanPref("jslint_happy", document.getAnonymousElementByAttribute(this, "anonid", "jslint_stricter_mode_checkbox").checked);
+                this._prefs.setBooleanPref("break_chained_methods", document.getAnonymousElementByAttribute(this, "anonid", "break_chained_methods_checkbox").checked);
+                this._prefs.setBooleanPref("keep_array_indentation", document.getAnonymousElementByAttribute(this, "anonid", "preserve_array_indentation_checkbox").checked);
+                this._prefs.setBooleanPref("keep_function_indentation", document.getAnonymousElementByAttribute(this, "anonid", "preserve_function_indentation_checkbox").checked);
+                this._prefs.setBooleanPref("unescape_strings", document.getAnonymousElementByAttribute(this, "anonid", "unescape_strings_checkbox").checked);
+                this._prefs.setBooleanPref("space_before_conditional", document.getAnonymousElementByAttribute(this, "anonid", "space_before_conditional_checkbox").checked);
+
+                prefset.setPref("jsBeautifyFormatterPrefs", this._prefs);
+            ]]>
+            </body>
+            </method>
+
+        </implementation>
+
+    </binding>
+
+</bindings>

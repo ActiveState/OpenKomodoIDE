@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Periodic Table - Parts that Work"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<script>
+<![CDATA[
+
+function setFrame()
+{
+  var listBox = document.getElementById("working-list");
+  var selectedItem = listBox.getSelectedItem(0);
+  var newPage = selectedItem.getAttribute("value");
+  document.getElementById("working-frame").setAttribute("src", newPage);
+}
+
+function viewSource()
+{
+  // try to open a view-source window while inheriting the charset (if any)
+  var listBox = document.getElementById("working-list");
+  var selectedItem = listBox.getSelectedItem(0);
+  var newPage = selectedItem.getAttribute("value");
+  var url = "chrome://komodo/content/bindings/test/"+newPage;
+  window.openDialog("chrome://navigator/content/viewSource.xul",
+             "_blank",
+             "scrollbars,resizable,chrome,dialog=no",
+             url);
+}
+
+]]>
+</script>
+
+ <hbox flex="1">
+    <listbox id="working-list" style="width:10em"
+             onselect="setFrame();"
+             ondblclick="viewSource();">
+       <listitem value="layout.xul"       label="Box Layout" selected="true" />
+       <listitem value="colorpicker.xul"  label="Color Pickers" />
+       <listitem value="button.xul"       label="Buttons" />
+       <listitem value="checkbox.xul"     label="Checkboxes" />
+       <listitem value="cropping.xul"     label="Cropping" />
+       <listitem value="grid.xul"         label="Grids" />
+       <listitem value="image.xul"        label="Images" />
+       <listitem value="label.xul"        label="Labels" />
+       <listitem value="list.xul"         label="Lists" />
+       <listitem value="menubar.xul"      label="Menubars" />
+       <listitem value="popup.xul"        label="Popups" />
+       <listitem value="radio.xul"        label="Radiobuttons" />
+       <listitem value="scrolling.xul"    label="Scrolling" />
+       <listitem value="splitter.xul"    label="Splitters" />
+       <listitem value="tab.xul"          label="Tabs" />
+       <listitem value="textbox.xul"      label="TextBoxes" />
+       <listitem value="tree-simple.xul"  label="Trees, Simple" />
+       <listitem value="tree-nested.xul"  label="Trees, Nested" />
+       <listitem value="simpleplugin.xul"  label="Plugin, Simple" />
+    </listbox>
+    <splitter resizebefore="closest" resizeafter="grow" />
+    <iframe id="working-frame" flex="1" type="content-primary"
+            src="layout.xul" />
+  </hbox>
+
+</window>

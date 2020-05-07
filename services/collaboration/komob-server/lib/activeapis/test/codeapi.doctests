@@ -1,0 +1,18 @@
+
+# Use alternate API URL if in the environment.
+>>> import os
+>>> api_url = os.environ.get("CODE_API_URL")
+
+>>> from activeapis2.codeapi import CodeAPI
+>>> api = CodeAPI(api_url=api_url)
+>>> tag_dicts = api.recipe_lang_tags('python')
+>>> tag_dict = tag_dicts[0]
+>>> isinstance(tag_dict["name"], unicode)
+True
+>>> isinstance(tag_dict["count"], int)
+True
+>>> isinstance(tag_dict["font_size"], int)
+True
+>>> isinstance(tag_dict["id"], int)
+True
+

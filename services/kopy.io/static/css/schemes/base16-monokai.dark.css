@@ -1,0 +1,114 @@
+/*
+
+    Name:       Base16 Monokai Dark
+    Author:     Wimer Hazenberg (http://www.monokai.nl)
+
+    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-chrome-devtools)
+    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+*/
+
+.cm-s-base16-monokai-dark.CodeMirror {background: #272822; color: #f5f4f1;}
+.cm-s-base16-monokai-dark div.CodeMirror-selected {background: #383830 !important;}
+.cm-s-base16-monokai-dark .CodeMirror-gutters {background: #272822; border-right: 0px;}
+.cm-s-base16-monokai-dark .CodeMirror-linenumber {color: #75715e;}
+.cm-s-base16-monokai-dark .CodeMirror-cursor {border-left: 1px solid #a59f85 !important;}
+
+.cm-s-base16-monokai-dark span.cm-header {color: #75715e;}
+.cm-s-base16-monokai-dark span.cm-comment {color: #75715e;}
+.cm-s-base16-monokai-dark span.cm-atom {color: #ae81ff;}
+.cm-s-base16-monokai-dark span.cm-number {color: #fd971f;}
+
+.cm-s-base16-monokai-dark span.cm-property {color: #f5f4f1;}
+.cm-s-base16-monokai-dark span.cm-attribute {color: #fd971f;}
+.cm-s-base16-monokai-dark span.cm-keyword {color: #ae81ff;}
+.cm-s-base16-monokai-dark span.cm-string {color: #a6e22e;}
+
+.cm-s-base16-monokai-dark span.cm-variable {color: #f92672;}
+.cm-s-base16-monokai-dark span.cm-variable-2 {color: #66d9ef;}
+.cm-s-base16-monokai-dark span.cm-def {color: #66d9ef;}
+.cm-s-base16-monokai-dark span.cm-error {background: #f92672; color: #a59f85;}
+.cm-s-base16-monokai-dark span.cm-bracket {color: #383830;}
+.cm-s-base16-monokai-dark span.cm-tag {color: #f92672;}
+.cm-s-base16-monokai-dark span.cm-link {color: #ae81ff;}
+.cm-s-base16-monokai-dark span.cm-builtin {color: #ae81ff;}
+
+.cm-s-base16-monokai-dark .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
+
+.cm-s-base16-monokai-dark .CodeMirror-activeline-background { background: #383830 !important; }
+
+
+
+body,
+textarea {
+  background: #272822;
+  color: #f8f8f2;
+}
+
+#sidebar, .modal {
+  background: #383830;
+  color: #f5f4f1;
+}
+
+a, a:hover {
+    color: #cc6633;
+}
+
+a.option {
+    color: #cc6633 !important;
+}
+
+#logos {
+  background: #1f201b;
+  color: #f8f8f2;
+}
+
+#buttons {
+  background: #383830;
+  color: #a59f85;
+}
+
+#buttons .function.enabled:hover {
+  color: #f5f4f1;
+}
+
+#buttonTips {
+  background: #cc6633;
+  color: #f9f8f5;
+}
+
+#pointer:after {
+    border-bottom-color: #cc6633 !important;
+}
+
+#linenos {
+  background: #383830;
+  border-color: #49483e !important;
+}
+
+#linenos a {
+    color: #a59f85 !important;
+}
+
+.option {
+    background: #272822 !important;
+    color: #a59f85 !important;
+}
+
+.option:hover {
+    background: #1f201b !important;
+}
+
+.dropdown:after {
+    border-top-color: #75715e !important;
+}
+
+#messages li {
+  background: #66d9ef;
+  color: #f9f8f5;
+}
+
+#messages li.error {
+  background: #f92672;
+  color: #f9f8f5;
+}

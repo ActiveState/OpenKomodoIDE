@@ -1,0 +1,303 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2011 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % profilerFlatTreeDTD SYSTEM "chrome://profiler/locale/flat-tree.dtd">
+  %profilerFlatTreeDTD;
+]>
+
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xbl="http://www.mozilla.org/xbl"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="flat-view">
+        <content>
+            <xul:vbox xbl:inherits="flex">
+                <xul:tree anonid="profiler_flat_tree"
+                          flex="3"
+                          enableColumnDrag="true"
+                          seltype="single"
+                          onselect="document.getBindingParent(this).onTreeSelect(event);"
+                          >
+                    <xul:treecols id="profiler_flat_treecols">
+    
+                        <xul:treecol id="profiler_flat_treecol_name"
+                                     label="&profiler_treecol_name.label;"
+                                     flex="3"
+                                     ordinal="1"
+                                     primary="true"
+                                     persist="width ordinal hidden" />
+                        <xul:splitter class="tree-splitter" ordinal="2" />
+    
+                        <xul:treecol id="profiler_flat_treecol_num_calls"
+                                     label="&profiler_treecol_num_calls.label;"
+                                     ordinal="3"
+                                     sortType="numeric"
+                                     persist="width ordinal hidden" />
+                        <xul:splitter class="tree-splitter" ordinal="4" />
+    
+                        <xul:treecol id="profiler_flat_treecol_cumulative_time"
+                                     label="&profiler_treecol_cumulative_time.label;"
+                                     ordinal="5"
+                                     sortType="numeric"
+                                     persist="width ordinal hidden" />
+                        <xul:splitter class="tree-splitter" ordinal="6" />
+            
+                        <xul:treecol id="profiler_flat_treecol_total_time"
+                                     label="&profiler_treecol_total_time.label;"
+                                     ordinal="7"
+                                     sortType="numeric"
+                                     persist="width ordinal hidden" />
+                        <xul:splitter class="tree-splitter" ordinal="8" />
+    
+                        <xul:treecol id="profiler_flat_treecol_progressmeter"
+                                     label="&profiler_treecol_progressmeter.label;"
+                                     type="progressmeter"
+                                     ordinal="9"
+                                     sortType="numeric"
+                                     flex="2"
+                                     persist="width ordinal hidden" />
+                    </xul:treecols>
+    
+                    <xul:treechildren id="profiler_flat_treechildren" />
+                </xul:tree>
+
+                <xul:splitter />
+
+                <xul:tabbox id="profiler_flat_tabbox"
+                            anonid="profiler_flat_tabbox"
+                            flex="1"
+                            persist="selectedIndex">
+                    <xul:tabs>
+                        <xul:tab label="Calls" />
+                        <xul:tab label="Source Code" />
+                    </xul:tabs>
+                    <xul:tabpanels flex="1">
+
+                        <!-- Caller and callee functions. -->
+                        <xul:tabpanel flex="1">
+                            <xul:hbox flex="1">
+                                <xul:groupbox flex="1">
+                                    <xul:caption label="&functionCallers.label;" />
+                                    <xul:tree anonid="profiler_callers_flat_tree"
+                                              flex="1"
+                                              enableColumnDrag="true"
+                                              seltype="single">
+                                        <xul:treecols id="profiler_callers_flat_treecols">
+                        
+                                            <xul:treecol id="profiler_callers_flat_treecol_name"
+                                                         label="&profiler_treecol_name.label;"
+                                                         flex="1"
+                                                         ordinal="1"
+                                                         primary="true"
+                                                         persist="width ordinal hidden" />
+                                            <xul:splitter class="tree-splitter" ordinal="2" />
+                        
+                                            <xul:treecol id="profiler_callers_flat_treecol_num_calls"
+                                                         label="&profiler_treecol_num_calls.label;"
+                                                         ordinal="3"
+                                                         sortType="numeric"
+                                                         persist="width ordinal hidden" />
+                                            <xul:splitter class="tree-splitter" ordinal="4" />
+                        
+                                            <xul:treecol id="profiler_callers_flat_treecol_cpu_time"
+                                                         label="&profiler_treecol_cpu_time.label;"
+                                                         ordinal="5"
+                                                         sortType="numeric"
+                                                         persist="width ordinal hidden" />
+
+                                        </xul:treecols>
+                        
+                                        <xul:treechildren id="profiler_callers_flat_treechildren" />
+
+                                    </xul:tree>
+                                </xul:groupbox>
+
+                                <xul:groupbox flex="1">
+                                    <xul:caption label="&functionCallees.label;" />
+                                    <xul:tree anonid="profiler_callees_flat_tree"
+                                              flex="1"
+                                              enableColumnDrag="true"
+                                              seltype="single">
+                                        <xul:treecols id="profiler_callees_flat_treecols">
+                        
+                                            <xul:treecol id="profiler_callees_flat_treecol_name"
+                                                         label="&profiler_treecol_name.label;"
+                                                         flex="1"
+                                                         ordinal="1"
+                                                         primary="true"
+                                                         persist="width ordinal hidden" />
+                                            <xul:splitter class="tree-splitter" ordinal="2" />
+                        
+                                            <xul:treecol id="profiler_callees_flat_treecol_num_calls"
+                                                         label="&profiler_treecol_num_calls.label;"
+                                                         ordinal="3"
+                                                         sortType="numeric"
+                                                         persist="width ordinal hidden" />
+                                            <xul:splitter class="tree-splitter" ordinal="4" />
+                        
+                                            <xul:treecol id="profiler_callees_flat_treecol_total_time"
+                                                         label="&profiler_treecol_cpu_time.label;"
+                                                         ordinal="5"
+                                                         sortType="numeric"
+                                                         persist="width ordinal hidden" />
+
+                                        </xul:treecols>
+                        
+                                        <xul:treechildren id="profiler_callees_flat_treechildren" />
+                                    </xul:tree>
+                                </xul:groupbox>
+
+                            </xul:hbox>
+                        </xul:tabpanel>
+
+                        <!-- Source code view. -->
+                        <xul:tabpanel flex="1">
+                            <xul:vbox flex="1" anonid="source_vbox">
+                                <xul:toolbar anonid="source_toolbar"
+                                             align="center">
+                                    <xul:label anonid="source_file_label"
+                                               value="&profiler_file_path.label;" />
+                                    <xul:description anonid="source_path"
+                                                     flex="1"
+                                                     crop="center"
+                                                     style="width: 0; font-weight: bolder;"
+                                                     />
+                                    <xul:button anonid="source_open_in_editor"
+                                                label="&profiler_show_file_in_editor.buttonlabel;"
+                                                tooltiptext="&profiler_show_file_in_editor.tooltiptext;"
+                                                oncommand="document.getBindingParent(this).onOpenInEditor(event);"/>
+                                </xul:toolbar>
+                                <xul:view anonid="source_view"
+                                          type="buffer"
+                                          flex="1" />
+                            </xul:vbox>
+                        </xul:tabpanel>
+
+                    </xul:tabpanels>
+                </xul:tabbox>
+
+            </xul:vbox>
+        </content>
+
+        <implementation implements="koIProfilerView">
+
+            <field name="name">flat</field>
+
+            <field name="profiler_instance">null</field>
+
+            <field name="treeview">null</field>
+
+            <method name="load">
+            <parameter name="profiler_instance"/>
+            <parameter name="state"/>
+            <body>
+            <![CDATA[
+                var tree = document.getAnonymousElementByAttribute(this, "anonid", "profiler_flat_tree");
+                this.treeview = new ProfilerFlatTreeView(tree, profiler_instance);
+                this.profiler_instance = profiler_instance;
+
+                var callersTree = document.getAnonymousElementByAttribute(this, "anonid", "profiler_callers_flat_tree");
+                this.callersTreeview = new CallerTreeView(callersTree);
+
+                var calleesTree = document.getAnonymousElementByAttribute(this, "anonid", "profiler_callees_flat_tree");
+                this.calleesTreeview = new CalleeTreeView(calleesTree);
+
+                if (state) {
+                    this.restore_state(state);
+                } else {
+                    this.show_hotspots();
+                }
+            ]]>
+            </body>
+            </method>
+    
+            <method name="setSelectedProfileItem">
+            <parameter name="profile_item"/>
+            <body>
+            <![CDATA[
+            ]]>
+            </body>
+            </method>
+
+            <method name="save_state">
+            <body>
+            <![CDATA[
+            ]]>
+            </body>
+            </method>
+
+            <method name="restore_state">
+            <parameter name="state"/>
+            <body>
+            <![CDATA[
+            ]]>
+            </body>
+            </method>
+
+            <method name="show_hotspots">
+            <parameter name="hotspot_type"/>
+            <body>
+            <![CDATA[
+                if (!hotspot_type) {
+                    hotspot_type = "own_cpu_time";
+                }
+                if (this.treeview) {
+                    this.treeview.show_hotspots(hotspot_type);
+                }
+            ]]>
+            </body>
+            </method>
+
+            <method name="onTreeSelect">
+            <parameter name="event"/>
+            <body>
+            <![CDATA[
+                var tree = document.getAnonymousElementByAttribute(this, "anonid", "profiler_flat_tree");
+                var rowNum = this.treeview.selection.currentIndex;
+                if (rowNum >= 0) {
+                    var profileItem = this.treeview.rows[rowNum];
+                    this.callersTreeview.setProfilerItem(profileItem);
+                    this.calleesTreeview.setProfilerItem(profileItem);
+
+                    // Show the source code.
+                    var path_label = document.getAnonymousElementByAttribute(this, "anonid", "source_path");
+                    path_label.value = profileItem.path;
+                    // TODO: Only update if the source view is currently shown.
+                    var source_view = document.getAnonymousElementByAttribute(this, "anonid", "source_view");
+                    var scintilla = source_view.scintilla;
+                    var openButton = document.getAnonymousElementByAttribute(this, "anonid", "source_open_in_editor");
+                    if (profiler_load_source_in_scintilla(this.profiler_instance, profileItem, scintilla)) {
+                        openButton.removeAttribute("disabled");
+                    } else {
+                        openButton.setAttribute("disabled", "true");
+                    }
+                }
+            ]]>
+            </body>
+            </method>
+
+            <method name="onOpenInEditor">
+            <parameter name="event"/>
+            <body>
+            <![CDATA[
+                var tree = document.getAnonymousElementByAttribute(this, "anonid", "profiler_flat_tree");
+                var rowNum = this.treeview.selection.currentIndex;
+                if (rowNum >= 0) {
+                    var profileItem = this.treeview.rows[rowNum];
+                    // Show the source code.
+                    opener.ko.open.URIAtLine(profileItem.path, profileItem.line);
+                }
+            ]]>
+            </body>
+            </method>
+
+        </implementation>
+
+    </binding>
+
+</bindings>
+

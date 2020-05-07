@@ -1,0 +1,15 @@
+# #if MODE == "dev"
+content publishing content/
+skin publishing classic/1.0 skin/
+locale publishing en-US locale/en-US/
+# #else
+content publishing jar:publishing.jar!/content/
+skin publishing classic/1.0 jar:publishing.jar!/skin/
+locale publishing en-US jar:publishing.jar!/locale/en-US/
+# #endif
+
+overlay chrome://komodo/content/komodo.xul chrome://publishing/content/overlay.xul
+overlay chrome://komodo-places/content/overlay_places.xul chrome://publishing/content/overlay-places.xul
+overlay chrome://komodo-places/content/places_panel.xul chrome://publishing/content/overlay-places-pane.xul
+
+manifest components/component.manifest

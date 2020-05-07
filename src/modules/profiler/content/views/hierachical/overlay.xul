@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Copyright (c) 2000-2011 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % hierachicalTreeDTD SYSTEM "chrome://profiler/locale/hierachical-tree.dtd">
+  %hierachicalTreeDTD;
+]>
+
+<!--
+
+  * load the CSS and JavaScript files used by the tree view
+  * overlay the layout menulist for our view type
+
+-->
+
+<?xml-stylesheet href="chrome://profiler/skin/views/hierachical/tree.css" type="text/css"?>
+
+<overlay id="profiler_tree_view_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://profiler/content/views/hierachical/tree.js" type="application/x-javascript;version=1.7"/>
+
+    <menupopup id="profiler_view_menupopup">
+        <menuitem id="profiler_view_hierachical_menuitem"
+                  label="&profiler_hierachical_tree_layout.label;"
+                  value="hierachical" />
+    </menupopup>
+    
+</overlay>
+

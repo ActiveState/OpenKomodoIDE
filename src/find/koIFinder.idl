@@ -1,0 +1,412 @@
+/* Copyright (c) 2000-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "nsITreeView.idl"
+
+interface nsICancelable;
+interface ISciMoz;
+interface koIDocument;
+interface koIFindSession;
+interface koIFindResultsTabManager;
+interface koIFindResultsView;
+interface koIFindContext;
+interface koIFinderReplaceHit;
+
+/**
+ * JS-implemented controller for driving the "Confirm Replacements"
+ * dialog.
+ */
+[scriptable, uuid(9cd5dae7-07f5-49e2-8b7b-d18a6f7a4c53)]
+interface koIConfirmReplaceController : nsISupports {
+    // Called by koIConfirmReplacerInFiles to indicate that all
+    // replacements have been found.
+    void done();
+
+    // Called to report the current status of the search/replace.
+    void report(in unsigned long num_hits,
+                in unsigned long num_paths_with_hits,
+                in unsigned long num_paths_searched,
+                in unsigned long num_paths_skipped);
+};
+
+
+/**
+ * Component that handles a single "replace all in files" session with
+ * confirmation. Typical usage is:
+ *
+ *   replacer = koIFindService.confirmreplaceallinfiles(...);
+ *   replacer.start();
+ */
+[scriptable, uuid(9ad2b49f-b71f-4c32-b2f5-478e5adbc46a)]
+interface koIConfirmReplacerInFiles : nsITreeView {
+
+    const long SKIPPED_LARGE_FILE = 1;
+    const long SKIPPED_BINARY_FILE = 2;
+
+    readonly attribute koIConfirmReplaceController controller;
+
+    readonly attribute unsigned long num_hits;
+    readonly attribute unsigned long num_paths_with_hits;
+    readonly attribute unsigned long num_paths_searched;
+    readonly attribute wstring journal_id;  // id to use for 'undo'
+
+    void start();
+    boolean isAlive();
+    void stop();
+
+    AString getPath(in unsigned long row_idx);
+
+    // Return the reason a path was skipped.
+    long getSkippedReason(in unsigned long row_idx);
+
+    void filterSkippedPaths(in boolean filter);
+
+    void toggle_mark(in unsigned long row_idx);
+    AString diff_from_indeces(
+        in unsigned long count,
+        [array, size_is(count)] in unsigned long indeces);
+    AString marked_diff();
+
+    /**
+     * Make the marked replacements and post results to the given
+     * results manager UI.
+     *
+     * @exception ServerException Raises an error and sets a "last error"
+     *      if the replacer thread is still running. I.e. the controller
+     *      must wait until `controller.done()` is called before calling
+     *      commit.
+     */
+    void commit(in koIFindResultsTabManager resultsMgr);
+};
+
+
+/**
+ * JS-implemented controller for driving the "Undo Replacements"
+ * dialog. This is generally driven by a `koIReplaceUndoer` instance.
+ */
+[scriptable, uuid(a47a52dc-f93e-4f0f-ad5e-0ecff91916cc)]
+interface koIUndoReplaceController : nsISupports {
+    void set_summary(in AString summary);
+
+    /**
+     * Called to report the undo status so far.
+     */
+    void report(in unsigned long num_hits, in unsigned long num_paths);
+
+    /**
+     * Called to indicate that the undo was successfully completed.
+     */
+    void done();
+    
+    /**
+     * Called to indicate that the undo failed.
+     *
+     * @param errmsg {string} A failure message.
+     */
+    void error(in AString errmsg);
+};
+
+
+/**
+ * Component that handles undoing a "replace all in files".
+ * Typical usage is:
+ *
+ *   undoer = koIFindService.undoreplaceallinfiles(...);
+ *   undoer.start();
+ */
+[scriptable, uuid(44e52fe4-a8ee-4877-bc21-61a793f063b3)]
+interface koIReplaceUndoer : nsITreeView {
+    readonly attribute koIUndoReplaceController controller;
+
+    void start();
+    boolean isAlive();
+    void stop();
+};
+
+
+[scriptable, uuid(94366D2F-6C10-455b-90B7-EC077161CDA2)]
+interface koIFindResult : nsISupports {
+    // The id for a searchable view.
+    //XXX Should change the name to viewId (or similar) at some point.
+    attribute wstring url;
+    // zero-based indeces into the search text demarking the find result
+    attribute unsigned long start;
+    attribute unsigned long end;
+    // the string found (not sure if this is really necessary, but should
+    // be useful for debugging)
+    readonly attribute AString value;
+
+    // Some data that can be filled in lazily. This data is not guaranteed to
+    // be set.
+    attribute unsigned long line;
+    attribute unsigned long column;
+    attribute AString context_;
+};
+
+
+[scriptable, uuid(2EE0CACF-D3BF-44a8-BCAC-952D6418B1C6)]
+interface koIReplaceResult : koIFindResult {
+    // the string with which to replace the value
+    readonly attribute AString replacement;
+};
+
+
+[scriptable, uuid(BB453BC9-FCF7-4625-A3FB-590418F48BF5)]
+interface koIFindOptions: nsISupports {
+    // pattern types
+    attribute unsigned long patternType;
+    const long FOT_SIMPLE = 0;       // search for a simple string
+    const long FOT_WILDCARD = 1;     // use shell-like filename matching of the search pattern
+    const long FOT_REGEX_PYTHON = 2; // the search pattern is a regex (Python syntax)
+
+    attribute boolean matchWord;    // whether to match whole words
+    attribute boolean searchBackward;
+
+    // case sensitivity options
+    attribute unsigned long caseSensitivity;
+    const long FOC_INSENSITIVE = 0;  // case insensitive searching
+    const long FOC_SENSITIVE = 1;    // case sensitive
+    const long FOC_SMART = 2;        // case sensitive iff pattern includes any uppercase letters
+
+    // One of FCT_CURRENT_DOC or FCT_ALL_OPEN_DOCS.
+    // This is set by the find dialog (when the user manually switches the
+    // context there) and is used by cmd_findNext and cmd_findPrevious in
+    // the main Komodo window. Opening the find dialog resets this to
+    // FCT_CURRENT_DOC (see bug 20003 for why).
+    //
+    // Persisted in the 'find-preferredContextType' pref.
+    attribute long preferredContextType; 
+
+    attribute boolean showReplaceAllResults;
+    attribute boolean displayInFindResults2;
+
+    // Fallback cwd for interpreting relative dirs for searching.
+    attribute wstring cwd;
+
+    // Find in Files stuff:
+    // - The folders in which to search
+    //   This is a _list_ of folders but this list is often represented in
+    //   the UI as a string encoded by joining the folders with the
+    //   native path separator. E.g. on Windows: "D:\trentm;D:\tmp". It is
+    //   easier with XPCOM to just pass around the encoded string.
+    attribute wstring encodedFolders;
+    void getFolders(out unsigned long count,
+                    [retval, array, size_is(count)] out wstring folders);
+    // - Whether to search in subfolders
+    attribute boolean searchInSubfolders;
+    // - The filetype to search (see 'encoding' note with folders)
+    attribute wstring encodedIncludeFiletypes;
+    void getIncludeFiletypes(out unsigned long count,
+                             [retval, array, size_is(count)] out wstring filetypes);
+    attribute wstring encodedExcludeFiletypes;
+    void getExcludeFiletypes(out unsigned long count,
+                             [retval, array, size_is(count)] out wstring filetypes);
+
+    // Other stuff:
+    attribute boolean multiline;
+    attribute boolean confirmReplacementsInFiles;
+    
+    // Return a string description of the search. E.g., if this
+    // is a regex search then the result might be 'foo' -> '/foo/i'
+    AString searchDescFromPattern(in AString pattern);
+};
+
+[scriptable, uuid(e4ddc3a2-8992-4bb2-b5b3-8ba55ef93d49)]
+interface koIFindHitCallback: nsISupports {
+    /**
+     * Report that a found result has been hit
+     * @param hit The hit
+     * @returns The number of characters changed as a result (to synchronize
+     *      future hits).
+     */
+    long onHit(in koIFinderReplaceHit hit);
+    /**
+     * Report that the find has completed and no more hits are forthcoming
+     * @param result A successful value if all hits were found; a failure value
+     *      if the find was cancelled.
+     */
+    void onDone(in nsresult result);
+};
+
+[scriptable, uuid(19A373A9-77EC-4c96-B86F-1928018AB924)]
+interface koIFindService : nsISupports {
+    // Error notes:
+    //  If an exception is raise in any of the Find service's methods
+    //  then details of the error are set on the koILastErrorService.
+    //  Only an error *message* is set, not an error number.
+
+    // Return the result of searching for the first "pattern" in "text".
+    koIFindResult find(in wstring url,
+                       in AString text,
+                       in AString pattern,
+                       in long start,
+                       in long end);
+
+    // Return a result indicating how to replace the first "pattern" in
+    // "text" with "replacement".
+    koIReplaceResult replace(in wstring url,
+                             in AString text,
+                             in AString pattern,
+                             in AString replacement,
+                             in long startOffset,
+                             in ISciMoz scimoz);
+
+    // A faster alternative to findall() specific to Komodo usage.
+    // See the implementation for more docs.
+    void findallex(in wstring url,
+                   in AString text,
+                   in AString pattern,
+                   in koIFindResultsView resultsView,
+                   in unsigned long contextOffset,
+                   in ISciMoz scimoz);
+
+    // Find all lines on which the given pattern is found.
+    // Returns a list of lines (0-based).
+    void findalllines(in wstring url,
+                      in AString text,
+                      in AString pattern,
+                      in unsigned long contextOffset,
+                      in ISciMoz scimoz,
+                      out unsigned long count,
+                      [retval, array, size_is(count)] out unsigned long lines);
+    
+    /**
+     * Does a find all operation asynchronously
+     * @param pattern The pattern to search for
+     * @param text The text to search in
+     * @param callback The callback to invoke on a find result
+     * @param offset The offset to use when reporting results
+     * @param options Find options
+     * @returns An interface that can be used to cancel the operation
+     */
+    nsICancelable findallasync(in AString pattern,
+                               in AString text,
+                               in koIFindHitCallback callback,
+                               [optional] in unsigned long offset,
+                               [optional] in koIFindOptions options);
+
+    /**
+     * Hightlight all matches in the scintilla buffer.
+     *
+     * @param scimoz   - a Scintilla instance
+     * @param pattern  - the search pattern to highlight
+     * @param start    - the starting text position (character position)
+     * @param end      - the ending text position (character position). If the
+     *                   end is the same as the start, then the whole of the
+     *                   scimoz text will be searched.
+     * @param timeout  - stop highlighting after this number of milliseconds
+     *                   have passed by.
+     * @returns Whether any results have been found. (If nothing has been found
+     *                  before the timeout expires, this will be false.)
+     */
+    boolean highlightall(in ISciMoz scimoz,
+                         in AString pattern,
+                         in long start,
+                         in long end,
+                         in long timeout);
+
+    /**
+     * Hightlight all the last find/replace matches in the scintilla buffer.
+     *
+     * @param scimoz   - a Scintilla instance
+     */
+    void highlightlastresults(in ISciMoz scimoz);
+
+    // A faster alternative to replaceall() specific to Komodo usage.
+    // See the implementation for more docs.
+    AString replaceallex(in wstring url,
+                         in AString text,
+                         in AString pattern,
+                         in AString replacement,
+                         in boolean firstOnLine,
+                         in koIFindSession session,
+                         in koIFindResultsView resultsView,
+                         in unsigned long contextOffset,
+                         in ISciMoz scimoz,
+                         out unsigned long count); // number of replacements
+
+    // Asynchronously find all occurrences of "pattern" and load those into
+    // the "resultsView". Note: the information on which files to search are
+    // in the "options" attribute.
+    //XXX Need to add a .finalize() to the find service to .stop() and
+    //    .join() any findallinfiles thread.
+    void findallinfiles(
+            in long id, // session id
+            in AString pattern,
+            in koIFindResultsTabManager resultsMgr);
+
+    // Asynchronously replace all "pattern" with "repl" and load those
+    // into the "resultsView". Note: the information on which files to
+    // search are either in `resultsMgr.context_` (if a
+    // koICollectionFindContext) or in the "options" attribute.
+    //XXX Need to add a .finalize() to the find service to .stop() and
+    //    .join() any replaceallinfiles thread.
+    void replaceallinfiles(
+            in long id, // session id
+            in AString pattern,
+            in AString repl,
+            in koIFindResultsTabManager resultsMgr);
+
+    koIConfirmReplacerInFiles confirmreplaceallinfiles(
+            in AString pattern,
+            in AString repl,
+            in koIFindContext context_,
+            in koIConfirmReplaceController controller);
+    
+    koIReplaceUndoer undoreplaceallinfiles(
+            in wstring journalId,
+            in koIUndoReplaceController controller);
+
+    // Abort a running findallinfiles, replaceallinfiles or
+    // findallincollection session.
+    // Returns true if the session was still running.
+    boolean stopfindreplaceinfiles(in long id);
+
+    AString regex_escape_string(in AString s);
+
+    // persistent find options
+    attribute koIFindOptions options;
+};
+
+[scriptable, uuid(f35485c9-a501-4d6b-98f3-f865b2ff0666)]
+interface koIFinderReplaceHit: nsISupports {
+    attribute unsigned long start_pos;
+    attribute unsigned long end_pos;
+    attribute unsigned long start_line;
+    attribute wstring before;
+    attribute wstring after;
+
+    void initialize(in unsigned long start_pos,
+                    in unsigned long end_pos,
+                    in unsigned long start_line,
+                    in AString before,
+                    in AString after);
+};
+
+[scriptable, uuid(d352066e-67ff-44a6-a192-9eb9e9be704a)]
+interface koILoadedPathAccessor: nsISupports {
+    // The main purpose of this interface is to give the find/replace
+    // background thread methods the ability to access and modify
+    // scimoz objects through a proxy, as they aren't threadsafe.
+    // Only the first method isn't trivial.
+    
+    // Apply text-changes to scimoz objects.
+    // The method can either walk the list of hits to apply changes one at a time,
+    // or it can simply replace the document with the supplied after_text object.
+    // Note that the hits should be provided in reverse document-order, because
+    // the locations in each hit are in terms of the pre-change locations, not the
+    // post-change.
+    void applySetText(in koIDocument koDoc,
+                      in AString after_text,
+                      in unsigned long count,
+                      [array, size_is(count)] in koIFinderReplaceHit hits);
+
+
+    // These are simple wrappers used to get to the main thread via a
+    // background thread object.
+    boolean bufferHasChanged(in koIDocument koDoc,
+                             in wstring after_md5sum);
+    
+    void undoChanges(in koIDocument koDoc);
+};

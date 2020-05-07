@@ -1,0 +1,322 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    orient="vertical"
+    onload="PrefUi_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/pref/pref-ui.js" type="application/x-javascript;version=1.7" />
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="ui-prefs-vbox" flex="1" class="autoscroll">
+        
+        <groupbox id="pref_appearance_interface">
+            <caption label="&colorscheme.caption;" />
+        
+            <hbox align="center">
+                <label value="Interface Colors: " width="100" />
+                <menulist id="interface-scheme"
+                          pref="true"
+                          preftype="string"
+                          prefdefault="Default"
+                          width="300">
+                    <menupopup/>
+                </menulist>
+            </hbox>
+
+            <hbox align="center">
+                <label value="Widget Colors: " width="100" />
+                <menulist id="widget-scheme"
+                          pref="true"
+                          preftype="string"
+                          prefdefault="Default"
+                          width="300">
+                    <menupopup/>
+                </menulist>
+            </hbox>
+            
+            <hbox align="center">
+                <label value="Editor Colors: " width="100" />
+                <menulist id="editor-scheme"
+                          pref="true"
+                          preftype="string"
+                          prefdefault="Default"
+                          width="300">
+                    <menupopup/>
+                </menulist>
+            </hbox>
+            
+            <hbox align="center">
+                <label value="" width="100"/>
+                <checkbox id="link-schemes" pref="true" label="Use the same color scheme for everything"/>
+            </hbox>
+
+        </groupbox>
+        
+        <groupbox id="pref_appearance_font">
+            <caption label="&fonts.caption;" />
+            
+            <hbox align="center">
+                <description value="Interface" style="font-weight: bold" width="100"/>
+                <checkbox id="interface-font-defer" pref="true" label="Let the color scheme decide"/>
+            </hbox>
+            
+            <hbox align="center">
+                <label value="&filePrefAllLangFontFamily.label;" width="100"/>
+                <menulist id="interface-font" width="300">
+                    <menupopup>
+                        <menu label="Monospace" class="mono"><menupopup/></menu>
+                        <menu label="All Fonts" class="all"><menupopup/></menu>
+                    </menupopup>
+                </menulist>
+            </hbox>
+            
+            <hbox align="center">
+                <label value="&filePrefAllLangSize.label;" width="100"/>
+                <menulist id="interface-font-size" pref="true" preftype="string">
+                    <menupopup>
+                        <menuitem value="0.5rem" label="0.5rem"/>
+                        <menuitem value="0.9rem" label="0.9rem"/>
+                        <menuitem value="1rem" label="1rem"/>
+                        <menuitem value="1.1rem" label="1.1rem"/>
+                        <menuitem value="1.5rem" label="1.5rem"/>
+                        <menuitem value="2rem" label="2rem"/>
+                        <menuitem id="fontSize_5" value="5" label="&label.5;"/>
+                        <menuitem id="fontSize_6" value="6" label="&label.6;"/>
+                        <menuitem id="fontSize_7" value="7" label="&label.7;"/>
+                        <menuitem id="fontSize_8" value="8" label="&label.8;"/>
+                        <menuitem id="fontSize_9" value="9" label="&label.9;"/>
+                        <menuitem id="fontSize_10" value="10" label="&label.10;"/>
+                        <menuitem id="fontSize_11" value="11" label="&label.11;"/>
+                        <menuitem id="fontSize_12" value="12" label="&label.12;"/>
+                        <menuitem id="fontSize_13" value="13" label="&label.13;"/>
+                        <menuitem id="fontSize_14" value="14" label="&label.14;"/>
+                        <menuitem id="fontSize_15" value="15" label="&label.15;"/>
+                        <menuitem id="fontSize_16" value="16" label="&label.16;"/>
+                        <menuitem id="fontSize_18" value="18" label="&label.18;"/>
+                        <menuitem id="fontSize_20" value="20" label="&label.20;"/>
+                        <menuitem id="fontSize_24" value="24" label="&label.24;"/>
+                        <menuitem id="fontSize_26" value="26" label="&label.26;"/>
+                        <menuitem id="fontSize_28" value="28" label="&label.28;"/>
+                        <menuitem id="fontSize_32" value="32" label="&label.32;"/>
+                        <menuitem id="fontSize_36" value="36" label="&label.36;"/>
+                        <menuitem id="fontSize_40" value="40" label="&label.40;"/>
+                        <menuitem id="fontSize_48" value="48" label="&label.48;"/>
+                        <menuitem id="fontSize_56" value="56" label="&label.56;"/>
+                        <menuitem id="fontSize_64" value="64" label="&label.64;"/>
+                        <menuitem id="fontSize_72" value="72" label="&label.72;"/>
+                    </menupopup>
+                </menulist>
+            </hbox>
+            
+            <spacer height="10"/>
+            <hbox align="center">
+                <description value="Editor" style="font-weight: bold" width="100"/>
+                <checkbox id="editor-font-defer" pref="true" label="Let the color scheme decide"/>
+            </hbox>
+            
+            <hbox align="center">
+                <label value="&filePrefAllLangFontFamily.label;" width="100"/>
+                <menulist id="editor-font" width="300">
+                    <menupopup>
+                        <menu label="Monospace" class="mono"><menupopup/></menu>
+                        <menu label="All Fonts" class="all"><menupopup/></menu>
+                    </menupopup>
+                </menulist>
+            </hbox>
+            
+            <hbox align="center">
+                <label value="&filePrefAllLangSize.label;" width="100"/>
+                <menulist id="editor-font-size" pref="true" preftype="long">
+                    <menupopup>
+                        <menuitem id="fontSize_4" value="4" label="&label.4;"/>
+                        <menuitem id="fontSize_5" value="5" label="&label.5;"/>
+                        <menuitem id="fontSize_6" value="6" label="&label.6;"/>
+                        <menuitem id="fontSize_7" value="7" label="&label.7;"/>
+                        <menuitem id="fontSize_8" value="8" label="&label.8;"/>
+                        <menuitem id="fontSize_9" value="9" label="&label.9;"/>
+                        <menuitem id="fontSize_10" value="10" label="&label.10;"/>
+                        <menuitem id="fontSize_11" value="11" label="&label.11;"/>
+                        <menuitem id="fontSize_12" value="12" label="&label.12;"/>
+                        <menuitem id="fontSize_13" value="13" label="&label.13;"/>
+                        <menuitem id="fontSize_14" value="14" label="&label.14;"/>
+                        <menuitem id="fontSize_15" value="15" label="&label.15;"/>
+                        <menuitem id="fontSize_16" value="16" label="&label.16;"/>
+                        <menuitem id="fontSize_18" value="18" label="&label.18;"/>
+                        <menuitem id="fontSize_20" value="20" label="&label.20;"/>
+                        <menuitem id="fontSize_24" value="24" label="&label.24;"/>
+                        <menuitem id="fontSize_26" value="26" label="&label.26;"/>
+                        <menuitem id="fontSize_28" value="28" label="&label.28;"/>
+                        <menuitem id="fontSize_32" value="32" label="&label.32;"/>
+                        <menuitem id="fontSize_36" value="36" label="&label.36;"/>
+                        <menuitem id="fontSize_40" value="40" label="&label.40;"/>
+                        <menuitem id="fontSize_48" value="48" label="&label.48;"/>
+                        <menuitem id="fontSize_56" value="56" label="&label.56;"/>
+                        <menuitem id="fontSize_64" value="64" label="&label.64;"/>
+                        <menuitem id="fontSize_72" value="72" label="&label.72;"/>
+                    </menupopup>
+                </menulist>
+            </hbox>
+            
+            <hbox align="center">
+                <label value="&lineSpacing.label;" width="100"/>
+                <textbox id="editor-line-spacing"
+                         type="number"
+                         hidespinbuttons="true"
+                         min="0"
+                         max="99"
+                         value="0"
+                         size="2"
+                         pref="true"
+                         preftype="long"
+                         />
+            </hbox>
+            
+        </groupbox>
+
+        <groupbox id="pref_appearance_interface2">
+            <caption label="Platform Integration" />
+            
+            <checkbox id="ui.classic.mode" pref="true" label="Enable classic mode"/>
+            <description align="center" pack="center">
+                Classic mode enables native platform styling for various elements,
+                it is highly recommended you use a light interface scheme with classic
+                mode as dark schemes likely do not mesh well with native platform styling.
+            </description>
+            <separator/>
+            
+            <checkbox id="ui.hide.chrome" class="ui-hide-chrome" pref="true" invert="true" label="Use native window borders"/>
+            <checkbox id="ui.classic.toolbar" pref="true" label="Use classic toolbar layout"/>
+            <checkbox id="ui.classic.statusbar" pref="true" label="Place statusbar below editor"/>
+    <!-- #if PLATFORM == "linux" -->
+            <vbox id="windowButtonPrefs">
+                <separator/>
+                
+                <checkbox id="ui.windowbuttons.left" pref="true" label="Place window buttons on left of titlebar"/>
+                
+                <hbox align="center">
+                    <label control="ui.windowbuttons.min.ordinal" value="Minimize Button Index: "/>
+                    <textbox id="ui.windowbuttons.min.ordinal" pref="true" prefattribute="value"
+                               type="number" min="0" max="2" width="60"/>
+                </hbox>
+                <hbox align="center">
+                    <label control="ui.windowbuttons.max.ordinal" value="Maximize Button Index: "/>
+                    <textbox id="ui.windowbuttons.max.ordinal" pref="true" prefattribute="value"
+                               type="number" min="0" max="2" width="60"/>
+                </hbox>
+                <hbox align="center">
+                    <label control="ui.windowbuttons.close.ordinal" value="Close Button Index: "/>
+                    <textbox id="ui.windowbuttons.close.ordinal" pref="true" prefattribute="value"
+                               type="number" min="0" max="2" width="60"/>
+                </hbox>
+            </vbox>
+    <!-- #endif -->
+            
+        </groupbox>
+
+        <groupbox id="ui.tabs.sidepanes.groupbox">
+            <caption label="&sidePaneTabStyles.caption;" />
+            <hbox id="ui.tabs.sidepanes.left.hbox"
+                  align="center">
+                <label id="ui.tabs.sidepanes.left.label"
+                       value="&uiPaneSidepanes.left.layout.label;" />
+                <menulist id="ui.tabs.sidepanes.left.layout"
+                          pref="true"
+                          prefattribute="value">
+                    <menupopup id="ui.tabs.sidepanes.left.menupopup">
+                        <menuitem id="ui.tabs.sidepanes.left.sidebar.menu"
+                                  label="&uiPaneSidebars.menuitem.label;"
+                                  value="sidebar"
+                                  />
+                        <menuitem id="ui.tabs.sidepanes.left.vertical.menu"
+                                  label="&uiPaneVerticalTabs.menuitem.label;"
+                                  value="vertical"
+                                  />
+                        <menuitem id="ui.tabs.sidepanes.left.horizontal.menu"
+                                  label="&uiPaneHorizontalTabs.menuitem.label;"
+                                  value="horizontal"
+                                  />
+                        <menuitem id="ui.tabs.sidepanes.left.icons.menu"
+                                  label="&uiPaneIconTabs.menuitem.label;"
+                                  value="icons"
+                                  />
+                    </menupopup>
+                </menulist>
+            </hbox>
+    
+            <hbox id="ui.tabs.sidepanes.right.hbox"
+                  align="center">
+                <label id="ui.tabs.sidepanes.right.label"
+                       value="&uiPaneSidepanes.right.layout.label;" />
+                <menulist id="ui.tabs.sidepanes.right.layout"
+                          pref="true"
+                          prefattribute="value">
+                    <menupopup id="ui.tabs.sidepanes.right.menupopup">
+                        <menuitem id="ui.tabs.sidepanes.right.sidebar.menu"
+                                  label="&uiPaneSidebars.menuitem.label;"
+                                  value="sidebar"
+                                  />
+                        <menuitem id="ui.tabs.sidepanes.right.vertical.menu"
+                                  label="&uiPaneVerticalTabs.menuitem.label;"
+                                  value="vertical"
+                                  />
+                        <menuitem id="ui.tabs.sidepanes.right.horizontal.menu"
+                                  label="&uiPaneHorizontalTabs.menuitem.label;"
+                                  value="horizontal"
+                                  />
+                        <menuitem id="ui.tabs.sidepanes.right.icons.menu"
+                                  label="&uiPaneIconTabs.menuitem.label;"
+                                  value="icons"
+                                  />
+                    </menupopup>
+                </menulist>
+            </hbox>
+    
+            <hbox id="ui.tabs.sidepanes.bottom.hbox"
+                  align="center">
+                <label id="ui.tabs.sidepanes.bottom.label"
+                       value="&uiPaneSidepanes.bottom.layout.label;" />
+                <menulist id="ui.tabs.sidepanes.bottom.layout"
+                          pref="true"
+                          prefattribute="value">
+                    <menupopup id="ui.tabs.sidepanes.bottom.menupopup">
+                        <menuitem id="ui.tabs.sidepanes.bottom.sidebar.menu"
+                                  label="&uiPaneSidebars.menuitem.label;"
+                                  value="sidebar"
+                                  />
+                        <menuitem id="ui.tabs.sidepanes.bottom.horizontal.menu"
+                                  label="&uiPaneHorizontalTabs.menuitem.label;"
+                                  value="horizontal"
+                                  />
+                        <menuitem id="ui.tabs.sidepanes.bottom.icons.menu"
+                                  label="&uiPaneIconTabs.menuitem.label;"
+                                  value="icons"
+                                  />
+                    </menupopup>
+                </menulist>
+            </hbox>
+        </groupbox>
+
+    </vbox>
+
+</window>
+

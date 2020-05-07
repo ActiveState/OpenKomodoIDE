@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+    %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+    %prefDTD.INTERNAL;
+  <!ENTITY % genericFormatterDTD SYSTEM "chrome://komodo/locale/formatters/generic/formatterOptions.dtd">
+  %genericFormatterDTD;
+]>
+
+<bindings id="genericFormatterOptionsBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="generic">
+        <content>
+            <children>
+                <xul:groupbox id="generic_formatter_options_groupbox">
+                    <xul:caption id="generic_formatter_options_groupbox_caption"
+                                 label="&formatterOptionsGroupbox.caption;" />
+                    <!--
+                        XXX: Wierd.
+                        The maxwidth attribute must be specified, otherwise the
+                        text will not wrap correctly, causing the text to
+                        disappear on the right side.
+                    -->
+                    <xul:description maxwidth="500px">
+                        &generalFormatter.description;
+                    </xul:description>
+        
+                    <xul:separator class="thin"/>
+        
+                    <xul:label id="application_arguments_label"
+                               anonid="application_arguments_label"
+                               value="&applicationExecutable.label;"/>
+                    <xul:hbox id="application_arguments_hbox"
+                              anonid="application_arguments_hbox"
+                              align="center">
+                        <xul:textbox id="application_executable_textbox"
+                                     anonid="application_executable_textbox"
+                                     flex="1"
+                                     tooltiptext="&commandLineTextbox.tooltip;"
+                                     style="min-height: 16px;"
+                                     maxrows="10"
+                                     size="30"
+                                     type="autocomplete"
+                                     autocompletesearch="mru_and_filepath"
+                                     autocompletesearchparam="mru: genericFormatterApplicationExecutable"
+                                     autocompletepopup="popupTextboxAutoComplete"
+                                     enablehistory="true"
+                                     tabscrolling="true"
+                                     completeselectedindex="true"
+                                />
+                        <xul:button id="application_browse_button"
+                                    anonid="application_browse_button"
+                                    label="&browse.label;"
+                                    oncommand="document.getBindingParent(this).browseForFormatter();"/>
+                    </xul:hbox>
+        
+                    <!--<xul:separator class="thin"/>-->
+        
+                    <xul:label id="application_arguments_label"
+                               anonid="application_arguments_label"
+                               value="&applicationArguments.label;"/>
+                    <xul:hbox id="application_arguments_hbox"
+                              anonid="application_arguments_hbox"
+                              align="center">
+                        <xul:textbox id="application_arguments_textbox"
+                                     anonid="application_arguments_textbox"
+                                     flex="1"
+                                     tooltiptext="&argumentsTextbox.tooltip;"
+                                />
+                    </xul:hbox>
+                </xul:groupbox>
+            </children>
+        </content>
+
+        <implementation>
+
+            <field name="_prefs">null</field>
+
+            <method name="browseForFormatter">
+            <body>
+            <![CDATA[
+                var textbox = document.getAnonymousElementByAttribute(this, "anonid", "application_executable_textbox");
+                var initial_dir = null;
+                if (textbox.value) {
+                    initial_dir = ko.uriparse.dirName(textbox.value);
+                }
+                var executable_path = ko.filepicker.browseForExeFile(initial_dir);
+                if (executable_path) {
+                    textbox.value = executable_path;
+                }
+            ]]>
+            </body>
+            </method>
+
+            <method name="loadFromPrefs">
+            <parameter name="prefset"/>
+            <body>
+            <![CDATA[
+                // Get the formatter's specific preferences.
+                if (!prefset.hasPref("genericFormatterPrefs")) {
+                    this._prefs = Components.classes['@activestate.com/koPreferenceSet;1'].createInstance();
+                } else {
+                    this._prefs = prefset.getPref("genericFormatterPrefs");
+                    // Load data from the formatter preferences.
+                    document.getAnonymousElementByAttribute(this, "anonid", "application_executable_textbox").value = this._prefs.getString("executable", "");
+                    document.getAnonymousElementByAttribute(this, "anonid", "application_arguments_textbox").value = this._prefs.getString("arguments", "");
+                }
+            ]]>
+            </body>
+            </method>
+
+            <method name="saveToPrefs">
+            <parameter name="prefset"/>
+            <body>
+            <![CDATA[
+                // Get the formatter's specific preferences.
+                this._prefs.setStringPref("executable", document.getAnonymousElementByAttribute(this, "anonid", "application_executable_textbox").value);
+                this._prefs.setStringPref("arguments", document.getAnonymousElementByAttribute(this, "anonid", "application_arguments_textbox").value);
+                prefset.setPref("genericFormatterPrefs", this._prefs);
+            ]]>
+            </body>
+            </method>
+
+        </implementation>
+
+    </binding>
+
+</bindings>

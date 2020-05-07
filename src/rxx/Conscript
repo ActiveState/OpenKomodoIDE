@@ -1,0 +1,47 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2003-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    "cons",
+    'komodoPythonUtilsDir',
+    "build",
+    "mozComponentsDir",
+    "mozIdlIncludePath",
+    "idlExportDir",
+    "ranRegxpcomStateFileName",
+    'platform',
+    'buildFlavour',
+    'supportDir',
+    'mozVersion',
+    'productType',
+    'unsiloedPythonExe',
+    'sdkDir',
+    'mozSrc',
+);
+
+
+$cons->Install($idlExportDir, "koIRxx.idl");
+$cons->BuildAndInstallXpt("koIRxx.idl");
+$cons->Preprocess('koRxx.p.py', 'koRxx.py');
+$cons->InstallXpcomComponent("koRxx.py");
+$cons->Install("$supportDir/rxx/", "rxx_js.js");
+$cons->Install("$supportDir/rxx/", "rxx_python.py");
+$cons->Install("$supportDir/rxx/", "rxx_perl.pl");
+$cons->Install("$supportDir/rxx/", "rxx_php.php");
+$cons->Install("$supportDir/rxx/", "rxx_ruby.rb");
+$cons->Install("$supportDir/rxx/", "rxx_tcl.tcl");
+
+#force change
+$cons->InstallRecursive("$supportDir/rxx/perl/lib",
+		       #XXX must be absolute path (bug in InstallRecursive)
+			cwd() . "/contrib/perl-json/lib",
+		        ("\.svn"));
+$cons->InstallRecursive("$supportDir/rxx/ruby/lib",
+			cwd() . "/contrib/ruby-json-pure/lib",
+		        ("\.svn", ".*\.xpm"));
+$cons->InstallRecursive("$supportDir/rxx/tcl/lib",
+			cwd() . "/contrib/tcl-json-pure/lib",
+		        ("\.svn", ".*\.xpm"));
+

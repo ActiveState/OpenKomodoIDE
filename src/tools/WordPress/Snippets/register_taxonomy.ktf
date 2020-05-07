@@ -1,0 +1,57 @@
+// komodo tool: register_taxonomy
+// ==============================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ==============================
+<% /* Register Taxonomy All Options */ %>
+
+/**
+ * Create a taxonomy
+ *
+ * @uses $wp_taxonomies Inserts new taxonomy object into the list
+ * @uses $wp Adds query vars
+ *
+ * @param string $taxonomy Name of taxonomy object
+ * @param array|string $object_type Name of the object type for the taxonomy object.
+ * @param array|string $args Taxonomy arguments
+ * @return null|WP_Error WP_Error if errors, otherwise null.
+ */
+function ${1:my_taxonomies_name}() {
+
+	${2:${3:\$labels} = array(
+		'name'					=> _x( '${4:Plural Name}', 'Taxonomy plural name', '${6:text-domain}' ),
+		'singular_name'			=> _x( '${5:Singular Name}', 'Taxonomy singular name', '${7:text-domain}' ),
+		'search_items'			=> __( 'Search ${4:Plural Name}', '${6:text-domain}' ),
+		'popular_items'			=> __( 'Popular ${4:Plural Name}', '${6:text-domain}' ),
+		'all_items'				=> __( 'All ${4:Plural Name}', '${6:text-domain}' ),
+		'parent_item'			=> __( 'Parent ${5:Singular Name}', '${7:text-domain}' ),
+		'parent_item_colon'		=> __( 'Parent ${5:Singular Name}', '${7:text-domain}' ),
+		'edit_item'				=> __( 'Edit ${5:Singular Name}', '${7:text-domain}' ),
+		'update_item'			=> __( 'Update ${5:Singular Name}', '${7:text-domain}' ),
+		'add_new_item'			=> __( 'Add New ${5:Singular Name}', '${7:text-domain}' ),
+		'new_item_name'			=> __( 'New ${5:Singular Name} Name', '${7:text-domain}' ),
+		'add_or_remove_items'	=> __( 'Add or remove ${4:Plural Name}', '${6:text-domain}' ),
+		'choose_from_most_used'	=> __( 'Choose from most used ${7:Plural Name}', '${6:text-domain}' ),
+		'menu_name'				=> __( '${5:Singular Name}', '${7:text-domain}' ),
+	);}
+
+	${8:${9:\$args} = array(
+		${10:'labels'            => ${3:\$labels},}
+		${11:'public'            => ${12:true},}
+		${13:'show_in_nav_menus' => ${14:true},}
+		${15:'show_admin_column' => ${16:false},}
+		${17:'hierarchical'      => ${18:false},}
+		${19:'show_tagcloud'     => ${20:true},}
+		${21:'show_ui'           => ${22:true},}
+		${23:'query_var'         => ${24:true},}
+		${25:'rewrite'           => ${26:true},}
+		${27:'query_var'         => ${28:true},}
+		${29:'capabilities'      => ${30:array()},}
+	);}
+
+	register_taxonomy( '${31:taxonomy-slug}', array( '${32:post}' ), ${9:\$args} );
+}
+
+add_action( 'init', '${1:my_taxonomies_name}' );

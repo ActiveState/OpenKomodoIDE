@@ -1,0 +1,11 @@
+// komodo tool: add_action
+// =======================
+// auto_abbreviation: true
+// indent_relative: false
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// =======================
+add_action( [[%tabstop:$hook]], [[%tabstop:$function_to_add]], [[%tabstop:$priority]], [[%tabstop:$accepted_args]] );!@#_currentPos!@#_anchor

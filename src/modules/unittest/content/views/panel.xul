@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % sccDTD SYSTEM "chrome://komodo/locale/scc.dtd">
+  %sccDTD;
+]>
+
+<!-- Copyright (c) 2003-2008 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!-- Source Code Control commit dialog. See commit.js for details. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="less://unittest/content/less/unittest.less" type="text/css"?>
+
+<window id="unittest_widget"
+        title="Unit Testing"
+        class="dialog"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        minwidth="800"
+        width="800"
+        height="480"
+        persist="width height screenX screenY"
+        onload="require('ko/windows').getMain().require('unittest/panel').onLoad(window)"
+    >
+
+    <script src="chrome://komodo/content/library/logging.js"   type="application/x-javascript;version=1.7"/>
+
+    <popupset>
+        <menupopup id="context">
+            <menuitem id="go-to" label="Go to Test"/>
+            <menuitem id="debug" label="Run Test in Debugger"/>
+            <menuitem id="show-more-details" label="Show Details"/>
+        </menupopup>
+    </popupset>
+
+    <vbox flex="1">
+
+        <tabbox id="main-tabs" class="embedded" flex="1">
+            <tabs class="widgetToolbarWrap">
+                <tab>Results</tab>
+                <tab id="test-output-tab">stdout</tab>
+                <tab id="test-errors-tab">stderr</tab>
+            </tabs>
+            <tabpanels flex="1">
+                <tabpanel>
+                    <richlistbox id="test-result" flex="1"></richlistbox>
+                    <splitter width="3"/>
+                    <deck id="filter-wrapper" selectedIndex="0">
+                        <vbox width="350">
+                            <textbox type="search" id="search" placeholder="Search .."/>
+                            <richlistbox id="filters" seltype="multiple" flex="1">
+                                <richlistitem selected="true" value="-1"><label value="Show All"/></richlistitem>
+                                <richlistitem class="state-ok" value="state:ok"><label value="Status: Successful"/></richlistitem>
+                                <richlistitem class="state-warning" value="state:not ok"><label value="Status: Failed"/></richlistitem>
+                                <richlistitem class="state-error" value="state:error"><label value="Status: Error"/></richlistitem>
+                            </richlistbox>
+                        </vbox>
+                        <vbox id="details-wrapper">
+                            <vbox id="details-inner" flex="1"></vbox>
+                            <hbox id="details-buttons" pack="center" align="center">
+                                <button id="go-to-details" label="Go to Test"></button>
+                                <button id="debug-details" label="Run Test in Debugger"></button>
+                            </hbox>
+                        </vbox>
+                    </deck>
+                </tabpanel>
+                <tabpanel>
+                    <textbox id="test-output" readonly="true" multiline="true" wrap="off" flex="1"></textbox>
+                </tabpanel>
+                <tabpanel>
+                    <textbox id="test-errors" readonly="true" multiline="true" wrap="off" flex="1"></textbox>
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+            
+        <hbox class="widgetToolbarWrap">
+            
+            <menulist id="config-menu" width="150">
+                <menupopup>
+                </menupopup>
+            </menulist>
+            
+            <buttongroup>
+                <button id="edit" class="icon-pencil-square"/>
+                <button id="delete" class="icon-minus-square"/>
+                <button id="add" class="icon-plus-square"/>
+            </buttongroup>
+            
+            <button id="run" label="Run"/>
+            <button id="stop" label="Stop" collapsed="true"/>
+            <checkbox id="run-on-save" label="Run on Save"/>
+            <checkbox id="show-details" label="Show Details"/>
+            <separator flex="1"/>
+            <hbox pack="center" align="end" id="summary">
+            </hbox>
+            
+        </hbox>
+    
+    </vbox>
+
+</window>

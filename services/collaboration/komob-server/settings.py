@@ -1,0 +1,61 @@
+import getpass
+import logging
+import os
+from os.path import join, dirname
+
+from logging.handlers import SMTPHandler
+
+
+_curr_user = getpass.getuser().lower()
+
+DEBUG = False
+
+# Location of the Redis DB used as the model backend, session/authentication
+# backend and pub/sub channel.
+REDIS_HOST = "collab1.activestate.com"
+REDIS_PORT = 6379
+
+# Cofiguration of the Redis DB. Make sure that `REDIS_PASSWORD` is properly
+# escaped. `REDIS_MODEL_DB` and `REDIS_SESSION_DB` must correspond to the
+# respective settings in the other applications (Sync, Collaboration #Socket
+# Server, Account site). Generally, leave it as it it.
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
+if REDIS_PASSWORD == None:
+  raise Exception("Missing 'REDIS_PASSWORD' environmental variable.")
+REDIS_MODEL_DB = 0
+REDIS_SESSION_DB = 1
+
+
+# Configuration of the Account API. In production this should point to
+# account.as.com
+ACCOUNT_API_SETTINGS = {
+    'api_url': 'http://account.activestate.com/api/',
+    #'http_cache_dir': join(dirname(__file__), '.cache-%s' % _curr_user),
+}
+
+# Client requests from IPs that start with any of those strings are allowed to
+# access certain views, such as `/__stats__`.
+INTERNAL_IPS = [
+    "127.0.0.1",
+    "192.168.69.", # allows the complete block
+    "192.168.71.", # allows any of the cluster/co-lo boxes
+]
+
+ADMINS = [
+    'dev-komodo@activestate.com',
+    'kevinw@activestate.com',
+]
+
+if not DEBUG:
+    from komob import app
+    from komob.bufferingsmtp import BufferingSMTPHandler
+    mail_handler = BufferingSMTPHandler('mail.activestate.com',
+                               'collab1-exceptions@activestate.com',
+                               ADMINS,
+                               '[collaboration.as.com] Internal Server Error '
+                               'on %s' % os.uname()[1],
+                               timeout=60*10) # limit email to one every 10 mins
+    mail_handler.setLevel(logging.ERROR)
+    loggers = [app.logger, logging.getLogger('mobwrite')]
+    for logger in loggers:
+        logger.addHandler(mail_handler)

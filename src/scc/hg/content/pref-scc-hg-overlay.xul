@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://mercurial/locale/mercurial-prefs.dtd" >
+
+<overlay id="hg_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <treechildren id="sourceCodeControlItemChildren">
+        <treeitem id="prefs_hg_treeitem">
+            <treerow id="prefs_hg_treecrow">
+                <treecell id="prefs_hg_treecell"
+                          class="treecell-indent"
+                          url="chrome://mercurial/content/pref-scc-hg.xul"
+                          label="&Mercurial.label;"
+                          helptag="scc.html"/>
+            </treerow>
+        </treeitem>
+    </treechildren>
+</overlay>

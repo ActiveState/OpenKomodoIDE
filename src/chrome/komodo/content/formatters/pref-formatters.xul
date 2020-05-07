@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefFormattersDTD SYSTEM "chrome://komodo/locale/formatters/pref-formatters.dtd">
+    %prefFormattersDTD;
+]>
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/formatters/pref-formatters.css" type="text/css"?>
+
+<window id="formatter_prefs_window"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        onload="PrefFormatters_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/formatters/pref-formatters.js" type="application/x-javascript;version=1.7"/>
+
+    <menupopup id="formatters_tree_context_menu"
+               onpopupshowing="return onContextPopupShowing(event);">
+        <menuitem id="context_menu_edit"
+                  label="&formattersContextMenuEdit.label;"
+                  tooltiptext="&editFormatter.tooltiptext;"
+                  oncommand="editSelectedFormatter();"/>
+        <menuitem id="context_menu_mark_default"
+                  label="&formattersContextMenuMakeDefault.label;"
+                  tooltiptext="&formattersContextMenuMakeDefault.tooltiptext;"
+                  oncommand="markAsDefaultSelectedFormatter();"/>
+        <menuseparator id="context_menu_separator_1" />
+        <menuitem id="context_menu_delete"
+                  label="&formattersContextMenuDelete.label;"
+                  tooltiptext="&deleteFormatter.tooltiptext;"
+                  oncommand="deleteSelectedFormatter();"/>
+    </menupopup>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="formatter-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox id="formatters_groupbox">
+            <caption id="formatters_groupbox_caption" label="&formatterPreferencesGroupbox.caption;"/>
+            <vbox id="formatters_vbox" flex="1">
+                <description id="formatters_description">
+                    &formattersOverview.description;
+                </description>
+                <spacer id="formatters_spacer" />
+                <hbox id="formatters_hbox" style="margin-right: 5px">
+                    <spring id="formatters_hbox_spring" flex="1"/>
+                    <button id="formatters_button_add"
+                            class="list-item-add-icon button-toolbar-a"
+                            oncommand="createNewFormatter();"
+                            tooltiptext="&addFormatter.tooltiptext;"/>
+                    <button id="formatters_button_edit"
+                            class="list-item-edit-icon button-toolbar-a"
+                            oncommand="editSelectedFormatter();"
+                            tooltiptext="&editFormatter.tooltiptext;"/>
+                    <button id="formatters_button_delete"
+                            class="list-item-remove-icon button-toolbar-a"
+                            oncommand="deleteSelectedFormatter();"
+                            tooltiptext="&deleteFormatter.tooltiptext;"/>
+                </hbox>
+                <tree id="formatters_tree"
+                      minheight="180"
+                      persist="height"
+                      ondblclick="formatters_onTreeDblClick(event);"
+                      enableColumnDrag="true"
+                      selType="single"
+                      hidecolumnpicker="true">
+                    <treecols id="formatters_treecols">
+                      <treecol id="formatters_treecol_is_default"
+                               label="&formatterDefaultColumnHeader.label;"
+                               tooltiptext="&formatterDefaultColumnHeader.tooltiptext;"
+                               type="checkbox"
+                               crop="right"
+                               persist="width hidden"
+                               />
+                      <splitter id="formatters_name_splitter" class="tree-splitter"/>
+                      <treecol id="formatters_treecol_name"
+                               flex="2"
+                               label="&formatterNameColumnHeader.label;"
+                               tooltiptext="&formatterNameColumnHeader.tooltiptext;"
+                               crop="right"
+                               persist="width hidden"
+                               />
+                      <splitter id="formatters_language_splitter" class="tree-splitter"/>
+                      <treecol id="formatters_treecol_language"
+                               flex="1"
+                               label="&formatterLanguageColumnHeader.label;"
+                               tooltiptext="&formatterLanguageColumnHeader.tooltiptext;"
+                               crop="right"
+                               persist="width hidden"
+                               />
+                      <splitter id="formatters_formatter_splitter" class="tree-splitter"/>
+                      <treecol id="formatters_treecol_formatter_name"
+                               flex="1"
+                               label="&formatterFormatterNameColumnHeader.label;"
+                               tooltiptext="&formatterFormatterNameColumnHeader.tooltiptext;"
+                               crop="right"
+                               persist="width hidden"
+                               />
+                    </treecols>
+                    <!-- Tree children are dynamically generated, we use our own custom tree view -->
+                    <treechildren id="formatters_treechildren"
+                                  context="formatters_tree_context_menu" />
+                </tree>
+            </vbox>
+        </groupbox>
+
+    </vbox>
+
+</window>

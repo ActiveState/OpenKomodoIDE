@@ -1,0 +1,146 @@
+# Setup bugzilla on Mac OS X 10.5
+
+1. MySQL
+
+        ...download and install MySQL...
+
+    Add this to "~/.bash_aliases":
+    
+        alias mysql-start="sudo /usr/local/mysql/support-files/mysql.server start"
+        alias mysql-stop="sudo /usr/local/mysql/support-files/mysql.server stop"
+    
+    Some links (investigated when I was having MySQL troubles):
+
+        http://jwopitz.wordpress.com/2007/12/09/getting-mysql-mac-os-x-105-leopard-togetherfinally/
+        http://hivelogic.com/articles/view/installing-mysql-on-mac-os-x
+    
+
+2. ActivePerl (could probably use the system Perl)
+
+        ...download and install ActivePerl 5.10...
+        export PATH=/usr/local/ActivePerl-5.10/bin:$PATH
+
+3. Bugzilla sources
+
+        cd /tmp
+        wget -q http://ftp.mozilla.org/pub/mozilla.org/webtools/bugzilla-3.2.3.tar.gz
+        mkdir ~/data
+        cd ~/data
+        tar xzf /tmp/bugzilla-3.2.3.tar.gz
+        mv bugzilla-3.2.3 bugzilla
+
+4. Extra Perl modules required by Bugzilla
+   (http://www.bugzilla.org/docs/3.4/en/html/installation.html)
+   WARNING: You *must* use "sudo" to run the "ppm" commands. Otherwise it
+   will successfully install those Perl modules in "~/Library/ActivePerl-5.10"
+   and Apache won't be able to use those later.
+
+        cd ~/data/bugzilla
+        perl checksetup.pl --check-modules
+        sudo ppm install TimeDate
+        sudo ppm install Template-Toolkit
+        sudo ppm install Email-Send
+        sudo ppm install Email-MIME
+        sudo ppm install Email-MIME-Modifier
+    
+        # `sudo ppm install DBD-mysql` doesn't work (not in PPM currently)
+        sudo perl install-module.pl DBD::mysql
+    
+        ppm install SOAP-Lite  # required for XML-RPC iface
+
+   Note: there are a number of other "optional" modules. Some
+   of these may be necessary for the API stuff. We'll see.
+
+   You should now get "ok" for all required modules when running
+  
+        perl checksetup.pl --check-modules
+
+5. Configure Bugzilla.
+   (http://www.bugzilla.org/docs/3.4/en/html/configuration.html)
+
+        cd ~/data/bugzilla
+        $EDITOR localconfig
+
+   Ensure the following settings (I left everything else as default):
+
+        $webserverconfig = 'www';
+        $db_name = 'bugs';
+        $db_user = 'bugs';
+        $db_pass = 'bugs';
+        $index_html = 0;
+
+6. Configure MySQL:
+
+    $ mysql -u root
+    mysql> grant all on bugs.* to 'bugs'@'localhost' identified by 'bugs';
+    #         $db_name --'         `-- $db_user          $db_pass --'
+    mysql> flush privileges;
+
+7. Bugzilla setup.
+
+        cd ~/data/bugzilla
+        sudo perl checksetup.pl
+
+   This runs for a while creating files, setting up the 'bugs' database,
+   etc. Note that there was a warning about potential permissions problems
+   because I didn't run as a member of the `$webserverconfig` group or
+   as root:
+   
+   > If you experience problems running Bugzilla scripts, log in as root and
+   > re-run this script, become a member of the group, or remove the value of
+   > the "webservergroup" parameter.
+
+8. Fix up shebang lines in Bugzilla files to point to
+   '/usr/local/ActivePerl-5.10/bin'. You can using Komodo's "frep" script
+   to do this:
+   
+        cd ~/data/bugzilla
+        sudo python .../komodo/bin/frep.py -rf 's/#!\/usr\/bin\/perl/#!/usr/local/ActivePerl-5.10/bin/perl/' .
+
+9. Turn on "Personal Web Sharing" on your Mac
+
+    - open "System Preferences"
+    - open the "Sharing" prefs panel
+    - check "Web sharing"
+   
+   This will turn on the OS's Apache.
+   
+10. Configure Apache.
+   Here we are using the Apache included by default on Mac OS X.
+   
+   Create "/etc/apache2/other/bugzilla.conf" (as root) with the following
+   content:
+
+        Alias /bugzilla /Users/trentm/data/bugzilla
+        <Directory "/Users/trentm/data/bugzilla">
+            #DirectoryIndex index.cgi
+            Options +ExecCGI
+            AllowOverride None
+            Order allow,deny
+            Allow from all
+        </Directory> 
+
+   Ensure that your Apache conf is correct:
+   
+        # sudo apachectl -t
+        Syntax OK
+   
+   Restart apache:
+   
+        sudo apachectl restart
+
+   Now visit:
+    
+        http://127.0.0.1/bugzilla/
+    
+   If that doesn't show you the "Welcome to Bugzilla" main, please let
+   Trent know.
+
+11. Setting up Bugzilla data.
+
+    - set maintainer email and urlbase in admin
+    - could create users here:
+      http://127.0.0.1/bugzilla/editusers.cgi?action=add
+      e.g. Bob <activetest+bob@activestate.com>
+          Sally <activestate+sally@activestate.com>
+

@@ -1,0 +1,11 @@
+// komodo tool: reqCookie
+// ======================
+// auto_abbreviation: true
+// indent_relative: false
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.0.12
+// ======================
+[[%tabstop1:foo]] = request.cookies.get$('[[%tabstop2:key]]')
+[[%tabstop3:3]]!@#_currentPos!@#_anchor

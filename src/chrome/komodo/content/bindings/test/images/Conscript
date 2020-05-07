@@ -1,0 +1,23 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'mozChromeDir',
+    'platform',
+    'productType',
+    'buildFlavour',
+    'unsiloedPythonExe',
+);
+
+$cons->InstallInChrome('BC-R.jpg');
+$cons->InstallInChrome('betty_boop.xbm');
+$cons->InstallInChrome('blue_apple.png');
+$cons->InstallInChrome('chick.png');
+$cons->InstallInChrome('cyan_apple.png');
+$cons->InstallInChrome('green_apple.png');
+$cons->InstallInChrome('magenta_apple.png');
+$cons->InstallInChrome('red_apple.png');
+$cons->InstallInChrome('yellow_apple.png');

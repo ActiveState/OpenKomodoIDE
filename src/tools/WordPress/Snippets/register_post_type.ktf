@@ -1,0 +1,64 @@
+// komodo tool: register_post_type
+// ===============================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ===============================
+<% /* Register Post Type All Options */ %>
+
+/**
+* Registers a new post type
+* @uses \$wp_post_types Inserts new post type object into the list
+*
+* @param string $post_type Post type key, must not exceed 20 characters
+* @param array|string $args See optional args description above.
+* @return object|WP_Error the registered post type object, or an error object
+*/
+function ${1:prefix_register_name}() {
+
+	${2:${3:\$labels} = array(
+		'name'                => __( '${4:Plural Name}', '${6:text-domain}' ),
+		'singular_name'       => __( '${5:Singular Name}', '${6:text-domain}' ),
+		'add_new'             => _x( 'Add New ${5:Singular Name}', '${6:Name}', '${6:text-domain}' ),
+		'add_new_item'        => __( 'Add New ${5:Singular Name}', '${6:text-domain}' ),
+		'edit_item'           => __( 'Edit ${5:Singular Namee}', '${6:text-domain}' ),
+		'new_item'            => __( 'New ${5:Singular Name}', '${6:text-domain}' ),
+		'view_item'           => __( 'View ${5:Singular Name}', '${6:text-domain}' ),
+		'search_items'        => __( 'Search ${4:Plural Name}', '${6:text-domain}' ),
+		'not_found'           => __( 'No ${4:Plural Name} found', '${6:text-domain}' ),
+		'not_found_in_trash'  => __( 'No ${4:Plural Name} found in Trash', '${6:text-domain}' ),
+		'parent_item_colon'   => __( 'Parent ${5:Singular Name}:', '${6:text-domains}' ),
+		'menu_name'           => __( '${4:Plural Name}', '${6:text-domain}' ),
+	);}
+
+	${8:${9:\$args} = array(
+		'labels'                   => ${3:\$labels},
+		${10:'hierarchical'        => ${11:false},}
+		${12:'description'         => '${13:description}',}
+		${14:'taxonomies'          => array(),}
+		${16:'public'              => ${17:true},}
+		${18:'show_ui'             => ${19:true},}
+		${20:'show_in_menu'        => ${21:true},}
+		${22:'show_in_admin_bar'   => ${23:true},}
+		${24:'menu_position'       => ${25:null},}
+		${26:'menu_icon'           => ${27:null},}
+		${28:'show_in_nav_menus'   => ${29:true},}
+		${30:'publicly_queryable'  => ${31:true},}
+		${32:'exclude_from_search' => ${33:false},}
+		${34:'has_archive'         => ${35:true},}
+		${36:'query_var'           => ${37:true},}
+		${38:'can_export'          => ${39:true},}
+		${40:'rewrite'             => ${41:true},}
+		${42:'capability_type'     => '${43:post}',}
+		${44:'supports'            => array(
+			${45:'${46:title}', '${47:editor}', '${48:author}', '${49:thumbnail}',
+			'${50:excerpt}','${51:custom-fields}', '${52:trackbacks}', '${53:comments}',
+			'${54:revisions}', '${55:page-attributes}', '${56:post-formats}'
+			})}
+	);}
+
+	register_post_type( '${7:slug}', ${9:\$args} );
+}
+
+add_action( 'init', '${1:prefix_register_name}' );

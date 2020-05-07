@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+	id="injector"
+	title="Javascript Injector"
+	onload="onLoad()">
+  <script type="application/x-javascript" src="chrome://extensiondev/content/injector.js"/>
+  <label value="Execute this file:"/>
+  <hbox>
+    <textbox id="filename" flex="1"/>
+    <button label="Browse..." oncommand="findFile()"/>
+  </hbox>
+  <label value="In this Window:"/>
+  <hbox>
+    <menulist id="window-list" crop="end" flex="1">
+      <menupopup>
+      </menupopup>
+    </menulist>
+    <button label="Refresh" oncommand="refreshWindows()"/>
+  </hbox>
+  <separator flex="0"/>
+  <hbox><button label="Execute!" oncommand="doExecute()"/></hbox>
+</window>

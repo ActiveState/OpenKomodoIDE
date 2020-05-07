@@ -1,0 +1,18 @@
+Metadata-Version: 1.0
+Name: redis
+Version: 2.2.2
+Summary: Python client for Redis key-value store
+Home-page: http://github.com/andymccurdy/redis-py
+Author: Andy McCurdy
+Author-email: sedrik@gmail.com
+License: MIT
+Download-URL: http://cloud.github.com/downloads/andymccurdy/redis-py/redis-2.2.2.tar.gz
+Description: Python client for Redis key-value store
+Keywords: Redis,key-value store
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python

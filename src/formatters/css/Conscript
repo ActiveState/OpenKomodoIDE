@@ -1,0 +1,27 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2015 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'build',
+    'platform',
+    'ranRegxpcomStateFileName',
+    'mozBin',
+    'mozSrc',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'komodoPythonUtilsDir',
+    'supportDir',
+    'unsiloedPythonExe',
+    'productType',
+    'buildFlavour',
+    'mozVersion',
+    'sdkDir',
+);
+
+$cons->InstallXpcomComponent('koCSSFormatter.js',
+                             {'@activestate.com/koFormatter?name=css_beautify;1' => "{d56ec2a1-b977-4714-b370-d39b61236a8f}"},
+                             ["category-komodo-formatter", "css_beautify", '@activestate.com/koFormatter?name=css_beautify;1']);

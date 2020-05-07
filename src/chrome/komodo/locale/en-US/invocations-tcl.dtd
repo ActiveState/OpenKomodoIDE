@@ -1,0 +1,2 @@
+<!ENTITY useDefaultTclshInterpreterForConsoleApplications.label "Use default tclsh interpreter (for console applications)">
+<!ENTITY useDefaultWishInterpreterForGraphicalApplications.label "Use default wish interpreter (for graphical applications)">

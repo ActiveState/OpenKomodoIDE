@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="chrome://komodo/skin" type="text/css"?>
+
+<dialog id="dialog-perlapp-fileadd"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        title="PDK Alert"
+        onload="onPerlAppFileAddLoad()"
+        buttons="accept,cancel"
+        ondialogaccept="return onOk();"
+        ondialogcancel="return onCancel();">
+
+    <script src="chrome://ascore/content/ascore.js" type="application/x-javascript"/>
+    <script type="application/x-javascript" src="chrome://komodo/content/library/logging.js" />
+    <script type="application/x-javascript" src="chrome://komodo/content/library/trace.js" />
+    <script type="application/x-javascript" src="chrome://komodo/content/library/dialogs.js" />
+    <script type="application/x-javascript" src="chrome://komodo/content/library/filepickers.js" />
+    <script type="application/x-javascript" src="chrome://komodo/content/library/uriparse.js" />
+    <script type="application/x-javascript" src="chrome://perlapp/content/perlapp-fileadd.js" />
+
+    <hbox flex="1">
+        <hbox align="start">
+            <image class="question-icon spaced"/>
+        </hbox>
+        <separator orient="vertical" class="thin"/>
+        <vbox flex="1">
+            <label value="Enter the name of the file to be added" class="kopadded"/>
+            <hbox align="center" flex="1">
+                <textbox id="sourceFile"
+                         oninput="changeSourceFile()" flex="1"/>
+                <button label="Browse..." align="left" oncommand="browse()"/>
+            </hbox>
+
+            <separator class="thin"/>
+
+            <label value="Enter the relative extraction path of the file e.g. myLibrary.dll" class="kopadded"/>
+            <textbox id="destinationFile"
+                     oninput="changeDestinationFile()"/>
+        </vbox>
+    </hbox>
+</dialog>
+

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>floating menu demo</title>
+	<meta charset="UTF-8" />
+	<style type="text/css">
+		code{ padding:10px 8px; margin:3px 0; display:block; background-color:#333; color:#eee; }
+		body{ margin:0; padding:0; font-size:12px; font-family:arial; }
+		.header{ height:200px; background-color:darkred; text-align:center; color:#FFF; font-size:3em; }
+		.content{ padding:10px 10px 30px; width:960px; margin:0 auto; background-color:#f1f1f1; position:relative; }
+			.wrap{ height:1300px; padding:20px; background-color:#ddd; margin:0 250px; color:#333; }
+				.wrap h2{ font-size:2em; }
+				.wrap ul{ list-style:none; padding:0; }
+					.wrap ul li{ margin-bottom:20px; }
+						.wrap ul li h3{ font-size:1.2em; padding:0; margin:0; }
+			.menu{ position:absolute; left:10px; padding:15px; width:210px; background:green;color:#FFF; }
+				.menu .easing{ overflow:hidden; margin:10px 0; }
+				.menu .easing button{ font-size:1.1em; float:left; clear:left; line-height:1; cursor:pointer; }
+				.menu h3{ border-bottom:1px solid #FFF; padding:3px 8px; margin:0; }
+				.menu label{ display:block; overflow:hidden; margin-bottom:5px; line-height:1.6; }
+				.menu label input{ float:right; }
+				.menu label input[type=text]{ width:60px; }
+			.menu2{ right:10px; left:auto; background-color:purple; }
+			.transition200 .duration,
+			.transition200 .delay{ visibility:hidden; }
+			.transition200{ transition:200ms; -webkit-transition:200ms; -o-transition:200ms; }
+		.footer{  height:500px; background-color:blue; text-align:center; color:#FFF; font-size:3em; }
+	</style>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src='stickyfloat.js'></script>
+</head>
+<body>
+	<div class="header">Header</div>
+	<div class="content">
+		<div class="menu">
+			<h3>Menu 1 Options:</h3>
+			<div class='easing'>
+				<button>linear</button>
+				<button>swing</button>
+				<button>easeInQuad</button>
+				<button>easeOutQuad</button>
+				<button>easeInOutQuad</button>
+				<button>easeOutElastic</button>
+				<button>easeInOutElastic</button>
+				<button>easeInBack</button>
+				<button>easeOutBack</button>
+				<button>easeInOutBack</button>
+			</div>
+			<label>
+				<input type='text' class='duration' value='200' />
+				Duration (in ms):
+			</label>
+			<label>
+				<input type='text' class='delay' value='0' />
+				Delay (in ms):
+			</label>
+			<label>
+				<input type='text' class='offsetY' value='auto' />
+				offsetY (in px):
+			</label>
+			<label>
+				<input type='text' class='startOffset' value='' />
+				startOffset (in px):
+			</label> 
+			<label>
+				<input type='checkbox' class='stickToBottom' />
+				Stick to bottom:
+			</label>
+			<label>
+				<input type='checkbox' class='lockBottom' checked />
+				Bind to parent's bottom:
+			</label>
+			<label>
+				<input type='checkbox' class='cssTransition' />
+				Use CSS3 transition (better):
+			</label>
+		</div>
+		<div class="menu menu2">
+			<h3>Menu 2 Options:</h3>
+			<div class='easing'>
+				<button>linear</button>
+				<button>swing</button>
+				<button>easeInQuad</button>
+				<button>easeOutQuad</button>
+				<button>easeInOutQuad</button>
+				<button>easeOutElastic</button>
+				<button>easeInOutElastic</button>
+				<button>easeInBack</button>
+				<button>easeOutBack</button>
+				<button>easeInOutBack</button>
+			</div>
+			<label>
+				<input type='text' class='duration' value='0' />
+				Duration (in ms):
+			</label>
+			<label>
+				<input type='text' class='delay' value='0' />
+				Delay (in ms):
+			</label>
+			<label>
+				<input type='text' class='offsetY' value='auto' />
+				offsetY (in px):
+			</label> 
+			<label>
+				<input type='text' class='startOffset' value='' />
+				startOffset (in px):
+			</label> 
+			<label>
+				<input type='checkbox' class='stickToBottom' />
+				Stick to bottom:
+			</label>
+			<label>
+				<input type='checkbox' class='lockBottom' checked />
+				Bind to parent's bottom:
+			</label>
+			<label>
+				<input type='checkbox' class='cssTransition' />
+				Use CSS3 transition (better):
+			</label>
+		</div>
+		<div class="wrap">
+			Example:<br/>
+			<code>jQuery('.menu').stickyfloat({ duration: 400 });</code>
+			<br/>
+			Or to update a floating element you might do:
+			<code>
+<pre>jQuery('.menu2').stickyfloat( 'update',
+{
+	duration : 0, 
+	stickToBottom:true
+});
+</pre>
+			</code>
+			<h2>parameters:</h2>
+			<ul>
+				<li><h3>duration 	(default: 200)</h3>The duration of the animation</li>
+				<li><h3>startOffset (default: auto - parent's offset from top)</h3>The amount of scroll offset after which the animations kicks in, because the idea is to start the animation only when the user has scrolled to a point where the element needs to start following him.<br />Value can be empty or auto, which are the same, or a number</li>
+				<li><h3>offsetY		(default: auto - parent's padding-top)</h3>The offset from the top after object's animation.<br />Value can be empty or auto, which are the same, or a number</li>
+				<li><h3>delay		(default: 0)</h3>Delay in milliseconds  until the animnations starts</li>
+				<li><h3>easing		(default: linear)</h3>Easing function (jQuery has by default only 'swing' &amp; 'linear')</li>
+				<li><h3>lockBottom	(default: true)</h3>Set to false if you don't want your floating box to stop at parent's bottom</li>
+				<li><h3>stickToBottom	(default: false)</h3>Set to true to make the floating menu stick to the bottom</li>
+			</ul>
+		</div>
+	</div>
+	<div class="footer">Footer</div>
+	<script>
+		/*
+		* jQuery easing functions (for this demo)
+		*/
+		jQuery.extend( jQuery.easing,{
+			def: 'easeOutQuad',
+			swing: function (x, t, b, c, d) {
+				//alert(jQuery.easing.default);
+				return jQuery.easing[jQuery.easing.def](x, t, b, c, d);
+			},
+			easeInQuad: function (x, t, b, c, d) {
+				return c*(t/=d)*t + b;
+			},
+			easeOutQuad: function (x, t, b, c, d) {
+				return -c *(t/=d)*(t-2) + b;
+			},
+			easeInOutQuad: function (x, t, b, c, d) {
+				if ((t/=d/2) < 1) return c/2*t*t + b;
+				return -c/2 * ((--t)*(t-2) - 1) + b;
+			},
+			easeOutElastic: function (x, t, b, c, d) {
+				var s=1.70158;var p=0;var a=c;
+				if (t==0) return b;  if ((t/=d)==1) return b+c;  if (!p) p=d*.3;
+				if (a < Math.abs(c)) { a=c; var s=p/4; }
+				else var s = p/(2*Math.PI) * Math.asin (c/a);
+				return a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b;
+			},
+			easeInOutElastic: function (x, t, b, c, d) {
+				var s=1.70158;var p=0;var a=c;
+				if (t==0) return b;  if ((t/=d/2)==2) return b+c;  if (!p) p=d*(.3*1.5);
+				if (a < Math.abs(c)) { a=c; var s=p/4; }
+				else var s = p/(2*Math.PI) * Math.asin (c/a);
+				if (t < 1) return -.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+				return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*.5 + c + b;
+			},
+			easeInBack: function (x, t, b, c, d, s) {
+				if (s == undefined) s = 1.70158;
+				return c*(t/=d)*t*((s+1)*t - s) + b;
+			},
+			easeOutBack: function (x, t, b, c, d, s) {
+				if (s == undefined) s = 1.70158;
+				return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+			},
+			easeInOutBack: function (x, t, b, c, d, s) {
+				if (s == undefined) s = 1.70158; 
+				if ((t/=d/2) < 1) return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;
+				return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
+			}
+		});
+		
+		// init the pluging and bind it to the #menu element
+		$('.menu').stickyfloat();
+		$('.menu2').stickyfloat('update',{ duration : 0 });
+		
+		/* binds for this demo only
+		------------------------------------------------------*/
+		$('.menu').on('click', 'button', function(){
+			var elem = $(this).parents('.menu');
+			elem.stickyfloat('update', { easing:this.innerHTML });
+		});
+		
+		$('.menu input').on('change', function(){
+			var elem = $(this).parents('.menu'),
+				prop = this.className,
+				value = this.value,
+				options = {};
+
+			if( (value|0) === parseInt(value) ) // if number, normalize
+				value = value|0;
+
+			options[prop] = value;
+			elem.stickyfloat('update', options);
+		});
+		
+		// after page refresh, make sure the values are returned to their defaults
+		$('.menu :text').each(function(){
+			$(this).val(this.defaultValue);
+		});
+		
+		$('.menu :checkbox').on('change', function(){
+			var elem = $(this).parents('.menu'),
+				prop = this.className,
+				options = {};
+
+			options[prop] = this.checked ? true : false;
+			elem.stickyfloat('update', options);
+		});
+
+		$('.menu .cssTransition:checkbox').on('change', function(){
+			var elem = $(this).parents('.menu'),
+				val = this.checked ? 0 : elem.find('.duration').val();
+			
+			elem.toggleClass('transition200');
+			elem.stickyfloat('update',{cssTransition: this.checked});
+		});
+		
+		$('.menu :checkbox').each(function(){
+			$(this).prop('checked', this.defaultChecked);
+		});
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!ENTITY sccCheckoutWizard.title "SCC: Checkout Repository">
+
+<!-- Wizard page 1 -->
+<!ENTITY wizard.page1.description "Set the SCC handler and the checkout data">
+<!ENTITY wizard.page1.label "SCC Checkout - Step 1 of 3">
+<!ENTITY scc.handler.label "SCC Handler:">
+<!ENTITY scc.checkout.handler.tooltiptext "The type of SCC handler that will perform the checkout.">
+<!ENTITY scc.checkout.handler.none.selected.label "-">
+<!ENTITY scc.checkout.url.label "Checkout URL:">
+<!ENTITY scc.checkout.url.textbox.emptytext "The repository URL">
+<!ENTITY scc.checkout.url.textbox.tooltiptext "The repository that you wish to checkout.">
+<!ENTITY scc.checkout.location.label "Save to:">
+<!ENTITY scc.checkout.location.textbox.emptytext "Checkout to this directory.">
+<!ENTITY scc.checkout.location.textbox.tooltiptext "This is the directory where the checkout command will save all of the checked out files and directories.">
+
+<!-- Wizard page 2 -->
+<!ENTITY wizard.page2.description "Customize the checkout parameters">
+<!ENTITY wizard.page2.label "SCC Checkout - Step 2 of 3">
+<!ENTITY additional.settings.groupbox.label "Additional settings">
+
+<!-- Wizard page 3 -->
+<!ENTITY wizard.page3.description "This is the command line that will be run">
+<!ENTITY wizard.page3.label "SCC Checkout - Step 3 of 3">
+<!ENTITY process.commandline.groupbox.label "Command line">
+<!ENTITY command.line.workingDirectory.label "Runs in dir: ">
+<!ENTITY command.line.label "Command line that will be run:">
+<!ENTITY command.output.label "Command output: ">
+<!ENTITY process.current.status.label "Current status:">
+<!ENTITY process.current.status.notRunning.value "Not running">
+<!ENTITY process.status.groupbox.label "Status">
+<!ENTITY scc.checkout.create.project.label "Create a Komodo project when completed">

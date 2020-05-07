@@ -1,0 +1,47 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+Import(
+    'cons', 
+    'mozChromeDir',
+    'platform',
+    'productType',
+    'buildFlavour',
+    'unsiloedPythonExe',
+    'mozVersion',
+);
+
+$cons->InstallInChrome('bindings.less');
+$cons->InstallInChrome('colors.less');
+$cons->InstallInChrome('chromeless.less');
+$cons->InstallInChrome('normalize.less');
+$cons->InstallInChrome('prefs.less');
+$cons->InstallInChrome('reset.less');
+$cons->InstallInChrome('scrollbars.less');
+$cons->InstallInChrome('_scrollbars.less');
+$cons->InstallInChrome('main.less');
+$cons->InstallInChrome('global.less');
+$cons->InstallInChrome('icons.less');
+$cons->InstallInChrome('mixins.less');
+$cons->InstallInChrome('wizard.less');
+$cons->InstallInChrome('classic.less');
+$cons->InstallInChrome('classic.toolbar.less');
+
+$cons->InstallInChrome('components/buttons.less');
+$cons->InstallInChrome('components/languages.less');
+$cons->InstallInChrome('components/scrolltabs.less');
+$cons->InstallInChrome('components/scc.less');
+$cons->InstallInChrome('components/customize.less');
+$cons->InstallInChrome('components/filestatus.less');
+$cons->InstallInChrome('components/toolbox.less');
+
+$cons->InstallInChrome('icons/style.less');
+$cons->InstallInChrome('icons/variables.less');
+$cons->InstallInChrome('icons/fonts/icomoon.eot');
+$cons->InstallInChrome('icons/fonts/icomoon.svg');
+$cons->InstallInChrome('icons/fonts/icomoon.ttf');
+$cons->InstallInChrome('icons/fonts/icomoon.woff');
+
+#$cons->InstallAs("$mozChromeDir/komodo/skin/global/global.css",
+#                 "$mozChromeDir/toolkit/skin/classic/global/global.css");

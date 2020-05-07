@@ -1,0 +1,60 @@
+<!ENTITY PHPRegularExpressionReferenceWeb.label "PHP Regular Expression Reference (web)">
+<!ENTITY T.accesskey "T">
+<!ENTITY c.accesskey "c">
+<!ENTITY doCaseInsensitivePatternMatching.tooltiptext "Do case-insensitive pattern matching">
+<!ENTITY group.label "Group">
+<!ENTITY delimiters.label "Delimiters...">
+<!ENTITY setDelimiters.tooltiptext "Set pattern delimiters">
+<!ENTITY help.label " Help ">
+<!ENTITY ignoreCaseI.label "Ignore case (i)">
+<!ENTITY jsRegularExpressionQuickStartGuideWeb.label "JavaScript Regular Expression Quick Start Guide (web)">
+<!ENTITY loadSampleRegexAndSearchText.label "Load Sample Regex and Search Text">
+<!ENTITY localeL.label "Locale (l)">
+<!ENTITY makeWWBAndBDependentOnTheCurrentLocalePythonOnly.tooltiptext "Make \w, \W, \b, and \B dependent on the current locale (Python only)">
+<!ENTITY makeWWBAndBDependentOnUnicodeCharacterPropertiesPythonOnly.tooltiptext "Make \w, \W, \b, and \B dependent on Unicode character properties (Python only)">
+<!ENTITY match.label "Match">
+<!ENTITY matchAll.label "Match All">
+<!ENTITY multiLineM.label "Multi-line (m)">
+<!ENTITY open.label " Open">
+<!ENTITY openAFileToUseAsSearchText.tooltiptext "Open a file to use as search text">
+<!ENTITY p.accesskey "p">
+<!ENTITY perlRegularExpressionQuickStartGuideWeb.label "Perl Regular Expression Quick Start Guide (web)">
+<!ENTITY permitWhitespaceAndCommentsInRegularExpression.tooltiptext "Permit whitespace and comments in regular expression">
+<!ENTITY pythonRegularExpressionReferenceWeb.label "Python Regular Expression Reference (web)">
+<!ENTITY regexHeaderLabel.accesskey "E">
+<!ENTITY regexOptionICheckbox.accesskey "i">
+<!ENTITY regexOptionLCheckbox.accesskey "l">
+<!ENTITY regexOptionMCheckbox.accesskey "m">
+<!ENTITY regexOptionSCheckbox.accesskey "s">
+<!ENTITY regexOptionUCheckbox.accesskey "u">
+<!ENTITY regexOptionXCheckbox.accesskey "x">
+<!ENTITY regularExpressionHelp.tooltiptext "Regular Expression Help">
+<!ENTITY replace.label "Replace">
+<!ENTITY replaceAll.label "Replace All">
+<!ENTITY replacement.label "Replacement">
+<!ENTITY resultsLabel.accesskey "R">
+<!ENTITY rubyRegularExpressionHelpWeb.label "Ruby Regular Expression Help (web)">
+<!ENTITY rubyRegularExpressionReferenceWeb.label "Ruby Regular Expression Reference (web)">
+<!ENTITY rxToolkit.title "Rx Toolkit">
+<!ENTITY rxToolkitHelp.label "Rx Toolkit Help">
+<!ENTITY rxxMode.label "Action:">
+<!ENTITY selectARegexShortcutToInsertIntoYourRegex.tooltiptext "Select a regex shortcut to insert into your regex">
+<!ENTITY selectAShortcutToInsertIntoYourReplacementPattern.tooltiptext "Select a shortcut to insert into your replacement pattern">
+<!ENTITY shortcuts.label " Shortcuts ">
+<!ENTITY singleLineS.label "Single-line (s)">
+<!ENTITY span.label "Span">
+<!ENTITY split.label "Split">
+<!ENTITY stop.label "Stop">
+<!ENTITY tclRegularExpressionHelpWeb.label "Tcl Regular Expression Help (web)">
+<!ENTITY tclRegularExpressionSyntaxWeb.label "Tcl Regular Expression Syntax (web)">
+<!ENTITY treatSearchTextAsMultipleLinesChangesMeaningOfAnd.tooltiptext "Treat search text as multiple lines, changes meaning of '^' and '$'">
+<!ENTITY treatSearchTextAsSingleLineIEWillMatchNewlinesInAdditionToAnythingElse.tooltiptext "Treat search text as single line, i.e. '.' will match newlines in addition to anything else">
+<!ENTITY unicodeU.label "Unicode (u)">
+<!ENTITY value.label "Value">
+<!ENTITY verboseX.label "Verbose (x)">
+
+<!-- setDelimiters.xul -->
+<!ENTITY specifyRxDelimiters.title "Specify Rx Delimiters">
+<!ENTITY openDelimiter.prompt "Open Delimiter:">
+<!ENTITY closeDelimiter.prompt "Close Delimiter:">
+<!ENTITY reset.label "Reset">

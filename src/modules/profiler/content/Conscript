@@ -1,0 +1,15 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2009 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import('cons', 'mozChromeDir');
+
+$cons->InstallInChrome('profiler.js');
+$cons->InstallInChrome('profiler.xul');
+$cons->InstallInChrome('profiler-overlay.xul');
+$cons->InstallInChrome('profiler-overlay.js');
+$cons->InstallXpcomComponent('views/tree/xpcom_profiler_tree.js');
+$cons->InstallXpcomComponent('views/tree/profiler_tree.js');
+$cons->InstallXpcomComponent('views/tree/profiler_tree.xml');
+$cons->InstallXpcomComponent('views/tree/profiler_tree_view.css');

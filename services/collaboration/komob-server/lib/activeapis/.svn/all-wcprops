@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30
+END
+TODO.txt
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/TODO.txt
+END
+Makefile.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/Makefile.py
+END
+distribute_setup.py
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/distribute_setup.py
+END
+CHANGES.md
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/CHANGES.md
+END
+activeapis.kpf
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/activeapis.kpf
+END
+setup.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/setup.py
+END
+README.txt
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/README.txt
+END
+setup.cfg
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/activestate/!svn/ver/59939/webops/activeapis/tags/2.0.30/setup.cfg
+END

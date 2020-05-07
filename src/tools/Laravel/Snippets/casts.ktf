@@ -1,0 +1,18 @@
+// komodo tool: casts
+// ==================
+// auto_abbreviation: true
+// indent_relative: false
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// ==================
+ /**
+ * The attributes that should be casted to native types.
+ *
+ * @var array
+ */
+protected $casts = [
+    '[[%tabstop:property_name]]' => '[[%tabstop:type]]',
+];!@#_currentPos!@#_anchor

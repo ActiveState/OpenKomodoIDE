@@ -1,0 +1,18 @@
+// komodo tool: migration
+// ======================
+// async: 0
+// icon: chrome://famfamfamsilk/skin/icons/database_edit.png
+// language: JavaScript
+// rank: 100
+// trigger: trigger_postopen
+// trigger_enabled: 0
+// type: macro
+// version: 1.0.12
+// ======================
+try {
+    ko.extensions.rails.generateRailsObject(window,
+                                        null, // extensions
+                                        'migration');
+} catch(ex) {
+    alert(ex + "\n");
+}

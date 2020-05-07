@@ -1,0 +1,18 @@
+{
+  "keyboard_shortcut": "", 
+  "name": "wp_enqueue_scripts", 
+  "language": "PHP", 
+  "value": [
+    "add_action('wp_enqueue_scripts', array($this, '[[%tabstop1:enqueue_scripts]]'));", 
+    "", 
+    "public function [[%tabstop1:enqueue_scripts]]() {", 
+    "\twp_enqueue_script('[[%tabstop2:handle_name]]', '[[%tabstop3:source]]', array('[[%tabstop6:jquery]]'), '[[%tabstop8:version]]', [[%tabstop10:false]]);", 
+    "}!@#_currentPos!@#_anchor"
+  ], 
+  "set_selection": 0, 
+  "version": "1.1.5", 
+  "indent_relative": 0, 
+  "type": "snippet", 
+  "treat_as_ejs": "true", 
+  "auto_abbreviation": "true"
+}

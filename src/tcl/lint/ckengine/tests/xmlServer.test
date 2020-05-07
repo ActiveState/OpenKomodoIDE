@@ -1,0 +1,41 @@
+# xmlServer.test --
+#
+#	This file contains regression tests for the xmlServer checkers.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: xmlServer.test,v 1.2 2000/05/30 22:25:10 wart Exp $
+
+if {[string compare test [info procs resetAnalyzer]] == 1} {
+    source [file join [pwd] [file dirname [info script]] defs.tcl]
+}
+
+analyzer::init
+renameMessageShow
+resetUProcData
+addTestUserProc
+sourcePcxFile xmlServer
+
+# Many of the tests expect that "a" is understood as a defined
+# procedure that takes any number of args.  To keep from getting
+# warnUndefProc warnings, pretend we've already gotten the warning.
+
+lappend ::analyzer::unknownCmds a
+
+foreach xmlServerVer $::protest::supportedVersions(XmlServer) {
+    resetAnalyzer
+    
+    # Pcx extensions work with the current Tcl version
+    
+    coreTcl::init $::protest::currentVersion(Tcl)
+    xmlServer::init $::protest::currentVersion(XmlServer)
+    testVersion checkXmlServer $::protest::currentVersion(XmlServer)
+}
+
+resetMessageShow
+resetAnalyzer
+resetUProcData
+
+# cleanup
+cleanupTests

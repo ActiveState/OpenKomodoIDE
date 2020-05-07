@@ -1,0 +1,568 @@
+# Lexer description for PHP
+
+# First we need to tell the lexer a bit about this language
+
+family ssl # server-side language
+sublanguage PHP
+
+# We have to specify the min and max styles we'll be referring to
+
+start_style SSL_DEFAULT
+end_style SSL_VARIABLE
+
+# If the language has keywords, specify which style needs to be transformed
+
+keyword_style SSL_IDENTIFIER => SSL_WORD
+
+# From Komodo's koPHPLanguage.py
+# From http://www.php.net/manual/en/language.types.boolean.php
+#
+# Recognition of keywords and functions is case-insensitive! So we
+# hack around UDL's case sensitivity v's PHP's case-insensitivy.
+
+keywords [
+                # http://www.php.net/manual/en/reserved.keywords.php
+                # new to php 5.5
+                "finally", "yield",
+                    "Finally", "Yield",
+                        "FINALLY", "YIELD",
+                # new to php 5.4
+                "insteadof", "trait",
+                    "Insteadof", "Trait",
+                        "INSTEADOF", "TRAIT",
+                # new to php 5.3
+                "__dir__", "__namespace__",
+                "e_deprecated", "e_user_deprecated", "php_maxpathlen",
+                "goto", "namespace",
+                    "__Dir__", "__Namespace__",
+                    "E_deprecated", "E_user_deprecated", "Php_maxpathlen",
+                    "Goto", "Namespace",
+                        "__DIR__", "__NAMESPACE__",
+                        "E_DEPRECATED", "E_USER_DEPRECATED", "PHP_MAXPATHLEN",
+                        "GOTO", "NAMESPACE",
+                # new to php5
+                "clone",
+                "public", "private", "protected", "final",
+                "abstract", "interface", "implements",
+                "try", "catch", "throw", "instanceof",
+                    "Clone",
+                    "Public", "Private", "Protected", "Final",
+                    "Abstract", "Interface", "Implements",
+                    "Try", "Catch", "Throw", "Instanceof",
+                        "CLONE",
+                        "PUBLIC", "PRIVATE", "PROTECTED", "FINAL",
+                        "ABSTRACT", "INTERFACE", "IMPLEMENTS",
+                        "TRY", "CATCH", "THROW", "INSTANCEOF",
+                # existed in php4
+                "define", "true", "false", 
+                "int", "integer", "real", "double",
+                "float", "string",  "object", "bool", "boolean",
+                "this", "virtual", "parent", "null",
+                    "Define", "True", "False", 
+                    "Int", "Integer", "Real", "Double",
+                    "Float", "String",  "Object", "Bool", "Boolean",
+                    "This", "Virtual", "Parent", "Null",
+                        "DEFINE", "TRUE", "FALSE", 
+                        "INT", "INTEGER", "REAL", "DOUBLE",
+                        "FLOAT", "STRING",  "OBJECT", "BOOL", "BOOLEAN",
+                        "THIS", "VIRTUAL", "PARENT", "NULL",
+                # general keywords
+                "and", "or", "xor",
+                "__file__", "__line__", "__function__", "__class__",
+                "array", "as", "break", "case", "cfunction",
+                "class", "const", "continue", "declare"
+                "default", "die", "do", "echo", "else",
+                "elseif", "empty", "enddeclare", "endfor", "endforeach",
+                "endif", "endswitch", "endwhile", "eval", "exit",
+                "extends", "for", "foreach", "function", "global",
+                "if", "include", "include_once", "isset", "list",
+                "new", "old_function", "print", "require", "require_once",
+                "return", "static", "switch", "unset", "use",
+                "var", "while",
+                    "And", "Or", "xor",
+                    "__file__", "__line__", "__function__", "__class__",
+                    "Array", "As", "Break", "Case", "Cfunction",
+                    "Class", "Const", "Continue", "Declare"
+                    "Default", "Die", "Do", "Echo", "Else",
+                    "Elseif", "Empty", "Enddeclare", "Endfor", "Endforeach",
+                    "Endif", "Endswitch", "Endwhile", "Eval", "Exit",
+                    "Extends", "For", "Foreach", "Function", "Global",
+                    "If", "Include", "Include_once", "Isset", "List",
+                    "New", "Old_function", "Print", "Require", "Require_once",
+                    "Return", "Static", "Switch", "Unset", "Use",
+                    "Var", "While",
+                        "AND", "OR", "XOR",
+                        "__FILE__", "__LINE__", "__FUNCTION__", "__CLASS__",
+                        "ARRAY", "AS", "BREAK", "CASE", "CFUNCTION",
+                        "CLASS", "CONST", "CONTINUE", "DECLARE"
+                        "DEFAULT", "DIE", "DO", "ECHO", "ELSE",
+                        "ELSEIF", "EMPTY", "ENDDECLARE", "ENDFOR", "ENDFOREACH",
+                        "ENDIF", "ENDSWITCH", "ENDWHILE", "EVAL", "EXIT",
+                        "EXTENDS", "FOR", "FOREACH", "FUNCTION", "GLOBAL",
+                        "IF", "INCLUDE", "INCLUDE_ONCE", "ISSET", "LIST",
+                        "NEW", "OLD_FUNCTION", "PRINT", "REQUIRE", "REQUIRE_ONCE",
+                        "RETURN", "STATIC", "SWITCH", "UNSET", "USE",
+                        "VAR", "WHILE",
+                # http://www.php.net/manual/en/reserved.constants.php
+                # Note: These constants should only be upper-case.
+                "PHP_VERSION",
+                "PHP_OS",
+                "DEFAULT_INCLUDE_PATH",
+                "PEAR_INSTALL_DIR",
+                "PEAR_EXTENSION_DIR",
+                "PHP_EXTENSION_DIR",
+                "PHP_BINDIR",
+                "PHP_LIBDIR",
+                "PHP_DATADIR",
+                "PHP_SYSCONFDIR",
+                "PHP_LOCALSTATEDIR",
+                "PHP_CONFIG_FILE_PATH",
+                "PHP_OUTPUT_HANDLER_START",
+                "PHP_OUTPUT_HANDLER_CONT",
+                "PHP_OUTPUT_HANDLER_END",
+                "E_ERROR",
+                "E_WARNING",
+                "E_PARSE",
+                "E_NOTICE",
+                "E_CORE_ERROR",
+                "E_CORE_WARNING",
+                "E_COMPILE_ERROR",
+                "E_COMPILE_WARNING",
+                "E_USER_ERROR",
+                "E_USER_WARNING",
+                "E_USER_NOTICE",
+                "E_ALL",
+                "EXTR_OVERWRITE",
+                "EXTR_SKIP",
+                "EXTR_PREFIX_SAME",
+                "EXTR_PREFIX_ALL",
+                "EXTR_PREFIX_INVALID",
+                "EXTR_PREFIX_IF_EXISTS",
+                "EXTR_IF_EXISTS",
+                "SORT_ASC",
+                "SORT_DESC",
+                "SORT_REGULAR",
+                "SORT_NUMERIC",
+                "SORT_STRING",
+                "CASE_LOWER",
+                "CASE_UPPER",
+                "COUNT_NORMAL",
+                "COUNT_RECURSIVE",
+                "ASSERT_ACTIVE",
+                "ASSERT_CALLBACK",
+                "ASSERT_BAIL",
+                "ASSERT_WARNING",
+                "ASSERT_QUIET_EVAL",
+                "CONNECTION_ABORTED",
+                "CONNECTION_NORMAL",
+                "CONNECTION_TIMEOUT",
+                "INI_USER",
+                "INI_PERDIR",
+                "INI_SYSTEM",
+                "INI_ALL",
+                "M_E",
+                "M_LOG2E",
+                "M_LOG10E",
+                "M_LN2",
+                "M_LN10",
+                "M_PI",
+                "M_PI_2",
+                "M_PI_4",
+                "M_1_PI",
+                "M_2_PI",
+                "M_2_SQRTPI",
+                "M_SQRT2",
+                "M_SQRT1_2",
+                "CRYPT_SALT_LENGTH",
+                "CRYPT_STD_DES",
+                "CRYPT_EXT_DES",
+                "CRYPT_MD5",
+                "CRYPT_BLOWFISH",
+                "DIRECTORY_SEPARATOR",
+                "SEEK_SET",
+                "SEEK_CUR",
+                "SEEK_END",
+                "LOCK_SH",
+                "LOCK_EX",
+                "LOCK_UN",
+                "LOCK_NB",
+                "HTML_SPECIALCHARS",
+                "HTML_ENTITIES",
+                "ENT_COMPAT",
+                "ENT_QUOTES",
+                "ENT_NOQUOTES",
+                "INFO_GENERAL",
+                "INFO_CREDITS",
+                "INFO_CONFIGURATION",
+                "INFO_MODULES",
+                "INFO_ENVIRONMENT",
+                "INFO_VARIABLES",
+                "INFO_LICENSE",
+                "INFO_ALL",
+                "CREDITS_GROUP",
+                "CREDITS_GENERAL",
+                "CREDITS_SAPI",
+                "CREDITS_MODULES",
+                "CREDITS_DOCS",
+                "CREDITS_FULLPAGE",
+                "CREDITS_QA",
+                "CREDITS_ALL",
+                "STR_PAD_LEFT",
+                "STR_PAD_RIGHT",
+                "STR_PAD_BOTH",
+                "PATHINFO_DIRNAME",
+                "PATHINFO_BASENAME",
+                "PATHINFO_EXTENSION",
+                "CHAR_MAX",
+                "LC_CTYPE",
+                "LC_NUMERIC",
+                "LC_TIME",
+                "LC_COLLATE",
+                "LC_MONETARY",
+                "LC_ALL",
+                "LC_MESSAGES",
+                "ABDAY_1",
+                "ABDAY_2",
+                "ABDAY_3",
+                "ABDAY_4",
+                "ABDAY_5",
+                "ABDAY_6",
+                "ABDAY_7",
+                "DAY_1",
+                "DAY_2",
+                "DAY_3",
+                "DAY_4",
+                "DAY_5",
+                "DAY_6",
+                "DAY_7",
+                "ABMON_1",
+                "ABMON_2",
+                "ABMON_3",
+                "ABMON_4",
+                "ABMON_5",
+                "ABMON_6",
+                "ABMON_7",
+                "ABMON_8",
+                "ABMON_9",
+                "ABMON_10",
+                "ABMON_11",
+                "ABMON_12",
+                "MON_1",
+                "MON_2",
+                "MON_3",
+                "MON_4",
+                "MON_5",
+                "MON_6",
+                "MON_7",
+                "MON_8",
+                "MON_9",
+                "MON_10",
+                "MON_11",
+                "MON_12",
+                "AM_STR",
+                "PM_STR",
+                "D_T_FMT",
+                "D_FMT",
+                "T_FMT",
+                "T_FMT_AMPM",
+                "ERA",
+                "ERA_YEAR",
+                "ERA_D_T_FMT",
+                "ERA_D_FMT",
+                "ERA_T_FMT",
+                "ALT_DIGITS",
+                "INT_CURR_SYMBOL",
+                "CURRENCY_SYMBOL",
+                "CRNCYSTR",
+                "MON_DECIMAL_POINT",
+                "MON_THOUSANDS_SEP",
+                "MON_GROUPING",
+                "POSITIVE_SIGN",
+                "NEGATIVE_SIGN",
+                "INT_FRAC_DIGITS",
+                "FRAC_DIGITS",
+                "P_CS_PRECEDES",
+                "P_SEP_BY_SPACE",
+                "N_CS_PRECEDES",
+                "N_SEP_BY_SPACE",
+                "P_SIGN_POSN",
+                "N_SIGN_POSN",
+                "DECIMAL_POINT",
+                "RADIXCHAR",
+                "THOUSANDS_SEP",
+                "THOUSEP",
+                "GROUPING",
+                "YESEXPR",
+                "NOEXPR",
+                "YESSTR",
+                "NOSTR",
+                "CODESET",
+                "LOG_EMERG",
+                "LOG_ALERT",
+                "LOG_CRIT",
+                "LOG_ERR",
+                "LOG_WARNING",
+                "LOG_NOTICE",
+                "LOG_INFO",
+                "LOG_DEBUG",
+                "LOG_KERN",
+                "LOG_USER",
+                "LOG_MAIL",
+                "LOG_DAEMON",
+                "LOG_AUTH",
+                "LOG_SYSLOG",
+                "LOG_LPR",
+                "LOG_NEWS",
+                "LOG_UUCP",
+                "LOG_CRON",
+                "LOG_AUTHPRIV",
+                "LOG_LOCAL0",
+                "LOG_LOCAL1",
+                "LOG_LOCAL2",
+                "LOG_LOCAL3",
+                "LOG_LOCAL4",
+                "LOG_LOCAL5",
+                "LOG_LOCAL6",
+                "LOG_LOCAL7",
+                "LOG_PID",
+                "LOG_CONS",
+                "LOG_ODELAY",
+                "LOG_NDELAY",
+                "LOG_NOWAIT",
+                "LOG_PERROR"
+                ]
+
+
+# Some info on the styles we're using here
+
+pattern NMSTART = '_a-zA-Z\x80-\xff'   # inside cset
+pattern NMCHAR = '$NMSTART\d'   # inside cset
+pattern CS = '\w\d_\x80-\xff'   # inside cset
+pattern WS = '\s\t\r\n'           # inside cset
+pattern OP = '!\#%&\(\)\*\+,-\.\/:;<=>\?@\[\]\^\{\}~|\\'
+
+initial IN_SSL_DEFAULT
+
+state IN_SSL_DEFAULT:
+
+# One-line comments end at either end-of-line or '?>'
+# This is a hard-wired transition
+
+/<\?php\b/ : #stay, we should have processed this during a transition point
+
+'#' : paint(upto, SSL_DEFAULT),  => IN_SSL_COMMENT_1
+'//' : paint(upto, SSL_DEFAULT),  => IN_SSL_COMMENT_1
+
+'/*' : paint(upto, SSL_DEFAULT), => IN_SSL_COMMENT_2
+/\$[$NMSTART][$CS]*/ : paint(upto, SSL_DEFAULT), paint(include, SSL_VARIABLE)
+
+/[$WS]+/  : #stay
+
+'"' : paint(upto, SSL_DEFAULT), => IN_SSL_DSTRING
+'\'' : paint(upto, SSL_DEFAULT), => IN_SSL_SSTRING
+'`' : paint(upto, SSL_DEFAULT), => IN_SSL_XSTRING
+
+# Go process a number, try to do it in regexes
+# octal and hex first
+/0[Xx][0-9a-fA-F]+/ : paint(upto, SSL_DEFAULT), paint(include, SSL_NUMBER)
+/[-+]?0[0-7]*/ : paint(upto, SSL_DEFAULT), paint(include, SSL_NUMBER)
+/[1-9]/ : paint(upto, SSL_DEFAULT), => IN_SSL_NUMBER_1
+/\.(?=[$NMSTART])/ : paint(upto, SSL_DEFAULT), paint(include, SSL_OPERATOR), \
+=> IN_SSL_NON_KEYWORD_IDENTIFIER_1
+/\.(?=\d)/ : paint(upto, SSL_DEFAULT), => IN_SSL_NUMBER_2
+
+# Bug 95243: support Content-type directives
+/header(?=\s*\(\s*["']Content-type:\s*application\/(?:javascript|json)\b)/ : \
+    paint(upto, SSL_DEFAULT), paint(include, SSL_IDENTIFIER), \
+    sstack_set(IN_CSL_DEFAULT)
+/header(?=\s*\(\s*["']Content-type:\s*text\/css\b)/ : \
+    paint(upto, SSL_DEFAULT), paint(include, SSL_IDENTIFIER), \
+    sstack_set(IN_CSS_DEFAULT)
+# This one is obsolete according to iana, but still commonly used.
+/header(?=\s*\(\s*["']Content-type:\s*text\/javascript\b)/ : \
+    paint(upto, SSL_DEFAULT), paint(include, SSL_IDENTIFIER), \
+    sstack_set(IN_CSL_DEFAULT)
+# Ignore any others.
+
+/[$NMSTART][$CS]*/ : paint(upto, SSL_DEFAULT), paint(include, SSL_IDENTIFIER)
+
+# Now a bunch of operators
+# Multi-char operators first
+
+#XXX Support high-bit characters in delimiter strings.
+
+/<<<(?=\s*[$NMSTART][$NMCHAR]*;?\r?$)/: paint(upto, SSL_DEFAULT), \
+paint(include, SSL_OPERATOR), => IN_SSL_PRE_HEREDOC_1
+/<<<(?=\s*"[$NMSTART][$NMCHAR]*";?\r?$)/: paint(upto, SSL_DEFAULT), \
+paint(include, SSL_OPERATOR), => IN_SSL_PRE_HEREDOC_1
+/<<<(?=\s*'[$NMSTART][$NMCHAR]*';?\r?$)/: paint(upto, SSL_DEFAULT), \
+paint(include, SSL_OPERATOR), => IN_SSL_PRE_NOWDOC_1
+
+/[$OP]/ : paint(upto, SSL_DEFAULT), redo, => IN_SSL_OP1
+
+/\z/ : paint(include, SSL_DEFAULT)
+
+################ Here-doc handling ################
+
+state IN_SSL_PRE_HEREDOC_1:
+/"?([$NMCHAR]+)"?/ : paint(include, SSL_IDENTIFIER), set_delimiter(1)
+';' : paint(include, SSL_OPERATOR)
+/[\r\n]+/ : paint(include, SSL_DEFAULT), => IN_SSL_IN_HEREDOC_1
+/\s+/ : paint(include, SSL_DEFAULT)
+
+# When we're in a here-doc, if we find a line that starts with the
+# current delimiter, check for end-of-line.  Otherwise look for interpolation
+# on the current line, in state IN_SSL_IN_HEREDOC_2
+
+# So we need to keep the delimiter alive, and then kill it if it's
+# the only item on a line.
+
+state IN_SSL_IN_HEREDOC_1:
+delimiter : keep_delimiter, paint(upto, SSL_STRING), => IN_SSL_IN_FOUND_HEREDOC_1
+/./ : redo, => IN_SSL_IN_HEREDOC_2
+/\z/ : paint(upto, SSL_STRING)
+
+state IN_SSL_IN_HEREDOC_2:
+/\\./: # stay here, escape next char (usually a '$'): bug 98190
+/\$[$NMSTART][$NMCHAR]*/: paint(upto, SSL_STRING), paint(include, SSL_VARIABLE) #stay
+/$/ : => IN_SSL_IN_HEREDOC_1
+/\z/ : paint(upto, SSL_STRING)
+
+state IN_SSL_IN_FOUND_HEREDOC_1:
+/;(?=[\r\n]*$)/ : no_keyword, paint(upto, SSL_IDENTIFIER), paint(include, SSL_OPERATOR) => IN_SSL_DEFAULT
+/$/ : no_keyword, paint(upto, SSL_IDENTIFIER), => IN_SSL_DEFAULT
+/[\r\n]/ : no_keyword, paint(upto, SSL_IDENTIFIER), => IN_SSL_DEFAULT
+/./ : redo, => IN_SSL_IN_HEREDOC_2
+
+################ Now-doc handling ################
+# Now-docs are like here-docs, but don't interpolate variables
+# Only difference: single-quotes surround the delimiter
+
+state IN_SSL_PRE_NOWDOC_1:
+/'([$NMCHAR]+)'/ : paint(include, SSL_IDENTIFIER), set_delimiter(1)
+';' : paint(include, SSL_OPERATOR)
+/[\r\n]+/ : paint(include, SSL_DEFAULT), => IN_SSL_IN_NOWDOC_1
+/\s+/ : paint(include, SSL_DEFAULT)
+
+# When we're in a here-doc, if we find a line that starts with the
+# current delimiter, check for end-of-line.  Otherwise look for interpolation
+# on the current line, in state IN_SSL_IN_NOWDOC_2
+
+# So we need to keep the delimiter alive, and then kill it if it's
+# the only item on a line.
+
+state IN_SSL_IN_NOWDOC_1:
+delimiter : keep_delimiter, paint(upto, SSL_STRING), => IN_SSL_IN_FOUND_NOWDOC_1
+/.+/ : #stay
+/\z/ : paint(upto, SSL_STRING)
+
+state IN_SSL_IN_FOUND_NOWDOC_1:
+/;(?=[\r\n]*$)/ : no_keyword, paint(upto, SSL_IDENTIFIER), paint(include, SSL_OPERATOR) => IN_SSL_DEFAULT
+/$/ : no_keyword, paint(upto, SSL_IDENTIFIER), => IN_SSL_DEFAULT
+/[\r\n]/ : no_keyword, paint(upto, SSL_IDENTIFIER), => IN_SSL_DEFAULT
+/./ : redo, => IN_SSL_IN_NOWDOC_1
+
+################ Non-keyword identifiers ################
+
+state IN_SSL_NON_KEYWORD_IDENTIFIER_1:
+/./ : no_keyword, paint(include, SSL_IDENTIFIER), => IN_SSL_NON_KEYWORD_IDENTIFIER_2
+
+state IN_SSL_NON_KEYWORD_IDENTIFIER_2:
+/[$CS]/ : #stay
+/[^$CS]/ : paint(upto, SSL_IDENTIFIER), redo, no_keyword, => IN_SSL_DEFAULT
+
+################ Comments ################
+
+state IN_SSL_COMMENT_1 : 
+'?>' : paint(upto, SSL_COMMENT), redo => IN_SSL_DEFAULT
+/[\r\n]/ : paint(upto, SSL_COMMENT), => IN_SSL_DEFAULT
+
+state IN_SSL_COMMENT_2 : 
+'*/' : paint(include, SSL_COMMENTBLOCK), => IN_SSL_DEFAULT
+
+################ Strings ################
+
+# We need counting to handle ${...} expressions, like in Ruby
+
+state IN_SSL_DSTRING:
+/\$[$NMSTART][$NMCHAR]*/: paint(upto, SSL_STRING), paint(include, SSL_VARIABLE) #stay
+/\$\{[$NMSTART][$NMCHAR]*\}/: paint(upto, SSL_STRING), paint(include, SSL_VARIABLE) #stay
+'"' : paint(include, SSL_STRING), => IN_SSL_DEFAULT
+/\\./ : #stay, Don't miscount backslash at end
+/[\r\n]/ : #stay, php strings are multi-line
+/\z/: paint(include, SSL_STRING)
+
+state IN_SSL_SSTRING:
+'\'' : paint(include, SSL_STRING), => IN_SSL_DEFAULT
+/\\./ : #
+/[\r\n]/ : #stay, php strings are multi-line
+# Verify we create a \z
+
+state IN_SSL_XSTRING:
+'`' : paint(include, SSL_STRING), => IN_SSL_DEFAULT
+/\\./ : #backslash-escape
+
+
+################ Numbers ################
+
+state IN_SSL_NUMBER_1 :
+/$/ : paint(upto, SSL_NUMBER), => IN_SSL_DEFAULT
+'.' : => IN_SSL_NUMBER_2
+/[\d]/ : #stay
+/[Ee][-+]?/ : => IN_SSL_NUMBER_3
+/./ : paint(upto, SSL_NUMBER), redo, => IN_SSL_DEFAULT
+
+state IN_SSL_NUMBER_2:
+/$/ : paint(upto, SSL_NUMBER), => IN_SSL_DEFAULT
+/[\d]/ : #stay
+/[Ee][-+]?/ : => IN_SSL_NUMBER_3
+'.' : paint(upto, SSL_NUMBER), paint(include, SSL_OPERATOR),  => IN_SSL_DEFAULT
+/./ : paint(upto, SSL_NUMBER), redo, => IN_SSL_DEFAULT
+
+state IN_SSL_NUMBER_3:
+/$/ : paint(upto, SSL_NUMBER), => IN_SSL_DEFAULT
+/[^\d]/ : paint(upto, SSL_NUMBER), redo, => IN_SSL_DEFAULT
+
+################ Operators ################
+
+# If we're here, we've painted the previous part, and 
+# just need to figure out which operator we have, doing
+# greedy left-to-right matching ('+++' parses as /++/, /+/)
+
+state IN_SSL_OP1:
+# Single-char operator -- all ops work as standalone chars
+
+# Single-char operator -- all ops work as standalone chars
+/[$OP](?:(?![$OP])|$)/ : paint(include, SSL_OPERATOR), => IN_SSL_DEFAULT
+/==?=?/ : paint(include, SSL_OPERATOR), => IN_SSL_DEFAULT
+/!=?=?/ : paint(include, SSL_OPERATOR), => IN_SSL_DEFAULT
+/<<=?/	 : paint(include, SSL_OPERATOR), => IN_SSL_DEFAULT
+/>>=?/	 : paint(include, SSL_OPERATOR), => IN_SSL_DEFAULT
+/[-<>+\*\/\.%&|\^]=?/ : paint(include, SSL_OPERATOR), => IN_SSL_DEFAULT
+/([-\+\&|])\1?/ : paint(include, SSL_OPERATOR), => IN_SSL_DEFAULT
+# The fallback
+/[$OP]/ : paint(include, SSL_OPERATOR), => IN_SSL_DEFAULT
+
+################ End States ################
+
+# PHP/CSS fold info
+
+
+fold "<?" SSL_OPERATOR +
+fold "?>" SSL_OPERATOR -
+
+fold "{" SSL_OPERATOR +
+fold "}" SSL_OPERATOR -
+
+fold "/*region" SSL_COMMENT +
+fold "/*endregion" SSL_COMMENT -
+
+fold "/*region" SSL_COMMENTBLOCK +
+fold "/*endregion" SSL_COMMENTBLOCK -
+
+
+fold "{{{" SSL_COMMENT +
+fold "}}}" SSL_COMMENT -
+
+fold "{{{" SSL_COMMENTBLOCK +
+fold "}}}" SSL_COMMENTBLOCK -

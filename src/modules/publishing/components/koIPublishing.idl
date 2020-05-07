@@ -1,0 +1,78 @@
+/* Copyright (c) 2009-2010 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "koIAsyncOperations.idl"
+#include "koIPublishingSettings.idl"
+#include "koIRemoteTransfer.idl"
+
+// Komodo file publishing components.
+
+[scriptable, uuid(b157c6f3-3d01-40db-8e34-9accfa03c4a1)]
+interface koISynchronizationCallback: koIAsyncCallbackWithProgress {
+
+    const long SYNC_REMOTE_DIR_ADDED = 1;
+    const long SYNC_REMOTE_DIR_REMOVED = 3;
+
+    const long SYNC_REMOTE_FILE_ADDED = 11;
+    const long SYNC_REMOTE_FILE_MODIFIED = 12;
+    const long SYNC_REMOTE_FILE_REMOVED = 13;
+
+    const long SYNC_LOCAL_DIR_ADDED = 101;
+    const long SYNC_LOCAL_DIR_REMOVED = 103;
+
+    const long SYNC_LOCAL_FILE_IN_SYNC = 110;
+    const long SYNC_LOCAL_FILE_ADDED = 111;
+    const long SYNC_LOCAL_FILE_MODIFIED = 112;
+    const long SYNC_LOCAL_FILE_REMOVED = 113;
+    
+
+    // Possible conflict states.
+    const long SYNC_CONFLICT_BOTH_MODIFIED = 201;
+    const long SYNC_CONFLICT_REMOVED_REMOTELY_MODIFIED_LOCALLY = 202;
+    const long SYNC_CONFLICT_REMOVED_LOCALLY_MODIFIED_REMOTELY = 203;
+
+    // Resolved Conflict States.
+    const long SYNC_CONFLICT_RESOLVED_UPLOAD = 204;
+    const long SYNC_CONFLICT_RESOLVED_DOWNLOAD = 205;
+
+        /**
+         * Notify that an item (file|directory) is out of sync.
+         * @param syncType - The type of synchronization event.
+         * @param relpath - The relative path of the item in question.
+         */
+    void notifySyncItem(in long syncType, in AString relpath);
+    void batchNotifySyncItems(in unsigned long count_syncTypes,
+                              [array, size_is(count_syncTypes)] in long syncTypes,
+                              in unsigned long count_relpaths,
+                              [array, size_is(count_relpaths)] in wstring relpaths);
+};
+
+
+[scriptable, uuid(8390b6b3-d473-4097-9172-7d0a694ea582)]
+interface koIPublishingOperation : koIAsyncOperation {
+    void commit(in koISynchronizationCallback callback);
+};
+
+
+[scriptable, uuid(aa860438-b407-4626-864e-1ae1ac1d6d34)]
+interface koIPublishingService : nsISupports {
+
+    void getPublishingSettings(out unsigned long count,
+                               [array, size_is(count)] out koIPublishingSettings settings);
+    void savePublishingSettings(in unsigned long count,
+                                [array, size_is(count)] in koIPublishingSettings settings);
+
+    koIAsyncOperation push(in koIPublishingSettings settings,
+                           in koISynchronizationCallback callback);
+    koIAsyncOperation pull(in koIPublishingSettings settings,
+                           in koISynchronizationCallback callback);
+    koIAsyncOperation pushLocalUri(in AString uri,
+                                   [optional] in koIRemoteTransferCallback callback,
+                                   [optional] in boolean force);
+    koIAsyncOperation pullUri(in AString uri,
+                              [optional] in koIRemoteTransferCallback callback,
+                              [optional] in boolean force);
+    koIPublishingOperation synchronize(in koIPublishingSettings settings,
+                                       in koISynchronizationCallback callback);
+};

@@ -1,0 +1,14 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    "cons",
+    "mozChromeDir",
+    "supportDir",
+);
+
+$cons->InstallWriteable("$supportDir/samples/php_tutorials", "php_tutorial.komodoproject");
+$cons->InstallWriteable("$supportDir/samples/php_tutorials", "guestbook.php");
+

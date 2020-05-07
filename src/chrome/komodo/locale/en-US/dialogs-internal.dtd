@@ -1,0 +1,16 @@
+<!ENTITY buyKomodoIDENow.label "Buy Komodo IDE now">
+<!ENTITY configureSourceCodeControl.tooltiptext "Configure Source Code Control">
+<!ENTITY configureTcl.tooltiptext "Configure Tcl">
+<!ENTITY helpOnNodeJSDebugging.tooltiptext "Help on Node.js Debugging">
+<!ENTITY helpOnPHPDebugging.tooltiptext "Help on PHP Debugging">
+<!ENTITY helpOnPerlDebugging.tooltiptext "Help on Perl Debugging">
+<!ENTITY helpOnPythonDebugging.tooltiptext "Help on Python Debugging">
+<!ENTITY helpOnPython3Debugging.tooltiptext "Help on Python3 Debugging">
+<!ENTITY helpOnRubyDebugging.tooltiptext "Help on Ruby Debugging">
+<!ENTITY helpOnRx.tooltiptext "Help on Rx">
+<!ENTITY helpOnSourceCodeControl.tooltiptext "Help on Source Code Control">
+<!ENTITY helpOnTclDebugging.tooltiptext "Help on Tcl Debugging">
+<!ENTITY helpOnXSLTDebugging.tooltiptext "Help on XSLT Debugging">
+<!ENTITY komodoIDE.title "Komodo IDE">
+<!ENTITY visitTheActiveStateWebsiteForMoreOptions.label "Visit the ActiveState Komodo website for more options">
+<!ENTITY visitTheActiveStateWebsiteForUpdates.label "Visit the ActiveState website for updates">

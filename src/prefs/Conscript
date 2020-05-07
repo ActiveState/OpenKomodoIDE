@@ -1,0 +1,48 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'build',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'komodoDevDir',
+    'supportDir',
+    'unsiloedPythonExe',
+    'productType',
+    'platform',
+    'buildFlavour',
+    'mozVersion',
+    'withSCC',
+    'withDebugging',
+    'komodoPythonUtilsDir',
+    'sdkDir',
+    'mozSrc',
+);
+
+# Install Python components.
+$cons->InstallXpcomComponent('koPrefs.py');
+$cons->Preprocess('koEnvView.p.py', 'koEnvView.py');
+$cons->InstallXpcomComponent('koEnvView.py');
+
+# Build and install IDL files.
+$cons->Install($idlExportDir, 'koIPrefs.idl');
+$cons->BuildAndInstallXpt('koIPrefs.idl');
+$cons->Install($idlExportDir, 'koIOrderedPreference.idl');
+$cons->BuildAndInstallXpt('koIOrderedPreference.idl');
+$cons->Preprocess('koIEnvView.p.idl', 'koIEnvView.idl');
+$cons->Install($idlExportDir, 'koIEnvView.idl');
+$cons->BuildAndInstallXpt('koIEnvView.idl');
+
+$cons->InstallPythonUtility('pref_serialization.py');
+
+$cons->AddComponentManifestLines("test-registration",
+                                 ["category komodo-jstest-paths prefs $komodoDevDir/src/prefs/test"]);
+
+# Install default preferences in root 
+$cons->Preprocess('prefs.p.xml', 'prefs.xml');
+$cons->Install($supportDir, 'prefs.xml');

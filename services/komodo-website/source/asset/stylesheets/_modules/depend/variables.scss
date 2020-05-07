@@ -1,0 +1,19 @@
+$fa-font-path: "../vendor/Font-Awesome/fonts";
+$fa-css-prefix: "icon";
+
+$tablet-size: 960px;
+$mobile-size: 570px;
+
+$tablet: max-width $tablet-size;
+$mobile: max-width $mobile-size;
+
+$footer-reduce: max-width 650px;
+
+$sidebar-collapse: max-width 900px;
+$sidebar-collapse-invert: min-width 900px;
+
+$nav-reduce: max-width 1120px;
+$nav-reduce-further: max-width 1000px;
+$nav-collapse: max-width 955px;
+
+$max-width: 1200px;

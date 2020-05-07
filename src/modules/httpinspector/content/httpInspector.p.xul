@@ -1,0 +1,730 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % httpinspectorDTD SYSTEM "chrome://httpinspector/locale/httpinspector.dtd">
+  %httpinspectorDTD;
+]>
+
+<!-- Copyright (c) 2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://httpinspector/skin/httpinspector.css" type="text/css"?>
+
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+
+<!--For the keybinding tab-->
+<?xul-overlay href="chrome://komodo/content/bindings/scintilla-overlay.xul"?>
+
+<window id="komodo_httpInspector"
+        title="&HTTPInspector.title;"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:nc="http://home.netscape.com/NC-rdf#"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        windowtype="komodo_httpinspector"
+        orient="vertical"
+        onload="httpInspector_onLoad();"
+        onunload="httpInspector_onUnload();"
+        height="600"
+        width="640"
+        persist="screenX screenY width height">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <!-- Scintilla overlay - required files. -->
+    <script src="chrome://komodo/content/library/timers.js"       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/stringutils.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/commands.js"     type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dragdrop.js"     type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/markers.js"              type="application/x-javascript;version=1.7"/>
+    
+    <script src="chrome://httpinspector/content/httpInspector.js" type="application/x-javascript;version=1.7"/>
+
+  <!-- Commands -->
+    <commandset id="httpInspector_commandset">
+        <command id="cmd_httpInspector_startDebugger"
+                 key="key_cmd_httpInspector_startDebugger"
+                 oncommand="gHttpInspector.startStopDebugger()"
+                 desc="&HTTPInspectorStartStopTheHttpInspector.desc;"/>
+        <command id="cmd_httpInspector_breakRequest"
+                 key="key_cmd_httpInspector_breakRequest"
+                 checked="false"
+                 oncommand="gHttpInspector.breakOnRequest()"
+                 desc="&HTTPInspectorBreakOnEveryRequest.desc;"/>
+        <command id="cmd_httpInspector_breakResponse"
+                 key="key_cmd_httpInspector_breakResponse"
+                 checked="false"
+                 oncommand="gHttpInspector.breakOnResponse()"
+                 desc="&HTTPInspectorBreakOnEveryResponse.desc;"/>
+        <command id="cmd_httpInspector_clear"
+                 key="key_cmd_httpInspector_clear"
+                 oncommand="gHttpInspector.clearHistory()"
+                 desc="&HTTPInspectorClearProxyHistory.desc;"/>
+        <command id="cmd_httpInspector_saveRequest"
+                 key="key_cmd_httpInspector_saveRequest"
+                 oncommand="gHttpInspector.saveRequest()"
+                 desc="&HTTPInspectorSavesSubmitsTheRequestChanges.desc;"/>
+        <command id="cmd_httpInspector_revertRequest"
+                 key="key_cmd_httpInspector_revertRequest"
+                 oncommand="gHttpInspector.revertRequest()"
+                 desc="&HTTPInspectorRevertTheRequestToPreviousState.desc;"/>
+        <command id="cmd_httpInspector_saveResponse"
+                 key="key_cmd_httpInspector_saveResponse"
+                 oncommand="gHttpInspector.saveResponse()"
+                 desc="&HTTPInspectorSavesSubmitsTheRequestChanges.desc;"/>
+        <command id="cmd_httpInspector_revertResponse"
+                 key="key_cmd_httpInspector_revertResponse"
+                 oncommand="gHttpInspector.revertResponse()"
+                 desc="&HTTPInspectorRevertTheRequestToPreviousState.desc;"/>
+        <command id="cmd_httpInspector_viewResponseBody"
+                 key="key_cmd_httpInspector_viewResponseBody"
+                 oncommand="gHttpInspector.viewResponseBody()"
+                 desc="&HTTPInspectorViewTheBodyOfTheResponse.desc;"/>
+        <command id="cmd_httpInspector_help"
+                 key="key_cmd_httpInspector_help"
+                 oncommand="gHttpInspector.help();"
+                 desc="&HTTPInspectorHelp.desc;"/>
+
+      <!-- Toolbox contextual menu's -->
+        <command
+            id="cmd_httpInspector_toggleButtonText"
+            key="key_cmd_httpInspector_toggleButtonText"
+            desc="&HTTPInspectorShowHideToolbarButtonText.desc;"
+            oncommand="gHttpInspector.toolbarShowHideButtonText(this);"
+            checked="false" />
+
+      <!-- Contextual menu's -->
+        <command id="cmd_httpInspector_editRequest"
+                 key="key_cmd_httpInspector_editRequest"
+                 oncommand="gHttpInspector.editRequest()"
+                 desc="&HTTPInspectorEditTheRequest.desc;"/>
+        <command id="cmd_httpInspector_editResponse"
+                 key="key_cmd_httpInspector_editResponse"
+                 oncommand="gHttpInspector.editResponse()"
+                 desc="&HTTPInspectorEditTheResponse.desc;"/>
+        <command id="cmd_httpInspector_renameRequestResponse"
+                 key="key_cmd_httpInspector_renameRequestResponse"
+                 oncommand="gHttpInspector.renameRequestResponse()"
+                 desc="&HTTPInspectorRenameTheRequestResponse.desc;"/>
+        <command id="cmd_httpInspector_removeRequestResponse"
+                 key="key_cmd_httpInspector_removeRequestResponse"
+                 oncommand="gHttpInspector.removeRequestResponse()"
+                 desc="&HTTPInspectorDeleteTheRequestResponse.desc;"/>
+
+        <command id="cmd_httpInspector_testAlert"
+                 key="key_cmd_httpInspector_testAlert"
+                 oncommand="alert('test alert');"
+                 desc="&HTTPInspectorTesting.desc;"/>
+    </commandset>
+
+<!-- Keep the menu around for Mac's, otherwise it looks wierd. -->
+<!-- #if PLATFORM == "darwin" -->
+  <!-- Menu -->
+    <menubar id="httpInspector_menubar">
+        <menu id="httpInspector_menu_debugger"
+              label="&inspector.label;"
+              accesskey="&httpInspectorMenuDebugger.accesskey;">
+            <menupopup id="httpInspector_popup_debugger">
+                <menuitem id="httpInspector_menu_debugger_start"
+                          label="&start.label;"
+                          command="cmd_httpInspector_startDebugger"
+                          accesskey="&httpInspectorMenuDebuggerStart.accesskey;">
+                </menuitem>
+                <menuitem id="httpInspector_menu_debugger_stop"
+                          label="&stop.label;"
+                          command="cmd_httpInspector_startDebugger"
+                          accesskey="&httpInspectorMenuDebuggerStop.accesskey;">
+                </menuitem>
+                <!-- Commented out for now, until needed. -->
+                <!--<menuitem id="httpInspector_menu_debugger_load"-->
+                <!--      label="Load"-->
+                <!--      accesskey="L">-->
+                <!--</menuitem>-->
+                <!--<menuitem id="httpInspector_menu_debugger_save"-->
+                <!--      label="&save.label;"-->
+                <!--      accesskey="V">-->
+                <!--</menuitem>-->
+                <menuitem id="httpInspector_menu_debugger_clear"
+                          label="&clearHistory.label;"
+                          command="cmd_httpInspector_clear"
+                          accesskey="&httpInspectorMenuDebuggerClear.accesskey;">
+                </menuitem>
+                <menuitem id="httpInspector_menu_debugger_interceptRequests"
+                      label="&breakOnRequest.label;"
+                      type="checkbox"
+                      autocheck="true"
+                      command="cmd_httpInspector_breakRequest"
+                      accesskey="&httpInspectorMenuDebuggerInterceptRequests.accesskey;">
+                </menuitem>
+                <menuitem id="httpInspector_menu_debugger_interceptResponses"
+                      label="&breakOnResponse.label;"
+                      type="checkbox"
+                      autocheck="true"
+                      command="cmd_httpInspector_breakResponse"
+                      accesskey="&httpInspectorMenuDebuggerInterceptResponses.accesskey;">
+                </menuitem>
+                <menuitem id="httpInspector_menu_debugger_ruleset"
+                      label="&rules.label;"
+                      oncommand="gHttpInspector.showRuleset(this);"
+                      accesskey="&httpInspectorMenuDebuggerRuleset.accesskey;">
+                </menuitem>
+                <!-- mozilla magic...menu_preferences id makes the preference
+                    menu appear in the proper place on osx -->
+                <menuitem label="&preferences.label;"
+                          id="httpInspector_menu_preferences"
+                          oncommand="opener.prefs_doGlobalPrefs('httpInspectorItem');"
+                          accesskey="&httpInspectorMenuPreferences.accesskey;"
+                          />
+            </menupopup>
+        </menu>
+    </menubar>
+<!-- #endif -->
+
+    <!--Not currently used anymore, and was only ever half inplemented-->
+    <!--<popupset>-->
+    <!--   <popup id="httpInspector_popupset">-->
+    <!--        <menuitem label="Edit request" command="cmd_httpInspector_editRequest"/>-->
+    <!--        <menuitem label="Edit response" command="cmd_httpInspector_editResponse"/>-->
+    <!--        <menuitem label="Rename" command="cmd_httpInspector_renameRequestResponse"/>-->
+    <!--        <menuitem label="Remove" command="cmd_httpInspector_removeRequestResponse"/>-->
+    <!--   </popup>-->
+    <!--</popupset>-->
+
+    <!-- To obtain a reference to the element which opened the popup menu, use document.popupNode. -->
+    <popupset>
+       <menupopup id="httpInspector_popupsetForRequestHeaders">
+            <menu id="httpInspector_request-menu-new" label="&new.label;">
+                <menupopup id="httpInspector_request-menu-new_popup">
+                    <menuitem label="&blankHeader.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, '');"/>
+                    <menuseparator/>
+                    <menuitem label="&accept.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Accept');"/>
+                    <menuitem label="&acceptCharset.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Accept-charset');"/>
+                    <menuitem label="&acceptEncoding.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Accept-encoding');"/>
+                    <menuitem label="&acceptLanguage.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Accept-language');"/>
+                    <menuitem label="&authorization.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Authorization');"/>
+                    <menuitem label="&connection.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Connection');"/>
+                    <menuitem label="&connectionType.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Connection-type');"/>
+                    <menuitem label="&connectionLength.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Connection-length');"/>
+                    <menuitem label="&cookie.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Cookie');"/>
+                    <menuitem label="&cookie2.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Cookie2');"/>
+                    <menuitem label="&host.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Host');"/>
+                    <menuitem label="&ifModifiedSince.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'If-Modified-Since');"/>
+                    <menuitem label="&pragma.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Pragma');"/>
+                    <menuitem label="&referer.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'Referer');"/>
+                    <menuitem label="&userAgent.label;" oncommand="gHttpInspector.addRequestHeaderWithName(event, 'User-agent');"/>
+                </menupopup>
+            </menu>
+            <menuitem label="&modify.label;" oncommand="gHttpInspector.editRequestHeader(event)"/>
+            <menuitem label="&delete.label;" oncommand="gHttpInspector.removeRequestHeader(event)"/>
+       </menupopup>
+
+       <menupopup id="httpInspector_toolbox_context_popup">
+            <!--<menupopup id="httpInspector_toolbox_context_menupopup">-->
+                <menuitem id="httpInspector_toolbox_context_toggleButtonText"
+                    label="&buttonText.label;"
+                    type="checkbox"
+                    observes="cmd_httpInspector_toggleButtonText"/>
+            <!--</menupopup>-->
+       </menupopup>
+
+       <menupopup id="httpInspector_popupsetForResponseHeaders">
+            <menu id="httpInspector_response-menu-new" label="&new.label;">
+                <menupopup id="httpInspector_response-menu-new_popup">
+                    <menuitem label="&blankHeader.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, '');"/>
+                    <menuseparator/>
+                    <menuitem label="&acceptRanges.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Accept-language');"/>
+                    <menuitem label="&allow.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Allow');"/>
+                    <menuitem label="&cacheControl.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Cache-control');"/>
+                    <menuitem label="&connection.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Connection');"/>
+                    <menuitem label="&contentType.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Content-type');"/>
+                    <menuitem label="&contentEncoding.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Content-encoding');"/>
+                    <menuitem label="&contentType.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Content-type');"/>
+                    <menuitem label="&contentLanguage.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Content-language');"/>
+                    <menuitem label="&contentLength.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Content-length');"/>
+                    <menuitem label="&date.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Date');"/>
+                    <menuitem label="&expires.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Expires');"/>
+                    <menuitem label="&lastModified.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Last-modified');"/>
+                    <menuitem label="&location.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Location');"/>
+                    <menuitem label="&refresh.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Refresh');"/>
+                    <menuitem label="&server.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Server');"/>
+                    <menuitem label="&setCookie.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Set-cookie');"/>
+                    <menuitem label="&setCookie2.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'Set-cookie2');"/>
+                    <menuitem label="&WWWAuthenticate.label;" oncommand="gHttpInspector.addResponseHeaderWithName(event, 'WWW-Authenticate');"/>
+                </menupopup>
+            </menu>
+            <menuitem label="&modify.label;" oncommand="gHttpInspector.editResponseHeader(event)"/>
+            <menuitem label="&delete.label;" oncommand="gHttpInspector.removeResponseHeader(event)"/>
+       </menupopup>
+
+       <menupopup id="httpInspector_popupsetQuickResponse">
+            <menuitem label="&timeout.label;"
+                      oncommand="gHttpInspector.respondWithStatus(-1);"/>
+            <menu id="httpInspector_submit_other_submenu_100" label="&label.100;">
+                <menupopup id="httpInspector_submit_other_submenu_100_popup">
+                    <menuitem label="&label.100Continue;"
+                              oncommand="gHttpInspector.respondWithStatus(100);"/>
+                    <menuitem label="&label.101SwitchingProtocols;"
+                              oncommand="gHttpInspector.respondWithStatus(101);"/>
+                </menupopup>
+            </menu>
+            <menu id="httpInspector_submit_other_submenu_200" label="&label.200;">
+                <menupopup id="httpInspector_submit_other_submenu_200_popup">
+                    <menuitem label="&label.200OK;"
+                              oncommand="gHttpInspector.respondWithStatus(200);"/>
+                    <menuitem label="&label.201Created;"
+                              oncommand="gHttpInspector.respondWithStatus(201);"/>
+                    <menuitem label="&label.202Accepted;"
+                              oncommand="gHttpInspector.respondWithStatus(202);"/>
+                    <menuitem label="&label.203NonAuthoritativeInformation;"
+                              oncommand="gHttpInspector.respondWithStatus(203);"/>
+                    <menuitem label="&label.204NoContent;"
+                              oncommand="gHttpInspector.respondWithStatus(204);"/>
+                    <menuitem label="&label.205ResetContent;"
+                              oncommand="gHttpInspector.respondWithStatus(205);"/>
+                    <menuitem label="&label.206PartialContent;"
+                              oncommand="gHttpInspector.respondWithStatus(206);"/>
+                    <menuitem label="&label.207MultiStatus;"
+                              oncommand="gHttpInspector.respondWithStatus(207);"/>
+                </menupopup>
+            </menu>
+            <menu id="httpInspector_submit_other_submenu_300" label="&label.300;">
+                <menupopup id="httpInspector_submit_other_submenu_300_popup">
+                    <menuitem label="&label.300MultipleChoices;"
+                              oncommand="gHttpInspector.respondWithStatus(300);"/>
+                    <menuitem label="&label.301MovedPermanently;"
+                              oncommand="gHttpInspector.respondWithStatus(301);"/>
+                    <menuitem label="&label.302Found;"
+                              oncommand="gHttpInspector.respondWithStatus(302);"/>
+                    <menuitem label="&label.303SeeOther;"
+                              oncommand="gHttpInspector.respondWithStatus(303);"/>
+                    <menuitem label="&label.304NotModified;"
+                              oncommand="gHttpInspector.respondWithStatus(304);"/>
+                    <menuitem label="&label.305UseProxy;"
+                              oncommand="gHttpInspector.respondWithStatus(305);"/>
+                    <menuitem label="&label.307TemporaryRedirect;"
+                              oncommand="gHttpInspector.respondWithStatus(307);"/>
+                </menupopup>
+            </menu>
+            <menu id="httpInspector_submit_other_submenu_400" label="&label.400;">
+                <menupopup id="httpInspector_submit_other_submenu_400_popup">
+                    <menuitem label="&label.400BadRequest;"
+                              oncommand="gHttpInspector.respondWithStatus(400);"/>
+                    <menuitem label="&label.401Unauthorized;"
+                              oncommand="gHttpInspector.respondWithStatus(401);"/>
+                    <menuitem label="&label.402PaymentRequired;"
+                              oncommand="gHttpInspector.respondWithStatus(402);"/>
+                    <menuitem label="&label.403Forbidden;"
+                              oncommand="gHttpInspector.respondWithStatus(403);"/>
+                    <menuitem label="&label.404NotFound;"
+                              oncommand="gHttpInspector.respondWithStatus(404);"/>
+                    <menuitem label="&label.405MethodNotAllowed;"
+                              oncommand="gHttpInspector.respondWithStatus(405);"/>
+                    <menuitem label="&label.406NotAcceptable;"
+                              oncommand="gHttpInspector.respondWithStatus(406);"/>
+                    <menuitem label="&label.407ProxyAuthenticationRequired;"
+                              oncommand="gHttpInspector.respondWithStatus(407);"/>
+                    <menuitem label="&label.408RequestTimeOut;"
+                              oncommand="gHttpInspector.respondWithStatus(408);"/>
+                    <menuitem label="&label.409Conflict;"
+                              oncommand="gHttpInspector.respondWithStatus(409);"/>
+                    <menuitem label="&label.410Gone;"
+                              oncommand="gHttpInspector.respondWithStatus(410);"/>
+                    <menuitem label="&label.411LengthRequired;"
+                              oncommand="gHttpInspector.respondWithStatus(411);"/>
+                    <menuitem label="&label.412PreconditionFailed;"
+                              oncommand="gHttpInspector.respondWithStatus(412);"/>
+                    <menuitem label="&label.413RequestEntityTooLarge;"
+                              oncommand="gHttpInspector.respondWithStatus(413);"/>
+                    <menuitem label="&label.414RequestURITooLong;"
+                              oncommand="gHttpInspector.respondWithStatus(414);"/>
+                    <menuitem label="&label.415UnsupportedMediaType;"
+                              oncommand="gHttpInspector.respondWithStatus(415);"/>
+                    <menuitem label="&label.416RequestedRangeNotSatisfiable;"
+                              oncommand="gHttpInspector.respondWithStatus(416);"/>
+                    <menuitem label="&label.417ExpectationFailed;"
+                              oncommand="gHttpInspector.respondWithStatus(417);"/>
+                </menupopup>
+            </menu>
+            <menu id="httpInspector_submit_other_submenu_500" label="&label.500;">
+                <menupopup id="httpInspector_submit_other_submenu_500_popup">
+                <menuitem label="&label.500InternalServerError;"
+                          oncommand="gHttpInspector.respondWithStatus(500);"/>
+                <menuitem label="&label.501NotImplemented;"
+                          oncommand="gHttpInspector.respondWithStatus(501);"/>
+                <menuitem label="&label.502BadGateway;"
+                          oncommand="gHttpInspector.respondWithStatus(502);"/>
+                <menuitem label="&label.503ServiceUnavailable;"
+                          oncommand="gHttpInspector.respondWithStatus(503);"/>
+                <menuitem label="&label.504GatewayTimeOut;"
+                          oncommand="gHttpInspector.respondWithStatus(504);"/>
+                <menuitem label="&label.505HTTPVersionNotSupported;"
+                          oncommand="gHttpInspector.respondWithStatus(505);"/>
+                <menuitem label="&label.507InsufficientStorageSpace;"
+                          oncommand="gHttpInspector.respondWithStatus(507);"/>
+                <menuitem label="&label.510NotExtended;"
+                          oncommand="gHttpInspector.respondWithStatus(510);"/>
+                </menupopup>
+            </menu>
+       </menupopup>
+    </popupset>
+
+    <!--<keyset id="httpInspector_keyset">-->
+    <!--    <key keycode="VK_DELETE" modifiers="" command="cmd_httpInspector_removeHeader"/>-->
+    <!--</keyset>-->
+
+  <!-- Window layout -->
+    <vbox id="httpInspector_vbox" flex="1">
+        <hbox id="httpInspector_hbox" flex="1" onkeypress="gHttpInspector.onKeyPress(event);">
+            <tree id="httpInspector_mainTree"
+                  flex="1"
+                  enableColumnDrag="true"
+                  onselect="httpInspector_mainTree_OnSelect();"
+                  ondblclick="gHttpInspector.onDoubleClick(event);"
+                  persist="height"
+                  style="margin: 0px">
+                  <!--context="httpInspector_popupset"-->
+                <treecols id="httpInspector_mainTree_treecols">
+                    <treecol id="httpInspector_treecol_creation_id"
+                             label="&id.label;"
+                             hidden="true"
+                             flex="1"
+                             crop="right"
+                             persist="width ordinal hidden"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="httpInspector_treecol_flags"
+                             label="&state.label;"
+                             tooltiptext="&breakState.tooltiptext;"
+                             flex="1"
+                             ignoreincolumnpicker="true"
+                             persist="width ordinal"/>
+                    <splitter class="tree-splitter"/>
+                    <!-- Used for naming/tagging a transaction. Not implemented yet. -->
+                    <!--<treecol id="httpInspector_treecol_name"-->
+                    <!--         label="Name"-->
+                    <!--         flex="1"-->
+                    <!--         hidden="true"-->
+                    <!--         crop="right"-->
+                    <!--         persist="width ordinal hidden"/>-->
+                    <!--<splitter class="tree-splitter"/>-->
+                    <treecol id="httpInspector_treecol_time"
+                             label="&time.label;"
+                             flex="1"
+                             crop="right"
+                             persist="width ordinal hidden"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="httpInspector_treecol_request_ip"
+                             label="&clientAddress.label;"
+                             flex="1"
+                             hidden="true"
+                             crop="right"
+                             persist="width ordinal hidden"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="httpInspector_treecol_duration"
+                             label="&duration.label;"
+                             flex="1"
+                             crop="right"
+                             persist="width ordinal hidden"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="httpInspector_treecol_method"
+                             label="&method.label;"
+                             flex="1"
+                             crop="right"
+                             persist="width ordinal hidden"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="httpInspector_treecol_status"
+                             label="&status.label;"
+                             flex="1"
+                             crop="right"
+                             persist="width ordinal hidden"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="httpInspector_treecol_size"
+                             label="&size.label;"
+                             flex="1"
+                             crop="right"
+                             persist="width ordinal hidden"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="httpInspector_treecol_content_type"
+                             label="&content.label;"
+                             flex="1"
+                             crop="right"
+                             persist="width ordinal hidden"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="httpInspector_treecol_url"
+                             label="&URL.label;"
+                             flex="6"
+                             crop="right"
+                             persist="width ordinal hidden"/>
+                </treecols>
+                <!-- Tree children are dynamically generated, we use our own custom tree view -->
+                <treechildren id="httpInspector_mainTree_treechildren" flex="1"/>
+            </tree>
+        </hbox>
+        
+        <toolbox id="httpInspector_toolbox" context="httpInspector_toolbox_context_popup">
+            <toolboxrow id="main-toolboxrow"
+                        flex="1">
+                <toolbar
+                    id="httpInspector_toolbar"
+                    flex="1"
+                    align="stretch"
+                    persist="hidden collapsed mode"
+                    grippyhidden="true"
+                    mode="text"
+                    broadcaster="cmd_viewedittoolbar"
+                    tooltiptext="&standardToolbar.tooltiptext;">
+                    <!--class="chromeclass-toolbar"-->
+                    <toolbarbutton id="httpInspector_toolbar_start_stop"
+                        label="&start.label;"
+                        class="http-inspector-start box-state-ok button"
+                        tooltiptext="&startStopTheHTTPInspector.tooltiptext;"
+                        observes="cmd_httpInspector_startDebugger"
+                        />
+                    <toolbarbutton
+                        id="httpInspector_toolbar_break_on_request"
+                        label="&request.label;"
+                        class="http-inspector-break-request button"
+                        tooltiptext="&breakOnEveryRequest.tooltiptext;"
+                        observes="cmd_httpInspector_breakRequest"
+                        />
+                    <toolbarbutton
+                        id="httpInspector_toolbar_break_on_response"
+                        label="&response.label;"
+                        class="http-inspector-break-response button"
+                        tooltiptext="&breakOnEveryResponse.tooltiptext;"
+                        observes="cmd_httpInspector_breakResponse"
+                        />
+                    <toolbarspring />
+                    <toolbarbutton id="httpInspector_toolbar_clear"
+                        label="&clear.label;"
+                        class="http-inspector-clear button"
+                        tooltiptext="&clearHistoryOfRequestsAndResponses.tooltiptext;"
+                        observes="cmd_httpInspector_clear"
+                        />
+                    <toolbarbutton id="httpInspector_toolbar_ruleset"
+                        label="&rules.label;"
+                        class="http-inspector-ruleset button"
+                        tooltiptext="&showBreakAndModifyRules.tooltiptext;"
+                        oncommand="gHttpInspector.showRuleset(this);"
+                        />
+                </toolbar>
+            </toolboxrow>
+        </toolbox>
+
+        <splitter id="httpInspector_topSplitter"
+                  class="httpinspector-pane-splitter row-splitter"
+                  state="open"
+                  resizeafter="closest"
+                  resizebefore="closest"/>
+
+      <!-- Request and response details -->
+        <grid id="httpInspector_grid" flex="2">
+            <columns id="httpInspector_grid_columns">
+                <column id="httpInspector_grid_column1" flex="1"/>
+                <column />
+                <column id="httpInspector_grid_column2" flex="1"/>
+            </columns>
+            <rows id="httpInspector_grid_rows">
+                <row id="httpInspector_grid_row_transactions" flex="1">
+                    <vbox id="httpInspector_request_vbox" flex="1">
+                        <label id="httpInspector_request_label" value="Request"/>
+                        <grid id="httpInspector_requestGrid">
+                            <columns id="httpInspector_requestGridColumns">
+                                <column id="httpInspector_requestGrid_column1"/>
+                                <column id="httpInspector_requestGrid_column2" flex="1"/>
+                                <!--<column minwidth="600"/>-->
+                            </columns>
+                            <rows id="httpInspector_requestRows">
+                                <row id="httpInspector_requestRow1" align="center">
+                                    <label id="httpInspector_requestCommandLabel"
+                                           value="Command: "
+                                           control="httpInspector_requestCommandMenulist"/>
+                                    <hbox id="httpInspector_requestRow1_hbox">
+                                        <menulist id="httpInspector_requestCommandMenulist"
+                                                  editable="true"
+                                                  onchange="gHttpInspector.requestChanged(event);">
+                                            <menupopup id="httpInspector_requestRow1_menupopup">
+                                                <!-- XXX: Not all of these are available in HTTP/1.0 -->
+                                                <menuitem label="&GET.label;" selected="true"/>
+                                                <menuitem label="&POST.label;"/>
+                                                <menuitem label="&HEAD.label;"/>
+                                                <menuitem label="&OPTIONS.label;"/>
+                                                <menuitem label="&PUT.label;"/>
+                                                <menuitem label="&DELETE.label;"/>
+                                                <menuitem label="&TRACE.label;"/>
+                                                <menuitem label="&CONNECT.label;"/>
+                                            </menupopup>
+                                        </menulist>
+                                    </hbox>
+                                </row>
+                                <row id="httpInspector_requestRow2" align="center">
+                                    <label id="httpInspector_requestUrlLabel"
+                                           value="URL: "
+                                           control="httpInspector_requestUrlTextbox"/>
+                                    <textbox id="httpInspector_requestUrlTextbox"
+                                             onchange="gHttpInspector.requestChanged(event);"/>
+                                </row>
+                            </rows>
+                        </grid>
+    
+                        <tree id="httpInspector_requestHeadersTree"
+                              flex="1"
+                              onchange="gHttpInspector.requestChanged(event);"
+                              enableColumnDrag="false"
+                              onkeypress="gHttpInspector.onRequestHeadersKeyPress(event);"
+                              ondblclick="gHttpInspector.editRequestHeader(event);"
+                              minheight="50"
+                              persist="height"
+                              style="margin: 0px"
+                              hidecolumnpicker="true">
+                            <treecols id="httpInspector_requestHeadersTreecols">
+                              <treecol id="httpInspector_treecol_request_header_name"
+                                       flex="1"
+                                       label="&headerName.label;"
+                                       crop="right"
+                                       persist="width hidden sortActive sortDirection"
+                                       class="sortDirectionIndicator"/>
+                              <splitter class="tree-splitter"/>
+                              <treecol id="httpInspector_treecol_request_header_value"
+                                       flex="2"
+                                       label="&headerValue.label;"
+                                       crop="right"
+                                       persist="width hidden sortActive sortDirection"
+                                       class="sortDirectionIndicator"/>
+                              <splitter class="tree-splitter"/>
+                            </treecols>
+                            <!-- Tree children are dynamically generated, we use our own custom tree view -->
+                            <treechildren id="httpInspector_requestHeadersTreechildren"/>
+                        </tree>
+                        <hbox id="httpInspector_hboxRequestHeaderButtons"
+                              collapsed="true">
+                            <vbox>
+                                <label id="httpInspector_labelRequestStatus"
+                                       value="Status: "/>
+                                <hbox>
+                                    <button id="httpInspector_buttonRequestSave"
+                                            label="&save.label;"
+                                            command="cmd_httpInspector_saveRequest"/>
+                                    <button id="httpInspector_buttonRequestRevert"
+                                            label="&revert.label;"
+                                            command="cmd_httpInspector_revertRequest"/>
+                                    <button id="httpInspector_buttonRequestRespondWith"
+                                            label="&respondWith.label;"
+                                            menu="httpInspector_popupsetQuickResponse"/>
+                                </hbox>
+                            </vbox>
+                        </hbox>
+                    </vbox>
+
+                    <splitter class="httpinspector-pane-splitter column-splitter"
+                              orient="horizontal"/>
+
+                    <vbox id="httpInspector_response_vbox">
+                        <label id="httpInspector_response_label" pack="right" value="Response"/>
+                        <grid id="httpInspector_responseGrid"
+                              collapsed="false">
+                            <columns id="httpInspector_responseGrid_columns">
+                                <column id="httpInspector_responseGrid_column1"/>
+                                <column id="httpInspector_responseGrid_column2" flex="1"/>
+                            </columns>
+                            <rows id="httpInspector_responseGrid_rows">
+                                <row id="httpInspector_responseGrid_row1" align="center">
+                                    <label id="httpInspector_responseVersionLabel"
+                                           value="Version: "
+                                           control="httpInspector_responseVersionMenulist"/>
+                                    <hbox id="httpInspector_responseGrid_row1_hbox">
+                                        <menulist id="httpInspector_responseVersionMenulist"
+                                                  editable="true"
+                                                  onchange="gHttpInspector.responseChanged(event);">
+                                            <menupopup id="httpInspector_responseGrid_row1_menupopup">
+                                                <menuitem label="&label.10;" selected="true"/>
+                                                <menuitem label="&label.11;"/>
+                                            </menupopup>
+                                        </menulist>
+                                    </hbox>
+                                </row>
+                                <row id="httpInspector_responseGrid_row2" align="center">
+                                    <label id="httpInspector_responseStatusLabel"
+                                           value="Status: "
+                                           control="httpInspector_responseStatusTextbox"/>
+                                    <hbox id="httpInspector_responseGrid_row2_hbox">
+                                        <textbox id="httpInspector_responseStatusTextbox"
+                                                 onchange="gHttpInspector.responseChanged(event);"/>
+                                    </hbox>
+                                </row>
+                            </rows>
+                        </grid>
+    
+                        <tree id="httpInspector_responseHeadersTree"
+                              flex="1"
+                              onchange="gHttpInspector.responseChanged(event);"
+                              enableColumnDrag="false"
+                              onkeypress="gHttpInspector.onResponseHeadersKeyPress(event);"
+                              ondblclick="gHttpInspector.editResponseHeader(event);"
+                              minheight="50"
+                              persist="height"
+                              style="margin: 0px"
+                              hidecolumnpicker="true">
+                            <treecols id="httpInspector_responseHeadersTreecols">
+                              <treecol id="httpInspector_treecol_response_header_name"
+                                       flex="1"
+                                       label="&headerName.label;"
+                                       crop="right"
+                                       persist="width hidden sortActive sortDirection"
+                                       class="sortDirectionIndicator"/>
+                              <splitter id="httpInspector_responseHeaders_treecol_splitter" class="tree-splitter"/>
+                              <treecol id="httpInspector_treecol_response_header_value"
+                                       flex="2"
+                                       label="&headerValue.label;"
+                                       crop="right"
+                                       persist="width hidden sortActive sortDirection"
+                                       class="sortDirectionIndicator"/>
+                              <splitter class="tree-splitter"/>
+                            </treecols>
+                            <!-- Tree children are dynamically generated, we use our own custom tree view -->
+                            <treechildren id="httpInspector_responseHeadersTreechildren"/>
+                        </tree>
+    
+                        <hbox id="httpInspector_hboxResponseHeaderButtons"
+                              collapsed="true">
+                            <vbox id="httpInspector_responseHeaderButtons_vbox">
+                                <label id="httpInspector_labelResponseStatus"
+                                       value="Status: "/>
+                                <hbox id="httpInspector_responseHeaderButtons_hbox">
+                                    <button id="httpInspector_buttonResponseSave"
+                                            label="Save"
+                                            command="cmd_httpInspector_saveResponse"/>
+                                    <button id="httpInspector_buttonResponseRevert"
+                                            label="&revert.label;"
+                                            command="cmd_httpInspector_revertResponse"/>
+                                </hbox>
+                            </vbox>
+                        </hbox>
+                    </vbox>
+                </row>
+                <splitter class="httpinspector-pane-splitter row-splitter"/>
+                <row id="httpInspector_grid_row_data" flex="1">
+                    <!-- Request data -->
+                    <view id="httpInspector_viewRequestData"
+                          flex="1"
+                          type="buffer"/>
+                    <splitter class="httpinspector-pane-splitter"/>
+                    <!-- Response data -->
+                    <deck id="httpInspector_responseDeck"
+                          selectedIndex="0"
+                          flex="1">
+                        <view id="httpInspector_viewResponseData"
+                              flex="1"
+                              type="buffer"/>
+                        <browser id="httpInspector_responseIFrame"
+                                 flex="1"
+                                 disablehistory="true"
+                                 src="about:blank"/>
+                    </deck>
+                </row>
+            </rows>
+        </grid>
+    </vbox>
+
+    <hbox id="scintillaOverlayXul"/>
+</window>

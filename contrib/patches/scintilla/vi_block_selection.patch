@@ -1,0 +1,28 @@
+This is to support vi block selection. The following patch adds a property to
+always enforce the selection to be a block selection.
+
+http://bugs.activestate.com/show_bug.cgi?id=87281
+
+Index: C:\as\komodo-devel\src\scintilla\src\Selection.h
+--- src/Selection.h 
++++ src/Selection.h (unsaved) 
+@@ -144,6 +144,7 @@
+ 	Selection();
+ 	~Selection();
+ 	bool IsRectangular() const;
++	bool enforceRectangular;
+ 	int MainCaret() const;
+ 	int MainAnchor() const;
+ 	SelectionRange &Rectangular();
+Index: C:\as\komodo-devel\src\scintilla\src\Selection.cxx
+--- src/Selection.cxx 
++++ src/Selection.cxx (unsaved) 
+@@ -170,7 +170,7 @@ void SelectionRange::MinimizeVirtualSpace() {
+ 	}
+ }
+ 
+-Selection::Selection() : mainRange(0), moveExtends(false), tentativeMain(false), selType(selStream) {
++Selection::Selection() : mainRange(0), moveExtends(false), tentativeMain(false), selType(selStream), enforceRectangular(false) {
+ 	AddSelection(SelectionRange(SelectionPosition(0)));
+ }
+ 

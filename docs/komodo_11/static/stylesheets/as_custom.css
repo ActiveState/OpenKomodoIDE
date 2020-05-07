@@ -1,0 +1,250 @@
+/* ActiveRuby-specific styles */
+.project .logo+.name {
+    color: #fcb315;
+}
+
+div#metadata
+{
+    display:none;
+}
+
+a, .exampleHeading .text {
+    color: #c32a1b;
+    text-decoration: none;
+}
+
+#class-index > div.title
+{
+  float: left;
+  font-size: 20px;
+  line-height: 1.4em;
+  color: #c32d1b;
+}
+
+#class-index > div.title > input
+{
+  display: none;
+}
+
+#method-index
+{
+
+    padding-bottom: 50px;
+}
+
+#method-index > div.title
+{
+  float: left;
+  font-size: 20px;
+  line-height: 1.4em;
+  color: #c32d1b;
+}
+
+#method-index > div.title > input
+{
+  display: none;
+}
+
+#file-index > div.title
+{
+    float:left;
+    font-size: 20px;
+    line-height: 1.4em;
+    color: #c32d1b;
+}
+
+div.wrapper.hdiv {
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+div #actionbar {
+    display: none;
+}
+div#topNav {
+    display:none;
+}
+
+#feature .wrapper {
+    margin: 0;
+    padding: 0;
+}
+
+div.wrapper.clearfix {
+    display:none;
+}
+
+/*
+// Styles for Golang.com-style homepage
+// Not included in as_common.css because activego defines this in /lib/godoc/style.css
+*/
+div#language_critter {
+	background: url(../images/frontpage.png) no-repeat;
+	background-position: center top;
+	height: 256px;
+}
+
+
+div.tl {
+	margin-right: 2.5%;
+	display:inline-block;
+	vertical-align: top;
+}
+
+div.tr {
+    margin-left: 2.5%;
+	display: inline-block;
+	vertical-align: top;
+}
+div.tl,
+div.tr {
+    width: 45%;
+}
+
+div.bl {
+	margin-right: 2.5%;
+	display:inline-block;
+	vertical-align: bottom;
+}
+
+div.br {
+	margin-right: 2.5%;
+	display:inline-block;
+	vertical-align: bottom;
+}
+div.bl,
+div.br {
+ width: 45%;
+}
+
+a#download_link {
+	color: #222; /* black */
+	border: 1px solid #999999; /* dark gray */
+	background: #bcbec0; /* silver */
+}
+
+a#download_link {
+	display: block;
+	padding: 10px;
+
+	text-align: center;
+	text-decoration: none;
+
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+a#download_link .big {
+	display: block;
+	font-weight: bold;
+	font-size: 20px;
+}
+a#download_link .desc {
+	display: block;
+	font-size: 14px;
+	font-weight: normal;
+	margin-top: 5px;
+}
+
+div#intro {
+	padding-top: 20px;
+}
+div#intro {
+	margin: 0;
+}
+div#intro {
+	font-size: 20px;
+	margin: 0 auto 10px;
+}
+
+.language_linkList {
+	margin: 20px 0 20px;
+	padding: 15px 0 0 0;
+	color: #333333; /*ActiveState dark grey */
+	font-weight: bold;
+}
+/*
+// End styles for Golang.com-style homepage
+*/
+
+div.card
+{
+	width: 100%;
+	height: 33%;
+	background-color: white;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	margin-bottom: 20px;
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+}
+
+h3.productName
+{
+	font-size: 150%;
+	color: #000;
+	display: block;
+	text-align: center;
+}
+
+img.card
+{
+	display: block;
+	margin: 0 auto;
+}
+
+.card ul
+{
+	margin-left: 50px;
+}
+
+.columnWrapper {
+    float: left;
+    width: 100%;
+}
+
+.column1 {
+    float: left;
+    width: 45%;
+}
+.column2 {
+    float: right;
+    width: 45%;
+}
+
+/* Stack column1 and column2 vertically if it's a phone */
+@media only screen and (max-width:480px) {
+  .columnWrapper, .column1, .column2 {
+    float: none;
+    width: auto;
+  }
+  .column1, .column2 {
+    margin-top: 25px;
+    padding-top: 10px;
+  }
+
+  .intro {
+      -webkit-order: 1;
+      order: 1;
+  }
+
+  .dl {
+      -webkit-order: 2;
+      order: 2;
+  }
+
+  .get {
+      -webkit-order: 3;
+      order: 3;
+  }
+
+  .start {
+      -webkit-order: 4;
+      order: 4;
+  }
+}

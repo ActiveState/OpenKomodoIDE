@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<?xml-stylesheet type="text/css" href="chrome://komodo/skin/bindings/widgets.css"?>
+<?xml-stylesheet type="text/css" href="chrome://komodo/skin/extmgr.css"?>
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<overlay id="extensionsOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <!-- persist dialog sizes -->
+    <page id="addons-page" persist="width height"/>
+
+    <!-- import crazy JS to shim in support for basic UI -->
+    <script type="application/x-javascript;version=1.7"
+            src="chrome://komodo/content/extmgr/em-overlay.js"/>
+</overlay>

@@ -1,0 +1,2118 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % bindingsDTD SYSTEM "chrome://komodo/locale/bindings.dtd">
+  %bindingsDTD;
+]>
+
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xbl="http://www.mozilla.org/xbl"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<binding id="popup-buffer"
+         extends="chrome://global/content/bindings/popup.xml#popup">
+    <content>
+        <xul:menuitem id="buffer-context-cut"
+                      label="&cut.label;"
+                      class="menuitem-iconic native-cut-icon"
+                      observes="cmd_cut"/>
+        <xul:menuitem id="buffer-context-copy"
+                      label="&copy.label;"
+                      class="menuitem-iconic native-copy-icon"
+                      observes="cmd_copy"/>
+        <xul:menuitem id="buffer-context-paste"
+                      label="&paste.label;"
+                      class="menuitem-iconic native-paste-icon"
+                      observes="cmd_paste"/>
+        <xul:menuitem id="buffer-context-editSelectAll"
+                      label="&selectAll.label;"
+                      observes="cmd_selectAll"/>
+        <xul:menuseparator id="context-buffer-sep-paste"/>
+        <xul:menuitem label="&showHideIndentationGuides.label;"
+                      type="checkbox"
+                      observes="cmd_viewIndentationGuides"/>
+        <xul:menuitem label="&showHideLineNumbers.label;"
+                      type="checkbox"
+                      observes="cmd_viewLineNumbers"/>
+        <xul:menuitem label="&showHideEOLMarkers.label;"
+                      type="checkbox"
+                      observes="cmd_viewEOL"/>
+        <xul:menuitem label="&showHideWhitespace.label;"
+                      type="checkbox"
+                      observes="cmd_viewWhitespace"/>
+        <xul:menuitem label="&wordWrap.label;"
+                      type="checkbox"
+                      observes="cmd_wordWrap"/>
+        <children/>
+    </content>
+</binding>
+
+<binding id="view-buffer-base"
+    extends="chrome://komodo/content/bindings/views.xml#view-base">
+    <implementation name="viewbufferbase" implements="koIScintillaView, ISciMozEvents, nsIObserver">
+      
+        <constructor>
+        <![CDATA[
+        // A list of registered handlers that can handle the onModified event.
+        this._onModifiedHandlers = [];
+        var wantedflags = (Components.interfaces.ISciMoz.SC_MOD_BEFOREDELETE |
+                           Components.interfaces.ISciMoz.SC_MOD_INSERTTEXT |
+                           Components.interfaces.ISciMoz.SC_MOD_DELETETEXT);
+        this.addModifiedHandler(this._onModifiedHandler, this, 1000, wantedflags);
+        ]]>
+        </constructor>
+
+        <field name="_scintilla">null</field>
+
+        <property name="scintilla">
+            <getter><![CDATA[
+            if (typeof require == "undefined")
+                return document.getAnonymousElementByAttribute(this, 'anonid', 'scintilla');
+
+            if ( ! this._scintilla)
+                this._scintilla = require("ko/dom")(this).findAnonymous('anonid', "scintilla").element();
+            return this._scintilla;
+            ]]></getter>
+        </property>
+
+        <!-- Whether the buffer/editor sends DOM events. -->
+        <field name="_dispatch_events">false</field>
+
+        <field name="__prefs">null</field>
+
+        <property name="prefs">
+             <getter><![CDATA[
+                // Buffers don't have their own file prefs - so they use global
+                // prefs.
+                if (!this.__prefs)
+                    this.__prefs = Components.classes["@activestate.com/koPrefService;1"].
+                                    getService(Components.interfaces.koIPrefService).prefs;
+                return this.__prefs;
+            ]]></getter>
+        </property>
+
+        <field name="__docSvc">null</field>
+
+        <property name="docSvc">
+        <getter><![CDATA[
+            if (!this.__docSvc)
+                this.__docSvc = Components.classes['@activestate.com/koDocumentService;1']
+                    .getService(Components.interfaces.koIDocumentService);
+            return this.__docSvc;
+        ]]></getter>
+        </property>
+        <property name="scimoz"
+            onget="return this.scintilla.scimoz;"/>
+
+        <field name="_uiTimer">null</field>
+
+        <property name="dragHandler"
+            onget="return this.scintilla;"/>
+
+        <field name="lastCharAdded">null</field>
+        <field name="charModified">null</field>
+        <field name="lastPosition">null</field>
+
+        <field name="textChangeUndoPending">false</field>
+
+        <field name="_findbar">null</field>
+
+        <property name="findbar">
+            <getter>
+                <![CDATA[
+                if (typeof require == "undefined")
+                    return document.getAnonymousElementByAttribute(this, 'anonid', 'findbar');
+
+                if ( ! this._findbar)
+                    this._findbar = require("ko/dom")(this).findAnonymous('anonid', "findbar").element();
+                return this._findbar;
+                ]]>
+            </getter>
+            <setter>
+                <![CDATA[
+                    this._findbar = val;
+                ]]>
+            </setter>
+        </property>
+
+        <property name="_doAutoComplete"
+            onget="return this.__globalPrefs.getBooleanPref('codeintel_completion_triggering_enabled')"/>
+        <property name="_doStartCallTip"
+            onget="return this.__globalPrefs.getBooleanPref('codeintel_calltip_triggering_enabled')"/>
+
+        <field name="_transientMarkRingSize">16</field>
+        <field name="_transientMarkRing">[]</field>
+
+        <property name="transientMark">
+            <getter>
+                <![CDATA[
+                try {
+                    if (this._transientMarkRing.length == 0) {
+                        return null;
+                    }
+                    // Return the last thing on the ring.
+                    var index = this._transientMarkRing.length-1;
+                    var dict = this._transientMarkRing[index];
+                    var handle = dict['handle'];
+                    var column = dict['column'];
+                    var context = dict['context'];
+                    var lineNo = this.scimoz.markerLineFromHandle(handle);
+                    var pos = ko.views.ScimozOffsetFromUCS2Offset(this.scimoz,
+                                 this.scimoz.positionFromLine(lineNo), column);
+                    // verify that the context is valid
+                    var newPos = ko.views.ScimozOffsetFromUCS2Offset(this.scimoz, pos, context.length);
+                    if (this.scimoz.getTextRange(pos, newPos) == context) {
+                        return pos;
+                    } else {
+                        // look for context on this line
+                        var lineStart = this.scimoz.positionFromLine(lineNo);
+                        var lineEnd = this.scimoz.getLineEndPosition(lineNo);
+                        var line = this.scimoz.getTextRange(lineStart, lineEnd);
+                        var column = line.indexOf(context);
+                        if (column != -1) { // found it
+                            this._transientMarkRing[index]['column'] = column;
+                            return lineStart + column;
+                        } else if (lineNo < this.scimoz.lineCount) { // look at next line
+                            lineStart = this.scimoz.positionFromLine(lineNo+1);
+                            lineEnd = this.scimoz.getLineEndPosition(lineNo+1);
+                            line = this.scimoz.getTextRange(lineStart, lineEnd);
+                            column = line.indexOf(context);
+                            if (column != -1) { // found it
+                                this._transientMarkRing[index]['column'] = column;
+                                this.scimoz.markerDeleteHandle(handle);
+                                handle = this.scimoz.markerAdd(lineNo, ko.markers.MARKNUM_TRANSIENTMARK);
+                                this._transientMarkRing[index]['handle'] = handle;
+                                return lineStart + column;
+                            }
+                        }
+                        this._transientMarkRing.pop();
+                        require("notify/notify").send("Mark not found - deleted", "mark");
+                        return -1;
+                    }
+                    return pos;
+                } catch (e) {
+                    this.log.exception(e);
+                }
+                return -1;
+                ]]>
+            </getter>
+            <setter>
+                <![CDATA[
+                try {
+                    this._clearTransientSelection();
+                    if (this._transientMarkRing.length >= this._transientMarkRingSize) { // emacs default size
+                        this._transientMarkRing.shift();
+                    }
+                    // We are given a position, but what we need to store
+                    // is a scintilla mark _handle_ and a column offset.
+                    var lineNo = this.scimoz.lineFromPosition(val);
+                    var handle = this.scimoz.markerAdd(lineNo, ko.markers.MARKNUM_TRANSIENTMARK);
+                    var column = this.scimoz.getColumn(val);
+                    var lineEnd = this.scimoz.getLineEndPosition(lineNo);
+                    var newPos = ko.views.ScimozOffsetFromUCS2Offset(this.scimoz, val, 5);
+                    if (newPos > lineEnd) {
+                        newPos = lineEnd;
+                    }
+                    var context = this.scimoz.getTextRange(val, newPos);
+                    var dict = {'handle': handle, 'column' : column,
+                                'context': context}
+                    this._transientMarkRing.push(dict);
+                    require("notify/notify").send("Transient mark set", "mark");
+                } catch (e) {
+                    this.log.exception(e);
+                }
+                ]]>
+            </setter>
+        </property>
+        
+        <method name="_clearTransientSelection">
+        <body>
+        <![CDATA[
+            try {
+                var indicator = Components.interfaces.koILintResult.DECORATOR_TAG_MATCH_HIGHLIGHT;
+                var scimoz = this.scimoz;
+                scimoz.indicatorCurrent = indicator;
+                scimoz.indicatorClearRange(0, scimoz.length);
+            } catch (e) {
+                this.log.exception(e);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="rotateTransientMarkRing">
+                <body>
+                <![CDATA[
+                try {
+                    this._clearTransientSelection();
+                    this._transientMarkRing = [this._transientMarkRing.pop()].concat(this._transientMarkRing);
+                } catch (e) {
+                    this.log.exception(e);
+                }
+                ]]>
+            </body>
+        </method>
+
+        <method name="transientMarkPop">
+            <body>
+            <![CDATA[
+            var msg;
+            if (this._transientMarkRing.length > 0) {
+                this._transientMarkRing.pop();
+                if (this._transientMarkRing.length > 0) {
+                    this.displayTransientSelection();
+                } else {
+                    this._clearTransientSelection();
+                }
+                msg = (this._transientMarkRing.length
+                       + " transient mark"
+                       + (this._transientMarkRing.length != 1 ? "s" : "")
+                       + " remaining");
+            } else {
+                msg = "No transient marks to pop";
+            }
+            require("notify/notify").send(msg, "mark");
+            ]]>
+            </body>
+        </method>
+
+        <method name="displayTransientSelection">
+            <body>
+            <![CDATA[
+            var transientMarkRingArray = this._transientMarkRing;
+            var dict = transientMarkRingArray[transientMarkRingArray.length - 1];
+            var indicator = Components.interfaces.koILintResult.DECORATOR_TAG_MATCH_HIGHLIGHT;
+            var handle = dict['handle'];
+            var column = dict['column'];
+            var scimoz = this.scimoz;
+            var lineNo = scimoz.markerLineFromHandle(handle);
+            var pos = ko.views.ScimozOffsetFromUCS2Offset(scimoz,
+                         scimoz.positionFromLine(lineNo), column);
+            var currentPos = scimoz.currentPos;
+            scimoz.indicatorCurrent = indicator;
+            scimoz.indicatorClearRange(0, scimoz.length);
+            if (currentPos != pos) {
+                if (currentPos > pos) {
+                    [currentPos, pos] = [pos, currentPos];
+                }
+                scimoz.indicatorFillRange(currentPos, pos - currentPos);
+            }
+            ]]>
+            </body>
+        </method>
+                    
+        <method name="moveToNextTabstop">
+            <body>
+            <![CDATA[
+            try {
+                return ko.tabstops.moveToNextTabstop(this);
+            } catch(ex) {
+                return false;
+            }
+            ]]>
+            </body>
+        </method>
+
+        <!--
+        Center the editor caret.
+          "align" param can be one of "top", "onethird", "middle" (the default),
+                 "twothirds" or "bottom"
+        -->
+        <method name="verticallyAlignCaret">
+            <parameter name="align"/>
+            <body>
+            <![CDATA[
+            var scimoz = this.scimoz;
+            var currentline = scimoz.visibleFromDocLine(scimoz.lineFromPosition(scimoz.currentPos));
+            var newfvl;
+            switch (align) {
+                case "top":
+                    // Position the caret line at the top of the screen.
+                    newfvl = currentline - this.prefs.getLong("ySlop", 5);
+                    break;
+                case "bottom":
+                    // Position the caret line at the bottom of the screen.
+                    newfvl = currentline + this.prefs.getLong("ySlop", 5) - (scimoz.linesOnScreen - 1);
+                    break;
+                case "onethird":
+                case "onethirds":
+                    // Position the caret line at the top 1/3 of the screen.
+                    newfvl = currentline - parseInt(scimoz.linesOnScreen / 3);
+                    break;
+                case "twothird":
+                case "twothirds":
+                    // Position the caret line at the bottom 1/3 of the screen.
+                    newfvl = currentline - parseInt((2 * scimoz.linesOnScreen) / 3);
+                    break;
+                case "middle":
+                default:
+                    // Position the caret line in the middle of the screen.
+                    newfvl = currentline - parseInt(scimoz.linesOnScreen / 2);
+                    break;
+            }
+            scimoz.firstVisibleLine = newfvl;
+            ]]>
+            </body>
+        </method>
+
+        <!-- Note: this guy is the *non-CodeIntel-based* completion service.
+             I.e., languages using CodeIntel for AutoComplete/CallTips do
+             no use these. -->
+        <field name="__commandCompletionSvcGetterAttempted">false</field>
+        <field name="_commandCompletionSvc">null</field>
+        <property name="commandCompletionSvc">
+            <setter><![CDATA[
+            if (val == null) {
+                this.__commandCompletionSvcGetterAttempted = false;
+                this._commandCompletionSvc = null;
+            } else {
+                throw new Error("cannot set 'commandCompletionSvc' to anything but null!");
+            }
+            ]]></setter>
+            <getter><![CDATA[
+            if (!this.__commandCompletionSvcGetterAttempted) {
+                this.__commandCompletionSvcGetterAttempted = true;
+                this._commandCompletionSvc = this.languageObj.getLanguageService(Components.interfaces.koICompletionLanguageService)
+                var languageName = this.languageObj.name;
+                if (!this._commandCompletionSvc) {
+                    this.log.debug('no completion service for '+this.languageObj.name);
+                    return null;
+                }
+                this.scimoz.autoCSeparator = this._commandCompletionSvc.completionSeparator;
+            }
+            return this._commandCompletionSvc;
+            ]]></getter>
+        </property>
+
+        <property name="currentLine">
+            <getter><![CDATA[
+                return this.scimoz.lineFromPosition(this.scimoz.currentPos)+1;
+            ]]></getter>
+            <setter><![CDATA[
+                var scimoz = this.scimoz;
+                var lineno = val-1;
+                scimoz.ensureVisibleEnforcePolicy(lineno);
+                scimoz.gotoLine(lineno);
+                scimoz.scrollCaret();
+            ]]></setter>
+        </property>
+
+        <property name="currentColumn"
+            onget="return this.scimoz.getColumn(this.scimoz.currentPos)+1;"
+            onset="this.scimoz.currentPos = this.scimoz.positionAtColumn(this.currentLine-1,val-1);
+                    this.scimoz.scrollCaret();"/>
+
+        <property name="anchor"
+            onset="this.scimoz.anchor = val;"
+            onget="return this.scimoz.anchor;"/>
+
+        <property name="currentPos"
+            onset="this.scimoz.currentPos = val;"
+            onget="return this.scimoz.currentPos;"/>
+
+        <property name="selection"
+            onset="this.scimoz.replaceSel(val)"
+            onget="return this.scimoz.selText;"/>
+
+        <property name="encoding"
+            onset="this.scintilla.encoding = val"
+            onget="return this.scintilla.encoding;"/>
+
+        <property name="scheme"
+            onset="this.scintilla.scheme= val"
+            onget="return this.scintilla.scheme;"/>
+
+        <property name="alternateFaceType"
+            onset="this.scintilla.alternateFaceType= val"
+            onget="return this.scintilla.alternateFaceType;"/>
+        <method name="setFoldStyle">
+            <parameter name="foldstyle"/>
+            <body>
+                <![CDATA[
+                    this.scintilla.setFoldStyle(foldstyle);
+                ]]>
+            </body>
+        </method>
+
+        <field name="_language">"Text"</field>
+        <property name="language">
+            <getter><![CDATA[
+                return this._language;
+            ]]>
+            </getter>
+            <setter><![CDATA[
+                this._language = val;
+                this._languageObj = null; // remove our language object
+                this.scintilla.language = val; // change scintilla
+            ]]>
+            </setter>
+        </property>
+
+        <field name="_languageObj">null</field>
+        <property name="languageObj">
+            <getter><![CDATA[
+            if (!this._languageObj) {
+                var registryService = Components.classes['@activestate.com/koLanguageRegistryService;1'].
+                       getService(Components.interfaces.koILanguageRegistryService)
+                this._languageObj = registryService.getLanguage(this.language);
+            }
+            return this._languageObj;
+            ]]>
+            </getter>
+        </property>
+
+        <field name="_genericController">null</field>
+
+        <destructor>
+        <![CDATA[
+            //dump("destructor for view-buffer called\n");
+        ]]>
+        </destructor>
+
+        <field name="_inInitPhase">true</field>
+
+        <field name="lintBuffer">null</field>
+
+        <method name="close_viewbufferbase">
+        <body>
+        <![CDATA[
+            //this.log.info('view-buffer is closing')
+            
+            if (this._uiTimer)
+                clearTimeout(this._uiTimer);
+            
+            // Note that we have to deal with being called after scintilla has
+            // already been unloaded.
+            try {
+                if (this.scintilla.inited) {
+                    // force scimoz to stop ticking, bug 37165
+                    this.scimoz.isFocused = false; 
+                    this.scimoz.unhookEvents(this);  // This needs to be done in a close() method.
+                    this.scintilla.controllers.removeController(this._genericController);
+                }
+                if (this._genericController) {
+                    this._genericController.view = null;
+                }
+                this._genericController = null;
+            } catch(e) {
+                // if anything bad happened, we still want to close the view!
+                this.log.exception(e);
+            }
+
+            this.scintilla.unload();
+
+            return this.close_viewbase();
+        ]]>
+        </body>
+        </method>
+
+        <method name="close">
+        <body>
+        <![CDATA[
+            this.close_viewbufferbase();
+        ]]>
+        </body>
+        </method>
+
+        <method name="closeUnconditionally">
+        // Bug 98867: Allow for any kind of view to handle a closeUnconditionally method.
+        <body>
+        <![CDATA[
+            this.close_viewbufferbase();
+        ]]>
+        </body>
+        </method>
+
+        <method name="init">
+        <body>
+        <![CDATA[
+            this.log.debug('view initializing');
+        ]]>
+        </body>
+        </method>
+
+        <method name="initWithBuffer">
+        <parameter name="buffer"/>
+        <parameter name="language"/>
+        <body>
+        <![CDATA[
+        try {
+            this.log.info("view-buffer:initWithBuffer");
+            if (!language) {
+                language = "Text";
+            }
+            this.language = language
+            this.scintilla.encoding = 'utf-8';
+            this.scintilla.init();
+            this.koDoc = null;
+            this._genericController = Components.classes['@activestate.com/koGenericCommandHandler;1'].createInstance();
+            this._genericController.view = this;
+
+            // We have to place the controller onto the scintilla element, as
+            // the scintilla element is the one that will have the focus!
+            this.scintilla.controllers.appendController(this._genericController);
+
+            this._hookSciMozEvents();
+            this.setBufferText(buffer);
+            this._inInitPhase = false;
+        } catch (e) {
+            this.log.exception(e);
+        }
+        ]]>
+        </body>
+        </method>
+
+        <field name="SCIMOZ_EVENT_MASK" readonly="true">
+            Components.interfaces.ISciMozEvents.SME_CHARADDED |
+            Components.interfaces.ISciMozEvents.SME_SAVEPOINTREACHED |
+            Components.interfaces.ISciMozEvents.SME_SAVEPOINTLEFT |
+            Components.interfaces.ISciMozEvents.SME_DOUBLECLICK |
+            Components.interfaces.ISciMozEvents.SME_UPDATEUI |
+            Components.interfaces.ISciMozEvents.SME_MODIFIED |
+            Components.interfaces.ISciMozEvents.SME_MARGINCLICK |
+            Components.interfaces.ISciMozEvents.SME_USERLISTSELECTION |
+            Components.interfaces.ISciMozEvents.SME_URIDROPPED |
+            Components.interfaces.ISciMozEvents.SME_DWELLSTART |
+            Components.interfaces.ISciMozEvents.SME_DWELLEND |
+            Components.interfaces.ISciMozEvents.SME_ZOOM |
+            Components.interfaces.ISciMozEvents.SME_HOTSPOTDOUBLECLICK |
+            Components.interfaces.ISciMozEvents.SME_COMMANDUPDATE
+        </field>
+
+        <method name="_hookSciMozEvents">
+            <parameter name="extras"/>
+            <body>
+                const SME = Components.interfaces.ISciMozEvents;
+                this.scimoz.hookEvents(this,
+                                       this.SCIMOZ_EVENT_MASK | (extras >>> 0));
+            </body>
+        </method>
+
+        <method name="setBufferText">
+            <parameter name="buffer"/>
+            <body>
+            <![CDATA[
+            // Undo magic as we set the buffer.
+            this.scimoz.undoCollection = 0
+            this.scimoz.emptyUndoBuffer()
+            this.scimoz.readOnly = 0
+            this.scimoz.text = buffer;
+            this.scimoz.undoCollection = 1;
+            this.scimoz.setSavePoint();
+            this.scimoz.emptyUndoBuffer();
+            ]]>
+            </body>
+        </method>
+
+        <method name="insertText">
+            <parameter name="text"/>
+            <body>
+            <![CDATA[
+            // Normalize the text to use the view's preferred EOL.
+            var eol = this.koDoc.new_line_endings;
+            var eol_str;
+            switch (eol) {
+            case Components.interfaces.koIDocument.EOL_LF:
+                eol_str = "\n";
+                break;
+            case Components.interfaces.koIDocument.EOL_CRLF:
+                eol_str = "\r\n";
+                break;
+            case Components.interfaces.koIDocument.EOL_CR:
+                eol_str = "\r";
+                break;
+            };
+
+            // Normalize the text to use the view's preferred tab/space setting.
+            var tabequivalent = '';
+            var useTabs = this.prefs.getBooleanPref("useTabs");
+            var tabWidth = this.prefs.getLongPref("tabWidth");
+            for (var i = 0; i < tabWidth; i++) {
+                tabequivalent += ' ';
+            }
+            var leading_ws_re = /^(\s+)(.*)/;
+            var lines = text.split(/\r\n|\n|\r/g);
+            for (i = 0; i < lines.length; i++) {
+                // Turn tabs into a space-equivalent value and vice-versa.
+                // We only need to do this for starting whitespace though.
+                var match = lines[i].match(leading_ws_re);
+                if (match) {
+                    var whitespace = match[1];
+                    if (useTabs) {
+                        whitespace = whitespace.replace(tabequivalent, "\t", "g");
+                    } else {
+                        whitespace = whitespace.replace("\t", tabequivalent, "g")
+                    }
+                    lines[i] = whitespace + match[2];
+                }
+            }
+
+            text = lines.join(eol_str);
+            this.scimoz.replaceSel(text);
+            ]]>
+            </body>
+        </method>
+
+        <!-- Bug 97600: turning off SC_WRAP_WORD has a side-effect of
+             updating the vertical scroll incorrectly
+          - @param docFirstLine: the first visible line before turning
+                   word-wrap off, in document coordinates (the value in
+                   the margin, minus 1)
+             -->
+        <method name="onWrapModeOff">
+        <parameter name="docFirstLine"/>
+        <body>
+        <![CDATA[
+            this.registerUpdateUICallback(function() {
+                this.scimoz.firstVisibleLine = this.scimoz.visibleFromDocLine(docFirstLine);
+            }.bind(this));
+        ]]>
+        </body>
+        </method>
+
+        <!--this is not a focus handler, but rather a set of stuff we
+        need to do in relation to forcing focus at certain points-->
+        <method name="setFocus">
+        <body>
+        <![CDATA[
+            /* doing this does not bubble the focus event back
+               to ourselves, so anything we'd do in the focus
+               handler also needs to be done here. */
+            this.log.info("in setFocus");
+            this.scintilla.focus();
+            this.doFocus(null);
+        ]]>
+        </body>
+        </method>
+
+        <method name="doFocus">
+        <parameter name="event"/>
+        <body>
+        <![CDATA[
+            this.log.info('in doFocus');
+            /* if event==null, then it's not a real focus event */
+            // XXX this slows down tab switching, file loading, file closing :(
+            // window.updateCommands('editor_has_focus');
+        ]]>
+        </body>
+        </method>
+
+        <!--ISciMozEvents implementation-->
+        <method name="onStyleNeeded">
+        <parameter name="position"/>
+        <body><![CDATA[return true;]]></body>
+        </method>
+
+        <method name="onCharAdded">
+        <parameter name="charCode"/>
+        <body>
+        <![CDATA[
+            this.lastCharAdded = String.fromCharCode(charCode);
+        ]]>
+        </body>
+        </method>
+
+        <method name="onSavePointReached">
+        <body>
+        <![CDATA[
+            this.log.info("in onSavePointReached");
+            if (this.koDoc) {
+                // we may not have a document yet
+                this.koDoc.isDirty = false;
+            }
+            return true;
+        ]]>
+        </body>
+        </method>
+
+        <method name="onSavePointLeft">
+        <body>
+        <![CDATA[
+            this.log.info("in onSavePointLeft");
+            if (this.koDoc) {
+                // we may not have a document yet
+                this.koDoc.isDirty = true;
+            }
+            return true;
+        ]]>
+        </body>
+        </method>
+
+        <method name="onDwellStart">
+            <parameter name="position"/>
+            <parameter name="x"/>
+            <parameter name="y"/>
+        <body><![CDATA[
+/* #if PLATFORM == "darwin" */
+            // The position given to use from Scintilla on the Mac are bogus, as
+            // it doesn't receive regular mousemove events - bug 97756.
+            [x,y] = this._last_mousemove_xy;
+/* #endif */
+
+            if (typeof require == 'undefined')
+                return;
+
+            var w = require("ko/windows").getMain();
+            if ( ! w || ! w.ko || ! w.ko.uilayout)
+                return;
+
+            var legacy = w.ko;
+            var bo = this.boxObject;
+            var [parentX, parentY] = legacy.uilayout.mousepos;
+            if (parentX < bo.x || parentY < bo.y || // left, top
+                parentX > bo.x + bo.width || parentY > bo.y + bo.height) // right, bottom
+                return;
+
+            // Send event.
+            if (this._dispatch_events) {
+                var data = { view: this, position: position, x: x, y: y };
+                if (!this.dispatchEvent(new CustomEvent("editor_dwell_start", { detail: data, bubbles: true, cancelable: true }))) {
+                    // Handled already.
+                    return true;
+                }
+            }
+
+            if (gEditorTooltipHandler && typeof(this.getTooltipText) != 'undefined') {
+                gEditorTooltipHandler.show(this, x, y, -1 /* no timeout */);
+            }
+
+            if (this._hyperlink && this._isHyperlinkAllowed) {
+                this._hyperlink.dwell(this, position);
+            }
+            return true;
+        ]]></body>
+        </method>
+
+        <method name="onDwellEnd">
+            <parameter name="position"/>
+            <parameter name="x"/>
+            <parameter name="y"/>
+        <body><![CDATA[
+            // Send event.
+            if (this._dispatch_events) {
+                var data = { view: this, position: position, x: x, y: y };
+                if (!this.dispatchEvent(new CustomEvent("editor_dwell_end", { detail: data, bubbles: true, cancelable: true }))) {
+                    // Handled already.
+                    return true;
+                }
+            }
+
+            if (gEditorTooltipHandler && typeof(this.getTooltipText) != 'undefined')
+                gEditorTooltipHandler.hide();
+            return true;
+        ]]></body>
+        </method>
+
+        <method name="onModifyAttemptRO">
+        <body><![CDATA[return true;]]></body>
+        </method>
+
+        <method name="onKey">
+        <parameter name="ch"/>
+        <parameter name="modifiers"/>
+        <body><![CDATA[return true;]]></body>
+        </method>
+
+        <method name="onDoubleClick">
+        <body>
+        <![CDATA[
+        var scimoz = this.scimoz;
+        // sample dbl clicks.  Match other parts in these:
+        // 123.456 -123.456 .211 435.61
+        // but not these:
+        // 456.321no no321.567 blip 123e+43e+55 128.34.56.75
+        
+        var sStart = scimoz.selectionStart;
+        var sEnd = scimoz.selectionEnd;
+        var lineStart = scimoz.lineFromPosition(sStart);
+        var lineEnd = scimoz.lineFromPosition(sEnd);
+        var selectedText = scimoz.getTextRange(sStart, sEnd);
+        var x = 123.456 + 123.456e-33 - 123.456e+33 * 123.34e02 + 10e4;
+        if (lineStart == lineEnd && /^\d+[Ee]?$/.test(selectedText)) {
+            // Consider everything surrounding the current selection
+            var textLeft = scimoz.getTextRange(scimoz.positionFromLine(lineStart), sStart);
+            var textRight = scimoz.getTextRange(sEnd, scimoz.getLineEndPosition(lineEnd));
+            var rightOffset;
+            if (/[Ee]$/.test(selectedText) && textRight.length && /^[\-\+]/.test(textRight)) {
+                selectedText += textRight[0];
+                textRight = textRight.substr(1);
+                rightOffset = 1;
+            } else {
+                rightOffset = 0;
+            }
+            var ptn = '((?:[Ee][\\-\\+]?|\\d+|\\.|[a-df-zA-DF-Z_])+)';
+            var m = (new RegExp(ptn + "$")).exec(textLeft);
+            var numTextLeft = m ? m[1] : "";
+            m = (new RegExp("^" + ptn)).exec(textRight);
+            var numTextRight = m ? m[1] : "";
+            var spannedText = numTextLeft + selectedText + numTextRight;
+            if (/^[\-\+]?\d*?(\.\d*)?(?:[Ee][\-\+]?)?\d*$/.test(spannedText)) {
+                // The matched subparts together match a single number.
+                scimoz.selectionStart = sStart - numTextLeft.length;
+                scimoz.selectionEnd = sEnd + numTextRight.length + rightOffset;
+            }
+        }
+        return true;
+        ]]>
+        </body>
+        </method>
+        
+        <!--<field name="firstDocLine">-1</field>-->
+        <!--<field name="lastDocLine">-1</field>-->
+        
+        <!-- These two methods used by subclasses to track editor/view boundaries.-->
+        <method name="getEditorViewBoundaries">
+        <body>
+        <![CDATA[
+        var scimoz = this.scimoz;
+        var firstDocLine, lastDocLineOnScreen;
+        var firstVisibleLine = scimoz.firstVisibleLine;
+        var firstDocLine = scimoz.docLineFromVisible(firstVisibleLine);
+        var lastDocLineOnScreen = scimoz.docLineFromVisible(firstVisibleLine + scimoz.linesOnScreen);
+        if (lastDocLineOnScreen > scimoz.lineCount) {
+            lastDocLineOnScreen = scimoz.lineCount;
+        }
+        return [firstDocLine, lastDocLineOnScreen];
+        ]]>
+        </body>
+        </method>
+        
+        <method name="updateEditorViewBoundaries">
+        <parameter name="firstDocLine" />
+        <parameter name="lastDocLineOnScreen" />
+        <body>
+        <![CDATA[
+            // If no arguments are supplied, use the current settings
+        if (typeof(firstDocLine) == "undefined") {
+            [firstDocLine, lastDocLineOnScreen] = this.getEditorViewBoundaries();
+        }
+        this.firstDocLine = firstDocLine;
+        this.lastDocLine = lastDocLineOnScreen;
+        ]]>
+        </body>
+        </method>
+
+        <field name="_lastPosLineAndCol">[-1, -1, -1, -1]</field>
+        <field name="_updateUICallbacks">[]</field>
+        
+        <!-- Note that if a callback causes further scintilla
+             updateUI events, they'll be processed in the next
+             onUpdateUI event, to avoid re-entrancy and loops.
+             -->
+        <method name="registerUpdateUICallback">
+        <parameter name="callback"/>
+        <body>
+        <![CDATA[
+            this._updateUICallbacks.push(callback);
+        ]]>
+        </body>
+        </method>
+        
+        <method name="onUpdateUI">
+        <parameter name="updated"/>
+        <body>
+        <![CDATA[
+            if (!this.log) return; // closed
+            this.log.debug('doUpdateUI called');
+            var scimoz = this.scimoz;
+
+            var callbacks = this._updateUICallbacks;
+            // Note: We check linesOnScreen to ensure Scintilla is ready.
+            if (callbacks.length && scimoz.linesOnScreen > 0) {
+                var log = this.log;
+                this._updateUICallbacks = [];
+                callbacks.forEach(function(cb) {
+                    try {
+                        cb();
+                    } catch(ex) {
+                        log.exception(ex, "Error invoking a _updateUICallback");
+                    }
+                });
+            }
+
+            // Since onUpdateUI is called for a lot of different cases, we
+            // check to see if the position has really changed.
+            var currentPos = scimoz.currentPos;
+            var selectionStart = scimoz.selectionStart;
+            var selectionEnd = scimoz.selectionEnd;
+            var currentLineNo = scimoz.lineFromPosition(currentPos);
+            var columnNo = scimoz.getColumn(currentPos);
+            var firstVisibleLine = scimoz.firstVisibleLine;
+            var newPosLineAndCol = [selectionStart, currentLineNo, columnNo, firstVisibleLine, selectionEnd];
+            if ((this._lastPosLineAndCol[0] != newPosLineAndCol[0]) ||
+                (this._lastPosLineAndCol[1] != newPosLineAndCol[1]) ||
+                (this._lastPosLineAndCol[2] != newPosLineAndCol[2]) ||
+                (this._lastPosLineAndCol[4] != newPosLineAndCol[4])) {
+                this._lastPosLineAndCol = newPosLineAndCol;
+                // The position has changed since the last time we updated.
+                var data = {
+                    "currentPos": currentPos,
+                    "line": currentLineNo,
+                    "column": columnNo
+                }
+                if (this._dispatch_events && this == ko.views.manager.currentView) {
+                    this.dispatchEvent(new CustomEvent('current_view_linecol_changed', { bubbles: true, detail: data }));
+                }
+
+            } else {
+                if (this._lastPosLineAndCol[3] != newPosLineAndCol[3]) {
+                    this._lastPosLineAndCol = newPosLineAndCol;
+                    if (this.lintBuffer) {
+                        if (this._dispatch_events && this == ko.views.manager.currentView) {
+                            this.dispatchEvent(new CustomEvent('current_view_scroll_changed', { bubbles: true }));
+                        }
+                    }
+                }
+                if (!this.textChangeUndoPending && !this.lastCharAdded) {
+                    // Position hasn't changed, no chars were added and no text
+                    // was modified - we've got nothing to do.
+                    return false;
+                }
+            }
+
+            // If there is an active calltip, then update it as necessary.
+            if (scimoz.callTipActive()) {
+                // For languages NOT using CodeIntel-based completion, make
+                // sure an active CallTip gets canceled if the cursor moves
+                // off the CallTip line or before the start pos. (Komodo-only
+                // patches to Scintilla make Scintilla NOT cancel this
+                // automatically for these cases.)
+                var posStart = scimoz.callTipPosStart();
+                if (currentPos < posStart) {
+                    scimoz.callTipCancel();
+                } else {
+                    var currentLineNo = scimoz.lineFromPosition(currentPos);
+                    var posStartLine = scimoz.lineFromPosition(posStart);
+                    if (currentLineNo != posStartLine) {
+                        scimoz.callTipCancel();
+                    }
+                }
+            }
+
+            if (this.textChangeUndoPending) {
+                // Fix bug 89414 -- undo/redo buttons not getting updated on doc changes
+                window.updateCommands('undo');
+                this.textChangeUndoPending = false;
+            }
+
+            // Forward the call to the languageObj so it can provide language
+            // specific features (smart indent, electric bracers, .. )
+            if (this.lastCharAdded) {
+                if (this.languageObj &&
+                    this.prefs.getBooleanPref("editElectricBrace")) {
+                    // "keyPressed" is the poorly named mechanism to initiate
+                    // auto-indenting functionality.
+                    this.languageObj.keyPressed(this.lastCharAdded, this.scimoz);
+                }
+            }
+
+            var obsvc;
+            if (this.charModified) {
+                this.dispatchEvent(new CustomEvent('buffer_char_modified', { bubbles: true, detail: this.lastCharAdded }));
+            }
+
+            if (this.lastPosition !== null && currentPos != this.lastPosition) {
+                var char = this.charModified ? this.lastCharAdded : null;
+                this.dispatchEvent(new CustomEvent('buffer_pos_changed', { bubbles: true, detail: { offset: currentPos - this.lastPosition, char: char } }));
+            }
+
+            this.lastCharAdded = null;
+            this.charModified = false;
+            this.lastPosition = currentPos;
+            
+            if (this._uiTimer) {
+                clearTimeout(this._uiTimer);
+            }
+            
+            this._uiTimer = setTimeout(this._onUpdateUI_debounced.bind(this, updated), 200);
+        ]]>
+        </body>
+        </method>
+        
+        <method name="_onUpdateUI_debounced">
+        <parameter name="updated"/>
+        <body>
+        <![CDATA[
+            this._uiTimer = null;
+            
+            var scimoz = this.scimoz;
+            
+            scimoz.doBraceMatch();
+
+            if (updated & (scimoz.SC_UPDATE_CONTENT | scimoz.SC_UPDATE_SELECTION)) {
+                // Highlight indentation guide for matching XML tags, as necessary.
+                this._xmlTagsHighlightGuide();
+            }
+            
+            if ((updated & Components.interfaces.ISciMoz.SC_UPDATE_CONTENT ||
+                 updated & Components.interfaces.ISciMoz.SC_UPDATE_V_SCROLL) &&
+                this.prefs.getBooleanPref("editUseSpellChecking")) {
+                // Run the background spell checker.
+                clearTimeout(this.spellcheck_timeout);
+                this.spellcheck_timeout = setTimeout(function() {
+                    var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+                                .getService(Components.interfaces.nsIWindowMediator);
+                    var w = wm.getMostRecentWindow("Komodo");
+                    if (!w) return;
+                    w = w.require("ko/windows").getMain();
+                    if (!w) return;
+                    
+                    if (w.require.exists('spellcheck/spellcheck'))
+                        w.require('spellcheck/spellcheck').checkSpelling();
+                }, this._spellcheck_delay);
+            }
+
+            // Highlight other variable instances when the cursor is on a variable.
+            var koILintResult = Components.interfaces.koILintResult;
+            this._clearIndicatorsNearRange(koILintResult.DECORATOR_TAG_MATCH_HIGHLIGHT, 0, scimoz.length);
+            if ((updated & scimoz.SC_UPDATE_SELECTION) && this.languageObj && scimoz.selections == 1) {
+                var styles = this.languageObj.getVariableStyles();
+                var style = scimoz.getStyleAt(scimoz.selectionStart);
+                for (let i = 0; i < styles.length; i++) {
+                    if (style == styles[i]) {
+                        if (scimoz.selectionEmpty) {
+                            var s = scimoz.wordStartPosition(scimoz.currentPos, true);
+                            var e = scimoz.wordEndPosition(scimoz.currentPos, true);
+                            if (s == e) continue;
+                            var word = scimoz.getTextRange(s, e);
+                        } else {
+                            var word = scimoz.selText;
+                        }
+                        scimoz.searchFlags = scimoz.SCFIND_WHOLEWORD | scimoz.SCFIND_MATCHCASE;
+                        scimoz.targetWholeDocument();
+                        while (scimoz.searchInTarget(word) != -1) {
+                            if (scimoz.getStyleAt(scimoz.targetStart) == style) {
+                                scimoz.indicatorFillRange(scimoz.targetStart, scimoz.targetEnd - scimoz.targetStart);
+                            }
+                            scimoz.setTargetRange(scimoz.targetEnd, scimoz.length);
+                        }
+                        break;
+                    }
+                }
+            }
+            
+        ]]>
+        </body>
+        </method>
+
+        <method name="positionAtColumn">
+            <parameter name="line"/>
+            <parameter name="col"/>
+            <body>
+                <![CDATA[
+                    // Convert a line,col tuple to a character position
+                    return this.scimoz.positionAtColumn(line, col);
+                ]]>
+            </body>
+        </method>
+
+        <field name="hotspothandler">null</field>
+
+        <method name="onHotSpotDoubleClick">
+        <parameter name="position"/>
+        <parameter name="modifiers"/>
+        <body>
+        <![CDATA[
+            try {
+                // It's possible that a view has defined a special
+                // handler for hotspotting.  If so, use it.  If it
+                // returns true, then do nothing else.
+                if (this.hotspothandler) {
+                    var retval = this.hotspothandler(position, modifiers);
+                    if (retval) return;
+                }
+
+                // We know what position we are at, but we don't know anything else
+                // about the buffer.  We don't know what languages are to be expected
+                // either.  The lexers seem to deal with all languages, so we should be
+                // able to as well.
+
+                var lineNo = this.scimoz.lineFromPosition(position);
+                var startOfLine = this.scimoz.positionFromLine(lineNo);
+                var endOfLine = this.scimoz.getLineEndPosition(lineNo);
+                var line = this.scimoz.getTextRange(startOfLine, endOfLine);
+
+                // We should be able to get a filename/URI (and possibly a line
+                // number) from the hotspot line.
+                // - Some views may display relative filenames (e.g. the Command
+                //   Output window when displaying the results of grep or findstr
+                //   output).  These views should set the "cwd" property.
+                var resultsObj = new Array();
+                var countObj = new Object();
+                this.docSvc.parseHotspotLine(line, this.cwd, countObj,
+                                             resultsObj);
+                var results = resultsObj.value;
+                var msg;
+                // We don't know how to stop the double-click on a hotspot
+                // line from selecting the current word, so we 'undo' that
+                // word selection here.  It'd be nice to avoid this.
+                this.scimoz.currentPos = position;
+                this.scimoz.anchor = position;
+                if (results.length == 2) {
+                    var fname = results[0];
+                    lineNo = results[1];
+                    lineNo = Number(lineNo);
+                    var os = Components.classes["@activestate.com/koOs;1"].createInstance();
+                    if (os.path.exists(fname)) {
+                        ko.views.manager.doFileOpenAtLineAsync(ko.uriparse.pathToURI(fname), lineNo);
+                    } else {
+                        msg = "The file '" + fname + "' could not be found.";
+                        require("notify/notify").send(msg, "editor", {priority: "warning"});
+                    }
+                } else {
+                    // Parsing in koIDocumentService.parseHotspotLine() is not
+                    // fully compliant with LexOthers.cxx hotspot lexing.
+                    msg = "Could not parse hotspot line: " + line;
+                    require("notify/notify").send(msg, "editor", {priority: "warning"});
+                    // internal error dialogs are too much of a bother for users.
+                    //ko.dialogs.internalError("Komodo could not successfully parse a "+
+                    //    "filename and line number from the hotspot line "+
+                    //    "you clicked.",
+                    //    "Could not parse hotspot line:\n\n"+line);
+                }
+            } catch (e) {
+                this.log.exception(e);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <field name="MOD_TEXT_MODIFIED" readonly="true">
+            Components.interfaces.ISciMoz.SC_MOD_INSERTTEXT |
+            Components.interfaces.ISciMoz.SC_MOD_DELETETEXT
+        </field>
+
+        <method name="onModified">
+        <parameter name="position"/>
+        <parameter name="modificationType"/>
+        <parameter name="text"/>   <!-- unicode text -->
+        <parameter name="bytelength"/> <!-- utf8 length -->
+        <parameter name="linesAdded"/>
+        <parameter name="line"/>
+        <parameter name="foldLevelNow"/>
+        <parameter name="foldLevelPrev"/>
+        <body>
+        <![CDATA[
+        var lim = this._onModifiedHandlers.length;
+        for (var i = 0; i < lim; i++) {
+            var entry = this._onModifiedHandlers[i];
+            var wantedFlags = entry[3];
+            if (modificationType & wantedFlags) {
+                try {
+                    if (entry[0].call(entry[1], position, modificationType,
+                                                text, bytelength, linesAdded, line,
+                                                foldLevelNow, foldLevelPrev)) {
+                        return;
+                    }
+                } catch(ex) {
+                    this.log.error("onModified: error with handler " + i + ": " + ex);
+                }
+            }
+        }
+
+        // Dispatch a custom text_modified event to the window.
+        if (this._dispatch_events && modificationType & this.MOD_TEXT_MODIFIED) {
+            var event = document.createEvent("Events");
+            event.initEvent("editor_text_modified", true, true);
+            event.data = {
+                'view': this,
+                'position': position,
+                'modificationType': modificationType,
+                'text': text,
+                'bytelength': bytelength,
+                'linesAdded': linesAdded,
+                'line': line,
+                'foldLevelNow': foldLevelNow,
+                'foldLevelPrev': foldLevelPrev
+            };
+            window.dispatchEvent(event);
+
+            if (linesAdded > 0 && text.trim() == "")
+            {
+                this.lastCharAdded = "\n";
+                this.charModified = true;
+            }
+
+            if (bytelength === 1)
+            {
+                this.charModified = true;
+            }
+
+            this.textChangeUndoPending = true;
+        }
+        ]]>
+        </body>
+        </method>
+        
+        <method name="addModifiedHandler">
+        <parameter name="code"/>
+        <parameter name="owner"/> <!-- The 'this' when the code executes -->
+        <parameter name="priority"/>
+        <parameter name="modifyFlags"/> <!-- Flags they wish to be notified of -->
+        <body>
+        <![CDATA[
+        var lim = this._onModifiedHandlers.length;
+        if (!modifyFlags) {
+            // Default is to listen for everything.
+            modifyFlags = Components.interfaces.ISciMoz.SC_MODEVENTMASKALL;
+        }
+        var entry;
+        // The lower the priority, the earlier to place it on the array.
+        // Ties go to the first one in the list.
+        for (var i = 0; i < lim; i++) {
+            entry = this._onModifiedHandlers[i];
+            if (priority < entry[2]) {
+                this._onModifiedHandlers.splice(i, 0, [code, owner, priority, modifyFlags]);
+                return;
+            }
+        }
+        this._onModifiedHandlers.push([code, owner, priority, modifyFlags]);
+        ]]>
+        </body>
+        </method>
+        
+        <method name="removeModifiedHandler">
+        <parameter name="code"/>
+        <body>
+        <![CDATA[
+        var lim = this._onModifiedHandlers.length;
+        for (var i = 0; i < lim; i++) {
+            if (code == this._onModifiedHandlers[i][0]) {
+                this._onModifiedHandlers.splice(i, 1);
+                return;
+            }
+        }
+        this.log.error("removeModifiedHandler: Couldn't find onModifiedHandler" + code)
+        ]]>
+        </body>
+        </method>
+
+        <method name="_clearIndicatorsNearRange">
+        <!--
+          - Clear indicators within, or partially overlapping, a given range
+          - @param indicator The indicator to clear
+          - @param position The byte position of the start of the range
+          - @param length The byte length of the range
+          -->
+        <parameter name="indicator"/>
+        <parameter name="position"/>
+        <parameter name="length"/>
+        <body>
+        <![CDATA[
+            let scimoz = this.scimoz;
+            let start = scimoz.indicatorValueAt(indicator, position) ?
+                        scimoz.indicatorStart(indicator, position) : position;
+            var end = scimoz.indicatorValueAt(indicator, position + length - 1) ?
+                      scimoz.indicatorEnd(indicator, position + length - 1) : position + length;
+            scimoz.indicatorCurrent = indicator;
+            scimoz.indicatorClearRange(start, end - start);
+        ]]>
+        </body>
+        </method>
+
+        <field name="codeintel_scan_timeout">-1</field>
+        <field name="spellcheck_timeout">-1</field>
+        <property name="_spellcheck_delay"
+            onget="return this.__globalPrefs.getLongPref('spellCheckDelay')"/>
+
+        <method name="_onModifiedHandler">
+        <parameter name="position"/>
+        <parameter name="modificationType"/>
+        <parameter name="text"/>   <!-- unicode text -->
+        <parameter name="length"/> <!-- utf8 length -->
+        <parameter name="linesAdded"/>
+        <parameter name="line"/>
+        <parameter name="foldLevelNow"/>
+        <parameter name="foldLevelPrev"/>
+        <body>
+        <![CDATA[
+        try {
+            // This method is called _very_ frequently. One must take care
+            // to ensure that it does not take a long time.
+            //
+            // NOTE: Do _not_ cause any restyling to occur if in the middle
+            //       of handling a SC_MOD_CHANGESTYLE.  This will cause
+            //       lexing failures. See bug 26575
+
+            const SC_MOD_BEFOREDELETE = Components.interfaces.ISciMoz.SC_MOD_BEFOREDELETE;
+            const SC_MOD_INSERTTEXT = Components.interfaces.ISciMoz.SC_MOD_INSERTTEXT;
+            const SC_MOD_DELETETEXT = Components.interfaces.ISciMoz.SC_MOD_DELETETEXT;
+            const SC_PERFORMED_USER = Components.interfaces.ISciMoz.SC_PERFORMED_USER;
+            const SC_PERFORMED_UNDO = Components.interfaces.ISciMoz.SC_PERFORMED_UNDO;
+
+            let koDoc = this.koDoc;
+            if (!koDoc) {
+                return;
+            }
+
+            if (modificationType & (SC_MOD_INSERTTEXT | SC_MOD_BEFOREDELETE)) {
+                let koILintResult = Components.interfaces.koILintResult;
+                this._clearIndicatorsNearRange(koILintResult.DECORATOR_FIND_HIGHLIGHT, position, length);
+                this._clearIndicatorsNearRange(koILintResult.DECORATOR_TAG_MATCH_HIGHLIGHT, position, length);
+            }
+
+            // if deleting or inserting text...
+            if (modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT))
+            {
+                if (this.lintBuffer &&
+                    koDoc.getEffectivePrefs().getBooleanPref("editUseLinting"))
+                {
+                    this.lintBuffer.request("buffer was modified");
+                }
+
+                if ((modificationType & SC_MOD_DELETETEXT)
+                    && this.commandCompletionSvc
+                    && this._doAutoComplete
+                    && !(this.commandCompletionSvc.triggers ||
+                         (text && this.commandCompletionSvc.triggers.indexOf(text[0]) > -1)
+                        )
+                    && this.scimoz.autoCActive())
+                {
+                    this.scimoz.autoCCancel();
+                }
+
+                require("ko/simpledebug").updateView(this, true);
+            }
+            if ((modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT | SC_MOD_BEFOREDELETE))
+                && (modificationType & (SC_PERFORMED_USER|SC_PERFORMED_UNDO))
+                && koDoc.hasTabstopInsertionTable
+                && window == ko.windowManager.getMainWindow() // : don't handle updates in other windows
+                && this == ko.window.focusedView() // focusedView: don't handle updates in other views
+               ) {
+                if (modificationType & SC_PERFORMED_USER) {
+                    var runModifiedHandler = function(this_) {
+                        ko.views.wrapScintillaChange(this_, function() {
+                            ko.tabstops.updateLinkedBackrefs(modificationType,
+                                                             this_,
+                                                             position,
+                                                             text,
+                                                             length);
+                        });
+                    }
+                    switch(modificationType & (SC_MOD_BEFOREDELETE|SC_MOD_INSERTTEXT
+                                               |SC_MOD_DELETETEXT)) {
+                    case SC_MOD_BEFOREDELETE:
+                        // BEFORE events have to be run now.
+                        // They can't modify the buffer.
+                        runModifiedHandler(this);
+                        break;
+                    case SC_MOD_INSERTTEXT:
+                        if (ko.tabstops.atEmptyLinkedTabstop(this.scimoz,
+                                                             position,
+                                                             length)) {
+                            setTimeout(function(this_) {
+                                ko.views.wrapScintillaChange(
+                                    this_,
+                                    function() {
+                                        ko.tabstops.forceUpdateAllZeroWidthLinks(
+                                            this_,
+                                            this_.scimoz,
+                                            position,
+                                            text,
+                                            length);
+                                    });
+                            }, 0, this);
+                            break;
+                        }
+                        // else fall through to default.
+                    default:
+                        setTimeout(runModifiedHandler, 0, this);
+                    }
+                }
+                else if (modificationType & SC_MOD_DELETETEXT) {
+                    // An undo that deletes text that moves us out of a tabstop.
+                    ko.tabstops.handleDeleteByUndo(this, this.scimoz, position, length);
+                }
+            }
+        } catch(e) { this.log.exception(e); }
+        ]]>
+        </body>
+        </method>
+
+        <method name="onMacroRecord">
+        <parameter name="message"/>
+        <parameter name="wParam"/>
+        <parameter name="lParam"/>
+        <body><![CDATA[return true;]]></body>
+        </method>
+
+        <field name="_matchedTagUnhighlighter">0</field>
+        <field name="_mouseButton">-1</field>
+
+        <field name="_marginClickPending">false</field>
+        <method name="onMarginClick">
+        <parameter name="modifiers"/>
+        <parameter name="position"/>
+        <parameter name="margin"/>
+        <body>
+        <![CDATA[
+/* #if PLATFORM == "win" */
+            this._onMarginClick.apply(this, arguments);
+/* #else */
+            this._marginClickPending = arguments;
+ /* #endif */
+        ]]>
+        </body>
+        </method>
+
+        <method name="_onMarginClick">
+        <parameter name="modifiers"/>
+        <parameter name="position"/>
+        <parameter name="margin"/>
+        <body>
+        <![CDATA[
+            var s = this.scimoz;
+            var lineClicked = s.lineFromPosition(position);
+            var isSymbolClick = margin == s.MARGIN_SYMBOLS;
+            var isNumberClick = margin == s.MARGIN_LINENUMBERS;
+            
+            if (this._mouseButton === 0) {
+                // Send event.
+                var data = { view: this, margin: margin, position: position, modifiers: modifiers, line: lineClicked };
+                if (this._dispatch_events &&
+                    !this.dispatchEvent(new CustomEvent("editor_margin_clicked", { detail: data, bubbles: true, cancelable: true }))) {
+                    // Handled already.
+                    return;
+                }
+
+                if (margin == s.MARGIN_FOLDING) {
+                    // this block formerly from editorWrapper.onMarginClick
+                    // If the language doesnt support folding, we can't get
+                    // a click on the margin!
+                    if (s.getFoldLevel(lineClicked) & s.SC_FOLDLEVELHEADERFLAG) {
+                        if (s.getFoldExpanded(lineClicked)) {
+                            // check to see if cursor is inside fold, if so, move it to a visible place
+                            var level = s.getFoldLevel(lineClicked);
+                            var lineMaxSubord = s.getLastChild(lineClicked, level);
+                            var currentLine = s.lineFromPosition(s.currentPos);
+                            if (currentLine > lineClicked && currentLine <= lineMaxSubord) {
+                                var pos = s.positionFromLine(lineClicked);
+                                s.selectionStart = pos;
+                                s.selectionEnd = pos;
+                                s.currentPos = pos;
+                            }
+                        }
+                        s.toggleFold(lineClicked);
+                    }
+                }
+                else if (isSymbolClick && modifiers === this.scimoz.SCMOD_SHIFT) {
+                    // toggle bookmark
+                    var markerState = this.scintilla.scimoz.markerGet(lineClicked);
+                    if (markerState & (1 << ko.markers.MARKNUM_BOOKMARK)) {
+                        this.scintilla.scimoz.markerDelete(lineClicked, ko.markers.MARKNUM_BOOKMARK);
+                    } else {
+                        this.scintilla.scimoz.markerAdd(lineClicked, ko.markers.MARKNUM_BOOKMARK);
+                    }
+                }
+                else if (isSymbolClick && modifiers === this.scimoz.SCMOD_CTRL) {
+                    // toggle debug statement
+                    require("ko/simpledebug").toggle(this, lineClicked);
+                }
+                else if (isNumberClick){
+                    s.selectionStart = s.positionFromLine(lineClicked);
+                    s.selectionEnd = s.positionFromLine(lineClicked + 1);
+                }
+/* #if WITH_DEBUGGING */
+                //XXX We have to let breakpoints be set in XML files for XSLT
+                //    debugging, so cannot use the .debuggable condition.
+                else if (isSymbolClick && ko.dbg && !this.terminalHandler && modifiers === this.scimoz.SCMOD_NORM) {
+                    if (ko.dbg.isDebuggableLanguage(this.language)) {
+                        // Update breakpoint data for line changes that may have happened.
+                        ko.dbg.breakpoints.manager.updateBreakpointsFromMarkers(this.koDoc, this);
+                        ko.dbg.breakpoints.toggleState(this, lineClicked+1);
+                    } else {
+                        var msg = "Breakpoint margin click ignored - " +
+                                                this.language +
+                                                " is not a debuggable language";
+                        require("notify/notify").send(msg, "debugger");
+                    }
+                }
+/* #endif */
+            }
+            this._mouseButton = -1;
+            this._marginClickPending = false;
+        ]]>
+        </body>
+        </method>
+
+        <method name="onNeedShown">
+        <parameter name="position"/>
+        <parameter name="length"/>
+        <body><![CDATA[return true;]]></body>
+        </method>
+
+        <method name="onZoom">
+        <parameter name="position"/>
+        <body>
+        <![CDATA[
+            this.scimoz.updateMarginWidths();
+            return true;
+        ]]>
+        </body>
+        </method>
+
+        <method name="onOtherNotification">
+        <parameter name="eventType"/>
+        <parameter name="position"/>
+        <parameter name="text"/>
+        <parameter name="modifiers"/>
+        <body>
+        <![CDATA[
+            //dump("onOtherNotification\n  eventType: " + eventType +
+            //                        "\n  position: " + position +
+            //                        "\n  text: " + text +
+            //                        "\n  modifiers: " + modifiers + "\n");
+            const ISciMozEvents = Components.interfaces.ISciMozEvents;
+            switch(eventType) {
+                case ISciMozEvents.SME_AUTOCSELECTION:
+                case ISciMozEvents.SME_USERLISTSELECTION:
+                    if (this._dispatch_events) {
+                        var data = {
+                            'position': position,
+                            'text': text,
+                            'listType': modifiers,
+                        }
+                        this.dispatchEvent(new CustomEvent("codeintel_userlist_selected", { bubbles: true, detail: data }));
+                    }
+                    break;
+                case ISciMozEvents.SME_URIDROPPED:
+                    if (typeof ko !== "undefined" && "dragdrop" in ko) {
+                        let data = new ko.dragdrop.KoDropData("text/plain", text);
+                        ko.dragdrop.openDroppedUrls([data]);
+                    }
+                    break;
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="onCommandUpdate">
+        <parameter name="commandset"/>
+        <body>
+        <![CDATA[
+            //dump("onCommandUpdate\n  commandset: " + commandset + "\n");
+            window.updateCommands(commandset);
+        ]]>
+        </body>
+        </method>
+
+        <method name="getMarginForCoord">
+        <parameter name="x"/>
+        <parameter name="y"/>
+        <body><![CDATA[
+            // Return the margin number for these x,y coordinates, or -1 when
+            // outside the margin.
+            if (x <= 0) {
+                return -1;
+            }
+            var totalWidth = 0,
+                marginWidth = 0;
+            var scimoz = this.scimoz;
+            for (var i=0; i <= scimoz.SC_MAX_MARGIN; i++) {
+                marginWidth = scimoz.getMarginWidthN(i);
+                if (marginWidth) {
+                    totalWidth += marginWidth;
+                    if (x < totalWidth)
+                        return i;
+                }
+            }
+            return -1;
+        ]]>
+        </body>
+        </method>
+
+        <method name="_xmlTagsHighlightGuide">
+        <body>
+        <![CDATA[
+        // Show indentation guide for matching XML tags.
+        // This needs to be as fast as possible since it is in the UpdateUI
+        // notification.
+        // First, check for XML language. Then check to make sure the caret is
+        // in an XML tag. Next, find the matching tag. Finally, show the guide.
+        var scimoz = this.scimoz;
+        var xmlLang = this.languageObj.supportsXMLIndentHere(scimoz, scimoz.currentPos);
+        if (!xmlLang) {
+            return;
+        }
+        var pos = scimoz.currentPos;
+        if (scimoz.getLineIndentation(scimoz.lineFromPosition(pos)) == 0) {
+            // No indent means no guide can be shown. This also guarantees that
+            // pos > 0 and that any matching XML tag's start position > 0.
+            return;
+        }
+        // Ensure the current position is on, in, or just after an XML tag.
+        var style = scimoz.getStyleAt(pos);
+        var prevStyle = scimoz.getStyleAt(scimoz.positionBefore(pos));
+        var validStyles = [scimoz.SCE_UDL_M_STAGO,
+                           scimoz.SCE_UDL_M_TAGNAME,
+                           scimoz.SCE_UDL_M_TAGSPACE,
+                           scimoz.SCE_UDL_M_ATTRNAME,
+                           scimoz.SCE_UDL_M_OPERATOR,
+                           scimoz.SCE_UDL_M_STAGC,
+                           scimoz.SCE_UDL_M_STRING,
+                           scimoz.SCE_UDL_M_ETAGO,
+                           scimoz.SCE_UDL_M_ETAGC];
+        if (validStyles.indexOf(style) === -1
+            && validStyles.indexOf(prevStyle) === -1) {
+            return;
+        }
+        // Then ensure `pos` is at a tag name (e.g. <|div>). This is needed for
+        // the `getMatchingTagInfo()` function call later.
+        if (style == scimoz.SCE_UDL_M_STAGO
+            || style == scimoz.SCE_UDL_M_ETAGO) {
+            // At starting '<'. Get position after.
+            pos = scimoz.positionAfter(pos);
+        } else {
+            // Move back to the tag's starting '<' and get the position after.
+            for (pos = scimoz.positionBefore(pos); pos > 0; pos = scimoz.positionBefore(pos)) {
+                style = scimoz.getStyleAt(pos);
+                if (style == scimoz.SCE_UDL_M_STAGO
+                    || style == scimoz.SCE_UDL_M_ETAGO) {
+                    pos = scimoz.positionAfter(pos);
+                    break;
+                } else if (validStyles.indexOf(style) === -1) {
+                    break; // invalid tag; abort
+                }
+            }
+        }
+        // Check for matching XML tags.
+        var result = {};
+        xmlLang.getMatchingTagInfo(scimoz, pos, false, result, {});
+        if (!result.value) {
+            return;
+        }
+        // Highlight the indentation guide.
+        // Note that Scintilla requires brace highlighting in order to highlight
+        // indentation guides, so highlight the line end positions as "braces".
+        var startTagPos = result.value[1];
+        var endTagPos = result.value[3];
+        var startTagLine = scimoz.lineFromPosition(startTagPos);
+        var endTagLine = scimoz.lineFromPosition(endTagPos);
+        var bracePos = scimoz.getLineEndPosition(startTagLine);
+        var bracePos2 = scimoz.getLineEndPosition(endTagLine);
+        scimoz.braceHighlight(bracePos, bracePos2);
+        scimoz.highlightGuide = scimoz.getLineIndentation(startTagLine);
+        ]]>
+        </body>
+        </method>
+
+        <method name="_flashMatchingTag">
+        <body>
+        <![CDATA[
+        var scimoz = this.scimoz;
+        var actualLanguageObj = this.languageObj.supportsXMLIndentHere(scimoz, scimoz.currentPos);
+        if (!actualLanguageObj) {
+            return;
+        } else if (!this.prefs.getBooleanPref("showMatchingTagsOnClick")) {
+            return;
+        }
+        var pos = scimoz.currentPos;
+        var style = scimoz.getStyleAt(pos);
+        var prevStyle;
+        if (style == scimoz.SCE_UDL_M_TAGNAME) {
+            // ok, tagname character here
+        } else if (pos == 0) {
+            // not in a tag
+            return;
+        } else if ((prevStyle = scimoz.getStyleAt(scimoz.positionBefore(pos))
+                    == scimoz.SCE_UDL_M_TAGNAME)) {
+            // ok, at the end of a tag
+        } else if (prevStyle == scimoz.SCE_UDL_M_ETAGO
+                   && style == scimoz.SCE_UDL_M_ETAGO) {
+            // at the start of an end-tag, between '<' and '/' (bug 96640)
+        } else {
+            // Not at the end of a tagname, so return
+            return;
+        }
+        var result = {};
+        var constrainSearchInViewPort = this.prefs.getBooleanPref("showMatchingTags_constrainSearchInViewPort");
+        actualLanguageObj.getMatchingTagInfo(scimoz, pos, constrainSearchInViewPort, result, {});
+        if (result.value) {
+            var atStartTag, s1, s2, e1, e2, t1, t2;
+            atStartTag = result.value[0];
+            s1 = result.value[1];
+            s2 = result.value[2];
+            e1 = result.value[3];
+            e2 = result.value[4];
+            if (atStartTag) {
+                t1 = e1;
+                t2 = e2 + 1;
+            } else {
+                t1 = s1;
+                t2 = s2 + 1;
+            }
+            var indic = Components.interfaces.koILintResult.DECORATOR_TAG_MATCH_HIGHLIGHT;  
+            this.clearMatchingTag();
+            scimoz.indicatorValue = scimoz.INDIC_PLAIN;
+            scimoz.indicatorFillRange(t1, t2 - t1);
+            var showMatchingTags_clearInterval = this.prefs.getLongPref("showMatchingTags_clearInterval");
+            if (showMatchingTags_clearInterval > 0) {
+                this._matchedTagUnhighlighter = setTimeout(function(this_) {
+                    this_.clearMatchingTag();
+                }, showMatchingTags_clearInterval, this);
+            }
+        }
+        ]]>
+        </body>
+        </method>
+        
+        <method name="clearMatchingTag">
+        <body>
+        <![CDATA[
+        if (this._matchedTagUnhighlighter) {
+            clearTimeout(this._matchedTagUnhighlighter);
+            this._matchedTagUnhighlighter = 0;
+        }
+        var indic = Components.interfaces.koILintResult.DECORATOR_TAG_MATCH_HIGHLIGHT;  
+        var scimoz = this.scimoz;
+        scimoz.indicatorCurrent = indic;
+        scimoz.indicatorClearRange(0, scimoz.textLength);
+        ]]>
+        </body>
+        </method>
+
+        <!--
+
+        ********************       Hyperlinks       ********************
+
+        These are interesting points in the editor which are highlighted to
+        show there is a possible action associated with this text.
+
+        Komodo hyperlinks are only active when the Ctrl key (Meta on Mac) is
+        held down, then where ever the mouse moves, the editor text under the
+        mouse will be checked to see if it has a hyperlink, if it does it will
+        become highlighted in the editor.
+
+        If the user left-clicks on the hyperlink, then a hyperlink action
+        will be performed (example: opening the target text in a browser).
+        -->
+
+        <field name="INDICATOR_HYPERLINK" readonly="true">Components.interfaces.koILintResult.INDICATOR_HYPERLINK</field>
+        <field name="DOM_VK_ACCEL" readonly="true">
+            Components.classes["@mozilla.org/preferences-service;1"]
+                      .getService(Components.interfaces.nsIPrefBranch)
+                      .getIntPref("ui.key.accelKey")
+        </field>
+        <!-- A hyperlink instance set on the view, ko.hyperlinks.Hyperlink -->
+        <field name="_hyperlink">null</field>
+        <field name="_last_mousemove_xy">[0,0]</field>
+        <field name="_last_hyperlink_style">-1</field>
+        <field name="_last_hyperlink_color">-1</field>
+        <!-- whether hyperlinks are allowed - they are when the accel key is
+           - down, but not after some other key has been pressed -->
+        <field name="_isHyperlinkAllowed">false</field>
+
+        <method name="saveLocation">
+        <parameter name="obj"/>
+        <body>
+        <![CDATA[
+            var scimoz = this.scimoz;
+            obj.currentPos = scimoz.currentPos;
+            obj.anchor = scimoz.anchor;
+            obj.firstVisibleLine = scimoz.firstVisibleLine;
+            obj.xOffset = scimoz.xOffset;
+            obj.selectionStart = scimoz.selectionStart;
+            obj.selectionEnd = scimoz.selectionEnd;
+        ]]>
+        </body>
+        </method>
+
+        <method name="restoreLocation">
+        <parameter name="obj"/>
+        <body>
+        <![CDATA[
+            var scimoz = this.scimoz;
+            scimoz.currentPos = obj.currentPos;
+            scimoz.anchor = obj.anchor;
+            scimoz.selectionStart = obj.selectionStart;
+            scimoz.selectionEnd = obj.selectionEnd;
+	    scimoz.firstVisibleLine = obj.firstVisibleLine;
+	    scimoz.xOffset = obj.xOffset;
+        ]]>
+        </body>
+        </method>
+
+
+        <!-- Set from a hyperlink handler. -->
+        <method name="setHyperlink">
+        <parameter name="hyperlink"/>
+        <body>
+            <![CDATA[
+            var scimoz = this.scimoz;
+            // Perf: Only change the indicator settings if they have changed
+            //       from the last hyperlink, as scimoz will redraw itself.
+            if (hyperlink.handler.indic_style != this._last_hyperlink_style) {
+                scimoz.indicSetStyle(this.INDICATOR_HYPERLINK, hyperlink.handler.indic_style);
+                this._last_hyperlink_style = hyperlink.handler.indic_style;
+            }
+            if (hyperlink.handler.indic_color != this._last_hyperlink_color) {
+                scimoz.indicSetFore(this.INDICATOR_HYPERLINK, hyperlink.handler.indic_color);
+                this._last_hyperlink_color = hyperlink.handler.indic_color;
+            }
+            scimoz.indicatorCurrent = this.INDICATOR_HYPERLINK;
+            scimoz.indicatorClearRange(0, scimoz.textLength);
+            scimoz.indicatorFillRange(hyperlink.startPos, hyperlink.endPos - hyperlink.startPos);
+            this._hyperlink = hyperlink;
+            ]]>
+        </body>
+        </method>
+
+        <method name="checkHyperlinks">
+        <parameter name="position"/>
+        <parameter name="reason"/>
+        <body>
+            <![CDATA[
+            if (ko.hyperlinks) {
+                ko.hyperlinks.show(this, position, reason);
+            }
+            ]]>
+        </body>
+        </method>
+
+        <method name="removeHyperlinks">
+        <parameter name="reason"/>
+        <body>
+            <![CDATA[
+            if (this._hyperlink) {
+                if (this._hyperlink.remove(this, reason)) {
+                    // It can be removed.
+                    var scimoz = this.scimoz;
+                    scimoz.indicatorCurrent = this.INDICATOR_HYPERLINK;
+                    scimoz.indicatorClearRange(0, scimoz.textLength);
+                    this._hyperlink = null;
+                }
+            }
+            ]]>
+        </body>
+        </method>
+
+    </implementation>
+    <handlers>
+        <handler event="focus" phase="capturing">
+            <![CDATA[
+            window.setTimeout("window.updateCommands('scintilla-focus');", 1);
+            /* code common to setFocus and the focus event needs
+               to be in doFocus. */
+            this.doFocus(event);
+            ]]>
+        </handler>
+        <handler event="mousedown" phase="capturing">
+            <![CDATA[
+            this._mouseButton = event.button;
+            if (this._marginClickPending)
+            {
+                this._onMarginClick.apply(this, this._marginClickPending);
+                this._marginClickPending = false;
+            }
+            ]]>
+        </handler>
+        <handler event="mouseup" phase="capturing">
+            <![CDATA[
+            setTimeout(function() {
+                this._mouseButton = -1;
+                this._marginClickPending = false;
+            }.bind(this), 0);
+            ]]>
+        </handler>
+        <handler event="mousemove" phase="capturing">
+            <![CDATA[
+            var x = event.clientX < 0 ? 0 : event.clientX - this.scintilla.boxObject.x;
+            var y = event.clientY - this.scintilla.boxObject.y;
+            this._last_mousemove_xy = [x, y];
+            if (this._isHyperlinkAllowed) {
+                // Check if the mouse has moved outside of the hyperlink, if
+                // it has then the hyperlink should be removed.
+                this.removeHyperlinks("mousemove");
+                var pos = this.scimoz.positionFromPointClose(x, y);
+                if (pos >= 0 && this.scimoz.dragPosition == -1) {
+                    this.checkHyperlinks(pos, "mousemove");
+                }
+            }
+            ]]>
+        </handler>
+        <handler event="click" phase="capturing">
+            <![CDATA[
+            if (this.getAttribute("type") == "editor"
+                && event.button === 0) {
+                try {
+                    this._flashMatchingTag();
+                } catch(ex) {
+                    this.log.exception("_flashMatchingTag: " + ex + "\n");
+                }
+            }
+            if (event.button == 0 && this._hyperlink) {
+                var scintilla = this.scintilla;
+                var scimoz = this.scimoz;
+                var x = event.clientX < 0 ? 0 : event.clientX - this.scintilla.boxObject.x;
+                var y = event.clientY - this.scintilla.boxObject.y;
+                var pos = scimoz.positionFromPointClose(x, y);
+                var anchor = scimoz.anchor;
+                var currentPos = scimoz.currentPos;
+                if (anchor > currentPos) {
+                    // Swap them around - we want (anchor < currentPos).
+                    var temp = anchor;
+                    anchor = currentPos;
+                    currentPos = temp;
+                }
+                // Bug 76721: Go to definition on Ctrl+click, but only if we
+                // aren't in the middle of a drag/drop, or have a selection, or
+                // a modified click, or are in a multi-selection session.
+                // Note: there is no way to prevent Scintilla from receiving
+                // Ctrl+click (the mousedown, mouseup, click XUL events in the
+                // "capturing" phase cannot prevent this); a caret will be
+                // placed at the Ctrl+clicked position.
+                if (scintilla.inDragDrop ||
+                    (scimoz.selections > 1 &&
+                     (scimoz.getSelectionNStart(1) != pos ||
+                      scimoz.getSelectionNEnd(1) != pos))) {
+                    this.removeHyperlinks("mouseup");
+                    return;
+                }
+                // Make sure that if there's a selection, we aren't clicking on it:
+                // Ctrl-click can be used to drag-copy a selection.
+                if (pos >= 0 &&
+                    ((anchor == currentPos) ||
+                     (pos < anchor) ||
+                     (pos > currentPos))) {
+                    if (scimoz.selections == 2) {
+                        // Remove the additional caret unintentionally added by
+                        // Ctrl+click before handling the hyperlink.
+                        scimoz.dropSelectionN(1);
+                    }
+                    scimoz.anchor = pos;
+                    scimoz.currentPos = pos;
+                    this._hyperlink.jump(this);
+                }
+            }
+            this.removeHyperlinks("mouseup");
+            this._isHyperlinkAllowed = false;
+            
+            // If Ctrl+Click creating multiple selections is disabled, collapse
+            // all additional selections.
+            if (event.button == 0 && this.scimoz.selections > 1 &&
+                !ko.prefs.getBooleanPref("enableMultipleSelectionMouse")) {
+                var n = this.scimoz.mainSelection;
+                this.scimoz.setSel(this.scimoz.getSelectionNStart(n),
+                                   this.scimoz.getSelectionNEnd(n));
+            }
+
+            window.setTimeout("window.updateCommands('scintilla-focus');", 1);
+            ]]>
+        </handler>
+        <handler event="blur" phase="capturing">
+            <![CDATA[
+            if (this.scintilla.isFocused) {
+                // This is a blur event going from the hidden IME textbox to the
+                // scintilla element, or something along those lines - don't
+                // actually treat this as a blur, we're still logically focused.
+                return;
+            }
+            // Remove editor tooltip.
+            if (gEditorTooltipHandler && typeof(this.getTooltipText) != 'undefined')
+                gEditorTooltipHandler.hide();
+            this.removeHyperlinks("blur");
+            this._isHyperlinkAllowed = false;
+            this.clearMatchingTag();
+            window.setTimeout(window.updateCommands, 1, 'scintilla-focus');
+            ]]>
+        </handler>
+        <handler event="keydown" phase="capturing">
+            <![CDATA[
+            var keyCode = event.keyCode;
+/* #if PLATFORM == "darwin" */
+            // Work around Synergy keypress problems on the Mac - bug 82430.
+            if (keyCode == 0 && event.metaKey) {
+                keyCode = KeyEvent.DOM_VK_META;
+            }
+/* #endif */
+
+            if (keyCode == this.DOM_VK_ACCEL) {
+                this._isHyperlinkAllowed = true;
+                var [x, y] = this._last_mousemove_xy;
+                var pos = this.scimoz.positionFromPointClose(x, y);
+                if (pos >= 0 && this.scimoz.dragPosition == -1) {
+                    this.checkHyperlinks(pos, "keydown");
+                }
+            } else {
+                switch (keyCode) {
+                    case KeyEvent.DOM_VK_CONTROL:
+                    case KeyEvent.DOM_VK_ALT:
+                    case KeyEvent.DOM_VK_SHIFT:
+                    case KeyEvent.DOM_VK_META:
+                        // these keys shouldn't matter
+                        break;
+                    default:
+                        // other keys, disable hyperlinks - bug 89246
+                        this.removeHyperlinks("keydown");
+                        this._isHyperlinkAllowed = false;
+                }
+            }
+            ]]>
+        </handler>
+        <handler event="keyup" phase="capturing">
+            <![CDATA[
+            var keyCode = event.keyCode;
+            //dump("keyup:: keyCode: " + keyCode + "\n");
+            // This key removal is not that accurate on the Mac, as the keyCode
+            // and charCode can both be 0 for Ctrl, Meta, Alt keypresses.
+/* #if PLATFORM == "darwin" */
+            // On OSX, if the cmd/meta key is down, no keyup events are sent.
+            // This means that if we get a keyup, hyperlinks should no longer
+            // be allowed.  Bug 97394
+            // However, do this on a timeout, because synergy does really odd
+            // things and repeatedly sends keydown/keyup combinations.
+            // Bug 97210.
+            if ("__keyup_unsetHyperlink_timeout" in this) {
+                clearTimeout(this.__keyup_unsetHyperlink_timeout);
+            }
+            this.__keyup_unsetHyperlink_timeout = setTimeout((function() {
+               this._isHyperlinkAllowed = false;
+               this.removeHyperlinks("keyup");
+            }).bind(this), 100);
+/* #else */
+            if (keyCode == this.DOM_VK_ACCEL) {
+                this._isHyperlinkAllowed = false;
+            }
+            // If the accel key is no longer held down, clear all hyperlinks.
+            if (!this._isHyperlinkAllowed) {
+                this.removeHyperlinks("keyup");
+            }
+/* #endif */
+            ]]>
+        </handler>
+    </handlers>
+
+</binding>
+
+<binding id="view-buffer"
+    extends="chrome://komodo/content/bindings/views-buffer.xml#view-buffer-base">
+    <content>
+        <xul:scintilla xbl:inherits="flex,focused,context,mozcontext"
+                       anonid="scintilla"
+                       allowIME="true"
+                       pluginPaintHack="true"
+                       mozcontext="bufferContextMenu"
+                       flex="1"/>
+        <xul:ko-findbar anonid="findbar"/>
+    </content>
+    <implementation name="viewbuffer" implements="koIScintillaView, ISciMozEvents, nsIObserver">
+        <field name="_foldstyle">null</field>
+        <property name="foldstyle">
+            <setter><![CDATA[
+                this._foldstyle = val;
+                this.scintilla.setFoldStyle(val);
+            ]]></setter>
+            <getter><![CDATA[
+                return this._foldstyle;
+            ]]></getter>
+        </property>
+    </implementation>
+
+</binding>
+
+</bindings>
+

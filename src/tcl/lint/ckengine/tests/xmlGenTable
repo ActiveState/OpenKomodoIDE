@@ -1,0 +1,67 @@
+# xmlGenTable --
+#
+#	This file contains the table of commands used to check xmlGen.
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on xmlGen commands.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+# 
+# RCS: @(#) $Id: xmlGenTable,v 1.8 2000/05/30 22:25:09 wart Exp $
+
+set ::checkXmlGen1.0 {
+
+{startDocument}			{ok}
+{xmlgen::startDocument}		{ok}
+{startDocument -name a}		{ok}
+{startDocument -name a x}	{1 {0 23} numArgs {} {}}
+{startDocument -channel a}	{ok}
+{startDocument -channel a x}	{1 {0 26} numArgs {} {}}
+{startDocument -variable a}	{ok}
+{startDocument -variable $a}	{1 {0 26} warnVarRef {24 2} {}}
+{startDocument -variable a x}	{1 {0 27} numArgs {} {}}
+{startDocument -noprolog}	{ok}
+{startDocument -noprolog x}	{1 {0 25} numArgs {} {}}
+{startDocument -pretty}		{ok}
+{startDocument -pretty x}	{1 {0 23} numArgs {} {}}
+{startDocument -name a -channel a -pretty -variable a -noprolog}	{ok}
+{startDocument -foo}		{1 {0 18} badSwitch {14 4} -foo}
+{startDocument a}		{1 {0 15} numArgs {} {}}
+
+{endDocument a}			{ok}
+{xmlgen::endDocument a}		{ok}
+{endDocument}			{1 {0 11} numArgs {} {}}
+{endDocument a a}		{1 {0 15} numArgs {} {}}
+
+{startElement a a}			{ok}
+{xmlgen::startElement a a $a}		{ok}
+{startElement a a {}}			{ok}
+{startElement a a {{a a}}}		{ok}
+{startElement a a {{a a} {a a} {a a}}}	{ok}
+{startElement a}			{1 {0 14} numArgs {} {}}
+
+{endElement a}			{ok}
+{xmlgen::endElement a}		{ok}
+{endElement a a}		{ok}
+{endElement}			{1 {0 10} numArgs {} {}}
+{endElement a a a}		{1 {0 16} numArgs {} {}}
+
+
+{element a a}				{ok}
+{xmlgen::element a a $a $a}		{ok}
+{element a a {{a a} {a a} {a a}}}	{ok}
+{element a a {} {set}}		{1 {16 3} numArgs {} {}}
+{element a a {} badProc1}	{1 {15 8} warnUndefProc {15 8} badProc1}
+{element a}			{1 {0 9} numArgs {} {}}
+
+{text a a}			{ok}
+{xmlgen::text a a $a a}		{ok}
+{text a a {{a a} {a a} {a a}}}	{ok}
+{text a}			{1 {0 6} numArgs {} {}}
+
+{rawText a a}			{ok}
+{xmlgen::rawText a a}		{ok}
+{rawText a}			{1 {0 9} numArgs {} {}}
+{rawText a a a}			{1 {0 13} numArgs {} {}}
+
+}

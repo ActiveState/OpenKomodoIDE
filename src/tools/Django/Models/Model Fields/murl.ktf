@@ -1,0 +1,10 @@
+# komodo tool: murl
+# =================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# =================
+<% /* URLField (murl) */ %>
+[[%tabstop1:FIELDNAME]] = models.URLField([[%tabstop2:2]])

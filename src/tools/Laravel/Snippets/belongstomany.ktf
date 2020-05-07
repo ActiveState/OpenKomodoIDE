@@ -1,0 +1,20 @@
+// komodo tool: belongstomany
+// ==========================
+// auto_abbreviation: true
+// indent_relative: false
+// is_clean: true
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// ==========================
+/**
+ * Get the [[%tabstop1:models]] that belong to the [[%tabstop:model]].
+ *
+ * @return \\\\Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\BelongsToMany
+ */
+public function [[%tabstop1:models]]()
+{
+    return $this->belongsToMany([[%tabstop:Name]]::class[[%tabstop:, 'table_name', 'local_key']]);
+}!@#_currentPos!@#_anchor

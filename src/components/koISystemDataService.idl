@@ -1,0 +1,22 @@
+/* Copyright (c) 2003-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+
+
+// A system data manager. See "src/python-sitelib/sysdata.py" for details.
+[scriptable, uuid(19EA424D-A581-4dd8-A83B-F545BFFF1815)]
+interface koISystemDataService: nsISupports {
+    boolean getBoolean(in string name);
+    long getLong(in string name);
+    double getDouble(in string name);
+    wstring getString(in string name);
+    void getStringList(in string name,
+                       out unsigned long count,
+                       [array, size_is(count)] out wstring value);
+
+    void setString(in string name, in string value);
+
+    void flush(in string name);
+};
+

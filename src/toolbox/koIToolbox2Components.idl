@@ -1,0 +1,93 @@
+/* Copyright (C) 2010 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "koIToolbox2HTreeView.idl"
+
+/* Database accessor to the toolbox database
+ *
+ */
+
+interface koITool;
+
+[scriptable, uuid(42fb0d27-9792-4e41-8791-0cfcdafed35d)]
+interface koIToolboxDatabaseService: nsISupports {
+    // Path to a sqlite database
+    void initialize(in wstring db_path);
+    
+    koITool getTool(in long id);
+};
+
+
+/* Light struct of koITool data for use by `.findTools()` below. Not returning
+ * full `koITool` instances for perf (though that this might be a perf
+ * problem hasn't been validated).
+ */
+[scriptable, uuid(29ee318b-a831-364f-9d48-aa54d4a0a1c9)]
+interface koIToolInfo: nsISupports {
+    readonly attribute long path_id;
+    readonly attribute wstring type;
+    readonly attribute wstring name;
+    readonly attribute wstring iconUrl;
+    readonly attribute koITool koTool;
+    readonly attribute wstring subDir;
+};
+
+interface koIPart;
+interface koIAsyncCallback;
+
+[scriptable, uuid(d4fd50c8-5b19-b041-97ad-2d8009f7de57)]
+interface koIToolbox2Service: nsISupports {
+    attribute koITool runningMacro;
+    void activateProjectToolbox(in koIPart project);
+    void deactivateProjectToolbox(in koIPart project);
+    koITool getStandardToolbox();
+    koITool getSharedToolbox();
+    // Get a toolbox that an extension provides, if there is one
+    // The extensionName argument is the [em:name] value from
+    // the extension's install.rdf file.
+    koITool getExtensionToolbox(in wstring extensionName); // The em:id from install.rdf
+    long getProjectToolboxId(in wstring uri);
+    long getStandardToolboxID();
+    void importDirectory(in wstring parentPath,
+                         in wstring pathToImport);
+    void importFiles(in wstring parentPath,
+                     in unsigned long count,
+                     [array, size_is(count)] in wstring paths);
+    void convertSublimeSnippetFolder(in wstring pathToConvert,
+        out unsigned long hitCount,
+        [retval, array, size_is(hitCount)] out wstring hits);
+    void convertSublimeSnippets(in unsigned long count,
+        [array, size_is(count)] in wstring paths,
+        out unsigned long hitCount,
+        [retval, array, size_is(hitCount)] out wstring hits);
+    void importFileWithNewName(in wstring parentPath,
+                               in wstring srcPath,
+                               in wstring destPath);
+    void importV5Package(in wstring parentPath,
+                         in wstring packagePath);
+    void initialize();
+    void migrateVersion5Toolboxes();
+    void reloadToolsDirectory(in wstring toolDir);
+
+    long updateFilePath(in wstring path);
+    void convertOldFormat(in wstring path, in boolean deleteOld);
+    void convertToTemplate(in wstring path, in wstring targetPath);
+
+    // Find and return all tools matching the given query.
+    void findTools(in wstring query,
+        in unsigned long langCount,
+        [array, size_is(langCount)] in wstring langs,
+        out unsigned long hitCount,
+        [retval, array, size_is(hitCount)] out koIToolInfo hits);
+    void findToolsAsync(in wstring query,
+        in unsigned long langCount,
+        [array, size_is(langCount)] in wstring langs,
+        in wstring type,
+        in koIAsyncCallback callback);
+    // Method that runs the query as is, and returns a list of koIToolInfo hits
+    void getAutoAbbreviationNames(
+        out unsigned long hitCount,
+        [retval, array, size_is(hitCount)] out wstring hits);
+};
+

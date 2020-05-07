@@ -1,0 +1,10 @@
+# komodo tool: mnullbool
+# ======================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ======================
+<% /* NullBooleanField (mnullbool) */ %>
+[[%tabstop1:FIELDNAME]] = models.NullBooleanField([[%tabstop2:2]])

@@ -1,0 +1,363 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % dialogsDTD SYSTEM "chrome://komodo/locale/dialogs.dtd">
+  %dialogsDTD;
+  <!ENTITY % dialogsDTD.INTERNAL SYSTEM "chrome://komodo/locale/dialogs-internal.dtd">
+  %dialogsDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2003-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/feature_control_panel.css" type="text/css"?>
+
+<dialog id="dialog-featurecontrolpanel"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="&featureControlPanel.title;"
+        onload="OnLoad()"
+        onunload="OnUnload()"
+        flex="1"
+        width="640"
+        screenX="20"
+        screenY="20"
+        persist="width screenX screenY"
+        orient="vertical"
+        buttonpack="center"
+        buttons="cancel"
+        ondialogcancel="return Cancel();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/launch.js"             type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js"       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/dialogs/featureControlPanel.js" type="application/x-javascript;version=1.7"/>
+
+<!--    <vbox>-->
+        <vbox flex="1">
+            <groupbox>
+                <caption label="&languageFeatures.label;"/>
+                <grid>
+                    <columns>
+                        <column width="200"/> <!-- feature name -->
+                        <column flex="1"/> <!-- feature status -->
+                    </columns>
+                    <rows>
+                        <row id="nodejs-feature-row">
+                            <hbox class="sp-mru-row" align="center" pack="start">
+                                <label value="&nodejs.label;"/>
+                            </hbox>
+                            <hbox class="sp-mru-row" flex="1" align="center" pack="start">
+                                <label id="nodejs-debugging-status"
+                                       value="Debugging: Status Unknown"/>
+                                <image id="nodejs-debugging-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnNodeJSDebugging.tooltiptext;"
+                                        oncommand="LaunchHelp('debugchrome.html');"/>
+                                <label id="nodejs-syntax-checking-status"
+                                       value="&sintaxCheckingUnknown.label;"/>
+                                <image id="nodejs-syntax-checking-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnBackgroundSyntaxChecking.tooltiptext;"
+                                        oncommand="LaunchHelp('editor.html#Linting');"/>
+                                <separator flex="1"/>
+                                <button class="icon-cog button-toolbar-a"
+                                        tooltiptext="&configureNodeJS.tooltiptext;"
+                                        oncommand="LaunchPrefs('nodejsItem')"/>
+                            </hbox>
+                        </row>
+                        <row id="perl-feature-row">
+                            <hbox class="sp-mru-row" align="center" pack="start">
+                                <label value="&perl.label;"/>
+                            </hbox>
+                            <hbox class="sp-mru-row" flex="1" align="center" pack="start">
+                                <label id="perl-debugging-status"
+                                       value="Debugging: Status Unknown"/>
+                                <image id="perl-debugging-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnPerlDebugging.tooltiptext;"
+                                        oncommand="LaunchHelp('prefs.html#configuring-perl');"/>
+                                <label id="perl-syntax-checking-status"
+                                       value="&sintaxCheckingUnknown.label;"/>
+                                <image id="perl-syntax-checking-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnBackgroundSyntaxChecking.tooltiptext;"
+                                        oncommand="LaunchHelp('editor.html#Linting');"/>
+                                <separator flex="1"/>
+                                <button class="icon-cog button-toolbar-a"
+                                        tooltiptext="&configurePerl.tooltiptext;"
+                                        oncommand="LaunchPrefs('perlItem')"/>
+                            </hbox>
+                        </row>
+                        <row id="php-feature-row">
+                            <hbox class="sp-mru-row" align="center" pack="start">
+                                <label value="&php.label;"/>
+                            </hbox>
+                            <hbox class="sp-mru-row" flex="1" align="center" pack="start">
+                                <label id="php-debugging-status"
+                                       value="Debugging: Status Unknown"/>
+                                <image id="php-debugging-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnPHPDebugging.tooltiptext;"
+                                        oncommand="LaunchHelp('prefs.html#configuring-php');"/>
+                                <label id="php-syntax-checking-status"
+                                       value="&sintaxCheckingUnknown.label;"/>
+                                <image id="php-syntax-checking-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnBackgroundSyntaxChecking.tooltiptext;"
+                                        oncommand="LaunchHelp('editor.html#Linting');"/>
+                                <separator flex="1"/>
+                                <button class="icon-cog button-toolbar-a"
+                                        tooltiptext="&configurePHP.tooltiptext;"
+                                        oncommand="LaunchPrefs('phpItem')"/>
+                            </hbox>
+                        </row>
+                        <row id="python-feature-row">
+                            <hbox class="sp-mru-row" align="center" pack="start">
+                                <label value="&python.label;"/>
+                            </hbox>
+                            <hbox class="sp-mru-row" align="center" pack="start">
+                                <label id="python-debugging-status"
+                                       value="Debugging: Status Unknown"/>
+                                <image id="python-debugging-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnPythonDebugging.tooltiptext;"
+                                        oncommand="LaunchHelp('prefs.html#configuring-python');"/>
+                                <label id="python-syntax-checking-status"
+                                       value="&sintaxCheckingUnknown.label;"/>
+                                <image id="python-syntax-checking-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnBackgroundSyntaxChecking.tooltiptext;"
+                                        oncommand="LaunchHelp('editor.html#Linting');"/>
+                                <separator flex="1"/>
+                                <button class="icon-cog button-toolbar-a"
+                                        tooltiptext="&configurePython.tooltiptext;"
+                                        oncommand="LaunchPrefs('pythonItem')"/>
+                            </hbox>
+                        </row>
+                        <row id="python3-feature-row">
+                            <hbox class="sp-mru-row" align="center" pack="start">
+                                <label value="&python3.label;"/>
+                            </hbox>
+                            <hbox class="sp-mru-row" align="center" pack="start">
+                                <label id="python3-debugging-status"
+                                       value="Debugging: Status Unknown"/>
+                                <image id="python3-debugging-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnPython3Debugging.tooltiptext;"
+                                        oncommand="LaunchHelp('prefs.html#configuring-python');"/>
+                                <label id="python3-syntax-checking-status"
+                                       value="&sintaxCheckingUnknown.label;"/>
+                                <image id="python3-syntax-checking-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnBackgroundSyntaxChecking.tooltiptext;"
+                                        oncommand="LaunchHelp('editor.html#Linting');"/>
+                                <separator flex="1"/>
+                                <button class="icon-cog button-toolbar-a"
+                                        tooltiptext="&configurePython3.tooltiptext;"
+                                        oncommand="LaunchPrefs('python3Item')"/>
+                            </hbox>
+                        </row>
+                        <row id="ruby-feature-row">
+                            <hbox class="sp-mru-row" align="center" pack="start">
+                                <label value="&ruby.label;"/>
+                            </hbox>
+                            <hbox class="sp-mru-row" align="center" pack="start">
+                                <label id="ruby-debugging-status"
+                                       value="Debugging: Status Unknown"/>
+                                <image id="ruby-debugging-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnRubyDebugging.tooltiptext;"
+                                        oncommand="LaunchHelp('prefs.html#configuring-ruby');"/>
+                                <label id="ruby-syntax-checking-status"
+                                       value="&sintaxCheckingUnknown.label;"/>
+                                <image id="ruby-syntax-checking-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnBackgroundSyntaxChecking.tooltiptext;"
+                                        oncommand="LaunchHelp('editor.html#Linting');"/>
+                                <separator flex="1"/>
+                                <button class="icon-cog button-toolbar-a"
+                                        tooltiptext="&configureRuby.tooltiptext;"
+                                        oncommand="LaunchPrefs('rubyItem')"/>
+                            </hbox>
+                        </row>
+                        <row id="tcl-feature-row">
+                            <hbox class="sp-mru-row" align="center" pack="start">
+                                <label value="&tcl.label;"/>
+                            </hbox>
+                            <hbox class="sp-mru-row" flex="1" align="center" pack="start">
+                                <label id="tcl-debugging-status"
+                                           value="Debugging: Status Unknown"/>
+                                <image id="tcl-debugging-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                            tooltiptext="&helpOnTclDebugging.tooltiptext;"
+                                            oncommand="LaunchHelp('prefs.html#configuring-tcl');"/>
+                                <label id="tcl-syntax-checking-status"
+                                           value="&sintaxCheckingUnknown.label;"/>
+                                <image id="tcl-syntax-checking-status-image"
+                                       class="status-pending"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                            tooltiptext="&helpOnBackgroundSyntaxChecking.tooltiptext;"
+                                            oncommand="LaunchHelp('editor.html#Linting');"/>
+                                <separator flex="1"/>
+                                <button class="icon-cog button-toolbar-a"
+                                            tooltiptext="&configureTcl.tooltiptext;"
+                                            oncommand="LaunchPrefs('tclItem')"/>
+                            </hbox>
+                        </row>
+                        <row id="xslt-feature-row">
+                            <hbox class="sp-mru-row" align="center" pack="start">
+                                <label value="&xslt.label;"/>
+                            </hbox>
+                            <hbox class="sp-mru-row" flex="1" align="center" pack="start">
+    <!-- #if WITH_DEBUGGING -->
+                                <label value="&debuggingStatusReady.label;"/>
+    <!-- #elif PRODUCT_TYPE == "edit" -->
+                                <label value="&debuggingStatusIDEOnly.label;"/>
+    <!-- #else -->
+                                <label value="&debuggingStatusUnknown.label;"/>
+    <!-- #endif -->
+                                <image id="xslt-debugging-status-image"
+                                       class="status-ready"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                            tooltiptext="&helpOnXSLTDebugging.tooltiptext;"
+                                            oncommand="LaunchHelp('prefs.html#configuring-xslt');"/>
+                                <label value="&sintaxCheckingReady.label;"/>
+                                <image id="xslt-syntax-checking-status-image"
+                                       class="status-ready"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                            tooltiptext="&helpOnBackgroundSyntaxChecking.tooltiptext;"
+                                            oncommand="LaunchHelp('editor.html#Linting');"/>
+                            </hbox>
+                        </row>
+                        <row id="other-languages-feature-row">
+                            <hbox class="sp-mru-row" align="center" pack="start">
+                                <label value="&otherLanguages.label;"/>
+                            </hbox>
+                            <hbox class="sp-mru-row" flex="1" align="center" pack="start">
+                                <label value="&sintaxCheckingReadyJavscriptHtmlXml.label;"/>
+                                <image id="other-languages-syntax-checking-status-image"
+                                       class="status-ready"
+                                       />
+                                <button class="help-icon button-toolbar-a"
+                                            tooltiptext="&helpOnBackgroundSyntaxChecking.tooltiptext;"
+                                            oncommand="LaunchHelp('editor.html#Linting');"/>
+                            </hbox>
+                        </row>
+                    </rows>
+                </grid>
+            </groupbox>
+        </vbox>
+
+        <separator class="thin"/>
+
+<!-- #if WITH_RX or WITH_SCC -->
+        <vbox flex="1">
+            <groupbox>
+                <caption label="Other Features"/>
+            <grid>
+                <columns>
+                    <column width="200"/> <!-- feature name -->
+                    <column flex="1"/> <!-- feature status -->
+                </columns>
+                <rows>
+<!-- #if WITH_RX -->
+                    <row id="rx-feature-row">
+                        <hbox class="sp-mru-row" align="center" pack="start">
+                            <label value="Rx (Regular Expression Toolkit)"/>
+                        </hbox>
+                        <hbox class="sp-mru-row" flex="1" align="center" pack="start">
+                            <label value="Ready"/>
+                            <image id="rx-feature-status-image"
+                                   class="status-ready"
+                                   />
+                            <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnRx.tooltiptext;"
+                                        oncommand="LaunchHelp('regex.html');"/>
+                        </hbox>
+                    </row>
+<!-- #endif -->
+<!-- #if WITH_SCC -->
+                    <row id="scc-feature-row">
+                        <hbox class="sp-mru-row" align="start" pack="start">
+                            <label value="Source Code Control"/>
+                        </hbox>
+                        <vbox class="sp-mru-row" flex="1" align="start" pack="start">
+                            <hbox id="scc_components_grid_cvs_row" align="center">
+                                <label id="cvs-status" value="CVS: Status Unknown"/>
+                                <image id="cvs-status-image" class="status-pending"/>
+                            </hbox>
+                            <hbox id="scc_components_grid_perforce_row" align="center">
+                                <label id="perforce-status" value="Perforce: Status Unknown"/>
+                                <image id="perforce-status-image" class="status-pending" />
+                            </hbox>
+                            <hbox id="scc_components_grid_svn_row" align="center">
+                                <label id="svn-status" value="Subversion: Status Unknown"/>
+                                <image id="svn-status-image" class="status-pending" />
+                            </hbox>
+                            <hbox id="scc_components_grid_hg_row" align="center">
+                                <label id="hg-status" value="Mercurial: Status Unknown"/>
+                                <image id="hg-status-image" class="status-pending" />
+                            </hbox>
+                            <hbox id="scc_components_grid_git_row" align="center">
+                                <label id="git-status" value="Git: Status Unknown"/>
+                                <image id="git-status-image" class="status-pending" />
+                            </hbox>
+                            <hbox id="scc_components_grid_bzr_row" align="center">
+                                <label id="bzr-status" value="Bazaar: Status Unknown"/>
+                                <image id="bzr-status-image" class="status-pending" />
+                            </hbox>
+                            <button class="help-icon button-toolbar-a"
+                                        tooltiptext="&helpOnSourceCodeControl.tooltiptext;"
+                                        align="start"
+                                        oncommand="LaunchHelp('configuring_scc_integration');"/>
+                            
+                            <separator flex="1"/>
+                            <button class="icon-cog button-toolbar-a"
+                                        tooltiptext="&configureSourceCodeControl.tooltiptext;"
+                                        align="start"
+                                        oncommand="LaunchPrefs('scc.html')"/>
+                        </vbox>
+                    </row>
+<!-- #endif -->
+                </rows>
+            </grid>
+            </groupbox>
+        </vbox>
+<!-- #endif -->
+
+<!--    </vbox>-->
+
+</dialog>
+

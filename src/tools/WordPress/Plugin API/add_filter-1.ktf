@@ -1,0 +1,16 @@
+// komodo tool: add_filter
+// =======================
+// auto_abbreviation: true
+// indent_relative: false
+// is_clean: true
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// =======================
+function [[%tabstop1:example_callback]]( $example ) {
+    // Maybe modify $example in some way.
+    return $example;
+}
+add_filter( '[[%tabstop:example_filter]]', '[[%tabstop1:example_callback]]' );!@#_currentPos!@#_anchor

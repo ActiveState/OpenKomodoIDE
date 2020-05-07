@@ -1,0 +1,15 @@
+// komodo tool: block
+// ==================
+// auto_abbreviation: false
+// indent_relative: false
+// language: PHP
+// set_selection: true
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// ==================
+<?php
+
+!@#_currentPos!@#_anchor
+
+?>

@@ -1,0 +1,67 @@
+<!ENTITY abortSynchronizations.button.tooptiptext "Stop the synchronization">
+<!ENTITY reloadSyncStatus.button.tooptiptext "Reload sync status">
+<!ENTITY addConfig.button.tooptiptext "Create a new synchronization configuration">
+<!ENTITY buttonCancel.accesskey "C">
+<!ENTITY buttonCancel.label "Cancel">
+<!ENTITY buttonDiff.accesskey "D">
+<!ENTITY buttonDiff.label "Diff Changes">
+<!ENTITY buttonPushAll.accesskey "P">
+<!ENTITY buttonPushAll.label "Force Push All">
+<!ENTITY buttonPullAll.accesskey "U">
+<!ENTITY buttonPullAll.label "Force Pull All">
+<!ENTITY buttonPublish.accesskey "S">
+<!ENTITY buttonPublish.label "Synchronize">
+<!ENTITY changeConfig.button.tooptiptext "Modify this current synchronization configuration">
+<!ENTITY conflict_resolve_choose_local_menuitem.label "Upload the local file">
+<!ENTITY conflict_resolve_choose_remote_menuitem.label "Download the remote file">
+<!ENTITY context_menu_conflict_resolve.label "Resolve Conflict">
+<!ENTITY context_menu_diff.label "Diff">
+<!ENTITY context_menu_stop.label "Stop">
+<!ENTITY context_menu_check.label "Check">
+<!ENTITY context_menu_uncheck.label "Uncheck">
+<!ENTITY context_menu_force_up.label "Force Upload">
+<!ENTITY context_menu_force_down.label "Force Download">
+<!ENTITY context_menu_force_down.tooltip "Force Sync Action to Download">
+<!ENTITY context_menu_force_up.tooltip "Force Sync Action to Upload">
+<!ENTITY context_menu_uncheckAll.label "Uncheck All">
+<!ENTITY context_menu_checkAll.label "Check All">
+
+<!ENTITY localpath.label "Local Path:">
+<!ENTITY revealLocalpathButton.tooltiptext "Reveal this folder in the system file manager">
+<!ENTITY progressmeter.label "Progress:">
+<!ENTITY publishingSettingsCancel.button.label "Cancel">
+<!ENTITY publishingSettingsSave.button.label "Save">
+<!ENTITY publishingSync.label "Synchronization">
+<!ENTITY publishingWindow.title "Publishing">
+<!ENTITY remotepath.label "Remote Path:">
+<!ENTITY removeConfig.button.tooptiptext "Delete this current synchronization configuration">
+<!ENTITY settingsHelp.description "You must configure both a local path and remote path in order to synchronize. When synchronizing Komodo will first examine these locations for any file differences and present the changes for your inspection. Check the files you wish to be transfered and then triggering the synchronize action will copy the files between the local and remote file systems. Synchronization operations can be aborted at any time by pressing the stop botton.">
+<!ENTITY settingsHelpGroupbox.caption "Publishing help">
+<!ENTITY settingsName.label "Config:">
+<!ENTITY treeActionTextColumn.label "Synchronize Action">
+<!ENTITY treeActionTextColumn.tooltiptext "This is the synchronize action that will be performed.">
+<!ENTITY treeCheckboxColumn.tooltiptext "Whether to include this path in the synchronization.">
+<!ENTITY treePathColumn.label "Filepath">
+<!ENTITY treeSyncColumn.label "Sync">
+<!ENTITY treeStateColumn.label "State">
+<!ENTITY treeFileTypeColumn.label "File Type">
+<!ENTITY treeSyncStatusColumn.label "Sync Status">
+<!ENTITY treePathColumn.tooltiptext "Relative paths that have changed.">
+<!ENTITY treeStatusColumn.tooltiptext "The type of change that was detected.">
+<!ENTITY treeTransferColumn.tooltiptext "The transfer status.">
+<!ENTITY treeTypeColumn.tooltiptext "The type of file/folder.">
+
+<!ENTITY publishingBrowse.label "Browse...">
+<!ENTITY publishingLocalPath.label "Local path:">
+<!ENTITY publishingName.label "Name:">
+<!ENTITY publishingExcludes.label "Excludes:">
+<!ENTITY publishingExcludes.emptytext "(none) - No files will be excluded">
+<!ENTITY publishingExcludes.tooltiptext "Excludes are used for both file and directory matching. Use ';' to separate multiple entries.">
+<!ENTITY publishingIncludes.label "Includes:">
+<!ENTITY publishingIncludes.emptytext "(none) - All files will be included">
+<!ENTITY publishingIncludes.tooltiptext "Includes are only used for file matching. Use ';' to separate multiple entries.">
+<!ENTITY publishingLocalPath.label "Local path:">
+<!ENTITY publishingRemotePath.label "Remote path:">
+<!ENTITY publishingSettings.label "Settings:">
+<!ENTITY publishingOptions.label "Options">
+<!ENTITY publishingOptionAutoPush.checkbox.label "When a file is saved locally, auto-push it to the remote server">

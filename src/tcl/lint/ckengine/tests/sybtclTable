@@ -1,0 +1,148 @@
+# sybtclTable --
+#
+#	This file contains the table of commands used to check sybTcl.
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on sybTcl commands.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+# 
+# RCS: @(#) $Id: sybtclTable,v 1.2 2000/05/30 22:24:59 wart Exp $
+
+set ::checkSybtcl3.0 {
+
+{sybcancel a}			{ok}
+{sybcancel [set]}		{1 {11 3} numArgs {} {}}
+{sybcancel}			{1 {0 9} numArgs {} {}}
+{sybcancel a a}			{1 {0 13} numArgs {} {}}
+
+{sybclose a}			{ok}
+{sybclose [set]}		{1 {10 3} numArgs {} {}}
+{sybclose}			{1 {0 8} numArgs {} {}}
+{sybclose a a}			{1 {0 12} numArgs {} {}}
+
+{sybcols a}			{ok}
+{sybcols [set]}			{1 {9 3} numArgs {} {}}
+{sybcols}			{1 {0 7} numArgs {} {}}
+{sybcols a a}			{1 {0 11} numArgs {} {}}
+
+{sybconnect a a}		{ok}
+{sybconnect a a a}		{ok}
+{sybconnect a a a a}		{ok}
+{sybconnect a a a a a}		{ok}
+{sybconnect a a a a a a}	{ok}
+{sybconnect [set] a}		{1 {12 3} numArgs {} {}}
+{sybconnect a [set]}		{1 {14 3} numArgs {} {}}
+{sybconnect a a [set] a a a}	{1 {16 3} numArgs {} {}}
+{sybconnect a a a [set] a a}	{1 {18 3} numArgs {} {}}
+{sybconnect a a a a a/$b a}	{1 {0 25} nonPortFile {19 4} {}}
+{sybconnect a a a a a [set]}	{1 {22 3} numArgs {} {}}
+{sybconnect a}			{1 {0 12} numArgs {} {}}
+{sybconnect a a a a a a a}	{1 {0 24} numArgs {} {}}
+
+{syberrhandler}			{ok}
+{syberrhandler $a}		{ok}
+{syberrhandler set}		{ok}
+{syberrhandler myBadProc1}	{1 {0 24} warnUndefProc {14 10} myBadProc1}
+{syberrhandler $a $a}		{1 {0 19} numArgs {} {}}
+
+{sybmsghandler}			{ok}
+{sybmsghandler $a}		{ok}
+{sybmsghandler set}		{ok}
+{sybmsghandler myBadProc2}	{1 {0 24} warnUndefProc {14 10} myBadProc2}
+{sybmsghandler $a $a}		{1 {0 19} numArgs {} {}}
+
+{sybevent a}			{ok}
+{sybevent a {set x}}		{ok}
+{sybevent [set] $a}		{1 {10 3} numArgs {} {}}
+{sybevent a {set}}		{1 {12 3} numArgs {} {}}
+{sybevent}			{1 {0 8} numArgs {} {}}
+{sybevent a $a $a}		{1 {0 16} numArgs {} {}}
+
+{sybnext a}				{ok}
+{sybnext a {set x}}			{ok}
+{sybnext a {set x} a}			{ok}
+{sybnext a {set x} a a 1}		{ok}
+{sybnext a {set x} a a 1 a 0 a 10}	{ok}
+{sybnext [set] {set x} a a 1 a 0 a 10}	{1 {9 3} numArgs {} {}}
+{sybnext a {set} a a 1 a 0 a 10}	{1 {11 3} numArgs {} {}}
+{sybnext a {set x} ab a 1 a 0 a 10}	{1 {0 33} sybtcl::badSubstChar {18 2} {}}
+{sybnext a {set x} a $a 1 a 0 a 10}	{1 {0 33} warnVarRef {20 2} {}}
+{sybnext a {set x} a a -1 a 0 a 10}	{1 {0 33} badWholeNum {22 2} -1}
+{sybnext a {set x} a a 1 a 0 $a 10}	{1 {0 33} warnVarRef {28 2} {}}
+{sybnext a {set x} a a 1 a 0 a -10}	{1 {0 33} badWholeNum {30 3} -10}
+{sybnext a {set x} a a}			{1 {0 21} numArgs {} {}}
+{sybnext a {set x} a a 1 a 0 a}		{1 {0 29} numArgs {} {}}
+
+{sybpoll a}			{ok}
+{sybpoll a 0}			{ok}
+{sybpoll a -1 -all}		{ok}
+{sybpoll a -all}		{1 {0 14} badInt {10 4} {}}
+{sybpoll a 1 $a}		{1 {0 14} numArgs {} {}}
+{sybpoll [set] 1}		{1 {9 3} numArgs {} {}}
+{sybpoll a 1.1}			{1 {0 13} badInt {10 3} {}}
+{sybpoll a 1 -foo}		{1 {0 16} badSwitch {12 4} -foo}
+{sybpoll a 1 -all a}		{1 {0 18} numArgs {} {}}
+{sybpoll a 1 a}			{1 {0 13} numArgs {} {}}
+{sybpoll}			{1 {0 7} numArgs {} {}}
+
+{sybreadtext a -variable a}	{ok}
+{sybreadtext a -variable $a}	{1 {0 26} warnVarRef {24 2} {}}
+{sybreadtext a -file a}		{ok}
+{sybreadtext a -file a/$b}	{1 {0 24} nonPortFile {20 4} {}}
+{sybreadtext a a}		{ok}
+{sybreadtext [set] a}		{1 {13 3} numArgs {} {}}
+{sybreadtext a [set]}		{1 {15 3} numArgs {} {}}
+{sybreadtext a a/$b}		{ok}
+{sybreadtext a -variable a}	{ok}
+{sybreadtext a -file a}		{ok}
+{sybreadtext $a}		{1 {0 14} numArgs {} {}}
+{sybreadtext a -variable a $a}	{1 {0 28} numArgs {} {}}
+{sybreadtext a -file a $a}	{1 {0 24} numArgs {} {}}
+{sybreadtext a a $a}		{1 {0 18} numArgs {} {}}
+
+{sybwritetext a a a -variable a}	{ok}
+{sybwritetext a a a -variable $a}	{1 {0 31} warnVarRef {29 2} {}}
+{sybwritetext a a a -file a}		{ok}
+{sybwritetext a a a -file a/$b}		{1 {0 29} nonPortFile {25 4} {}}
+{sybwritetext a a a a}			{ok}
+{sybwritetext [set] a a a}		{1 {14 3} numArgs {} {}}
+{sybwritetext a [set] a a}		{1 {16 3} numArgs {} {}}
+{sybwritetext a a [set] a}		{1 {18 3} numArgs {} {}}
+{sybwritetext a a a [set]}		{1 {20 3} numArgs {} {}}
+{sybwritetext a a a a/$b}		{ok}
+{sybwritetext a a a -variable a -nolog}	{ok}
+{sybwritetext a a a -variable a $a}	{1 {0 33} numArgs {} {}}
+{sybwritetext a a a -file a -nolog}	{ok}
+{sybwritetext a a a -file a $a}		{1 {0 29} numArgs {} {}}
+{sybwritetext a a a a -nolog}		{ok}
+{sybwritetext a a a a $a}		{1 {0 23} numArgs {} {}}
+{sybwritetext a a a a -foo}		{1 {0 25} badSwitch {21 4} -foo}
+{sybwritetext a a a}			{1 {0 18} numArgs {} {}}
+{sybwritetext a a a -variable a -nolog $a}	{1 {0 40} numArgs {} {}}
+{sybwritetext a a a -file a -nolog $a}		{1 {0 36} numArgs {} {}}
+{sybwritetext a a a a -nolog $a}		{1 {0 30} numArgs {} {}}
+
+{sybretval a}			{ok}
+{sybretval [set]}		{1 {11 3} numArgs {} {}}
+{sybretval}			{1 {0 9} numArgs {} {}}
+{sybretval a a}			{1 {0 13} numArgs {} {}}
+
+{sybsql a a}			{ok}
+{sybsql a a -async}		{ok}
+{sybsql a a $a}			{1 {0 13} numArgs {} {}}
+{sybsql [set] a}		{1 {8 3} numArgs {} {}}
+{sybsql a [set]}		{1 {10 3} numArgs {} {}}
+{sybsql	a a -foo}		{1 {0 15} badSwitch {11 4} -foo}
+{sybsql a a -async a}		{1 {0 19} numArgs {} {}}
+{sybsql a a a}			{1 {0 12} numArgs {} {}}
+{sybsql a}			{1 {0 8} numArgs {} {}}
+
+{sybuse a}			{ok}
+{sybuse a a}			{ok}
+{sybuse [set] a}		{1 {8 3} numArgs {} {}}
+{sybuse a [set]}		{1 {10 3} numArgs {} {}}
+{sybuse}			{1 {0 6} numArgs {} {}}
+{sybuse a a a}			{1 {0 12} numArgs {} {}}
+
+}

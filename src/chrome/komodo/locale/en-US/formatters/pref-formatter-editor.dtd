@@ -1,0 +1,4 @@
+<!ENTITY formatterEditor.title "Formatter Configuration">
+<!ENTITY formatterLanguage.label "Language:">
+<!ENTITY formatterName.label "Name:">
+<!ENTITY formatter.label "Formatter:">

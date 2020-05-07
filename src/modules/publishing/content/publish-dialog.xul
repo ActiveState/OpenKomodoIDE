@@ -1,0 +1,339 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % publishDialogDTD SYSTEM "chrome://publishing/locale/publish-dialog.dtd">
+  %publishDialogDTD;
+]>
+
+<!-- Copyright (c) 2009-2010 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!-- Publishing dialog. See publish-dialog.js for details. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/listbox.css" type="text/css"?>
+<?xml-stylesheet href="less://publishing/skin/publish-dialog.less" type="text/css"?>
+
+<window id="publish_window"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="OnLoad()"
+        onunload="OnUnload()"
+        minwidth="400"
+        width="640"
+        height="480"
+        persist="width height screenX screenY"
+        title="&publishingWindow.title;"
+    >
+
+    <script src="chrome://xtk/content/xtk.js"                  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://xtk/content/domutils.js"             type="application/x-javascript;version=1.7"/>
+    <script src="chrome://xtk/content/treeview.js"             type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js"   type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/trace.js"     type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js"   type="application/x-javascript;version=1.7"/>
+
+        <!-- Necessary for directory browsing -->
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+        <!-- Necessary for ctrl-A handling -->
+    <script src="chrome://komodo/content/library/controller.js" type="application/x-javascript;version=1.7"/>
+        <!-- Necessary for diff functionality -->
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/launch.js" type="application/x-javascript;version=1.7"/>
+
+    <script src="chrome://publishing/content/publish-dialog.js" type="application/x-javascript;version=1.7"/>
+
+
+    <stringbundleset id="publishing_strbundles">
+        <stringbundle id="publishing_strings" src="chrome://publishing/locale/publish.properties"/>
+    </stringbundleset>
+
+    <keyset id="publishing_keys">
+        <key keycode="VK_ESCAPE" modifiers="" oncommand="ConfirmCloseWindow();"/>
+    </keyset>
+
+    <menupopup id="publishing_tree_context_menu"
+               onpopupshowing="ContextPopupShowing(this);">
+        <menuitem id="context_menu_diff"
+                  label="&context_menu_diff.label;"
+                  oncommand="DiffSelectedItems();"/>
+        <menuitem id="context_menu_stop"
+                  label="&context_menu_stop.label;"
+                  collapsed="true"
+                  oncommand="StopSelectedItems();"/>
+        <menu id="context_menu_conflict_resolve"
+                  label="&context_menu_conflict_resolve.label;"
+                  disabled="true">
+            <menupopup id="conflict_resolve_menupopup">
+                <menuitem id="conflict_resolve_choose_local_menuitem"
+                          label="&conflict_resolve_choose_local_menuitem.label;"
+                          oncommand="ConflictResolveSelectedItems('local wins');"/>
+                <menuitem id="conflict_resolve_choose_remote_menuitem"
+                          label="&conflict_resolve_choose_remote_menuitem.label;"
+                          oncommand="ConflictResolveSelectedItems('remote wins');"/>
+            </menupopup>
+        </menu>
+        <menuseparator id="context_menu_separator_1" />
+        <menuitem id="context_menu_check"
+                  label="&context_menu_check.label;"
+                  oncommand="CheckSelectedItems();"/>
+        <menuitem id="context_menu_uncheck"
+                  label="&context_menu_uncheck.label;"
+                  oncommand="UncheckSelectedItems();"/>
+        <menuitem id="context_menu_checkall"
+                  label="&context_menu_checkAll.label;"
+                  oncommand="CheckAll()();"/>
+        <menuitem id="context_menu_uncheckall"
+                  label="&context_menu_uncheckAll.label;"
+                  oncommand="UncheckAll();"/>
+
+        <menuseparator id="context_menu_separator_2" />
+        
+        <menuseparator id="context_menu_separator_3" />
+        <menuitem id="context_menu_upload"
+                  label="&context_menu_force_up.label;"
+                  tooltiptext="&context_menu_force_up.tooltip;"
+                  oncommand="ForceUploadSelectedItems();"
+                  disabled="true"/>
+        <menuitem id="context_menu_download"
+                  label="&context_menu_force_down.label;"
+                  tooltiptext="&context_menu_force_down.tooltip;"
+                  oncommand="ForceDownloadSelectedItems();"
+                  disabled="true"/>
+       
+    </menupopup>
+
+    <vbox id="settings_help_vbox" collapsed="true">
+        <groupbox id="settings_help_groupbox">
+            <caption id="settings_help_groupbox_caption"
+                     label="&settingsHelpGroupbox.caption;"/>
+            <description id="settings_help_description">
+                &settingsHelp.description;
+            </description>
+        </groupbox>
+    </vbox>
+
+    <deck id="publishing_deck" flex="1">
+
+        <vbox id="publishing_settings_vbox">
+            <groupbox id="publishing_settings_groupbox">
+                <caption id="publishing_settings_groupbox_caption"
+                             label="&publishingSettings.label;" />
+                <grid>
+                    <columns>
+                        <column />
+                        <column flex="1"/>
+                        <column />
+                    </columns>
+                    <rows>
+                        <row align="center">
+                            <label id="publishing_name_label"
+                                       value="&publishingName.label;"/>
+                            <textbox id="publishing_name_textbox"
+                                         flex="1"
+                                         oninput="validateName();"
+                                         />
+                        </row>
+                        <row id="publishing_settings_localpath_row" align="center">
+                            <label id="publishing_localpath_label"
+                                       value="&publishingLocalPath.label;"/>
+                            <textbox id="publishing_localpath_textbox"
+                                         flex="1"
+                                         oninput="validateLocalPath();" />
+                            <button id="publishing_localpath_browse_button"
+                                        label="&publishingBrowse.label;"
+                                        oncommand="browseLocal();"/>
+                        </row>
+                        <row id="publishing_settings_remotepath_row" align="center">
+                            <label id="publishing_remotepath_label"
+                                       value="&publishingRemotePath.label;"/>
+                            <textbox id="publishing_remotepath_textbox"
+                                         flex="1"
+                                         oninput="validateRemotePath();" />
+                            <button id="publishing_remotepath_browse_button"
+                                        label="&publishingBrowse.label;"
+                                        oncommand="browseRemote();"/>
+                        </row>
+                    </rows>
+                </grid>
+            </groupbox>
+            <groupbox id="validation_errors_groupbox"/>
+            <groupbox id="publishing_optionals_groupbox">
+                <label id="publishing_includes_label"
+                       value="&publishingIncludes.label;"/>
+                <textbox id="publishing_includes_textbox" flex="1"
+                             tooltiptext="&publishingIncludes.tooltiptext;"
+                             emptytext="&publishingIncludes.emptytext;"/>
+                <label id="publishing_excludes_label"
+                           value="&publishingExcludes.label;"/>
+                <textbox id="publishing_excludes_textbox" flex="1"
+                             tooltiptext="&publishingExcludes.tooltiptext;"
+                             emptytext="&publishingExcludes.emptytext;"/>
+                <caption id="publishing_optionals_groupbox_caption"
+                             label="&publishingOptions.label;" />
+                <checkbox id="publishing_autopush_on_save_checkbox"
+                              label="&publishingOptionAutoPush.checkbox.label;" />
+                
+            </groupbox>
+
+            <hbox>
+                <spacer flex="1" />
+                <button label="&publishingSettingsSave.button.label;"
+                        oncommand="settings_save();"/>
+                <spacer flex="1" />
+                <button label="&publishingSettingsCancel.button.label;"
+                        oncommand="settings_cancel();" />
+                <spacer flex="1" />
+            </hbox>
+
+        </vbox>
+
+
+        <vbox id="publishing_sync_vbox">
+            <groupbox id="publishing_sync_groupbox">
+                <caption anonid="publishing_groupbox_caption"
+                             label="&publishingSync.label;" />
+                <grid id="publishing_grid">
+                    <columns id="publishing_grid_columns">
+                        <column id="publishing_grid_column1" />
+                        <column id="publishing_grid_column2" flex="1" />
+                        <column id="publishing_grid_column3" />
+                        <column id="publishing_grid_column4" />
+                        <column id="publishing_grid_column5" />
+                    </columns>
+                    <rows id="publishing_grid_rows">
+                        <row id="publishing_config_row" align="center">
+                            <label id="settings_name_label" value="&settingsName.label;" />
+                            <menulist id="settings_menulist">
+                                <menupopup id="settings_menupopup" />
+                            </menulist>
+                            <button id="change_config_button"
+                                    class="list-item-edit-icon button-toolbar-a"
+                                    tooltiptext="&changeConfig.button.tooptiptext;"
+                                    oncommand="edit_current_settings();" />
+                            <button id="remove_config_button"
+                                    class="list-item-remove-icon button-toolbar-a"
+                                    tooltiptext="&removeConfig.button.tooptiptext;"
+                                    oncommand="delete_current_settings();" />
+                        </row>
+                        <row id="remote_path_row">
+                            <label id="localpath_label" value="&localpath.label;" />
+                            <label id="localpath" value="" flex="1" />
+                        </row>
+                        <row>
+                            <label id="remotepath_label" value="&remotepath.label;" />
+                            <label id="remotepath" value="" flex="1" />
+                        </row>
+                        <row id="status_row" flex="1" align="start">
+                            <label id="progressmeter_label" value="&progressmeter.label;" />
+                            <vbox id="progress_box" flex="1"></vbox>
+                            <spacer id="progress_row_spacer"/>
+                            <button id="abort_synchronizations_button"
+                                    class="cancel-icon button-toolbar-a"
+                                    tooltiptext=" &abortSynchronizations.button.tooptiptext;"
+                                    oncommand="abort_synchronizations();"/>
+                            <button id="reload_sync_status_button"
+                                    class="reload-icon"
+                                    tooltiptext="&reloadSyncStatus.button.tooptiptext;"
+                                    oncommand="Refresh();" />
+                        </row>
+                        <!--<row id="progress_row">-->
+                        <!--    -->
+                        <!--    -->
+                        <!--</row>-->
+                    </rows>
+                </grid>
+            </groupbox>
+
+            <tree id="sync-tree"
+                  flex="1"
+                  selType="multiple"
+                  height="200"
+                  minheight="100"
+                  editable="true"
+                  onkeypress="return on_keypress(event)">
+                <treecols id="urls-treecols">
+                    <treecol id="urls-column-checkbox"
+                             label="&treeSyncColumn.label;"
+                             type="checkbox"
+                             tooltiptext="&treeCheckboxColumn.tooltiptext;"
+                             persist="width ordinal hidden sortActive sortDirection"
+                             editable="true" />
+                    <treecol id="urls-column-status"
+                             label="&treeStateColumn.label;"
+                             align="center"
+                             tooltiptext="&treeStatusColumn.tooltiptext;"
+                             persist="width ordinal hidden sortActive sortDirection"/>
+                    <treecol id="urls-column-type"
+                             label="&treeFileTypeColumn.label;"
+                             align="center"
+                             tooltiptext="&treeTypeColumn.tooltiptext;"
+                             persist="width ordinal hidden sortActive sortDirection"/>
+                    <treecol id="urls-column-transfer-state"
+                             label="&treeSyncStatusColumn.label;"
+                             align="center"
+                             tooltiptext="&treeTransferColumn.tooltiptext;"
+                             persist="width ordinal hidden sortActive sortDirection"/>
+                    <treecol id="urls-column-name"
+                             label="&treePathColumn.label;"
+                             tooltiptext="&treePathColumn.tooltiptext;"
+                             persist="width ordinal hidden sortActive sortDirection"
+                             crop="center"
+                             flex="1" />
+                    <treecol id="urls-column-action-text"
+                             label="&treeActionTextColumn.label;"
+                             tooltiptext="&treeActionTextColumn.tooltiptext;"
+                             persist="width ordinal hidden sortActive sortDirection"
+                             crop="center"
+                             flex="1" />
+                </treecols>
+                <treechildren id="urls-children"
+                              flex="1"
+                              tooltip="treechildren_tooltip"
+                              context="publishing_tree_context_menu" />
+            </tree>
+
+            <grid id="publishing_controls_grid">
+                <columns id="publishing_controls_grid_columns">
+                    <column id="publishing_controls_grid_column1" />
+                    <column id="publishing_controls_grid_column2" flex="1" />
+                    <column id="publishing_controls_grid_column3" />
+                    <column id="publishing_controls_grid_column4" />
+                    <column id="publishing_controls_grid_column5" />
+                </columns>
+                <rows id="publishing_controls_grid_rows" flex="1" >
+                    <row id="publishing_controls_grid_row1">
+                        
+                        <button id="button_cancel"
+                                label="&buttonCancel.label;"
+                                oncommand="Cancel()"
+                                accesskey="&buttonCancel.accesskey;"/>
+                        
+                    </row>
+                    <row id="publishing_controls_grid_row2">
+                        <spacer id="publishing_controls_row2_column_spacer" />
+                        <spacer id="publishing_controls_row2_column_spacer2" />
+                        
+                        <button id="push_all_button"
+                               label="&buttonPushAll.label;"
+                               oncommand="PushAll();"
+                               accesskey="&buttonPushAll.accesskey;"/>
+                        <button id="pull_all_button"
+                              label="&buttonPullAll.label;"
+                              oncommand="PullAll();"
+                              accesskey="&buttonPullAll.accesskey;"/>
+
+                        <button id="button_publish"
+                                label="&buttonPublish.label;"
+                                accesskey="&buttonPublish.accesskey;"
+                                oncommand="OK();" />
+                    </row>
+                </rows>
+            </grid>
+            
+        </vbox>
+    </deck>
+
+</window>

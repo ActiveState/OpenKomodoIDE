@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2007-2008 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % sccHgDTD SYSTEM "chrome://mercurial/locale/mercurial.dtd">
+  %sccHgDTD;
+]>
+
+<bindings id="koHgCheckoutBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="hg_checkout">
+        <content>
+            <children>
+                <xul:vbox anonid="checkout_vbox" flex="1">
+                    <xul:hbox anonid="checkout_revision_hbox"
+                              xbl:inherits="disabled"
+                              align="center">
+                        <xul:label anonid="checkout_revision_label"
+                                   class="checkout_revision_label"
+                                   xbl:inherits="crop,disabled"
+                                   crop="right"
+                                   value="&checkoutRevision.label;"/>
+                        <xul:textbox anonid="checkout_revision_textbox"
+                                     class="checkout_revision_textbox"
+                                     xbl:inherits="disabled"
+                                     flex="1"/>
+                    </xul:hbox>
+
+                    <xul:checkbox anonid="checkout_no_update_checkbox"
+                                  class="checkout_no_update_checkbox"
+                                  xbl:inherits="crop,disabled"
+                                  label="&checkoutNoUpdate.label;"
+                                  checked="false"/>
+                    <xul:checkbox anonid="checkout_use_pull_protocol_checkbox"
+                                  class="checkout_use_pull_protocol_checkbox"
+                                  xbl:inherits="crop,disabled"
+                                  label="&checkoutUsePullProtocol.label;"
+                                  checked="false"/>
+                    <xul:checkbox anonid="checkout_uncompressed_checkbox"
+                                  class="checkout_uncompressed_checkbox"
+                                  xbl:inherits="crop,disabled"
+                                  label="&checkoutUncompressed.label;"
+                                  checked="false"/>
+                </xul:vbox>
+            </children>
+        </content>
+
+        <implementation>
+            <constructor>
+            <![CDATA[
+            try {
+            } catch (e) {
+                log.exception(e);
+            }
+            ]]>
+            </constructor>
+
+            <method name="getCheckoutArguments">
+            <body>
+            <![CDATA[
+                // Must return an array of parameters to be used by the
+                // command line svn checkout.
+                var revTextbox = document.getAnonymousElementByAttribute(this, "anonid", "checkout_revision_textbox");
+                var noUpdateCheckbox = document.getAnonymousElementByAttribute(this, "anonid", "checkout_no_update_checkbox");
+                var usePullCheckbox = document.getAnonymousElementByAttribute(this, "anonid", "checkout_use_pull_protocol_checkbox");
+                var unCompressedCheckbox = document.getAnonymousElementByAttribute(this, "anonid", "checkout_uncompressed_checkbox");
+                var commandline_args = [];
+                if (revTextbox.value) {
+                    commandline_args.push("--rev");
+                    commandline_args.push(revTextbox.value);
+                }
+                if (noUpdateCheckbox.checked) {
+                    commandline_args.push("--noupdate");
+                }
+                if (usePullCheckbox.checked) {
+                    commandline_args.push("--pull");
+                }
+                if (unCompressedCheckbox.checked) {
+                    commandline_args.push("--uncompressed");
+                }
+                return commandline_args.join(" ");
+            ]]>
+            </body>
+            </method>
+
+        </implementation>
+
+    </binding>
+
+</bindings>

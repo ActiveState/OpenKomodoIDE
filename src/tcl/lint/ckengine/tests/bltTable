@@ -1,0 +1,1593 @@
+# bltTable --
+#
+#	This file contains the table of commands used to check BLT.
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on BLT commands.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions.
+# All rights reserved.
+# 
+# RCS: @(#) $Id: bltTable,v 1.2 2000/05/30 22:24:44 wart Exp $
+
+set checkBLT2.4 {
+
+{barchart .w}				{ok}
+{barchart}				{}
+{barchart .w a}				{}
+{barchart a}				{}
+
+{barchart .w -background red}		{ok}
+{barchart .w -background}		{}
+{barchart .w -background red a}		{}
+{barchart .w -background 0}		{}
+
+{barchart .w -borderwidth 0}		{ok}
+{barchart .w -borderwidth}		{}
+{barchart .w -borderwidth 0 a}		{}
+{barchart .w -borderwidth a}		{}
+
+{barchart .w -buttonmargin 0}		{ok}
+{barchart .w -buttonmargin}		{}
+{barchart .w -buttonmargin 0 a}		{}
+{barchart .w -buttonmargin a}		{}
+
+{barchart .w -bufferelements 0}		{ok}
+{barchart .w -bufferelements}		{}
+{barchart .w -bufferelements 0 a}	{}
+{barchart .w -bufferelements a}		{}
+
+{barchart .w -cursor $cur}		{ok}
+{barchart .w -cursor}			{}
+{barchart .w -cursor $cur a}		{}
+{barchart .w -cursor 0}			{}
+
+{barchart .w -font a}			{ok}
+{barchart .w -font}			{}
+{barchart .w -font a a}			{}
+{barchart .w -font [set]}		{}
+
+{barchart .w -halo 0}			{ok}
+{barchart .w -halo}			{}
+{barchart .w -halo 0 a}			{}
+{barchart .w -halo a}			{}
+
+{barchart .w -height 0}			{ok}
+{barchart .w -height}			{}
+{barchart .w -height 0 a}		{}
+{barchart .w -height a}			{}
+
+{barchart .w -invertxy 0}		{ok}
+{barchart .w -invertxy}			{}
+{barchart .w -invertxy 0 a}		{}
+{barchart .w -invertxy a}		{}
+
+{barchart .w -justify left}		{ok}
+{barchart .w -justify right}		{ok}
+{barchart .w -justify center}		{ok}
+{barchart .w -justify l}		{ok}
+{barchart .w -justify r}		{ok}
+{barchart .w -justify c}		{ok}
+{barchart .w -justify}			{}
+{barchart .w -justify left a}		{}
+{barchart .w -justify foo}		{}
+
+{barchart .w -leftmargin 0}		{ok}
+{barchart .w -leftmargin}		{}
+{barchart .w -leftmargin 0 a}		{}
+{barchart .w -leftmargin a}		{}
+
+{barchart .w -plotbackground red}	{ok}
+{barchart .w -plotbackground}		{}
+{barchart .w -plotbackground red a}	{}
+{barchart .w -plotbackground 0}		{}
+
+{barchart .w -plotborderwidth 0}	{ok}
+{barchart .w -plotborderwidth}		{}
+{barchart .w -plotborderwidth 0 a}	{}
+{barchart .w -plotborderwidth a}	{}
+
+{barchart .w -plotpadx 1}		{ok}
+{barchart .w -plotpadx {1}}		{ok}
+{barchart .w -plotpadx {1 1}}		{ok}
+{barchart .w -plotpadx}			{}
+{barchart .w -plotpadx 1 1}		{}
+{barchart .w -plotpadx a}		{}
+{barchart .w -plotpadx {a}}		{}
+{barchart .w -plotpadx {a 1}}		{}
+{barchart .w -plotpadx {1 a}}		{}
+
+{barchart .w -plotpady 1}		{ok}
+{barchart .w -plotpady {1}}		{ok}
+{barchart .w -plotpady {1 1}}		{ok}
+{barchart .w -plotpady}			{}
+{barchart .w -plotpady 1 1}		{}
+{barchart .w -plotpady a}		{}
+{barchart .w -plotpady {a}}		{}
+{barchart .w -plotpady {a 1}}		{}
+{barchart .w -plotpady {1 a}}		{}
+
+{barchart .w -plotrelief flat}		{ok}
+{barchart .w -plotrelief}		{}
+{barchart .w -plotrelief flat a}	{}
+{barchart .w -plotrelief a}		{}
+
+{barchart .w -relief flat}		{ok}
+{barchart .w -relief}			{}
+{barchart .w -relief flat a}		{}
+{barchart .w -relief a}			{}
+
+{barchart .w -rightmargin 0}		{ok}
+{barchart .w -rightmargin}		{}
+{barchart .w -rightmargin 0 a}		{}
+{barchart .w -rightmargin a}		{}
+
+{barchart .w -takefocus a}		{ok}
+{barchart .w -takefocus}		{}
+{barchart .w -takefocus a a}		{}
+{barchart .w -takefocus [set]}		{}
+
+{barchart .w -tile a}			{ok}
+{barchart .w -tile}			{}
+{barchart .w -tile a a}			{}
+{barchart .w -tile [set]}		{}
+
+{barchart .w -title a}			{ok}
+{barchart .w -title}			{}
+{barchart .w -title a a}		{}
+{barchart .w -title [set]}		{}
+
+{barchart .w -topmargin 0}		{ok}
+{barchart .w -topmargin}		{}
+{barchart .w -topmargin 0 a}		{}
+{barchart .w -topmargin a}		{}
+
+{barchart .w -width 0}			{ok}
+{barchart .w -width}			{}
+{barchart .w -width 0 a}		{}
+{barchart .w -width a}			{}
+
+{barchart .w -barmode normal}		{ok}
+{barchart .w -barmode aligned}		{ok}
+{barchart .w -barmode overlap}		{ok}
+{barchart .w -barmode stacked}		{ok}
+{barchart .w -barmode}			{}
+{barchart .w -barmode normal a}		{}
+{barchart .w -barmode a}		{}
+
+{barchart .w -barwidth 0}		{ok}
+{barchart .w -barwidth}			{}
+{barchart .w -barwidth 0 a}		{}
+{barchart .w -barwidth a}		{}
+
+
+{beep -100}				{ok}
+{beep 0}				{ok}
+{beep 100}				{ok}
+{beep}					{}
+{beep 0 a}				{}
+{beep -101}				{}
+{beep 101}				{}
+{beep a}				{}
+
+
+{bgexec a}				{ok}
+{bgexec a a}				{ok}
+{bgexec a a a}				{ok}
+{bgexec -- a}				{ok}
+{bgexec}				{}
+{bgexec [set] a a}			{}
+{bgexec a [set] a}			{}
+{bgexec a a [set]}			{}
+
+{bgexec a -error a}			{ok}
+{bgexec a -error}			{}
+{bgexec a -error a a}			{}
+{bgexec a -error $a}			{}
+
+{bgexec a -keepnewline 0}		{ok}
+{bgexec a -keepnewline}			{}
+{bgexec a -keepnewline 0 a}		{}
+{bgexec a -keepnewline a}		{}
+
+{bgexec a -killsignal 1}		{ok}
+{bgexec a -killsignal 32}		{ok}
+{bgexec a -killsignal SIGKILL}		{ok}
+{bgexec a -killsignal}			{}
+{bgexec a -killsignal 1 1}		{}
+{bgexec a -killsignal -1}		{}
+{bgexec a -killsignal 0}		{}
+{bgexec a -killsignal 33}		{}
+{bgexec a -killsignal KILL}		{}
+{bgexec a -killsignal SIGNOTHING}	{}
+
+{bgexec a -lasterror a}			{ok}
+{bgexec a -lasterror}			{}
+{bgexec a -lasterror a a}		{}
+{bgexec a -lasterror $a}		{}
+
+{bgexec a -lastoutput a}		{ok}
+{bgexec a -lastoutput}			{}
+{bgexec a -lastoutput a a}		{}
+{bgexec a -lastoutput $a}		{}
+
+{bgexec a -output a}			{ok}
+{bgexec a -output}			{}
+{bgexec a -output a a}			{}
+{bgexec a -output $a}			{}
+
+{bgexec a -onerror a}			{ok}
+{bgexec a -onerror}			{}
+{bgexec a -onerror a a}			{}
+{bgexec a -onerror [set]}		{}
+
+{bgexec a -onoutput a}			{ok}
+{bgexec a -onoutput}			{}
+{bgexec a -onoutput a a}		{}
+{bgexec a -onoutput [set]}		{}
+
+{bgexec a -update a}			{ok}
+{bgexec a -update}			{}
+{bgexec a -update a a}			{}
+{bgexec a -update $a}			{}
+
+
+{bitmap}				{}
+{bitmap foo}				{}
+{bitmap foo a}				{}
+
+{bitmap compose a a}			{ok}
+{bitmap compose a a -font a}		{ok}
+{bitmap compose a a -rotate 0.0}	{ok}
+{bitmap compose a a -scale 1.0}		{ok}
+{bitmap compose}			{}
+{bitmap compose a}			{}
+{bitmap compose a a a}			{}
+{bitmap compose [set] a}		{}
+{bitmap compose a [set]}		{}
+{bitmap compose a a -font}		{}
+{bitmap compose a a -font a a}		{}
+{bitmap compose a a -font [set]}	{}
+{bitmap compose a a -rotate}		{}
+{bitmap compose a a -rotate 1.0 a}	{}
+{bitmap compose a a -rotate a}		{}
+{bitmap compose a a -scale}		{}
+{bitmap compose a a -scale 1.0 a}	{}
+{bitmap compose a a -scale a}		{}
+
+{bitmap data a}				{ok}
+{bitmap data}				{}
+{bitmap data a a}			{}
+{bitmap data [set]}			{}
+
+{bitmap define a a}			{ok}
+{bitmap define a a -rotate 0.0}		{ok}
+{bitmap define a a -theta 1.0}		{ok}
+{bitmap define}				{}
+{bitmap define a}			{}
+{bitmap define a a a}			{}
+{bitmap define [set] a}			{}
+{bitmap define a [set]}			{}
+{bitmap define a a -rotate}		{}
+{bitmap define a a -rotate 0.0 a}	{}
+{bitmap define a a -rotate a}		{}
+{bitmap define a a -theta}		{}
+{bitmap define a a -theta 0.0 a}	{}
+{bitmap define a a -theta a}		{}
+
+{bitmap exists a}			{ok}
+{bitmap exists}				{}
+{bitmap exists a a}			{}
+{bitmap exists [set]}			{}
+
+{bitmap height a}			{ok}
+{bitmap height}				{}
+{bitmap height a a}			{}
+{bitmap height [set]}			{}
+
+{bitmap source a}			{ok}
+{bitmap source}				{}
+{bitmap source a a}			{}
+{bitmap source [set]}			{}
+
+{bitmap width a}			{ok}
+{bitmap width}				{}
+{bitmap width a a}			{}
+{bitmap width [set]}			{}
+
+
+{bltdebug}				{ok}
+{bltdebug #0}				{ok}
+{bltdebug #0 a}				{}
+{bltdebug #a}				{}
+
+
+{busy}					{}
+{busy foo}				{}
+{busy foo a}				{}
+
+{busy configure .a}			{ok}
+{busy configure .a a}			{ok}
+{busy configure .a a a}			{ok}
+{busy configure}			{}
+{busy configure .A a}			{}
+{busy configure .a [set]}		{}
+
+{busy forget .a}			{ok}
+{busy forget .a .a}			{ok}
+{busy forget .a .a .a}			{ok}
+{busy forget}				{}
+{busy forget .A .a}			{}
+{busy forget .a .A}			{}
+
+{busy isbusy}				{ok}
+{busy isbusy a}				{ok}
+{busy isbusy a a}			{}
+{busy isbusy a[A-Z]*}			{}
+
+{busy hold .a}				{ok}
+{busy hold .a -cursor a}		{ok}
+{busy hold}				{ok}
+{busy hold .a a}			{ok}
+{busy hold .A}				{}
+{busy hold .a -cursor}			{}
+{busy hold .a -cursor a a}		{}
+{busy hold .a -cursor 0}		{}
+
+{busy release .a}			{ok}
+{busy release .a .a}			{ok}
+{busy release .a .a .a}			{ok}
+{busy release}				{}
+{busy release .A .a}			{}
+{busy release .a .A}			{}
+
+{busy status .a}			{ok}
+{busy status}				{}
+{busy status .a a}			{}
+{busy status .A}			{}
+
+{busy windows}				{ok}
+{busy windows a}			{ok}
+{busy windows a a}			{}
+{busy windows a[A-z]*}			{}
+
+
+{cutbuffer}				{}
+{cutbuffer foo}				{}
+{cutbuffer foo a}			{}
+
+{cutbuffer get}				{ok}
+{cutbuffer get 0}			{ok}
+{cutbuffer get 7}			{ok}
+{cutbuffer get 0 a}			{}
+{cutbuffer get -1}			{}
+{cutbuffer get 8}			{}
+{cutbuffer get a}			{}
+
+{cutbuffer rotate}			{ok}
+{cutbuffer rotate -7}			{ok}
+{cutbuffer rotate 7}			{ok}
+{cutbuffer rotate 0 a}			{}
+{cutbuffer rotate -8}			{}
+{cutbuffer rotate 8}			{}
+{cutbuffer rotate a}			{}
+
+{cutbuffer set a}			{ok}
+{cutbuffer set a 0}			{ok}
+{cutbuffer set a 7}			{ok}
+{cutbuffer set}				{}
+{cutbuffer set a 0 a}			{}
+{cutbuffer set [set] 0}			{}
+{cutbuffer set a -1}			{}
+{cutbuffer set a 8}			{}
+{cutbuffer set a a}			{}
+
+
+{drag&drop}				{ok}
+{drag&drop}				{}
+
+{drag&drop active}			{ok}
+{drag&drop active}			{}
+
+{drag&drop drop}			{ok}
+{drag&drop drop}			{}
+
+{drag&drop drag}			{ok}
+{drag&drop drag}			{}
+
+{drag&drop errors}			{ok}
+{drag&drop errors}			{}
+
+{drag&drop location}			{ok}
+{drag&drop location}			{}
+
+{drag&drop source}			{ok}
+{drag&drop source}			{}
+
+{drag&drop target}			{ok}
+{drag&drop target}			{}
+
+{drag&drop token}			{ok}
+{drag&drop token}			{}
+
+
+{graph}					{ok}
+{graph}					{}
+
+{graph .w -background}			{ok}
+{graph .w -background}			{}
+
+{graph .w -borderwidth}			{ok}
+{graph .w -borderwidth}			{}
+
+{graph .w -buttonmargin}		{ok}
+{graph .w -buttonmargin}		{}
+
+{graph .w -bufferelements}		{ok}
+{graph .w -bufferelements}		{}
+
+{graph .w -cursor}			{ok}
+{graph .w -cursor}			{}
+
+{graph .w -font}			{ok}
+{graph .w -font}			{}
+
+{graph .w -halo}			{ok}
+{graph .w -halo}			{}
+
+{graph .w -height}			{ok}
+{graph .w -height}			{}
+
+{graph .w -invertxy}			{ok}
+{graph .w -invertxy}			{}
+
+{graph .w -justify}			{ok}
+{graph .w -justify}			{}
+
+{graph .w -leftmargin}			{ok}
+{graph .w -leftmargin}			{}
+
+{graph .w -plotbackground}		{ok}
+{graph .w -plotbackground}		{}
+
+{graph .w -plotborderwidth}		{ok}
+{graph .w -plotborderwidth}		{}
+
+{graph .w -plotpadx}			{ok}
+{graph .w -plotpadx}			{}
+
+{graph .w -plotpady }			{ok}
+{graph .w -plotpady }			{}
+
+{graph .w -plotrelief}			{ok}
+{graph .w -plotrelief}			{}
+
+{graph .w -relief}			{ok}
+{graph .w -relief}			{}
+
+{graph .w -rightmargin}			{ok}
+{graph .w -rightmargin}			{}
+
+{graph .w -takefocus}			{ok}
+{graph .w -takefocus}			{}
+
+{graph .w -tile}			{ok}
+{graph .w -tile}			{}
+
+{graph .w -title}			{ok}
+{graph .w -title}			{}
+
+{graph .w -topmargin}			{ok}
+{graph .w -topmargin}			{}
+
+{graph .w -width}			{ok}
+{graph .w -width}			{}
+
+
+
+{hierbox}				{ok}
+{hierbox}				{}
+
+{hierbox .w -background}		{ok}
+{hierbox .w -background}		{}
+
+{hierbox .w -borderwidth}		{ok}
+{hierbox .w -borderwidth}		{}
+
+{hierbox .w -cursor}			{ok}
+{hierbox .w -cursor}			{}
+
+{hierbox .w -exportselection}		{ok}
+{hierbox .w -exportselection}		{}
+
+{hierbox .w -font}			{ok}
+{hierbox .w -font}			{}
+
+{hierbox .w -foreground}		{ok}
+{hierbox .w -foreground}		{}
+
+{hierbox .w -height}			{ok}
+{hierbox .w -height}			{}
+
+{hierbox .w -highlightbackground}	{ok}
+{hierbox .w -highlightbackground}	{}
+
+{hierbox .w -highlightcolor}		{ok}
+{hierbox .w -highlightcolor}		{}
+
+{hierbox .w -highlightthickness}	{ok}
+{hierbox .w -highlightthickness}	{}
+
+{hierbox .w -relief}			{ok}
+{hierbox .w -relief}			{}
+
+{hierbox .w -selectbackground}		{ok}
+{hierbox .w -selectbackground}		{}
+
+{hierbox .w -selectborderwidth}		{ok}
+{hierbox .w -selectborderwidth}		{}
+
+{hierbox .w -selectforeground}		{ok}
+{hierbox .w -selectforeground}		{}
+
+{hierbox .w -takefocus}			{ok}
+{hierbox .w -takefocus}			{}
+
+{hierbox .w -tile}			{ok}
+{hierbox .w -tile}			{}
+
+{hierbox .w -width}			{ok}
+{hierbox .w -width}			{}
+
+{hierbox .w -xscrollcommand}		{ok}
+{hierbox .w -xscrollcommand}		{}
+
+{hierbox .w -yscrollcommand}		{ok}
+{hierbox .w -yscrollcommand}		{}
+
+{hierbox .w -closecommand}		{ok}
+{hierbox .w -closecommand}		{}
+
+{hierbox .w -closerelief}		{ok}
+{hierbox .w -closerelief}		{}
+
+{hierbox .w -dashes}			{ok}
+{hierbox .w -dashes}			{}
+
+{hierbox .w -gadgetactivebackground}	{ok}
+{hierbox .w -gadgetactivebackground}	{}
+
+{hierbox .w -gadgetactiveforeground}	{ok}
+{hierbox .w -gadgetactiveforeground}	{}
+
+{hierbox .w -gadgetbackground}		{ok}
+{hierbox .w -gadgetbackground}		{}
+
+{hierbox .w -gadgetborderwidth}		{ok}
+{hierbox .w -gadgetborderwidth}		{}
+
+{hierbox .w -gadgetforeground}		{ok}
+{hierbox .w -gadgetforeground}		{}
+
+{hierbox .w -gadgets}			{ok}
+{hierbox .w -gadgets}			{}
+
+{hierbox .w -linecolor}			{ok}
+{hierbox .w -linecolor}			{}
+
+{hierbox .w -linewidth}			{ok}
+{hierbox .w -linewidth}			{}
+
+{hierbox .w -opencommand}		{ok}
+{hierbox .w -opencommand}		{}
+
+{hierbox .w -openrelief}		{ok}
+{hierbox .w -openrelief}		{}
+
+{hierbox .w -scrolltile}		{ok}
+{hierbox .w -scrolltile}		{}
+
+{hierbox .w -separator}			{ok}
+{hierbox .w -separator}			{}
+
+{hierbox .w -trimleft}			{ok}
+{hierbox .w -trimleft}			{}
+
+
+
+
+{htext}					{ok}
+{htext}					{}
+
+{htext .w -background}			{ok}
+{htext .w -background}			{}
+
+{htext .w -cursor}			{ok}
+{htext .w -cursor}			{}
+
+{htext .w -font}			{ok}
+{htext .w -font}			{}
+
+{htext .w -foreground}			{ok}
+{htext .w -foreground}			{}
+
+{htext .w -height}			{ok}
+{htext .w -height}			{}
+
+{htext .w -linespacing}			{ok}
+{htext .w -linespacing}			{}
+
+{htext .w -text}			{ok}
+{htext .w -text}			{}
+
+{htext .w -xscrollcommand}		{ok}
+{htext .w -xscrollcommand}		{}
+
+{htext .w -xscrollunits}		{ok}
+{htext .w -xscrollunits}		{}
+
+{htext .w -yscrollcommand }		{ok}
+{htext .w -yscrollcommand }		{}
+
+{htext .w -yscrollcommand}		{ok}
+{htext .w -yscrollcommand}		{}
+
+{htext .w -width}			{ok}
+{htext .w -width}			{}
+
+{htext .w -filename}			{ok}
+{htext .w -filename}			{}
+
+{htext .w -specialchar}			{ok}
+{htext .w -specialchar}			{}
+
+
+
+{spline}				{ok}
+{spline}				{}
+
+{spline natural}			{ok}
+{spline natural}			{}
+
+{spline quadratic}			{ok}
+{spline quadratic}			{}
+
+
+
+
+{stripchart}				{ok}
+{stripchart}				{}
+
+{stripchart .w -background}		{ok}
+{stripchart .w -background}		{}
+
+{stripchart .w -borderwidth}		{ok}
+{stripchart .w -borderwidth}		{}
+
+{stripchart .w -buttonmargin}		{ok}
+{stripchart .w -buttonmargin}		{}
+
+{stripchart .w -bufferelements}		{ok}
+{stripchart .w -bufferelements}		{}
+
+{stripchart .w -cursor}			{ok}
+{stripchart .w -cursor}			{}
+
+{stripchart .w -font}			{ok}
+{stripchart .w -font}			{}
+
+{stripchart .w -halo}			{ok}
+{stripchart .w -halo}			{}
+
+{stripchart .w -height}			{ok}
+{stripchart .w -height}			{}
+
+{stripchart .w -invertxy}		{ok}
+{stripchart .w -invertxy}		{}
+
+{stripchart .w -justify}		{ok}
+{stripchart .w -justify}		{}
+
+{stripchart .w -leftmargin}		{ok}
+{stripchart .w -leftmargin}		{}
+
+{stripchart .w -plotbackground}		{ok}
+{stripchart .w -plotbackground}		{}
+
+{stripchart .w -plotborderwidth}	{ok}
+{stripchart .w -plotborderwidth}	{}
+
+{stripchart .w -plotpadx}		{ok}
+{stripchart .w -plotpadx}		{}
+
+{stripchart .w -plotpady }		{ok}
+{stripchart .w -plotpady }		{}
+
+{stripchart .w -plotrelief}		{ok}
+{stripchart .w -plotrelief}		{}
+
+{stripchart .w -relief}			{ok}
+{stripchart .w -relief}			{}
+
+{stripchart .w -rightmargin}		{ok}
+{stripchart .w -rightmargin}		{}
+
+{stripchart .w -takefocus}		{ok}
+{stripchart .w -takefocus}		{}
+
+{stripchart .w -tile}			{ok}
+{stripchart .w -tile}			{}
+
+{stripchart .w -title}			{ok}
+{stripchart .w -title}			{}
+
+{stripchart .w -topmargin}		{ok}
+{stripchart .w -topmargin}		{}
+
+{stripchart .w -width}			{ok}
+{stripchart .w -width}			{}
+
+
+
+{table}					{ok}
+{table}					{}
+
+{table arrange}				{ok}
+{table arrange}				{}
+
+{table cget}				{ok}
+{table cget}				{}
+
+{table configure}			{ok}
+{table configure}			{}
+
+{table extents}				{ok}
+{table extents}				{}
+
+{table forget}				{ok}
+{table forget}				{}
+
+{table info}				{ok}
+{table info}				{}
+
+{table locate}				{ok}
+{table locate}				{}
+
+{table masters}				{ok}
+{table masters}				{}
+
+{table search}				{ok}
+{table search}				{}
+
+
+{tabset}				{ok}
+{tabset}				{}
+
+{tabset .w -activebackground}		{ok}
+{tabset .w -activebackground}		{}
+
+{tabset .w -activeforeground}		{ok}
+{tabset .w -activeforeground}		{}
+
+{tabset .w -background}			{ok}
+{tabset .w -background}			{}
+
+{tabset .w -borderwidth}		{ok}
+{tabset .w -borderwidth}		{}
+
+{tabset .w -cursor}			{ok}
+{tabset .w -cursor}			{}
+
+{tabset .w -font}			{ok}
+{tabset .w -font}			{}
+
+{tabset .w -foreground}			{ok}
+{tabset .w -foreground}			{}
+
+{tabset .w -height}			{ok}
+{tabset .w -height}			{}
+
+{tabset .w -highlightbackground}	{ok}
+{tabset .w -highlightbackground}	{}
+
+{tabset .w -highlightcolor}		{ok}
+{tabset .w -highlightcolor}		{}
+
+{tabset .w -highlightthickness}		{ok}
+{tabset .w -highlightthickness}		{}
+
+{tabset .w -relief}			{ok}
+{tabset .w -relief}			{}
+
+{tabset .w -scrollcommand  }		{ok}
+{tabset .w -scrollcommand  }		{}
+
+{tabset .w -selectbackground}		{ok}
+{tabset .w -selectbackground}		{}
+
+{tabset .w -selectborderwidth}		{ok}
+{tabset .w -selectborderwidth}		{}
+
+{tabset .w -selectforeground}		{ok}
+{tabset .w -selectforeground}		{}
+
+{tabset .w -takefocus}			{ok}
+{tabset .w -takefocus}			{}
+
+{tabset .w -tile}			{ok}
+{tabset .w -tile}			{}
+
+{tabset .w -width}			{ok}
+{tabset .w -width}			{}
+
+{tabset .w -dashes}			{ok}
+{tabset .w -dashes}			{}
+
+{tabset .w -gap}			{ok}
+{tabset .w -gap}			{}
+
+{tabset .w -pageheight}			{ok}
+{tabset .w -pageheight}			{}
+
+{tabset .w -pagewidth}			{ok}
+{tabset .w -pagewidth}			{}
+
+{tabset .w -rotate}			{ok}
+{tabset .w -rotate}			{}
+
+{tabset .w -samewidth}			{ok}
+{tabset .w -samewidth}			{}
+
+{tabset .w -scrollincrement}		{ok}
+{tabset .w -scrollincrement}		{}
+
+{tabset .w -scrolltile}			{ok}
+{tabset .w -scrolltile}			{}
+
+{tabset .w -separator}			{ok}
+{tabset .w -separator}			{}
+
+{tabset .w -trimleft}			{ok}
+{tabset .w -trimleft}			{}
+
+{tabset .w -selectpad}			{ok}
+{tabset .w -selectpad}			{}
+
+{tabset .w -selectcommand}		{ok}
+{tabset .w -selectcommand}		{}
+
+{tabset .w -side}			{ok}
+{tabset .w -side}			{}
+
+{tabset .w -tabbackground}		{ok}
+{tabset .w -tabbackground}		{}
+
+{tabset .w -tabborderwidth}		{ok}
+{tabset .w -tabborderwidth}		{}
+
+{tabset .w -tabforeground}		{ok}
+{tabset .w -tabforeground}		{}
+
+{tabset .w -tabrelief}			{ok}
+{tabset .w -tabrelief}			{}
+
+{tabset .w -textside}			{ok}
+{tabset .w -textside}			{}
+
+{tabset .w -tiers}			{ok}
+{tabset .w -tiers}			{}
+
+
+
+{tilebutton}				{ok}
+{tilebutton}				{}
+
+{tilebutton .w -activebackground}	{ok}
+{tilebutton .w -activebackground}	{}
+
+{tilebutton .w -activeforeground}	{ok}
+{tilebutton .w -activeforeground}	{}
+
+{tilebutton .w -anchor}			{ok}
+{tilebutton .w -anchor}			{}
+
+{tilebutton .w -background}		{ok}
+{tilebutton .w -background}		{}
+
+{tilebutton .w -bd}			{ok}
+{tilebutton .w -bd}			{}
+
+{tilebutton .w -bg}			{ok}
+{tilebutton .w -bg}			{}
+
+{tilebutton .w -bitmap}			{ok}
+{tilebutton .w -bitmap}			{}
+
+{tilebutton .w -borderwidth}		{ok}
+{tilebutton .w -borderwidth}		{}
+
+{tilebutton .w -command}		{ok}
+{tilebutton .w -command}		{}
+
+{tilebutton .w -cursor}			{ok}
+{tilebutton .w -cursor}			{}
+
+{tilebutton .w -default}		{ok}
+{tilebutton .w -default}		{}
+
+{tilebutton .w -disabledforeground}	{ok}
+{tilebutton .w -disabledforeground}	{}
+
+{tilebutton .w -fg}			{ok}
+{tilebutton .w -fg}			{}
+
+{tilebutton .w -font}			{ok}
+{tilebutton .w -font}			{}
+
+{tilebutton .w -foreground}		{ok}
+{tilebutton .w -foreground}		{}
+
+{tilebutton .w -height}			{ok}
+{tilebutton .w -height}			{}
+
+{tilebutton .w -highlightbackground}	{ok}
+{tilebutton .w -highlightbackground}	{}
+
+{tilebutton .w -highlightcolor}		{ok}
+{tilebutton .w -highlightcolor}		{}
+
+{tilebutton .w -highlightthickness}	{ok}
+{tilebutton .w -highlightthickness}	{}
+
+{tilebutton .w -image}			{ok}
+{tilebutton .w -image}			{}
+
+{tilebutton .w -justify}		{ok}
+{tilebutton .w -justify}		{}
+
+{tilebutton .w -padx}			{ok}
+{tilebutton .w -padx}			{}
+
+{tilebutton .w -pady}			{ok}
+{tilebutton .w -pady}			{}
+
+{tilebutton .w -relief}			{ok}
+{tilebutton .w -relief}			{}
+
+{tilebutton .w -takefocus}		{ok}
+{tilebutton .w -takefocus}		{}
+
+{tilebutton .w -text}			{ok}
+{tilebutton .w -text}			{}
+
+{tilebutton .w -textvariable}		{ok}
+{tilebutton .w -textvariable}		{}
+
+{tilebutton .w -underline}		{ok}
+{tilebutton .w -underline}		{}
+
+{tilebutton .w -variable}		{ok}
+{tilebutton .w -variable}		{}
+
+{tilebutton .w -width}			{ok}
+{tilebutton .w -width}			{}
+
+{tilebutton .w -wraplength}		{ok}
+{tilebutton .w -wraplength}		{}
+
+{tilebutton .w -activetile}		{ok}
+{tilebutton .w -activetile}		{}
+
+{tilebutton .w -tile}			{ok}
+{tilebutton .w -tile}			{}
+
+{tilebutton .w -state}			{ok}
+{tilebutton .w -state}			{}
+
+
+
+
+{tilecheckbutton}			{ok}
+{tilecheckbutton}			{}
+
+{tilecheckbutton .w -activebackground}	{ok}
+{tilecheckbutton .w -activebackground}	{}
+
+{tilecheckbutton .w -activeforeground}	{ok}
+{tilecheckbutton .w -activeforeground}	{}
+
+{tilecheckbutton .w -anchor}		{ok}
+{tilecheckbutton .w -anchor}		{}
+
+{tilecheckbutton .w -background}	{ok}
+{tilecheckbutton .w -background}	{}
+
+{tilecheckbutton .w -bd}		{ok}
+{tilecheckbutton .w -bd}		{}
+
+{tilecheckbutton .w -bg}		{ok}
+{tilecheckbutton .w -bg}		{}
+
+{tilecheckbutton .w -bitmap}		{ok}
+{tilecheckbutton .w -bitmap}		{}
+
+{tilecheckbutton .w -borderwidth}	{ok}
+{tilecheckbutton .w -borderwidth}	{}
+
+{tilecheckbutton .w -command}		{ok}
+{tilecheckbutton .w -command}		{}
+
+{tilecheckbutton .w -cursor}		{ok}
+{tilecheckbutton .w -cursor}		{}
+
+{tilecheckbutton .w -disabledforeground}	{ok}
+{tilecheckbutton .w -disabledforeground}	{}
+
+{tilecheckbutton .w -fg}		{ok}
+{tilecheckbutton .w -fg}		{}
+
+{tilecheckbutton .w -font}		{ok}
+{tilecheckbutton .w -font}		{}
+
+{tilecheckbutton .w -foreground}	{ok}
+{tilecheckbutton .w -foreground}	{}
+
+{tilecheckbutton .w -height}		{ok}
+{tilecheckbutton .w -height}		{}
+
+{tilecheckbutton .w -highlightbackground}	{ok}
+{tilecheckbutton .w -highlightbackground}	{}
+
+{tilecheckbutton .w -highlightcolor}	{ok}
+{tilecheckbutton .w -highlightcolor}	{}
+
+{tilecheckbutton .w -highlightthickness}	{ok}
+{tilecheckbutton .w -highlightthickness}	{}
+
+{tilecheckbutton .w -image}		{ok}
+{tilecheckbutton .w -image}		{}
+
+{tilecheckbutton .w -indicatoron}	{ok}
+{tilecheckbutton .w -indicatoron}	{}
+
+{tilecheckbutton .w -justify}		{ok}
+{tilecheckbutton .w -justify}		{}
+
+{tilecheckbutton .w -offvalue}		{ok}
+{tilecheckbutton .w -offvalue}		{}
+
+{tilecheckbutton .w -onvalue}		{ok}
+{tilecheckbutton .w -onvalue}		{}
+
+{tilecheckbutton .w -padx}		{ok}
+{tilecheckbutton .w -padx}		{}
+
+{tilecheckbutton .w -pady}		{ok}
+{tilecheckbutton .w -pady}		{}
+
+{tilecheckbutton .w -relief}		{ok}
+{tilecheckbutton .w -relief}		{}
+
+{tilecheckbutton .w -selectcolor}	{ok}
+{tilecheckbutton .w -selectcolor}	{}
+
+{tilecheckbutton .w -selectimage}	{ok}
+{tilecheckbutton .w -selectimage}	{}
+
+{tilecheckbutton .w -takefocus}		{ok}
+{tilecheckbutton .w -takefocus}		{}
+
+{tilecheckbutton .w -text}		{ok}
+{tilecheckbutton .w -text}		{}
+
+{tilecheckbutton .w -textvariable}	{ok}
+{tilecheckbutton .w -textvariable}	{}
+
+{tilecheckbutton .w -underline}		{ok}
+{tilecheckbutton .w -underline}		{}
+
+{tilecheckbutton .w -variable}		{ok}
+{tilecheckbutton .w -variable}		{}
+
+{tilecheckbutton .w -width}		{ok}
+{tilecheckbutton .w -width}		{}
+
+{tilecheckbutton .w -wraplength}	{ok}
+{tilecheckbutton .w -wraplength}	{}
+
+{tilecheckbutton .w -activetile}	{ok}
+{tilecheckbutton .w -activetile}	{}
+
+{tilecheckbutton .w -tile}		{ok}
+{tilecheckbutton .w -tile}		{}
+
+{tilecheckbutton .w -selector}		{ok}
+{tilecheckbutton .w -selector}		{}
+
+{tilecheckbutton .w -state}		{ok}
+{tilecheckbutton .w -state}		{}
+
+
+
+{tileframe}				{ok}
+{tileframe}				{}
+
+{tileframe .w -background}		{ok}
+{tileframe .w -background}		{}
+
+{tileframe .w -bd}			{ok}
+{tileframe .w -bd}			{}
+
+{tileframe .w -bg}			{ok}
+{tileframe .w -bg}			{}
+
+{tileframe .w -borderwidth}		{ok}
+{tileframe .w -borderwidth}		{}
+
+{tileframe .w -class}			{ok}
+{tileframe .w -class}			{}
+
+{tileframe .w -colormap}		{ok}
+{tileframe .w -colormap}		{}
+
+{tileframe .w -container}		{ok}
+{tileframe .w -container}		{}
+
+{tileframe .w -cursor}			{ok}
+{tileframe .w -cursor}			{}
+
+{tileframe .w -height}			{ok}
+{tileframe .w -height}			{}
+
+{tileframe .w -highlightbackground}	{ok}
+{tileframe .w -highlightbackground}	{}
+
+{tileframe .w -highlightcolor}		{ok}
+{tileframe .w -highlightcolor}		{}
+
+{tileframe .w -highlightthickness}	{ok}
+{tileframe .w -highlightthickness}	{}
+
+{tileframe .w -relief}			{ok}
+{tileframe .w -relief}			{}
+
+{tileframe .w -takefocus}		{ok}
+{tileframe .w -takefocus}		{}
+
+{tileframe .w -visual}			{ok}
+{tileframe .w -visual}			{}
+
+{tileframe .w -width}			{ok}
+{tileframe .w -width}			{}
+
+{tileframe .w -activetile}		{ok}
+{tileframe .w -activetile}		{}
+
+{tileframe .w -tile}			{ok}
+{tileframe .w -tile}			{}
+
+{tileframe .w -geometry}		{ok}
+{tileframe .w -geometry}		{}
+
+
+
+{tilelabel}				{ok}
+{tilelabel}				{}
+
+{tilelabel .w -anchor}			{ok}
+{tilelabel .w -anchor}			{}
+
+{tilelabel .w -background}		{ok}
+{tilelabel .w -background}		{}
+
+{tilelabel .w -bd}			{ok}
+{tilelabel .w -bd}			{}
+
+{tilelabel .w -bg}			{ok}
+{tilelabel .w -bg}			{}
+
+{tilelabel .w -bitmap}			{ok}
+{tilelabel .w -bitmap}			{}
+
+{tilelabel .w -borderwidth}		{ok}
+{tilelabel .w -borderwidth}		{}
+
+{tilelabel .w -cursor}			{ok}
+{tilelabel .w -cursor}			{}
+
+{tilelabel .w -fg}			{ok}
+{tilelabel .w -fg}			{}
+
+{tilelabel .w -font}			{ok}
+{tilelabel .w -font}			{}
+
+{tilelabel .w -foreground}		{ok}
+{tilelabel .w -foreground}		{}
+
+{tilelabel .w -height}			{ok}
+{tilelabel .w -height}			{}
+
+{tilelabel .w -highlightbackground}	{ok}
+{tilelabel .w -highlightbackground}	{}
+
+{tilelabel .w -highlightcolor}		{ok}
+{tilelabel .w -highlightcolor}		{}
+
+{tilelabel .w -highlightthickness}	{ok}
+{tilelabel .w -highlightthickness}	{}
+
+{tilelabel .w -image}			{ok}
+{tilelabel .w -image}			{}
+
+{tilelabel .w -justify}			{ok}
+{tilelabel .w -justify}			{}
+
+{tilelabel .w -padx}			{ok}
+{tilelabel .w -padx}			{}
+
+{tilelabel .w -pady}			{ok}
+{tilelabel .w -pady}			{}
+
+{tilelabel .w -relief}			{ok}
+{tilelabel .w -relief}			{}
+
+{tilelabel .w -takefocus}		{ok}
+{tilelabel .w -takefocus}		{}
+
+{tilelabel .w -text}			{ok}
+{tilelabel .w -text}			{}
+
+{tilelabel .w -textvariable}		{ok}
+{tilelabel .w -textvariable}		{}
+
+{tilelabel .w -underline}		{ok}
+{tilelabel .w -underline}		{}
+
+{tilelabel .w -width}			{ok}
+{tilelabel .w -width}			{}
+
+{tilelabel .w -wraplength}		{ok}
+{tilelabel .w -wraplength}		{}
+
+{tilelabel .w -activetile}		{ok}
+{tilelabel .w -activetile}		{}
+
+{tilelabel .w -tile}			{ok}
+{tilelabel .w -tile}			{}
+
+
+
+{tileradiobutton}			{ok}
+{tileradiobutton}			{}
+
+{tileradiobutton .w -activebackground}	{ok}
+{tileradiobutton .w -activebackground}	{}
+
+{tileradiobutton .w -activeforeground}	{ok}
+{tileradiobutton .w -activeforeground}	{}
+
+{tileradiobutton .w -anchor}		{ok}
+{tileradiobutton .w -anchor}		{}
+
+{tileradiobutton .w -background}	{ok}
+{tileradiobutton .w -background}	{}
+
+{tileradiobutton .w -bd}		{ok}
+{tileradiobutton .w -bd}		{}
+
+{tileradiobutton .w -bg}		{ok}
+{tileradiobutton .w -bg}		{}
+
+{tileradiobutton .w -bitmap}		{ok}
+{tileradiobutton .w -bitmap}		{}
+
+{tileradiobutton .w -borderwidth}	{ok}
+{tileradiobutton .w -borderwidth}	{}
+
+{tileradiobutton .w -command}		{ok}
+{tileradiobutton .w -command}		{}
+
+{tileradiobutton .w -cursor}		{ok}
+{tileradiobutton .w -cursor}		{}
+
+{tileradiobutton .w -disabledforeground}	{ok}
+{tileradiobutton .w -disabledforeground}	{}
+
+{tileradiobutton .w -fg}		{ok}
+{tileradiobutton .w -fg}		{}
+
+{tileradiobutton .w -font}		{ok}
+{tileradiobutton .w -font}		{}
+
+{tileradiobutton .w -foreground}	{ok}
+{tileradiobutton .w -foreground}	{}
+
+{tileradiobutton .w -height}		{ok}
+{tileradiobutton .w -height}		{}
+
+{tileradiobutton .w -highlightbackground}	{ok}
+{tileradiobutton .w -highlightbackground}	{}
+
+{tileradiobutton .w -highlightcolor}	{ok}
+{tileradiobutton .w -highlightcolor}	{}
+
+{tileradiobutton .w -highlightthickness}	{ok}
+{tileradiobutton .w -highlightthickness}	{}
+
+{tileradiobutton .w -image}		{ok}
+{tileradiobutton .w -image}		{}
+
+{tileradiobutton .w -indicatoron}	{ok}
+{tileradiobutton .w -indicatoron}	{}
+
+{tileradiobutton .w -justify}		{ok}
+{tileradiobutton .w -justify}		{}
+
+{tileradiobutton .w -padx}		{ok}
+{tileradiobutton .w -padx}		{}
+
+{tileradiobutton .w -pady}		{ok}
+{tileradiobutton .w -pady}		{}
+
+{tileradiobutton .w -relief}		{ok}
+{tileradiobutton .w -relief}		{}
+
+{tileradiobutton .w -selectcolor}	{ok}
+{tileradiobutton .w -selectcolor}	{}
+
+{tileradiobutton .w -selectimage}	{ok}
+{tileradiobutton .w -selectimage}	{}
+
+{tileradiobutton .w -takefocus}		{ok}
+{tileradiobutton .w -takefocus}		{}
+
+{tileradiobutton .w -text}		{ok}
+{tileradiobutton .w -text}		{}
+
+{tileradiobutton .w -textvariable}	{ok}
+{tileradiobutton .w -textvariable}	{}
+
+{tileradiobutton .w -underline}		{ok}
+{tileradiobutton .w -underline}		{}
+
+{tileradiobutton .w -value}		{ok}
+{tileradiobutton .w -value}		{}
+
+{tileradiobutton .w -variable}		{ok}
+{tileradiobutton .w -variable}		{}
+
+{tileradiobutton .w -width}		{ok}
+{tileradiobutton .w -width}		{}
+
+{tileradiobutton .w -wraplength}	{ok}
+{tileradiobutton .w -wraplength}	{}
+
+{tileradiobutton .w -activetile}	{ok}
+{tileradiobutton .w -activetile}	{}
+
+{tileradiobutton .w -tile}		{ok}
+{tileradiobutton .w -tile}		{}
+
+{tileradiobutton .w -selector}		{ok}
+{tileradiobutton .w -selector}		{}
+
+{tileradiobutton .w -state}		{ok}
+{tileradiobutton .w -state}		{}
+
+
+
+
+{tilescrollbar}				{ok}
+{tilescrollbar}				{}
+
+{tilescrollbar .w -activebackground}	{ok}
+{tilescrollbar .w -activebackground}	{}
+
+{tilescrollbar .w -activerelief}	{ok}
+{tilescrollbar .w -activerelief}	{}
+
+{tilescrollbar .w -background}		{ok}
+{tilescrollbar .w -background}		{}
+
+{tilescrollbar .w -bd}			{ok}
+{tilescrollbar .w -bd}			{}
+
+{tilescrollbar .w -bg}			{ok}
+{tilescrollbar .w -bg}			{}
+
+{tilescrollbar .w -borderwidth}		{ok}
+{tilescrollbar .w -borderwidth}		{}
+
+{tilescrollbar .w -command}		{ok}
+{tilescrollbar .w -command}		{}
+
+{tilescrollbar .w -cursor}		{ok}
+{tilescrollbar .w -cursor}		{}
+
+{tilescrollbar .w -elementborderwidth}	{ok}
+{tilescrollbar .w -elementborderwidth}	{}
+
+{tilescrollbar .w -highlightbackground}	{ok}
+{tilescrollbar .w -highlightbackground}	{}
+
+{tilescrollbar .w -highlightcolor}	{ok}
+{tilescrollbar .w -highlightcolor}	{}
+
+{tilescrollbar .w -highlightthickness}	{ok}
+{tilescrollbar .w -highlightthickness}	{}
+
+{tilescrollbar .w -jump}		{ok}
+{tilescrollbar .w -jump}		{}
+
+{tilescrollbar .w -orient}		{ok}
+{tilescrollbar .w -orient}		{}
+
+{tilescrollbar .w -relief}		{ok}
+{tilescrollbar .w -relief}		{}
+
+{tilescrollbar .w -repeatdelay}		{ok}
+{tilescrollbar .w -repeatdelay}		{}
+
+{tilescrollbar .w -repeatinterval}	{ok}
+{tilescrollbar .w -repeatinterval}	{}
+
+{tilescrollbar .w -takefocus}		{ok}
+{tilescrollbar .w -takefocus}		{}
+
+{tilescrollbar .w -troughcolor}		{ok}
+{tilescrollbar .w -troughcolor}		{}
+
+{tilescrollbar .w -width}		{ok}
+{tilescrollbar .w -width}		{}
+
+{tilescrollbar .w -activetile}		{ok}
+{tilescrollbar .w -activetile}		{}
+
+{tilescrollbar .w -tile}		{ok}
+{tilescrollbar .w -tile}		{}
+
+{tilescrollbar .w -activeforeground}	{ok}
+{tilescrollbar .w -activeforeground}	{}
+
+{tilescrollbar .w -foreground}		{ok}
+{tilescrollbar .w -foreground}		{}
+
+
+
+{tiletoplevel}				{ok}
+{tiletoplevel}				{}
+
+{tiletoplevel .w -background}		{ok}
+{tiletoplevel .w -background}		{}
+
+{tiletoplevel .w -bd}			{ok}
+{tiletoplevel .w -bd}			{}
+
+{tiletoplevel .w -bg}			{ok}
+{tiletoplevel .w -bg}			{}
+
+{tiletoplevel .w -borderwidth}		{ok}
+{tiletoplevel .w -borderwidth}		{}
+
+{tiletoplevel .w -class}		{ok}
+{tiletoplevel .w -class}		{}
+
+{tiletoplevel .w -colormap}		{ok}
+{tiletoplevel .w -colormap}		{}
+
+{tiletoplevel .w -container}		{ok}
+{tiletoplevel .w -container}		{}
+
+{tiletoplevel .w -cursor}		{ok}
+{tiletoplevel .w -cursor}		{}
+
+{tiletoplevel .w -height}		{ok}
+{tiletoplevel .w -height}		{}
+
+{tiletoplevel .w -highlightbackground}	{ok}
+{tiletoplevel .w -highlightbackground}	{}
+
+{tiletoplevel .w -highlightcolor}	{ok}
+{tiletoplevel .w -highlightcolor}	{}
+
+{tiletoplevel .w -highlightthickness}	{ok}
+{tiletoplevel .w -highlightthickness}	{}
+
+{tiletoplevel .w -menu}			{ok}
+{tiletoplevel .w -menu}			{}
+
+{tiletoplevel .w -relief}		{ok}
+{tiletoplevel .w -relief}		{}
+
+{tiletoplevel .w -screen}		{ok}
+{tiletoplevel .w -screen}		{}
+
+{tiletoplevel .w -takefocus}		{ok}
+{tiletoplevel .w -takefocus}		{}
+
+{tiletoplevel .w -use}			{ok}
+{tiletoplevel .w -use}			{}
+
+{tiletoplevel .w -visual}		{ok}
+{tiletoplevel .w -visual}		{}
+
+{tiletoplevel .w -width}		{ok}
+{tiletoplevel .w -width}		{}
+
+{tiletoplevel .w -activetile}		{ok}
+{tiletoplevel .w -activetile}		{}
+
+{tiletoplevel .w -tile}			{ok}
+{tiletoplevel .w -tile}			{}
+
+{tiletoplevel .w -geometry}		{ok}
+{tiletoplevel .w -geometry}		{}
+
+
+
+{vector}				{ok}
+{vector}				{}
+
+{vector create}				{ok}
+{vector create}				{}
+
+{vector destroy}			{ok}
+{vector destroy}			{}
+
+{vector expr}				{ok}
+{vector expr}				{}
+
+{vector names}				{ok}
+{vector names}				{}
+
+
+
+{watch }				{ok}
+{watch }				{}
+
+{watch activate}			{ok}
+{watch activate}			{}
+
+{watch configure}			{ok}
+{watch configure}			{}
+
+{watch create}				{ok}
+{watch create}				{}
+
+{watch deactivate}			{ok}
+{watch deactivate}			{}
+
+{watch delete}				{ok}
+{watch delete}				{}
+
+{watch info}				{ok}
+{watch info}				{}
+
+{watch names}				{ok}
+{watch names}				{}
+
+
+
+{winop }				{ok}
+{winop }				{}
+
+{winop lower}				{ok}
+{winop lower}				{}
+
+{winop map}				{ok}
+{winop map}				{}
+
+{winop move}				{ok}
+{winop move}				{}
+
+{winop raise}				{ok}
+{winop raise}				{}
+
+{winop snap}				{ok}
+{winop snap}				{}
+
+{winop unmap}				{ok}
+{winop unmap}				{}
+
+{winop warpto}				{ok}
+{winop warpto}				{}
+}

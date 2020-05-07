@@ -1,0 +1,15 @@
+<!ENTITY setup_create_account "Create new account">
+<!ENTITY setup_reset_password "Reset password">
+
+<!ENTITY komodo.services "Komodo Services">
+
+
+<!ENTITY account_setup_header "Komodo Services Account Setup">
+<!ENTITY setup_enter_data_label "Please enter your ActiveState.com account data to setup Komodo Services.">
+<!ENTITY setup_no_account_label "Don't have an account?">
+<!ENTITY setup_create_account_label "You can create one now.">
+<!ENTITY setup_forgot_password_label "Did you forget your password?">
+<!ENTITY setup_reset_password_label "Click here to reset it.">
+<!ENTITY setup_login "Login">
+<!ENTITY setup_reset "Stop using this account">
+<!ENTITY setup_close "Close">

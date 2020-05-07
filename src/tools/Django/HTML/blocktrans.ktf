@@ -1,0 +1,13 @@
+// komodo tool: blocktrans
+// =======================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// =======================
+<% /* blocktrans */ %>
+
+{% blocktrans %}
+    [[%tabstop1:<%= require("ko/editor").getColumnNumber() %>]]
+{% endblocktrans %}
+ 

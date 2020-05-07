@@ -1,0 +1,122 @@
+/*
+
+    Name:       Base16 Marrakesh Light
+    Author:     Alexandre Gavioli (http://github.com/Alexx2/)
+
+    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-chrome-devtools)
+    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+*/
+
+.cm-s-base16-marrakesh-light.CodeMirror {background: #faf0a5; color: #302e00;}
+.cm-s-base16-marrakesh-light div.CodeMirror-selected {background: #ccc37a !important;}
+.cm-s-base16-marrakesh-light .CodeMirror-gutters {background: #faf0a5; border-right: 0px;}
+.cm-s-base16-marrakesh-light .CodeMirror-linenumber {color: #86813b;}
+.cm-s-base16-marrakesh-light .CodeMirror-cursor {border-left: 1px solid #6c6823 !important;}
+
+.cm-s-base16-marrakesh-dark span.cm-header {color: #6c6823;}
+.cm-s-base16-marrakesh-light span.cm-comment {color: #6c6823;}
+.cm-s-base16-marrakesh-light span.cm-atom {color: #8868b3;}
+.cm-s-base16-marrakesh-light span.cm-number {color: #b36144;}
+
+.cm-s-base16-marrakesh-light span.cm-property {color: #302e00;}
+.cm-s-base16-marrakesh-light span.cm-attribute {color: #b36144;}
+.cm-s-base16-marrakesh-light span.cm-keyword {color: #8868b3;}
+.cm-s-base16-marrakesh-light span.cm-string {color: #18974e;}
+
+.cm-s-base16-marrakesh-light span.cm-variable {color: #c35359;}
+.cm-s-base16-marrakesh-light span.cm-variable-2 {color: #477ca1;}
+.cm-s-base16-marrakesh-light span.cm-def {color: #477ca1;}
+.cm-s-base16-marrakesh-light span.cm-error {background: #c35359; color: #6c6823;}
+.cm-s-base16-marrakesh-light span.cm-bracket {color: #302e00;}
+.cm-s-base16-marrakesh-light span.cm-tag {color: #c35359;}
+.cm-s-base16-marrakesh-light span.cm-link {color: #8868b3;}
+.cm-s-base16-marrakesh-light span.cm-builtin {color: #8868b3;}
+
+.cm-s-base16-marrakesh-light .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
+
+.cm-s-base16-marrakesh-dark .CodeMirror-activeline-background { background: #ccc37a !important; }
+
+
+
+body,
+textarea {
+  background: #faf0a5;
+  color: #5f5b17;
+}
+
+#sidebar, .modal {
+  background: #948e48;
+  color: #302e00;
+}
+
+a, a:hover {
+    color: #b3588e;
+}
+
+a.option {
+    color: #b3588e !important;
+}
+
+#logos {
+  background: #86813b;
+  color: #5f5b17;
+}
+
+#buttons {
+  background: #948e48;
+  color: #6c6823;
+}
+
+#buttons .function.enabled:hover {
+  color: #302e00;
+}
+
+#buttonTips {
+  background: #b3588e;
+  color: #faf0a5;
+}
+
+#pointer:after {
+    border-bottom-color: #b3588e !important;
+}
+
+#linenos {
+  background: #ccc37a;
+  border-color: #948e48 !important;
+}
+
+#linenos a {
+    color: #6c6823 !important;
+}
+
+.option {
+    background: #86813b !important;
+    color: #5f5b17 !important;
+}
+
+.option:hover {
+    background: #797435 !important;
+}
+
+.dropdown:after {
+    border-top-color: #6c6823 !important;
+}
+
+#logo-kopy {
+    background: url(../../img/pastebin-logo-dark.png) no-repeat !important;
+}
+
+#logo-komodo {
+    background: url(../../img/komodo-logo-dark.png) no-repeat !important;
+}
+
+#messages li {
+  background: #477ca1;
+  color: #faf0a5;
+}
+
+#messages li.error {
+  background: #c35359;
+  color: #faf0a5;
+}

@@ -1,0 +1,11 @@
+// komodo tool: did_action
+// =======================
+// auto_abbreviation: true
+// indent_relative: false
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// =======================
+did_action( [[%tabstop:$tag]] );!@#_currentPos!@#_anchor

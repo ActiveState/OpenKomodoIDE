@@ -1,0 +1,13 @@
+// komodo tool: error
+// ==================
+// auto_abbreviation: true
+// indent_relative: false
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.0.12
+// ==================
+@app.errorhandler([[%tabstop1:404]])
+def [[%tabstop2:bar]](error):
+		return render_template('[[%tabstop3:error.html]]'), [[%tabstop1:404]]
+[[%tabstop4:4]]!@#_currentPos!@#_anchor

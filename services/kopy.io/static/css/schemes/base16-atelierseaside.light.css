@@ -1,0 +1,122 @@
+/*
+
+    Name:       Base16 Atelier Seaside Light
+    Author:     Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/seaside/)
+
+    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-chrome-devtools)
+    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+*/
+
+.cm-s-base16-atelierseaside-light.CodeMirror {background: #f0fff0; color: #242924;}
+.cm-s-base16-atelierseaside-light div.CodeMirror-selected {background: #cfe8cf !important;}
+.cm-s-base16-atelierseaside-light .CodeMirror-gutters {background: #f0fff0; border-right: 0px;}
+.cm-s-base16-atelierseaside-light .CodeMirror-linenumber {color: #809980;}
+.cm-s-base16-atelierseaside-light .CodeMirror-cursor {border-left: 1px solid #687d68 !important;}
+
+.cm-s-base16-atelierseaside-dark span.cm-header {color: #687d68;}
+.cm-s-base16-atelierseaside-light span.cm-comment {color: #687d68;}
+.cm-s-base16-atelierseaside-light span.cm-atom {color: #ad2bee;}
+.cm-s-base16-atelierseaside-light span.cm-number {color: #87711d;}
+
+.cm-s-base16-atelierseaside-light span.cm-property {color: #242924;}
+.cm-s-base16-atelierseaside-light span.cm-attribute {color: #87711d;}
+.cm-s-base16-atelierseaside-light span.cm-keyword {color: #ad2bee;}
+.cm-s-base16-atelierseaside-light span.cm-string {color: #29a329;}
+
+.cm-s-base16-atelierseaside-light span.cm-variable {color: #e6193c;}
+.cm-s-base16-atelierseaside-light span.cm-variable-2 {color: #3d62f5;}
+.cm-s-base16-atelierseaside-light span.cm-def {color: #3d62f5;}
+.cm-s-base16-atelierseaside-light span.cm-error {background: #e6193c; color: #687d68;}
+.cm-s-base16-atelierseaside-light span.cm-bracket {color: #242924;}
+.cm-s-base16-atelierseaside-light span.cm-tag {color: #e6193c;}
+.cm-s-base16-atelierseaside-light span.cm-link {color: #ad2bee;}
+.cm-s-base16-atelierseaside-light span.cm-builtin {color: #ad2bee;}
+
+.cm-s-base16-atelierseaside-light .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
+
+.cm-s-base16-atelierseaside-dark .CodeMirror-activeline-background { background: #cfe8cf !important; }
+
+
+
+body,
+textarea {
+  background: #f0fff0;
+  color: #5e6e5e;
+}
+
+#sidebar, .modal {
+  background: #8ca68c;
+  color: #242924;
+}
+
+a, a:hover {
+    color: #e619c3;
+}
+
+a.option {
+    color: #e619c3 !important;
+}
+
+#logos {
+  background: #809980;
+  color: #5e6e5e;
+}
+
+#buttons {
+  background: #8ca68c;
+  color: #687d68;
+}
+
+#buttons .function.enabled:hover {
+  color: #242924;
+}
+
+#buttonTips {
+  background: #e619c3;
+  color: #f0fff0;
+}
+
+#pointer:after {
+    border-bottom-color: #e619c3 !important;
+}
+
+#linenos {
+  background: #cfe8cf;
+  border-color: #8ca68c !important;
+}
+
+#linenos a {
+    color: #687d68 !important;
+}
+
+.option {
+    background: #809980 !important;
+    color: #5e6e5e !important;
+}
+
+.option:hover {
+    background: #738a73 !important;
+}
+
+.dropdown:after {
+    border-top-color: #687d68 !important;
+}
+
+#logo-kopy {
+    background: url(../../img/pastebin-logo-dark.png) no-repeat !important;
+}
+
+#logo-komodo {
+    background: url(../../img/komodo-logo-dark.png) no-repeat !important;
+}
+
+#messages li {
+  background: #3d62f5;
+  color: #f0fff0;
+}
+
+#messages li.error {
+  background: #e6193c;
+  color: #f0fff0;
+}

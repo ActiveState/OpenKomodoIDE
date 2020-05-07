@@ -1,0 +1,17 @@
+
+# Use alternate API URL if in the environment.
+>>> import os
+>>> api_url = os.environ.get("ACCOUNT_API_URL")
+
+>>> from activeapis2.accountapi import AccountAPI
+>>> api = AccountAPI(api_url=api_url)
+>>> a1 = api.account_from_user_id(23)
+>>> a1.user_id
+23
+>>> bool(a1.is_active)
+True
+>>> a1.email.lower()
+u'trentm@activestate.com'
+>>> a1.summary.lower()  # capitalization varies for my account in diff dbs
+u'trent mick <trentm@activestate.com>'
+

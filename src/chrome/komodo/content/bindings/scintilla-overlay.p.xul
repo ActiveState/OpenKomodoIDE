@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!-- this overlay provides the minimal set of scripts and overlays that are required
+     to properly use scintilla in a dialog or secondary window. It also handles fixing
+     the context menu for scintilla.  -->
+
+<?xml-stylesheet href="chrome://komodo/skin/bindings/scintilla.css" type="text/css"?>
+<?xul-overlay href="chrome://komodo/content/commandsOverlay.xul"?>
+
+<overlay id="scintillaOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <hbox id="scintillaOverlayXul" style="margin: 0px; padding: 0px; height: 0px; width: 0px;">
+        <menupopup type="buffercontext" id="bufferContextMenu"
+                   onpopupshowing="document.commandDispatcher.updateCommands('buffer_context_menu_showing');"/>
+        <menupopup id = "token-context-menu"/>
+        <spacer height="0" id="context-spacer" context="token-context-menu"/>
+        <commandset id="allcommands"/>
+    </hbox>
+
+<script type="application/x-javascript;version=1.7">
+<![CDATA[
+(function() {
+var gMainWindow = null;
+var _log = null;
+var _loaded = false;
+
+if (typeof(gEditorTooltipHandler) == 'undefined') {
+    Components.utils.getGlobalForObject(this).gEditorTooltipHandler = null;
+}
+
+/**
+ * Initialize additional Scintilla support
+ * @param options [optional] A hash; keys in this hash turn on various options.
+ *   "commands": various <command>s and <key>s (default on)
+ *   "keyhandler": traps key handling to prevent other handlers from taking over
+ *      (e.g. to prevent dialogs closing on enter in scintilla) (default on)
+ */
+function scintillaOverlayOnLoad(options) {
+    if (_loaded) {
+        // this is being run twice; skip
+        return;
+    }
+    _loaded = true;
+
+    // import various scripts if they don't exist; this is necessary for the
+    // panes because they get ko.* for free and including the script again would
+    // clobber them (and use the wrong global).
+    var scripts = {
+        "library/logging.js"          : true,
+        "library/windowManager.js"    : true,
+        "library/timers.js"           : function() "objectTimer" in (ko || {}),
+        "library/stringutils.js"      : true,
+        "library/commands.js"         : true,
+        "library/dragdrop.js"         : true,
+        "markers.js"                  : true,
+    };
+
+    var loader = null;
+    for (var [script, check] in scripts) {
+        if (check instanceof Function) {
+            if (check()) continue;
+        } else if (script.split("/").pop().replace(/\.js$/, "") in (ko || {})) {
+            // ko.foo exists
+            continue;
+        }
+        if (!loader) {
+            loader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
+                               .getService(Components.interfaces.mozIJSSubScriptLoader);
+        }
+        var url = "chrome://komodo/content/" + script;
+        loader.loadSubScript(url);
+    }
+    _log = ko.logging.getLogger("scintilla-overlay");
+    
+    gMainWindow = ko.windowManager.getMainWindow();
+
+    if ((!options || ("commands" in options)) && gMainWindow) {
+        // "steal" the commands and keyset from the main window
+        // Doing it the 'right' way takes a long time - I'm hoping this
+        // will be faster.
+        var node = document.importNode(
+              gMainWindow.document.getElementById('widekeyset'), true);
+        document.documentElement.appendChild(node);
+    }
+
+    if ((!options || ("keyhandler" in options)) && gMainWindow) {
+        // Stop ENTER key in Scintilla from going to dialog "OK" button - bug 41071.
+        // (keypress screws up keybindings with shifted keys such as ctrl+shift+9)
+        window.addEventListener("keydown", keypressInterrupt, false);
+        window.addEventListener("keypress", keypressInterrupt, false);
+    }
+}
+
+function scintillaOverlayOnUnload() {
+    if (!_loaded) {
+        // this is being run twice; skip
+        return;
+    }
+    _loaded = false;
+    // bug 41071
+    window.removeEventListener("keydown", keypressInterrupt, false);
+    window.removeEventListener("keypress", keypressInterrupt, false);
+}
+
+function keypressInterrupt(event) {
+    try {
+        if (event.shiftKey != (event.type == "keydown")) {
+            // if the shift key is down, use the keydown event; otherwise, use
+            // the keypress event.
+            return;
+        }
+        // get the command name from the keybinding and execute it
+        var key = gMainWindow.ko.keybindings.manager.event2keylabel(event,
+                                                                    undefined,
+                                                                    event.type == "keypress");
+        if (!key) return;
+        var command = gMainWindow.ko.keybindings.manager.key2command[key];
+        if (!command) return;
+        var controller = document.commandDispatcher.getControllerForCommand(command);
+        if (!controller) return;
+        if (!(controller instanceof Components.interfaces.ISciMozController) &&
+            !(controller instanceof Components.interfaces.koIViewController))
+        {
+            // Only do special handling for <scintilla> and <view> elements; see
+            // bug 65504 where we overrode cmd_delete for <textbox>s
+            return;
+        }
+        // we have a valid controller; just go ahead and do it, since our typical
+        // isCommandEnabled is broken.
+        event.preventDefault();
+        controller.doCommand(command);
+    } finally {
+        // this lets us do logging at one spot, using undefined for missing values
+        _log.debug("keypressInterrupt: key [" + key +
+                   "] command [" + command +
+                   "] controller [" + controller + "]");
+    }
+}
+
+Components.utils.getGlobalForObject(this).scintillaOverlayOnLoad =
+    scintillaOverlayOnLoad;
+Components.utils.getGlobalForObject(this).scintillaOverlayOnUnload =
+    scintillaOverlayOnUnload;
+})();
+]]>
+</script>
+
+</overlay>

@@ -1,0 +1,7 @@
+require 'rake'
+require 'rake/testtask'
+
+$: << File.join(File.dirname($0), "lib")
+Rake::TestTask.new do |t|
+  t.pattern = 'test/test_*.rb'
+end

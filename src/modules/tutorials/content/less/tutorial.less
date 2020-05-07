@@ -1,0 +1,180 @@
+@import url("chrome://komodo/skin/global/colors.less");
+@import url("resource://profile/colors.less");
+@import url("less://tutorials/content/less/markdown.less");
+
+*
+{
+    box-sizing: border-box;
+}
+
+html, body
+{
+    height: 100%;
+    margin: 0;
+    padding: 0 0 0 0;
+}
+
+.floating body
+{
+    border: 1px solid @border;
+}
+
+a
+{
+    cursor: pointer;
+    
+    &:hover
+    {
+        text-decoration: underline;
+    }
+}
+
+#wrapper
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    
+    .inner
+    {
+        flex: 1;
+        padding: 10px;
+        overflow: auto;
+        
+        & > h1
+        {
+            margin-top: 0;
+        }
+    }
+    
+    @media (min-width: 800px)
+    {
+        .inner
+        {
+            display: flex;
+            flex-direction: row;
+            
+            & > div
+            {
+                &:not(:first-child)
+                {
+                    border-left: 1px solid @border;
+                    padding-left: 10px;
+                }
+                
+                &:not(:last-child)
+                {
+                    padding-right: 10px;
+                }
+                
+                flex-grow: 1;
+                flex-basis: 0;
+            }
+        }
+    }
+    
+    .validation
+    {
+        padding: 10px;
+    }
+    
+    .buttons
+    {
+        border-top: 1px solid @border;
+        padding: 10px;
+        height: 40px;
+        position: relative;
+        
+        .step-counter
+        {
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        button
+        {
+            position: absolute;
+            top: 0;
+        }
+        
+        .prevStep
+        {
+            left: 0;
+        }
+        
+        .nextStep,
+        .finish
+        {
+            right: 0;
+        }
+    }
+    
+    .tips
+    {
+        & > p
+        {
+            text-align: center;
+        }
+        
+        ul
+        {
+            margin: 0;
+            padding: 0 10px;
+            
+            & > li:not(.visible)
+            {
+                display: none;
+            }
+            
+            li
+            {
+                font-size: 0.9rem;
+            }
+        }
+    }
+    
+    .validation:not(.visible)
+    {
+        display: none;
+    }
+}
+
+.hud button
+{
+    -moz-appearance: none;
+}
+
+a.close
+{
+    position: absolute;
+    z-index: 99;
+    top: 10px;
+    right: 16px;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+
+a.dock
+{
+    position: absolute;
+    z-index: 99;
+    top: 10px;
+    right: 42px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+a.orientation
+{
+    position: absolute;
+    z-index: 99;
+    top: 10px;
+    right: 68px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+

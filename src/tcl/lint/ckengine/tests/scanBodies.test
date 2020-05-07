@@ -1,0 +1,344 @@
+# scanBodies.tcl --
+#
+#	This file contains regression tests for all checkers that scan
+#	into bodies looking for user-defined procs..
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: scanBodies.test,v 1.2 2000/05/30 22:24:57 wart Exp $
+
+
+if {[string compare test [info procs resetAnalyzer]] == 1} {
+    source [file  join [pwd] [file dirname [info script]] defs.tcl]
+}
+
+set dummyFile [file join $::tcltest::temporaryDirectory dummy.tcl]
+analyzer::init
+renameMessageShow
+
+test scanBodies-1.1 {testScanBodies-coreTcl7.3} {
+    makeFile {case a {a {proc foo {a} {}}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {0 29} warnDeprecated {} switch 1 {30 4} procNumArgs {} foo}
+test scanBodies-1.2 {testScanBodies-coreTcl7.3} {
+    makeFile {catch {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {25 4} procNumArgs {} foo}
+test scanBodies-1.3 {testScanBodies-coreTcl7.3} {
+    makeFile {eval {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {24 4} procNumArgs {} foo}
+test scanBodies-1.4 {testScanBodies-coreTcl7.3} {
+    makeFile {for {proc foo {a} {}} {1} {} {}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {33 4} procNumArgs {} foo}
+test scanBodies-1.5 {testScanBodies-coreTcl7.3} {
+    makeFile {for {} {1} {proc foo {a} {}} {}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {33 4} procNumArgs {} foo}
+test scanBodies-1.6 {testScanBodies-coreTcl7.3} {
+    makeFile {for {} {1} {} {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {33 4} procNumArgs {} foo}
+test scanBodies-1.7 {testScanBodies-coreTcl7.3} {
+    makeFile {foreach a a {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {31 4} procNumArgs {} foo}
+test scanBodies-1.8 {testScanBodies-coreTcl7.3} {
+    makeFile {history add {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {31 4} procNumArgs {} foo}
+test scanBodies-1.9 {testScanBodies-coreTcl7.3} {
+    makeFile {if {1} {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {26 4} procNumArgs {} foo}
+test scanBodies-1.10 {testScanBodies-coreTcl7.3} {
+    makeFile {if {1} {} elseif {1} {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {40 4} procNumArgs {} foo}
+test scanBodies-1.11 {testScanBodies-coreTcl7.3} {
+    makeFile {if {1} {} elseif {1} {} else {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {48 4} procNumArgs {} foo}
+test scanBodies-1.12 {testScanBodies-coreTcl7.3} {
+    makeFile {if {1} {} else {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {34 4} procNumArgs {} foo}
+test scanBodies-1.13 {testScanBodies-coreTcl7.3} {
+    makeFile {switch a {a {proc foo {a} {}}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {32 4} procNumArgs {} foo}
+test scanBodies-1.14 {testScanBodies-coreTcl7.3} {
+    makeFile {time {proc foo {a} {}} 1; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {26 4} procNumArgs {} foo}
+test scanBodies-1.15 {testScanBodies-coreTcl7.3} {
+    makeFile {while {1} {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {29 4} procNumArgs {} foo}
+test scanBodies-1.16 {testScanBodies-coreTcl7.3} {
+    makeFile {proc newProc {} {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    scanalyze $dummyFile
+    set result
+} {1 {35 4} procNumArgs {} foo}
+
+test scanBodies-2.1 {testScanBodies-coreTcl7.5} {
+    makeFile {after idle {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.5
+    scanalyze $dummyFile
+    set result
+} {1 {30 4} procNumArgs {} foo}
+test scanBodies-2.2 {testScanBodies-coreTcl7.5} {
+    makeFile {after 1 {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.5
+    scanalyze $dummyFile
+    set result
+} {1 {27 4} procNumArgs {} foo}
+test scanBodies-2.3 {testScanBodies-coreTcl7.5} {
+    makeFile {namespace eval a {proc ::foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.5
+    scanalyze $dummyFile
+    set result
+} {1 {0 37} warnUndefProc {0 37} namespace 1 {38 4} procNumArgs {} foo}
+
+test scanBodies-3.1 {testScanBodies-proScanCmds} {
+    makeFile {debugger_eval {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 8.0
+    scanalyze $dummyFile
+    set result
+} {1 {33 4} procNumArgs {} foo}
+
+test scanBodies-4.1 {testScanBodies-incrTcl1.5} {
+    makeFile {body a a {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    incrTcl::init 1.5
+    scanalyze $dummyFile
+    set result
+} {1 {0 27} incrTcl::badMemberName {5 1} {} 1 {28 4} procNumArgs {} foo}
+test scanBodies-4.2 {testScanBodies-incrTcl1.5} {
+    makeFile {itcl_class a {proc ::foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.3
+    incrTcl::init 1.5
+    scanalyze $dummyFile
+    set result
+} {1 {34 4} procNumArgs {} ::foo}
+
+test scanBodies-5.1 {testScanBodies-incrTcl2.0} {
+    makeFile {configbody a::a {proc ::foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.4
+    incrTcl::init 2.0
+    scanalyze $dummyFile
+    set result
+} {1 {37 4} procNumArgs {} foo}
+test scanBodies-5.2 {testScanBodies-incrTcl2.0} {
+    makeFile {class a {constructor a {proc ::foo {a} {}}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.4
+    incrTcl::init 2.0
+    scanalyze $dummyFile
+    set result
+} {1 {45 4} procNumArgs {} ::foo}
+test scanBodies-5.3 {testScanBodies-incrTcl2.0} {
+    makeFile {class a {method a a {proc ::foo {a} {}}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.4
+    incrTcl::init 2.0
+    scanalyze $dummyFile
+    set result
+} {1 {42 4} procNumArgs {} ::foo}
+test scanBodies-5.4 {testScanBodies-incrTcl2.0} {
+    makeFile {class a {destructor {proc ::foo {a} {}}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.4
+    incrTcl::init 2.0
+    scanalyze $dummyFile
+    set result
+} {1 {42 4} procNumArgs {} ::foo}
+test scanBodies-5.5 {testScanBodies-incrTcl2.0} {
+    makeFile {namespace a {proc ::foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 7.4
+    incrTcl::init 2.0
+    scanalyze $dummyFile
+    set result
+} {1 {33 4} procNumArgs {} foo}
+
+test scanBodies-6.1 {testScanBodies-incrTcl3.0} {
+    makeFile {namespace eval a {proc ::foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 8.0
+    incrTcl::init 3.0
+    scanalyze $dummyFile
+    set result
+} {1 {38 4} procNumArgs {} foo}
+
+
+test scanBodies-5.1 {testScanBodies-expect5.28} {
+    makeFile {exp_exit -onexit {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 8.0
+    expect::init 5.28
+    scanalyze $dummyFile
+    set result
+} {1 {36 4} procNumArgs {} foo}
+test scanBodies-5.2 {testScanBodies-expect5.28} {
+    makeFile {exp_interact a {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 8.0
+    expect::init 5.28
+    scanalyze $dummyFile
+    set result
+} {1 {34 4} procNumArgs {} foo}
+test scanBodies-5.3 {testScanBodies-expect5.28} {
+    makeFile {exp_trap {proc foo {a} {}} INT; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 8.0
+    expect::init 5.28
+    scanalyze $dummyFile
+    set result
+} {1 {32 4} procNumArgs {} foo}
+test scanBodies-5.4 {testScanBodies-expect5.28} {
+    makeFile {expect a {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 8.0
+    expect::init 5.28
+    scanalyze $dummyFile
+    set result
+} {1 {28 4} procNumArgs {} foo}
+test scanBodies-5.5 {testScanBodies-expect5.28} {
+    makeFile {expect_after a {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 8.0
+    expect::init 5.28
+    scanalyze $dummyFile
+    set result
+} {1 {34 4} procNumArgs {} foo}
+test scanBodies-5.6 {testScanBodies-expect5.28} {
+    makeFile {expect_background a {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 8.0
+    expect::init 5.28
+    scanalyze $dummyFile
+    set result
+} {1 {39 4} procNumArgs {} foo}
+test scanBodies-5.7 {testScanBodies-expect5.28} {
+    makeFile {expect_before a {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 8.0
+    expect::init 5.28
+    scanalyze $dummyFile
+    set result
+} {1 {35 4} procNumArgs {} foo}
+test scanBodies-5.8 {testScanBodies-expect5.28} {
+    makeFile {expect_tty a {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 8.0
+    expect::init 5.28
+    scanalyze $dummyFile
+    set result
+} {1 {32 4} procNumArgs {} foo}
+test scanBodies-5.9 {testScanBodies-expect5.28} {
+    makeFile {expect_user a {proc foo {a} {}}; foo} $dummyFile
+    set result {}
+    resetAllData
+    coreTcl::init 8.0
+    expect::init 5.28
+    scanalyze $dummyFile
+    set result
+} {1 {33 4} procNumArgs {} foo}
+
+resetMessageShow
+
+# cleanup
+cleanupTests

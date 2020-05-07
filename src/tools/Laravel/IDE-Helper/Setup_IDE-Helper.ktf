@@ -1,0 +1,243 @@
+// komodo tool: Setup IDE-Helper
+// =============================
+// is_clean: true
+// type: tutorial
+// version: 1.1.5
+// =============================
+# Sample content, edit, delete, do whatever you like
+Description: This tutorial helps you configure IDE-Helper for Laravel
+Author: ActiveState
+Version: 1.0
+# Placement can be floating or docked
+Placement: docked
+Callouts:
+  toolboxWidget:
+    Element: "#toolbox2viewbox"
+    Message: "This is the Toolbox widget."
+    Fail: "Open Toolbox using View > Tabs & Sidebars > Toolbox or Ctrl + Shift + L"
+  placesWidget:
+    Element: "#placesViewbox"
+    Message: This is the Places widget.
+Steps: 
+    -
+      Title: Before We Start
+      Summary: >
+        Before you go through this tutorial please make sure that you have
+        setup you Laravel installation properly. We recommend that you follow
+        the *Laravel Setup* tutorial found in the **Tutorial** folder in your
+        [Toolbox][callout:toolboxWidget] as it pertains specifically to
+        setting up Laravel for Komodo.
+        
+        Make sure you've added the Laravel Tool suite to your Project toolbox
+        or main toolbox before starting. Click the <i class="icon
+        icon-cog"></i>&nbsp; in the *[Toolbox][callout:toolboxWidget] > Import >
+        Laravel Tools*.
+        
+        The Laravel Tools suite comes with two Command toolbox tools, one
+        called **Install IDE-Helper** and the other called **Generate
+        IDE-Helper**. We will be modifying these to work in your project as
+        well as configuring your project itself to use IDE-Helper.
+        
+        This tutorial follows the [creators
+        documenation](https://github.com/barryvdh/laravel-ide-helper#install).
+        Thanks goes to [barryvdh](https://github.com/barryvdh) for creating
+        the IDE-Helper.
+        
+      Task: >
+          Click **Next** if you're ready to go.
+    -
+      Title: Install IDE-Helper Command
+      Summary: >
+        Here we will modify and run the *Install IDE-Helper* command. You're
+        Laravel Komodo project should be open.
+        Remember to use the name you used when creating your project (`laravel
+        new sitename`) when you see *sitename* throughout this tutorial.
+      Task: >
+        1. In the Komodo [toolbox][callout:toolboxWidget] open the **Laravel** tools folder where you installed it, then open the IDE-Helper folder.
+        1. Right click the *Install IDE-Helper > Properties*.
+        1. Select the **Advanced Options** tab.
+        1. In the **Start in** field enter `<% if (require("sdk/system").platform == "winnt") { %>
+        %p\sitename
+        <% } else { %>
+        i%/sitename<% } %>`
+        1. Click **Ok**.
+        1. Double click the tool to run it.
+        
+        The Command Output widget will open and show you the output of the
+        command. When the command is complete it should `return 0` and present this output:
+        ```
+        Generating optimized class loader
+        The compiled services file has been removed.
+        ```
+        IDE-Helper is now installed!  Let's configure it!
+        
+      Tips:
+        - IDE-Helper must be installed in your sites root folder for it to work.  Make sure you're pointing at it when you run `composer require barryvdh/laravel-ide-helper` by double clicking the *Install IDE-Helper** command.
+    -
+      Title: Configure IDE-Helper
+      Summary: >
+        Here we will update your sites **config/app.php** file so it's aware of `IDE-Helper`.
+      Task: >
+        1. Open **config/app.php** in the Komodo Editor by finding it and double clicking it in the [Places pane][callout:placesWidget].
+        1. Find the `providers` array and append `Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,` to the array.
+        1. Save and close the file.
+        
+        That's it for this step.  Lets make the **_ide_helper.php** file!
+    -
+      Title: Generate IDE-Helper
+      Summary: >
+        Finally we will generate the **_ide_helper.php** file so that Komodo can be aware
+        of Laravel Facades.
+      Task: >
+        1. In the Komodo [toolbox][callout:toolboxWidget] open the **Laravel** tools folder where you installed it, then open the **IDE-Helper** folder.
+        1. Right click the *Generate IDE-Helper > Properties*.
+        1. Select the **Advanced Options** tab.
+        1. In the **Start in** field enter `<% if (require("sdk/system").platform == "winnt") { %>
+        %p\sitename
+        <% } else { %>
+        i%/sitename<% } %>`
+        1. Click **Ok**.
+        1. Double click the tool to run it.
+        
+        The Command Output widget will open and show you the output of the
+        command. When the command is complete it should `return 0` and present this output:
+        ```
+        A new helper file was written to _ide_helper.php
+        ```
+        You should now have a **_ide_helper.php** file in your projects root folder.
+    -
+      Title: Get Back to Work
+      Summary: >
+        And we're done.  You should probably get back to work.
+      Task: >
+        1.  Create or open a PHP file in your project.
+        1.  Typing `Rou`. This should trigger Komodo to do a code intel scan then suggest `Route`.
+        
+        Enjoy!
+      Tips:
+        - If Komodo isn't suggesting completions for Laravel make sure it is giving completions for vanilla PHP, eg. `php` should should suggest `phpinfo` among other things.
+        - If Komodo isn't giving ANY code intel suggestions check *View menu > Tabs & Sidebars > Notifications* to see if Komodo is currently scanning your project.
+        - If Komodo is not scanning and is still not suggesting try the [Komodo forums](https://community.komodoide.com/) for quick assistance from a community member or one of the developers.
+  
+        
+    
+// =============================
+// komodo meta: logic
+// =============================
+# Sample content, edit, delete, do whatever you like
+Description: This tutorial helps you configure IDE-Helper for Laravel
+Author: ActiveState
+Version: 1.0
+# Placement can be floating or docked
+Placement: docked
+Callouts:
+  toolboxWidget:
+    Element: "#toolbox2viewbox"
+    Message: "This is the Toolbox widget."
+    Fail: "Open Toolbox using View > Tabs & Sidebars > Toolbox or Ctrl + Shift + L"
+  placesWidget:
+    Element: "#placesViewbox"
+    Message: This is the Places widget.
+Steps: 
+    -
+      Title: Before We Start
+      Summary: >
+        Before you go through this tutorial please make sure that you have
+        setup you Laravel installation properly. We recommend that you follow
+        the *Laravel Setup* tutorial found in the **Tutorial** folder in your
+        [Toolbox][callout:toolboxWidget] as it pertains specifically to
+        setting up Laravel for Komodo.
+        
+        Make sure you've added the Laravel Tool suite to your Project toolbox
+        or main toolbox before starting. Click the <i class="icon
+        icon-cog"></i>&nbsp; in the *[Toolbox][callout:toolboxWidget] > Import >
+        Laravel Tools*.
+        
+        The Laravel Tools suite comes with two Command toolbox tools, one
+        called **Install IDE-Helper** and the other called **Generate
+        IDE-Helper**. We will be modifying these to work in your project as
+        well as configuring your project itself to use IDE-Helper.
+        
+        This tutorial follows the [creators
+        documenation](https://github.com/barryvdh/laravel-ide-helper#install).
+        Thanks goes to [barryvdh](https://github.com/barryvdh) for creating
+        the IDE-Helper.
+        
+      Task: >
+          Click **Next** if you're ready to go.
+    -
+      Title: Install IDE-Helper Command
+      Summary: >
+        Here we will modify and run the *Install IDE-Helper* command. You're
+        Laravel Komodo project should be open.
+        Remember to use the name you used when creating your project (`laravel
+        new sitename`) when you see *sitename* throughout this tutorial.
+      Task: >
+        1. In the Komodo [toolbox][callout:toolboxWidget] open the **Laravel** tools folder where you installed it, then open the IDE-Helper folder.
+        1. Right click the *Install IDE-Helper > Properties*.
+        1. Select the **Advanced Options** tab.
+        1. In the **Start in** field enter `<% if (require("sdk/system").platform == "winnt") { %>
+        %p\sitename
+        <% } else { %>
+        i%/sitename<% } %>`
+        1. Click **Ok**.
+        1. Double click the tool to run it.
+        
+        The Command Output widget will open and show you the output of the
+        command. When the command is complete it should `return 0` and present this output:
+        ```
+        Generating optimized class loader
+        The compiled services file has been removed.
+        ```
+        IDE-Helper is now installed!  Let's configure it!
+        
+      Tips:
+        - IDE-Helper must be installed in your sites root folder for it to work.  Make sure you're pointing at it when you run `composer require barryvdh/laravel-ide-helper` by double clicking the *Install IDE-Helper** command.
+    -
+      Title: Configure IDE-Helper
+      Summary: >
+        Here we will update your sites **config/app.php** file so it's aware of `IDE-Helper`.
+      Task: >
+        1. Open **config/app.php** in the Komodo Editor by finding it and double clicking it in the [Places pane][callout:placesWidget].
+        1. Find the `providers` array and append `Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,` to the array.
+        1. Save and close the file.
+        
+        That's it for this step.  Lets make the **_ide_helper.php** file!
+    -
+      Title: Generate IDE-Helper
+      Summary: >
+        Finally we will generate the **_ide_helper.php** file so that Komodo can be aware
+        of Laravel Facades.
+      Task: >
+        1. In the Komodo [toolbox][callout:toolboxWidget] open the **Laravel** tools folder where you installed it, then open the **IDE-Helper** folder.
+        1. Right click the *Generate IDE-Helper > Properties*.
+        1. Select the **Advanced Options** tab.
+        1. In the **Start in** field enter `<% if (require("sdk/system").platform == "winnt") { %>
+        %p\sitename
+        <% } else { %>
+        i%/sitename<% } %>`
+        1. Click **Ok**.
+        1. Double click the tool to run it.
+        
+        The Command Output widget will open and show you the output of the
+        command. When the command is complete it should `return 0` and present this output:
+        ```
+        A new helper file was written to _ide_helper.php
+        ```
+        You should now have a **_ide_helper.php** file in your projects root folder.
+    -
+      Title: Get Back to Work
+      Summary: >
+        And we're done.  You should probably get back to work.
+      Task: >
+        1.  Create or open a PHP file in your project.
+        1.  Typing `Rou`. This should trigger Komodo to do a code intel scan then suggest `Route`.
+        
+        Enjoy!
+      Tips:
+        - If Komodo isn't suggesting completions for Laravel make sure it is giving completions for vanilla PHP, eg. `php` should should suggest `phpinfo` among other things.
+        - If Komodo isn't giving ANY code intel suggestions check *View menu > Tabs & Sidebars > Notifications* to see if Komodo is currently scanning your project.
+        - If Komodo is not scanning and is still not suggesting try the [Komodo forums](https://community.komodoide.com/) for quick assistance from a community member or one of the developers.
+  
+        
+    

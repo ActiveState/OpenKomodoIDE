@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % customizeToolbarDTD SYSTEM "chrome://komodo/locale/dialogs/customizeToolbar.dtd">
+  %customizeToolbarDTD;
+]>
+
+<!-- Copyright (c) 2000-2011 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!-- Dialog for customizing the main window toolbar -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+
+<window id="window-customize-toolbar"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        title="&customizeToolbar.title;"
+        width="400"
+        buttons="accept,cancel"
+        resizable="0"
+        buttonlabelextra1="&customizeToolbar.extra1.label;"
+        ondialogaccept="onConfirmDialog();">
+
+    <vbox class="wrapper autoscroll" flex="1">
+        <groupbox>
+            <hbox class="row">
+                <checkbox id="classic-layout"
+                          label="Use classic layout"/>
+                <checkbox id="show-notification"
+                          label="Show Notification Box"/>
+                <checkbox id="show-toolbar"
+                          label="Show Main Toolbar"/>
+                <checkbox id="show-side-toolbar"
+                          label="Show Side Toolbar"/>
+            </hbox>
+            <hbox class="row">
+                <hbox>
+                    <label value="Main Toolbar Mode: "/>
+                    <menulist id="toolbar-mode">
+                        <menupopup>
+                            <menuitem label="Icons" value="icons"/>
+                            <menuitem label="Text" value="text"/>
+                            <menuitem label="Icons &amp; Text" value="full"/>
+                        </menupopup>
+                    </menulist>
+                </hbox>
+            </hbox>
+        </groupbox>
+        
+        <caption label="Main Toolbar - Left"/>
+        <hbox id="main-toolbar" class="list-box"></hbox>
+        
+        <caption label="Main Toolbar - Right"/>
+        <hbox id="second-toolbar" class="list-box"></hbox>
+        
+        <caption label="Side Toolbar - Top"/>
+        <hbox id="side-toolbar" class="list-box"></hbox>
+        
+        <caption label="Side Toolbar - Bottom"/>
+        <hbox id="side-toolbar-bottom" class="list-box"></hbox>
+    </vbox>
+    
+    <script src="customizeToolbar.js"/>
+
+</window>

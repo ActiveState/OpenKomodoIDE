@@ -1,0 +1,8698 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Komodo IDE SDK Module: ko/editor</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cosmo.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Komodo IDE SDK</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			<li>
+				<a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs" target="_blank">Mozilla SDK</a>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-ko_ajax.html">ko/ajax</a></li><li><a href="module-ko_benchmark.html">ko/benchmark</a></li><li><a href="module-ko_button.html">ko/button</a></li><li><a href="module-ko_color.html">ko/color</a></li><li><a href="module-ko_colorscheme.html">ko/colorscheme</a></li><li><a href="module-ko_commands.html">ko/commands</a></li><li><a href="module-ko_console.html">ko/console</a></li><li><a href="module-ko_debug.html">ko/debug</a></li><li><a href="module-ko_dependencies.html">ko/dependencies</a></li><li><a href="module-ko_dialogs.html">ko/dialogs</a></li><li><a href="module-ko_dom.html">ko/dom</a></li><li><a href="module-ko_dynamic-button.html">ko/dynamic-button</a></li><li><a href="module-ko_editor.html">ko/editor</a></li><li><a href="module-ko_file.html">ko/file</a></li><li><a href="module-ko_filestatus.html">ko/filestatus</a></li><li><a href="module-ko_fonts.html">ko/fonts</a></li><li><a href="module-ko_icons.html">ko/icons</a></li><li><a href="module-ko_keybindings.html">ko/keybindings</a></li><li><a href="module-ko_locale.html">ko/locale</a></li><li><a href="module-ko_logging.html">ko/logging</a></li><li><a href="module-ko_menu.html">ko/menu</a></li><li><a href="module-ko_modal.html">ko/modal</a></li><li><a href="module-ko_prefs.html">ko/prefs</a></li><li><a href="module-ko_printing.html">ko/printing</a></li><li><a href="module-ko_profiler.html">ko/profiler</a></li><li><a href="module-ko_progress.html">ko/progress</a></li><li><a href="module-ko_promise.html">ko/promise</a></li><li><a href="module-ko_session-storage.html">ko/session-storage</a></li><li><a href="module-ko_share.html">ko/share</a></li><li><a href="module-ko_share_kopy.html">ko/share/kopy</a></li><li><a href="module-ko_share_slack.html">ko/share/slack</a></li><li><a href="module-ko_share_slack_api.html">ko/share/slack/api</a></li><li><a href="module-ko_share_slack_dialog.html">ko/share/slack/dialog</a></li><li><a href="module-ko_shell.html">ko/shell</a></li><li><a href="module-ko_simple-storage.html">ko/simple-storage</a></li><li><a href="module-ko_simpledebug.html">ko/simpledebug</a></li><li><a href="module-ko_stylesheet.html">ko/stylesheet</a></li><li><a href="module-ko_views.html">ko/views</a></li><li><a href="module-ko_windows.html">ko/windows</a></li><li><a href="module-ko_windows_draggable.html">ko/windows/draggable</a></li><li><a href="module-template_publish.html">template/publish</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">UI Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-ko_ui_button.html">ko/ui/button</a></li><li><a href="module-ko_ui_caption.html">ko/ui/caption</a></li><li><a href="module-ko_ui_checkbox.html">ko/ui/checkbox</a></li><li><a href="module-ko_ui_column.html">ko/ui/column</a></li><li><a href="module-ko_ui_container.html">ko/ui/container</a></li><li><a href="module-ko_ui_deck.html">ko/ui/deck</a></li><li><a href="module-ko_ui_description.html">ko/ui/description</a></li><li><a href="module-ko_ui_element.html">ko/ui/element</a></li><li><a href="module-ko_ui_filepath.html">ko/ui/filepath</a></li><li><a href="module-ko_ui_groupbox.html">ko/ui/groupbox</a></li><li><a href="module-ko_ui_interpolation-button.html">ko/ui/interpolation-button</a></li><li><a href="module-ko_ui_label.html">ko/ui/label</a></li><li><a href="module-ko_ui_link.html">ko/ui/link</a></li><li><a href="module-ko_ui_list.html">ko/ui/list</a></li><li><a href="module-ko_ui_listbox.html">ko/ui/listbox</a></li><li><a href="module-ko_ui_listcell.html">ko/ui/listcell</a></li><li><a href="module-ko_ui_listcol.html">ko/ui/listcol</a></li><li><a href="module-ko_ui_listcols.html">ko/ui/listcols</a></li><li><a href="module-ko_ui_listhead.html">ko/ui/listhead</a></li><li><a href="module-ko_ui_listheader.html">ko/ui/listheader</a></li><li><a href="module-ko_ui_listitem.html">ko/ui/listitem</a></li><li><a href="module-ko_ui_menu.html">ko/ui/menu</a></li><li><a href="module-ko_ui_menuitem.html">ko/ui/menuitem</a></li><li><a href="module-ko_ui_menulist.html">ko/ui/menulist</a></li><li><a href="module-ko_ui_menupopup.html">ko/ui/menupopup</a></li><li><a href="module-ko_ui_menuseparator.html">ko/ui/menuseparator</a></li><li><a href="module-ko_ui_panel.html">ko/ui/panel</a></li><li><a href="module-ko_ui_radio.html">ko/ui/radio</a></li><li><a href="module-ko_ui_radiogroup.html">ko/ui/radiogroup</a></li><li><a href="module-ko_ui_richlistbox.html">ko/ui/richlistbox</a></li><li><a href="module-ko_ui_richlistitem.html">ko/ui/richlistitem</a></li><li><a href="module-ko_ui_row.html">ko/ui/row</a></li><li><a href="module-ko_ui_separator.html">ko/ui/separator</a></li><li><a href="module-ko_ui_spacer.html">ko/ui/spacer</a></li><li><a href="module-ko_ui_span.html">ko/ui/span</a></li><li><a href="module-ko_ui_spinner.html">ko/ui/spinner</a></li><li><a href="module-ko_ui_textbox.html">ko/ui/textbox</a></li><li><a href="module-ko_ui_toolbarbutton.html">ko/ui/toolbarbutton</a></li><li><a href="module-ko_ui_tooltip.html">ko/ui/tooltip</a></li><li><a href="module-ko_ui_wizardpage.html">ko/ui/wizardpage</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-ko_dom-Constructor.html">ko/dom~Constructor</a></li><li><a href="module-ko_dom-QueryObject.html">ko/dom~QueryObject</a></li><li><a href="module-ko_logging-Logger.html">ko/logging~Logger</a></li><li><a href="module-ko_progress-Progress.html">ko/progress~Progress</a></li><li><a href="module-ko_promise-Promise.html">ko/promise~Promise</a></li><li><a href="module-ko_ui_button-Model.html">ko/ui/button~Model</a></li><li><a href="module-ko_ui_caption-Model.html">ko/ui/caption~Model</a></li><li><a href="module-ko_ui_checkbox-Model.html">ko/ui/checkbox~Model</a></li><li><a href="module-ko_ui_column-Model.html">ko/ui/column~Model</a></li><li><a href="module-ko_ui_container-Model.html">ko/ui/container~Model</a></li><li><a href="module-ko_ui_deck-Model.html">ko/ui/deck~Model</a></li><li><a href="module-ko_ui_description-Model.html">ko/ui/description~Model</a></li><li><a href="module-ko_ui_element-Model.html">ko/ui/element~Model</a></li><li><a href="module-ko_ui_filepath-Model.html">ko/ui/filepath~Model</a></li><li><a href="module-ko_ui_groupbox-Model.html">ko/ui/groupbox~Model</a></li><li><a href="module-ko_ui_interpolation-button-Model.html">ko/ui/interpolation-button~Model</a></li><li><a href="module-ko_ui_label-Model.html">ko/ui/label~Model</a></li><li><a href="module-ko_ui_link-Model.html">ko/ui/link~Model</a></li><li><a href="module-ko_ui_listbox-Model.html">ko/ui/listbox~Model</a></li><li><a href="module-ko_ui_listcell-Model.html">ko/ui/listcell~Model</a></li><li><a href="module-ko_ui_listcols-Model.html">ko/ui/listcols~Model</a></li><li><a href="module-ko_ui_listcol-Model.html">ko/ui/listcol~Model</a></li><li><a href="module-ko_ui_listheader-Model.html">ko/ui/listheader~Model</a></li><li><a href="module-ko_ui_listhead-Model.html">ko/ui/listhead~Model</a></li><li><a href="module-ko_ui_listitem-Model.html">ko/ui/listitem~Model</a></li><li><a href="module-ko_ui_list-Model.html">ko/ui/list~Model</a></li><li><a href="module-ko_ui_menuitem-Model.html">ko/ui/menuitem~Model</a></li><li><a href="module-ko_ui_menulist-Model.html">ko/ui/menulist~Model</a></li><li><a href="module-ko_ui_menupopup-Model.html">ko/ui/menupopup~Model</a></li><li><a href="module-ko_ui_menuseparator-Model.html">ko/ui/menuseparator~Model</a></li><li><a href="module-ko_ui_menu-Model.html">ko/ui/menu~Model</a></li><li><a href="module-ko_ui_panel-Model.html">ko/ui/panel~Model</a></li><li><a href="module-ko_ui_radiogroup-Model.html">ko/ui/radiogroup~Model</a></li><li><a href="module-ko_ui_radio-Model.html">ko/ui/radio~Model</a></li><li><a href="module-ko_ui_richlistbox-Model.html">ko/ui/richlistbox~Model</a></li><li><a href="module-ko_ui_richlistitem-Model.html">ko/ui/richlistitem~Model</a></li><li><a href="module-ko_ui_row-Model.html">ko/ui/row~Model</a></li><li><a href="module-ko_ui_separator-Model.html">ko/ui/separator~Model</a></li><li><a href="module-ko_ui_spacer-Model.html">ko/ui/spacer~Model</a></li><li><a href="module-ko_ui_span-Model.html">ko/ui/span~Model</a></li><li><a href="module-ko_ui_spinner-Model.html">ko/ui/spinner~Model</a></li><li><a href="module-ko_ui_textbox-Model.html">ko/ui/textbox~Model</a></li><li><a href="module-ko_ui_toolbarbutton-Model.html">ko/ui/toolbarbutton~Model</a></li><li><a href="module-ko_ui_tooltip-Model.html">ko/ui/tooltip~Model</a></li><li><a href="module-ko_ui_wizardpage-Model.html">ko/ui/wizardpage~Model</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-10">
+	
+		<div id="main">
+			
+
+	<h1 class="page-title">Module: ko/editor</h1>
+<section>
+
+<header>
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>The editor SDK</p></div>
+        
+
+        
+
+        
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+	<dt class="tag-author method-doc-label method-doc-details-label">Author:</dt>
+	<dd class="tag-author">
+		<ul>
+			<li>ActiveState</li>
+			</ul>
+	</dd>
+	
+
+	
+	<dt class="tag-copyright method-doc-label method-doc-details-label">Copyright:</dt>
+	<dd class="tag-copyright">
+		<ul class="dummy">
+			<li>(c) 2017 ActiveState Software Inc.</li>
+		</ul>
+	</dd>
+	
+
+	
+	<dt class="tag-license method-doc-label method-doc-details-label">License:</dt>
+	<dd class="tag-license">
+		<ul class="dummy">
+			<li>Mozilla Public License v. 2.0</li>
+		</ul>
+	</dd>
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="._posFormat">
+        <span class="type-signature">require("ko/editor").</span><strong>_posFormat</strong>(positions, format)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Convert the given position(s) into the given format, regardless of what
+format the input is in</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>positions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Either a single position or an array
+                            of positions</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>format</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>Returns a single position or an array of positions
+                             if the input was an array</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._posToAbsolute">
+        <span class="type-signature">require("ko/editor").</span><strong>_posToAbsolute</strong>(pos)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Converts a relative position to an absolute position</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pos</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>{line, ch}</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="._posToRelative">
+        <span class="type-signature">require("ko/editor").</span><strong>_posToRelative</strong>(abs)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Converts an absolute position to a relative position</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>abs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>{line, ch}</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".available">
+        <span class="type-signature">require("ko/editor").</span><strong>available</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Checks whether scintilla is available for the current editor</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".bookmarkExists">
+        <span class="type-signature">require("ko/editor").</span><strong>bookmarkExists</strong>(line)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Check if there is already a bookmark set on a given line</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>line</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>number, defaults to current line</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".clearSelection">
+        <span class="type-signature">require("ko/editor").</span><strong>clearSelection</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Clear the current selection</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".copy">
+        <span class="type-signature">require("ko/editor").</span><strong>copy</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Copy current selection to clipboard</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".cut">
+        <span class="type-signature">require("ko/editor").</span><strong>cut</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Cut current selection to clipboard</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".defaultTextHeight">
+        <span class="type-signature">require("ko/editor").</span><strong>defaultTextHeight</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the default line height (all lines are currently the same height)</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>Height in pixels</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".delCharAfter">
+        <span class="type-signature">require("ko/editor").</span><strong>delCharAfter</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Delete the character after the cursor.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".delCharBefore">
+        <span class="type-signature">require("ko/editor").</span><strong>delCharBefore</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Delete the character before the cursor.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".deleteLine">
+        <span class="type-signature">require("ko/editor").</span><strong>deleteLine</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Deletes the whole line under the cursor, including newline at the end</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".deleteRange">
+        <span class="type-signature">require("ko/editor").</span><strong>deleteRange</strong>(start, length)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Delete the given range of characters</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>start</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Position</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>length</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".delLineLeft">
+        <span class="type-signature">require("ko/editor").</span><strong>delLineLeft</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Delete the part of the line before the cursor</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".delLineRight">
+        <span class="type-signature">require("ko/editor").</span><strong>delLineRight</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Delete the part of the line after the cursor</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".delWordAfter">
+        <span class="type-signature">require("ko/editor").</span><strong>delWordAfter</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Delete up to the end of the word after the cursor.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".delWordBefore">
+        <span class="type-signature">require("ko/editor").</span><strong>delWordBefore</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Delete up to the start of the word before the cursor.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".editor">
+        <span class="type-signature">require("ko/editor").</span><strong>editor</strong>(sci, scm)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Returns the editor SDK for a custom scintilla instance</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sci</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Scintilla</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scm</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Scimoz</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">sdkEditor</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".emptyUndoBuffer">
+        <span class="type-signature">require("ko/editor").</span><strong>emptyUndoBuffer</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Empty the undo buffer.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".findString">
+        <span class="type-signature">require("ko/editor").</span><strong>findString</strong>(text, startPos, maxResults)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Find a string in the current buffer</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>String of text to find</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>startPos</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Start position (optional)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxResults</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Maximum number of results, -1 for unlimited (optional)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>Returns an array of relative positions</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".focus">
+        <span class="type-signature">require("ko/editor").</span><strong>focus</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Set focus on the editor</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getAllMarks">
+        <span class="type-signature">require("ko/editor").</span><strong>getAllMarks</strong>(type)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get all registered bookmarks</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Long</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>See legacy.markers</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getBookmarkLineFromHandle">
+        <span class="type-signature">require("ko/editor").</span><strong>getBookmarkLineFromHandle</strong>(markerid,)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Retrieve the line a bookmark is at by handle</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>markerid,</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Default is current line.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>line number</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getColumnNumber">
+        <span class="type-signature">require("ko/editor").</span><strong>getColumnNumber</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the current column (character | ch) number</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getCursorPosition">
+        <span class="type-signature">require("ko/editor").</span><strong>getCursorPosition</strong>(format)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the position of the cursor</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>format</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>absolute | relative (default)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>Absolute: Int, Relative: {line, ch, absolute}</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getCursorWindowPosition">
+        <span class="type-signature">require("ko/editor").</span><strong>getCursorWindowPosition</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the position of the cursor relative to the Komodo window</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>{x: .., y: ..}</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getLanguage">
+        <span class="type-signature">require("ko/editor").</span><strong>getLanguage</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the current programming language used</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getLength">
+        <span class="type-signature">require("ko/editor").</span><strong>getLength</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the character length of the current buffer</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getLine">
+        <span class="type-signature">require("ko/editor").</span><strong>getLine</strong>(line)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the contents of the given line</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>line</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Int</span>
+|
+
+<span class="param-type">Undefined</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getLineEndPos">
+        <span class="type-signature">require("ko/editor").</span><strong>getLineEndPos</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the given line end position</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getLineFromMousePosition">
+        <span class="type-signature">require("ko/editor").</span><strong>getLineFromMousePosition</strong>(x, y)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the line number from the given x/y position</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>x</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>relative to scimoz view</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>relative to scimoz view</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>Line number</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getLineNumber">
+        <span class="type-signature">require("ko/editor").</span><strong>getLineNumber</strong>(position)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the current line number</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>position</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Null</span>
+|
+
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>relative/absolute position to look from, leave empty to use current cursor position.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getLineSize">
+        <span class="type-signature">require("ko/editor").</span><strong>getLineSize</strong>(line)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the size of the line</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>line</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getLineStartPos">
+        <span class="type-signature">require("ko/editor").</span><strong>getLineStartPos</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the given line start position</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getMarginFromMousePosition">
+        <span class="type-signature">require("ko/editor").</span><strong>getMarginFromMousePosition</strong>(x, y)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get margin number relative to x/y position</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>x</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>relative to scimoz view</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>relative to scimoz view</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>Margin number, see ISciMoz.template.idl</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getRange">
+        <span class="type-signature">require("ko/editor").</span><strong>getRange</strong>(from, to)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Retrieve the given range of text</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>from</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Absolute or relative position</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>to</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Int</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Absolute or relative position</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getSelection">
+        <span class="type-signature">require("ko/editor").</span><strong>getSelection</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the currently selected text</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getSelectionRange">
+        <span class="type-signature">require("ko/editor").</span><strong>getSelectionRange</strong>(format)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the current selection range</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>format</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>absolute | relative (default)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>{start: formattedPost, end: formattedPos}</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getValue">
+        <span class="type-signature">require("ko/editor").</span><strong>getValue</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the current buffer's content</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getWindowPosition">
+        <span class="type-signature">require("ko/editor").</span><strong>getWindowPosition</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the window position of the given character</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>{x: .., y: ..}</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getWord">
+        <span class="type-signature">require("ko/editor").</span><strong>getWord</strong>(pos, match)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get word to the left of the given position</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pos</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Null</span>
+|
+
+<span class="param-type">Int</span>
+|
+
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Regexp</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Absolute or relative position, if value is regex then this will be used as the match. Leave empty to use current cursor position.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>match</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Null</span>
+|
+
+<span class="param-type">RegExp</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The regex to match the word agains</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goCharLeft">
+        <span class="type-signature">require("ko/editor").</span><strong>goCharLeft</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor one character left, going to the previous line when hitting the start of line.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goCharRight">
+        <span class="type-signature">require("ko/editor").</span><strong>goCharRight</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor one character right, going to the next line when hitting the end of line.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goColumnLeft">
+        <span class="type-signature">require("ko/editor").</span><strong>goColumnLeft</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor one character left, but don't cross line boundaries.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goColumnRight">
+        <span class="type-signature">require("ko/editor").</span><strong>goColumnRight</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor one character right, don't cross line boundaries.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goDocEnd">
+        <span class="type-signature">require("ko/editor").</span><strong>goDocEnd</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor to the end of the document.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goDocStart">
+        <span class="type-signature">require("ko/editor").</span><strong>goDocStart</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor to the start of the document</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goLineDown">
+        <span class="type-signature">require("ko/editor").</span><strong>goLineDown</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move down one line.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goLineEnd">
+        <span class="type-signature">require("ko/editor").</span><strong>goLineEnd</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor to the end of the line.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goLineLeft">
+        <span class="type-signature">require("ko/editor").</span><strong>goLineLeft</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor to the left side of the visual line it is on. If this line is wrapped, that may not be the start of the line.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goLineRight">
+        <span class="type-signature">require("ko/editor").</span><strong>goLineRight</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor to the right side of the visual line it is on.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goLineStart">
+        <span class="type-signature">require("ko/editor").</span><strong>goLineStart</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor to the start of the line.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goLineStartSmart">
+        <span class="type-signature">require("ko/editor").</span><strong>goLineStartSmart</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move to the start of the text on the line, or if we are already there, to the actual start of the line (including whitespace).</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goLineUp">
+        <span class="type-signature">require("ko/editor").</span><strong>goLineUp</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor up one line.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goPageDown">
+        <span class="type-signature">require("ko/editor").</span><strong>goPageDown</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor down one screen, and scroll down by the same distance.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goPageUp">
+        <span class="type-signature">require("ko/editor").</span><strong>goPageUp</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor up one screen, and scroll up by the same distance.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".gotoLine">
+        <span class="type-signature">require("ko/editor").</span><strong>gotoLine</strong>((number))
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move cursor to a specific line</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>(number)</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>line number</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goWordLeft">
+        <span class="type-signature">require("ko/editor").</span><strong>goWordLeft</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor to the start of the previous word.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".goWordRight">
+        <span class="type-signature">require("ko/editor").</span><strong>goWordRight</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Move the cursor to the end of the next word.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".insert">
+        <span class="type-signature">require("ko/editor").</span><strong>insert</strong>(text)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Insert text at the current cursor position</p>
+<p>Any existing selections will be replaced with the given text</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".lineCount">
+        <span class="type-signature">require("ko/editor").</span><strong>lineCount</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the number of lines in the current buffer</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".paste">
+        <span class="type-signature">require("ko/editor").</span><strong>paste</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Replace current selection with the clipboard contents</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".replaceSelection">
+        <span class="type-signature">require("ko/editor").</span><strong>replaceSelection</strong>(replacement, select)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Replace the current selection with the given text</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>replacement</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>select</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>What to select after insertion</p>
+<pre class="prettyprint source"><code>                           - around: select inserted text
+                           - start: set cursor to start of insertion
+                           - {undefined}: set cursor at end of insertion</code></pre></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".selectAll">
+        <span class="type-signature">require("ko/editor").</span><strong>selectAll</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Select all the text in the buffer</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".setBookmark">
+        <span class="type-signature">require("ko/editor").</span><strong>setBookmark</strong>(line, Optional)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Create a bookmark at a given line if one doesn't exist.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>line</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>number.  Default is current line.  Line is decremented
+  when passed in.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Optional</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>type of bookmark. See legacy.markers.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>ID of marker according to Scimoz</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".setCursor">
+        <span class="type-signature">require("ko/editor").</span><strong>setCursor</strong>(pos)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Set the position of the cursor</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pos</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Int</span>
+|
+
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>relative or absolute position</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".setSelection">
+        <span class="type-signature">require("ko/editor").</span><strong>setSelection</strong>(start, end)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Set the selection</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>start</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>{line, ch}</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>end</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>{line, ch}</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".setValue">
+        <span class="type-signature">require("ko/editor").</span><strong>setValue</strong>(value)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Set the current buffer's content</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".toggleBookmark">
+        <span class="type-signature">require("ko/editor").</span><strong>toggleBookmark</strong>(line)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Toggle a bookmark on a given line</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>line</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>number. default is current line
+Line number is decremented by one if passed in to match scimoz lines
+starting from 0.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".undo">
+        <span class="type-signature">require("ko/editor").</span><strong>undo</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Undo the last action</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".unsetBookmarkByHandle">
+        <span class="type-signature">require("ko/editor").</span><strong>unsetBookmarkByHandle</strong>(A)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Unset breakpoint by Marker handle</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>marker handle</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".unsetBookmarkByLine">
+        <span class="type-signature">require("ko/editor").</span><strong>unsetBookmarkByLine</strong>(line)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Remove a bookmark at a given line</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>line</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>number. default is current line
+Note, if using this</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-2">
+			<div id="toc" class="col-md-2 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	&copy; 2018 ActiveState Software Inc. All rights reserved.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	
+		on 2018-06-19T18:28:56-07:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

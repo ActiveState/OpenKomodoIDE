@@ -1,0 +1,146 @@
+# oratclTable --
+#
+#	This file contains the table of commands used to check oraTcl.
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on oraTcl commands.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+# 
+# RCS: @(#) $Id: oratclTable,v 1.2 2000/05/30 22:24:56 wart Exp $
+
+set ::checkOratcl2.5 {
+
+{oraautocom a $a}			{ok}
+{oraautocom a on}			{ok}
+{oraautocom a off}			{ok}
+{oraautocom a o}			{1 {0 14} oratcl::badOnOff {13 1} {}}
+{oraautocom a}				{1 {0 12} numArgs {} {}}
+{oraautocom a $a $a}			{1 {0 18} numArgs {} {}}
+
+{orabindexec a}				{ok}
+{orabindexec a -async}			{ok}
+{orabindexec a :a a}			{ok}
+{orabindexec a -async :a a}		{ok}
+{orabindexec a :a a :a a :a a}		{ok}
+{orabindexec a -async :a a :a a :a a}	{ok}
+{orabindexec a a a a a}			{1 {0 21} oratcl::missingColon {14 1} {} 1 {0 21} oratcl::missingColon {18 1} {}}
+{orabindexec a -async a a a a}		{1 {0 28} oratcl::missingColon {21 1} {} 1 {0 28} oratcl::missingColon {25 1} {}}
+{orabindexec a $a $a $a $a}		{1 {0 25} warnVarRef {14 2} {} 1 {0 25} warnVarRef {20 2} {}}
+{orabindexec a -async $a $a $a a}	{1 {0 31} warnVarRef {21 2} {} 1 {0 31} warnVarRef {27 2} {}}
+{orabindexec}				{1 {0 11} numArgs {} {}}
+{orabindexec a -async $a}		{1 {0 23} warnVarRef {21 2} {} 1 {0 23} numArgs {} {}}
+{orabindexec a :a a $a a a}		{1 {0 25} warnVarRef {19 2} {} 1 {0 25} oratcl::missingColon {24 1} {} 1 {0 25} numArgs {} {}}
+
+{orabreak a}				{ok}
+{orabreak [set]}			{1 {10 3} numArgs {} {}}
+{orabreak}				{1 {0 8} numArgs {} {}}
+{orabreak $a $a}			{1 {0 14} numArgs {} {}}
+
+{oracancel a}				{ok}
+{oracancel [set]}			{1 {11 3} numArgs {} {}}
+{oracancel}				{1 {0 9} numArgs {} {}}
+{oracancel $a $a}			{1 {0 15} numArgs {} {}}
+
+{oraclose a}				{ok}
+{oraclose [set]}			{1 {10 3} numArgs {} {}}
+{oraclose}				{1 {0 8} numArgs {} {}}
+{oraclose $a $a}			{1 {0 14} numArgs {} {}}
+
+{oracols a}				{ok}
+{oracols [set]}				{1 {9 3} numArgs {} {}}
+{oracols}				{1 {0 7} numArgs {} {}}
+{oracols $a a}				{1 {0 12} numArgs {} {}}
+
+{oracommit a}				{ok}
+{oracommit [set]}			{1 {11 3} numArgs {} {}}
+{oracommit}				{1 {0 9} numArgs {} {}}
+{oracommit $a $a}			{1 {0 15} numArgs {} {}}
+
+{orafetch a}				{ok}
+{orafetch a {set x}}			{ok}
+{orafetch a {set x} ""}			{ok}
+{orafetch a {set x} a}			{ok}
+{orafetch a {set x} a a $a}		{ok}
+{orafetch a {set x} a a $a a $a a $a}	{ok}
+{orafetch a {set}}			{1 {12 3} numArgs {} {}}
+{orafetch a {set x} ab}			{1 {0 21} oratcl::badSubstChar {19 2} {}}
+{orafetch a {set x} a $a a $a a $a a}	{1 {0 35} warnVarRef {21 2} {} 1 {0 35} warnVarRef {26 2} {} 1 {0 35} warnVarRef {31 2} {}}
+{orafetch}				{1 {0 8} numArgs {} {}}
+{orafetch a $a $a a}			{1 {0 18} numArgs {} {}}
+{orafetch a $a $a a $a a $a a}		{1 {0 28} numArgs {} {}}
+
+{oralogoff a}				{ok}
+{oralogoff [set]}			{1 {11 3} numArgs {} {}}
+{oralogoff}				{1 {0 9} numArgs {} {}}
+{oralogoff $a $a}			{1 {0 15} numArgs {} {}}
+
+{oralogon ""}			{ok}
+{oralogon @}			{1 {0 10} oratcl::badConnectStr {9 1} {}}
+{oralogon name}			{ok}
+{oralogon /pwd}			{1 {0 13} oratcl::badConnectStr {9 4} {}}
+{oralogon @svr}			{1 {0 13} oratcl::badConnectStr {9 4} {}}
+{oralogon name/pwd}		{ok}
+{oralogon name/}		{1 {0 14} oratcl::badConnectStr {9 5} {}}
+{oralogon name/pwd/x}		{1 {0 19} oratcl::badConnectStr {9 10} {}}
+{oralogon name@svr}		{ok}
+{oralogon name/pwd@svr}		{ok}
+{oralogon name@}		{1 {0 14} oratcl::badConnectStr {9 5} {}}
+{oralogon name@svr@svr}		{1 {0 21} oratcl::badConnectStr {9 12} {}}
+{oralogon name@x:host:svr}	{ok}
+{oralogon name/pwd@x:host:svr}	{ok}
+{oralogon name@:host:svr}	{1 {0 23} oratcl::badConnectStr {9 14} {}}
+{oralogon name@xy:host:svr}	{1 {0 25} oratcl::badConnectStr {9 16} {}}
+{oralogon name@x::svr}		{1 {0 20} oratcl::badConnectStr {9 11} {}}
+{oralogon name@x:host}		{1 {0 20} oratcl::badConnectStr {9 11} {}}
+{oralogon name@x:host:}		{1 {0 21} oratcl::badConnectStr {9 12} {}}
+{oralogon [set]}		{1 {10 3} numArgs {} {}}
+{oralogon}			{1 {0 8} numArgs {} {}}
+{oralogon $a $a}		{1 {0 14} numArgs {} {}}
+
+{oraopen a}				{ok}
+{oraopen [set]}				{1 {9 3} numArgs {} {}}
+{oraopen}				{1 {0 7} numArgs {} {}}
+{oraopen $a $a}				{1 {0 13} numArgs {} {}}
+
+{oraplexec a a}				{ok}
+{oraplexec a a :a a}			{ok}
+{oraplexec a a :a a :a a :a a}		{ok}
+{oraplexec a a $a a $a a}		{1 {0 23} warnVarRef {14 2} {} 1 {0 23} warnVarRef {19 2} {}}
+{oraplexec a a a $a a $a}		{1 {0 23} oratcl::missingColon {14 1} {} 1 {0 23} oratcl::missingColon {19 1} {}}
+{oraplexec}				{1 {0 9} numArgs {} {}}
+{oraplexec a}				{1 {0 11} numArgs {} {}}
+{oraplexec a a a}			{1 {0 15} oratcl::missingColon {14 1} {} 1 {0 15} numArgs {} {}}
+
+{orapoll a}				{ok}
+{orapoll a -all}			{ok}
+{orapoll [set]}				{1 {9 3} numArgs {} {}}
+{orapoll [set] -all}			{1 {9 3} numArgs {} {}}
+{orapoll a -all $a}			{1 {0 17} numArgs {} {}}
+{orapoll a -foo}			{1 {0 14} badSwitch {10 4} -foo}
+
+{orareadlong a a a a a}			{ok}
+{orareadlong a a a a $a/b}		{1 {0 24} nonPortFile {20 4} {}}
+{orareadlong a a a a}			{1 {0 19} numArgs {} {}}
+{orareadlong a a a a a $a}		{1 {0 24} numArgs {} {}}
+
+{oraroll a}				{ok}
+{oraroll [set]}				{1 {9 3} numArgs {} {}}
+{oraroll}				{1 {0 7} numArgs {} {}}
+{oraroll $a $a}				{1 {0 13} numArgs {} {}}
+
+{orasql a s}				{ok}
+{orasql a s -async}			{ok}
+{orasql a s -parseonly}			{ok}
+{orasql a s -parseonly -async}		{ok}
+{orasql a s -p -a}			{1 {0 16} badSwitch {11 2} -p 1 {0 16} badSwitch {14 2} -a}
+{orasql [set] s}			{1 {8 3} numArgs {} {}}
+{orasql a [set]}			{1 {10 3} numArgs {} {}}
+{orasql a s -async -parseonly $a}	{1 {0 31} numArgs {} {}}
+{orasql a s -foo -bar}			{1 {0 20} badSwitch {11 4} -foo 1 {0 20} badSwitch {16 4} -bar}
+
+{orawritelong a a a a a}		{ok}
+{orawritelong a a a a $a/b}		{1 {0 25} nonPortFile {21 4} {}}
+{orawritelong a a a a}			{1 {0 20} numArgs {} {}}
+{orawritelong a a a a a $a}		{1 {0 25} numArgs {} {}}
+}

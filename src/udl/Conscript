@@ -1,0 +1,304 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+Import(
+    'cons',
+    'build',
+    'platform',
+    'productType',
+    'buildFlavour',
+    'buildType',
+    'supportDir',
+    'unsiloedPythonExe',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'komodoPythonUtilsDir',
+    'mozVersion',
+    'mozBin',
+    'ludditeVersion',
+    'mozExtensionDir',
+    'sdkDir',
+    'buildAbsDir',
+);
+
+
+# Install Komodo's "core" UDL-based language extensions: currently just RHTML.
+
+my $RMDIR = ($platform eq "win"? "rd /s/q" : "rm -rf");
+my $MKDIR = ($platform eq "win"? "mkdir" : "mkdir -p");
+my $COPY = ($platform eq "win"? "xcopy /s/q" : "cp -R");
+
+
+my $creator = "ActiveState";
+my @lexers = (
+              {
+               language_name => "LaravelBlade",
+               codename => "laravelblade_language",
+               udl_path => "laravelblade-mainlex.udl",
+               ext => ".blade.php",
+               skel => "skel/LaravelBlade",
+              },
+              {
+               language_name => "Django",
+               codename => "django_language",
+               udl_path => "django-mainlex.udl",
+               ext => ".django.html",
+               skel => "skel/Django",
+              },
+              {
+               language_name => "EJS",
+               codename => "ejs_language",
+               udl_path => "ejs-mainlex.udl",
+               ext => ".ejs.html",
+               skel => "skel/EJS",
+              },
+              {
+               language_name => "JSERB",
+               codename => "jserb_language",
+               udl_path => "jserb-mainlex.udl",
+               ext => ".js.erb",
+               skel => "skel/JSERB",
+              },
+              {
+               language_name => "Komodo Snippet",
+               codename => "komodo_snippet_language",
+               udl_path => "ko-snippet-mainlex.udl",
+               ext => ".snippet",
+               skel => "skel/KomodoSnippet",
+              },
+              {
+               language_name => "HTML",
+               codename => "html_language",
+               udl_path => "html-mainlex.udl",
+               ext => ".html",
+               skel => "skel/HTML",
+              },
+              {
+               language_name => "Luddite",
+               codename => "luddite_language",
+               udl_path => "luddite-mainlex.udl",
+               ext => ".udl",
+              },
+              {
+               language_name => "RHTML",
+               codename => "rhtml_language",
+               udl_path => "rhtml-mainlex.udl",
+               ext => ".rhtml",
+               skel => "skel/RHTML",
+              },
+              {
+               language_name => "PHP",
+               codename => "php_language",
+               udl_path => "php-mainlex.udl",
+               ext => ".php",
+               skel => "skel/PHP",
+              },
+              {
+               language_name => "Smarty",
+               codename => "smarty_language",
+               udl_path => "php-smarty-mainlex.udl",
+               ext => ".tpl",
+               skel => "skel/Smarty",
+              },
+              {
+               language_name => "Mason",
+               codename => "mason_language",
+               udl_path => "mason-mainlex.udl",
+               ext => ".mason.html",
+               skel => "skel/Mason",
+              },
+              {
+               language_name => "epMojo",
+               codename => "epmojo_language",
+               udl_path => "epMojo-mainlex.udl",
+               ext => ".ep",
+               skel => "skel/epMojo",
+              },
+              {
+               language_name => "TemplateToolkit",
+               codename => "templatetoolkit_language",
+               udl_path => "template-toolkit-mainlex.udl",
+               ext => ".ttkt.html",
+               skel => "skel/TemplateToolkit",
+              },
+              {
+               language_name => "Twig",
+               codename => "twig_language",
+               udl_path => "twig-mainlex.udl",
+               ext => ".twig",
+               skel => "skel/Twig",
+              },
+              {
+               language_name => "XBL",
+               codename => "xbl_language",
+               udl_path => "xbl-mainlex.udl",
+               ext => ".xbl",
+               skel => "skel/XBL",
+              },
+              {
+               language_name => "XUL",
+               codename => "xul_language",
+               udl_path => "xul-mainlex.udl",
+               ext => ".xul",
+               skel => "skel/XUL",
+              },
+              {
+               language_name => "XML",
+               codename => "xml_language",
+               udl_path => "xml-mainlex.udl",
+               ext => ".xml",
+               skel => "skel/XML",
+              },
+              {
+               language_name => "XSLT",
+               codename => "xslt_language",
+               udl_path => "xslt-mainlex.udl",
+               ext => ".xsl",
+               skel => "skel/XSLT",
+              },
+              {
+               language_name => "ActionScript",
+               codename => "actionscript_language",
+               udl_path => "actionscript-mainlex.udl",
+               ext => ".as",
+               skel => "skel/ActionScript",
+              },
+              {
+               language_name => "reStructuredText",
+               codename => "restructuredtext_language",
+               udl_path => "restructuredtext-mainlex.udl",
+               ext => ".rst",
+               skel => "skel/reStructuredText",
+              },
+              {
+               language_name => "TracWiki",
+               codename => "tracwiki_language",
+               udl_path => "tracwiki-mainlex.udl",
+               ext => ".tracwiki",
+               skel => "skel/TracWiki",
+              },
+              {
+               language_name => "Docker",
+               codename => "docker_language",
+               udl_path => "docker-mainlex.udl",
+               skel => "skel/Docker",
+              },
+              {
+               language_name => "R",
+               codename => "r_language",
+               udl_path => "r-mainlex.udl",
+               skel => "skel/R",
+              },
+              {
+               language_name => "Mustache",
+               codename => "mustache_language",
+               udl_path => "mustache-mainlex.udl",
+               skel => "skel/Mustache",
+              },
+              {
+               language_name => "JSX",
+               codename => "jsx_language",
+               udl_path => "jsx-mainlex.udl",
+               skel => "skel/JSX",
+              },
+              {
+               language_name => "AngularJS",
+               codename => "angularjs_language",
+               udl_path => "angularjs-mainlex.udl",
+               skel => "skel/AngularJS",
+              },
+              {
+               language_name => "Handlebars",
+               codename => "handlebars_language",
+               udl_path => "handlebars-mainlex.udl",
+               skel => "skel/Handlebars",
+              },
+              {
+               language_name => "Jinja2",
+               codename => "jinja2_language",
+               udl_path => "jinja2-mainlex.udl",
+               skel => "skel/Jinja2",
+              },
+              {
+               language_name => "Haml",
+               codename => "haml_language",
+               udl_path => "haml-mainlex.udl",
+               skel => "skel/Haml",
+              }
+             );
+my $root = dirname(__FILE__);
+foreach my $info (@lexers) {
+    my $language_name = $info->{language_name};
+    my $safe_language_name = $language_name;
+    $safe_language_name =~ s/[^\w\d-_=+]+/_/g;
+    my $codename = $info->{codename};
+    my $udl_path = "udl/" . $info->{udl_path};
+    my $version = $info->{version} || "1.0.0";
+    my $build_dir = "build/$safe_language_name";
+    my $xpi_path = "$codename-$version-ko.xpi";
+    my $build_xpi_path = "$buildAbsDir/udl/$xpi_path";
+
+    if (-e $build_xpi_path)
+    {
+        my $source_ts = (stat("$root/$udl_path"))[9];
+        my $target_ts = (stat($build_xpi_path))[9];
+        next if $target_ts >= $source_ts;
+    }
+
+    my $install_rdf_path = "$build_dir/install.rdf";
+    my $rmdir_cmd = "$RMDIR $build_dir";
+    my $mkdir_cmd = "$MKDIR build";
+    if ($platform eq "win") {
+        $build_dir =~ s/\//\\/g;
+        $build_dir .= '\\';
+        $rmdir_cmd = "IF EXIST $build_dir $RMDIR $build_dir";
+        $mkdir_cmd = "IF NOT EXIST build $MKDIR build";
+    }
+    if ($info->{skel}) {
+        my $skel_dir = $info->{skel};
+        if ($platform eq "win") {
+            $skel_dir =~ s/\//\\/g;
+        }
+        $cons->Command(
+            $install_rdf_path,
+            "luddite.py",
+            "GUIDs.txt",
+            $udl_path,
+            qq(
+                cd %1:d && $rmdir_cmd
+                cd %1:d && $mkdir_cmd
+                cd %1:d && $COPY $skel_dir $build_dir
+                cd %1:d && python %1:f compile --skel --add-missing --ext=$info->{ext} -c "$creator" -V $version -g GUIDs.txt $udl_path
+            ));
+        $cons->DependsRecursive($install_rdf_path, $info->{skel}, ('\.svn'));
+    } else {
+        $cons->Command(
+            $install_rdf_path,
+            "luddite.py",
+            "GUIDs.txt",
+            $udl_path,
+            qq(
+                cd %1:d && python %1:f compile --skel --ext=$info->{ext} -c "$creator" -V $version -g GUIDs.txt -f $udl_path
+            ));
+    }
+    $cons->DependsRecursive($install_rdf_path, "udl",
+                            ($info->{udl_path}, '\.consign', '\.svn'));
+    $cons->DependsRecursive($install_rdf_path, "ludditelib",
+                            ('\.consign', '.*\.pyc', '\.svn'));
+    $cons->KoExtv1("kodistinstall", $xpi_path, $build_dir);
+    $cons->Depends($xpi_path, $install_rdf_path);
+}
+
+
+# Put UDL and luddite bits into the Komodo SDK dir for extension development.
+$cons->InstallRecursive("$sdkDir/udl", cwd()."/src/udl/udl", ('\.svn'));
+$cons->InstallRecursive("$sdkDir/pylib/ludditelib", cwd()."/src/udl/ludditelib",
+                        (".*\.pyc", ".*\.pyo", '\.svn'));
+if ($platform eq "win") {
+    $cons->InstallAs("$sdkDir/bin/luddite.py", "luddite.py");
+} else {
+    $cons->InstallAs("$sdkDir/bin/luddite", "luddite.py");
+}

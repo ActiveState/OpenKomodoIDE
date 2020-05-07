@@ -1,0 +1,6 @@
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans+Mono);
+
+.CodeMirror
+{
+    font-family: "Droid Sans Mono", Menlo, Monaco, "Courier New", Courier, Monospace;
+}

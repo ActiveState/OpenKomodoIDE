@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Grid"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript;version=1.7"
+	  src="chrome://global/content/dialogOverlay.js" />
+
+<html:h1>XUL Grids</html:h1>
+
+<vbox flex="1" style="overflow: auto">
+
+<groupbox>
+<caption label="data in the rows" />
+<grid>
+  <columns>
+    <column flex="1" />
+    <column flex="1" />
+    <column flex="1" />
+    <column flex="1" />
+  </columns>
+
+  <rows>
+    <row>
+      <button label="Name" />
+      <button label="Sex" />
+      <button label="Color" />
+      <button label="Description" />
+    </row>
+    <row>
+      <label value="Pearl" />
+      <label value="Female" />
+      <label value="Gray" />
+      <label value="Frumpy" />
+    </row>
+    <row>
+      <label value="Aramis" />
+      <label value="Male" />
+      <label value="Black" />
+      <label value="Cute" />
+    </row>
+    <row>
+      <label value="Yakima" />
+      <label value="Male" />
+      <label value="Holstein" />
+      <label value="Handsome" />
+    </row>
+    <row>
+      <label value="Cosmo" />
+      <label value="Female" />
+      <label value="White" />
+      <label value="Round" />
+    </row>
+    <row>
+      <label value="Fergus" />
+      <label value="Male" />
+      <label value="Black" />
+      <label value="Long" />
+    </row>
+    <row>
+      <label value="Clint" />
+      <label value="Male" />
+      <label value="Black" />
+      <label value="Young" />
+    </row>
+    <row>
+      <label value="Tribble" />
+      <label value="Female" />
+      <label value="Orange" />
+      <label value="Frumpy" />
+    </row>
+    <row>
+      <label value="Zippy" />
+      <label value="Male" />
+      <label value="Orange" />
+      <label value="Playful" />
+    </row>
+    <row>
+      <label value="" />
+      <label value="" />
+      <label value="" />
+      <label value="" />
+    </row>
+  </rows>
+</grid>
+</groupbox>
+
+<groupbox>
+<caption label="data in the columns" />
+<grid>
+  <rows>
+    <row />
+    <row />
+    <row />
+    <row />
+  </rows>>
+
+  <columns>
+    <column flex="1">
+      <button label="Name" />
+      <button label="Sex" />
+      <button label="Color" />
+      <button label="Description" />
+    </column>
+    <column flex="1">
+      <label value="Pearl" />
+      <label value="Female" />
+      <label value="Gray" />
+      <label value="Frumpy" />
+    </column>
+    <column flex="1">
+      <label value="Aramis" />
+      <label value="Male" />
+      <label value="Black" />
+      <label value="Cute" />
+    </column>
+    <column flex="1">
+      <label value="Yakima" />
+      <label value="Male" />
+      <label value="Holstein" />
+      <label value="Handsome" />
+    </column>
+    <column flex="1">
+      <label value="Cosmo" />
+      <label value="Female" />
+      <label value="White" />
+      <label value="Round" />
+    </column>
+    <column flex="1">
+      <label value="Fergus" />
+      <label value="Male" />
+      <label value="Black" />
+      <label value="Long" />
+    </column>
+    <column flex="1">
+      <label value="Clint" />
+      <label value="Male" />
+      <label value="Black" />
+      <label value="Young" />
+    </column>
+    <column flex="1">
+      <label value="Tribble" />
+      <label value="Female" />
+      <label value="Orange" />
+      <label value="Frumpy" />
+    </column>
+    <column flex="1">
+      <label value="Zippy" />
+      <label value="Male" />
+      <label value="Orange" />
+      <label value="Playful" />
+    </column>
+  </columns>
+</grid>
+</groupbox>
+
+</vbox>
+
+</window>

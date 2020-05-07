@@ -1,0 +1,1977 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+  <!ENTITY % komodoDTD.INTERNAL SYSTEM "chrome://komodo/locale/komodo-internal.dtd">
+  %komodoDTD.INTERNAL;
+]>
+
+<!-- this overlay provides the minimal set of scripts and overlays that are required
+     to properly use scintilla in a dialog or secondary window. It also handles fixing
+     the context menu for scintilla.  -->
+
+<overlay id="commandsOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<commandset id="allcommands">
+
+    <broadcasterset id="broadcasterset_global">
+        <!--
+            These are always available or are enabled/disabled through
+            mechanisms other than the command/event updating system.
+        -->
+        <broadcaster
+            id="cmd_viewBottomPane" key="key_cmd_viewBottomPane"
+            desc="&userInterfaceShowHideBottomPane.desc;"
+            splitter="bottom_splitter"
+            box="workspace_bottom_area"
+            oncommand="ko.commands.doCommandAsync('cmd_viewBottomPane', event)">
+            <observes attribute="checked" element="workspace_bottom_area"/>
+        </broadcaster>
+        <broadcaster
+            id="cmd_viewLeftPane" key="key_cmd_viewLeftPane"
+            desc="&userInterfaceShowHideLeftPane.desc;"
+            splitter="workspace_left_splitter"
+            box="workspace_left_area"
+            oncommand="ko.commands.doCommandAsync('cmd_viewLeftPane', event)">
+            <observes attribute="checked" element="workspace_left_area"/>
+        </broadcaster>
+        <broadcaster
+            id="cmd_viewRightPane" key="key_cmd_viewRightPane"
+            desc="&userInterfaceShowHideRightPane.desc;"
+            splitter="workspace_right_splitter"
+            box="workspace_right_area"
+            oncommand="ko.commands.doCommandAsync('cmd_viewRightPane', event)">
+            <observes attribute="checked" element="workspace_right_area"/>
+        </broadcaster>
+        <broadcaster
+            id="cmd_viewToolbox" key="key_cmd_viewToolbox"
+            desc="&userInterfaceShowHideToolboxTab.desc;"
+            autoCheck="false"
+            oncommand="ko.commands.doCommandAsync('cmd_viewToolbox', event)"/>
+        <broadcaster
+            id="cmd_viewFullScreen" key="key_cmd_viewFullScreen"
+            desc="&userInterfaceFullScreen.desc;"
+            autoCheck="false"
+            oncommand="ko.commands.doCommandAsync('cmd_viewFullScreen', event)"/>
+<!-- #if PLATFORM != "darwin" -->
+        <broadcaster
+            id="cmd_toggleMenubar" key="key_cmd_toggleMenubar"
+            desc="&userInterfaceShowHideMenubar.desc;"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleMenubar', event)"
+            persist="checked"
+            checked="false"
+             />
+<!-- #endif -->
+        <broadcaster
+            id="cmd_toggleToolbars" key="key_cmd_toggleToolbars"
+            desc="&userInterfaceShowHideToolbars.desc;"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleToolbars', event)"
+            persist="checked"
+            checked="true"
+            autoCheck="false" />
+        <broadcaster
+            id="cmd_toggleSideToolbar" key="key_cmd_toggleSideToolbar"
+            desc="&userInterfaceShowHideSideToolbars.desc;"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleSideToolbar', event)"
+            persist="checked"
+            checked="true"
+            autoCheck="false" />
+        <broadcaster
+            id="cmd_viewedittoolbar" key="key_cmd_viewedittoolbar"
+            desc="&userInterfaceShowHideStandardToolbar.desc;"
+            autoCheck="false"
+            checked="true"
+            persist="checked"
+            oncommand="ko.commands.doCommandAsync('cmd_viewedittoolbar', event)"/>
+        <broadcaster
+            id="cmd_viewtoolstoolbar" key="key_cmd_viewtoolstoolbar"
+            desc="&userInterfaceShowHideToolsToolbar.desc;"
+            autoCheck="false"
+            checked="true"
+            persist="checked"
+            oncommand="ko.commands.doCommandAsync('cmd_viewtoolstoolbar', event)"/>
+        <broadcaster
+            id="cmd_viewmacrotoolbar" key="key_cmd_viewmacrotoolbar"
+            desc="&userInterfaceShowHideMacrosToolbar.desc;"
+            autoCheck="false"
+            checked="false"
+            persist="checked"
+            oncommand="ko.commands.doCommandAsync('cmd_viewmacrotoolbar', event)"/>
+        <broadcaster
+            id="cmd_viewkomodotoolbar" key="key_cmd_viewkomodotoolbar"
+            desc="&userInterfaceShowHideKomodoResourcesToolbar.desc;"
+            autoCheck="false"
+            checked="true"
+            persist="checked"
+            oncommand="ko.commands.doCommandAsync('cmd_viewkomodotoolbar', event)"/>
+        <broadcaster
+            id="cmd_viewworkspacetoolbar" key="key_cmd_viewworkspacetoolbar"
+            desc="&userInterfaceShowHideWorkspaceToolbar.desc;"
+            autoCheck="false"
+            checked="true"
+            persist="checked"
+            oncommand="ko.commands.doCommandAsync('cmd_viewworkspacetoolbar', event)"/>
+        <broadcaster
+            id="cmd_viewfindtoolbar" key="key_cmd_viewfindtoolbar"
+            desc="&userInterfaceShowHideFindToolbar.desc;"
+            autoCheck="false"
+            checked="true"
+            persist="checked"
+            oncommand="ko.commands.doCommandAsync('cmd_viewfindtoolbar', event)"/>
+        <broadcaster
+            id="cmd_openextmgr"
+            desc="&openAddonsDialog.desc;"
+            oncommand="ko.launch.openAddonsMgr();"/>
+        <broadcaster
+            id="cmd_expandAbbrev"
+            key="key_cmd_expandAbbrev"
+            desc="&editorInsertSnippetByName.desc;"
+            oncommand="ko.abbrev.expandAbbrev()"/>
+
+        <!--
+        The following are commands rather than broadcasters for reasons
+        that are a bit fuzzy to me [DA] - there's possibly no difference.
+        -->
+<!-- #if WITH_CODE_BROWSER -->
+        <command
+            id="cmd_codeBrowserGoToDefinition" key="key_cmd_codeBrowserGoToDefinition"
+            oncommand="ko.commands.doCommandAsync('cmd_codeBrowserGoToDefinition', event)"
+            desc="&codeBrowserGoToDefinition.desc;"/>
+<!-- #endif -->
+        <command
+            id="cmd_addNewFile" key="key_cmd_addNewFile"
+            oncommand="ko.commands.doCommandAsync('cmd_addNewFile', event)"
+            desc="&projectsToolboxAddNewFile.desc;"/>
+        <command
+            id="cmd_addNewFileFromTemplate" key="key_cmd_addNewFileFromTemplate"
+            oncommand="ko.commands.doCommandAsync('cmd_addNewFileFromTemplate', event)"
+            desc="&projectsToolboxAddNewFileFromTemplate.desc;"/>
+        <command
+            id="cmd_addFolderPart" key="key_cmd_addFolderPart"
+            oncommand="ko.commands.doCommandAsync('cmd_addFolderPart', event)"
+            desc="&projectsToolboxAddNewFolder.desc;"/>
+        <command
+            id="cmd_addRemoteFilePart" key="key_cmd_addRemoteFilePart"
+            oncommand="ko.commands.doCommandAsync('cmd_addRemoteFilePart', event)"
+            desc="&projectsToolboxAddRemoteFile.desc;"/>
+        <command
+            id="cmd_editPrefs" key="key_cmd_editPrefs"
+            oncommand="ko.commands.doCommandAsync('cmd_editPrefs', event);"
+            desc="&generalPreferences.desc;"/>
+        <command
+            id="cmd_newWindow" key="key_cmd_newWindow"
+            oncommand="ko.commands.doCommandAsync('cmd_newWindow', event)"
+            desc="&generalNewWindow.desc;"/>
+        <command
+            id="cmd_nextWindow" key="key_cmd_nextWindow"
+            oncommand="ko.commands.doCommandAsync('cmd_nextWindow', event)"
+            desc="&generalNextWindow.desc;"/>
+        <command
+            id="cmd_previousWindow" key="key_cmd_previousWindow"
+            oncommand="ko.commands.doCommandAsync('cmd_previousWindow', event)"
+            desc="&generalPreviousWindow.desc;"/>
+        <command
+            id="cmd_helpHelp" key="key_cmd_helpHelp"
+            oncommand="ko.commands.doCommandAsync('cmd_helpHelp')"
+            desc="&helpHelp.desc;"/>
+        <command
+            id="cmd_helpTipOfTheDay" key="key_cmd_helpTipOfTheDay"
+            oncommand="ko.commands.doCommandAsync('cmd_helpTipOfTheDay', event)"
+            desc="&helpTipOfTheDay.desc;"/>
+        <command
+            id="cmd_helpShowKeybindings" key="key_cmd_helpShowKeybindings"
+            oncommand="ko.commands.doCommandAsync('cmd_helpShowKeybindings', event)"
+            desc="&helpShowKeybindings.desc;"/>
+        <command
+            id="cmd_helpPerlRef_Web" key="key_cmd_helpPerlRef_Web"
+            oncommand="ko.commands.doCommandAsync('cmd_helpPerlRef_Web', event);"
+            desc="&helpPerlReferenceWeb.desc;"/>
+        <command
+            id="cmd_helpPerlMailingLists" key="key_cmd_helpPerlMailingLists"
+            oncommand="ko.commands.doCommandAsync('cmd_helpPerlMailingLists', event);"
+            desc="&helpPerlMailingLists.desc;"/>
+        <command
+            id="cmd_helpPythonRef_Web" key="key_cmd_helpPythonRef_Web"
+            oncommand="ko.commands.doCommandAsync('cmd_helpPythonRef_Web', event);"
+            desc="&helpPythonReferenceWeb.desc;"/>
+        <command
+            id="cmd_helpPythonMailingLists" key="key_cmd_helpPythonMailingLists"
+            oncommand="ko.commands.doCommandAsync('cmd_helpPythonMailingLists', event);"
+            desc="&helpPythonMailingLists.desc;"/>
+        <command
+            id="cmd_helpPython3Ref_Web" key="key_cmd_helpPython3Ref_Web"
+            oncommand="ko.commands.doCommandAsync('cmd_helpPython3Ref_Web', event);"
+            desc="&helpPython3ReferenceWeb.desc;"/>
+        <command
+            id="cmd_helpPHPRef_Web" key="key_cmd_helpPHPRef_Web"
+            oncommand="ko.commands.doCommandAsync('cmd_helpPHPRef_Web', event);"
+            desc="&helpPHPReferenceWeb.desc;"/>
+        <command
+            id="cmd_helpPHPMailingLists" key="key_cmd_helpPHPMailingLists"
+            oncommand="ko.commands.doCommandAsync('cmd_helpPHPMailingLists', event);"
+            desc="&helpPHPMailingLists.desc;"/>
+        <command
+            id="cmd_helpRubyRef_Web" key="key_cmd_helpRubyRef_Web"
+            oncommand="ko.commands.doCommandAsync('cmd_helpRubyRef_Web', event);"
+            desc="&helpRubyReferenceWeb.desc;"/>
+        <command
+            id="cmd_helpRubyMailingLists" key="key_cmd_helpRubyMailingLists"
+            oncommand="ko.commands.doCommandAsync('cmd_helpRubyMailingLists', event);"
+            desc="&helpRubyMailingLists.desc;"/>
+        <command
+            id="cmd_helpTclRef_Web" key="key_cmd_helpTclRef_Web"
+            oncommand="ko.commands.doCommandAsync('cmd_helpTclRef_Web', event);"
+            desc="&helpTclReferenceWeb.desc;"/>
+        <command
+            id="cmd_helpTclMailingLists" key="key_cmd_helpTclMailingLists"
+            oncommand="ko.commands.doCommandAsync('cmd_helpTclMailingLists', event);"
+            desc="&helpTclMailingLists.desc;"/>
+        <command
+            id="cmd_helpXSLTRef_Web" key="key_cmd_helpXSLTRef_Web"
+            oncommand="ko.commands.doCommandAsync('cmd_helpXSLTRef_Web', event);"
+            desc="&helpXSLTReferenceWeb.desc;"/>
+        <command
+            id="cmd_helpXSLTMailingLists" key="key_cmd_helpXSLTMailingLists"
+            oncommand="ko.commands.doCommandAsync('cmd_helpXSLTMailingLists', event);"
+            desc="&helpXSLTMailingLists.desc;"/>
+        <command
+            id="cmd_helpKomodoMailLists" key="key_cmd_helpKomodoMailLists"
+            oncommand="ko.commands.doCommandAsync('cmd_helpKomodoMailLists', event)"
+            desc="&helpKomodoDiscussMailingListArchives.desc;"/>
+        <command
+            id="cmd_helpActiveState" key="key_cmd_helpActiveState"
+            oncommand="ko.commands.doCommandAsync('cmd_helpActiveState', event)"
+            desc="&helpActiveStateWebsite.desc;"/>
+        <command
+            id="cmd_helpASPN" key="key_cmd_helpASPN"
+            oncommand="ko.commands.doCommandAsync('cmd_helpASPN', event)"
+            desc="&helpActiveStateProgrammerNetwork.desc;"/>
+        <command
+            id="cmd_helpCommunity" key="key_cmd_helpCommunity"
+            oncommand="ko.commands.doCommandAsync('cmd_helpCommunity', event)"
+            desc="&helpKomodoCommunity.desc;"/>
+        <command
+            id="cmd_helpViewBugs" key="key_cmd_helpViewBugs"
+            oncommand="ko.commands.doCommandAsync('cmd_helpViewBugs', event)"
+            desc="&helpKomodoBugDatabase.desc;"/>
+        <command
+            id="cmd_helpAbout" key="key_cmd_helpAbout"
+            oncommand="ko.commands.doCommandAsync('cmd_helpAbout', event)"
+            desc="&helpAboutKomodo.desc;"/>
+        <command
+            id="cmd_helpLanguage" key="key_cmd_helpLanguage"
+            oncommand="ko.commands.doCommandAsync('cmd_helpLanguage', event)"
+            desc="&helpLanguageSpecificHelpOnSelection.desc;"/>
+        <command
+            id="cmd_helpLanguageAlternate" key="key_cmd_helpLanguageAlternate"
+            oncommand="ko.commands.doCommandAsync('cmd_helpLanguageAlternate', event)"
+            desc="&helpAlternateHelpOnSelection.desc;"/>
+        <command
+            id="cmd_helpViewErrorLog" key="key_cmd_helpViewErrorLog"
+            oncommand="ko.commands.doCommandAsync('cmd_helpViewErrorLog', event)"
+            desc="&helpTroubleshootingViewErrorLog.desc;"/>
+        <command
+            id="cmd_komodoMemoryUsage" key="key_cmd_komodoMemoryUsage"
+            oncommand="ko.commands.doCommandAsync('cmd_komodoMemoryUsage', event)"
+            desc="&komodoMemoryUsage.desc;"/>
+        <command
+            id="cmd_helpContactUs" key="key_cmd_helpContactUs"
+            oncommand="ko.commands.doCommandAsync('cmd_helpContactUs', event)"
+            desc="&helpTroubleshootingContactUs.desc;"/>
+        <command
+            id="cmd_toolsWatchFile" key="key_cmd_toolsWatchFile"
+            interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_toolsWatchFile', event)"
+            desc="&toolsWatchFile.desc;"/>
+        <command
+            id="cmd_toolsRunCommand" key="key_cmd_toolsRunCommand"
+            interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_toolsRunCommand', event)"
+            desc="&toolsRunCommand.desc;"/>
+<!-- #if WITH_RX -->
+        <command
+            id="cmd_toolsRx" key="key_cmd_toolsRx"
+            oncommand="ko.commands.doCommandAsync('cmd_toolsRx', event)"
+            desc="&toolsRxToolkit.desc;"/>
+<!-- #endif -->
+        <!-- cmd_open MUST NOT be async in order for xpi install to work -->
+        <command
+            id="cmd_open" key="key_cmd_open"
+            oncommand="ko.commands.doCommand('cmd_open')"
+            desc="&generalOpenFileDialog.desc;"/>
+        <command
+            id="cmd_reopenLastClosedTab"
+            key="key_cmd_reopenLastClosedTab"
+            oncommand="ko.history.open_rctab(-1);"
+            desc="&reopenLastClosedTab.desc;"/>
+        <command
+            id="cmd_open_remote" key="key_cmd_open_remote"
+            oncommand="ko.commands.doCommandAsync('cmd_open_remote', event)"
+            desc="&generalOpenRemoteFileDialog.desc;"/>
+        <command
+            id="cmd_printSetup" key="key_cmd_printSetup"
+            oncommand="ko.commands.doCommandAsync('cmd_printSetup', event)"
+            desc="&generalPrintSetup.desc;"/>
+        <command
+            id="cmd_new" key="key_cmd_new"
+            oncommand="ko.commands.doCommandAsync('cmd_new', event);"
+            desc="&generalNewFileDefaultType.desc;"/>
+        <command
+            id="cmd_newTab" key="key_cmd_newTab"
+            oncommand="ko.commands.doCommandAsync('cmd_newTab', event);"
+            desc="&generalNewTab.desc;"/>
+        <command
+            id="cmd_newTemplate" key="key_cmd_newTemplate"
+            oncommand="ko.commands.doCommandAsync('cmd_newTemplate', event)"
+            desc="&generalNewFile.desc;"/>
+        <command
+            id="cmd_showQuicklaunch" key="key_cmd_showQuicklaunch"
+            oncommand="ko.commands.doCommandAsync('cmd_showQuicklaunch', event)"
+            desc="&showQuicklaunch.desc;"/>
+<!-- #if PLATFORM == "darwin" -->
+        <!-- The "Hide Komodo" and "Hide Others" App menu items; these keys
+             aren't customizable, so don't give them desc= attributes (which
+             means they won't show up in the key bindings prefs).  Ideally they
+             would instead show up but can't be changed, though.  Ah well.
+          -->
+        <command
+            id="cmd_hideThisAppCmdMac" key="key_hideThisAppCmdMac"
+            oncommand="/* avoid double flash of app menu (bug 80666) */"/>
+        <command
+            id="cmd_hideOtherAppsCmdMac" key="key_hideOtherAppsCmdMac"
+            oncommand="/* avoid double flash of app menu (bug 80666) */"/>
+<!-- #endif -->
+        <command
+            id="cmd_quit" key="key_cmd_quit"
+            oncommand="ko.commands.doCommandAsync('cmd_quit', event)"
+            desc="&generalQuit.desc;"/>
+        <command
+            id="cmd_focusProjectPane" key="key_cmd_focusProjectPane"
+            oncommand="ko.commands.doCommandAsync('cmd_focusProjectPane', event)"
+            desc="&userInterfaceFocusOnProjectsPane.desc;"/>
+        <command
+            id="cmd_focusToolboxPane" key="key_cmd_focusToolboxPane"
+            oncommand="ko.commands.doCommandAsync('cmd_focusToolboxPane', event)"
+            desc="&userInterfaceFocusOnToolboxPane.desc;"/>
+        <command
+            id="cmd_focusBottomPane" key="key_cmd_focusBottomPane"
+            oncommand="ko.commands.doCommandAsync('cmd_focusBottomPane', event)"
+            desc="&userInterfaceFocusOnBottomPane.desc;"/>
+        <command
+            id="cmd_focusEditor" key="key_cmd_focusEditor"
+            oncommand="ko.commands.doCommandAsync('cmd_focusEditor', event)"
+            desc="&userInterfaceFocusOnEditor.desc;"/>
+        <!-- XXX we need a command set that enables/dissabled depending
+            simply on whether a view in the editor has focus -->
+        <command
+            id="cmd_focusSource" key="key_cmd_focusSource"
+            oncommand="ko.commands.doCommandAsync('cmd_focusSource', event)"
+            desc="&userInterfaceViewSource.desc;"/>
+
+        <command
+            id="cmd_newProject" key="key_cmd_newProject"
+            oncommand="ko.commands.doCommandAsync('cmd_newProject', event)"
+            desc="&generalNewProject.desc;"/>
+        <command
+            id="cmd_openProject" key="key_cmd_openProject"
+            oncommand="ko.commands.doCommandAsync('cmd_openProject', event)"
+            desc="&generalOpenProject.desc;"/>
+        <command
+            id="cmd_sampleProject" key="key_cmd_sampleProject"
+            oncommand="ko.commands.doCommandAsync('cmd_sampleProject', event)"
+            desc="&generalSampleProject.desc;"/>
+        <command
+            id="cmd_openProjectNewWindow" key="key_cmd_openProjectNewWindow"
+            oncommand="ko.commands.doCommandAsync('cmd_openProjectNewWindow', event)"
+            desc="&generalOpenProjectInNewWindow.desc;"/>
+	<command
+            id="cmd_projectOpenRemoteProject" key="key_cmd_projectOpenRemoteProject"
+            oncommand="ko.commands.doCommandAsync('cmd_openRemoteProject', event)"
+            desc="&generalOpenRemoteProject.desc;"/>
+        <command
+            id="cmd_saveAll" key="key_cmd_saveAll"
+            oncommand="ko.commands.doCommandAsync('cmd_saveAll', event)"
+            desc="&generalSaveAll.desc;"/>
+        <command
+            id="cmd_toggleOvertype" key="key_cmd_toggleOvertype"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleOvertype', event)"
+            desc="&editorToggleOvertypeInsertMode.desc;"/>
+
+        <command
+            id="cmd_cancel" key="key_cmd_cancel"
+            oncommand="ko.commands.doCommandAsync('cmd_cancel', event)"
+            desc="&editorCancelAutoComplete.desc;"/>
+
+        <!--We don't want this command to be mucked with, so mark
+            it 'invisible'-->
+        <command
+            id="cmd_prefix"
+            oncommand="ko.keybindings.manager.keypressHandler(event)"
+            invisible="true"
+            />
+        <command
+            id="cmd_callPart"
+            interactive="true"
+            invisible="true"
+            docommand="try { ko.projects.invokePartById(_param) ;} catch (e) { log.exception(e); }"
+            oncommand="ko.keybindings.manager.keypressHandler(event)"
+            />
+
+        <command
+            id="cmd_findInFiles" key="key_cmd_findInFiles"
+            interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_findInFiles', event)"
+            desc="&findFindInFiles.desc;"/>
+        <command
+            id="cmd_replaceInFiles" key="key_cmd_replaceInFiles"
+            interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_replaceInFiles', event)"
+            desc="&findReplaceInFiles.desc;"/>
+        <command
+            id="cmd_left" key="key_cmd_left"
+            oncommand="ko.commands.doCommand('cmd_left')"
+            desc="&editorMoveLeftOneCharacter.desc;"/>
+        <command
+            id="cmd_right" key="key_cmd_right"
+            oncommand="ko.commands.doCommand('cmd_right')"
+            desc="&editorMoveOneCharacterRight.desc;"/>
+        <command
+            id="cmd_homeAbsolute" key="key_cmd_homeAbsolute"
+            oncommand="ko.commands.doCommand('cmd_homeAbsolute')"
+            desc="&editorBeginningOfLine.desc;"/>
+        <command
+            id="cmd_home" key="key_cmd_home"
+            oncommand="ko.commands.doCommand('cmd_home')"
+            desc="&editorBeginningOfLineFirstVisibleCharFirstColumn.desc;"/>
+        <command
+            id="cmd_end" key="key_cmd_end"
+            oncommand="ko.commands.doCommand('cmd_end')"
+            desc="&editorEndOfLine.desc;"/>
+        <command
+            id="cmd_selectHome" key="key_cmd_selectHome"
+            oncommand="ko.commands.doCommand('cmd_selectHome')"
+            desc="&editorSelectToBeginningOfLineFirstCharFirstColumn.desc;"/>
+        <command
+            id="cmd_selectHomeAbsolute" key="key_cmd_selectHomeAbsolute"
+            oncommand="ko.commands.doCommand('cmd_selectHomeAbsolute')"
+            desc="&editorSelectToBeginningOfLineAnyCharFirstColumn.desc;"/>
+        <command
+            id="cmd_selectEnd" key="key_cmd_selectEnd"
+            oncommand="ko.commands.doCommand('cmd_selectEnd')"
+            desc="&editorSelectToEndOfLine.desc;"/>
+        <command
+            id="cmd_documentHome" key="key_cmd_documentHome"
+            oncommand="ko.commands.doCommand('cmd_documentHome')"
+            desc="&editorGoToTopOfDocument.desc;"/>
+        <command
+            id="cmd_documentEnd" key="key_cmd_documentEnd"
+            oncommand="ko.commands.doCommand('cmd_documentEnd')"
+            desc="&editorGoToEndOfDocument.desc;"/>
+        <command
+            id="cmd_selectDocumentHome" key="key_cmd_selectDocumentHome"
+            oncommand="ko.commands.doCommand('cmd_selectDocumentHome')"
+            desc="&editorSelectToTopOfDocument.desc;"/>
+        <command
+            id="cmd_selectDocumentEnd" key="key_cmd_selectDocumentEnd"
+            oncommand="ko.commands.doCommand('cmd_selectDocumentEnd')"
+            desc="&editorSelectToEndOfDocument.desc;"/>
+        <command
+            id="cmd_linePrevious" key="key_cmd_linePrevious"
+            oncommand="ko.commands.doCommand('cmd_linePrevious')"
+            desc="&editorGoToPreviousLine.desc;"/>
+        <command
+            id="cmd_lineNext" key="key_cmd_lineNext"
+            oncommand="ko.commands.doCommand('cmd_lineNext')"
+            desc="&editorGoToNextLine.desc;"/>
+        <command
+            id="cmd_selectLinePrevious" key="key_cmd_selectLinePrevious"
+            oncommand="ko.commands.doCommand('cmd_selectLinePrevious')"
+            desc="&editorSelectToPreviousLine.desc;"/>
+        <command
+            id="cmd_selectLineNext" key="key_cmd_selectLineNext"
+            oncommand="ko.commands.doCommand('cmd_selectLineNext')"
+            desc="&editorSelectToNextLine.desc;"/>
+        <command
+            id="cmd_lineScrollUp" key="key_cmd_lineScrollUp"
+            oncommand="ko.commands.doCommand('cmd_lineScrollUp')"
+            desc="&editorScrollOneLineUp.desc;"/>
+        <command
+            id="cmd_lineScrollDown" key="key_cmd_lineScrollDown"
+            oncommand="ko.commands.doCommand('cmd_lineScrollDown')"
+            desc="&editorScrollOneLineDown.desc;"/>
+        <command
+            id="cmd_wordLeft" key="key_cmd_wordLeft"
+            oncommand="ko.commands.doCommand('cmd_wordLeft')"
+            desc="&editorMoveOneWordLeft.desc;"/>
+        <command
+            id="cmd_wordLeftSameLine" key="key_cmd_wordLeftSameLine"
+            oncommand="ko.commands.doCommand('cmd_wordLeftSameLine')"
+            desc="&editorMoveOneWordLeftSameLine.desc;"/>
+        <command
+            id="cmd_wordLeftEnd" key="key_cmd_wordLeftEnd"
+            oncommand="ko.commands.doCommand('cmd_wordLeftEnd')"
+            desc="&editorMoveToEndOfWordToLeft.desc;"/>
+        <command
+            id="cmd_wordRight" key="key_cmd_wordRight"
+            oncommand="ko.commands.doCommand('cmd_wordRight')"
+            desc="&editorMoveOneWordRight.desc;"/>
+        <command
+            id="cmd_wordRightSameLine" key="key_cmd_wordRightSameLine"
+            oncommand="ko.commands.doCommand('cmd_wordRightSameLine')"
+            desc="&editorMoveOneWordRightSameLine.desc;"/>
+        <command
+            id="cmd_selectWordLeft" key="key_cmd_selectWordLeft"
+            oncommand="ko.commands.doCommand('cmd_selectWordLeft')"
+            desc="&editorSelectPreviousWord.desc;"/>
+        <command
+            id="cmd_selectWordLeftSameLine" key="key_cmd_selectWordLeftSameLine"
+            oncommand="ko.commands.doCommand('cmd_selectWordLeftSameLine')"
+            desc="&editorSelectPreviousWordSameLine.desc;"/>
+        <command
+            id="cmd_selectWordRight" key="key_cmd_selectWordRight"
+            oncommand="ko.commands.doCommand('cmd_selectWordRight')"
+            desc="&editorSelectNextWord.desc;"/>
+        <command
+            id="cmd_selectWordRightSameLine" key="key_cmd_selectWordRightSameLine"
+            oncommand="ko.commands.doCommand('cmd_selectWordRightSameLine')"
+            desc="&editorSelectNextWordSameLine.desc;"/>
+        <command
+            id="cmd_wordPartLeft" key="key_cmd_wordPartLeft"
+            oncommand="ko.commands.doCommand('cmd_wordPartLeft')"
+            desc="&editorMoveBackPartOfWord.desc;"/>
+        <command
+            id="cmd_wordPartLeftSameLine" key="key_cmd_wordPartLeftSameLine"
+            oncommand="ko.commands.doCommand('cmd_wordPartLeftSameLine')"
+            desc="&editorMoveBackPartOfWordSameLine.desc;"/>
+        <command
+            id="cmd_wordPartRight" key="key_cmd_wordPartRight"
+            oncommand="ko.commands.doCommand('cmd_wordPartRight')"
+            desc="&editorMoveForwardPartOfWord.desc;"/>
+        <command
+            id="cmd_wordPartRightSameLine" key="key_cmd_wordPartRightSameLine"
+            oncommand="ko.commands.doCommand('cmd_wordPartRightSameLine')"
+            desc="&editorMoveForwardPartOfWordSameLine.desc;"/>
+        <command
+            id="cmd_wordPartLeftExtend" key="key_cmd_wordPartLeftExtend"
+            oncommand="ko.commands.doCommand('cmd_wordPartLeftExtend')"
+            desc="&editorSelectPreviousPartOfWord.desc;"/>
+        <command
+            id="cmd_wordPartLeftExtendSameLine" key="key_cmd_wordPartLeftExtendSameLine"
+            oncommand="ko.commands.doCommand('cmd_wordPartLeftExtendSameLine')"
+            desc="&editorSelectPreviousPartOfWordSameLine.desc;"/>
+        <command
+            id="cmd_wordPartRightExtend" key="key_cmd_wordPartRightExtend"
+            oncommand="ko.commands.doCommand('cmd_wordPartRightExtend')"
+            desc="&editorSelectNextPartOfWord.desc;"/>
+        <command
+            id="cmd_wordPartRightExtendSameLine" key="key_cmd_wordPartRightExtendSameLine"
+            oncommand="ko.commands.doCommand('cmd_wordPartRightExtendSameLine')"
+            desc="&editorSelectNextPartOfWordSameLine.desc;"/>
+        <command
+            id="cmd_selectWordUnderCursor" key="key_cmd_selectWordUnderCursor"
+            oncommand="ko.commands.doCommand('cmd_selectWordUnderCursor')"
+            desc="&editorSelectWordUnderCursor.desc;"/>
+        <command
+            id="cmd_selectCharPrevious" key="key_cmd_selectCharPrevious"
+            oncommand="ko.commands.doCommand('cmd_selectCharPrevious')"
+            desc="&editorSelectPreviousCharacter.desc;"/>
+        <command
+            id="cmd_selectCharNext" key="key_cmd_selectCharNext"
+            oncommand="ko.commands.doCommand('cmd_selectCharNext')"
+            desc="&editorSelectNextCharacter.desc;"/>
+        <command
+            id="cmd_selectRectLinePrevious" key="key_cmd_selectRectLinePrevious"
+            oncommand="ko.commands.doCommand('cmd_selectRectLinePrevious')"
+            desc="&editorSelectRectangularToPreviousLine.desc;"/>
+        <command
+            id="cmd_selectRectLineNext" key="key_cmd_selectRectLineNext"
+            oncommand="ko.commands.doCommand('cmd_selectRectLineNext')"
+            desc="&editorSelectRectangularToNextLine.desc;"/>
+        <command
+            id="cmd_selectRectCharPrevious" key="key_cmd_selectRectCharPrevious"
+            oncommand="ko.commands.doCommand('cmd_selectRectCharPrevious')"
+            desc="&editorSelectRectangularPreviousCharacter.desc;"/>
+        <command
+            id="cmd_selectRectCharNext" key="key_cmd_selectRectCharNext"
+            oncommand="ko.commands.doCommand('cmd_selectRectCharNext')"
+            desc="&editorSelectRectangularNextCharacter.desc;"/>
+        <command
+            id="cmd_selectRectPageUp" key="key_cmd_selectRectPageUp"
+            oncommand="ko.commands.doCommand('cmd_selectRectPageUp')"
+            desc="&editorSelectRectangularPageUp.desc;"/>
+        <command
+            id="cmd_selectRectPageDown" key="key_cmd_selectRectPageDown"
+            oncommand="ko.commands.doCommand('cmd_selectRectPageDown')"
+            desc="&editorSelectRectangularPageDown.desc;"/>
+        <command
+            id="cmd_selectRectHome" key="key_cmd_selectRectHome"
+            oncommand="ko.commands.doCommand('cmd_selectRectHome')"
+            desc="&editorSelectRectangularToBeginningOfLineFirstCharFirstColumn.desc;"/>
+        <command
+            id="cmd_selectRectEnd" key="key_cmd_selectRectEnd"
+            oncommand="ko.commands.doCommand('cmd_selectRectEnd')"
+            desc="&editorSelectRectangularToEndOfLine.desc;"/>
+        <command
+            id="cmd_pageUp" key="key_cmd_pageUp"
+            oncommand="ko.commands.doCommand('cmd_pageUp')"
+            desc="&editorPageUp.desc;"/>
+        <command
+            id="cmd_pageDown" key="key_cmd_pageDown"
+            oncommand="ko.commands.doCommand('cmd_pageDown')"
+            desc="&editorPageDown.desc;"/>
+        <command
+            id="cmd_selectPageUp" key="key_cmd_selectPageUp"
+            oncommand="ko.commands.doCommand('cmd_selectPageUp')"
+            desc="&editorSelectPageUp.desc;"/>
+        <command
+            id="cmd_selectPageDown" key="key_cmd_selectPageDown"
+            oncommand="ko.commands.doCommand('cmd_selectPageDown')"
+            desc="&editorSelectPageDown.desc;"/>
+        <command
+            id="cmd_editSelectAll" key="key_cmd_editSelectAll"
+            oncommand="ko.commands.doCommand('cmd_selectAll')"
+            desc="&editorSelectAllDeprecatedBinding.desc;"/>
+        <command
+            id="cmd_selectAll" key="key_cmd_selectAll"
+            oncommand="ko.commands.doCommand('cmd_selectAll')"
+            desc="&editorSelectAll.desc;"/>
+        <command
+            id="cmd_endOfWord" key="key_cmd_endOfWord"
+            oncommand="ko.commands.doCommand('cmd_endOfWord')"
+            desc="&editorGoToEndOfWord.desc;"/>
+        <command
+            id="cmd_endOfWordExtend" key="key_cmd_endOfWordExtend"
+            oncommand="ko.commands.doCommand('cmd_endOfWordExtend')"
+            desc="&editorSelectToEndOfWord.desc;"/>
+        <command
+            id="cmd_beginningOfWord" key="key_cmd_beginningOfWord"
+            oncommand="ko.commands.doCommand('cmd_beginningOfWord')"
+            desc="&editorGoToBeginningOfWord.desc;"/>
+        <command
+            id="cmd_beginningOfWordExtend" key="key_cmd_beginningOfWordExtend"
+            oncommand="ko.commands.doCommand('cmd_beginningOfWordExtend')"
+            desc="&editorSelectToBeginningOfWord.desc;"/>
+        <command
+            id="cmd_paraUp" key="key_cmd_paraUp"
+            oncommand="ko.commands.doCommand('cmd_paraUp')"
+            desc="&editorParaUp.desc;"/>
+        <command
+            id="cmd_paraDown" key="key_cmd_paraDown"
+            oncommand="ko.commands.doCommand('cmd_paraDown')"
+            desc="&editorParaDown.desc;"/>
+        <!-- The remaining ones are only available when a read/write
+             editor has focus: optimization possible -->
+        <command
+            id="cmd_back" key="key_cmd_back"
+            oncommand="ko.commands.doCommand('cmd_back')"
+            desc="&editorBack.desc;"/>
+        <command
+            id="cmd_deleteWordLeft" key="key_cmd_deleteWordLeft"
+            oncommand="ko.commands.doCommand('cmd_deleteWordLeft')"
+            desc="&editorDeleteWordLeft.desc;"/>
+        <command
+            id="cmd_deleteWordRight" key="key_cmd_deleteWordRight"
+            oncommand="ko.commands.doCommand('cmd_deleteWordRight')"
+            desc="&editorDeleteWordRight.desc;"/>
+        <command
+            id="cmd_newline" key="key_cmd_newline"
+            oncommand="ko.commands.doCommand('cmd_newline')"
+            desc="&editorInsertNewline.desc;"/>
+        <command
+            id="cmd_newlineExtra" key="key_cmd_newlineExtra"
+            oncommand="ko.commands.doCommand('cmd_newlineExtra')"
+            desc="&editorInsertNewlineContinueComments.desc;"/>
+        <command
+            id="cmd_newlineBare" key="key_cmd_newlineBare"
+            oncommand="ko.commands.doCommand('cmd_newlineBare')"
+            desc="&editorInsertNewlineNoFavors.desc;"/>
+        <command
+            id="cmd_newlineSame" key="key_cmd_newlineSame"
+            oncommand="ko.commands.doCommand('cmd_newlineSame')"
+            desc="&editorInsertNewlineAlignWithCurrentLine.desc;"/>
+        <command
+            id="cmd_newlinePrevious" key="key_cmd_newlinePrevious"
+            oncommand="ko.commands.doCommand('cmd_newlinePrevious')"
+            desc="&editorInsertNewlineStartingOnThePreviousLine.desc;"/>
+        <command
+            id="cmd_backSmart" key="key_cmd_backSmart"
+            oncommand="ko.commands.doCommand('cmd_backSmart')"
+            desc="&editorBackspace.desc;"/>
+
+        <command
+            id="cmd_selectToMatchingBrace" key="key_cmd_selectToMatchingBrace"
+            oncommand="ko.commands.doCommand('cmd_selectToMatchingBrace')"
+            desc="&sourceCodeSelectToMatchingBrace.desc;"/>
+        <command
+            id="cmd_jumpToMatchingBrace" key="key_cmd_jumpToMatchingBrace"
+            oncommand="ko.commands.doCommand('cmd_jumpToMatchingBrace')"
+            desc="&sourceCodeJumpToMatchingBrace.desc;"/>
+
+	<!-- emacs commands -->
+        <command
+            id="cmd_openLine" key="key_cmd_openLine"
+            oncommand="ko.commands.doCommand('cmd_openLine')"
+            desc="&openLine.desc;"/>
+        <command
+            id="cmd_splitLine" key="key_cmd_splitLine"
+            oncommand="ko.commands.doCommand('cmd_splitLine')"
+            desc="&splitLine.desc;"/>
+        <command
+            id="cmd_deleteBlankLines" key="key_cmd_deleteBlankLines"
+            oncommand="ko.commands.doCommand('cmd_deleteBlankLines')"
+            desc="&deleteBlankLines.desc;"/>
+        <command
+            id="cmd_paste" key="key_cmd_paste"
+            oncommand="ko.commands.doCommand('cmd_paste')"
+            desc="&editorPaste.desc;"/>
+
+        <command
+            id="cmd_buffer1" key="key_cmd_buffer1"
+            oncommand="ko.commands.doCommandAsync('cmd_buffer1', event)"
+            disabled="true"
+            desc="&generalSwitchToTab1.desc;"/>
+        <command
+            id="cmd_buffer2" key="key_cmd_buffer2"
+            oncommand="ko.commands.doCommandAsync('cmd_buffer2', event)"
+            disabled="true"
+            desc="&generalSwitchToTab2.desc;"/>
+        <command
+            id="cmd_buffer3" key="key_cmd_buffer3"
+            oncommand="ko.commands.doCommandAsync('cmd_buffer3', event)"
+            disabled="true"
+            desc="&generalSwitchToTab3.desc;"/>
+        <command
+            id="cmd_buffer4" key="key_cmd_buffer4"
+            oncommand="ko.commands.doCommandAsync('cmd_buffer4', event)"
+            disabled="true"
+            desc="&generalSwitchToTab4.desc;"/>
+        <command
+            id="cmd_buffer5" key="key_cmd_buffer5"
+            oncommand="ko.commands.doCommandAsync('cmd_buffer5', event)"
+            disabled="true"
+            desc="&generalSwitchToTab5.desc;"/>
+        <command
+            id="cmd_buffer6" key="key_cmd_buffer6"
+            oncommand="ko.commands.doCommandAsync('cmd_buffer6', event)"
+            disabled="true"
+            desc="&generalSwitchToTab6.desc;"/>
+        <command
+            id="cmd_buffer7" key="key_cmd_buffer7"
+            oncommand="ko.commands.doCommandAsync('cmd_buffer7', event)"
+            disabled="true"
+            desc="&generalSwitchToTab7.desc;"/>
+        <command
+            id="cmd_buffer8" key="key_cmd_buffer8"
+            oncommand="ko.commands.doCommandAsync('cmd_buffer8', event)"
+            disabled="true"
+            desc="&generalSwitchToTab8.desc;"/>
+        <command
+            id="cmd_buffer9" key="key_cmd_buffer9"
+            oncommand="ko.commands.doCommandAsync('cmd_buffer9', event)"
+            disabled="true"
+            desc="&generalSwitchToTab9.desc;"/>
+        <command
+            id="cmd_togglePanels" key="key_cmd_togglePanels"
+            oncommand="ko.commands.doCommandAsync('cmd_togglePanels', event)"
+            disabled="true"
+            desc="&generalTogglePanels.desc;"/>
+    </broadcasterset>
+
+<!--
+    The following commandsets need a specific set of events to be sent
+    in response to particular changes in things like selection, who
+    has focus, whether views are open, etc.
+
+    In each of these cases, it is "ok" for notifications to be sent more
+    often than specified below - however command updates can have
+    _major_ performance implications, so while the behavior will be
+    correct, it will be slower than necessary.
+
+    See the howto-events.txt file for definition of the events.
+
+-->
+
+
+    <!-- Enabled or not depending on the state of the undo stack,
+         which depends on the current file and only is available
+         if the editor has focus
+         -->
+    <commandset
+        id="cmdset_undo"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="undo,currentview_is_editor,current_view_changed">
+        <command
+            id="cmd_undo" key="key_cmd_undo"
+            oncommand="ko.commands.doCommand('cmd_undo')"
+            disabled="true"
+            desc="&editorUndo.desc;"/>
+        <command
+            id="cmd_redo" key="key_cmd_redo"
+            oncommand="ko.commands.doCommand('cmd_redo')"
+            disabled="true"
+            desc="&editorRedo.desc;"/>
+    </commandset>
+
+    <commandset
+        id="cmdset_macros"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="macro"
+        >
+        <command
+            id="cmd_macroNew" key="key_cmd_macroNew"
+            oncommand="ko.commands.doCommandAsync('cmd_macroNew', event)"
+            desc="&macroNew.command.desc;" />
+        <!-- Available whenever we are recording -->
+        <command
+            id="cmd_startMacroMode" key="key_cmd_startMacroMode"
+            interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_startMacroMode', event)"
+            desc="&macroStartResumeRecording.desc;" />
+        <!-- Available whenever we are recording -->
+        <command
+            id="cmd_pauseMacroMode" key="key_cmd_pauseMacroMode"
+            interactive="true"
+            disabled="true"
+            oncommand="ko.commands.doCommandAsync('cmd_pauseMacroMode', event)"
+            desc="&macroPauseRecording.desc;" />
+        <command
+            id="cmd_stopMacroMode" key="key_cmd_stopMacroMode" interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_stopMacroMode', event)"
+            disabled="true"
+            desc="&macroEndRecording.desc;"/>
+        <!-- Available whenever we have a current macro -->
+        <command
+            id="cmd_executeLastMacro" key="key_cmd_executeLastMacro" interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_executeLastMacro', event)"
+            disabled="true"
+            desc="&macroExecuteLastMacro.desc;"/>
+        <!-- Available whenever we have a current macro -->
+        <command
+            id="cmd_saveMacroToToolbox" key="key_cmd_saveMacroToToolbox" interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_saveMacroToToolbox', event)"
+            disabled="true"
+            desc="&macroSaveToToolbox.desc;"/>
+    </commandset>
+
+    <commandset
+        id="cmdset_more_than_one_view"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="second_view_open_close"
+        >
+        <command
+            id="cmd_bufferNext" key="key_cmd_bufferNext"
+            oncommand="ko.commands.doCommandAsync('cmd_bufferNext', event)"
+            disabled="true"
+            desc="&generalNextFile.desc;"/>
+        <command
+            id="cmd_bufferPrevious" key="key_cmd_bufferPrevious"
+            oncommand="ko.commands.doCommandAsync('cmd_bufferPrevious', event)"
+            disabled="true"
+            desc="&generalPreviousFile.desc;"/>
+        <command
+            id="cmd_bufferNextMostRecent" key="key_cmd_bufferNextMostRecent"
+            oncommand="ko.commands.doCommandAsync('cmd_bufferNextMostRecent', event)"
+            disabled="true"
+            desc="&generalMostRecentlyViewedFile.desc;"/>
+        <command
+            id="cmd_bufferNextLeastRecent" key="key_cmd_bufferNextLeastRecent"
+            oncommand="ko.commands.doCommandAsync('cmd_bufferNextLeastRecent', event)"
+            disabled="true"
+            desc="&generalLeastRecentlyViewedFile.desc;"/>
+        <command
+            id="cmd_bufferCloseOthers" key="key_cmd_bufferCloseOthers"
+            oncommand="ko.commands.doCommandAsync('cmd_bufferCloseOthers', event)"
+            desc="&editorCloseOtherBuffers.desc;"
+            disabled="true"
+            />
+    </commandset>
+
+    <!-- Commands that need to be updated when the first file
+            is opened or the last file is closed. -->
+    <commandset
+        id="cmdset_some_files_open"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="some_files_open"
+        >
+        <command
+            id="cmd_bufferClose" key="key_cmd_bufferClose"
+            oncommand="ko.commands.doCommandAsync('cmd_bufferClose', event)"
+            desc="&editorCloseCurrentBuffer.desc;"
+            disabled="true"
+            />
+        <command
+            id="cmd_closeAll" key="key_cmd_closeAll"
+            oncommand="ko.commands.doCommandAsync('cmd_closeAll', event)"
+            desc="&editorCloseAllBuffers.desc;"
+            disabled="true"
+            />
+        <command
+            id="cmd_refreshStatus" key="key_cmd_refreshStatus"
+            oncommand="ko.commands.doCommandAsync('cmd_refreshStatus', event)"
+            disabled="true"
+            desc="&generalRefreshStatus.desc;"/>
+        <command
+            id="cmd_movetab" key="key_cmd_movetab"
+            oncommand="ko.commands.doCommandAsync('cmd_movetab', event)"
+            disabled="true"
+            desc="&userInterfaceMoveTabToAnotherTabWindow.desc;"/>
+        <command
+            id="cmd_splittab" key="key_cmd_splittab"
+            oncommand="ko.commands.doCommandAsync('cmd_splittab', event)"
+            disabled="true"
+            desc="&userInterfaceSplitViewOfTab.desc;"/>
+        <command
+            id="cmd_switchpane" key="key_cmd_switchpane"
+            oncommand="ko.commands.doCommandAsync('cmd_switchpane', event)"
+            disabled="true"
+            desc="&userInterfaceFocusOtherSplitEditorPane.desc;"/>
+    </commandset>
+
+
+    <commandset
+        id="cmdset_view_dependent"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="current_view_changed,buffer_context_menu_showing,buffertab_context_menu_showing"
+        >
+        <command
+            id="cmd_linkViews" key="key_cmd_linkViews"
+            oncommand="ko.commands.doCommandAsync('cmd_linkViews', event)"
+            disabled="true"
+            desc="&linkViewsCmd.desc;"/>
+        <command
+            id="cmd_unlinkViews" key="key_cmd_unlinkViews"
+            oncommand="ko.commands.doCommandAsync('cmd_unlinkViews', event)"
+            disabled="true"
+            desc="&unlinkViewsCmd.desc;"/>
+        <command
+            id="cmd_rotateSplitter" key="key_cmd_rotateSplitter"
+            oncommand="ko.commands.doCommandAsync('cmd_rotateSplitter', event)"
+            disabled="true"
+            desc="&userInterfaceToggleSplitterOrientation.desc;"/>
+        <command
+            id="cmd_openTabInNewWindow" key="key_cmd_openTabInNewWindow"
+            oncommand="ko.commands.doCommandAsync('cmd_openTabInNewWindow', event)"
+            disabled="true"
+            desc="&userInterfaceOpenTabInANewWindow.desc;" />
+        <command
+            id="cmd_moveTabToNewWindow" key="key_cmd_moveTabToNewWindow"
+            oncommand="ko.commands.doCommandAsync('cmd_moveTabToNewWindow', event)"
+            disabled="true"
+            desc="&userInterfaceMoveTabToANewWindow.desc;" />
+
+        <!-- Scintilla settings -->
+        <command
+            id="cmd_viewLineNumbers" key="key_cmd_viewLineNumbers"
+            type="checkbox"
+            oncommand="ko.commands.doCommandAsync('cmd_viewLineNumbers', event)"
+            disabled="true"
+            desc="&userInterfaceViewHideLineNumbers.desc;"/>
+        <command
+            id="cmd_viewIndentationGuides" key="key_cmd_viewIndentationGuides"
+            type="checkbox"
+            disabled="true"
+            oncommand="ko.commands.doCommandAsync('cmd_viewIndentationGuides', event)"
+            desc="&userInterfaceViewHideIndentationGuides.desc;"/>
+        <command
+            id="cmd_fontFixed" key="key_cmd_fontFixed"
+            disabled="true"
+            oncommand="ko.commands.doCommandAsync('cmd_fontFixed', event)"
+            desc="&userInterfaceUseFixedProportionalFont.desc;"/>
+        <command
+            id="cmd_viewWhitespace" key="key_cmd_viewWhitespace"
+            disabled="true"
+            type="checkbox"
+            oncommand="ko.commands.doCommandAsync('cmd_viewWhitespace', event)"
+            desc="&userInterfaceShowHideWhitespace.desc;"/>
+        <command
+            id="cmd_viewEOL" key="key_cmd_viewEOL"
+            type="checkbox"
+            disabled="true"
+            oncommand="ko.commands.doCommandAsync('cmd_viewEOL', event)"
+            desc="&userInterfaceShowHideEndOfLines.desc;"/>
+        <command
+            id="cmd_wordWrap" key="key_cmd_wordWrap"
+            type="checkbox"
+            oncommand="ko.commands.doCommandAsync('cmd_wordWrap', event)"
+            disabled="true"
+            desc="&userInterfaceWordWrapLongLines.desc;"/>
+        <command
+            id="cmd_reloadBrowserPreview" key="key_cmd_reloadBrowserPreview"
+            oncommand="ko.commands.doCommandAsync('cmd_reloadBrowserPreview', event)"
+            disabled="true"
+            desc="&reloadBrowserPreview.desc;"/>
+    </commandset>
+
+    <commandset
+        id="cmdset_previewability_changed"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="previewability_changed"
+        >
+        <command
+            id="cmd_browserPreview" key="key_cmd_browserPreview"
+            oncommand="ko.commands.doCommandAsync('cmd_browserPreview', event)"
+            disabled="true"
+            desc="&userInterfaceBrowserPreview.desc;"/>
+        <command
+            id="cmd_browserPreviewInternal" key="key_cmd_browserPreviewInternal"
+            oncommand="ko.commands.doCommandAsync('cmd_browserPreviewInternal', event)"
+            disabled="true"
+            desc="&userInterfaceBrowserPreviewInternal.desc;"/>
+        <command
+            id="cmd_browserPreviewInternalSameTabGroup" key="key_cmd_browserPreviewInternalSameTabGroup"
+            oncommand="ko.commands.doCommandAsync('cmd_browserPreviewInternalSameTabGroup', event)"
+            disabled="true"
+            desc="&userInterfaceBrowserPreviewInternalSameTabGroup.desc;"/>
+    </commandset>
+
+    <!-- Commands that need to be updated when focus goes from
+            an editor view to something else or vice versa
+            Performance note: it'd be nice to not update these
+            on editor losing or gaining focus since there are so
+            many of them, and the vast majority have no UI impact
+
+            Some don't even show up menus and don't need to be updated
+            at all.  The ones that show up in menus could be updated
+            on menu showing.
+    -->
+    <commandset
+        id="cmdset_currentview_is_editor_on_html"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="currentview_is_editor,current_view_changed,language_changed"
+        >
+        <command
+            id="cmd_rename_tag" key="key_cmd_rename_tag"
+            oncommand="ko.commands.doCommandAsync('cmd_rename_tag', event)"
+            disabled="true"
+            desc="&renameTag.desc;"/>
+    </commandset>
+    <commandset
+        id="cmdset_currentview_is_editor"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="currentview_is_editor"
+        >
+        <command
+            id="cmd_print" key="key_cmd_print"
+            oncommand="ko.commands.doCommandAsync('cmd_print', event)"
+            disabled="true"
+            desc="&generalPrint.desc;"/>
+<!-- #if PLATFORM != "darwin" -->
+        <command
+            id="cmd_printPreview" key="key_cmd_printPreview"
+            oncommand="ko.commands.doCommandAsync('cmd_printPreview', event)"
+            disabled="true"
+            desc="&generalPrintPreview.desc;"/>
+<!-- #endif -->
+        <command
+            id="cmd_exportHTML" key="key_cmd_exportHTML"
+            oncommand="ko.commands.doCommandAsync('cmd_exportHTML', event)"
+            disabled="true"
+            desc="&generalExportAsHTML.desc;"/>
+        <command
+            id="cmd_find" key="key_cmd_find"
+            interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_find', event)"
+            disabled="true"
+            desc="&findFind.desc;"/>
+        <command
+            id="cmd_replace" key="key_cmd_replace"
+            interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_replace', event)"
+            disabled="true"
+            desc="&findReplace.desc;"/>
+        <command
+            id="cmd_findNext" key="key_cmd_findNext"
+            oncommand="ko.commands.doCommandAsync('cmd_findNext', event)"
+            disabled="true"
+            desc="&findFindNext.desc;"/>
+        <command
+            id="cmd_findPrevious" key="key_cmd_findPrevious"
+            oncommand="ko.commands.doCommandAsync('cmd_findPrevious', event)"
+            disabled="true"
+            desc="&findFindPrevious.desc;"/>
+        <command
+            id="cmd_findNextResult" key="key_cmd_findNextResult"
+            oncommand="ko.commands.doCommandAsync('cmd_findNextResult', event)"
+            disabled="true"
+            desc="&findFindNextResult.desc;"/>
+        <command
+            id="cmd_findPrevResult" key="key_cmd_findPrevResult"
+            oncommand="ko.commands.doCommandAsync('cmd_findPrevResult', event)"
+            disabled="true"
+            desc="&findFindPrevResult.desc;"/>
+        <command
+            id="cmd_startIncrementalSearch" key="key_cmd_startIncrementalSearch"
+            interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_startIncrementalSearch', event)"
+            disabled="true"
+            desc="&findIncrementalSearch.desc;"/>
+        <command
+            id="cmd_startIncrementalSearchBackwards" key="key_cmd_startIncrementalSearchBackwards"
+            interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_startIncrementalSearchBackwards', event)"
+            disabled="true"
+            desc="&findIncrementalSearchBackwards.desc;"/>
+        <command
+            id="cmd_findHighlightVariableManual" key="keycmd_findHighlightVariableManual"
+            disabled="true"
+            oncommand="ko.commands.doCommandAsync('cmd_findHighlightVariableManual', event)"
+            desc="&findHighlightVariableManual.desc;"/>
+        <command
+            id="cmd_saveAs" key="key_cmd_saveAs"
+            oncommand="ko.commands.doCommandAsync('cmd_saveAs', event)"
+            disabled="true"
+            desc="&generalSaveAs.desc;"/>
+        <command
+            id="cmd_saveAs_remote" key="key_cmd_saveAs_remote"
+            oncommand="ko.commands.doCommandAsync('cmd_saveAs_remote', event)"
+            disabled="true"
+            desc="&generalSaveAsRemote.desc;"/>
+        <command
+            id="cmd_saveAsTemplate" key="key_cmd_saveAsTemplate"
+            oncommand="ko.commands.doCommandAsync('cmd_saveAsTemplate', event)"
+            disabled="true"
+            desc="&generalSaveAsTemplate.desc;"/>
+        <command
+            id="cmd_nextLintResult" key="key_cmd_nextLintResult"
+            oncommand="ko.commands.doCommandAsync('cmd_nextLintResult', event)"
+            disabled="true"
+            desc="&sourceCodeNextSyntaxErrorWarning.desc;"/>
+        <command
+            id="cmd_lintClearResults" key="key_cmd_lintClearResults"
+            oncommand="ko.commands.doCommandAsync('cmd_lintClearResults', event)"
+            disabled="true"
+            desc="&sourceCodeClearSyntaxErrorsWarnings.desc;"/>
+        <command
+            id="cmd_lintNow" key="key_cmd_lintNow"
+            oncommand="ko.commands.doCommandAsync('cmd_lintNow', event)"
+            disabled="true"
+            desc="&sourceCodeRunSyntaxCheck.desc;"/>
+        
+        <command
+            id="cmd_bookmarkToggle" key="key_cmd_bookmarkToggle"
+            oncommand="ko.commands.doCommandAsync('cmd_bookmarkToggle', event)"
+            disabled="true"
+            desc="&editorToggleBookmark.desc;"/>
+        <command
+            id="cmd_bookmarkRemoveAll" key="key_cmd_bookmarkRemoveAll"
+            oncommand="ko.commands.doCommandAsync('cmd_bookmarkRemoveAll', event)"
+            disabled="true"
+            desc="&editorRemoveAllBookmarks.desc;"/>
+        <command
+            id="cmd_bookmarkGotoNext" key="key_cmd_bookmarkGotoNext"
+            oncommand="ko.commands.doCommandAsync('cmd_bookmarkGotoNext', event)"
+            disabled="true"
+            desc="&editorGoToNextBookmark.desc;"/>
+        <command
+            id="cmd_bookmarkGotoPrevious" key="key_cmd_bookmarkGotoPrevious"
+            oncommand="ko.commands.doCommandAsync('cmd_bookmarkGotoPrevious', event)"
+            disabled="true"
+            desc="&editorGoToPreviousBookmark.desc;"/>
+        <command
+            id="cmd_transientMarkSet" key="key_cmd_transientMarkSet"
+            oncommand="ko.commands.doCommandAsync('cmd_transientMarkSet', event)"
+            disabled="true"
+            desc="&editorSetMark.desc;"/>
+        <command
+            id="cmd_transientMarkExchangeWithPoint" key="key_cmd_transientMarkExchangeWithPoint"
+            oncommand="ko.commands.doCommandAsync('cmd_transientMarkExchangeWithPoint', event)"
+            disabled="true"
+            desc="&editorExchangeCurrentPointAndMark.desc;"/>
+        <command
+            id="cmd_transientMarkMoveBack" key="key_cmd_transientMarkMoveBack"
+            oncommand="ko.commands.doCommandAsync('cmd_transientMarkMoveBack', event)"
+            disabled="true"
+            desc="&editorMoveToPreviousMarkInMarkRing.desc;"/>
+        <command
+            id="cmd_transientMarkPop" key="key_cmd_transientMarkPop"
+            oncommand="ko.commands.doCommandAsync('cmd_transientMarkPop', event)"
+            disabled="true"
+            desc="&editorPopTransientMark.desc;"/>
+        <command
+            id="cmd_fontZoomIn" key="key_cmd_fontZoomIn"
+            oncommand="ko.commands.doCommandAsync('cmd_fontZoomIn', event)"
+            disabled="true"
+            desc="&editorZoomFontSizeUp.desc;"/>
+        <command
+            id="cmd_fontZoomOut" key="key_cmd_fontZoomOut"
+            oncommand="ko.commands.doCommandAsync('cmd_fontZoomOut', event)"
+            disabled="true"
+            desc="&editorZoomFontSizeDown.desc;"/>
+        <command
+            id="cmd_fontZoomReset" key="key_cmd_fontZoomReset"
+            oncommand="ko.commands.doCommandAsync('cmd_fontZoomReset', event)"
+            disabled="true"
+            desc="&editorZoomFontSizeReset.desc;"/>
+        <command
+            id="cmd_gotoLine" key="key_cmd_gotoLine"
+            oncommand="ko.commands.doCommandAsync('cmd_gotoLine', event)"
+            disabled="true"
+            desc="&editorGoToLine.desc;"/>
+        <!-- cmd_viewAsLanguage exists only to enable/disable to the
+             associated popup menu - not to actually do anything. -->
+        <command
+            id="cmd_viewAsLanguage" key="key_cmd_viewAsLanguage"
+            disabled="true"/>
+        <command
+            id="cmd_viewAsGuessedLanguage" key="key_cmd_viewAsGuessedLanguage"
+            interactive="true"
+            oncommand="ko.commands.doCommandAsync('cmd_viewAsGuessedLanguage', event)"
+            disabled="true"
+            desc="&editorResetLanguageToBestGuess.desc;"/>
+
+        <command
+            id="cmd_transpose" key="key_cmd_transpose"
+            disabled="true"
+            oncommand="ko.commands.doCommandAsync('cmd_transpose', event)"
+            desc="&editorTransposeCurrentAndPreviousCharacters.desc;"/>
+        <command
+            id="cmd_transposeWords" key="key_cmd_transposeWords"
+            disabled="true"
+            oncommand="ko.commands.doCommandAsync('cmd_transposeWords', event)"
+            desc="&editorTransposeCurrentAndPreviousWords.desc;"/>
+        <command
+            id="cmd_join" key="key_cmd_join"
+            disabled="true"
+            oncommand="ko.commands.doCommand('cmd_join')"
+            desc="&editorJoinCurrentAndNextLines.desc;"/>
+        <command
+            id="cmd_lineCut" key="key_cmd_lineCut"
+            disabled="true"
+            oncommand="ko.commands.doCommand('cmd_lineCut')"
+            desc="&editorCutLine.desc;"/>
+        <command
+            id="cmd_lineDelete" key="key_cmd_lineDelete"
+            disabled="true"
+            oncommand="ko.commands.doCommand('cmd_lineDelete')"
+            desc="&editorDeleteLine.desc;"/>
+        <command
+            id="cmd_lineDuplicateUp" key="key_cmd_lineDuplicateUp"
+            disabled="true"
+            oncommand="ko.commands.doCommand('cmd_lineDuplicateUp')"
+            desc="&editorDuplicateLineUp.desc;"/>
+        <command
+            id="cmd_lineDuplicateDown" key="key_cmd_lineDuplicateDown"
+            disabled="true"
+            oncommand="ko.commands.doCommand('cmd_lineDuplicateDown')"
+            desc="&editorDuplicateLineDown.desc;"/>
+        <command
+            id="cmd_lineTransposeUp" key="key_cmd_lineTransposeUp"
+            disabled="true"
+            oncommand="ko.commands.doCommand('cmd_lineTransposeUp')"
+            desc="&editorTransposeLineUp.desc;"/>
+        <command
+            id="cmd_lineTransposeDown" key="key_cmd_lineTransposeDown"
+            disabled="true"
+            oncommand="ko.commands.doCommand('cmd_lineTransposeDown')"
+            desc="&editorTransposeLineDown.desc;"/>
+        <command
+            id="cmd_inlineSelectionDuplicateLeft" key="key_cmd_inlineSelectionDuplicateLeft"
+            disabled="true"
+            oncommand="ko.commands.doCommand('cmd_inlineSelectionDuplicateLeft')"
+            desc="&editorDuplicateSelectionLeft.desc;"/>
+        <command
+            id="cmd_inlineSelectionDuplicateRight" key="key_cmd_inlineSelectionDuplicateRight"
+            disabled="true"
+            oncommand="ko.commands.doCommand('cmd_inlineSelectionDuplicateRight')"
+            desc="&editorDuplicateSelectionRight.desc;"/>
+
+        <!-- The remaining ones are only available when a scintilla-style
+             editor has focus: optimization possible -->
+        <command
+            id="cmd_rawKey" key="key_cmd_rawKey"
+            disabled="true"
+            oncommand="ko.commands.doCommand('cmd_rawKey')"
+            desc="&editorInsertNextKeyAsLiteralCharacter.desc;"/>
+        <command
+            id="cmd_repeatNextCommandBy" key="key_cmd_repeatNextCommandBy"
+            disabled="true"
+            oncommand="ko.commands.doCommand('cmd_repeatNextCommandBy')"
+            desc="&editorRepeatNextKeystrokeNTimes.desc;"/>
+
+        <command
+            id="cmd_indent" key="key_cmd_indent"
+            oncommand="ko.commands.doCommand('cmd_indent')"
+            disabled="true"
+            desc="&editorIncreaseLineIndent.desc;"/>
+        <command
+            id="cmd_indent_always" key="key_cmd_indent_always"
+            oncommand="ko.commands.doCommand('cmd_indent_always')"
+            disabled="true"
+            desc="&editorIncreaseLineIndentAlways.desc;"/>
+        <command
+            id="cmd_dedent" key="key_cmd_dedent"
+            oncommand="ko.commands.doCommand('cmd_dedent')"
+            disabled="true"
+            desc="&editorDecreaseLineIndent.desc;"/>
+        <command
+            id="cmd_dedent_always" key="key_cmd_dedent_always"
+            oncommand="ko.commands.doCommand('cmd_dedent_always')"
+            disabled="true"
+            desc="&editorDecreaseLineIndentAlways.desc;"/>
+        <command
+            id="cmd_tabify" key="key_cmd_tabify"
+            oncommand="ko.commands.doCommand('cmd_tabify')"
+            disabled="true"
+            desc="&sourceCodeTabifyRegion.desc;"/>
+        <command
+            id="cmd_untabify" key="key_cmd_untabify"
+            oncommand="ko.commands.doCommand('cmd_untabify')"
+            disabled="true"
+            desc="&sourceCodeUnTabifyRegion.desc;"/>
+        <command
+            id="cmd_completeWord" key="key_cmd_completeWord"
+            oncommand="ko.commands.doCommandAsync('cmd_completeWord', event)"
+            disabled="true"
+            desc="&sourceCodeCompleteWord.desc;"/>
+        <command
+            id="cmd_completeWordBack" key="key_cmd_completeWordBack"
+            oncommand="ko.commands.doCommandAsync('cmd_completeWordBack', event)"
+            disabled="true"
+            desc="&sourceCodeCompleteWordBackwards.desc;"/>
+        <command
+            id="cmd_blockSelect" key="key_cmd_blockSelect"
+            oncommand="ko.commands.doCommand('cmd_blockSelect')"
+            disabled="true"
+            desc="&sourceCodeSelectBlock.desc;"/>
+        <command
+            id="cmd_delimitedBlockSelect" key="key_cmd_delimitedBlockSelect"
+            oncommand="ko.commands.doCommand('cmd_delimitedBlockSelect')"
+            disabled="true"
+            desc="&editorDelimitedBlockSelect.desc;"/>
+        <command
+            id="cmd_cleanLineEndings" key="key_cmd_cleanLineEndings"
+            oncommand="ko.commands.doCommandAsync('cmd_cleanLineEndings', event)"
+            disabled="true"
+            desc="&sourceCodeCleanLineEndings.desc;"/>
+        <command
+            id="cmd_removeTrailingWhitespace" key="key_cmd_removeTrailingWhitespace"
+            oncommand="ko.commands.doCommandAsync('cmd_removeTrailingWhitespace', event)"
+            disabled="true"
+            desc="&editorRemoveTrailingWhitespace.desc;"/>
+        <command
+            id="cmd_editPrefsCurrent" key="key_cmd_editPrefsCurrent"
+            oncommand="ko.commands.doCommandAsync('cmd_editPrefsCurrent', event);"
+            disabled="true"
+            desc="&editorCurrentFileSettings.desc;"/>
+        <command 
+            id="cmd_createMappedURI" key="key_cmd_createMappedURI"
+            oncommand="ko.commands.doCommandAsync('cmd_createMappedURI', event);"
+            disabled="true"
+            desc="&createMappedURI.desc;"/>
+        <command
+            id="cmd_editReflow" key="key_cmd_editReflow"
+            oncommand="ko.commands.doCommandAsync('cmd_editReflow', event)"
+            disabled="true"
+            desc="&editorReflowParagraphS.desc;"/>
+        <command
+            id="cmd_editCenterVertically" key="key_cmd_editCenterVertically"
+            oncommand="ko.commands.doCommandAsync('cmd_editCenterVertically', event)"
+            disabled="true"
+            desc="&editorScrollCurrentLineToCenterOfScreen.desc;"/>
+        <command
+            id="cmd_editMoveCurrentLineToTop" key="key_cmd_editMoveCurrentLineToTop"
+            oncommand="ko.commands.doCommandAsync('cmd_editMoveCurrentLineToTop', event)"
+            disabled="true"
+            desc="&editorScrollCurrentLineToTopOfScreen.desc;"/>
+        <command
+            id="cmd_killLine" key="key_cmd_killLine"
+            oncommand="ko.commands.doCommand('cmd_killLine')"
+            disabled="true"
+            desc="&editorCutRestOfLine.desc;"/>
+        <command
+            id="cmd_invokeHyperlink" key="key_cmd_invokeHyperlink"
+            oncommand="ko.commands.doCommandAsync('cmd_invokeHyperlink', event)"
+            disabled="true"
+            desc="&editorInvokeHyperlink.desc;"/>
+        <command
+            id="cmd_launchColorPicker" key="key_cmd_launchColorPicker"
+            oncommand="ko.commands.doCommandAsync('cmd_launchColorPicker', event)"
+            disabled="true"
+            desc="&editorLaunchColorPicker.desc;"/>
+    </commandset>
+
+    <commandset
+        id="cmdset_minimap"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="minimap_changed,currentview_is_editor"
+        >
+        <command
+            id="cmd_minimap_fontZoomIn" key="key_cmd_minimap_fontZoomIn"
+            oncommand="ko.commands.doCommandAsync('cmd_minimap_fontZoomIn', event)"
+            disabled="true"
+            desc="&minimapZoomFontSizeUp.desc;"/>
+        <command
+            id="cmd_minimap_fontZoomOut" key="key_cmd_minimap_fontZoomOut"
+            oncommand="ko.commands.doCommandAsync('cmd_minimap_fontZoomOut', event)"
+            disabled="true"
+            desc="&minimapZoomFontSizeDown.desc;"/>
+        <command
+            id="cmd_minimap_fontZoomReset" key="key_cmd_minimap_fontZoomReset"
+            oncommand="ko.commands.doCommandAsync('cmd_minimap_fontZoomReset', event)"
+            disabled="true"
+            desc="&minimapZoomFontSizeReset.desc;"/>
+        <command
+            id="cmd_minimap_hide" key="key_cmd_minimap_hide"
+            oncommand="ko.commands.doCommandAsync('cmd_minimap_hide', event)"
+            disabled="true"
+            desc="&minimapHide.desc;"/>
+    </commandset>
+
+    <!-- Commands that need updating when the foldability of
+         the current view changes -->
+    <commandset
+        id="cmdset_foldability"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="foldability_changed"
+        >
+        <command
+            id="cmd_foldExpand" key="key_cmd_foldExpand"
+            oncommand="ko.commands.doCommandAsync('cmd_foldExpand', event)"
+            disabled="true"
+            desc="&sourceCodeExpandFold.desc;"/>
+        <command
+            id="cmd_foldExpandRecursive" key="key_cmd_foldExpandRecursive"
+            oncommand="ko.commands.doCommandAsync('cmd_foldExpandRecursive', event)"
+            disabled="true"
+            desc="&sourceCodeExpandFoldRecursively.desc;"/>
+        <command
+            id="cmd_foldExpandAll" key="key_cmd_foldExpandAll"
+            oncommand="ko.commands.doCommandAsync('cmd_foldExpandAll', event)"
+            disabled="true"
+            desc="&sourceCodeExpandAllFolds.desc;"/>
+        <command
+            id="cmd_foldCollapse" key="key_cmd_foldCollapse"
+            oncommand="ko.commands.doCommandAsync('cmd_foldCollapse', event)"
+            disabled="true"
+            desc="&sourceCodeCollapseFold.desc;"/>
+        <command
+            id="cmd_foldCollapseRecursive" key="key_cmd_foldCollapseRecursive"
+            oncommand="ko.commands.doCommandAsync('cmd_foldCollapseRecursive', event)"
+            disabled="true"
+            desc="&sourceCodeCollapseFoldRecursively.desc;"/>
+        <command
+            id="cmd_foldCollapseAll" key="key_cmd_foldCollapseAll"
+            oncommand="ko.commands.doCommandAsync('cmd_foldCollapseAll', event)"
+            disabled="true"
+            desc="&sourceCodeCollapseAllFolds.desc;"/>
+        <command
+            id="cmd_foldToggle" key="key_cmd_foldToggle"
+            oncommand="ko.commands.doCommandAsync('cmd_foldToggle', event)"
+            disabled="true"
+            desc="&sourceCodeToggleFold.desc;"/>
+    </commandset>
+
+    <commandset
+        id="cmdset_view_or_language_changed"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="language_changed,current_view_changed"
+        >
+        <command
+            id="cmd_jumpToCorrespondingLine" key="key_cmd_jumpToCorrespondingLine"
+            oncommand="ko.commands.doCommandAsync('cmd_jumpToCorrespondingLine', event)"
+            disabled="true"
+            desc="&sourceCodeJumpToCorrespondingLine.desc;"/>
+        <command
+            id="cmd_comment" key="key_cmd_comment"
+            oncommand="ko.commands.doCommand('cmd_comment')"
+            disabled="true"
+            desc="&sourceCodeCommentRegion.desc;"/>
+        <command
+            id="cmd_uncomment" key="key_cmd_uncomment"
+            oncommand="ko.commands.doCommand('cmd_uncomment')"
+            disabled="true"
+            desc="&sourceCodeUnCommentRegion.desc;"/>
+    </commandset>
+
+    <!-- Commands that depend on the clipboard.  Note that the
+         clipboard is per-view inside of the view system, and
+         global outside of the view system -->
+    <commandset
+        id="cmdset_clipboard"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="select,clipboard,currentview_is_editor"
+        >
+        <command
+            id="cmd_pasteAndSelect" key="key_cmd_pasteAndSelect"
+            oncommand="ko.commands.doCommandAsync('cmd_pasteAndSelect', event)"
+            disabled="true"
+            desc="&editorPasteAndSelect.desc;"/>
+        <command
+            id="cmd_pasteHtml" key="key_cmd_pasteHtml"
+            oncommand="ko.commands.doCommand('cmd_pasteHtml')"
+            desc="&pasteHtml.command.desc;"/>
+        <command
+            id="cmd_tabAwarePaste" key="key_cmd_tabAwarePaste"
+            oncommand="ko.commands.doCommandAsync('cmd_tabAwarePaste', event)"
+            disabled="true"
+            desc="&editorTabAwarePaste.desc;"/>
+        <command
+            id="cmd_addNextWordToCaretSet" key="key_cmd_addNextWordToCaretSet"
+            oncommand="ko.commands.doCommandAsync('cmd_addNextWordToCaretSet', event)"
+            disabled="true"
+            desc="&addNextWordToCaretSet.desc;"/>
+        <command
+            id="cmd_addNextSubstringToCaretSet" key="key_cmd_addNextSubstringToCaretSet"
+            oncommand="ko.commands.doCommandAsync('cmd_addNextSubstringToCaretSet', event)"
+            disabled="true"
+            desc="&addNextSubstringToCaretSet.desc;"/>
+    </commandset>
+
+    <!-- Commands that are enabled when the editor has focus and
+         a selection -->
+    <commandset
+        id="cmdset_selection"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="select,current_view_changed"
+        >
+        <command
+            id="cmd_makeSnippetFromSelection" key="key_cmd_makeSnippetFromSelection"
+            oncommand="ko.commands.doCommandAsync('cmd_makeSnippetFromSelection', event)"
+            disabled="true"
+            desc="&editorAddAsSnippetToToolbox.desc;"/>
+        <command
+            id="cmd_findNextSelected" key="key_cmd_findNextSelected"
+            oncommand="ko.commands.doCommandAsync('cmd_findNextSelected', event)"
+            disabled="true"
+            desc="&findFindNextSelected.desc;"/>
+        <command
+            id="cmd_findPreviousSelected" key="key_cmd_findPreviousSelected"
+            oncommand="ko.commands.doCommandAsync('cmd_findPreviousSelected', event)"
+            disabled="true"
+            desc="&findFindPreviousSelected.desc;"/>
+        <command
+            id="cmd_convertUpperCase" key="key_cmd_convertUpperCase"
+            oncommand="ko.commands.doCommand('cmd_convertUpperCase')"
+            disabled="true"
+            desc="&sourceCodeConvertSelectionToUpperCase.desc;"/>
+        <command
+            id="cmd_convertLowerCase" key="key_cmd_convertLowerCase"
+            oncommand="ko.commands.doCommand('cmd_convertLowerCase')"
+            disabled="true"
+            desc="&sourceCodeConvertSelectionToLowerCase.desc;"/>
+        <command
+            id="cmd_convertTitleCase" key="key_cmd_convertTitleCase"
+            oncommand="ko.commands.doCommand('cmd_convertTitleCase')"
+            disabled="true"
+            desc="&sourceCodeConvertSelectionToTitleCase.desc;"/>
+        <command
+            id="cmd_convertFromHex" key="key_cmd_convertFromHex"
+            oncommand="ko.commands.doCommand('cmd_convertFromHex')"
+            disabled="true"
+            desc="&codeConvertSelectionFromHex.desc;"/>
+        <command
+            id="cmd_convertToHex" key="key_cmd_convertToHex"
+            oncommand="ko.commands.doCommand('cmd_convertToHex')"
+            disabled="true"
+            desc="&codeConvertSelectionToHex.desc;"/>
+        <command
+            id="cmd_printSelection" key="key_cmd_printSelection"
+            oncommand="ko.commands.doCommandAsync('cmd_printSelection', event)"
+            disabled="true"
+            desc="&generalPrintSelection.desc;"/>
+        <command
+            id="cmd_exportHTMLSelection" key="key_cmd_exportHTMLSelection"
+            oncommand="ko.commands.doCommandAsync('cmd_exportHTMLSelection', event)"
+            disabled="true"
+            desc="&generalExportSelectionAsHTML.desc;"/>
+        <command
+            id="cmd_htmlTagRelocator" key="key_cmd_htmlTagRelocator"
+            oncommand="ko.commands.doCommand('cmd_htmlTagRelocator')"
+            disabled="true"
+            desc="&editorHTMLTagRelocator.desc;"/>
+<!-- #if PLATFORM != "darwin" -->
+        <command
+            id="cmd_printPreviewSelection" key="key_cmd_printPreviewSelection"
+            oncommand="ko.commands.doCommandAsync('cmd_printPreviewSelection', event)"
+            disabled="true"
+            desc="&generalPrintPreviewSelection.desc;"/>
+<!-- #endif -->
+        <command
+            id="cmd_removePrevWordInCaretSet" key="key_cmd_removePrevWordInCaretSet"
+            oncommand="ko.commands.doCommandAsync('cmd_removePrevWordInCaretSet', event)"
+            disabled="true"
+            desc="&removePrevWordInCaretSet.desc;"/>
+        <command
+            id="cmd_wrapSelectionWithCarets" key="key_cmd_wrapSelectionWithCarets"
+            oncommand="ko.commands.doCommandAsync('cmd_wrapSelectionWithCarets')"
+            disabled="true"
+            desc="&wrapSelectionWithCarets.desc;"/>
+    </commandset>
+    
+    <!-- These commands need to be updated on window open,
+    and then whenever the history lists change.
+    -->
+    <commandset
+        id="cmdset_history"
+        commandupdater="true"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        events="history_changed">
+        <command
+            id="cmd_historyBack" key="key_cmd_historyBack"
+            disabled="true"
+            oncommand="ko.commands.doCommandAsync('cmd_historyBack', event)"
+            desc="&editorHistoryBack.desc;" />
+        <command
+            id="cmd_historyForward" key="key_cmd_historyForward"
+            disabled="true"
+            oncommand="ko.commands.doCommandAsync('cmd_historyForward', event)"
+            desc="&editorHistoryForward.desc;" />
+        <command
+            id="cmd_historyRecentLocations"
+            disabled="true" />
+    </commandset>
+        
+    <!-- Commands that need to be updated when the dirtyness of the
+         current file changes, which can happen on 'dirty' or when
+         the current file changes -->
+    <commandset
+        id="komodoFileSaveItems"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="dirty">
+        <command
+            id="cmd_save" key="key_cmd_save"
+            oncommand="ko.commands.doCommandAsync('cmd_save', event);"
+            disabled="true"
+            desc="&generalSave.desc;"/>
+        <command
+            id="cmd_showUnsavedChanges" key="key_cmd_showUnsavedChanges"
+            oncommand="ko.commands.doCommandAsync('cmd_showUnsavedChanges', event);"
+            disabled="true"
+            desc="&editorShowUnsavedChanges.desc;"/>
+        <command
+            id="cmd_revert" key="key_cmd_revert"
+            oncommand="ko.commands.doCommandAsync('cmd_revert', event);"
+            disabled="true"
+            desc="&generalRevert.desc;"/>
+    </commandset>
+
+    <!-- Commands that need to be updated when the dirtyness
+         of the current project changes -->
+    <commandset
+        id="cmdset_project_save"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="project_dirty,current_project_changed,some_projects_open,selected_project_changed">
+        <command
+            id="cmd_saveProject" key="key_cmd_saveProject"
+            oncommand="ko.commands.doCommandAsync('cmd_saveProject', event)"
+            disabled="true"
+            desc="&generalSaveProject.desc;"/>
+        <command
+            id="cmd_revertProject" key="key_cmd_revertProject"
+            oncommand="ko.commands.doCommandAsync('cmd_revertProject', event)"
+            disabled="true"
+            desc="&generalRevertProject.desc;"/>
+    </commandset>
+
+    <!-- Commands that need at least a project to be opened -->
+    <commandset
+        id="cmdset_projects"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="some_projects_open,current_project_changed">
+        <broadcaster
+            id="broadcaster_projectCurrent" key="key_broadcaster_projectCurrent"
+            disabled="true"/>
+
+        <command
+            id="cmd_importFromFS_Project" key="key_cmd_importFromFS_Project"
+            oncommand="ko.commands.doCommandAsync('cmd_importFromFS_Project', event)"
+            disabled="false"
+            desc="&generalImportFromFileSystemIntoCurrentProject.desc;"/>
+
+        <command
+            id="cmd_reimportFromFS_Project" key="key_cmd_reimportFromFS_Project"
+            oncommand="ko.commands.doCommandAsync('cmd_reimportFromFS_Project', event)"
+            disabled="false"
+            tooltiptext="&reImportFromFileSystemWithTheSameSettings.tooltiptext;"
+            desc="&generalPerformTheImportFromFileSystemAgainRefreshes.desc;"/>
+        <command
+            id="cmd_renameProject" key="key_cmd_renameProject"
+            oncommand="ko.commands.doCommandAsync('cmd_renameProject', event)"
+            disabled="true"
+            desc="&generalSaveProjectAs.desc;"/>
+        <command
+            id="cmd_saveProjectAs" key="key_cmd_saveProjectAs"
+            oncommand="ko.commands.doCommandAsync('cmd_saveProjectAs', event)"
+            disabled="true"
+            desc="&generalSaveProjectAs.desc;"/>
+        <command
+            id="cmd_closeAllProjects" key="key_cmd_closeAllProjects"
+            oncommand="ko.commands.doCommandAsync('cmd_closeAllProjects', event)"
+            disabled="true"
+            desc="&generalCloseAllProjects.desc;"/>
+        <command
+            id="cmd_closeProject" key="key_cmd_closeProject"
+            oncommand="ko.commands.doCommandAsync('cmd_closeProject', event)"
+            disabled="true"
+            desc="&generalCloseProject.desc;"/>
+        <command
+            id="cmd_findInCurrProject" key="key_cmd_findInCurrProject"
+            disabled="true"
+            oncommand="ko.commands.doCommandAsync('cmd_findInCurrProject', event)"
+            desc="&findFindInCurrProject.desc;"/>
+        <command
+            id="cmd_replaceInCurrProject" key="key_cmd_replaceInCurrProject"
+            disabled="true"
+            oncommand="ko.commands.doCommandAsync('cmd_replaceInCurrProject', event)"
+            desc="&findReplaceInCurrProject.desc;"/>
+        <command
+            id="cmd_projectProperties" key="key_cmd_projectProperties"
+            oncommand="ko.commands.doCommandAsync('cmd_projectProperties', event)"
+            disabled="true"
+            desc="&projectProperties.desc;"/>
+    </commandset>
+    <commandset
+        id="cmdset_projects_places"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="some_projects_open,current_project_changed,current_place_opened">
+        <command
+            id="cmd_showProjectInPlaces" key="key_cmd_showProjectInPlaces"
+            oncommand="ko.commands.doCommandAsync('cmd_showProjectInPlaces', event)"
+            disabled="true"
+            desc="&showProjectInPlaces.desc;"/>
+    </commandset>
+
+    <!-- Commands that need updating based on changes in non-editor
+         selection (e.g. in the parts system). -->
+    <commandset
+        id="cmdset_properties"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="part_selection,currentview_is_editor">
+        <command
+            id="cmd_editProperties" key="key_cmd_editProperties"
+            oncommand="ko.commands.doCommandAsync('cmd_editProperties', event)"
+            disabled="true"
+            desc="&generalEditProperties.desc;"/>
+    </commandset>
+
+    <commandset
+        id="cmdset_toolboxExport"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="part_selection">
+        <command
+            id="cmd_toolboxExportPackage" key="key_cmd_toolboxExportPackage"
+            oncommand="ko.commands.doCommandAsync('cmd_toolboxExportPackage', event)"
+            disabled="true"
+            desc="&toolboxExportPackage.desc;"/>
+    </commandset>
+
+    <commandset
+        id="cmdset_cutcopydelete"
+        oncommandupdate="ko.commands.updateCommandset(this);"
+        commandupdater="true"
+        events="currentview_is_editor,part_selection,current_view_changed,buffer_context_menu_showing">
+        <command
+            id="cmd_cut" key="key_cmd_cut"
+            oncommand="ko.commands.doCommand('cmd_cut')"
+            disabled="true"
+            desc="&editorCut.desc;"/>
+        <command
+            id="cmd_copyRegion" key="key_cmd_copyRegion"
+            oncommand="ko.commands.doCommand('cmd_copyRegion')"
+            disabled="true"
+            desc="&editorCopyRegion.desc;"/>
+        <command
+            id="cmd_cutRegion" key="key_cmd_cutRegion"
+            oncommand="ko.commands.doCommand('cmd_cutRegion')"
+            disabled="true"
+            desc="&editorCutRegion.desc;"/>
+        <command
+            id="cmd_copy" key="key_cmd_copy"
+            oncommand="ko.commands.doCommand('cmd_copy')"
+            disabled="true"
+            desc="&editorCopy.desc;"/>
+        <!--<command-->
+        <!--    id="cmd_copyLine" key="key_cmd_copyLine"-->
+        <!--    oncommand="ko.commands.doCommand('cmd_copyLine')"-->
+        <!--    desc="&editorCopyCurrentLine.desc;"/>-->
+        <!-- cmd_delete bug 65750, because html:input implements cmd_delete
+             as a backspace rather than delete to right, we have to special
+             case to get correct behaviour.  -->
+        <command
+            id="cmd_delete" key="key_cmd_delete"
+            oncommand="
+                if (typeof event != 'undefined') {
+                    var cont = true; 
+                    if (event.originalTarget.controllers) {
+                        if (event.originalTarget.controllers.getControllerForCommand('cmd_deleteCharForward')) {
+                            ko.commands.doCommand('cmd_deleteCharForward', {suppressExceptions: true});
+                            cont = false;
+                        }
+                    } 
+                    if (cont) ko.commands.doCommand('cmd_delete');
+                }"
+            disabled="true"
+            desc="&editorDelete.desc;"/>
+    </commandset>
+
+    <commandset
+        id="cmdset_for_showHideMinimap"
+        oncommandupdate="ko.commands.updateCommandset(this);"
+        commandupdater="true"
+        events="currentview_is_editor,current_view_changed">
+        <command
+            id="cmd_showHideMinimap" key="key_cmd_showHideMinimap"
+            type="checkbox"
+            oncommand="ko.commands.doCommandAsync('cmd_showHideMinimap', event)"
+            disabled="true"
+            desc="&userInterfaceShowHideMinimap.desc;"/>
+    </commandset>
+    
+    <commandset
+        id="cmdset_workspace2"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        >
+        <command
+            id="cmd_saveWorkspace" key="key_cmd_saveWorkspace"
+            desc="&saveUserWorkspace.desc;" 
+            oncommand="ko.commands.doCommandAsync('cmd_saveWorkspace', event)"/>
+        <command
+            id="cmd_openWorkspace" key="key_cmd_openWorkspace"
+            desc="&openUserWorkspace.desc;" 
+            oncommand="ko.commands.doCommandAsync('cmd_openWorkspace', event)"/>
+        <command
+            id="cmd_manageWorkspaces" key="key_cmd_manageWorkspaces"
+            desc="&manUserWorkspace.desc;" 
+            oncommand="ko.commands.doCommandAsync('cmd_manageWorkspaces', event)"/>
+            
+    </commandset>
+    
+    <commandset
+        id="cmdset_quickbookmarks"
+        oncommandupdate="ko.commands.updateCommandset(this)">
+<!--Quick Bookmarks-->
+        <command
+            id="cmd_toggleQuickBookmark_1" key="key_cmd_toggleQuickBookmark_1"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleQuickBookmark_1', event)"
+            disabled="true"
+            desc="Quick Bookmark 1: Set bookmark for number key."/>
+        <command
+            id="cmd_toggleQuickBookmark_2" key="key_cmd_toggleQuickBookmark_2"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleQuickBookmark_2', event)"
+            disabled="true"
+            desc="Quick Bookmark 2: Set bookmark for number key."/>
+        <command
+            id="cmd_toggleQuickBookmark_3" key="key_cmd_toggleQuickBookmark_3"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleQuickBookmark_3', event)"
+            disabled="true"
+            desc="Quick Bookmark 3: Set bookmark for number key."/>
+        <command
+            id="cmd_toggleQuickBookmark_4" key="key_cmd_toggleQuickBookmark_4"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleQuickBookmark_4', event)"
+            disabled="true"
+            desc="Quick Bookmark 4: Set bookmark for number key."/>
+        <command
+            id="cmd_toggleQuickBookmark_5" key="key_cmd_toggleQuickBookmark_5"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleQuickBookmark_5', event)"
+            disabled="true"
+            desc="Quick Bookmark 5: Set bookmark for number key."/>
+        <command
+            id="cmd_toggleQuickBookmark_6" key="key_cmd_toggleQuickBookmark_6"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleQuickBookmark_6', event)"
+            disabled="true"
+            desc="Quick Bookmark 6: Set bookmark for number key."/>
+        <command
+            id="cmd_toggleQuickBookmark_7" key="key_cmd_toggleQuickBookmark_7"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleQuickBookmark_7', event)"
+            disabled="true"
+            desc="Quick Bookmark 7: Set bookmark for number key."/>
+        <command
+            id="cmd_toggleQuickBookmark_8" key="key_cmd_toggleQuickBookmark_8"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleQuickBookmark_8', event)"
+            disabled="true"
+            desc="Quick Bookmark 8: Set bookmark for number key."/>
+        <command
+            id="cmd_toggleQuickBookmark_9" key="key_cmd_toggleQuickBookmark_9"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleQuickBookmark_9', event)"
+            disabled="true"
+            desc="Quick Bookmark 9: Set bookmark for number key."/>
+        <command
+            id="cmd_toggleQuickBookmark_0" key="key_cmd_toggleQuickBookmark_0"
+            oncommand="ko.commands.doCommandAsync('cmd_toggleQuickBookmark_0', event)"
+            disabled="true"
+            desc="Quick Bookmark 0: Set bookmark for number key."/>
+        
+        <command
+            id="cmd_goToQuickBookmark_1" key="key_cmd_goToQuickBookmark_1"
+            oncommand="ko.commands.doCommandAsync('cmd_goToQuickBookmark_1', event)"
+            disabled="true"
+            desc="Quick Bookmark 1: Go to bookmark for number key."/>
+        <command
+            id="cmd_goToQuickBookmark_2" key="key_cmd_goToQuickBookmark_2"
+            oncommand="ko.commands.doCommandAsync('cmd_goToQuickBookmark_2', event)"
+            disabled="true"
+            desc="Quick Bookmark 2: Go to bookmark for number key."/>
+        <command
+            id="cmd_goToQuickBookmark_3" key="key_cmd_goToQuickBookmark_3"
+            oncommand="ko.commands.doCommandAsync('cmd_goToQuickBookmark_3', event)"
+            disabled="true"
+            desc="Quick Bookmark 3: Go to bookmark for number key."/>
+        <command
+            id="cmd_goToQuickBookmark_4" key="key_cmd_goToQuickBookmark_4"
+            oncommand="ko.commands.doCommandAsync('cmd_goToQuickBookmark_4', event)"
+            disabled="true"
+            desc="Quick Bookmark 4: Go to bookmark for number key."/>
+        <command
+            id="cmd_goToQuickBookmark_5" key="key_cmd_goToQuickBookmark_5"
+            oncommand="ko.commands.doCommandAsync('cmd_goToQuickBookmark_5', event)"
+            disabled="true"
+            desc="Quick Bookmark 5: Go to bookmark for number key."/>
+        <command
+            id="cmd_goToQuickBookmark_6" key="key_cmd_goToQuickBookmark_6"
+            oncommand="ko.commands.doCommandAsync('cmd_goToQuickBookmark_6', event)"
+            disabled="true"
+            desc="Quick Bookmark 6: Go to bookmark for number key."/>
+        <command
+            id="cmd_goToQuickBookmark_7" key="key_cmd_goToQuickBookmark_7"
+            oncommand="ko.commands.doCommandAsync('cmd_goToQuickBookmark_7', event)"
+            disabled="true"
+            desc="Quick Bookmark 7: Go to bookmark for number key."/>
+        <command
+            id="cmd_goToQuickBookmark_8" key="key_cmd_goToQuickBookmark_8"
+            oncommand="ko.commands.doCommandAsync('cmd_goToQuickBookmark_8', event)"
+            disabled="true"
+            desc="Quick Bookmark 8: Go to bookmark for number key."/>
+        <command
+            id="cmd_goToQuickBookmark_9" key="key_cmd_goToQuickBookmark_9"
+            oncommand="ko.commands.doCommandAsync('cmd_goToQuickBookmark_9', event)"
+            disabled="true"
+            desc="Quick Bookmark 9: Go to bookmark for number key."/>
+        <command
+            id="cmd_goToQuickBookmark_0" key="key_cmd_goToQuickBookmark_0"
+            oncommand="ko.commands.doCommandAsync('cmd_goToQuickBookmark_0', event)"
+            disabled="true"
+            desc="Quick Bookmark 0: Go to bookmark for number key."/>
+        
+        <!--Quick Bookmarks-->
+
+    </commandset>
+            
+    <commandset id="cmdset_parts"/>
+
+</commandset>
+<!-- key_cmd_catchallbindings:
+    this little hack fixes late binding of key elements by causing
+    all unhandled keys to go through the keybinding managers keypressHandler.
+    this will likely break when moz gets fixed. -->
+<keyset id="widekeyset"/>
+</overlay>

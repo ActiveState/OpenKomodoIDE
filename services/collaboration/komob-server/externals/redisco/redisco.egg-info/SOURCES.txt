@@ -1,0 +1,17 @@
+MANIFEST.in
+README.rst
+redisco/__init__.py
+redisco/containers.py
+redisco.egg-info/PKG-INFO
+redisco.egg-info/SOURCES.txt
+redisco.egg-info/dependency_links.txt
+redisco.egg-info/top_level.txt
+redisco/models/__init__.py
+redisco/models/attributes.py
+redisco/models/base.py
+redisco/models/exceptions.py
+redisco/models/key.py
+redisco/models/managers.py
+redisco/models/modelset.py
+redisco/models/utils.py
+redisco/models/validation.py

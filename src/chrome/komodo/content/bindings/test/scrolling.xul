@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Scrolling"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script>
+<![CDATA[
+
+]]>
+</script>
+
+<html:h1>XUL Scrolling</html:h1>
+
+<vbox flex="1" style="overflow: auto">
+ <hbox >
+  <groupbox flex="1">
+  <caption label="The full list" />
+  <vbox>
+    <button label="Button #1" />
+    <button label="Button #2" />
+    <button label="Button #3" />
+    <button label="Button #4" />
+    <button label="Button #5" />
+    <button label="Button #6" />
+    <button label="Button #7" />
+    <button label="Button #8" />
+    <button label="Button #9" />
+  </vbox>
+  </groupbox>
+
+  <vbox flex="1">
+  <groupbox maxheight="80">
+  <caption label="The list limited in height, no overflow" />
+  <vbox flex="1" >
+    <button label="Button #1" />
+    <button label="Button #2" />
+    <button label="Button #3" />
+    <button label="Button #4" />
+    <button label="Button #5" />
+    <button label="Button #6" />
+    <button label="Button #7" />
+    <button label="Button #8" />
+    <button label="Button #9" />
+  </vbox>
+  </groupbox>
+  <groupbox maxheight="80">
+  <caption label="The list limited in height, auto overflow" />
+  <vbox flex="1" style="overflow: auto">
+    <button label="Button #1" />
+    <button label="Button #2" />
+    <button label="Button #3" />
+    <button label="Button #4" />
+    <button label="Button #5" />
+    <button label="Button #6" />
+    <button label="Button #7" />
+    <button label="Button #8" />
+    <button label="Button #9" />
+  </vbox>
+  </groupbox>
+  <groupbox maxheight="80">
+  <caption label="The list limited in height, scroll overflow" />
+  <vbox flex="1" style="overflow: scroll">
+    <button label="Button #1" />
+    <button label="Button #2" />
+    <button label="Button #3" />
+    <button label="Button #4" />
+    <button label="Button #5" />
+    <button label="Button #6" />
+    <button label="Button #7" />
+    <button label="Button #8" />
+    <button label="Button #9" />
+  </vbox>
+  </groupbox>
+  </vbox>
+ </hbox>
+
+<description value="arrowscrollbox - hover over the arrow to scroll" />
+<arrowscrollbox orient="vertical" flex="1">
+
+  <button label=" 1 Astérix le Gaulois" />
+  <button label=" 2 La serpe d'or" />
+  <button label=" 3 Astérix et les Goths" />
+  <button label=" 4 Astérix gladiateur" />
+  <button label=" 5 Le tour de Gaule d'Astérix" />
+  <button label=" 6 Astérix et Cléopâtre" />
+  <button label=" 7 Le combat des chefs" />
+  <button label=" 8 Astérix chez les Bretons" />
+  <button label=" 9 Astérix et les Normands" />
+  <button label="10 Astérix légionnaire" />
+  <button label="11 Le bouclier Arverne" />
+  <button label="12 Astérix aux jeux olympiques" />
+  <button label="13 Astérix et le chaudron" />
+  <button label="14 Astérix en Hispanie" />
+  <button label="15 La zizanie" />
+  <button label="16 Astérix chez les Helvêtes" />
+  <button label="17 Le domaine des Dieux" />
+  <button label="18 Les lauriers de César" />
+  <button label="19 Le devin" />
+  <button label="20 Astérix en Corse" />
+  <button label="21 Le cadeau de César" />
+  <button label="22 La grande traversée" />
+  <button label="23 Obélix et compagnie" />
+  <button label="24 Astérix chez les Belges" />
+  <button label="25 Le grand Fossé" />
+  <button label="26 L'Odyssée d'Astérix" />
+  <button label="27 Le fils d'Astérix" />
+  <button label="28 Astérix chez Rahàzade" />
+  <button label="29 La rose et le glaive" />
+  <button label="30 La galère d'Obélix" />
+  <button label="31 Astérix et Latraviata" />
+
+</arrowscrollbox>
+
+</vbox>
+
+</window>

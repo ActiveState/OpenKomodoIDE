@@ -1,0 +1,83 @@
+# xmlServerTable --
+#
+#	This file contains the table of commands used to check xmld.
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on xmlServer commands.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+# 
+# RCS: @(#) $Id: xmlServerTable,v 1.2 2000/05/30 22:25:11 wart Exp $
+
+set ::checkXmlServer1.0 {
+
+{getenv}		{ok}
+{xmld::getenv}		{ok}
+{getenv a}		{1 {0 8} numArgs {} {}}
+
+{getpost}		{ok}
+{xmld::getpost a}	{ok}
+{getpost a}		{ok}
+{getpost a a}		{1 {0 11} numArgs {} {}}
+
+{respond status 0}	{ok}
+{xmld::respond status 1}	{ok}
+{respond status -1}	{1 {0 17} badWholeNum {15 2} -1}
+{respond status}	{1 {0 14} numArgs {} {}}
+{respond status 1 a}	{1 {0 18} numArgs {} {}}
+{respond header a}	{ok}
+{respond header}	{1 {0 14} numArgs {} {}}
+{respond header a a}	{1 {0 18} numArgs {} {}}
+{respond data a}	{ok}
+{respond data a a}	{ok}
+{respond data}		{1 {0 12} numArgs {} {}}
+{respond data a a a}	{1 {0 18} numArgs {} {}}
+{respond file a}	{ok}
+{respond file a/$b}	{1 {0 17} nonPortFile {13 4} {}}
+{respond file}		{1 {0 12} numArgs {} {}}
+{respond file a a}	{1 {0 16} numArgs {} {}}
+{respond}		{1 {0 7} numArgs {} {}}
+{respond foo}		{1 {0 11} numArgs {} {}}
+{respond foo a}		{1 {0 13} badOption {8 3} {{status header data file} foo}}
+
+{redirect -external a}		{ok}
+{xmld::redirect -external a}	{ok}
+{redirect -external}		{1 {0 18} numArgs {} {}}
+{redirect -external a a}	{1 {0 22} numArgs {} {}}
+{redirect -internal a}		{ok}
+{redirect -internal}		{1 {0 18} numArgs {} {}}
+{redirect -internal a a}	{1 {0 22} numArgs {} {}}
+{redirect}			{1 {0 8} numArgs {} {}}
+{redirect -foo}			{1 {0 13} numArgs {} {}}
+{redirect -foo a}		{1 {0 15} badSwitch {9 4} -foo}
+
+{log -emerg a}		{ok}
+{xmld::log -emerg a}	{ok}
+{log -emerg}		{1 {0 10} numArgs {} {}}
+{log -emerg a a}	{1 {0 14} numArgs {} {}}
+{log -alert a}		{ok}
+{log -alert}		{1 {0 10} numArgs {} {}}
+{log -alert a a}	{1 {0 14} numArgs {} {}}
+{log -crit a}		{ok}
+{log -crit}		{1 {0 9} numArgs {} {}}
+{log -crit a a}		{1 {0 13} numArgs {} {}}
+{log -error a}		{ok}
+{log -error}		{1 {0 10} numArgs {} {}}
+{log -error a a}	{1 {0 14} numArgs {} {}}
+{log -warn a}		{ok}
+{log -warn}		{1 {0 9} numArgs {} {}}
+{log -warn a a}		{1 {0 13} numArgs {} {}}
+{log -notice a}		{ok}
+{log -notice}		{1 {0 11} numArgs {} {}}
+{log -notice a a}	{1 {0 15} numArgs {} {}}
+{log -info a}		{ok}
+{log -info}		{1 {0 9} numArgs {} {}}
+{log -info a a}		{1 {0 13} numArgs {} {}}
+{log -debug a}		{ok}
+{log -debug}		{1 {0 10} numArgs {} {}}
+{log -debug a a}	{1 {0 14} numArgs {} {}}
+{log}			{1 {0 3} numArgs {} {}}
+{log -foo}		{1 {0 8} numArgs {} {}}
+{log -foo a}		{1 {0 10} badSwitch {4 4} -foo}
+
+}

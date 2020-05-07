@@ -1,0 +1,71 @@
+# xmlActTable --
+#
+#	This file contains the table of commands used to check xmlAct.
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on xmlAct commands.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+# 
+# RCS: @(#) $Id: xmlActTable,v 1.5 2000/05/30 22:25:07 wart Exp $
+
+set ::checkXmlAct1.0 {
+
+{create}			{ok}
+{create -prune}			{ok}
+{xmlact::create -prune}		{ok}
+{create -trim}			{ok}
+{create -trim a}		{1 {0 14} numArgs {} {}}
+{create -name a}		{ok}
+{create -name}			{1 {0 12} noSwitchArg {7 5} -name}
+{create -name a a}		{1 {0 16} numArgs {} {}}
+{create -progress a}		{ok}
+{create -progress {set}}	{1 {18 3} numArgs {} {}}
+{create -progress}		{1 {0 16} noSwitchArg {7 9} -progress}
+{create -progress a a}		{1 {0 20} numArgs {} {}}
+{create -foo}			{1 {0 11} badSwitch {7 4} -foo}
+{create a a}			{1 {0 10} numArgs {} {}}
+
+{delete a}			{ok}
+{xmlact::delete a}		{ok}
+{delete}			{1 {0 6} numArgs {} {}}
+{delete a a}			{1 {0 10} numArgs {} {}}
+
+{parse a a 0}			{ok}
+{xmlact::parse a a 1}		{ok}
+{parse a a a}			{1 {0 11} badBoolean {10 1} {}}
+{parse a a}			{1 {0 9} numArgs {} {}}
+{parse a a 0 a}			{1 {0 13} numArgs {} {}}
+
+{process a a}			{ok}
+{xmlact::process a a}		{ok}
+{process a}			{1 {0 9} numArgs {} {}}
+{process a a a}			{1 {0 13} numArgs {} {}}
+
+{reset a}			{ok}
+{xmlact::reset a}		{ok}
+{reset}				{1 {0 5} numArgs {} {}}
+{reset a a}			{1 {0 9} numArgs {} {}}
+
+{action a a set}			{ok}
+{xmlact::action a -end *a* set}		{ok}
+{action a -start a badProc1}		{1 {0 26} warnUndefProc {18 8} badProc1}
+{action a -start a set -text a}		{ok}
+{action a a set -text}			{1 {0 20} noSwitchArg {} -text}
+{action a -start a set -value a a}	{ok}
+{action a -start a set -value a}	{1 {0 30} noSwitchArg {} -value}
+{action a a set -attributes a}	{ok}
+{action a -start a set -attributes}	{1 {0 33} noSwitchArg {} -attributes}
+{action a -start a set a a a -literal a a a}	{ok}
+{action a a set -text a -value a a -attributes a -tag -path -node}	{ok}
+{action a a}			{1 {0 10} numArgs {} {}}
+
+{skip a {}}				{ok}
+{xmlact::skip a $a}			{ok}
+{skip a children}			{ok}
+{skip a {start children end all}}	{ok}
+{skip a {foo bar}}			{1 {0 16} badXMLaction {} {} 1 {0 16} badXMLaction {} {}}
+{skip a}				{1 {0 6} numArgs {} {}}
+{skip a $a $a}				{1 {0 12} numArgs {} {}}
+
+}

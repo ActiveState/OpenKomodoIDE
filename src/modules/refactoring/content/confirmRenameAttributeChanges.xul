@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2013 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % findDTD SYSTEM "chrome://komodo/locale/find.dtd">
+  %findDTD;
+  <!ENTITY % theDTD SYSTEM "chrome://refactoring/locale/refactoring.dtd">
+  %theDTD;
+]>
+
+<!-- Dialog to run a "RenameClassMember in Files" operation and confirm with the
+     user the replacements to make. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/tree.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/find.css" type="text/css"?>
+<?xml-stylesheet href="chrome://refactoring/skin/confirmRenameAttributeChanges.css" type="text/css"?>
+
+<dialog id="refactoring-confirm-repl"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        windowtype="komodo_refactoring_confirm_repl"
+        title="&confirmReplacement.title;"
+        orient="vertical"
+        width="640"
+        height="480"
+        persist="height width"
+        flex="1"
+        onload="onLoad()"
+        buttons="accept,cancel"
+        defaultButton="accept"
+        ondialogaccept="return make_changes();"
+        ondialogcancel="return cancel();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://xtk/content/treeview.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/launch.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://refactoring/content/confirmRenameAttributeChanges.js" type="application/x-javascript;version=1.7"/>
+
+    <menupopup id="tree_context_menu"
+               onpopupshowing="onTreePopupShowing(event, this);">
+        <menuitem id="context_menu_diff"
+                  label="&showSelectedChanges.label;"
+                  tooltiptext="&showSelectedChanges.tooltiptext;"
+                  oncommand="show_selected_changes();"/>
+        <menuseparator id="context_menu_separator_1" />
+        <menuitem id="context_menu_check" label="&context_menu_check.label;" oncommand="check_selected();"/>
+        <menuitem id="context_menu_uncheck" label="&context_menu_uncheck.label;" oncommand="uncheck_selected();"/>
+    </menupopup>
+
+    <!--
+    <hbox align="center">
+        <image id="dialog-icon" class="question-icon spaced" />
+        <separator orient="vertical" class="thin"/>
+        <description flex="1">
+            &amp;confirmReplacement.description;
+        </description>
+    </hbox>
+    -->
+
+    <separator class="thin"/>
+    <tree id="repls" flex="1"
+          class="no-border"
+          editable="true"
+          style="margin: 0px;"
+          hidecolumnpicker="true"
+          onclick="onTreeClick(event);"
+          ondblclick="onTreeDblClick(event);"
+          onkeypress="return onKeyPress(event);">
+        <treecols>
+            <splitter class="tree-splitter"/>
+            <treecol id="isChecked"
+                     type="checkbox"
+                     primary="true"
+                     label=""
+                     editable="true"
+                     width="50"
+                     style="max-width: 50px"
+                     ignoreincolumnpicker="true"
+                     flex="1"
+                     tooltiptext="&checkToApplyChanges.tooltiptext;" />
+            <splitter class="tree-splitter"/>
+            <treecol id="text"
+                     label="Value"
+                     crop="center"
+                     flex="1" />
+            <splitter class="tree-splitter"/>
+            <treecol id="lineNo"
+                     label="Line #"
+                     width="100"
+                     crop="center"
+                     />
+        </treecols>
+        <treechildren id="repls-body" flex="1"
+                      context="tree_context_menu"
+                      editable="true"
+                      class="confirmrepl"/>
+    </tree>
+
+    <separator class="thin"/>
+    <hbox>
+        <separator flex="1"/>
+        <button id="show-marked-changes-btn" label="&showMarkedChanges.label;"
+                tooltiptext="&showMarkedChanges.tooltiptext;"
+                disabled="true"
+                accesskey="&showMarkedChanges.accesskey;"
+                oncommand="show_marked_changes();"/>
+    </hbox>
+
+    <separator class="thin"/>
+</dialog>
+

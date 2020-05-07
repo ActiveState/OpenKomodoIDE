@@ -1,0 +1,14 @@
+Update the cursor when entering Scintilla on the Mac - bug 97903.
+
+Index: cocoa/ScintillaView.mm
+===================================================================
+--- cocoa/ScintillaView.mm	(revision 77517)
++++ cocoa/ScintillaView.mm	(working copy)
+@@ -202,6 +202,7 @@
+   [mCurrentCursor retain];
+   
+   // Trigger recreation of the cursor rectangle(s).
++  [mCurrentCursor set];  // Forced cursor setting - Komodo bug 97903.
+   [[self window] invalidateCursorRectsForView: self];
+ }
+ 

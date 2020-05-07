@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/listbox.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        class="kodialog pref-window"
+        orient="vertical"
+        onload="onload();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+
+<script><![CDATA[
+function onload() {
+    // for project prefs, we do not want to inherit the parent prefs
+    if (parent.part) {
+        document.getElementById("mappings").setAttribute("prefhere","true");
+        // Don't want to show the drag/drop preferences for a project.
+        var remove = document.getElementById("dropask_groupbox");
+        remove.parentNode.removeChild(remove);
+    }
+    parent.initPanel();
+}
+]]></script>
+
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="mapped-uri-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical">
+            <caption label="&mappedURIs.label;"/>
+            <description>
+                &mappedUri.description;
+            </description>
+      
+            <mappededitor id="mappings"
+                    pref="true" prefwidget="true"
+                    prefstring="mappedPaths" flex="1"/>
+    
+            <separator class="thin"/>
+        </groupbox>
+    
+        <separator class="thin"/>
+    
+        <groupbox id="dropask_groupbox" orient="vertical">
+            <caption label="&unmatchedMappedURIs.label;"/>
+            <vbox id="dropask2">
+                <label value="&remoteDebuggingNewURL.label;"/>
+                <menulist pref="true"
+                          id="remotedebug_mapped_uri"
+                          prefattribute="data"
+                          prefstrings="donotask_remotedebug_mapped_uri,donotask_action_remotedebug_mapped_uri">
+                    <menupopup>
+                        <menuitem data="false,"   label="&askMeWhatToDo.label;"/>
+                        <menuitem data="true,Yes" label="&addAURIMapping.label;"/>
+                        <menuitem data="false,No" label="&doNotAddAURIMapping.label;"/>
+                    </menupopup>
+                </menulist>
+            </vbox>
+        </groupbox>
+
+    </vbox>
+
+</window>
+
+

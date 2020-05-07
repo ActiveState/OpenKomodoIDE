@@ -1,0 +1,249 @@
+/* Copyright (c) 2000-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* override the default text-link binding to always open in a different app */
+label.text-link, label[onclick] {
+  -moz-binding: url(chrome://komodo/content/bindings/text-link.xml#text-link);
+}
+
+/* a menupopup that can be used in a menu or menulist */
+langlist  {
+  -moz-binding: url('chrome://komodo/content/bindings/widgets.xml#lang-list');
+}
+
+/* a listbox that manages a list of paths */
+pathlist  {
+  -moz-binding: url('chrome://komodo/content/bindings/widgets.xml#listbox-patheditor');
+}
+
+/* a listbox that manages path/uri mappings */
+mappededitor {
+  -moz-binding: url("chrome://komodo/content/bindings/widgets.xml#tree-mappededitor");
+}
+
+/* a listbox that manages a list of checkbox elements */
+checklistbox  {
+  -moz-binding: url('chrome://komodo/content/bindings/widgets.xml#listbox-checklist');
+}
+
+/* styling for the langlist menupopup */
+menu.menulist-subLevel {
+  padding: 1px;
+  margin: 1px;
+  list-style-image: none;
+  -moz-box-align: start;
+}
+
+#statusbar-encoding-menupopup > menuitem > .menu-text,
+menu.menulist-subLevel > .menu-text,
+menu.menulist-subLevel > menupopup  > menuitem > .menu-text {
+    margin-left: 2px !important;
+  padding: 1px;
+  margin: 1px;
+}
+
+menu.menulist-subLevel > menupopup  > menuitem {
+  border: 1px solid transparent;
+  padding: 1px;
+  margin: 1px;
+  max-width: none;
+  list-style-image: none;
+}
+
+/* A pane to hold widgets, as in kd 272 */
+ko-pane {
+  -moz-binding: url("chrome://komodo/content/bindings/pane.xml#pane");
+}
+
+ko-pane:not([ready]) {
+  /* panes should initially be collapsed */
+  visibility: collapse;
+}
+
+ko-pane .pane-tabs-container tabs {
+  -moz-box-flex: 1;
+}
+
+ko-pane tabpanels {
+  -moz-appearance: none;
+}
+
+ko-pane > [anonid="tabs_popup"]:not([_tabsInPane="1"]) .tab_popup_single_tab {
+  display: none;
+}
+ko-pane > [anonid="tabs_popup"][_tabsInPane="1"] .tab_popup_multiple_tabs {
+  display: none;
+}
+ko-pane > [anonid="tabs_popup"][_widgetsInPane="1"] .tab_popup_multiple_widgets {
+  display: none;
+}
+ko-pane[floating] > [anonid="tabs_popup"] [anonid="tabs_popup_detach"] {
+  display: none; /* don't allow detaching floating panes, it does nothing */
+}
+ko-pane[type="sidebar"] > [anonid="tabs_popup"] > .tab_popup_move_tab {
+  /* "Move Above X" and "Move Below X" don't make sense for single-tab view */
+  display: none;
+}
+ko-pane > [anonid="tabs_popup"] > .tab_popup_move_tab:not([label]) {
+  /* "Move Above X" and "Move Below X" when at the ends of the list */
+  display: none;
+}
+
+#workspace_left_area ko-pane[type="sidebar"] .pane-container {
+	padding-left: 5px;
+}
+
+#workspace_right_area ko-pane[type="sidebar"] .pane-container {
+	padding-right: 5px;
+}
+ 
+:root > panel[id^="pane-floating-panel-"] {
+  border: none;
+}
+
+ko-pane[type="sidebar"] .pane-container,
+ko-pane[type="horizontal"] .pane-container,
+ko-pane[type="icons"] .pane-container {
+  -moz-box-orient: vertical;
+}
+ko-pane[type="sidebar"] .pane-tabs-container tabs {
+  -moz-binding: url("chrome://komodo/content/bindings/scrolltabs.xml#tabs-droplist");
+  background-image: none;
+}
+ko-pane[type="horizontal"] .pane-tabs-container tabs,
+ko-pane[type="icons"] .pane-tabs-container tabs {
+  -moz-binding: url("chrome://komodo/content/bindings/scrolltabs.xml#tabs-scrollable");
+}
+ko-pane .tabs-vertical-label {
+  -moz-appearance: -moz-win-browsertabbar-toolbox;
+  -moz-box-align: center;
+}
+ko-pane[type="sidebar"] .tabs-vertical-label,
+ko-pane[type="horizontal"] .tabs-vertical-label,
+ko-pane[type="icons"] .tabs-vertical-label {
+  visibility: collapse;
+}
+
+ko-pane .tabs-vertical-label > spacer {
+  -moz-box-flex: 1;
+}
+
+ko-pane[type="horizontal"],
+ko-pane[type="icons"] {
+  -moz-box-orient: vertical;
+}
+
+ko-pane[type="vertical"] tabs[anonid="tabs"] {
+  -moz-binding: url("chrome://komodo/content/bindings/scrolltabs.xml#tabs-vertical-text");
+  -moz-box-orient: vertical;
+}
+ko-pane[type="vertical"] tabs[anonid="tabs"] .tabs-left {
+  /* Ensures the tabs are vertically centered. */
+  -moz-box-flex: 1;
+}
+ko-pane[type="vertical"] tabs[anonid="tabs"] tab {
+  /* Vertical tab with vertical text labels. */
+  -moz-binding        : url("chrome://komodo/content/bindings/scrolltabs.xml#tab-vertical-text");
+  -moz-appearance     : none;
+  min-width           : 1.5em;
+  max-width           : 2.5em;
+  margin              : 0;
+  padding             : 0;
+}
+ko-pane[type="vertical"] tabs[anonid="tabs"] tab:-moz-focusring {
+  outline: none;
+}
+
+ko-pane[type="vertical"] tabs[anonid="tabs"][rotation="90"] .vertical-label-vbox {
+  /* since the last character is normally on top, this makes the text read backwards */
+  -moz-box-direction: reverse;
+}
+ko-pane[type="vertical"] tabs[anonid="tabs"][rotation="90"] .vertical-button-text {
+  -moz-transform: rotate(90deg);
+}
+ko-pane[type="vertical"] tabs[anonid="tabs"][rotation="180"] .vertical-button-text {
+  -moz-transform: rotate(180deg);
+}
+ko-pane[type="vertical"] tabs[anonid="tabs"][rotation="270"] .vertical-button-text {
+  -moz-transform: rotate(270deg);
+}
+#workspace_right_area[type="vertical"] .pane-container {
+  /* put the tabs on the outer edge of the window */
+  -moz-box-direction: reverse;
+}
+
+ko-pane[type="icons"] .pane-tabs-container tab {
+  /* default image for icons panes */
+  list-style-image: url("chrome://komodo/skin/images/existing_file.png");
+  -moz-binding: url("chrome://komodo/content/bindings/scrolltabs.xml#tab-icons");
+}
+ko-pane[type="icons"] .pane-tabs-container .tab-text {
+  display: none;
+}
+
+browser[type="ko-widget"] {
+  -moz-binding: url("chrome://komodo/content/bindings/pane.xml#widget");
+  -moz-box-flex: 1;
+}
+
+/**
+ * Vertical text label.
+ */
+ko-vertical-text
+{
+    -moz-binding        : url("chrome://komodo/content/bindings/widgets.xml#vertical_label");
+    margin-left         : 0px;
+    margin-right        : 0px;
+    overflow-x          : hidden;
+    -moz-box-align      : start;
+}
+
+ko-vertical-text .label
+{
+  overflow-x          : hidden;
+  margin              : 0;
+}
+
+ko-pane[type="vertical"] tabs[anonid="tabs"][rotation="90"] ko-vertical-text .label {
+  -moz-transform-origin: top left;
+  -moz-transform: rotate(90deg) translateY(-1em);
+}
+ko-pane[type="vertical"] tabs[anonid="tabs"][rotation="180"] ko-vertical-text .label {
+  -moz-transform: rotate(180deg);
+}
+ko-pane[type="vertical"] tabs[anonid="tabs"][rotation="270"] ko-vertical-text .label {
+  -moz-transform: rotate(270deg) translateY(-moz-calc(-1em + 10px));
+}
+
+.vertical-label-vbox, .tab-text.vertical-label-vbox
+{
+    text-align          : center;
+    padding             : 4px 0 4px 0;
+}
+.vertical-label-vbox .tab-middle
+{
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.vertical-button-text
+{
+    margin              : 0;
+    padding             : 0;
+    margin-top          : -4px;
+    margin-bottom       : -4px;
+}
+
+
+/**
+ * File Status within menu items.
+ */
+menuitem.menuitem-file-status {
+  -moz-binding: url("chrome://komodo/content/bindings/widgets.xml#menuitem-file-status");
+}
+
+menuitem.menuitem-file-status > label {
+  margin: 0 4px;
+}

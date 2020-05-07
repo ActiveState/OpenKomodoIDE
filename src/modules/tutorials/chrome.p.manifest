@@ -1,0 +1,9 @@
+# #if MODE == "dev"
+content tutorials content/
+locale tutorials en-US locale/en-US/
+skin tutorials classic/1.0 skin/
+# #else
+content tutorials jar:tutorials.jar!/content/
+locale tutorials en-US jar:tutorials.jar!/locale/en-US/
+skin tutorials classic/1.0 jar:tutorials.jar!/skin/
+# #endif

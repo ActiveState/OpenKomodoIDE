@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % dialogsDTD SYSTEM "chrome://komodo/locale/dialogs.dtd">
+  %dialogsDTD;
+]>
+
+<!-- Copyright (c) 2003-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/dialogs/internalError.css" type="text/css"?>
+
+<dialog id="dialog-internalerror"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    onload="OnLoad()"
+    orient="vertical"
+    title="&internalKomodoError.title;"
+    flex="1"
+    persist="width"
+    buttons="accept"
+    buttonpack="center">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js"       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js"       type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/browse.js"                type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/dialogs/internalError.js" type="application/x-javascript;version=1.7"/>
+
+    <vbox flex="1" align="left">
+        <hbox flex="1" align="left" pack="center">
+            <label class="warning-icon"/>
+            <description id="error" flex="1"/>
+        </hbox>
+        <hbox flex="1" align="center" pack="center">
+            <label value="&pleaseReport.label;"/>
+            <button label="&pleaseReport.button;"
+                class="button-link"
+                oncommand="Browse('https://github.com/Komodo/KomodoEdit/issues/new');"/>
+            <separator orient="vertical"/>
+        </hbox>
+        <vbox>
+            <label value="&pleaseInclude.label;"/>
+            <textbox id="text" multiline="true" flex="1"
+                     readonly="true"/>
+        </vbox>
+    </vbox>
+    <separator class="thin"/>
+
+</dialog>
+

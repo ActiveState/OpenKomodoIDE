@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Textboxes"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script>
+<![CDATA[
+
+function setText(textBoxID)
+{
+  var result = document.getElementById(textBoxID).value;
+  document.getElementById("result").value = result;
+}
+
+]]>
+</script>
+
+<html:h1>XUL Textboxes</html:h1>
+
+<vbox flex="1" style="overflow: auto">
+
+   <hbox>
+      <label style="width:10em" value="Default:"/>
+      <textbox id="default" oninput="setText('default');" />
+   </hbox>
+   <hbox>
+      <label style="width:10em" value="Disabled:" />
+      <textbox id="disabled" disabled="true" value="disabled" size="10"
+               oninput="setText('disabled');" />
+   </hbox>
+   <hbox>
+      <label style="width:10em"  value="Readonly:" />
+      <textbox id="readonly" readonly="true" value="readonly"  size="30"
+               oninput="setText('readonly');" />
+   </hbox>
+   <hbox>
+      <label style="width:10em" value="Max length of 20:"  />
+      <textbox id="max-length" maxlength="20"  size="20"
+               oninput="setText('max-length');" />
+   </hbox>
+   <hbox>
+      <label style="width:10em" value="Password:"  />
+      <textbox id="password" type="password"
+               oninput="setText('password');" />
+   </hbox>
+   <hbox>
+      <label style="width:10em" value="Multiline:"  />
+      <textbox id="multiline" multiline="true" rows="7" cols="20"
+               oninput="setText('multiline');" />
+   </hbox>
+
+   <hbox >
+      <label style="width:10em" value="Input:"  />
+      <description id="result" >
+         none yet
+      </description>
+   </hbox>
+
+</vbox>
+
+</window>

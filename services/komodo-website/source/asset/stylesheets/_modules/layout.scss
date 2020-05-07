@@ -1,0 +1,320 @@
+#container
+{
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 0 -120px;
+}
+
+.grid-2
+{
+    @include outer-container;
+    
+    & > *
+    {
+        @include span-columns(6);
+    }
+}
+
+.grid-3
+{
+    @include outer-container;
+    
+    & > *
+    {
+        @include span-columns(4);
+    }
+}
+
+.grid-4
+{
+    @include outer-container;
+    
+    & > *
+    {
+        @include span-columns(3);
+    }
+}
+
+#content
+{
+    padding: 25px 0;
+    
+    &:not(.no-grid)
+    {
+        @include outer-container;
+
+        article
+        {
+            padding: 10px;
+            
+        }
+
+        &.sidebar
+        {
+            position: relative;
+            
+            & > section
+            {
+                @include span-columns(8);
+            }
+
+            & > aside
+            {
+                @include span-columns(4);
+            }
+
+
+            @include media($sidebar-collapse)
+            {
+                & > section
+                {
+                    @include span-columns(12);
+                }
+
+                & > aside
+                {
+                    position: absolute;
+                    z-index: 110;
+                }
+            }
+        }
+
+        &:not(.sidebar)
+        {
+            & > section
+            {
+                @include span-columns(12);
+            }
+        }
+
+    }
+
+    ul.trail
+    {
+        margin: 0;
+        padding: 0;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+
+        font-size: 18pt;
+
+        li
+        {
+            display: inline-block;
+
+            &:not(:last-child):after
+            {
+                content: ">";
+            }
+        }
+    }
+}
+
+/*#content:after
+{
+    content: "";
+    display: block;
+}*/
+
+footer, #footer_push
+{
+    height: 120px;
+}
+
+@include media($footer-reduce)
+{
+    #container
+    {
+        margin-bottom: -640px;
+    }
+
+    footer, #footer_push
+    {
+        height: 640px;
+    }
+}
+
+aside
+{
+    position: relative;
+    min-height: 100px;
+
+    #side-border
+    {
+        position: absolute;
+        left: -15px;
+        bottom: 0;
+        width: 1px;
+        min-height: 100%;
+        background: rgba(0,0,0,0.15);
+    }
+}
+
+/* Github Widgets */
+.github-repositories
+{
+    h3, h2
+    {
+        margin-bottom: 0;
+    }
+
+    p
+    {
+        margin-top: 0;
+        color: lighten($color-base-text, 10%);
+    }
+}
+
+.github-commits-wrap
+{
+    .github-commits
+    {
+        font-size: 9pt;
+
+        ul
+        {
+            padding: 0;
+
+            li
+            {
+                display: block;
+                margin-bottom: 5px;
+                min-width: 0;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+        }
+
+        .github-user
+        {
+            img
+            {
+                margin-right: 3px;
+                vertical-align: middle;
+                border: 1px solid rgba(0,0,0,0.4);
+            }
+
+            a
+            {
+                font-weight: bold;
+            }
+
+            &:after
+            {
+                content: ":";
+                margin-right: 5px;
+            }
+        }
+
+        .github-commit
+        {
+            color: $color-base-text;
+            border: 0;
+        }
+
+        .github-commit-date
+        {
+            display: none;
+        }
+    }
+
+}
+
+/* Pagination */
+
+.pagination
+{
+    margin-top: 25px;
+    text-align: center;
+    
+    ul
+    {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-weight: bold;
+
+        li
+        {
+            display: inline-block;
+        }
+    }
+}
+
+.document-contest
+{
+    article
+    {
+        ol
+        {
+            font-size: 15pt;
+        }
+    }
+
+    .promotion
+    {
+        float: right;
+        width: 300px;
+        height: 300px;
+        background-image: url(../images/icons/emblems/promotion.png);
+        background-size: 100%;
+        border: 0;
+
+        .inner
+        {
+            position: relative;
+            top: 50%;
+            @include transform(translateY(-50%));
+
+            color: #FFF;
+            font-size: 24pt;
+            line-height: 1.3;
+            font-weight: bold;
+            text-align: center;
+            padding: 0 40px;
+        }
+    }
+}
+
+#noscript-warning
+{
+    padding: 25px;
+    text-align: center;
+}
+
+.try-buy-buttons.global
+{
+    position: relative;
+    
+    .inner
+    {
+        @include media(min-width 960px)
+        {
+            position: absolute;
+            right: 0;
+        }
+    }
+}
+
+@include media(max-width 1279px)
+{
+    .at4-share-outer
+    {
+        display: none;
+    }
+}
+
+body.footer-disabled
+{
+    #container
+    {
+        margin-bottom: 0;
+    }
+    
+    #content
+    {
+        padding-bottom: 0;
+    }
+}

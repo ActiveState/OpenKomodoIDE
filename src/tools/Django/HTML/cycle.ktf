@@ -1,0 +1,9 @@
+// komodo tool: cycle
+// ==================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ==================
+<% /* cycle */ %>
+{% cycle [[%tabstop1:1]] %}

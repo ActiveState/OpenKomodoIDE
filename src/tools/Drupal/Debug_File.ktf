@@ -1,0 +1,48 @@
+// komodo tool: Debug File
+// =======================
+// async: 0
+// is_clean: true
+// language: JavaScript
+// rank: 100
+// trigger: trigger_postopen
+// trigger_enabled: 0
+// type: macro
+// version: 1.1.5
+// =======================
+(function()
+{
+    var koWebbrowser = Components.classes['@activestate.com/koWebbrowser;1'].
+                       getService(Components.interfaces.koIWebbrowser);
+    var prefs = require("ko/prefs");
+    var browser = prefs.getStringPref("browser");
+    this.launchFile = () =>
+    {
+        if( ! browser )
+        {
+            var browsers = koWebbrowser.get_possible_browsers({});
+            browserChoice = ko.dialogs.selectFromList(
+                "Set a default browser for Komodo to use",
+                "Which browser should we open?",
+                browsers,
+                "one"); // selectionCondition
+            
+            if( ! browserChoice )
+            {
+                ko.dialogs.alert("No browser chosen.  Komodo will ask your system to open the file with the application configured to open this type of file.  We can't be sure what you have configured.  Please specify a browser for a better workflow.");
+            }
+            else
+            {
+                browser = browserChoice[0];
+            }
+        }
+        var localURI = require("ko/views").current().get().koDoc.file.URI+"?XDEBUG_SESSION_START=1";
+        domainURI = ko.uriparse.getMappedPath(localURI);
+        if( domainURI.startsWith("file:///") )
+        {
+            ko.dialogs.alert("Run `Configure Mapped URI` userscript to map your file path to a domain path. ie. `http://localhost/` maps to `file:///C:/xampp/htdocs/`");
+            return;
+        }
+        ko.browse.openUrlInDefaultBrowser(domainURI, browser);
+    };
+    this.launchFile();
+})()

@@ -1,0 +1,3437 @@
+# analyzer.test --
+#
+#	This file contains regression tests for the routines in the
+#	analyzer.tcl file.
+#
+# Copyright (c) 1998-2000 Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: analyzer.test,v 1.8 2000/06/14 01:45:52 hershey Exp $
+
+if {[string compare test [info procs resetAnalyzer]] == 1} {
+    source [file  join [pwd] [file dirname [info script]] defs.tcl]
+}
+
+set dummyFile [file join $::tcltest::temporaryDirectory dummy.tcl]
+set dummyTextFile [file join $::tcltest::temporaryDirectory dummy.txt]
+
+analyzer::init
+coreTcl::init $::protest::currentVersion(Tcl)
+coreTk::init  $::protest::currentVersion(Tk)
+incrTcl::init $::protest::currentVersion(Incr)
+analyzer::setQuiet   1
+analyzer::setTwoPass 1
+
+renameMessageShow
+resetUProcData
+
+test analyzer-1.1 {analyzer::setTwoPass & analyzer::isTwoPass} {
+    analyzer::setTwoPass 1
+    if {[analyzer::isTwoPass]} {
+	set result 1
+    } else {
+	set result 0
+    }
+} {1}
+test analyzer-1.2 {analyzer::setTwoPass & analyzer::isTwoPass} {
+    analyzer::setTwoPass 0
+    if {[analyzer::isTwoPass]} {
+	set result 1
+    } else {
+	set result 0
+    }
+    analyzer::setTwoPass 1
+    set result
+} {0}
+
+test analyzer-2.1 {analyzer::setQuiet & analyzer::getQuiet} {
+    analyzer::setQuiet 1
+    if {[analyzer::getQuiet]} {
+	set result 1
+    } else {
+	set result 0
+    }
+} {1}
+test analyzer-2.2 {analyzer::setQuiet & analyzer::getQuiet} {
+    analyzer::setQuiet 0
+    if {[analyzer::getQuiet]} {
+	set result 1
+    } else {
+	set result 0
+    }
+    analyzer::setQuiet 1
+    set result
+} {0}
+
+test analyzer-3.1 {analyzer::setVerbose & analyzer::getVerbose} {
+    analyzer::setVerbose true
+    if {[analyzer::getVerbose]} {
+	set result 1
+    } else {
+	set result 0
+    }
+} {1}
+test analyzer-3.2 {analyzer::setVerbose & analyzer::getVerbose} {
+    analyzer::setVerbose false
+    if {[analyzer::getVerbose]} {
+	set result 1
+    } else {
+	set result 0
+    }
+} {0}
+
+test analyzer-4.1 {analyzer::getErrorCount & analyzer::getWarningCount} {
+    testCmd {set; incr $x}
+    list [analyzer::getErrorCount] [analyzer::getWarningCount]
+} {1 1}
+
+test analyzer-5.1 {analyzer::getFile} {
+    makeFile {} $dummyFile
+    set result {}
+    analyzer::analyze $dummyFile
+    analyzer::getFile
+} $dummyFile
+
+test analyzer-6.1 {analyzer::getScript} {
+    makeFile {set x 1} $dummyFile
+    set result {}
+    analyzer::analyze $dummyFile
+    analyzer::getScript
+} {set x 1
+}
+
+
+# (7.0) analyzer::getLine is tested by other tests.
+# (8.0) analyzer::getCmdRange is tested by other tests.
+# (9.0) analyzer::getTokenRange is tested by other tests.
+
+
+test analyzer-7.1 {analyzer::setCmdRange} {
+    testCmd "set x 1 2\nset y 3 4\n"
+} {1 {0 10} numArgs {} {} 2 {10 10} numArgs {} {}}
+
+test analyzer-8.1 {analyzer::pushCmdInfo & analyzer::popCmdInfo} {
+    testCmd {
+	incr [
+	set y 3 4] foo
+	set z 1 2 3
+    }
+} {3 {10 9} numArgs {} {} 2 {2 23} badInt {21 3} {} 4 {26 12} numArgs {} {}}
+
+
+# (13.0) analyzer::check is tested by other tests.
+
+
+test analyzer-9.1 {analyzer::isScannning} {
+    set analyzer::scanning 1
+    set result [analyzer::isScanning]
+    set analyzer::scanning 0
+    set result
+} {1}
+test analyzer-9.2 {analyzer::isScannning} {
+    set analyzer::scanning 0
+    set result [analyzer::isScanning]
+    set analyzer::scanning 0
+    set result
+} {0}
+
+test analyzer-10.1 {analyzer::scan} {
+    makeFile {
+	proc foo::bar {} {
+	}
+	namespace eval foo {
+	    namespace export bar
+	}
+	namespace import foo::*
+	bar a
+    } $dummyFile
+    set result {}
+    scanalyze $dummyFile
+    list $result [analyzer::getQuiet] [analyzer::isScanning]
+} {{8 {101 6} procNumArgs {} bar} 1 0}
+
+test analyzer-11.1 {analyzer::scanScript} {
+    makeFile "set x {}f\nset x 2 3\nproc foo {} {}\n foo a" $dummyFile
+    set result {}
+    resetScanData
+    scanalyze $dummyFile
+    set result
+} {1 {0 42} parse {8 34} {{extra characters after close-brace}} 2 {10 10} numArgs {} {} 4 {36 6} procNumArgs {} foo}
+test analyzer-11.2 {analyzer::scanScript} {
+    makeFile "set x {}f;set x 2 3;proc foo {} {}; foo a" $dummyFile
+    set result {}
+    resetScanData
+    scanalyze $dummyFile
+    set result
+} {1 {0 42} parse {8 34} {{extra characters after close-brace}} 1 {10 10} numArgs {} {} 1 {36 6} procNumArgs {} foo}
+
+test analyzer-11.3 {analyzer::scanScript} {
+    makeFile "set x {}f\\\nset x 2 3\nset x 3 4;proc foo {} {}; foo a" $dummyFile
+    set result {}
+    resetScanData
+    scanalyze $dummyFile
+    set result
+} {1 {0 53} parse {8 45} {{extra characters after close-brace}} 3 {21 10} numArgs {} {} 3 {47 6} procNumArgs {} foo}
+test analyzer-11.4 {analyzer::scanScript} {
+    makeFile {\set x 4 5;proc foo {} {}; foo a} $dummyFile
+    set result {}
+    resetScanData
+    scanalyze $dummyFile
+    set result
+} {1 {0 11} numArgs {} {} 1 {27 6} procNumArgs {} foo}
+test analyzer-11.5 {analyzer::scanScript} {
+    makeFile "\[set x 3 3\] x 4 5;proc foo {} {}; foo a" $dummyFile
+    set result {}
+    resetScanData
+    scanalyze $dummyFile
+    set result
+} {1 {1 9} numArgs {} {} 1 {34 6} procNumArgs {} foo}
+test analyzer-11.6 {analyzer::scanScript} {
+    makeFile {set x 3;proc $foo {} {}; foo a} $dummyFile
+    set result {}
+    resetScanData
+    scanalyze $dummyFile
+    set result
+} {1 {25 6} warnUndefProc {25 6} foo}
+test analyzer-11.6 {analyzer::scanScript} {
+    makeFile {proc foo {} {}; ::foo a} $dummyFile
+    set result {}
+    resetScanData
+    scanalyze $dummyFile
+    set result
+} {1 {16 8} procNumArgs {} foo}
+
+test analyzer-12.1 {analyzer::addScanCmds & analyzer::scanCmdExists} {
+    makeFile {
+	set x 1
+	foobar baz
+	set z 2 3
+    } $dummyFile
+    set result {}
+    resetScanData
+    analyzer::addScanCmds {}
+    analyzer::scan $dummyFile
+    set result
+} {}
+test analyzer-12.2 {analyzer::addScanCmds & analyzer::scanCmdExists} {
+    proc fooproc {tokens index} {
+	global result
+	lappend result $tokens $index
+	return 2
+    }
+    makeFile {
+	set x 1
+	foobar baz
+	set z 2 3
+    } $dummyFile
+    set result {}
+    resetScanData
+    analyzer::addScanCmds {foobar fooproc}
+    analyzer::scan $dummyFile
+    set result
+} {{{simple {11 6} {{text {11 6} {}}}} {simple {18 3} {{text {18 3} {}}}}} 1}
+test analyzer-12.4 {analyzer::addScanCmds & analyzer::scanCmdExists} {
+    resetScanData
+    list [analyzer::scanCmdExists foo] [analyzer::scanCmdExists bar]
+} {0 0}
+test analyzer-12.3 {analyzer::addScanCmds & analyzer::scanCmdExists} {
+    resetScanData
+    array set analyzer::scanCmds {foo-TPC-SCAN 1 bar {cmd}}
+    set result [list [analyzer::scanCmdExists foo] [analyzer::scanCmdExists bar]]
+    catch {unset analyzer::scanCmds(foo-TPC-SCAN)}
+    catch {unset analyzer::scanCmds(bar)}
+    set result
+} {1 1}
+resetScanData
+
+proc chainCmd {tokens index} {
+    global result
+    set result [list $tokens $index]
+    return -1
+}
+proc setProcInfo {tokens index} {
+    set pInfo [uproc::popProcInfo]
+    set pInfo [uproc::setName $pInfo f]
+    set pInfo [uproc::setDef  $pInfo 1]
+    uproc::pushProcInfo $pInfo
+    return -1
+}
+
+test analyzer-13.1 {analyzer::addContext - pushing new context} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::addContext 0 1 {} {} "return -errorinfo" $tokens 0
+    context::top
+} {::}
+test analyzer-13.2 {analyzer::addContext - pushing new context} {
+    resetScanData
+    set cmd "foo::bar"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::addContext 0 1 {} {} "return -errorinfo" $tokens 0
+    context::top
+} {::foo}
+test analyzer-13.3 {analyzer::addContext - pushing new context} {
+    resetScanData
+    set cmd "::foo::bar"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::cat"
+    analyzer::addContext 0 1 {} {} "return -errorinfo" $tokens 0
+    context::top
+} {::foo}
+test analyzer-13.4 {analyzer::addContext - pushing new context} {
+    resetScanData
+    set cmd "foo::bar"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::addContext 0 0 {} {} "return -errorinfo" $tokens 0
+    context::top
+} {::foo::bar}
+test analyzer-13.5 {analyzer::addContext - pushing new context} {
+    resetScanData
+    set cmd "\$foo::bar"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::addContext 0 1 {} {} "return -errorinfo" $tokens 0
+    context::top
+} {UNKNOWN}
+test analyzer-13.6 {analyzer::addContext - pushing new context} {
+    resetScanData
+    set cmd "\$foo::bar"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::addContext 0 0 {} {} "return -errorinfo" $tokens 0
+    context::top
+} {UNKNOWN}
+test analyzer-13.7 {analyzer::addContext - adding hooks to pInfo} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::addContext 0 1 {} {} "return -errorinfo" $tokens 0
+    set pInfo [uproc::popProcInfo]
+    list [uproc::getVerifyCmd $pInfo] [uproc::getCheckCmd $pInfo]
+} {analyzer::verifyUserProc analyzer::checkUserProc}
+test analyzer-13.8 {analyzer::addContext - adding hooks to pInfo} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::addContext 0 1 testV {} "return -errorinfo" $tokens 0
+    set pInfo [uproc::popProcInfo]
+    list [uproc::getVerifyCmd $pInfo] [uproc::getCheckCmd $pInfo]
+} {testV analyzer::checkUserProc}
+test analyzer-13.9 {analyzer::addContext - adding hooks to pInfo} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::addContext 0 1 {} testC "return -errorinfo" $tokens 0
+    set pInfo [uproc::popProcInfo]
+    list [uproc::getVerifyCmd $pInfo] [uproc::getCheckCmd $pInfo]
+} {analyzer::verifyUserProc testC}
+test analyzer-13.10 {analyzer::addContext - adding hooks to pInfo} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::addContext 0 1 testV testC "return -errorinfo" $tokens 0
+    set pInfo [uproc::popProcInfo]
+    list [uproc::getVerifyCmd $pInfo] [uproc::getCheckCmd $pInfo]
+} {testV testC}
+test analyzer-13.11 {analyzer::addContext - testing chain cmd} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result {}
+    set index [analyzer::addContext 0 1 {} {} chainCmd $tokens 0]
+    list $result $index
+} {{{{simple {0 3} {{text {0 3} {}}}}} 0} -1}
+test analyzer-13.12 {analyzer::addContext - verifying proc info} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result {}
+    set index [analyzer::addContext 0 1 {} {} chainCmd $tokens 0]
+    list [array names uproc::userProc] $index
+} {{} -1}
+test analyzer-13.13 {analyzer::addContext - verifying proc info} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result {}
+    set index [analyzer::addContext 0 1 {} {} setProcInfo $tokens 0]
+    list [array names uproc::userProc] $index
+} {f -1}
+test analyzer-13.14 {analyzer::addContext - cleanup} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    uproc::pushProcInfo newProc
+    context::push newContext
+    set index [analyzer::addContext 0 1 {} {} chainCmd $tokens 0]
+    list [uproc::topProcInfo] [context::top]
+} {newProc newContext}
+
+test analyzer-14.1 {analyzer::addUserProc} {
+    resetScanData
+    set cmd "proc"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::"
+    uproc::pushProcInfo [uproc::newProcInfo]
+    set index [analyzer::addUserProc $tokens 1]
+    set pInfo [uproc::topProcInfo]
+    list [uproc::getName $pInfo] [uproc::getType $pInfo] $index
+} {{} proc 1}
+test analyzer-14.2 {analyzer::addUserProc} {
+    resetScanData
+    set cmd "proc foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::"
+    uproc::pushProcInfo [uproc::newProcInfo]
+    set index [analyzer::addUserProc $tokens 1]
+    set pInfo [uproc::topProcInfo]
+    list [uproc::getName $pInfo] [uproc::getType $pInfo] $index
+} {{} proc 2}
+test analyzer-14.3 {analyzer::addUserProc} {
+    resetScanData
+    set cmd "proc foo {}"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::"
+    uproc::pushProcInfo [uproc::newProcInfo]
+    set index [analyzer::addUserProc $tokens 1]
+    set pInfo [uproc::topProcInfo]
+    list [uproc::getName $pInfo] [uproc::getType $pInfo] $index
+} {{} proc 3}
+test analyzer-14.4 {analyzer::addUserProc} {
+    resetScanData
+    set cmd "proc foo {} {} {}"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::"
+    uproc::pushProcInfo [uproc::newProcInfo]
+    set index [analyzer::addUserProc $tokens 1]
+    set pInfo [uproc::topProcInfo]
+    list [uproc::getName $pInfo] [uproc::getType $pInfo] $index
+} {{} proc 5}
+test analyzer-14.5 {analyzer::addUserProc} {
+    resetScanData
+    set cmd "proc \$foo {} {}"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::"
+    uproc::pushProcInfo [uproc::newProcInfo]
+    set index [analyzer::addUserProc $tokens 1]
+    set pInfo [uproc::topProcInfo]
+    list [uproc::getName $pInfo] [uproc::getType $pInfo] $index
+} {{} proc 4}
+test analyzer-14.6 {analyzer::addUserProc} {
+    resetScanData
+    set cmd "proc foo {} {}"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::"
+    uproc::pushProcInfo [uproc::newProcInfo]
+    set index [analyzer::addUserProc $tokens 1]
+    set pInfo [uproc::topProcInfo]
+    list [uproc::getName $pInfo] [uproc::getType $pInfo] $index
+} {::foo proc 2}
+test analyzer-14.7 {analyzer::addUserProc} {
+    resetScanData
+    set cmd "proc foo::bar {} {}"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::"
+    uproc::pushProcInfo [uproc::newProcInfo]
+    set index [analyzer::addUserProc $tokens 1]
+    set pInfo [uproc::topProcInfo]
+    list [uproc::getName $pInfo] [uproc::getType $pInfo] $index
+} {::bar proc 2}
+
+test analyzer-15.1 {analyzer::addArgList} {
+    resetScanData
+    set cmd "proc foo::bar \$a {}"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::"
+    uproc::pushProcInfo [uproc::newProcInfo]
+    set index [analyzer::addArgList $tokens 2]
+    set pInfo [uproc::topProcInfo]
+    list [uproc::getMin $pInfo] [uproc::getMax $pInfo] \
+	[uproc::getDef $pInfo] $index
+} {-1 -1 0 4}
+test analyzer-15.2 {analyzer::addArgList} {
+    resetScanData
+    set cmd "proc foo::bar {a} {}"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::"
+    uproc::pushProcInfo [uproc::newProcInfo]
+    set index [analyzer::addArgList $tokens 2]
+    set pInfo [uproc::topProcInfo]
+    list [uproc::getMin $pInfo] [uproc::getMax $pInfo] \
+	[uproc::getDef $pInfo] $index
+} {1 1 1 3}
+
+test analyzer-16.1 {analyzer::addRenameCmd} {
+    resetScanData
+    set cmd "\$a a c"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::"
+    set index [analyzer::addRenameCmd $tokens 0]
+    list [array names analyzer::renameCmds] $index
+} {{} 3}
+test analyzer-16.2 {analyzer::addRenameCmd} {
+    resetScanData
+    set cmd "a \$a c"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::"
+    set index [analyzer::addRenameCmd $tokens 0]
+    list [array names analyzer::renameCmds] $index
+} {{} 3}
+test analyzer-16.3 {analyzer::addRenameCmd} {
+    resetScanData
+    set cmd "a b c"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::"
+    set index [analyzer::addRenameCmd $tokens 0]
+    list [array names analyzer::renameCmds] $index
+} {::a,::b 2}
+test analyzer-16.4 {analyzer::addRenameCmd} {
+    resetScanData
+    set cmd "a b c"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::foo"
+    set index [analyzer::addRenameCmd $tokens 0]
+    list [array names analyzer::renameCmds] $index
+} {::foo::a,::foo::b 2}
+
+test analyzer-17.1 {analyzer::addInheritCmd} {
+    resetScanData
+    set cmd ""
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::A"
+    set index [analyzer::addInheritCmd $tokens 0]
+    list [array get analyzer::inheritCmds] $index
+} {{::A {{}}} 0}
+test analyzer-17.2 {analyzer::addInheritCmd} {
+    resetScanData
+    set cmd "\$B C"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::A"
+    set index [analyzer::addInheritCmd $tokens 0]
+    list [array get analyzer::inheritCmds] $index
+} {{::A C} 2}
+test analyzer-17.3 {analyzer::addInheritCmd} {
+    resetScanData
+    set cmd "B \$C"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::A"
+    set index [analyzer::addInheritCmd $tokens 0]
+    list [array get analyzer::inheritCmds] $index
+} {{::A B} 2}
+test analyzer-17.4 {analyzer::addInheritCmd} {
+    resetScanData
+    set cmd "\$B \$C"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::A"
+    set index [analyzer::addInheritCmd $tokens 0]
+    list [array get analyzer::inheritCmds] $index
+} {{::A {{}}} 2}
+test analyzer-17.5 {analyzer::addInheritCmd} {
+    resetScanData
+    set cmd "B C"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::A"
+    set index [analyzer::addInheritCmd $tokens 0]
+    list [array get analyzer::inheritCmds] $index
+} {{::A {{B C}}} 2}
+test analyzer-17.6 {analyzer::addInheritCmd} {
+    resetScanData
+    set cmd "B C"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push "::A"
+    set index [analyzer::addInheritCmd $tokens 0]
+    set index [analyzer::addInheritCmd $tokens 0]
+    list [array get analyzer::inheritCmds] $index
+} {{::A {{B C} {B C}}} 2}
+
+test analyzer-18.1 {analyzer::addExportCmd} {
+    resetScanData
+    set cmd "namespace export"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::exportCmds}
+    array set analyzer::exportCmds {}
+
+    analyzer::addExportCmd $tokens 2
+    array get analyzer::exportCmds
+} {}
+test analyzer-18.2 {analyzer::addExportCmd} {
+    resetScanData
+    set cmd "namespace export -clear"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::exportCmds}
+    array set analyzer::exportCmds {}
+
+    analyzer::addExportCmd $tokens 2
+    array get analyzer::exportCmds
+} {}
+test analyzer-18.3 {analyzer::addExportCmd} {
+    resetScanData
+    set cmd "namespace export foo::*"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::exportCmds}
+    array set analyzer::exportCmds {}
+
+    analyzer::addExportCmd $tokens 2
+    array get analyzer::exportCmds
+} {}
+test analyzer-18.4 {analyzer::addExportCmd} {
+    resetScanData
+    set cmd "namespace export \$pat \$pat"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::exportCmds}
+    array set analyzer::exportCmds {}
+
+    analyzer::addExportCmd $tokens 2
+    array get analyzer::exportCmds
+} {}
+test analyzer-18.5 {analyzer::addExportCmd} {
+    resetScanData
+    set cmd "namespace export -clear foo::* \$pat *"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::exportCmds}
+    array set analyzer::exportCmds {}
+
+    analyzer::addExportCmd $tokens 2
+    array get analyzer::exportCmds
+} {:: *}
+test analyzer-18.6 {analyzer::addExportCmd} {
+    resetScanData
+    set cmd {namespace export a\[1-9\]*}
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::exportCmds}
+    array set analyzer::exportCmds {}
+
+    analyzer::addExportCmd $tokens 2
+    array get analyzer::exportCmds
+} {:: {{a[1-9]*}}}
+test analyzer-18.7 {analyzer::addExportCmd} {
+    resetScanData
+    set cmd {namespace export {a[1-9]*}}
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::exportCmds}
+    array set analyzer::exportCmds {}
+
+    analyzer::addExportCmd $tokens 2
+    array get analyzer::exportCmds
+} {:: {{a[1-9]*}}}
+
+catch {unset analyzer::exportCmds}
+
+test analyzer-19.1 {analyzer::addImportCmd} {
+    set cmd "namespace import"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::importCmds}
+    array set analyzer::importCmds {}
+
+    analyzer::addImportCmd $tokens 2
+    array get analyzer::importCmds
+} {}
+test analyzer-19.2 {analyzer::addImportCmd} {
+    set cmd "namespace import -force"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::importCmds}
+    array set analyzer::importCmds {}
+
+    analyzer::addImportCmd $tokens 2
+    array get analyzer::importCmds
+} {}
+test analyzer-19.3 {analyzer::addImportCmd} {
+    set cmd "namespace import "
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::importCmds}
+    array set analyzer::importCmds {}
+
+    analyzer::addImportCmd $tokens 2
+    array get analyzer::importCmds
+} {}
+test analyzer-19.4 {analyzer::addImportCmd} {
+    set cmd "namespace import"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::importCmds}
+    array set analyzer::importCmds {}
+
+    analyzer::addImportCmd $tokens 2
+    array get analyzer::importCmds
+} {}
+test analyzer-19.5 {analyzer::addImportCmd} {
+    set cmd "namespace import"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::importCmds}
+    array set analyzer::importCmds {}
+
+    analyzer::addImportCmd $tokens 2
+    array get analyzer::importCmds
+} {}
+test analyzer-19.6 {analyzer::addImportCmd} {
+    set cmd "namespace import"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    catch {unset analyzer::importCmds}
+    array set analyzer::importCmds {}
+
+    analyzer::addImportCmd $tokens 2
+    array get analyzer::importCmds
+} {}
+
+catch {unset analyzer::importCmds}
+
+test analyzer-20.1 {analyzer::verifyUserProc} {
+    set pInfo [uproc::newProcInfo]
+    set pInfo [uproc::setDef  $pInfo 1]
+    analyzer::verifyUserProc $pInfo
+} {0}
+test analyzer-20.2 {analyzer::verifyUserProc} {
+    set pInfo [uproc::newProcInfo]
+    set pInfo [uproc::setName $pInfo f]
+    analyzer::verifyUserProc $pInfo
+} {0}
+test analyzer-20.3 {analyzer::verifyUserProc} {
+    set pInfo [uproc::newProcInfo]
+    set pInfo [uproc::setName $pInfo f]
+    set pInfo [uproc::setDef  $pInfo 1]
+    analyzer::verifyUserProc $pInfo
+} {1}
+
+test analyzer-21.1 {analyzer::collate} {
+        makeFile {
+	namespace eval foo {
+	    proc f1 {} {}
+	    proc ::foo::f2 {} {}
+	    
+	    namespace eval bar {
+		proc b1 {} {}
+		proc f1 {a {a a}} {}
+		proc ::foo::bar::b2 {} {}
+	    }
+	    proc bar::b3 {} {}
+	}
+	proc foo::f3 {} {}
+	namespace eval dog {
+	    proc ::foo::f4 {} {}
+	    proc ::foo::bar::b4 {} {}
+	}
+	namespace eval dog::cat {
+	    proc ::dog::d2 {} {}
+	    proc c1 {} {}
+	    proc ::dog::cat::c2 {} {}
+	}
+	namespace eval foo {
+	    namespace export *
+	    namespace eval bar {
+		namespace export *
+	    }
+	    namespace import bar::*
+	}
+	namespace import foo::*
+    } $dummyFile
+    scanalyze $dummyFile
+    lsort [array names uproc::userProc {::[bf][1-4]}]
+} {::b1 ::b2 ::b3 ::b4 ::f1 ::f2 ::f3 ::f4}
+
+resetScanData
+
+# (27.0) analyzer::getExportedCmds tested by the analyzer::collate tests
+# (28.0) analyzer::getInheritedCmds tested by the analyzer::collate tests
+
+test analyzer-22.1 {analyzer::analyze} {
+    makeFile {set x 1} $dummyFile
+    analyzer::analyze $dummyFile
+} "$dummyFile"
+test analyzer-22.2 {analyzer::analyze} {
+    set oldChannel $::message::outChannel
+    set ::message::outChannel [open $dummyFile w]
+    set result [analyzer::analyze $dummyFile-that-does-not-exist]
+    set ::message::outChannel $oldChannel
+    set result
+} {}
+test analyzer-22.3 {analyzer::analyze without -quiet} {
+    analyzer::setQuiet   0
+    set oldChannel $::message::outChannel
+    set ::message::outChannel [open $dummyTextFile w]
+    makeFile {set x 1} $dummyFile
+    set result [analyzer::analyze $dummyFile]
+    set ::message::outChannel $oldChannel
+    analyzer::setQuiet   1
+    set result
+} "$dummyFile"
+test analyzer-22.4 {analyzer::analyze without -quiet, with stdin} {
+    analyzer::setQuiet   0
+    set oldChannel $::message::outChannel
+    set ::message::outChannel [open $dummyFile w]
+    set result [analyzer::analyze {}]
+    set ::message::outChannel $oldChannel
+    analyzer::setQuiet   1
+    set result
+} {}
+test analyzer-22.5 {analyzer::analyze with scanning} {
+    set analyzer::scanning 1
+    makeFile {set x 1} $dummyFile
+    set result [analyzer::analyze $dummyFile]
+    set analyzer::scanning 0
+    set result
+} "$dummyFile"
+test analyzer-22.6 {analyzer::analyze without -quiet, with scanning} {
+    analyzer::setQuiet   0
+    set oldChannel $::message::outChannel
+    set ::message::outChannel [open $dummyTextFile w]
+    set analyzer::scanning 1
+    makeFile {set x 1} $dummyFile
+    set result [analyzer::analyze $dummyFile]
+    set ::message::outChannel $oldChannel
+    analyzer::setQuiet   1
+    set analyzer::scanning 0
+    set result
+} "$dummyFile"
+test analyzer-22.7 {analyzer::analyze with stdin} {
+    analyzer::analyze {}
+} {}
+test analyzer-22.8 {analyzer::analyze with stdin, scanning} {
+    set analyzer::scanning 1
+
+    # open stdin for writing to test reading from stdin
+    close stdin
+    open stdin w
+    puts stdin "set x 1"
+    close stdin
+    open stdin r
+
+    set result [analyzer::analyze {}]
+    set analyzer::scanning 0
+    set result
+} {}
+test analyzer-22.9 {analyzer::analyze without -quiet, with stdin, scanning} {
+    set analyzer::scanning 1
+    analyzer::setQuiet   0
+    set oldChannel $::message::outChannel
+    set ::message::outChannel [open $dummyFile w]
+
+    # open stdin for writing to test reading from stdin
+    close stdin
+    open stdin w
+    puts stdin "set x 1"
+    close stdin
+    open stdin r
+
+    set result [analyzer::analyze {}]
+    set analyzer::scanning 0
+    set ::message::outChannel $oldChannel
+    analyzer::setQuiet   1
+    set result
+} {}
+catch {file delete -force $dummyTextFile}
+
+test analyzer-23.1 {analyzer::analyzeScript} {
+    testCmd "set x {}f\nset x 2 3"
+} {1 {0 19} parse {8 11} {{extra characters after close-brace}} 2 {10 9} numArgs {} {}}
+test analyzer-23.2 {analyzer::analyzeScript} {
+    testCmd "set x {}f;set x 2 3"
+} {1 {0 19} parse {8 11} {{extra characters after close-brace}} 1 {10 9} numArgs {} {}}
+test analyzer-23.3 {analyzer::analyzeScript} {
+    testCmd "set x {}f\\\nset x 2 3\nset x 3 4"
+} {1 {0 30} parse {8 22} {{extra characters after close-brace}} 3 {21 9} numArgs {} {}}
+test analyzer-23.4 {analyzer::analyzerScript} {
+    testCmd {\set x 4 5}
+} {1 {0 10} numArgs {} {}}
+test analyzer-23.5 {analyzer::analyzeScript} {
+    testCmd "\[set x 3 3\] x 4 5"
+} {1 {1 9} numArgs {} {}}
+test analyzer-23.6 {analyzer::analyzeScript} {
+    testCmd "::set"
+} {1 {0 5} numArgs {} {}}
+test analyzer-23.7 {analyzer::analyzeScript} {
+    testCmd "::set a"
+} {ok}
+test analyzer-23.8 {analyzer::analyzeScript} {
+    testCmd "::set a a"
+} {ok}
+test analyzer-23.9 {analyzer::analyzeScript} {
+    testCmd "::set a a a"
+} {1 {0 11} numArgs {} {}}
+
+test analyzer-24.1 {analyzer::addCheckers} {
+    makeFile {
+	set x 1
+	puts y
+	set z 2 3
+    } $dummyFile
+    set result {}
+    analyzer::addCheckers {}
+    analyzer::analyze $dummyFile
+    set result
+} {4 {19 10} numArgs {} {}}
+test analyzer-24.2 {analyzer::addCheckers} {
+    proc fooproc {tokens index} {
+	global result
+	lappend result $tokens $index
+	return 2
+    }
+    makeFile {
+	set x 1
+	foobar baz
+	set z 2 3
+    } $dummyFile
+    set result {}
+    analyzer::addCheckers {foobar fooproc}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foobar
+    set result
+} {{{simple {11 6} {{text {11 6} {}}}} {simple {18 3} {{text {18 3} {}}}}} 1 4 {23 10} numArgs {} {}}
+
+test analyzer-25.1 {analyzer::pushChecker & analyzer::popChecker, already exists} {
+    proc setproc {tokens index} {
+	global result
+	lappend result setproc
+	return [llength $tokens]
+    }
+    makeFile {set x 2 3} $dummyFile
+    set result {}
+    analyzer::analyze $dummyFile
+    analyzer::pushChecker set setproc
+    analyzer::analyze $dummyFile
+    analyzer::popChecker set
+    analyzer::analyze $dummyFile
+    set result
+} {1 {0 10} numArgs {} {} setproc 1 {0 10} numArgs {} {}}
+test analyzer-25.2 {analyzer::pushChecker & analyzer::popChecker, new} {
+    proc foo2proc {arg tokens index} {
+	global result
+	lappend result $arg foo2proc
+	return [llength $tokens]
+    }
+    makeFile {foo2 x 2 3} $dummyFile
+    set result {}
+    set tmp $analyzer::unknownCmds
+    set analyzer::unknownCmds [list foo2]
+    analyzer::analyze $dummyFile
+    analyzer::pushChecker foo2 {foo2proc 42}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo2
+    analyzer::analyze $dummyFile
+    set analyzer::unknownCmds $tmp
+    set result
+} {42 foo2proc}
+test analyzer-25.3 {analyzer::popChecker, non-existent checker} {
+    analyzer::popChecker blat
+} {}
+
+test analyzer-26.1 {analyzer::topChecker} {
+    analyzer::topChecker blat
+} {}
+test analyzer-26.2 {analyzer::topChecker} {
+    analyzer::pushChecker foo2 foo2proc
+    set result [analyzer::topChecker foo2]
+    analyzer::popChecker foo2
+    set result
+} foo2proc
+test analyzer-26.3 {analyzer::topChecker} {
+    analyzer::pushChecker foo2 foo2proc
+    analyzer::pushChecker foo2 {bar baz}
+    set result [analyzer::topChecker foo2]
+    analyzer::popChecker foo2
+    analyzer::popChecker foo2
+    set result
+} {bar baz}
+
+test analyzer-27.1 {analyzer::logError} {
+    testCmd "set x {}3"
+} {1 {0 9} parse {8 1} {{extra characters after close-brace}}}
+test analyzer-28.1 {analyzer::logError, filtering} {
+    makeFile "set x {}3" $dummyFile
+    filter::addFilters parse
+    set result {}
+    analyzer::analyze $dummyFile
+    set ::result
+} {1 {0 10} parse {8 2} {{extra characters after close-brace}}}
+
+test analyzer-28.2 {analyzer::isLiteral} {
+    proc litProc {tokens index} {
+	global result
+	lappend result [isLiteral [lindex $tokens $index]]
+	return 2
+    }
+    makeFile {islit foo} $dummyFile
+    set result {}
+    set tmp $analyzer::unknownCmds
+    set analyzer::unknownCmds [list islit]
+    analyzer::pushChecker islit litProc
+    analyzer::analyze $dummyFile
+    analyzer::popChecker islit
+    set analyzer::unknownCmds $tmp
+    set result
+} 1
+test analyzer-28.3 {analyzer::isLiteral} {
+    proc litProc {tokens index} {
+	global result
+	lappend result [isLiteral [lindex $tokens $index]]
+	return 2
+    }
+    makeFile {islit $x} $dummyFile
+    set result {}
+    analyzer::pushChecker islit litProc
+    analyzer::analyze $dummyFile
+    analyzer::popChecker islit
+    set result
+} 0
+test analyzer-28.4 {analyzer::isLiteral} {
+    proc litProc {tokens index} {
+	global result
+	lappend result [isLiteral [lindex $tokens $index]]
+	return 2
+    }
+    makeFile {islit foo[bar]baz} $dummyFile
+    set result {}
+    set tmp $analyzer::unknownCmds
+    set analyzer::unknownCmds [list islit]
+    analyzer::pushChecker islit litProc
+    analyzer::analyze $dummyFile
+    analyzer::popChecker islit
+    set analyzer::unknownCmds $tmp
+    set result
+} 0
+test analyzer-28.5 {analyzer::isLiteral} {
+    proc litProc {tokens index} {
+	global result
+	lappend result [isLiteral [lindex $tokens $index]]
+	return 2
+    }
+    makeFile {islit \x} $dummyFile
+    set result {}
+    set tmp $analyzer::unknownCmds
+    set analyzer::unknownCmds [list islit]
+    analyzer::pushChecker islit litProc
+    analyzer::analyze $dummyFile
+    analyzer::popChecker islit
+    set analyzer::unknownCmds $tmp
+    set result
+} 0
+test analyzer-28.6 {analyzer::isLiteral} {
+    proc litProc {tokens index} {
+	global result
+	lappend result [isLiteral [lindex $tokens $index]]
+	return 2
+    }
+    makeFile "islit {foo\\\nx}" $dummyFile
+    set result {}
+    set tmp $analyzer::unknownCmds
+    set analyzer::unknownCmds [list islit]
+    analyzer::pushChecker islit litProc
+    analyzer::analyze $dummyFile
+    analyzer::popChecker islit
+    set analyzer::unknownCmds $tmp
+    set result
+} 1
+test analyzer-28.7 {analyzer::isLiteral} {
+    proc litProc {tokens index} {
+	global result
+	lappend result [isLiteral [lindex $tokens $index]]
+	return 2
+    }
+    makeFile "islit \"foo\\\nx\"" $dummyFile
+    set result {}
+    analyzer::pushChecker islit litProc
+    analyzer::analyze $dummyFile
+    analyzer::popChecker islit
+    set result
+} 0
+
+test analyzer-29.1 {analyzer::getLiteral} {
+    proc litProc {tokens index} {
+	global result
+	set value {}
+	lappend result [getLiteral [lindex $tokens $index] value] $value
+	return 2
+    }
+    makeFile {getlit foo} $dummyFile
+    set result {}
+    analyzer::pushChecker getlit litProc
+    analyzer::analyze $dummyFile
+    analyzer::popChecker getlit
+    set result
+} {1 foo}
+test analyzer-29.2 {analyzer::getLiteral} {
+    proc litProc {tokens index} {
+	global result
+	set value {}
+	lappend result [getLiteral [lindex $tokens $index] value] $value
+	return 2
+    }
+    makeFile {getlit foo\ bar} $dummyFile
+    set result {}
+    set tmp $analyzer::unknownCmds
+    set analyzer::unknownCmds [list islit]
+    analyzer::pushChecker getlit litProc
+    analyzer::analyze $dummyFile
+    analyzer::popChecker getlit
+    set analyzer::unknownCmds $tmp
+    set result
+} {1 {foo bar}}
+test analyzer-29.3 {analyzer::getLiteral} {
+    proc litProc {tokens index} {
+	global result
+	set value {}
+	lappend result [getLiteral [lindex $tokens $index] value] $value
+	return 2
+    }
+    makeFile {getlit foo$x} $dummyFile
+    set result {}
+    analyzer::pushChecker getlit litProc
+    analyzer::analyze $dummyFile
+    analyzer::popChecker getlit
+    set result
+} {0 {foo$x}}
+test analyzer-29.4 {analyzer::getLiteral} {
+    proc litProc {tokens index} {
+	global result
+	set value {}
+	lappend result [getLiteral [lindex $tokens $index] value] $value
+	return 2
+    }
+    makeFile {getlit "foo\x40silly"} $dummyFile
+    set result {}
+    analyzer::pushChecker getlit litProc
+    analyzer::analyze $dummyFile
+    analyzer::popChecker getlit
+    set result
+} {1 foo@silly}
+
+test analyzer-30.1 {analyzer::getLiteralPos} {
+    proc litProc {pos tokens index} {
+	global result
+	lappend result [analyzer::getLiteralPos [lindex $tokens $index] $pos]
+	return 2
+    }
+    makeFile {getlitpos foo} $dummyFile
+    set result {}
+    analyzer::pushChecker getlitpos {litProc 0}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker getlitpos
+    set result
+} 10
+test analyzer-30.2 {analyzer::getLiteralPos} {
+    proc litProc {pos tokens index} {
+	global result
+	lappend result [analyzer::getLiteralPos [lindex $tokens $index] $pos]
+	return 2
+    }
+    makeFile {getlitpos foo\x40silly} $dummyFile
+    set result {}
+    analyzer::pushChecker getlitpos {litProc 4}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker getlitpos
+    set result
+} 17
+test analyzer-30.3 {analyzer::getLiteralPos} {
+    proc litProc {pos tokens index} {
+	global result
+	lappend result [analyzer::getLiteralPos [lindex $tokens $index] $pos]
+	return 2
+    }
+    makeFile {getlitpos foo\x40silly} $dummyFile
+    set result {}
+    analyzer::pushChecker getlitpos {litProc 3}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker getlitpos
+    set result
+} 13
+test analyzer-30.4 {analyzer::getLiteralPos} {
+    proc litProc {pos tokens index} {
+	global result
+	lappend result [analyzer::getLiteralPos [lindex $tokens $index] $pos]
+	return 2
+    }
+    makeFile {getlitpos {foosilly}} $dummyFile
+    set result {}
+    analyzer::pushChecker getlitpos {litProc 3}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker getlitpos
+    set result
+} 14
+test analyzer-30.5 {analyzer::getLiteralPos} {
+    proc litProc {pos tokens index} {
+	global result
+	lappend result [analyzer::getLiteralPos [lindex $tokens $index] $pos]
+	return 2
+    }
+    makeFile {getlitpos {foosilly}} $dummyFile
+    set result {}
+    analyzer::pushChecker getlitpos {litProc 8}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker getlitpos
+    set result
+} 19
+
+test analyzer-31.1 {analyzer::getLiteralRange} {
+    set cmd "abc 123 xyz"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set word  [lindex $tokens 0]
+    set range [lindex [parse list $analyzer::script {}] 0]
+    analyzer::getLiteralRange $word $range
+} {0 3}
+test analyzer-31.2 {analyzer::getLiteralRange} {
+    set cmd "abc 123 xyz"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set word  [lindex $tokens 1]
+    set range [lindex [parse list $analyzer::script {}] 1]
+    analyzer::getLiteralRange $word $range
+} {8 3}
+test analyzer-31.3 {analyzer::getLiteralRange} {
+    set cmd "abc 123 xyz"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set word  [lindex $tokens 2]
+    set range [lindex [parse list $analyzer::script {}] 2]
+    analyzer::getLiteralRange $word $range
+} {16 3}
+
+
+# (39.0) analyzer::checkScript command tested by other tests
+
+
+test analyzer-32.1 {analyzer::checkContext - pushing new context} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::checkContext 0 1 "return -errorinfo" $tokens 0
+    context::top
+} {::}
+test analyzer-32.2 {analyzer::checkContext - pushing new context} {
+    resetScanData
+    set cmd "foo::bar"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::checkContext 0 1 "return -errorinfo" $tokens 0
+    context::top
+} {::foo}
+test analyzer-32.3 {analyzer::checkContext - pushing new context} {
+    resetScanData
+    set cmd "::foo::bar"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::cat"
+    analyzer::checkContext 0 1 "return -errorinfo" $tokens 0
+    context::top
+} {::foo}
+test analyzer-32.4 {analyzer::checkContext - pushing new context} {
+    resetScanData
+    set cmd "foo::bar"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::checkContext 0 0 "return -errorinfo" $tokens 0
+    context::top
+} {::foo::bar}
+test analyzer-32.5 {analyzer::checkContext - pushing new context} {
+    resetScanData
+    set cmd "\$foo::bar"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::checkContext 0 1 "return -errorinfo" $tokens 0
+    context::top
+} {UNKNOWN}
+test analyzer-32.6 {analyzer::checkContext - pushing new context} {
+    resetScanData
+    set cmd "\$foo::bar"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set context::contextStack "::"
+    analyzer::checkContext 0 0 "return -errorinfo" $tokens 0
+    context::top
+} {UNKNOWN}
+test analyzer-32.7 {analyzer::checkContext - testing chain cmd} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result {}
+    set index [analyzer::checkContext 0 1 chainCmd $tokens 0]
+    list $result $index
+} {{{{simple {0 3} {{text {0 3} {}}}}} 0} -1}
+test analyzer-32.8 {analyzer::checkContext - cleanup} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    context::push newContext
+    set index [analyzer::checkContext 0 1 chainCmd $tokens 0]
+    list [context::top]
+} {newContext}
+
+test analyzer-33.1 {analyzer::checkUserProc} {
+    resetScanData
+    set cmd "a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set pInfo [uproc::newProcInfo]
+    set pInfo [uproc::setName $pInfo ::foo]
+    set pInfo [uproc::setMin  $pInfo 1]
+    set pInfo [uproc::setMax  $pInfo 1]
+    
+    analyzer::checkUserProc $pInfo $tokens 0
+} {}
+test analyzer-33.2 {analyzer::checkUserProc} {
+    resetScanData
+    set cmd "a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set pInfo [uproc::newProcInfo]
+    set pInfo [uproc::setName $pInfo ::foo]
+    set pInfo [uproc::setMin  $pInfo 1]
+    set pInfo [uproc::setMax  $pInfo 3]
+    
+    analyzer::checkUserProc $pInfo $tokens 0
+} {}
+test analyzer-33.3 {analyzer::checkUserProc} {
+    resetScanData
+    set cmd "a a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set pInfo [uproc::newProcInfo]
+    set pInfo [uproc::setName $pInfo ::foo]
+    set pInfo [uproc::setMin  $pInfo 1]
+    set pInfo [uproc::setMax  $pInfo 3]
+    
+    analyzer::checkUserProc $pInfo $tokens 0
+} {}
+test analyzer-33.4 {analyzer::checkUserProc} {
+    resetScanData
+    set cmd "a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set pInfo [uproc::newProcInfo]
+    set pInfo [uproc::setName $pInfo ::foo]
+    set pInfo [uproc::setMin  $pInfo 0]
+    set pInfo [uproc::setMax  $pInfo 0]
+    
+    analyzer::checkUserProc $pInfo $tokens 0
+} {{logError procNumArgs {} foo}}
+test analyzer-33.5 {analyzer::checkUserProc} {
+    resetScanData
+    set cmd "a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set pInfo [uproc::newProcInfo]
+    set pInfo [uproc::setName $pInfo ::foo]
+    set pInfo [uproc::setMin  $pInfo 1]
+    set pInfo [uproc::setMax  $pInfo 1]
+    
+    analyzer::checkUserProc $pInfo $tokens 0
+} {{logError procNumArgs {} foo}}
+test analyzer-33.6 {analyzer::checkUserProc} {
+    resetScanData
+    set cmd "a a a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set pInfo [uproc::newProcInfo]
+    set pInfo [uproc::setName $pInfo ::foo]
+    set pInfo [uproc::setMin  $pInfo 1]
+    set pInfo [uproc::setMax  $pInfo 3]
+    
+    analyzer::checkUserProc $pInfo $tokens 0
+} {{logError procNumArgs {} foo}}
+
+test analyzer-34.1 {analyzer::checkRedefined} {
+    resetScanData
+    set cmd "foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set pInfo [uproc::newProcInfo]
+    set pInfo [uproc::setName $pInfo ::foo]
+    set pInfo [uproc::setMin  $pInfo 1]
+    set pInfo [uproc::setMax  $pInfo 1]
+    uproc::add $pInfo 0
+    set pInfo [uproc::setMax  $pInfo 2]
+    uproc::add $pInfo 0
+
+    set context::contextStack "::"
+
+    set result {}
+    set index [analyzer::checkRedefined $tokens 0]
+    list $result $index
+} [list [list 1 {} warnRedefine {} [list proc ::foo proc $dummyFile 1]] 1]
+test analyzer-34.2 {analyzer::checkRedefined} {
+    resetScanData
+    set cmd "\$foo"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set pInfo [uproc::newProcInfo]
+    set pInfo [uproc::setName $pInfo ::foo]
+    set pInfo [uproc::setMin  $pInfo 1]
+    set pInfo [uproc::setMax  $pInfo 1]
+    uproc::add $pInfo 0
+    set pInfo [uproc::setMax  $pInfo 2]
+    uproc::add $pInfo 0
+
+    set context::contextStack "::"
+
+    set result {}
+    set index [analyzer::checkRedefined $tokens 0]
+    list $result $index
+} {{} 1}
+resetScanData
+
+test analyzer-35.1 {analyzer::checkBody} {
+    testCmd {catch {set x 1 2}}
+} {1 {7 9} numArgs {} {}}
+test analyzer-35.2 {analyzer::checkBody} {
+    testCmd {catch "set x 1 2"}
+} {1 {7 9} numArgs {} {}}
+test analyzer-35.3 {analyzer::checkBody} {
+    testCmd {catch set}
+} {1 {6 3} numArgs {} {}}
+test analyzer-35.4 {analyzer::checkBody} {
+    testCmd {catch set\ x\ 1\ 2}
+} {ok}
+
+test analyzer-36.1 {analyzer::checkWord, command} {
+    testCmd {set [set]}
+} {1 {5 3} numArgs {} {}}
+test analyzer-36.2 {analyzer::checkWord, subexpr} {
+    testCmd {while {3 + [set]} {}}
+} {1 {12 3} numArgs {} {}}
+test analyzer-36.3 {analyzer::checkWord, variable} {
+    testCmd {lsearch $foo([set]) 3}
+} {1 {14 3} numArgs {} {}}
+test analyzer-36.4 {analyzer::CheckExtraCloseChar, trailing brackets, command} {
+    testCmd {set [pwd]}
+} {ok}
+test analyzer-36.5 {analyzer::CheckExtraCloseChar, trailing brackets, backslash} {
+    testCmd {cd \]}
+} {ok}
+test analyzer-36.6 {analyzer::CheckExtraCloseChar, trailing brackets, no open} {
+    testCmd {cd ]}
+} {1 {0 4} warnExtraClose {3 1} {}}
+test analyzer-36.7 {analyzer::CheckExtraCloseChar, trailing brackets, skip subcommand} {
+    testCmd {set a[pwd]]}
+} {1 {0 11} warnExtraClose {10 1} {}}
+test analyzer-36.8 {analyzer::CheckExtraCloseChar, trailing brackets. backslash} {
+    testCmd {set a\[]}
+} {ok}
+test analyzer-36.9 {analyzer::CheckExtraCloseChar, trailing brackets. backslash} {
+    testCmd {set {[a-z]}}
+} {ok}
+test analyzer-36.10 {analyzer::CheckExtraCloseChar, trailing brackets. backslash} {
+    testCmd {subst {z]}}
+} {1 {0 10} warnExtraClose {8 1} {}}
+test analyzer-36.11 {analyzer::CheckExtraCloseChar, trailing curley bracket} {
+    testCmd "set x \[pwd\]\}"
+} {1 {0 12} warnExtraClose {11 1} {}}
+test analyzer-36.12 {analyzer::CheckExtraCloseChar, trailing curley bracket} {
+    testCmd "expr \[catch {}\]\}"
+} {1 {0 16} warnExpr {5 11} {} 1 {0 16} warnExtraClose {15 1} {}}
+test analyzer-36.13 {analyzer::CheckExtraCloseChar, trailing curley bracket} {
+    testCmd "subst \[set x\]\}"
+} {1 {0 14} warnExtraClose {13 1} {}}
+
+
+test analyzer-37.1 {analyzer::checkVariable} {
+    testCmd {set tcl_precision 2}
+} {1 {0 19} nonPortVar {4 13} tcl_precision}
+test analyzer-37.2 {analyzer::checkVariable} {
+    testCmd {set tkVersion 2}
+} {1 {0 15} warnUnsupported {4 9} tk_version}
+
+test analyzer-38.1 {analyzer::checkExpr, nonliteral} {
+    testCmd {while $x {}}
+} {1 {0 11} warnExpr {6 2} {}}
+test analyzer-38.2 {analyzer::checkExpr, nonliteral} {
+    testCmd {while $x([set]) {}}
+} {1 {0 18} warnExpr {6 9} {} 1 {10 3} numArgs {} {}}
+test analyzer-38.3 {analyzer::checkExpr, complicated literal} {
+    testCmd {while "1\ + 2" {}}
+} {ok}
+test analyzer-38.4 {analyzer::checkExpr, syntax} {
+    testCmd {while {1 + foo} {}}
+} {1 {0 18} parse {6 9} {{PARSE syntax 11 {syntax error in expression "1 + foo"}}}}
+test analyzer-38.5 {analyzer::checkExpr, subcommands} {
+    testCmd {while {1 + [set]} {}}
+} {1 {12 3} numArgs {} {}}
+
+test analyzer-39.1 {analyzer::checkCommand} {
+    testCmd {pwd}
+} {ok}
+test analyzer-39.2 {analyzer::checkCommand} {
+    testCmd {cd [set]}
+} {1 {4 3} numArgs {} {}}
+
+test analyzer-40.1 {analyzer::checkSimpleArgs} {
+    makeFile {foo; foo bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 0 0 {}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {5 8} numArgs {} {}}
+test analyzer-40.2 {analyzer::checkSimpleArgs} {
+    makeFile {foo; foo bar; foo bar baz} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 {checkWord}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 4} numArgs {} {}}
+test analyzer-40.3 {analyzer::checkSimpleArgs} {
+    makeFile {foo; foo 1; foo bar baz; foo a b c} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 2 {checkInt checkWord}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 4} numArgs {} {} 1 {12 12} badInt {16 3} {} 1 {25 10} numArgs {} {}}
+test analyzer-40.4 {analyzer::checkSimpleArgs} {
+    makeFile {foo; foo bar; foo 1 baz} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 {checkInt}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 4} numArgs {} {} 1 {5 8} badInt {9 3} {} 1 {14 10} badInt {20 3} {}}
+test analyzer-40.5 {analyzer::checkSimpleArgs} {
+    makeFile {foo a b c} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 3 3 {checkInt checkWord checkInt}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 10} badInt {4 1} {} 1 {0 10} badInt {8 1} {}}
+
+
+test analyzer-40b.1 {analyzer::checkTailArgs} {
+    makeFile {foo} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkTailArgs \
+	    {checkHeadSwitches 0 1 -a {}} \
+	    {checkSimpleArgs 1 1 checkWord} \
+	    1
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 4} numArgs {} {}}
+test analyzer-40b.2 {analyzer::checkTailArgs} {
+    makeFile {foo -a -b} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkTailArgs \
+	    {checkHeadSwitches 0 1 -a {}} \
+	    {checkSimpleArgs 1 1 checkWord} \
+	    1
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-40b.3 {analyzer::checkTailArgs} {
+    makeFile {foo -a -a -b} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkTailArgs \
+	    {checkHeadSwitches 0 1 -a {}} \
+	    {checkSimpleArgs 1 1 checkWord} \
+	    1
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-40b.4 {analyzer::checkTailArgs} {
+    makeFile {foo -b -c} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkTailArgs \
+	    {checkHeadSwitches 0 1 -a {}} \
+	    {checkSimpleArgs 1 1 checkWord} \
+	    1
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 10} badSwitch {4 2} -b}
+test analyzer-40b.5 {analyzer::checkTailArgs} {
+    makeFile {foo -a -b -a -b} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkTailArgs \
+	    {checkHeadSwitches 0 1 -a {}} \
+	    {checkSimpleArgs 1 1 checkWord} \
+	    1
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 16} badSwitch {7 2} -b}
+test analyzer-40b.6 {analyzer::checkTailArgs} {
+    makeFile {foo -b -c} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkTailArgs \
+	    {checkHeadSwitches 0 2 -a {}} \
+	    {checkSimpleArgs 2 -1 checkWord} \
+	    2
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-40b.7 {analyzer::checkTailArgs} {
+    makeFile {foo -a -b -c} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkTailArgs \
+	    {checkHeadSwitches 0 2 -a {}} \
+	    {checkSimpleArgs 2 -1 checkWord} \
+	    2
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-40b.8 {analyzer::checkTailArgs} {
+    makeFile {foo -a -a -b -c} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkTailArgs \
+	    {checkHeadSwitches 0 2 -a {}} \
+	    {checkSimpleArgs 2 -1 checkWord} \
+	    2
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-40b.9 {analyzer::checkTailArgs} {
+    makeFile {foo -a -b -b -c} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkTailArgs \
+	    {checkHeadSwitches 0 2 -a {}} \
+	    {checkSimpleArgs 2 -1 checkWord} \
+	    2
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 16} badSwitch {7 2} -b}
+
+test analyzer-40c.1 {analyzer::checkSwitchArg} {
+    makeFile {foo} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 {{
+	checkSwitches 1 {{-a {
+	    checkSwitchArg -a 2 3 checkWord
+        }}} {}
+    }}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 4} numArgs {} {}}
+test analyzer-40c.2 {analyzer::checkSwitchArg} {
+    makeFile {foo -a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 {{
+	checkSwitches 1 {{-a {
+	    checkSwitchArg -a 2 3 checkWord
+        }}} {}
+    }}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 7} noSwitchArg {4 2} -a}
+test analyzer-40c.3 {analyzer::checkSwitchArg} {
+    makeFile {foo -a a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 {{
+	checkSwitches 1 {{-a {
+	    checkSwitchArg -a 2 3 checkWord
+        }}} {}
+    }}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 9} noSwitchArg {7 1} -a}
+test analyzer-40c.4 {analyzer::checkSwitchArg} {
+    makeFile {foo -a a a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 {{
+	checkSwitches 1 {{-a {
+	    checkSwitchArg -a 2 3 checkWord
+        }}} {}
+    }}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-40c.5 {analyzer::checkSwitchArg} {
+    makeFile {foo -a a a a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 {{
+	checkSwitches 1 {{-a {
+	    checkSwitchArg -a 2 3 checkWord
+        }}} {}
+    }}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-40c.6 {analyzer::checkSwitchArg} {
+    makeFile {foo -a a a a a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 {{
+	checkSwitches 1 {{-a {
+	    checkSwitchArg -a 2 3 checkWord
+        }}} {}
+    }}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 15} numArgs {} {}}
+test analyzer-40c.7 {analyzer::checkSwitchArg} {
+    makeFile {foo -a a [set]} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 {{
+	checkSwitches 1 {{-a {
+	    checkSwitchArg -a 2 3 checkWord
+        }}} {}
+    }}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {10 3} numArgs {} {}}
+test analyzer-40c.8 {analyzer::checkSwitchArg} {
+    makeFile {foo -a a a a -a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 {{
+	checkSwitches 1 {{-a {
+	    checkSwitchArg -a 2 3 checkWord
+        }}} {}
+    }}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 16} noSwitchArg {13 2} -a}
+test analyzer-40c.9 {analyzer::checkSwitchArg} {
+    makeFile {foo -a a a a -a a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 {{
+	checkSwitches 1 {{-a {
+	    checkSwitchArg -a 2 3 checkWord
+        }}} {}
+    }}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 18} noSwitchArg {16 1} -a}
+test analyzer-40c.10 {analyzer::checkSwitchArg} {
+    makeFile {foo -a a a a -a a a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 {{
+	checkSwitches 1 {{-a {
+	    checkSwitchArg -a 2 3 checkWord
+        }}} {}
+    }}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+
+test analyzer-41.1 {analyzer::checkOption} {
+    makeFile {foo} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkOption {{float checkFloat} {int checkInt}} ""
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 4} numArgs {} {}}
+test analyzer-41.2 {analyzer::checkOption, nonliteral} {
+    makeFile {foo $sub; foo $sub([set])} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkOption {{float checkFloat} {int checkInt}} ""
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {20 3} numArgs {} {}}
+test analyzer-41.3 {analyzer::checkOption} {
+    makeFile {foo float a; foo int 2.5; foo blat 54} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkOption {{float checkFloat} {int checkInt}} ""
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 12} badFloat {10 1} {} 1 {13 12} badInt {21 3} {} 1 {26 12} badOption {30 4} {{float int} blat}}
+test analyzer-41.4 {analyzer::checkOption} {
+    makeFile {foo float a; foo int 2.5; foo blat only} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkOption {{float checkFloat} {int checkInt}} checkBoolean
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 12} badFloat {10 1} {} 1 {13 12} badInt {21 3} {} 1 {26 14} badBoolean {30 4} {} 1 {26 14} warnUndefProc {26 14} only}
+test analyzer-41.5 {analyzer::checkOption} {
+    makeFile {foo float 1.5} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkOption {{float checkFloat} {int checkInt}} ""
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-41.6 {analyzer::checkOption} {
+    makeFile {foo f a; foo i 3.5} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkOption {{float checkFloat} {int checkInt}} ""
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} badFloat {6 1} {} 1 {9 10} badInt {15 3} {}}
+
+
+
+test analyzer-42.1 {analyzer::checkKeyword} {
+    makeFile {foo $x([set])} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkKeyword 0 {bar}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {8 3} numArgs {} {}}
+test analyzer-42.2 {analyzer::checkKeyword} {
+    makeFile {foo \x62\x61r} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkKeyword 0 {bar}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-42.3 {analyzer::checkKeyword} {
+    makeFile {foo; foo bar; foo {}; foo b} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkKeyword 0 {bar}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 4} badKey {} {bar {}} 1 {14 7} badKey {18 2} {bar {}}}
+test analyzer-42.4 {analyzer::checkKeyword} {
+    makeFile {foo; foo bar; foo {}; foo b; foo baz} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkKeyword 0 {bar baz}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 4} badKey {} {{bar baz} {}} 1 {14 7} badKey {18 2} {{bar baz} {}} 1 {22 6} badKey {26 1} {{bar baz} b}}
+test analyzer-42.5 {analyzer::checkKeyword, exact} {
+    makeFile {foo b} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkKeyword 1 {bar foo}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 6} badKey {4 1} {{bar foo} b}}
+
+test analyzer-43.1 {analyzer::checkSwitches} {
+    makeFile {foo; foo -f; foo -foo; foo -bar; foo -foo -bar -foo} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 1 {-foo -bar} {}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {5 7} badSwitch {9 2} -f}
+test analyzer-43.2 {analyzer::checkSwitches} {
+    makeFile {foo -f $x -f} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 1 {-foo -bar} {checkSimpleArgs 0 -1 checkInt}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 13} badSwitch {4 2} -f 1 {0 13} badInt {10 2} {}}
+test analyzer-43.3 {analyzer::checkSwitches} {
+    makeFile {foo -f x} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 1 {-foo -bar} {checkSimpleArgs 0 -1 checkInt}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 9} badSwitch {4 2} -f 1 {0 9} badInt {7 1} {}}
+test analyzer-43.4 {analyzer::checkSwitches} {
+    makeFile {foo -f x} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 0 {-foo -bar} {checkSimpleArgs 0 -1 checkInt}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 9} badInt {7 1} {}}
+test analyzer-43.5 {analyzer::checkSwitches} {
+    makeFile {foo -f -- -f} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 0 {-foo -bar --} {checkSimpleArgs 0 -1 checkInt}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 13} badInt {10 2} {}}
+test analyzer-43.6 {analyzer::checkSwitches} {
+    makeFile {foo -foo} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 0 {{-foo checkInt} -bar --} \
+		{checkSimpleArgs 0 -1 checkInt}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 9} noSwitchArg {4 4} -foo}
+test analyzer-43.7 {analyzer::checkSwitches} {
+    makeFile {foo -foo -bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 0 {{-foo checkInt} -bar --} \
+		{checkSimpleArgs 0 -1 checkInt}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 14} badInt {9 4} {}}
+test analyzer-43.8 {analyzer::checkSwitches} {
+    makeFile {foo -foo -bar -- baz} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 0 {-foo -bar --} {}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 21} numArgs {} {}}
+
+test analyzer-44.1 {analyzer::checkConfigure, no args} {
+    makeFile {foo} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkConfigure 1 {{-float checkFloat} {-int checkInt}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-44.2 {analyzer::checkConfigure, one arg} {
+    makeFile {foo -float; foo -blat; foo -f} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkConfigure 1 {{-float checkFloat} {-int checkInt}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {12 10} badSwitch {16 5} -blat}
+test analyzer-44.3 {analyzer::checkConfigure, nonliteral} {
+    makeFile {foo $x; foo $x 3; foo $x 3 $y} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkConfigure 1 {{-float checkFloat} {-int checkInt}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {18 12} noSwitchArg {27 2} {{$y}}}
+test analyzer-44.4 {analyzer::checkConfigure, multiple args} {
+    makeFile {foo -float a; foo -float 1.1; foo -float 1.1 -int} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkConfigure 1 {{-float checkFloat} {-int checkInt}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 13} badFloat {11 1} {} 1 {30 20} noSwitchArg {45 4} -int}
+test analyzer-44.5 {analyzer::checkConfigure, no args} {
+    makeFile {foo} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkConfigure 0 {{-float checkFloat} {-int checkInt}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-44.6 {analyzer::checkConfigure, one arg} {
+    makeFile {foo -float; foo -blat; foo -f} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkConfigure 0 {{-float checkFloat} {-int checkInt}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 11} noSwitchArg {4 6} -float 1 {12 10} badSwitch {16 5} -blat 1 {12 10} noSwitchArg {16 5} -blat 1 {23 7} noSwitchArg {27 2} -f}
+test analyzer-44.7 {analyzer::checkConfigure, nonliteral} {
+    makeFile {foo $x; foo $x 3; foo $x 3 $y} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkConfigure 0 {{-float checkFloat} {-int checkInt}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 7} noSwitchArg {4 2} {{$x}} 1 {18 12} noSwitchArg {27 2} {{$y}}}
+test analyzer-44.8 {analyzer::checkConfigure, multiple args} {
+    makeFile {foo -float a; foo -float 1.1; foo -float 1.1 -int} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkConfigure 0 {{-float checkFloat} {-int checkInt}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 13} badFloat {11 1} {} 1 {30 20} noSwitchArg {45 4} -int}
+
+test analyzer-45.1 {analyzer::matchKeyword, empty string} {
+    makeFile {foo {}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkKeyword 0 {float int}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 7} badKey {4 2} {{float int} {}}}
+test analyzer-45.2 {analyzer::matchKeyword, empty string} {
+    makeFile {foo {}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkKeyword 1 {float int}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 7} badKey {4 2} {{float int} {}}}
+test analyzer-45.3 {analyzer::matchKeyword, exact match} {
+    makeFile {foo -float a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 1 {{-float checkFloat} {-float checkInt}} {}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 13} badFloat {11 1} {}}
+test analyzer-45.4 {analyzer::matchKeyword, exact match} {
+    makeFile {foo -f 1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 1 {{-float checkFloat} {-int checkInt}} {}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 9} badSwitch {4 2} -f 1 {0 9} numArgs {} {}}
+test analyzer-45.5 {analyzer::matchKeyword, inexact match} {
+    makeFile {foo -f a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 0 {{-float checkFloat} {-int checkInt}} {}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 9} badFloat {7 1} {}}
+test analyzer-45.6 {analyzer::matchKeyword, multiple matches} {
+    makeFile {foo -f 1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 0 {{-float checkFloat} {-flop checkInt}} {}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 9} badSwitch {4 2} -f 1 {0 9} numArgs {} {}}
+test analyzer-45.7 {analyzer::matchKeyword, multiple matches} {
+    makeFile {foo -floa a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 0 {{-float checkFloat} {-flop checkInt}} {}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 12} badFloat {10 1} {}}
+test analyzer-45.8 {analyzer::matchKeyword, multiple matches} {
+    makeFile {foo -floa 1.1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 0 {{-float checkFloat} {-floa checkInt}} {}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 14} badInt {10 3} {}}
+test analyzer-45.9 {analyzer::matchKeyword, multiple matches} {
+    makeFile {foo -floa 1.1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkSwitches 1 {{-float checkFloat} {-floa checkInt}} {}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 14} badInt {10 3} {}}
+test analyzer-45.10 {analyzer::matchKeyword, null} {
+    makeFile {foo {}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkKeyword 1 {{}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+
+test analyzer-46.1 {analyzer::checkNumArgs} {
+    makeFile {foo bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkNumArgs {{1 checkInt}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} badInt {4 3} {}}
+test analyzer-46.2 {analyzer::checkNumArgs} {
+    makeFile {foo bar baz} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkNumArgs {{1 checkInt} {-1 checkFloat}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 12} badFloat {4 3} {} 1 {0 12} warnUndefProc {0 12} baz}
+test analyzer-46.3 {analyzer::checkNumArgs} {
+    makeFile {foo bar baz} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkNumArgs {{1 checkInt} {2 {checkSimpleArgs 2 2 checkFloat}}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 12} badFloat {4 3} {} 1 {0 12} badFloat {8 3} {}}
+test analyzer-46.4 {analyzer::checkNumArgs} {
+    makeFile {foo} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkNumArgs {{1 checkInt} {3 {checkSimpleArgs 3 3 checkFloat}}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 4} numArgs {} {}}
+test analyzer-46.5 {analyzer::checkNumArgs} {
+    makeFile {foo bar baz} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {
+	checkNumArgs {{1 checkInt} {3 {checkSimpleArgs 3 3 checkFloat}}}
+    }
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 12} numArgs {} {}}
+
+test analyzer-47.1 {analyzer::checkListValues} "
+    makeFile \"foo \\\$x(\\\[set\\\]); foo \\\"\{\\\"\" $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkListValues 1 1 checkInt}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+" {1 {8 3} numArgs {} {} 1 {15 8} badList {20 1} {{unmatched open brace in list}}}
+test analyzer-47.2 {analyzer::checkListValues} {
+    makeFile {foo {}; foo {bar}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkListValues 0 0 {}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {8 10} numListElts {12 5} {}}
+test analyzer-47.3 {analyzer::checkListValues} {
+    makeFile {foo {}; foo {bar}; foo {bar baz}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkListValues 1 -1 {checkWord}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 7} numListElts {4 2} {}}
+test analyzer-47.4 {analyzer::checkListValues} {
+    makeFile {foo {}; foo 1; foo {bar baz}; foo {a b c}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkListValues 1 2 {checkInt checkWord}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 7} numListElts {4 2} {} 1 {15 14} badInt {20 3} {} 1 {30 12} numListElts {34 7} {} 1 {30 12} badInt {35 1} {}}
+test analyzer-47.5 {analyzer::checkListValues} {
+    makeFile {foo {}; foo {bar}; foo {1 baz}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkListValues 1 -1 {checkInt}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 7} numListElts {4 2} {} 1 {8 10} badInt {13 3} {} 1 {19 12} badInt {26 3} {}}
+test analyzer-47.6 {analyzer::checkListValues} {
+    makeFile {foo {a b c}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkListValues 3 3 {checkInt checkWord checkInt}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 12} badInt {5 1} {} 1 {0 12} badInt {9 1} {}}
+test analyzer-47.7 {analyzer::checkListValues} {
+    makeFile {foo {{1} {1.1} 1.1}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkListValues 1 -1 {checkInt}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 20} badInt {9 5} {} 1 {0 20} badInt {15 3} {}}
+test analyzer-47.8 {analyzer::checkListValues} {
+    makeFile {foo $a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkListValues 3 3 {checkInt checkWord checkInt}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+
+test analyzer-48.1 {analyzer::checkLevel} {
+    makeFile {foo $x a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkLevel {checkSimpleArgs 1 -1 checkFloat}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 9} badFloat {7 1} {}}
+test analyzer-48.2 {analyzer::checkLevel} {
+    makeFile {foo #1 a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkLevel {checkSimpleArgs 1 11 checkFloat}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 9} badFloat {7 1} {}}
+test analyzer-48.3 {analyzer::checkLevel} {
+    makeFile {foo #foo a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkLevel {checkSimpleArgs 1 1 checkFloat}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 11} badLevel {4 4} #foo 1 {0 11} badFloat {9 1} {}}
+test analyzer-48.4 {analyzer::checkLevel} {
+    makeFile {foo a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkLevel {checkSimpleArgs 1 1 checkFloat}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 6} badFloat {4 1} {}}
+test analyzer-48.5 {analyzer::checkLevel} {
+    makeFile {foo bar 3} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkLevel {checkSimpleArgs 1 1 checkFloat}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 10} numArgs {} {}}
+
+test analyzer-49.1 {analyzer::warn} {
+    makeFile {foo bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {warn nonPortCmd blat checkFloat}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} nonPortCmd {0 3} blat 1 {0 8} badFloat {4 3} {}}
+test analyzer-49.2 {analyzer::warn} {
+    makeFile {foo bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {warn nonPortCmd blat {}}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} nonPortCmd {0 3} blat}
+
+test analyzer-50.1 {analyzer::checkBoolean} {
+    makeFile {foo $x([set])} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkBoolean}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {8 3} numArgs {} {}}
+test analyzer-50.2 {analyzer::checkBoolean} {
+    makeFile {foo 1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkBoolean}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-50.3 {analyzer::checkBoolean} {
+    makeFile {foo bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkBoolean}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} badBoolean {4 3} {}}
+
+test analyzer-51.1 {analyzer::checkInt} {
+    makeFile {foo $x([set])} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkInt}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {8 3} numArgs {} {}}
+test analyzer-51.2 {analyzer::checkInt} {
+    makeFile {foo 1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkInt}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-51.3 {analyzer::checkInt} {
+    makeFile {foo bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkInt}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} badInt {4 3} {}}
+
+test analyzer-52.1 {analyzer::checkFloat} {
+    makeFile {foo $x([set])} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFloat}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {8 3} numArgs {} {}}
+test analyzer-52.2 {analyzer::checkFloat} {
+    makeFile {foo 1.1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFloat}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-52.3 {analyzer::checkFloat} {
+    makeFile {foo bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFloat}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} badFloat {4 3} {}}
+
+test analyzer-53.1 {analyzer::checkWholeNum} {
+    testCmd {grid .c -row a}
+} {1 {0 14} badWholeNum {13 1} a}
+test analyzer-53.2 {analyzer::checkWholeNum} {
+    testCmd {grid .c -row -1}
+} {1 {0 15} badWholeNum {13 2} -1}
+test analyzer-53.3 {analyzer::checkWholeNum} {
+    testCmd {grid .c -row 1}
+} {ok}
+test analyzer-53.4 {analyzer::checkWholeNum} {
+    testCmd {grid .c -row $x}
+} {ok}
+
+test analyzer-54.1 {analyzer::checkIndex} {
+    makeFile {foo $x([set])} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkIndex}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {8 3} numArgs {} {}}
+test analyzer-54.2 {analyzer::checkIndex} {
+    makeFile {foo 1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkIndex}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-54.3 {analyzer::checkIndex} {
+    makeFile {foo end} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkIndex}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-54.4 {analyzer::checkIndex} {
+    makeFile {foo bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkIndex}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} badIndex {4 3} {}}
+
+
+test analyzer-54b.1 {analyzer::checkByteNum} {
+    makeFile {foo -1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkByteNum}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 7} badByteNum {4 2} {}}
+test analyzer-54b.2 {analyzer::checkByteNum} {
+    makeFile {foo 0} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkByteNum}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-54b.3 {analyzer::checkByteNum} {
+    makeFile {foo 1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkByteNum}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-54b.4 {analyzer::checkByteNum} {
+    makeFile {foo 254} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkByteNum}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-54b.5 {analyzer::checkByteNum} {
+    makeFile {foo 255} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkByteNum}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-54b.6 {analyzer::checkByteNum} {
+    makeFile {foo 256} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkByteNum}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} badByteNum {4 3} {}}
+test analyzer-54b.7 {analyzer::checkByteNum} {
+    makeFile {foo 1.0} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkByteNum}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} badByteNum {4 3} {}}
+test analyzer-54b.8 {analyzer::checkByteNum} {
+    makeFile {foo a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkByteNum}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 6} badByteNum {4 1} {}}
+test analyzer-54b.9 {analyzer::checkByteNum} {
+    makeFile {foo $a} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkByteNum}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+
+
+test analyzer-55.1 {analyzer::checkList} {
+    makeFile {foo $x([set])} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {8 3} numArgs {} {}}
+test analyzer-55.2 {analyzer::checkList} {
+    makeFile {foo 1.1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-55.3 {analyzer::checkList} {
+    makeFile "foo \"\x7b\"" $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} badList {5 1} {{unmatched open brace in list}}}
+
+test analyzer-56.1 {analyzer::checkVarName} {
+    makeFile {foo [set]} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkVarName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {5 3} numArgs {} {}}
+test analyzer-56.2 {analyzer::checkVarName} {
+    makeFile {foo bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkVarName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-56.3 {analyzer::checkVarName} {
+    makeFile {foo tcl_precision} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkVarName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 18} nonPortVar {4 13} tcl_precision}
+test analyzer-56.4 {analyzer::checkVarName} {
+    makeFile {foo tkVersion} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkVarName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 14} warnUnsupported {4 9} tk_version}
+test analyzer-56.5 {analyzer::checkVarName} {
+    makeFile {foo $foo} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkVarName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 9} warnVarRef {4 4} {}}
+test analyzer-56.6 {analyzer::checkVarName} {
+    makeFile {set $a($i)} $dummyFile
+    set result {}
+    analyzer::analyze $dummyFile
+    set result
+} {1 {0 11} warnVarRef {4 6} {}}
+test analyzer-56.7 {analyzer::checkVarName, bug 2485} {
+    makeFile {set ${a}($i)} $dummyFile
+    set result {}
+    analyzer::analyze $dummyFile
+    set result
+} {1 {0 13} warnVarRef {4 8} {}}
+
+test analyzer-57.1 {analyzer::checkFileName} {
+    makeFile {foo $x([set])} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFileName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {8 3} numArgs {} {}}
+test analyzer-57.2 {analyzer::checkFileName} {
+    makeFile {foo 1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFileName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-57.3 {analyzer::checkFileName} {
+    makeFile {foo $x} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFileName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-57.4 {analyzer::checkFileName} {
+    makeFile {foo foo/bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFileName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-57.5 {analyzer::checkFileName} {
+    makeFile {foo $x.bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFileName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-57.6 {analyzer::checkFileName} {
+    makeFile {foo foo/$x/bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFileName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 15} nonPortFile {4 10} {}}
+test analyzer-57.7 {analyzer::checkFileName} {
+    makeFile {foo foo/[set x 1]/bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFileName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 22} nonPortFile {4 17} {}}
+test analyzer-57.8 {analyzer::checkFileName} {
+    makeFile {foo foo:$x:bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFileName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 15} nonPortFile {4 10} {}}
+test analyzer-57.9 {analyzer::checkFileName} {
+    makeFile {foo foo\\[set x 1]\\bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFileName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 24} nonPortFile {4 19} {}}
+test analyzer-57.10 {analyzer::checkFileName} {
+    makeFile {foo f\ oo[set x]bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkFileName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+
+test analyzer-58.1 {analyzer::checkChannelID} {
+    makeFile {foo $x([set])} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkChannelID}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {8 3} numArgs {} {}}
+test analyzer-58.2 {analyzer::checkChannelID} {
+    makeFile {foo file10} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkChannelID}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-58.3 {analyzer::checkChannelID} {
+    makeFile {foo file0} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkChannelID}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 10} nonPortChannel {4 5} stdin}
+test analyzer-58.4 {analyzer::checkChannelID} {
+    makeFile {foo file1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkChannelID}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 10} nonPortChannel {4 5} stdout}
+test analyzer-58.5 {analyzer::checkChannelID} {
+    makeFile {foo file2} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkChannelID}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 10} nonPortChannel {4 5} stderr}
+
+test analyzer-59.1 {analyzer::checkArgList} {
+    makeFile {foo $x([set])} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkArgList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {8 3} numArgs {} {}}
+test analyzer-59.2 {analyzer::checkArgList} {
+    makeFile {foo arg1} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkArgList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-59.3 {analyzer::checkArgList} {
+    makeFile {foo {arg1 arg2}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkArgList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-59.4 {analyzer::checkArgList} {
+    makeFile {foo {arg1 {arg2 3}}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkArgList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-59.5 {analyzer::checkArgList} {
+    makeFile {foo {arg1 {arg2 3} args}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkArgList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-59.6 {analyzer::checkArgList} {
+    makeFile "foo \"\x7b\"" $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkArgList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} badList {5 1} {{unmatched open brace in list}}}
+test analyzer-59.7 {analyzer::checkArgList} {
+    makeFile {foo {{arg1 1 1}}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkArgList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 17} tooManyFieldArg {4 12} {}}
+test analyzer-59.8 {analyzer::checkArgList} {
+    makeFile {foo {{arg1 1} arg2}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkArgList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 20} nonDefAfterDef {4 15} {}}
+test analyzer-59.9 {analyzer::checkArgList} {
+    makeFile {foo {args {arg2 1}}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkArgList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 20} argAfterArgs {4 15} {}}
+test analyzer-59.10 {analyzer::checkArgList, bug 2230} {
+    makeFile {foo {args arg2 arg3}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkArgList}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 21} argAfterArgs {4 16} {}}
+test analyzer-56.10 {analyzer::checkArgList, bug 2231} {
+    makeFile {proc foo {$a} {}} $dummyFile
+    set result {}
+    analyzer::analyze $dummyFile
+    set result
+} {1 {0 17} warnVarRef {9 4} {}}
+test analyzer-56.11 {analyzer::checkArgList, bug 2231} {
+    makeFile {proc foo {$a $b {$c bar}} {}} $dummyFile
+    set result {}
+    analyzer::analyze $dummyFile
+    set result
+} {1 {0 29} warnVarRef {9 16} {} 1 {0 29} warnVarRef {9 16} {} 1 {0 29} warnVarRef {9 16} {}}
+test analyzer-56.12 {analyzer::checkArgList, bug 2230} {
+    makeFile {proc foo {{a bar} b c d} {}} $dummyFile
+    set result {}
+    analyzer::analyze $dummyFile
+    set result
+} {1 {0 28} nonDefAfterDef {9 15} {}}
+
+test analyzer-60.1 {analyzer::checkEvalArgs} {
+    makeFile {foo $x([set])} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkEvalArgs}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {8 3} numArgs {} {}}
+test analyzer-60.2 {analyzer::checkEvalArgs} {
+    makeFile {foo set} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkEvalArgs}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {4 3} numArgs {} {}}
+test analyzer-60.3 {analyzer::checkEvalArgs} {
+    makeFile {foo set x 3 4} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkEvalArgs}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-60.4 {analyzer::checkEvalArgs} {
+    makeFile {foo {set x 3 4}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkEvalArgs}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {5 9} numArgs {} {}}
+
+test analyzer-61.1 {analyzer::checkNamespace} {
+    testCmd {set}    
+} {1 {0 3} numArgs {} {}}
+
+test analyzer-62.1 {analyzer::checkNamespacePattern} {
+    makeFile {foo $x([set])} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkNamespacePattern}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {8 3} numArgs {} {}}
+test analyzer-62.2 {analyzer::checkNamespacePattern} {
+    makeFile {foo set} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkNamespacePattern}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-62.3 {analyzer::checkNamespacePattern} {
+    makeFile {foo set::bar} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkNamespacePattern}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-62.4 {analyzer::checkNamespacePattern} {
+    makeFile {foo set::bar*} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkNamespacePattern}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-62.5 {analyzer::checkNamespacePattern} {
+    makeFile {foo set::bar*::baz} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkNamespacePattern}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 19} warnNamespacePat {4 14} {}}
+test analyzer-62.6 {analyzer::checkNamespacePattern} {
+    makeFile {foo set::b\[a\]r::baz} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkNamespacePattern}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 22} warnNamespacePat {4 17} {}}
+test analyzer-62.7 {analyzer::checkNamespacePattern} {
+    makeFile {foo set::b\\r::baz} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkNamespacePattern}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 19} warnNamespacePat {4 14} {}}
+test analyzer-62.8 {analyzer::checkNamespacePattern} {
+    makeFile {foo set::b?r::baz} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkNamespacePattern}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 18} warnNamespacePat {4 13} {}}
+
+test analyzer-63.1 {analyzer::checkPattern} {
+    makeFile {foo *} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkPattern}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-63.2 {analyzer::checkPattern} {
+    makeFile {foo bar[set]*} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkPattern}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 14} warnPattern {4 9} {} 1 {8 3} numArgs {} {}}
+test analyzer-63.3 {analyzer::checkPattern} {
+    makeFile {foo [set]} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkPattern}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {5 3} numArgs {} {}}
+
+test analyzer-64.1 {analyzer::checkAccessMode} {
+    makeFile {foo [set]} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkAccessMode}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {5 3} numArgs {} {}}
+test analyzer-64.2 {analyzer::checkAccessMode} {
+    makeFile {foo r r+ w w+ a a+ z} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkSimpleArgs 1 -1 checkAccessMode}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 21} badKey {19 1} {{r r+ w w+ a a+} z}}
+test analyzer-64.3 {analyzer::checkAccessMode} {
+    makeFile "foo \"\x7b\"" $dummyFile
+    set result {}
+    analyzer::pushChecker foo checkAccessMode
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} badList {5 1} {{unmatched open brace in list}}}
+test analyzer-64.4 {analyzer::checkAccessMode} {
+    makeFile {foo {RDONLY WRONLY RDWR APPEND CREAT EXCL NOCTTY NONBLOCK TRUNC BLAT}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo checkAccessMode
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 70} badKey {64 4} {{RDONLY WRONLY RDWR APPEND CREAT EXCL NOCTTY NONBLOCK TRUNC} BLAT}}
+test analyzer-64.5 {analyzer::checkAccessMode} {
+    makeFile {foo {APPEND CREAT EXCL NOCTTY NONBLOCK TRUNC BLAT}} $dummyFile
+    set result {}
+    analyzer::pushChecker foo checkAccessMode
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 51} badKey {45 4} {{RDONLY WRONLY RDWR APPEND CREAT EXCL NOCTTY NONBLOCK TRUNC} BLAT} 1 {0 51} badMode {4 46} {}}
+
+test analyzer-65.1 {analyzer::checkResourceType} {
+    makeFile {foo [set]} $dummyFile
+    set result {}
+    analyzer::pushChecker foo checkResourceType
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {5 3} numArgs {} {}}
+test analyzer-65.2 {analyzer::checkResourceType} {
+    makeFile {foo blat} $dummyFile
+    set result {}
+    analyzer::pushChecker foo checkResourceType
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-65.3 {analyzer::checkResourceType} {
+    makeFile {foo blt} $dummyFile
+    set result {}
+    analyzer::pushChecker foo checkResourceType
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 8} badResource {4 3} {}}
+
+
+proc testTypesCmd {cmd} {
+    global result
+    set result {}
+    set ::analyzer::script $cmd
+    set ::analyzer::file test
+    set ::analyzer::currentLine 1
+    analyzer::setQuiet 1
+    analyzer::checkScript
+    return $result
+}
+
+test analyzer-66.0 {analyzer::checkWinName} {
+    testTypesCmd {frame a }
+} {1 {0 8} winBeginDot {6 1} {}}
+test analyzer-66.1 {analyzer::checkWinName} {
+    testTypesCmd {frame . }
+} {}
+test analyzer-66.2 {analyzer::checkWinName} {
+    testTypesCmd {frame .a }
+} {}
+test analyzer-66.3 {analyzer::checkWinName} {
+    testTypesCmd {frame [set] }
+} {1 {7 3} numArgs {} {}}
+test analyzer-66.4 {analyzer::checkWinName} {
+    testTypesCmd {frame . }
+} {}
+test analyzer-66.5 {analyzer::checkWinName} {
+    testTypesCmd {frame .a.. }
+} {1 {0 11} winNotNull {9 7} {} 1 {0 11} winNotNull {10 8} {}}
+test analyzer-66.6 {analyzer::checkWinName} {
+    testTypesCmd {frame .a.A }
+} {1 {0 11} winAlpha {9 7} {}}
+test analyzer-66.7 {analyzer::checkWinName} {
+    testTypesCmd {frame .a.aa.aaa.aaa.A }
+} {1 {0 22} winAlpha {20 29} {}}
+
+test analyzer-67.0 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg [set] }
+} {1 {15 3} numArgs {} {}}
+test analyzer-67.1 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg # }
+} {1 {0 16} badColorFormat {14 1} {}}
+test analyzer-67.2 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg #00 }
+} {1 {0 18} badColorFormat {14 3} {}}
+test analyzer-67.3 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg #012 }
+} {}
+test analyzer-67.4 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg #0123 }
+} {1 {0 20} badColorFormat {14 5} {}}
+test analyzer-67.5 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg #00223 }
+} {1 {0 21} badColorFormat {14 6} {}}
+test analyzer-67.6 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg #112233 }
+} {}
+test analyzer-67.7 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg #1112223 }
+} {1 {0 23} badColorFormat {14 8} {}}
+test analyzer-67.8 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg #0001113334 }
+} {1 {0 26} badColorFormat {14 11} {}}
+test analyzer-67.9 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg #000011112222 }
+} {}
+test analyzer-67.10 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg #0000111122223 }
+} {1 {0 29} badColorFormat {14 14} {}}
+test analyzer-67.11 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg #abg }
+} {1 {0 19} badColorFormat {14 4} {}}
+test analyzer-67.12 {analyzer::checkColor} {
+    testTypesCmd {button .b -bg foobarcat }
+} {1 {0 24} nonPortColor {14 9} {}}
+
+
+test analyzer-68.0 {analyzer::checkPixels} {
+    testTypesCmd {place .a -x [set] }
+} {1 {13 3} numArgs {} {}}
+test analyzer-68.1 {analyzer::checkPixels} {
+    testTypesCmd {place .a -x 1c }
+} {}
+test analyzer-68.2 {analyzer::checkPixels} {
+    testTypesCmd {place .a -x 1i }
+} {}
+test analyzer-68.3 {analyzer::checkPixels} {
+    testTypesCmd {place .a -x 1m }
+} {}
+test analyzer-68.4 {analyzer::checkPixels} {
+    testTypesCmd {place .a -x 1p }
+} {}
+test analyzer-68.5 {analyzer::checkPixels} {
+    testTypesCmd {place .a -x 1.1111c }
+} {}
+test analyzer-68.6 {analyzer::checkPixels} {
+    testTypesCmd {place .a -x 1.111 }
+} {}
+test analyzer-68.7 {analyzer::checkPixels} {
+    testTypesCmd {place .a -x a }
+} {1 {0 14} badPixel {12 1} {}}
+
+
+test analyzer-69.0 {analyzer::checkRelief} {
+    testTypesCmd {frame .a -relief raised }
+} {}
+test analyzer-69.1 {analyzer::checkRelief} {
+    testTypesCmd {frame .a -relief sunken }
+} {}
+test analyzer-69.2 {analyzer::checkRelief} {
+    testTypesCmd {frame .a -relief flat }
+} {}
+test analyzer-69.3 {analyzer::checkRelief} {
+    testTypesCmd {frame .a -relief ridge }
+} {}
+test analyzer-69.4 {analyzer::checkRelief} {
+    testTypesCmd {frame .a -relief solid }
+} {}
+test analyzer-69.5 {analyzer::checkRelief} {
+    testTypesCmd {frame .a -relief groove }
+} {}
+test analyzer-69.6 {analyzer::checkRelief} {
+    testTypesCmd {frame .a -relief foo }
+} {1 {0 21} badKey {17 3} {{raised sunken flat ridge solid groove} foo}}
+test analyzer-69.7 {analyzer::checkRelief} {
+    testTypesCmd {frame .a -relief {} }
+} {1 {0 20} badKey {17 2} {{raised sunken flat ridge solid groove} {}}}
+
+
+test analyzer-70.0 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor [set] }
+} {1 {19 3} numArgs {} {}}
+test analyzer-70.1 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor {{}a} }
+} {1 {0 24} badCursor {18 5} {}}
+test analyzer-70.2 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor gumby }
+} {}
+test analyzer-70.3 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor starting }
+} {1 {0 27} nonPortCursor {18 8} {}}
+test analyzer-70.4 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor text }
+} {1 {0 23} nonPortCursor {18 4} {}}
+test analyzer-70.5 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor foo }
+} {1 {0 22} badCursor {18 3} {}}
+test analyzer-70.6 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "@foo red" }
+} {1 {0 29} nonPortCmd {18 10} {}}
+test analyzer-70.7 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "@foo foo" }
+} {1 {0 29} nonPortCmd {18 10} {} 1 {0 29} nonPortColor {18 10} {}}
+test analyzer-70.8 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "foo red" }
+} {1 {0 28} nonPortCmd {18 9} {} 1 {0 28} badCursor {18 9} {}}
+test analyzer-70.9 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "foo red red" }
+} {1 {0 32} nonPortCmd {18 13} {} 1 {0 32} badCursor {18 13} {}}
+test analyzer-70.10 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "@foo red red" }
+} {1 {0 33} nonPortCmd {18 14} {} 1 {0 33} badCursor {18 14} {}}
+test analyzer-70.11 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "gumby foo red" }
+} {1 {0 34} nonPortCmd {18 15} {} 1 {0 34} nonPortColor {18 15} {}}
+test analyzer-70.12 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "gumby red foo" }
+} {1 {0 34} nonPortCmd {18 15} {} 1 {0 34} nonPortColor {18 15} {}}
+test analyzer-70.13 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "@foo foo red red" }
+} {1 {0 37} nonPortCmd {18 18} {}}
+test analyzer-70.14 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "foo foo red red" }
+} {1 {0 36} nonPortCmd {18 17} {} 1 {0 36} badCursor {18 17} {}}
+test analyzer-70.15 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "@foo foo foo red" }
+} {1 {0 37} nonPortCmd {18 18} {} 1 {0 37} nonPortColor {18 18} {}}
+test analyzer-70.16 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "@foo foo red foo" }
+} {1 {0 37} nonPortCmd {18 18} {} 1 {0 37} nonPortColor {18 18} {}}
+test analyzer-70.17 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "foo foo foo foo foo" }
+} {1 {0 40} badCursor {18 21} {}}
+test analyzer-70.18 {analyzer::checkCursor} {
+    testTypesCmd {button .b -cursor "" }
+} {}
+
+test analyzer-71.1 {analyzer::checkProcName called with undef proc} {
+    makeFile {rename p71_1 foo} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkProcName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {1 {0 17} warnUndefProc {7 5} p71_1}
+test analyzer-71.2 {analyzer::checkProcName called with user-defined proc} {
+    makeFile {rename p71_2 foo} $dummyFile
+    set result {}
+    analyzer::pushChecker p71_2 {checkProcName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker p71_2
+    set result
+} {}
+test analyzer-71.3 {analyzer::checkProcName called with built-in proc} {
+    makeFile {rename set foo} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkProcName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+test analyzer-71.4 {analyzer::checkProcName called with built-in proc} {
+    makeFile {rename $A foo} $dummyFile
+    set result {}
+    analyzer::pushChecker foo {checkProcName}
+    analyzer::analyze $dummyFile
+    analyzer::popChecker foo
+    set result
+} {}
+
+test analyzer-72.1 {analyzer::checkProcCall called with undef proc} {
+    makeFile {lsort -command p72_1 $a} $dummyFile
+    set result {}
+    analyzer::analyze $dummyFile
+    set result
+} {1 {0 24} warnUndefProc {15 5} p72_1}
+test analyzer-72.2 {analyzer::checkProcCall called with user-defined proc} {
+    makeFile {lsort -command p72_2 $a} $dummyFile
+    set result {}
+    set pInfo [uproc::newProcInfo]
+    set pInfo [uproc::setName $pInfo ::p72_2]
+    analyzer::analyze $dummyFile
+    set result
+} {1 {0 24} warnUndefProc {15 5} p72_2}
+test analyzer-72.3 {analyzer::checkProcCall called with user-defined proc} {
+    makeFile {
+	proc p72_3 {x y} {}
+	lsort -command p72_3 $a
+    } $dummyFile
+    set result {}
+    analyzer::scan $dummyFile
+    analyzer::analyze $dummyFile
+    set result
+} {}
+test analyzer-72.4 {analyzer::checkProcCall called with user-defined proc} {
+    makeFile {
+	proc p72_4 {x y z} {}
+	lsort -command p72_4 $a
+    } $dummyFile
+    set result {}
+    analyzer::scan $dummyFile
+    analyzer::analyze $dummyFile
+    set result
+} {3 {25 24} procNumArgs {} p72_4}
+test analyzer-72.5 {analyzer::checkProcCall called with user-defined proc} {
+    makeFile {
+	proc p72_5 {x y} {}
+	lsort -command {p72_5 x} $a
+    } $dummyFile
+    set result {}
+    analyzer::scan $dummyFile
+    analyzer::analyze $dummyFile
+    set result
+} {}
+test analyzer-72.6 {analyzer::checkProcCall called with user-defined proc} {
+    makeFile {
+	proc p72_6 {x y z} {}
+	lsort -command {p72_6 x} $a
+    } $dummyFile
+    set result {}
+    analyzer::scan $dummyFile
+    analyzer::analyze $dummyFile
+    set result
+} {}
+test analyzer-72.7 {analyzer::checkProcCall called with built-in proc} {
+    makeFile {lsort -command set $a} $dummyFile
+    set result {}
+    analyzer::scan $dummyFile
+    analyzer::analyze $dummyFile
+    set result
+} {}
+test analyzer-72.8 {analyzer::checkProcCall called with built-in proc} {
+    makeFile {lsort -command bell $a} $dummyFile
+    set result {}
+    analyzer::analyze $dummyFile
+    set result
+} {}
+test analyzer-72.9 {analyzer::checkProcCall called with user-defined proc} {
+    makeFile {
+	proc p72_9 {args} {}
+	lsort -command {p72_9} $a
+    } $dummyFile
+    set result {}
+    analyzer::scan $dummyFile
+    analyzer::analyze $dummyFile
+    set result
+} {}
+test analyzer-72.10 {analyzer::checkProcCall called with user-defined proc} {
+    makeFile {
+	proc p72_10 {x y z} {}
+	trace variable a r p72_10
+    } $dummyFile
+    set result {}
+    analyzer::scan $dummyFile
+    analyzer::analyze $dummyFile
+    set result
+} {}
+test analyzer-72.11 {analyzer::checkProcCall called with user-defined proc} {
+    makeFile {
+	proc p72_11 {args} {}
+	trace variable a r p72_11
+    } $dummyFile
+    set result {}
+    analyzer::scan $dummyFile
+    analyzer::analyze $dummyFile
+    set result
+} {}
+test analyzer-73.1 {analyzer::checkProcName called with non-lilteral proc} {
+    makeFile {lsort -command $A $a} $dummyFile
+    set result {}
+    analyzer::analyze $dummyFile
+    set result
+} {}
+
+resetMessageShow
+resetAnalyzer
+resetUProcData
+
+# cleanup
+cleanupTests
+return

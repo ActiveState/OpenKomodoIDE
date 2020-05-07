@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/prefwidgets.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        class="pref-window"
+        onload="parent.initPanel();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/logging.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/uriparse.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/filepickers.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/dialogs.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/launch.js"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://komodo/content/pref/pref-project-debugging-properties.js" type="application/x-javascript;version=1.7"/>
+
+    <groupbox id="panelFrame" name="panelFrame" orient="vertical">
+        <caption label="&debugConfiguration.label;" class="kopadded"/>
+        <grid>
+            <columns>
+                <column flex="1"/>
+                <column/>
+                <column/>
+            </columns>
+            <rows>
+                <row align="center">
+                <menulist id="invocation-configuration"
+                            oncommand="ChangeInvocation();">
+                    <menupopup id="invocation-configuration-popup" flex="1"/>
+                </menulist>
+                <button id="newButton" label="&new.label;" oncommand="doCreateNewInvocation()" />
+                <button id="deleteButton" label="&delete.label;" oncommand="doDeleteInvocation()" />
+                </row>
+            </rows>
+        </grid>
+    </groupbox>
+
+    <groupbox orient="vertical"  id="generalProperties">
+        <caption label="&debugSessionStartup.label;"/>
+        <grid>
+            <columns>
+                <column/>
+                <column flex="1"/>
+            </columns>
+            <rows>
+                <row align="center">
+                    <label value="Language"
+                           accesskey="&L.accesskey;"
+                           tooltiptext="&languageToDebugWith.tooltiptext;"/>
+                    <menulist id="language" oncommand="changeLanguage()">
+                        <menupopup>
+                            <menuitem label="Node.js"/>
+                            <menuitem label="Perl"/>
+                            <menuitem label="PHP"/>
+                            <menuitem label="Python"/>
+                            <menuitem label="Python3"/>
+                            <menuitem label="Ruby"/>
+                            <menuitem label="Tcl"/>
+                            <menuitem label="XSLT"/>
+                        </menupopup>
+                    </menulist>
+                </row>
+                <row align="center">
+                    <label value="Interpreter Arguments"
+                           accesskey="&I.accesskey;"
+                           control="executable-params"
+                           class="kopadded"
+                           tooltiptext="&interpreterCommandLineArguments.tooltiptext;"/>
+                    <hbox align="center" id="interpparams" flex="1">
+                        <textbox id="executable-params"
+                                 flex="1"
+                                 tooltiptext="&interpreterCommandLineArguments.tooltiptext;"/>
+                    </hbox>
+                </row>
+                <row align="center">
+                    <label value="Script"
+                           accesskey="&S.accesskey;"
+                           control="filename"
+                           class="kopadded"
+                           tooltiptext="&scriptToBeExecuted.tooltiptext;"/>
+                    <hbox align="center">
+                        <textbox id="filename" flex="1"
+                                 tooltiptext="&scriptToBeExecuted.tooltiptext;"/>
+                        <button label="&browse.label;"
+                                accesskey="&browse.accesskey;"
+                                oncommand="doBrowseForLanguageFile('filename')" />
+                    </hbox>
+                </row>
+                <row align="center">
+                    <label value="Script Arguments"
+                           control="params"
+                           class="kopadded"
+                           accesskey="&A.accesskey;"
+                           tooltiptext="&scriptCommandLineArguments.tooltiptext;"/>
+                    <textbox id="params" 
+                                tooltiptext="&scriptCommandLineArguments.tooltiptext;"/>
+                </row>
+                <row align="center">
+                    <label value="Directory"
+                           control="cwd"
+                           class="kopadded"
+                           accesskey="&c.accesskey;"
+                           tooltiptext="&startInThisDirectoryDefaultsToDirectoryOfTheScript.tooltiptext;"/>
+                    <hbox align="center">
+                        <textbox id="cwd" flex="1"
+                            tooltiptext="&startInThisDirectoryIfYouDoNotSpecifyADebuggingDirectoryDebuggingWillStartInTheDirectoryWhereTheProgramResides.tooltiptext;"/>
+                        <button accesskey="&browse.accesskey;"
+                                label="&browse.label;"
+                                oncommand="doBrowseForDir()" />
+                    </hbox>
+                </row>
+            </rows>
+        </grid>
+        <separator class="groovy-thin"
+                   style="margin-top: 10px; margin-bottom: 10px;"/>
+        <checkbox id="debuggerRunInConsole"
+            label="&debugInSeparateConsole.label;"/>
+    </groupbox>
+</window>
+

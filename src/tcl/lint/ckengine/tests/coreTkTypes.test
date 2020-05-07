@@ -1,0 +1,1083 @@
+# coreTkTypes.test --
+#
+#	This file contains regression tests for the Tk type checkers.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: coreTkTypes.test,v 1.2 2000/05/30 22:24:48 wart Exp $
+
+if {[string compare test [info procs resetAnalyzer]] == 1} {
+    source [file  join [pwd] [file dirname [info script]] defs.tcl]
+}
+
+analyzer::init
+renameMessageShow
+
+proc testTypesCmd {cmd} {
+    global result
+    set result {}
+    set ::analyzer::script $cmd
+    set ::analyzer::file test
+    set ::analyzer::currentLine 1
+    analyzer::setQuiet 1
+    analyzer::checkScript
+    return $result
+}
+
+test coreTkTypes-1.0 {coreTk::init} {
+    resetAnalyzer
+    catch {coreTk::init 4.1} err
+    set ::analyzer::checkers(event)
+} {{::analyzer::warn warnReserved "Tk 4.2" checkCommand}}
+
+
+test coreTkTypes-2.0 {coreTk::getMessage} {
+    coreTk::getMessage fakeMID
+} {fakeMID}
+set mid [lindex [array names coreTk::messages] 0]
+set str [lindex $coreTk::messages($mid) 0]
+test coreTkTypes-2.1 {coreTk::getMessage} {
+    coreTk::getMessage $mid
+} $str
+catch {unset mid str}
+
+
+test coreTkTypes-3.0 {coreTk::getTypes} {
+    coreTk::getTypes fakeMID
+} {err}
+set mid   [lindex [array names coreTk::messages] 0]
+set types [lindex $coreTk::messages($mid) 1]
+test coreTkTypes-3.1 {coreTk::getTypes} {
+    set mid   [lindex [array names coreTk::messages] 0]
+    set types [lindex $coreTk::messages($mid) 1]
+    coreTk::getTypes $mid
+} $types
+catch {unset mid types}
+
+if {0} {
+
+rename coreTk::checkConfigure coreTk::checkConfigureOrig
+proc coreTk::checkConfigure {args} {return $args}
+test coreTkTypes-4.0 {checkWidgetOptions} {
+    checkWidgetOptions 1 {} {a b c} t i
+} {1 {a b c} t i}
+test coreTkTypes-4.1 {checkWidgetOptions} {
+    checkWidgetOptions 1 {-bg} {} t i
+} {1 {{-bg coreTk::checkColor}} t i}
+    rename coreTk::checkConfigure {}
+    rename coreTk::checkConfigureOrig coreTk::checkConfigure
+
+}
+
+coreTcl::init $::protest::currentVersion(Tcl)
+coreTk::init $::protest::currentVersion(Tk)
+
+test coreTkTypes-6.0 {coreTk::checkTag} {
+    testTypesCmd {bindtags .a .a }
+} {}
+test coreTkTypes-6.1 {coreTk::checkTag} {
+    testTypesCmd {bindtags .a .A }
+} {1 {0 15} winAlpha {13 3} {}}
+test coreTkTypes-6.2 {coreTk::checkTag} {
+    testTypesCmd {bindtags .a a }
+} {}
+test coreTkTypes-6.3 {coreTk::checkTag} {
+    testTypesCmd {bindtags .a [set] }
+} {1 {13 3} numArgs {} {}}
+
+
+test coreTkTypes-7.0 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create }
+} {}
+test coreTkTypes-7.1 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create foo }
+} {}
+test coreTkTypes-7.2 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create [set] }
+} {1 {13 3} numArgs {} {}}
+test coreTkTypes-7.3 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create foo -family [set] }
+} {1 {25 3} numArgs {} {}}
+test coreTkTypes-7.4 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create -family [set] }
+} {1 {21 3} numArgs {} {}}
+test coreTkTypes-7.5 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create -size a }
+} {1 {0 20} badInt {18 1} {}}
+test coreTkTypes-7.6 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create -weight normal }
+} {}
+test coreTkTypes-7.7 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create -weight bold }
+} {}
+test coreTkTypes-7.8 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create -weight foo }
+} {1 {0 24} badKey {20 3} {{normal bold} foo}}
+test coreTkTypes-7.9 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create -slant roman }
+} {}
+test coreTkTypes-7.10 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create -slant italic }
+} {}
+test coreTkTypes-7.11 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create -slant foo }
+} {1 {0 23} badKey {19 3} {{roman italic} foo}}
+test coreTkTypes-7.12 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create -underline a }
+} {1 {0 25} badBoolean {23 1} {}}
+test coreTkTypes-7.13 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create -overstrike a }
+} {1 {0 26} badBoolean {24 1} {}}
+test coreTkTypes-7.14 {coreTk::checkFontCreateCmd} {
+    testTypesCmd {font create -foo a }
+} {1 {0 19} badSwitch {12 4} -foo}
+
+
+test coreTkTypes-8.0 {coreTk::checkWmProtocol} {
+    testTypesCmd {wm protocol .a FOO }
+} {1 {0 19} nonPortOption {15 3} {{}}}
+test coreTkTypes-8.1 {coreTk::checkWmProtocol} {
+    testTypesCmd {wm protocol .a WM_DELETE_WINDOW }
+} {}
+test coreTkTypes-8.2 {coreTk::checkWmProtocol} {
+    testTypesCmd {wm protocol .a [set] }
+} {1 {16 3} numArgs {} {}}
+
+
+test coreTkTypes-9.0 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -icon foo }
+} {1 {0 24} badKey {20 3} {{error info question warning} foo}}
+test coreTkTypes-9.1 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -icon error }
+} {}
+test coreTkTypes-9.2 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -icon info }
+} {}
+test coreTkTypes-9.3 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -icon question }
+} {}
+test coreTkTypes-9.4 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -icon warning }
+} {}
+test coreTkTypes-9.5 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -icon foo }
+} {1 {0 24} badKey {20 3} {{error info question warning} foo}}
+test coreTkTypes-9.6 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -message [set] }
+} {1 {24 3} numArgs {} {}}
+test coreTkTypes-9.7 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -parent .A }
+} {1 {0 25} winAlpha {23 3} {}}
+test coreTkTypes-9.8 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -title [set] }
+} {1 {22 3} numArgs {} {}}
+test coreTkTypes-9.9 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type abortretryignore }
+} {}
+test coreTkTypes-9.10 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type abortretryignore -default abort }
+} {}
+test coreTkTypes-9.11 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type abortretryignore -default retry }
+} {}
+test coreTkTypes-9.12 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type abortretryignore -default ignore }
+} {}
+test coreTkTypes-9.13 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type abortretryignore -default foo }
+} {1 {0 50} badKey {46 3} {{abort retry ignore} foo}}
+test coreTkTypes-9.14 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type ok }
+} {}
+test coreTkTypes-9.15 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type ok -default ok }
+} {}
+test coreTkTypes-9.16 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type ok -default foo }
+} {1 {0 36} badKey {32 3} {ok foo}}
+test coreTkTypes-9.17 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type okcancel }
+} {}
+test coreTkTypes-9.18 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type okcancel -default ok }
+} {}
+test coreTkTypes-9.19 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type okcancel -default cancel }
+} {}
+test coreTkTypes-9.20 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type okcancel -default foo }
+} {1 {0 42} badKey {38 3} {{ok cancel} foo}}
+test coreTkTypes-9.21 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type retrycancel }
+} {}
+test coreTkTypes-9.22 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type retrycancel -default retry }
+} {}
+test coreTkTypes-9.23 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type retrycancel -default cancel }
+} {}
+test coreTkTypes-9.24 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type retrycancel -default foo }
+} {1 {0 45} badKey {41 3} {{retry cancel} foo}}
+test coreTkTypes-9.25 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type yesno }
+} {}
+test coreTkTypes-9.26 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type yesno -default yes }
+} {}
+test coreTkTypes-9.27 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type yesno -default no }
+} {}
+test coreTkTypes-9.28 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type yesno -default foo }
+} {1 {0 39} badKey {35 3} {{yes no} foo}}
+test coreTkTypes-9.29 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type yesnocancel }
+} {}
+test coreTkTypes-9.30 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type yesnocancel -default yes }
+} {}
+test coreTkTypes-9.31 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type yesnocancel -default no }
+} {}
+test coreTkTypes-9.32 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type yesnocancel -default cancel }
+} {}
+test coreTkTypes-9.33 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -type yesnocancel -default foo }
+} {1 {0 45} badKey {41 3} {{yes no cancel} foo}}
+test coreTkTypes-9.34 {coreTk::checkMessageBox} {
+    testTypesCmd {tk_messageBox -foo a }
+} {1 {0 21} badSwitch {14 4} -foo}
+
+
+test coreTkTypes-10.0 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a [set] }
+} {1 {16 3} numArgs {} {}}
+test coreTkTypes-10.1 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a {} }
+} {}
+test coreTkTypes-10.2 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0x0 }
+} {}
+test coreTkTypes-10.3 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a Ax0 }
+} {1 {0 19} coreTk::badGeometry {15 3} {}}
+test coreTkTypes-10.4 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0xA }
+} {1 {0 19} coreTk::badGeometry {15 3} {}}
+test coreTkTypes-10.5 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0X0 }
+} {1 {0 19} coreTk::badGeometry {15 3} {}}
+test coreTkTypes-10.6 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0x0-0-0 }
+} {}
+test coreTkTypes-10.7 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0x0+0-0 }
+} {}
+test coreTkTypes-10.8 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0x0--0-0 }
+} {}
+test coreTkTypes-10.9 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0x0+-0-0 }
+} {}
+test coreTkTypes-10.10 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0x0-+0-0 }
+} {1 {0 24} coreTk::badGeometry {15 8} {}}
+test coreTkTypes-10.12 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0x0+A+0 }
+} {1 {0 23} coreTk::badGeometry {15 7} {}}
+test coreTkTypes-10.13 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0x0+0+A }
+} {1 {0 23} coreTk::badGeometry {15 7} {}}
+test coreTkTypes-10.14 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0x0+0--0 }
+} {}
+test coreTkTypes-10.15 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0x0+0+-0 }
+} {}
+test coreTkTypes-10.16 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0x0+0-+0 }
+} {1 {0 24} coreTk::badGeometry {15 8} {}}
+test coreTkTypes-10.17 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a 0x0+0+0x0 }
+} {1 {0 25} coreTk::badGeometry {15 9} {}}
+test coreTkTypes-10.18 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a -0-0 }
+} {}
+test coreTkTypes-10.19 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a +0-0 }
+} {}
+test coreTkTypes-10.20 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a --0-0 }
+} {}
+test coreTkTypes-10.21 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a +-0-0 }
+} {}
+test coreTkTypes-10.22 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a -+0-0 }
+} {1 {0 21} coreTk::badGeometry {15 5} {}}
+test coreTkTypes-10.23 {coreTk::checkGeometry} {
+    testTypesCmd {wm geometry .a foo }
+} {1 {0 19} coreTk::badGeometry {15 3} {}}
+
+
+test coreTkTypes-11.0 {coreTk::checkBitmap} {
+    testTypesCmd {button .a -bitmap [set] }
+} {1 {19 3} numArgs {} {}}
+test coreTkTypes-11.1 {coreTk::checkBitmap} {
+    testTypesCmd {button .a -bitmap @foo }
+} {}
+test coreTkTypes-11.2 {coreTk::checkBitmap} {
+    testTypesCmd {button .a -bitmap error }
+} {}
+test coreTkTypes-11.3 {coreTk::checkBitmap} {
+    testTypesCmd {button .a -bitmap foo }
+} {1 {0 22} coreTk::nonPortBitmap {18 3} {}}
+
+
+test coreTkTypes-12.1 {coreTk::checkVirtual} {
+    testTypesCmd {event info [set] }
+} {1 {12 3} numArgs {} {}}
+test coreTkTypes-12.2 {coreTk::checkVirtual} {
+    testTypesCmd {event info <a> }
+} {1 {0 15} coreTk::badVirtual {11 3} {}}
+test coreTkTypes-12.3 {coreTk::checkVirtual} {
+    testTypesCmd {event info <<>> }
+} {1 {0 16} coreTk::badVirtual {11 4} {}}
+test coreTkTypes-12.4 {coreTk::checkVirtual} {
+    testTypesCmd {event info a }
+} {1 {0 13} coreTk::badVirtual {11 1} {}}
+test coreTkTypes-12.5 {coreTk::checkVirtual} {
+    testTypesCmd {event info <<A>> }
+} {}
+
+
+test coreTkTypes-13.0 {coreTk::checkEvent} {
+    testTypesCmd {bind .a [set] a }
+} {1 {9 3} numArgs {} {}}
+test coreTkTypes-13.1 {coreTk::checkEvent} {
+    testTypesCmd {bind .a <1> a }
+} {}
+test coreTkTypes-13.2 {coreTk::checkEvent} {
+    testTypesCmd {bind .a <Key-Page_Down> a }
+} {1 {0 26} coreTk::nonPortKeysym {13 1} {}}
+
+
+test coreTkTypes-14.0 {coreTk::checkKeysym} {
+    testTypesCmd {event generate .a <KeyPress> -keysym [set] }
+} {1 {38 3} numArgs {} {}}
+test coreTkTypes-14.1 {coreTk::checkKeysym} {
+    testTypesCmd {event generate .a <KeyPress> -keysym space }
+} {}
+test coreTkTypes-14.2 {coreTk::checkKeysym} {
+    testTypesCmd {event generate .a <KeyPress> -keysym a }
+} {}
+test coreTkTypes-14.3 {coreTk::checkKeysym} {
+    testTypesCmd {event generate .a <KeyPress> -keysym foo }
+} {1 {0 41} coreTk::nonPortKeysym {37 3} {}}
+test coreTkTypes-14.3 {coreTk::checkKeysym} {
+    testTypesCmd {event generate .a <KeyPress> -keysym {} }
+} {1 {0 40} coreTk::nonPortKeysym {37 2} {}}
+
+
+test coreTkTypes-15.0 {coreTk::checkSequence} {
+    testTypesCmd {event add <<A>> [set] }
+} {1 {17 3} numArgs {} {}}
+test coreTkTypes-15.1 {coreTk::checkSequence} {
+    testTypesCmd {event add <<A>> {} }
+} {1 {0 19} coreTk::noEvent {16 2} {}}
+test coreTkTypes-15.2 {coreTk::checkSequence} {
+    testTypesCmd {event add <<A>> < }
+} {1 {0 18} coreTk::badEvent {16 1} {}}
+test coreTkTypes-15.3 {coreTk::checkSequence} {
+    testTypesCmd {event add <<A>> <a }
+} {1 {0 19} coreTk::badEvent {16 1} {}}
+test coreTkTypes-15.4 {coreTk::checkSequence} {
+    testTypesCmd {event add <<A>> <<1>> }
+} {1 {0 22} coreTk::noVirtual {20 1} {}}
+test coreTkTypes-15.5 {coreTk::checkSequence} {
+    testTypesCmd {event add <<A>> <<1> }
+} {1 {0 21} coreTk::badEvent {19 1} {}}
+test coreTkTypes-15.6 {coreTk::checkSequence} {
+    testTypesCmd {event add <<A>> <1>> }
+} {1 {0 21} coreTk::badEvent {19 1} {}}
+test coreTkTypes-15.7 {coreTk::checkSequence} {
+    testTypesCmd {event add <<A>> <1> }
+} {}
+test coreTkTypes-15.8 {coreTk::checkSequence} {
+    testTypesCmd {event add <<A>> <Foo> }
+} {1 {0 22} coreTk::nonPortKeysym {17 1} {}}
+
+
+test coreTkTypes-16.1 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <1> }
+} {}
+test coreTkTypes-16.2 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> }
+} {}
+test coreTkTypes-16.3 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <1> -above .a }
+} {}
+test coreTkTypes-16.4 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -above .a }
+} {}
+test coreTkTypes-16.5 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -above a }
+} {1 {0 33} winBeginDot {31 1} {}}
+test coreTkTypes-16.6 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -borderwidth a }
+} {1 {0 39} badPixel {37 1} {}}
+test coreTkTypes-16.7 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -button -1 }
+} {1 {0 35} badWholeNum {32 2} -1}
+test coreTkTypes-16.8 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -count a }
+} {1 {0 33} badInt {31 1} {}}
+test coreTkTypes-16.9 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -detail NotifyAncestor }
+} {}
+test coreTkTypes-16.10 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -detail NotifyNonlinearVirtual }
+} {}
+test coreTkTypes-16.11 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -detail NotifyDetailNone }
+} {}
+test coreTkTypes-16.12 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -detail NotifyPointer }
+} {}
+test coreTkTypes-16.13 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -detail NotifyInferior }
+} {}
+test coreTkTypes-16.14 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -detail NotifyPointerRoot }
+} {}
+test coreTkTypes-16.15 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -detail NotifyNonlinear }
+} {}
+test coreTkTypes-16.16 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -detail NotifyVirtual }
+} {}
+test coreTkTypes-16.17 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -detail foo }
+} {1 {0 36} badKey {32 3} {{ NotifyAncestor NotifyNonlinearVirtual  NotifyDetailNone NotifyPointer  NotifyInferior NotifyPointerRoot  NotifyNonlinear NotifyVirtual  } foo}}
+test coreTkTypes-16.18 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -detail {} }
+} {1 {0 35} badKey {32 2} {{ NotifyAncestor NotifyNonlinearVirtual  NotifyDetailNone NotifyPointer  NotifyInferior NotifyPointerRoot  NotifyNonlinear NotifyVirtual  } {}}}
+test coreTkTypes-16.19 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -focus a }
+} {1 {0 33} badBoolean {31 1} {}}
+test coreTkTypes-16.20 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -height a }
+} {1 {0 34} badPixel {32 1} {}}
+test coreTkTypes-16.21 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -keycode 1.1 }
+} {1 {0 37} badInt {33 3} {}}
+test coreTkTypes-16.22 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -keysym foo }
+} {1 {0 36} coreTk::nonPortKeysym {32 3} {}}
+test coreTkTypes-16.23 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -mode NotifyNormal }
+} {}
+test coreTkTypes-16.24 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -mode NotifyGrab }
+} {}
+test coreTkTypes-16.25 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -mode NotifyUngrab }
+} {}
+test coreTkTypes-16.26 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -mode NotifyWhileGrabbed }
+} {}
+test coreTkTypes-16.27 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -mode foo }
+} {1 {0 34} badKey {30 3} {{ NotifyNormal NotifyGrab NotifyUngrab NotifyWhileGrabbed  } foo}}
+test coreTkTypes-16.28 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -mode {} }
+} {1 {0 33} badKey {30 2} {{ NotifyNormal NotifyGrab NotifyUngrab NotifyWhileGrabbed  } {}}}
+test coreTkTypes-16.29 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -override a }
+} {1 {0 36} badBoolean {34 1} {}}
+test coreTkTypes-16.30 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -place PlaceOnTop }
+} {}
+test coreTkTypes-16.31 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -place PlaceOnBottom }
+} {}
+test coreTkTypes-16.32 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -place foo }
+} {1 {0 35} badKey {31 3} {{ PlaceOnTop PlaceOnBottom  } foo}}
+test coreTkTypes-16.33 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -root a }
+} {1 {0 32} winBeginDot {30 1} {}}
+test coreTkTypes-16.34 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -rootx a }
+} {1 {0 33} badPixel {31 1} {}}
+test coreTkTypes-16.35 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -rooty a }
+} {1 {0 33} badPixel {31 1} {}}
+test coreTkTypes-16.36 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -sendevent a }
+} {1 {0 37} badBoolean {35 1} {}}
+test coreTkTypes-16.37 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -serial 1.1 }
+} {1 {0 36} badInt {32 3} {}}
+test coreTkTypes-16.38 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -state [set] }
+} {1 {32 3} numArgs {} {}}
+test coreTkTypes-16.39 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -subwindow a }
+} {1 {0 37} winBeginDot {35 1} {}}
+test coreTkTypes-16.40 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -time 1.1 }
+} {1 {0 34} badInt {30 3} {}}
+test coreTkTypes-16.41 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -when now }
+} {}
+test coreTkTypes-16.42 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -when tail }
+} {}
+test coreTkTypes-16.43 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -when head }
+} {}
+test coreTkTypes-16.44 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -when mark }
+} {}
+test coreTkTypes-16.45 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -when foo }
+} {1 {0 34} badKey {30 3} {{ now tail head mark  } foo}}
+test coreTkTypes-16.46 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -when {} }
+} {1 {0 33} badKey {30 2} {{ now tail head mark  } {}}}
+test coreTkTypes-16.47 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -width a }
+} {1 {0 33} badPixel {31 1} {}}
+test coreTkTypes-16.48 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -x a }
+} {1 {0 29} badPixel {27 1} {}}
+test coreTkTypes-16.49 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -y a }
+} {1 {0 29} badPixel {27 1} {}}
+test coreTkTypes-16.50 {coreTk::checkEventGenerate} {
+    testTypesCmd {event generate .a <<A>> -foo a }
+} {1 {0 31} badSwitch {24 4} -foo}
+
+
+test coreTkTypes-17.0 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a a a }
+} {}
+test coreTkTypes-17.1 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <<A>> a }
+} {}
+test coreTkTypes-17.2 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <a a }
+} {1 {0 13} coreTk::badEvent {8 1} {}}
+test coreTkTypes-17.3 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <<A a }
+} {1 {0 14} coreTk::badEvent {8 1} {}}
+test coreTkTypes-17.4 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <<A> a }
+} {1 {0 15} coreTk::badEvent {11 1} {}}
+test coreTkTypes-17.5 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <A>> a }
+} {1 {0 15} coreTk::badEvent {11 1} {}}
+test coreTkTypes-17.6 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <Control-1> a }
+} {}
+test coreTkTypes-17.7 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <Control-Shift-1> a }
+} {}
+test coreTkTypes-17.8 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <Triple-1> a }
+} {}
+test coreTkTypes-17.9 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <1> a }
+} {}
+test coreTkTypes-17.10 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <Key-space> a }
+} {}
+test coreTkTypes-17.11 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <KeyPress-a> a }
+} {}
+test coreTkTypes-17.12 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <KeyRelease-1> a }
+} {}
+test coreTkTypes-17.13 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <Button-1> a }
+} {}
+test coreTkTypes-17.14 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <ButtonPress-1> a }
+} {}
+test coreTkTypes-17.15 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <ButtonRelease-1> a }
+} {}
+test coreTkTypes-17.16 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <Destroy-1> a }
+} {1 {0 22} coreTk::badEvent {17 1} {}}
+test coreTkTypes-17.17 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <> a }
+} {1 {0 13} coreTk::badEvent {9 1} {}}
+test coreTkTypes-17.18 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <Shift-Double> a }
+} {1 {0 25} coreTk::nonPortKeysym {15 1} {}}
+test coreTkTypes-17.19 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <Shift-Double-> a }
+} {1 {0 26} coreTk::badEvent {22 1} {}}
+test coreTkTypes-17.20 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <Shift-Double--> a }
+} {1 {0 27} coreTk::nonPortKeysym {22 1} {}}
+test coreTkTypes-17.21 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <Button-1-1> a }
+} {1 {0 23} coreTk::badEvent {18 1} {}}
+test coreTkTypes-17.22 {coreTk::CheckEventString} {
+    testTypesCmd {bind .a <Button-86> a }
+} {1 {0 22} coreTk::badEvent {16 1} {}}
+
+
+test coreTkTypes-20.1 {coreTk::checkGridOptions} {
+    testTypesCmd {grid }
+} {1 {0 5} numArgs {} {}}
+test coreTkTypes-20.2 {coreTk::checkGridOptions} {
+    testTypesCmd {grid configure }
+} {1 {0 15} numArgs {} {}}
+test coreTkTypes-20.3 {coreTk::checkGridOptions} {
+    testTypesCmd {grid $w }
+} {}
+test coreTkTypes-20.4 {coreTk::checkGridOptions} {
+    testTypesCmd {grid $w $w }
+} {}
+test coreTkTypes-20.5 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a $w -row 0 }
+} {}
+test coreTkTypes-20.6 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a - -row 0 }
+} {}
+test coreTkTypes-20.7 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a ^ -row 0 }
+} {}
+test coreTkTypes-20.8 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a x -row 0 }
+} {}
+test coreTkTypes-20.9 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a ^ x -row 0 }
+} {}
+test coreTkTypes-20.10 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a x ^ -row 0 }
+} {}
+test coreTkTypes-20.11 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a ^ - -row 0 }
+} {1 {0 19} coreTk::badGridRel {10 1} {}}
+test coreTkTypes-20.12 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a x - -row 0 }
+} {1 {0 19} coreTk::badGridRel {10 1} {}}
+test coreTkTypes-20.13 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a - ^ x .a -row 0 }
+} {}
+test coreTkTypes-20.14 {coreTk::checkGridOptions} {
+    testTypesCmd {grid x -row 0 }
+} {1 {0 14} coreTk::badGridMaster {7 4} {}}
+test coreTkTypes-20.15 {coreTk::checkGridOptions} {
+    testTypesCmd {grid - -row 0 }
+} {1 {0 14} coreTk::badGridMaster {7 4} {}}
+test coreTkTypes-20.16 {coreTk::checkGridOptions} {
+    testTypesCmd {grid ^ -row 0 }
+} {1 {0 14} coreTk::badGridMaster {7 4} {}}
+test coreTkTypes-20.17 {coreTk::checkGridOptions} {
+    testTypesCmd {grid -row 0 }
+} {1 {0 12} numArgs {} {}}
+test coreTkTypes-20.18 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a -padx a }
+} {1 {0 16} badPixel {14 1} {}}
+test coreTkTypes-20.19 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a -pady a }
+} {1 {0 16} badPixel {14 1} {}}
+test coreTkTypes-20.20 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a -column -1 }
+} {1 {0 19} badWholeNum {16 2} -1}
+test coreTkTypes-20.21 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a -columnspan -1 }
+} {1 {0 23} badWholeNum {20 2} -1}
+test coreTkTypes-20.22 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a -in A }
+} {1 {0 14} winBeginDot {12 1} {}}
+test coreTkTypes-20.23 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a -ipadx a }
+} {1 {0 17} badPixel {15 1} {}}
+test coreTkTypes-20.24 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a -ipady a }
+} {1 {0 17} badPixel {15 1} {}}
+test coreTkTypes-20.25 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a -row -1 }
+} {1 {0 16} badWholeNum {13 2} -1}
+test coreTkTypes-20.26 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a -rowspan -1 }
+} {1 {0 20} badWholeNum {17 2} -1}
+test coreTkTypes-20.27 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a -sticky q }
+} {1 {0 18} coreTk::badSticky {16 1} {}}
+test coreTkTypes-20.28 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a -foo a }
+} {1 {0 15} badSwitch {8 4} -foo}
+test coreTkTypes-20.29 {coreTk::checkGridOptions} {
+    testTypesCmd {grid .a -row }
+} {1 {0 13} noSwitchArg {8 4} -row}
+
+
+test coreTkTypes-21.0 {coreTk::checkSticky} {
+    testTypesCmd {grid .a -sticky n }
+} {}
+test coreTkTypes-21.1 {coreTk::checkSticky} {
+    testTypesCmd {grid .a -sticky s }
+} {}
+test coreTkTypes-21.2 {coreTk::checkSticky} {
+    testTypesCmd {grid .a -sticky e }
+} {}
+test coreTkTypes-21.3 {coreTk::checkSticky} {
+    testTypesCmd {grid .a -sticky w }
+} {}
+test coreTkTypes-21.4 {coreTk::checkSticky} {
+    testTypesCmd {grid .a -sticky nsew }
+} {}
+test coreTkTypes-21.5 {coreTk::checkSticky} {
+    testTypesCmd {grid .a -sticky nswewse }
+} {}
+test coreTkTypes-21.6 {coreTk::checkSticky} {
+    testTypesCmd {grid .a -sticky nwsea }
+} {1 {0 22} coreTk::badSticky {16 5} {}}
+test coreTkTypes-21.7 {coreTk::checkSticky} {
+    testTypesCmd {grid .a -sticky a }
+} {1 {0 18} coreTk::badSticky {16 1} {}}
+
+
+test coreTkTypes-24.1 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs [set] }
+} {1 {15 3} numArgs {} {}}
+test coreTkTypes-24.2 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs {{}a} }
+} {1 {0 20} coreTk::badTab {14 5} {}}
+test coreTkTypes-24.3 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs 1 }
+} {}
+test coreTkTypes-24.4 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs 1.1 }
+} {}
+test coreTkTypes-24.5 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs 01234.56789 }
+} {}
+test coreTkTypes-24.6 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs 1.1c }
+} {}
+test coreTkTypes-24.7 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs 1.1m }
+} {}
+test coreTkTypes-24.8 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs 1.1p }
+} {}
+test coreTkTypes-24.9 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs 1.1i }
+} {}
+test coreTkTypes-24.10 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs 1.1.1c }
+} {1 {0 21} badPixel {14 6} {}}
+test coreTkTypes-24.11 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs 1cc }
+} {1 {0 18} badPixel {14 3} {}}
+test coreTkTypes-24.12 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs 01234.56789 }
+} {}
+test coreTkTypes-24.13 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs 01234x.56789 }
+} {1 {0 27} badPixel {14 12} {}}
+test coreTkTypes-24.14 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs 01234.56789x }
+} {1 {0 27} badPixel {14 12} {}}
+test coreTkTypes-24.15 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs {2c 2c 2c} }
+} {}
+test coreTkTypes-24.16 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs {2c left} }
+} {}
+test coreTkTypes-24.17 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs {2c right} }
+} {}
+test coreTkTypes-24.18 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs {2c center} }
+} {}
+test coreTkTypes-24.19 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs {2c numeric} }
+} {}
+test coreTkTypes-24.20 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs {2c numeric numeric} }
+} {1 {0 35} badPixel {25 20} {}}
+test coreTkTypes-24.21 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs {2c numeric 2c} }
+} {}
+test coreTkTypes-24.22 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs {numeric} }
+} {1 {0 24} badPixel {14 9} {}}
+test coreTkTypes-24.23 {coreTk::checkTabs} {
+    testTypesCmd {text .t -tabs {2c foo} }
+} {1 {0 23} coreTk::badTabJust {17 8} foo}
+
+
+test coreTkTypes-25.0 {coreTk::checkColormap} {
+    testTypesCmd {frame .a -colormap [set] }
+} {1 {20 3} numArgs {} {}}
+test coreTkTypes-25.1 {coreTk::checkColormap} {
+    testTypesCmd {frame .a -colormap new }
+} {}
+test coreTkTypes-25.2 {coreTk::checkColormap} {
+    testTypesCmd {frame .a -colormap .a }
+} {}
+test coreTkTypes-25.3 {coreTk::checkColormap} {
+    testTypesCmd {frame .a -colormap .A }
+} {1 {0 22} winAlpha {20 3} {}}
+test coreTkTypes-25.4 {coreTk::checkColormap} {
+    testTypesCmd {frame .a -colormap foo }
+} {1 {0 23} coreTk::badColormap {19 3} foo}
+
+
+test coreTkTypes-26.1 {coreTk::checkVisual} {
+    testTypesCmd {frame .a -visual [set] }
+} {1 {18 3} numArgs {} {}}
+test coreTkTypes-26.2 {coreTk::checkVisual} {
+    testTypesCmd {frame .a -visual {{}a} }
+} {1 {0 23} coreTk::badVisual {17 5} {}}
+test coreTkTypes-26.3 {coreTk::checkVisual} {
+    testTypesCmd {frame .a -visual . }
+} {}
+test coreTkTypes-26.4 {coreTk::checkVisual} {
+    testTypesCmd {frame .a -visual .A }
+} {1 {0 20} winAlpha {18 3} {}}
+test coreTkTypes-26.5 {coreTk::checkVisual} {
+    testTypesCmd {frame .a -visual default }
+} {}
+test coreTkTypes-26.6 {coreTk::checkVisual} {
+    testTypesCmd {frame .a -visual 1 }
+} {}
+test coreTkTypes-26.7 {coreTk::checkVisual} {
+    testTypesCmd {frame .a -visual best }
+} {}
+test coreTkTypes-26.8 {coreTk::checkVisual} {
+    testTypesCmd {frame .a -visual {best 4} }
+} {}
+test coreTkTypes-26.9 {coreTk::checkVisual} {
+    testTypesCmd {frame .a -visual foo }
+} {1 {0 21} coreTk::badVisual {17 3} {}}
+test coreTkTypes-26.10 {coreTk::checkVisual} {
+    testTypesCmd {frame .a -visual {best a} }
+} {1 {0 26} coreTk::badVisualDepth {22 8} {}}
+
+
+test coreTkTypes-27.1 {coreTk::checkScreen} {
+    testTypesCmd {toplevel .t -screen [set] }
+} {1 {0 26} nonPortOption {12 7} {} 1 {21 3} numArgs {} {}}
+test coreTkTypes-27.2 {coreTk::checkScreen} {
+    testTypesCmd {toplevel .t -screen {{}a} }
+} {1 {0 26} nonPortOption {12 7} {} 1 {0 26} coreTk::badScreen {20 5} {}}
+test coreTkTypes-27.3 {coreTk::checkScreen} {
+    testTypesCmd {toplevel .t -screen :0.0 }
+} {1 {0 25} nonPortOption {12 7} {}}
+test coreTkTypes-27.4 {coreTk::checkScreen} {
+    testTypesCmd {toplevel .t -screen vader:0.0 }
+} {1 {0 30} nonPortOption {12 7} {}}
+test coreTkTypes-27.5 {coreTk::checkScreen} {
+    testTypesCmd {toplevel .t -screen :0 }
+} {1 {0 23} nonPortOption {12 7} {}}
+test coreTkTypes-27.6 {coreTk::checkScreen} {
+    testTypesCmd {toplevel .t -screen :a.0 }
+} {1 {0 25} nonPortOption {12 7} {} 1 {0 25} coreTk::badScreen {20 4} {}}
+test coreTkTypes-27.7 {coreTk::checkScreen} {
+    testTypesCmd {toplevel .t -screen :0.a }
+} {1 {0 25} nonPortOption {12 7} {} 1 {0 25} coreTk::badScreen {20 4} {}}
+
+
+test coreTkTypes-28.0 {coreTk::checkNameAndPairs} {
+    testTypesCmd {image create bitmap [set] }
+} {1 {21 3} numArgs {} {}}
+test coreTkTypes-28.1 {coreTk::checkNameAndPairs} {
+    testTypesCmd {image create bitmap foo }
+} {}
+test coreTkTypes-28.2 {coreTk::checkNameAndPairs} {
+    testTypesCmd {image create bitmap foo -file a }
+} {}
+test coreTkTypes-28.3 {coreTk::checkNameAndPairs} {
+    testTypesCmd {image create bitmap foo bar -file a }
+} {1 {0 36} badOption {24 3} {{-background -data -file -foreground -maskdata -maskfile} bar}}
+test coreTkTypes-28.4 {coreTk::checkNameAndPairs} {
+    testTypesCmd {image create bitmap -file a }
+} {}
+test coreTkTypes-28.5 {coreTk::checkNameAndPairs} {
+    testTypesCmd {image create bitmap foo bar -data a -file a }
+} {1 {0 44} badOption {24 3} {{-background -data -file -foreground -maskdata -maskfile} bar}}
+
+
+test coreTkTypes-29.0 {coreTk::checkPalette} {
+    testTypesCmd {image create photo -palette [set] }
+} {1 {29 3} numArgs {} {}}
+test coreTkTypes-29.1 {coreTk::checkPalette} {
+    testTypesCmd {image create photo -palette 1.1 }
+} {}
+test coreTkTypes-29.2 {coreTk::checkPalette} {
+    testTypesCmd {image create photo -palette 1.1/1/1.1 }
+} {}
+test coreTkTypes-29.3 {coreTk::checkPalette} {
+    testTypesCmd {image create photo -palette 1.1/ }
+} {1 {0 33} coreTk::badPalette {28 4} {}}
+test coreTkTypes-29.4 {coreTk::checkPalette} {
+    testTypesCmd {image create photo -palette 1/1.1 }
+} {1 {0 34} coreTk::badPalette {28 5} {}}
+test coreTkTypes-29.5 {coreTk::checkPalette} {
+    testTypesCmd {image create photo -palette 1/1.1/ }
+} {1 {0 35} coreTk::badPalette {28 6} {}}
+test coreTkTypes-29.6 {coreTk::checkPalette} {
+    testTypesCmd {image create photo -palette a }
+} {1 {0 30} coreTk::badPalette {28 1} {}}
+test coreTkTypes-29.7 {coreTk::checkPalette} {
+    testTypesCmd {image create photo -palette a/1/1 }
+} {1 {0 34} coreTk::badPalette {28 5} {}}
+test coreTkTypes-29.8 {coreTk::checkPalette} {
+    testTypesCmd {image create photo -palette 1/a/1 }
+} {1 {0 34} coreTk::badPalette {28 5} {}}
+test coreTkTypes-29.9 {coreTk::checkPalette} {
+    testTypesCmd {image create photo -palette 1/1/a }
+} {1 {0 34} coreTk::badPalette {28 5} {}}
+test coreTkTypes-29.10 {coreTk::checkPalette} {
+    testTypesCmd {image create photo -palette 1/1/1/1 }
+} {1 {0 36} coreTk::badPalette {28 7} {}}
+
+
+test coreTkTypes-30.0 {coreTk::checkWinThenOptions} {
+    testTypesCmd {place }
+} {1 {0 6} numArgs {} {}}
+test coreTkTypes-30.1 {coreTk::checkWinThenOptions} {
+    testTypesCmd {place $a }
+} {}
+test coreTkTypes-30.2 {coreTk::checkWinThenOptions} {
+    testTypesCmd {place .a }
+} {}
+test coreTkTypes-30.3 {coreTk::checkWinThenOptions} {
+    testTypesCmd {place .A }
+} {1 {0 9} winAlpha {7 3} {}}
+test coreTkTypes-30.4 {coreTk::checkWinThenOptions} {
+    testTypesCmd {place .a -in .a }
+} {}
+test coreTkTypes-30.5 {coreTk::checkWinThenOptions} {
+    testTypesCmd {place .a .a .a -in .a }
+} {}
+test coreTkTypes-30.6 {coreTk::checkWinThenOptions} {
+    testTypesCmd {place forget .a }
+} {}
+test coreTkTypes-30.7 {coreTk::checkWinThenOptions} {
+    testTypesCmd {place forget .a -in .a }
+} {1 {0 23} numArgs {} {}}
+
+
+test coreTkTypes-31.0 {coreTk::checkPriority} {
+    testTypesCmd {option add a a widgetDefault }
+} {}
+test coreTkTypes-31.1 {coreTk::checkPriority} {
+    testTypesCmd {option add a a startupFile }
+} {}
+test coreTkTypes-31.2 {coreTk::checkPriority} {
+    testTypesCmd {option add a a userDefault }
+} {}
+test coreTkTypes-31.3 {coreTk::checkPriority} {
+    testTypesCmd {option add a a interactive }
+} {}
+test coreTkTypes-31.4 {coreTk::checkPriority} {
+    testTypesCmd {option add a a foo }
+} {1 {0 19} coreTk::badPriority {15 3} {}}
+test coreTkTypes-31.5 {coreTk::checkPriority} {
+    testTypesCmd {option add a a 0 }
+} {}
+test coreTkTypes-31.6 {coreTk::checkPriority} {
+    testTypesCmd {option add a a 100 }
+} {}
+test coreTkTypes-31.7 {coreTk::checkPriority} {
+    testTypesCmd {option add a a -1 }
+} {1 {0 18} coreTk::badPriority {15 2} {}}
+test coreTkTypes-31.8 {coreTk::checkPriority} {
+    testTypesCmd {option add a a 101 }
+} {1 {0 19} coreTk::badPriority {15 3} {}}
+test coreTkTypes-31.9 {coreTk::checkPriority} {
+    testTypesCmd {option add a a 1.0 }
+} {1 {0 19} coreTk::badPriority {15 3} {}}
+
+
+test coreTkTypes-32.0 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette }
+} {1 {0 14} numArgs {} {}}
+test coreTkTypes-32.1 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette $a }
+} {}
+test coreTkTypes-32.2 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette $a $a }
+} {}
+test coreTkTypes-32.3 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette activeBackground red }
+} {}
+test coreTkTypes-32.4 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette foreground red }
+} {}
+test coreTkTypes-32.5 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette selectColor red }
+} {}
+test coreTkTypes-32.6 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette activeForeground red }
+} {}
+test coreTkTypes-32.7 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette highlightBackground red }
+} {}
+test coreTkTypes-32.8 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette selectBackground red }
+} {}
+test coreTkTypes-32.9 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette background red }
+} {}
+test coreTkTypes-32.10 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette highlightColor red }
+} {}
+test coreTkTypes-32.11 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette selectForeground red }
+} {}
+test coreTkTypes-32.12 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette disabledForeground red }
+} {}
+test coreTkTypes-32.13 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette insertBackground red }
+} {}
+test coreTkTypes-32.14 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette troughColor red }
+} {}
+test coreTkTypes-32.15 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette foo red }
+} {1 {0 22} badKey {14 3} {{ activeBackground foreground selectColor activeForeground highlightBackground selectBackground background highlightColor selectForeground disabledForeground insertBackground troughColor } foo}}
+test coreTkTypes-32.16 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette troughColor a }
+} {1 {0 28} nonPortColor {26 1} {}}
+test coreTkTypes-32.17 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette troughColor red troughColor red }
+} {}
+test coreTkTypes-32.18 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette troughColor red foo red }
+} {1 {0 38} badKey {30 3} {{ activeBackground foreground selectColor activeForeground highlightBackground selectBackground background highlightColor selectForeground disabledForeground insertBackground troughColor } foo}}
+test coreTkTypes-32.19 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette troughColor red troughColor a }
+} {1 {0 44} nonPortColor {42 1} {}}
+test coreTkTypes-32.20 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette troughColor red $a a }
+} {1 {0 35} nonPortColor {33 1} {}}
+test coreTkTypes-32.21 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette troughColor red troughColor }
+} {1 {0 42} numArgs {} {}}
+test coreTkTypes-32.22 {coreTk::checkSetPalette} {
+    testTypesCmd {tk_setPalette troughColor red troughColor red red }
+} {1 {0 50} badKey {46 3} {{ activeBackground foreground selectColor activeForeground highlightBackground selectBackground background highlightColor selectForeground disabledForeground insertBackground troughColor } red} 1 {0 50} numArgs {} {}}
+
+resetMessageShow
+
+# cleanup
+cleanupTests
+
+return

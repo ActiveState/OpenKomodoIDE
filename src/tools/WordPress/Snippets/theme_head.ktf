@@ -1,0 +1,22 @@
+/*
+komodo tool: theme_head
+=======================
+auto_abbreviation: true
+language: CSS
+treat_as_ejs: true
+type: snippet
+version: 1.1.5
+=======================*/
+<% /* Theme Head */ %>
+
+/*
+Theme Name: ${1:Theme Name}
+Theme URI: ${2:${TM_HOMEPAGE:http://example.com/}}
+Description: ${3:Description}
+Version: ${4:1.0}
+Author: ${5:${TM_NAME:Your Name}}
+Author URI: ${6:${TM_HOMEPAGE:http://example.com/}}
+Tags: ${7:one, two}
+*/
+
+$0

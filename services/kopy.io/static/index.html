@@ -1,0 +1,328 @@
+<html>
+
+    <head>
+
+        <title>kopy.io</title>
+
+        <link rel="stylesheet" type="text/css" href="components/codemirror/lib/codemirror.css"/>
+        <link rel="stylesheet" type="text/css" href="css/schemes/base16-default.dark.css" id="scheme"/>
+        <link rel="stylesheet" type="text/css" href="css/application.css"/>
+        <link rel="stylesheet" type="text/css" href="css/fonts.css"/>
+        <link rel="stylesheet" type="text/css" href="css/fonts/SourceCodePro.css" id="font"/>
+        <link rel="icon" type="image/png" href="img/favicon.png">
+
+        <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
+
+        <script type="text/javascript" src="components/codemirror/lib/codemirror.js"></script>
+        <script type="text/javascript" src="components/codemirror/addon/mode/loadmode.js"></script>
+
+        <script type="text/javascript" src="components/Cookies/dist/cookies.min.js"></script>
+
+        <script type="text/javascript" src="components/CryptoJS/rollups/aes.js"></script>
+        
+        <script type="text/javascript" src="components/marked/marked.min.js"></script>
+
+        <script type="text/javascript" src="js/helpers.js"></script>
+        <script type="text/javascript" src="js/language.js"></script>
+        <script type="text/javascript" src="js/model.js"></script>
+        <script type="text/javascript" src="js/application.js"></script>
+
+        <meta name="robots" content="noindex,nofollow"/>
+    </head>
+
+    <body>
+        <ul id="messages"></ul>
+
+        <div id="wrapper">
+            <textarea spellcheck="false" style="display:none;"></textarea>
+        </div>
+
+        <div id="sidebar">
+            <div id="pointer" style="display:none;"></div>
+                <div id="logos">
+                    <a href="/about.md" id="logo-kopy">&nbsp;</a>
+                </div>
+                <div id="buttons">
+                    <div class="icon-save save context-toggle function"></div>
+                    <div class="icon-create new context-toggle function"></div>
+                    <div class="icon-copy duplicate context-toggle function"></div>
+                    <div class="icon-link link context-toggle function"></div>
+                    <div class="icon-info info context-toggle function"></div>
+                </div>
+                <div id="buttonTips" style="display:none;">
+                    <div class="label"></div>
+                    <div class="shortcut"></div>
+                </div>
+                <div id="bottom">
+                    <form name="options" autocomplete="off">
+                        <div class="keep context-toggle">
+                            <select name="keep" data-prefix="Keep For: ">
+                                <option value="600">10 Minutes</option>
+                                <option value="3600">1 Hour</option>
+                                <option value="86400" selected="selected">1 Day</option>
+                                <option value="259200">3 Days</option>
+                                <option value="604800">1 Week</option>
+                                <option value="2592000">1 Month</option>
+                            </select>
+                        </div>
+                        <div class="language context-toggle">
+                            <select name="language" data-prefix="Language: ">
+                                <option value="-1">Auto-Detect</option>
+                                <option value="null">Plain Text</option>
+                                <option>C</option>
+                                <option>C++</option>
+                                <option>CoffeeScript</option>
+                                <option>CSS</option>
+                                <option>diff</option>
+                                <option>Go</option>
+                                <option>HTML</option>
+                                <option>Java</option>
+                                <option>JavaScript</option>
+                                <option>JSON</option>
+                                <option>Markdown</option>
+                                <option>LESS</option>
+                                <option>Perl</option>
+                                <option>PHP</option>
+                                <option>Python</option>
+                                <option>Ruby</option>
+                                <option>Sass</option>
+                                <option>SCSS</option>
+                                <option>Shell</option>
+                                <option>SQL</option>
+                                <option>XML</option>
+                                <option value="-1">---------------------------</option>
+                                <option>APL</option>
+                                <option>Asterisk</option>
+                                <option>Cobol</option>
+                                <option>C#</option>
+                                <option>Clojure</option>
+                                <option>Common Lisp</option>
+                                <option>Cypher</option>
+                                <option>D</option>
+                                <option>DTD</option>
+                                <option>Dylan</option>
+                                <option>ECL</option>
+                                <option>Eiffel</option>
+                                <option>Erlang</option>
+                                <option>Fortran</option>
+                                <option>F#</option>
+                                <option>Gas</option>
+                                <option>Gherkin</option>
+                                <option>GitHub Flavored Markdown</option>
+                                <option>Groovy</option>
+                                <option>HAML</option>
+                                <option>Haskell</option>
+                                <option>Haxe</option>
+                                <option>ASP.NET</option>
+                                <option>Embedded Javascript</option>
+                                <option>JavaServer Pages</option>
+                                <option>HTTP</option>
+                                <option>Jade</option>
+                                <option>JSON-LD</option>
+                                <option>TypeScript</option>
+                                <option>Jinja2</option>
+                                <option>Julia</option>
+                                <option>Kotlin</option>
+                                <option>LiveScript</option>
+                                <option>Lua</option>
+                                <option>mIRC</option>
+                                <option>Modelica</option>
+                                <option>Nginx</option>
+                                <option>NTriples</option>
+                                <option>OCaml</option>
+                                <option>Octave</option>
+                                <option>Pascal</option>
+                                <option>PEG.js</option>
+                                <option>Pig</option>
+                                <option>Properties files</option>
+                                <option>Puppet</option>
+                                <option>Cython</option>
+                                <option>R</option>
+                                <option>reStructuredText</option>
+                                <option>Rust</option>
+                                <option>Scala</option>
+                                <option>Scheme</option>
+                                <option>Sieve</option>
+                                <option>Slim</option>
+                                <option>Smalltalk</option>
+                                <option>Smarty</option>
+                                <option>SmartyMixed</option>
+                                <option>Solr</option>
+                                <option>SPARQL</option>
+                                <option>MariaDB</option>
+                                <option>sTeX</option>
+                                <option>LaTeX</option>
+                                <option>SystemVerilog</option>
+                                <option>Tcl</option>
+                                <option>TiddlyWiki </option>
+                                <option>Tiki wiki</option>
+                                <option>TOML</option>
+                                <option>Turtle</option>
+                                <option>VB.NET</option>
+                                <option>VBScript</option>
+                                <option>Velocity</option>
+                                <option>Verilog</option>
+                                <option>XQuery</option>
+                                <option>YAML</option>
+                                <option>Z80</option>
+                            </select>
+                        </div>
+                        <div class="security context-toggle">
+                            <select name="security" data-prefix="Privacy: ">
+                                <option value="default">Public</option>
+                                <option value="encrypted">Client-Side Encryption</option>
+                            </select>
+                        </div>
+                        <a class="option" id="pref-link">Preferences</a>
+                    </form>
+                    <div id="legal">
+                        <p>Created with <a href="http://komodoide.com/" target="_blank">Komodo® IDE</a></p>
+                        <p>
+                            <small>
+                                © 2016 ActiveState Software Inc. All rights reserved. ActiveState®, Komodo® are registered trademarks of ActiveState. All other marks are property of their respective owners.
+                            </small>
+                        </p>
+                    </div>
+                </div>
+        </div>
+
+        <div id="preferences" class="modal">
+            <select name="scheme" data-prefix="Color Scheme: " autocomplete="off">
+                <option value="base16-default.dark">Default</option>
+                <option value="base16-3024.dark">3024 Dark</option>
+                <option value="base16-3024.light">3024 Light</option>
+                <option value="base16-ashes.dark">Ashes Dark</option>
+                <option value="base16-ashes.light">Ashes Light</option>
+                <option value="base16-atelierdune.dark">Atelierdune Dark</option>
+                <option value="base16-atelierdune.light">Atelierdune Light</option>
+                <option value="base16-atelierforest.dark">Atelierforest Dark</option>
+                <option value="base16-atelierforest.light">Atelierforest Light</option>
+                <option value="base16-atelierheath.dark">Atelierheath Dark</option>
+                <option value="base16-atelierheath.light">Atelierheath Light</option>
+                <option value="base16-atelierlakeside.dark">Atelierlakeside Dark</option>
+                <option value="base16-atelierlakeside.light">Atelierlakeside Light</option>
+                <option value="base16-atelierseaside.dark">Atelierseaside Dark</option>
+                <option value="base16-atelierseaside.light">Atelierseaside Light</option>
+                <option value="base16-bespin.dark">Bespin Dark</option>
+                <option value="base16-bespin.light">Bespin Light</option>
+                <option value="base16-brewer.dark">Brewer Dark</option>
+                <option value="base16-brewer.light">Brewer Light</option>
+                <option value="base16-chalk.dark">Chalk Dark</option>
+                <option value="base16-chalk.light">Chalk Light</option>
+                <option value="base16-codeschool.dark">Codeschool Dark</option>
+                <option value="base16-codeschool.light">Codeschool Light</option>
+                <option value="base16-default.dark">Default Dark</option>
+                <option value="base16-default.light">Default Light</option>
+                <option value="base16-eighties.dark">Eighties Dark</option>
+                <option value="base16-eighties.light">Eighties Light</option>
+                <option value="base16-embers.dark">Embers Dark</option>
+                <option value="base16-embers.light">Embers Light</option>
+                <option value="base16-google.dark">Google Dark</option>
+                <option value="base16-google.light">Google Light</option>
+                <option value="base16-grayscale.dark">Grayscale Dark</option>
+                <option value="base16-grayscale.light">Grayscale Light</option>
+                <option value="base16-greenscreen.dark">Greenscreen Dark</option>
+                <option value="base16-greenscreen.light">Greenscreen Light</option>
+                <option value="base16-isotope.dark">Isotope Dark</option>
+                <option value="base16-isotope.light">Isotope Light</option>
+                <option value="base16-londontube.dark">Londontube Dark</option>
+                <option value="base16-londontube.light">Londontube Light</option>
+                <option value="base16-marrakesh.dark">Marrakesh Dark</option>
+                <option value="base16-marrakesh.light">Marrakesh Light</option>
+                <option value="base16-mocha.dark">Mocha Dark</option>
+                <option value="base16-mocha.light">Mocha Light</option>
+                <option value="base16-monokai.dark">Monokai Dark</option>
+                <option value="base16-monokai.light">Monokai Light</option>
+                <option value="base16-ocean.dark">Ocean Dark</option>
+                <option value="base16-ocean.light">Ocean Light</option>
+                <option value="base16-paraiso.dark">Paraiso Dark</option>
+                <option value="base16-paraiso.light">Paraiso Light</option>
+                <option value="base16-railscasts.dark">Railscasts Dark</option>
+                <option value="base16-railscasts.light">Railscasts Light</option>
+                <option value="base16-shapeshifter.dark">Shapeshifter Dark</option>
+                <option value="base16-shapeshifter.light">Shapeshifter Light</option>
+                <option value="base16-solarized.dark">Solarized Dark</option>
+                <option value="base16-solarized.light">Solarized Light</option>
+                <option value="base16-tomorrow.dark">Tomorrow Dark</option>
+                <option value="base16-tomorrow.light">Tomorrow Light</option>
+                <option value="base16-twilight.dark">Twilight Dark</option>
+                <option value="base16-twilight.light">Twilight Light</option>
+            </select>
+            <select name="font" data-prefix="Font Face: " autocomplete="off">
+                <option>Anonymous Pro</option>
+                <option>Cousine</option>
+                <option>Droid Sans Mono</option>
+                <option>Inconsolata</option>
+                <option selected="selected">Source Code Pro</option>
+                <option>Ubuntu Mono</option>
+            </select>
+            <select name="font-size" data-prefix="Font Size: " autocomplete="off">
+                <option value="auto" selected="selected">Auto (based on kopy length)</option>
+                <option value="xl">Very Large</option>
+                <option value="l">Large</option>
+                <option value="m">Normal</option>
+                <option value="s">Small</option>
+                <option value="xs">Very Small</option>
+            </select>
+            <select name="line-spacing" data-prefix="Line Spacing: " autocomplete="off">
+                <option value="xl">Very Large</option>
+                <option value="l">Large</option>
+                <option value="-1" selected="selected">Normal</option>
+                <option value="m">Little</option>
+                <option value="s">None</option>
+            </select>
+            <select name="wrapping" data-prefix="Line Wrapping: " autocomplete="off">
+                <option>Enabled</option>
+                <option selected="selected">Disabled</option>
+            </select>
+            <p>
+                These settings will be saved in your browser cookies and used
+                by default for new kopies.
+            </p>
+            <a class="close option">Close</a>
+        </div>
+
+        <div id="encryptkey" class="modal">
+            <form onsubmit="return false">
+                <p>
+                    <strong>Enter decryption key:</strong>
+                </p>
+                <input name="encryptkey" class="option"/>
+            </form>
+        </div>
+        
+        <div id="about" class="modal">
+            <div class="inner">
+                Loading..
+            </div>
+            <a class="close option">Close</a>
+        </div>
+
+        <div id="copy" class="modal">
+            <p>
+                <strong>Copy URL:</strong>
+            </p>
+            <input name="copy" class="option"/>
+            <p>&nbsp;</p>
+            <a class="close option">Close</a>
+        </div>
+
+        <script>
+
+        // Todo: proper environment setup
+        if (window.location.host.indexOf("kopy.io")!=-1)
+        {
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-47685083-2', 'auto');
+            ga('send', 'pageview');
+        }
+
+        </script>
+
+    </body>
+
+</html>

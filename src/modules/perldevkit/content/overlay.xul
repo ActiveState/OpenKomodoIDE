@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<?xml-stylesheet href="chrome://perldevkit/skin/perldevkit.css" type="text/css"?>
+
+<overlay id="PDKOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://perldevkit/content/info.js" type="application/x-javascript"/>
+    <script src="chrome://perldevkit/content/controller.js" type="application/x-javascript"/>
+
+    <commandset id="allcommands">
+        <commandset
+            id="cmdset_PDK"
+            oncommandupdate="ko.commands.updateCommandset(this)"
+            commandupdater="true"
+            events="language_changed,current_view_changed,pdk_prefchange"
+            >
+        <command
+            id="cmd_pdkLaunchPerlApp"
+            oncommand="ko.commands.doCommandAsync('cmd_pdkLaunchPerlApp')" 
+            disabled="true"
+            desc="PDK: Launch PerlApp"/>
+        <command
+            id="cmd_pdkLaunchPerlCov"
+            oncommand="ko.commands.doCommandAsync('cmd_pdkLaunchPerlCov')" 
+            disabled="true"
+            desc="PDK: Launch PerlCov"/>
+        <command
+            id="cmd_pdkLaunchPerlSvc"
+            oncommand="ko.commands.doCommandAsync('cmd_pdkLaunchPerlSvc')" 
+            disabled="true"
+            desc="PDK: Launch PerlSvc"/>
+        <command
+            id="cmd_pdkLaunchPerlCtrl"
+            oncommand="ko.commands.doCommandAsync('cmd_pdkLaunchPerlCtrl')" 
+            disabled="true"
+            desc="PDK: Launch PerlCtrl"/>
+        <command
+            id="cmd_pdkLaunchPerlTray"
+            oncommand="ko.commands.doCommandAsync('cmd_pdkLaunchPerlTray')" 
+            disabled="true"
+            desc="PDK: Launch PerlTray"/>
+        <command
+            id="cmd_pdkLaunchVBScriptConverter"
+            oncommand="ko.commands.doCommandAsync('cmd_pdkLaunchVBScriptConverter')" 
+            disabled="true"
+            desc="PDK: Launch VBScript Converter"/>
+        <command
+            id="cmd_pdkLaunchFilterBuilder"
+            oncommand="ko.commands.doCommandAsync('cmd_pdkLaunchFilterBuilder')" 
+            desc="PDK: Launch Filter Builder"/>
+        <command
+            id="cmd_pdkLaunchPerlNET"
+            oncommand="ko.commands.doCommandAsync('cmd_pdkLaunchPerlNET')" 
+            desc="PDK: Launch PerlNET"/>
+        </commandset>
+    </commandset>
+    
+    <menupopup id="popup_tools">
+        <menu label="Perl Dev Kit"
+              insertbefore="menu_watchThread">
+            <menupopup id="popup_pdk">
+                <menuitem label="PerlApp"
+                          id="menu_pdkPerlApp"
+                          observes="cmd_pdkLaunchPerlApp"
+                          class="menuitem-iconic pdk-perlapp-icon"
+                          />
+                <menuitem label="PerlCov"
+                          id="menu_pdkPerlCov"
+                          observes="cmd_pdkLaunchPerlCov"
+                          class="menuitem-iconic pdk-perlcov-icon"
+                          />
+                <menuitem label="PerlSvc"
+                          id="menu_pdkPerlSvc"
+                          observes="cmd_pdkLaunchPerlSvc"
+                          class="menuitem-iconic pdk-perlsvc-icon"
+                          />
+                <menuitem label="PerlCtrl"
+                          id="menu_pdkPerlCtrl"
+                          observes="cmd_pdkLaunchPerlCtrl"
+                          class="menuitem-iconic pdk-perlctrl-icon"
+                          />
+                <menuitem label="PerlTray"
+                          id="menu_pdkPerlTray"
+                          observes="cmd_pdkLaunchPerlTray"
+                          class="menuitem-iconic pdk-perltray-icon"
+                          />
+                <menuitem label="VBScript Converter"
+                          id="menu_pdkPerlVBConverter"
+                          observes="cmd_pdkLaunchVBScriptConverter"
+                          class="menuitem-iconic pdk-vbconverter-icon"
+                          />
+                <menuitem label="Filter Builder"
+                          id="menu_pdkPerlFilterBuilder"
+                          observes="cmd_pdkLaunchFilterBuilder"
+                          class="menuitem-iconic pdk-filterbuilder-icon"
+                          />
+                <menuitem label="PerlNET"
+                          id="menu_pdkPerlNET"
+                          observes="cmd_pdkLaunchPerlNET"
+                          class="menuitem-iconic pdk-perlnet-icon"
+                          />
+            </menupopup>
+        </menu>
+    </menupopup>
+            
+    <toolbaritem id="toolsToolbarGroup">
+        
+        <toolbarbutton id="tb_pdkPerlMenu"
+                class="perl-toolbar-icon"
+                label="Perl Dev Kit"
+                tooltiptext="Perl Dev Kit"
+                buttonstyle="pictures"
+                kohidden="true"
+                persist="kohidden"
+                type="menu-button">
+            
+            <menupopup id="tb_pdkPerlMenuPopup">
+                <menuitem id="tb_pdkPerlApp"
+                        label="Run PerlApp"
+                        observes="cmd_pdkLaunchPerlApp"/>
+                <menuitem id="tb_pdkPerlCov"
+                        label="Run PerlCov"
+                        observes="cmd_pdkLaunchPerlCov"/>
+                <menuitem id="tb_pdkPerlSvc"
+                        label="Run PerlSvc"
+                        observes="cmd_pdkLaunchPerlSvc"/>
+                <menuitem id="tb_pdkPerlCtrl"
+                        label="Run PerlCtrl"
+                        observes="cmd_pdkLaunchPerlCtrl"/>
+                <menuitem id="tb_pdkPerlTray"
+                        label="Run PerlTray"
+                        observes="cmd_pdkLaunchPerlTray"/>
+                <menuitem id="tb_pdkPerlVBConverter"
+                        label="Run VBScript Converter"
+                        observes="cmd_pdkLaunchVBScriptConverter"/>
+                <menuitem id="tb_pdkPerlFilterBuilder"
+                        label="Run Filter Builder"
+                        observes="cmd_pdkLaunchFilterBuilder"/>
+                <menuitem id="tb_pdkPerlNET"
+                        label="Run PerlNET"
+                        observes="cmd_pdkLaunchPerlNET"/>
+            </menupopup>
+            
+        </toolbarbutton>
+        
+</toolbaritem>
+
+</overlay>

@@ -1,0 +1,27 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>github.commits.widget example</title>
+  <meta name="description" content="github.commits.widget example">
+  <meta name="author" content="alexander beletsky">
+</head>
+
+<body>
+  <div id="container">
+    <div id="main">
+		<div id="github-commits"></div>
+    </div>
+  </div> 
+  
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+  <script src="js/github.commits.widget.js"></script>
+  
+  <script>
+	$(function() {
+		$('#github-commits').githubInfoWidget(
+			{ user: 'alexanderbeletsky', repo: 'github-commits-widget', branch: 'master', last: 15, limitMessageTo: 30 });
+	});
+  </script>  
+</body>
+</html>

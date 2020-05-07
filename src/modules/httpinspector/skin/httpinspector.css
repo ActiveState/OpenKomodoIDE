@@ -1,0 +1,32 @@
+/* Copyright (c) 2006 ActiveState Software Inc. .
+   See the file LICENSE.txt for licensing information. */
+
+/*
+ * CSS for the HTTP Inspector UI elements.
+ */
+
+/* Toolbar */
+
+/* Main tree */
+treechildren:-moz-tree-image(breakOnRequest) {
+  list-style-image: url('chrome://httpinspector/skin/images/http_inspector_break_request.png');
+  padding: 0px 5px 0px 5px;
+}
+
+treechildren:-moz-tree-image(breakOnResponse) {
+  list-style-image: url('chrome://httpinspector/skin/images/http_inspector_break_response.png');
+  padding: 0px 5px 0px 5px;
+}
+
+/* Ruleset */
+.httpInspector_ruleMatch {
+  -moz-binding: url("chrome://httpinspector/content/httpInspectorBindings.xml#httpInspector_ruleMatch");
+}
+
+.httpInspector_ruleAction {
+  -moz-binding: url("chrome://httpinspector/content/httpInspectorBindings.xml#httpInspector_ruleAction");
+}
+
+treechildren::-moz-tree-image(httpInspectorRuleset_treecol_enabled, Enabled-true) {
+  list-style-image: url("chrome://komodo/skin/images/cbox-check.gif");
+}

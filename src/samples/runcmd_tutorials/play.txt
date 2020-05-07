@@ -1,0 +1,12 @@
+This is simple text file for playing around with Komodo's Run Command system.
+
+
+
+5 red frogs
+6 green frogs
+1 red frog
+8 green frogs
+0 blue frogs
+2 red frogs
+
+

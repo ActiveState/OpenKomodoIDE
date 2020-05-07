@@ -1,0 +1,93 @@
+---
+languageCode: "en-us"
+title: "Komodo 11 Documentation"
+metadataformat: "yaml"
+newContentEditor: "Atom"
+disablePathToLower: true
+baseURL: "/"
+uglyURLs: true
+relativeURLs: true
+canonifyURLs: true
+disableKinds:
+    - "RSS"
+    - "robotsTXT"
+googleAnalytics: "UA-20072-24"
+theme: hugo-material-docs
+
+menu:
+    main:
+    -   name: "Get Komodo"
+        url: "get/"
+        weight: 20
+    -   parent: "Get Komodo"
+        name: "Release notes"
+        weight: 22
+        url: "get/relnotes/"
+    -   parent: "Get Komodo"
+        name: "Windows installation"
+        url: "get/windows/"
+        weight: 23
+    -   parent: "Get Komodo"
+        name: "macOS Installation"
+        url: "get/macos/"
+        weight: 25
+    -   parent: "Get Komodo"
+        name: "Linux Installation"
+        url: "get/linux/"
+        weight: 24
+    -   parent: "Get Komodo"
+        name: "License"
+        url: "get/license/"
+        weight: 28
+    -   name: "User Guide"
+        url: "manual/"
+        weight: 81
+    -   parent: "User Guide"
+        name: "Starting Komodo"
+        url: "manual/starting.html"
+        weight: 71
+    -   parent: "User Guide"
+        name: "The Komodo Workspace"
+        url: "manual/workspace.html"
+        weight: 80
+    -   parent: "User Guide"
+        name: "Preferences"
+        url: "manual/prefs.html"
+        weight: 82
+    -   parent: "User Guide"
+        name: "Editing"
+        url: "manual/editor.html"
+        weight: 82
+    -   parent: "User Guide"
+        name: "Troubleshooting"
+        url: "manual/trouble.html"
+        weight: 83
+    -   name: "Tutorials"
+        url: "tutorial/"
+        weight: 90
+    -   name: "SDK"
+        url: "sdk/"
+        weight: 91
+    -   parent: "SDK"
+        name: "IDE SDK Reference"
+        url: "sdk/api/"
+        weight: 92
+
+outputs:
+  home: ["HTML", "JSON"]
+  page: ["HTML"]
+
+params:
+    description: "Complete documentation for Komodo 11"
+    logo: "images/komodo_icon.png"
+    favicon: "images/favicon.ico"
+    custom_css:
+        -   "stylesheets/as_common.css"
+        -   "stylesheets/as_custom.css"
+    palette:
+        primary: "grey"
+        accent: "red"
+    font:
+        text: "Open Sans"
+        code: "Source Code Pro"
+...

@@ -1,0 +1,21 @@
+{
+  "name": "wp_submenu_page", 
+  "language": "PHP", 
+  "value": [
+    "", 
+    "[[%tabstop6:placeholder 6]]:// Put this into your __construct function", 
+    "add_action('admin_menu', array($this, 'add_[[%tabstop1:submenu_slug]]_submenu_page'));}", 
+    "", 
+    "public function add_[[%tabstop1:submenu_slug]]_submenu_page() {", 
+    "\tadd_submenu_page('[[%tabstop2:parent_slug]]', '[[%tabstop3:Page title]]', '[[%tabstop4:Menu title]]', '[[%tabstop5:manage_options]]', '[[%tabstop1:submenu_slug]]', array($this, '[[%tabstop1:submenu_slug]]_submenu_callback'));", 
+    "}", 
+    "", 
+    "public function [[%tabstop1:submenu_slug]]_submenu_callback() {", 
+    "\t[[%tabstop0:// Content goes here]]", 
+    "}"
+  ], 
+  "version": "1.1.5", 
+  "type": "snippet", 
+  "treat_as_ejs": "true", 
+  "auto_abbreviation": "true"
+}

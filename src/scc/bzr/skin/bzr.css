@@ -1,0 +1,4 @@
+/* scc checkout bindings */
+scc_checkout[type="bzr"] {
+    -moz-binding: url('chrome://bazaar/content/bindings/bzr_checkout.xml#bzr_checkout');
+}

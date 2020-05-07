@@ -1,0 +1,49 @@
+/* Copyright (c) 2003-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information.
+   
+   Authors: David Ascher
+   
+   Interface to the ko.views.manager as a service.
+*/
+
+#include "nsISupports.idl"
+#include "koIViews.idl"
+
+[scriptable, uuid(2A0B0CE4-8A62-45A2-8AE8-BAE907D6C093)]
+interface koIViewService : nsISupports
+{
+    void setViewMgr(in koIViewList viewMgr);
+
+    /**
+     * These two methods are used to keep track of the number of alive views.
+     * When a view is created it is registered, then the view service holds a
+     * weak reference to this view.
+     */
+    void registerView(in koIView view);
+
+    /**
+     * Count of how many koIView instances are currently being referenced. The
+     * leak count is the number of those view instances which are referencing a
+     * closed view.
+     */
+    void getReferencedViewCount(out long count, out long leak_count);
+
+    /**
+     * Return all view instances for the given type. If viewtype is set, it
+     * must be one of the know view types, i.e. "editor", "browser", etc...
+     */
+    void getAllViews(in AString viewtype,
+                     out unsigned long count,
+                     [array, size_is(count), retval] out koIView views);
+
+    /**
+     * Return all view instances for the given type. If viewtype is given, it
+     * must be one of the know view types, i.e. "editor", "browser", etc...
+     */
+    void getAllViewMgrs(out unsigned long count,
+                        [array, size_is(count), retval] out koIViewList viewMgrs);
+
+    readonly attribute koIView currentView;
+    readonly attribute koIView topView;
+};
+

@@ -1,0 +1,28 @@
+/* Copyright (c) 2004-2010 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "nsILoginInfo.idl"
+
+[scriptable, uuid(753e9504-e137-406e-b536-060f379799ef)]
+interface koIDBXLoginInfo: nsISupports {
+    attribute wstring hostname;
+    attribute wstring port;
+    attribute wstring db_type;
+    attribute wstring username;
+    attribute wstring password;
+
+    void init(in wstring db_type,
+              in wstring hostname,
+              in wstring port,
+              in wstring username,
+              in wstring password);
+};
+
+[scriptable, uuid(6eec38f8-220b-4d11-904f-3e9282c9230f)]
+interface koIDBXLoginManager: nsISupports {
+    nsILoginInfo addLoginConnectionInfo(in koIDBXLoginInfo connInfo);
+    wstring getPasswordField(in koIDBXLoginInfo connInfo);
+    void updatePasswordField(in koIDBXLoginInfo connInfo);
+    void removeLoginConnectionInfo(in koIDBXLoginInfo connInfo);
+};

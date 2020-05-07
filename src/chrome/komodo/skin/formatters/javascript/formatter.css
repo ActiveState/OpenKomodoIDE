@@ -1,0 +1,7 @@
+/* Copyright (c) 2000-2013 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+/* js_beautify formatter options binding. */
+formatter_options[type="js_beautifier"] {
+    -moz-binding: url('chrome://komodo/content/formatters/javascript/formatter_bindings.xml#js_beautifier');
+}

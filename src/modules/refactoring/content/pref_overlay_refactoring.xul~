@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2013 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % refactoringDTD SYSTEM "chrome://refactoring/locale/refactoring.dtd">
+  %refactoringDTD;
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+]>
+
+<overlay id="refactoring_prefs_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <treechildren id="panelChildren">
+        <treeitem id="refactoringPref" insertbefore="printItem">
+            <treerow>
+                <treecell class="treecell-indent"
+                          url="chrome://refactoring/content/refactoring_prefs.xul"
+                          label="Refactoring.label;"
+                          helptag="places"/>
+            </treerow>
+        </treeitem>
+    </treechildren>
+</overlay>

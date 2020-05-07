@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2011 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE window PUBLIC "-//MOZILLA//DTD XUL V1.0//EN"
+          "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % dbexplorerDTD SYSTEM "chrome://dbexplorer/locale/dbexplorer.dtd">
+  %dbexplorerDTD;
+]>
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/sidebar.css" type="text/css"?>
+<?xml-stylesheet href="chrome://dbexplorer/skin/dbx-views.css" type="text/css"?>
+<?xml-stylesheet href="chrome://dbexplorer/skin/dbexplorer.css" type="text/css"?>
+
+<!-- DB explorer pane content -->
+<page id="dbExplorerPane"
+      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      onload="ko.dbexplorer.initialize();">
+    <script src="chrome://dbexplorer/content/dbexplorer.js"
+            type="application/x-javascript"/>
+
+    <commandset id="allcommands">
+        <command id="cmd_dbexplorer_refreshConnection"
+                 oncommand="ko.dbexplorer.viewManager.refreshConnection(event);" />
+    </commandset>
+
+    <popupset id="mainPopupSet">
+        <menupopup id="dbexplorerPanelContext">
+            <menuitem id="menuitem_dbexplorer_refreshConnection"
+                      observes="cmd_dbexplorer_refreshConnection"
+                      label="XXX refresh.label;"
+                      class="menuitem-iconic"
+                      keep="true"/>
+        </menupopup>
+    </popupset>
+
+    <vbox flex="1">
+        <hbox align="center" class="toolbar-box status-toolbar">
+            <label id="dbexplorer-label"
+                   flex="1"
+                     value="&databases.label;"/>
+            <toolbarbutton
+                id="dbx_button_addDatabase"
+                tooltiptext="&addDatabase.tooltiptext;"
+                buttonstyle="pictures"
+                class="show-databaseAdd-icon rightarrow-button-a"
+                oncommand="ko.dbexplorer.viewManager.addDatabase()"
+                />
+        </hbox>
+        <hbox align="center">
+            <toolbarseparator flex="1"/>
+        </hbox>
+        <tree id="dbexplorer-tree" flex="1"
+              class="dbxtree bg_transparent"
+              ondblclick="ko.dbexplorer.viewManager.onDblClick(event);"
+              onkeypress="ko.dbexplorer.viewManager.onTreeKeyPress(event);"
+              onfocus="this.focused = true;"
+              onblur="this.focused = false;"
+              hidecolumnpicker="true"
+              context="_child"
+              seltype="single">
+            <menupopup id="dbexplorer_popup" onpopupshowing="ko.dbexplorer.initContextMenu(event);" />
+            <treecols>
+                <treecol id="name" flex="2"
+                         primary="true" hideheader="true"
+                         crop="center"/>
+            </treecols>
+            <treechildren id="dbexplorer-body" class="domviewtree" flex="1"/>
+        </tree>
+    </vbox>
+	
+</page>

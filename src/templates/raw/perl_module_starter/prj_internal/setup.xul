@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+
+<dialog
+  id="perl_module_builder"
+  title="Perl Module Builder Configuration"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  onload="setup()"
+  onunload="cleanup()"
+  width="500px"
+  height="480px"
+  buttons="accept,cancel"
+  buttonlabelcancel="Cancel"
+  buttonlabelaccept="Create"
+  ondialogaccept="return doSave();"
+  ondialogcancel="return cancel();"
+  defaultButton="accept"
+  buttonalign="horizontal"
+  buttonorient="horizontal"
+  orient="vertical"
+  >
+  <script src="setup.js"  type="application/x-javascript" />
+
+<commandset id="koext_commands">
+  <command id="checkValid" oncommand="checkValid();"/>
+</commandset>
+
+<vbox flex="1">
+  <caption label="Module Options"/>
+  <grid flex="1">
+    <columns>
+      <column/>
+      <column flex="1"/>
+    </columns>
+    <rows>
+      <row align="top">
+        <vbox>
+            <label id = "modules.label" value="Module Names:" control="modules"/>
+            <description  style="font-size: smaller">One per line</description>
+            <description  style="font-size: smaller">use :: notation</description>
+        </vbox>
+        <textbox id="modules" multiline='true' rows='3' />
+      </row>
+      <row align="center">
+        <label id="distribution.label" value="Distribution:"/>
+        <textbox id="distribution"/>
+      </row>
+      <row align="center">
+        <label id="builder.label" value="Builder:"/>
+        <menulist id="builder">
+          <menupopup id="builderMenuPopup">
+            <menuitem label="ExtUtils::MakeMaker" />
+            <menuitem label="Module::Build" />
+            <menuitem label="Module::Install" />
+          </menupopup>
+        </menulist>
+      </row>
+      <row align="center">
+          <label id="author.label" value="Author:"/>
+          <textbox id="author" value=""/>
+      </row>
+      <row align="center">
+          <label id="email.label" value="Email Address:"/>
+          <textbox id="email" value=""/>
+      </row>
+      <row align="center">
+          <label id="license.label" value="License:"/>
+          <textbox id="license" value="Artistic"/>
+      </row>
+      <row align="center">
+          <label id="directory.label" value="Directory:"/>
+          <hbox>
+            <textbox id="directory" value=""/>
+            <button id="directoryButton" oncommand="browseDirectory()" label="Browse..." />
+          </hbox>
+      </row>
+      <row align="center">
+        <label id="force.label" value=""/>
+        <checkbox align="left"
+                  id="force"
+                  label="Delete pre-existing files if needed"
+                  />
+      </row>
+      <row align="center">
+        <label id="verbose.label" value=""/>
+        <checkbox id="verbose"
+                  label="Print progress messages while working"
+                  />
+      </row>
+    </rows>
+  </grid>
+</vbox>
+  
+</dialog>

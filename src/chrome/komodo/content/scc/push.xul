@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % sccDTD SYSTEM "chrome://komodo/locale/scc.dtd">
+  %sccDTD;
+  <!ENTITY % sccPushDTD SYSTEM "chrome://komodo/locale/scc-push.dtd">
+  %sccPushDTD;
+]>
+
+<!-- Source Code Control push dialog. See push.js for details. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/listbox.css" type="text/css"?>
+<?xul-overlay href="chrome://komodo/content/bindings/scintilla-overlay.xul"?>
+
+<dialog id="scc_push_window"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="OnLoad();"
+        ondialogaccept="return OnAccept(event);"
+        minwidth="400"
+        width="500"
+        persist="screenX screenY width height"
+        buttonlabelaccept="&cmd.accept.label;"
+        buttonlabelextra1="&cmd.history.open.label;">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="text/javascript;version=1.7" />
+    <script src="chrome://komodo/content/scc/push.js" type="text/javascript;version=1.7" />
+
+    <!-- Scintilla overlay - required files. -->
+    <script src="chrome://komodo/content/library/windowManager.js" type="text/javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/timers.js"        type="text/javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/stringutils.js"   type="text/javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/commands.js"      type="text/javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dragdrop.js"      type="text/javascript;version=1.7"/>
+    <script src="chrome://komodo/content/markers.js"               type="text/javascript;version=1.7"/>
+    <vbox flex="1">
+        <vbox>
+            <hbox>
+                <label value="&txtRepo.label;" control="txtRepo"/>
+                <textbox id="txtRepo" type="autocomplete" flex="1"
+                         enablehistory="true" showcommentcolumn="true"
+                         autocompletesearch="scc-push-known mru dirpath"
+                         autocompletesearchparam=""
+                         oninput="_doPreviewCommand();"/>
+            </hbox>
+            <hbox>
+                <vbox flex="1">
+                    <label value="&lstBranches.label;" control="lstBranches"/>
+                    <listbox id="lstBranches"
+                             onselect="_doPreviewCommand();"/>
+                </vbox>
+                <spacer flex="1"/>
+                <vbox flex="1">
+                    <label value="&lstTags.label;" control="lstTags"/>
+                    <listbox id="lstTags"
+                         onselect="_doPreviewCommand();"/>
+                </vbox>
+            </hbox>
+        </vbox>
+        <spacer width="10"/>
+        <vbox id="grpOptions" collapsed="true">
+            <label value="&options.groupbox.label;"/>
+        </vbox>
+        <spacer width="10"/>
+        <vbox>
+            <label value="&commandline.groupbox.label;"/>
+            <textbox id="txtCommandLine" class="plain" multiline="true" rows="2"
+                     style="font-family: -moz-fixed;"/>
+        </vbox>
+        <vbox flex="1">
+            <progressmeter id="progress" mode="undetermined" collapsed="true"/>
+            <view type="buffer" id="viewErrors" collapsed="true" flex="1"/>
+            <hbox id="scintillaOverlayXul" />
+        </vbox>
+    </vbox>
+</dialog>

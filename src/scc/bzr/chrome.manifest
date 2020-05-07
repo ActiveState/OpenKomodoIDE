@@ -1,0 +1,14 @@
+content bazaar jar:bazaar.jar!/content/
+
+locale	bazaar	en-US	     jar:bazaar.jar!/locale/en-US/
+skin    bazaar  classic/1.0  jar:bazaar.jar!/skin/
+
+overlay	chrome://komodo/content/pref/pref.xul	    chrome://bazaar/content/pref-scc-bzr-overlay.xul
+overlay	chrome://komodo/content/scc/checkout.xul    chrome://bazaar/content/checkout-overlay.xul
+
+component {88488d69-3316-4ced-a059-6312f70d2877} components/koBzr.py
+contract @activestate.com/koSCC?type=bzr;1 {88488d69-3316-4ced-a059-6312f70d2877}
+category category-komodo-scc bzr @activestate.com/koSCC?type=bzr;1
+component {60cff019-709b-44ff-b707-2db0b9fe82f6} components/koBzr.py
+contract @activestate.com/koFileStatusChecker?type=bzr;1 {60cff019-709b-44ff-b707-2db0b9fe82f6}
+category category-komodo-file-status bzr @activestate.com/koFileStatusChecker?type=bzr;1

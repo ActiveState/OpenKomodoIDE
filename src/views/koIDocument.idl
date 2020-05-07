@@ -1,0 +1,324 @@
+/* Copyright (c) 2003-2014 ActiveState Software Inc.
+ * See the file LICENSE.txt for licensing information.
+ */
+
+#include "nsISupports.idl"
+
+#include "koIFileEx.idl"
+#include "koIEncoding.idl"
+#include "koIPrefs.idl"
+#include "koILanguage.idl"
+#include "ISciMoz.idl"
+#include "nsIObserverService.idl"
+
+interface koIDocumentSettingsManager;
+interface koITabstopInsertionNode;
+
+interface koILexerLanguageService;
+interface koIAsyncCallback;
+
+/* A koIDocument instance represents the contents of a file in Komodo,
+ * whether saved or unsaved.
+ */
+[scriptable, uuid(BE0B2F5D-DB83-427B-9C41-FA8E890F81AF)]
+interface koIDocument : nsISupports
+{
+    void initWithFile(in koIFileEx file, in boolean untitled);
+    void initUntitled(in wstring name, in wstring encoding);
+
+    // Basic operations.
+    //
+    // Each of load(), save() and revert() can raise an exception if
+    // the operation fails. If so the error is set on the
+    // koILastErrorService.
+    void loadFromURI(in wstring uri);
+    void load();
+    void save(in boolean forceSave); 
+    void revert(); 
+
+    // Manual reference counting.
+    void addReference();
+    void releaseReference();
+
+    // The baseName and displayPath for untitled documents is just its
+    // name.
+    attribute wstring baseName;
+    readonly attribute wstring displayPath;
+
+    // The file that this document corresponds to, or NULL if untitled
+    // document.
+    readonly attribute koIFileEx file;
+
+    attribute AString buffer; // The contents of the document
+    readonly attribute long bufferLength;
+
+    attribute boolean isDirty; // There are unsaved changes to the document.
+    attribute boolean isUntitled;
+    
+    // Returns true if the contents of the file on disk have changed from
+    // the last save/load/revert or call to differentOnDisk.  It DOES NOT
+    // compare against the current contents of the buffer in memory.
+    boolean differentOnDisk();
+
+    // --- EOLs (end-of-line characters)
+    // The EOL_* constants must remain in sync with the ones in eollib.py
+    const long EOL_LF = 0;
+    const long EOL_CR = 1;
+    const long EOL_CRLF = 2;
+    // EOL to use for new lines
+    // - Must be one of the above three EOL_* constants.
+    attribute long new_line_endings;
+    const long EOL_MIXED = 3;
+    const long EOL_NOEOL = 4;
+    // Getting/setting this involves reading/changing the document.
+    // - Can be any of the above five EOL_* constants.
+    //XXX Might want to add a get_dominant_line_ending() method to know
+    //    what to use when existing_line_endings returns EOL_MIXED.
+    attribute long existing_line_endings;
+    void cleanLineEndings();
+
+    attribute wstring language;  // what language is this document in?
+    attribute koILanguage languageObj;  // what language object corresponds to language?
+    // subLanguage returns the language for the current position in the
+    // document. the document must be using a UDL buffer, otherwise it is the
+    // same as language above 
+    readonly attribute wstring subLanguage; 
+    // Return the language (or sub-language in the UDL case) for the given pos.
+    string languageForPosition(in long position);
+    // Return the family for the given pos
+    string familyForPosition(in long position);
+
+    /**
+     * Return the positions in the provided region where the language changes.
+     * At a minimum, two values will always be returned (0, text.length).
+     * This will only ever return additional array results for multi-language
+     * UDL documents, in which case these additional positions mark where the
+     * language changes inside the document.
+     *
+     * Note: The first and last positions returned can be outside of the
+     *       provided start_position,end_position range, all other points
+     *       will *always* be positions within the provided range.
+     *
+     * @param start_position - The position to start searching from.
+     * @param end_position - The position to finish searching at.
+     *
+     * @returns array
+     */
+    void getLanguageTransitionPoints(in long start_position,
+                                     in long end_position,
+                                     [array, size_is(count)] out long positions,
+                                     out unsigned long count);
+
+    //---- Encoding support
+    // Komodo always uses code page 65001, i.e. put scintilla in
+    // Unicode/UTF-8 mode. Setting `codePage` is DEPRECATED in
+    // Komodo 6.0.0b1 -- the set value is ignored.
+    attribute long codePage;
+    attribute koIEncoding encoding;
+    readonly attribute boolean isEncodable; // true if the file can be encoded using it's current encoding settings
+    void setEncodingFromEncodingName(in string encoding_name);
+    void forceEncodingFromEncodingName(in string encoding_name);
+
+  /**
+   * @param encoding - the proposed encoding to use, wrapped in a koIEncoding
+   *
+   * @returns boolean
+   *
+   *    If it returns false, it sets the singleton LastErrorMsg:
+   *      nsError.NS_ERROR_FAILURE if the value can't be encoded
+   *      nsError.NS_ERROR_UNEXPECTED on an unexpected exception
+   */
+    boolean canBeEncodedWithEncoding(in koIEncoding encoding);
+  
+    // encodedText must be an 8bit string as it is the byte representation of a file
+    // that is only used for saving a buffer (see autoSave)
+    readonly attribute ACString encodedText;
+    readonly attribute ACString utf8Text;
+    void removeUnencodeable();  
+
+    void setBufferAndEncoding(in AString buffer, in string encoding_name);
+
+    /**
+     * Notify koDoc that the file has been accessed. This will update the
+     * last access time and access amount.
+     *
+     * Access refers literally to how often a file is "accessed" by the user,
+     * not just opened. Ie. any time a user switches to a file (eg. through
+     * tabs) this counts as "access".
+     */
+    void setFileAccessed();
+
+    /*
+     * Retrieve unix timestamp representing when the file was last opened
+     */
+    readonly attribute long fileLastOpened;
+
+    /*
+     * Retrieve number of times this file has been accessed, see
+     * setFileAccessed() in-line doc for more info.
+     */
+    readonly attribute long fileAccessNo;
+
+    /*
+     * Retrieve unix timestamp representing when the file was accessed.
+     * See setFileAccessed() in-line doc for more info.
+     */
+    readonly attribute long fileLastAccessed;
+
+    /**
+     * Document preferences (chains to project/global prefs)
+     */
+    readonly attribute koIPreferenceSet prefs;
+
+    /**
+     * Get the document prefset (obsolete alias) - this used to do something
+     * different, but no longer.
+     */
+    [deprecated] koIPreferenceSet getEffectivePrefs();
+
+    /**
+     * Deprecated method, do not use.
+     */
+    [deprecated] koIPreferenceSet getEffectivePrefsByName(in AString prefName);
+
+    // Set the appropriate preference chain (takes into account project prefs).
+    void resetPreferenceChain();
+
+    void saveState(in koIScintillaView scintilla);
+    
+    // Maintain a list of editor views that are using this document.
+    // XXX we will want to revisit this and make it less scintilla-specific
+    void addView(in koIScintillaView scintilla);
+    void addScimoz(in ISciMoz scimoz);
+    void releaseView(in koIScintillaView scintilla);
+    void releaseScimoz(in ISciMoz scimoz);
+    koIScintillaView getView(); // return first view
+    readonly attribute long numScintillas; // the number of scintillas for this view.
+    
+    // Users can observe changes of a number of document attributes.
+    readonly attribute nsIObserverService observerService;
+
+    // The indentation parameters are derived from prefs if they exist
+    // in prefs, or guessed from analysis of the document if not.
+    attribute long tabWidth;    // number of spaces that a tab character uses in display
+    attribute boolean useTabs;  // true if tabs are used for indentation
+    attribute long indentWidth; // number of spaces for an indent (typically 4 or 8)
+
+    AString getUnsavedChanges();
+                             
+    // Auto-save API.    
+    boolean haveAutoSave();
+    void doAutoSave();
+    void restoreAutoSave();
+    // `removeAutoSaveFile` should only called from the viewManager
+    // canClose handler.  Other uses are internal to koDocument.  The
+    // auto save file is removed by revert and save.
+    void removeAutoSaveFile();
+
+    readonly attribute koIDocumentSettingsManager docSettingsMgr;
+
+    // The TabstopInsertionTable maintains the state of tabstop
+    // insertions from snippets or templates on the current
+    // document.  It needs to be on the document object, so all
+    // views see the same state of tabstop processing.
+    void getTabstopInsertionTable(out unsigned long count,
+                                  [array, size_is(count), retval] out koITabstopInsertionNode value);
+    void clearTabstopInsertionTable();
+    readonly attribute boolean hasTabstopInsertionTable;
+    void setTabstopInsertionTable(in unsigned long count,
+                                  [array, size_is(count)] in koITabstopInsertionNode insertionNodes);
+    void removeTabstopInsertionNodeAt(in unsigned long idx);
+
+    readonly attribute boolean isLargeDocument; // Based on time to load
+    attribute koILexerLanguageService lexer;
+
+    boolean isCollab();
+
+    // Used by refactoring to verify document contents haven't changed.
+    wstring md5Hash();
+
+    void getLinesMatching(in wstring search,
+                          in koIAsyncCallback callback);
+};
+
+[scriptable, uuid(826C0192-5D6C-4DDB-B135-1412649BF3CC)]
+interface koITabstopInsertionNode : nsISupports
+{
+    attribute long indicator;
+    attribute boolean isBackref;
+    attribute long backrefNumber;
+    attribute boolean isBackrefAnchor;
+    void describe(); // for debugging
+};
+
+/*
+ * The koIDocumentService knows all of the open documents.
+ */
+[scriptable, uuid(CA0A2B77-781B-49E9-B394-B6F8DD56700E)]
+interface koIDocumentService: nsISupports
+{
+    // Creates a new document for this uri.
+    koIDocument createNewDocumentFromURI(in wstring uri);
+    // Like createNewDocumentFromURI, though first checks to see if a doc with
+    // this uri already exists, and if it does it returns the existing one.
+    koIDocument createDocumentFromURI(in wstring uri);
+    // In Komodo's view system "untitled" == "unsaved and unnamed".
+    koIDocument createUntitledDocument(in string language);
+    
+    // These create methods are currently only used for creating a new
+    // file from a template.
+    koIDocument createDocumentFromTemplateURI(in wstring uri,
+                                           in wstring name,
+                                           in wstring ext);
+    koIDocument createFileFromTemplateURI(in wstring templateURI,
+                                           in wstring uri,
+                                           in boolean savenow);
+    
+    void getAllDocuments([array, size_is(count)] out koIDocument documents,
+                     out unsigned long count);
+    koIDocument findDocumentByURI(in wstring URI);
+    
+    //TODO: Move this to a more suitable IDL. This has nothing to do with managing koIDocuments. 
+    // This should indicate that it is intended to be an error line with
+    // a parseable filepath and line number.
+    void parseHotspotLine(in AString line,
+                          in wstring cwd,
+                          out unsigned long count,
+                          [array, size_is(count)] out wstring results);
+};
+
+/* The koIDocumentSettingsManager manages the transfer of data between
+ * document prefs and scintilla views.  There is one per document.
+ */
+[scriptable, uuid(F42C1036-6AAA-4B9A-8623-B398983095E3)]
+interface koIDocumentSettingsManager : nsISupports {
+    void register(in koIDocument koDoc, in koIScintillaView scintilla);
+    void unregister(in koIScintillaView scintilla);
+    void applyViewSettingsToDocument(in koIScintillaView scintilla);
+    void applyDocumentSettingsToView(in koIScintillaView scintilla);
+};
+
+
+/**
+ * A specialization of the koIDocument for use in Collaboration.
+ */
+[scriptable, uuid(E9F8E324-0658-4CF1-84E1-AC76744EC233)]
+interface koICollabDocument : koIDocument
+{
+    // Initializes an instance of koICollabDocument with an instance of
+    // koIDocument.
+    void initFromBaseDocument(in koIDocument base);
+    
+    // Returns an instance of koIDocument initialized with the properties of
+    // the koICollabDocumentInstance.
+    koIDocument toBaseDocument();
+    
+    // Sets the buffer that this collaboration document can be reverted to.
+    void setRevertBuffer(in wstring buffer);
+
+    // Enables or disables the regular isDirty handling.
+    //   enabled: the document will do it's normal isDirty handling.
+    //   disabled: the document is never marked dirty, even if changes occur.
+    void enableIsDirty();
+    void disableIsDirty();
+};

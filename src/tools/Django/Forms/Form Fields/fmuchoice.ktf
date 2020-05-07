@@ -1,0 +1,10 @@
+# komodo tool: fmuchoice
+# ======================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ======================
+<% /* MultipleChoiceField (fmuchoice) */ %>
+[[%tabstop1:FIELDNAME]] = forms.MultipleChoiceField([[%tabstop2:2]])

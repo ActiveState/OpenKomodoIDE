@@ -1,0 +1,37 @@
+/* Copyright (c) 2000-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsIDirectoryService.idl"
+
+// Provides the URIs to Komodo files.
+[scriptable, uuid(59180061-04d0-4f61-9549-2ee3bff7a4b9)]
+interface koIDirs : nsISupports {
+    readonly attribute wstring userDataDir;
+    // The roamingUserDataDir only applies to Windows, it was used by Komodo 5
+    // and previous to store profile information. Komodo 6 moved to a local only
+    // user data dir.
+    readonly attribute wstring roamingUserDataDir;
+    // hostUserDataDir is deprecated - it is now the same value as userDataDir.
+    readonly attribute wstring hostUserDataDir;
+    readonly attribute wstring factoryCommonDataDir;
+    readonly attribute wstring commonDataDir;
+    readonly attribute wstring userCacheDir;
+    // supportDir: Komodo's data support files directory somewhere in
+    // the Komodo install tree.
+    readonly attribute wstring supportDir;
+    readonly attribute wstring sdkDir;
+    readonly attribute wstring installDir;
+    readonly attribute wstring mozBinDir;
+    readonly attribute wstring binDir;
+    readonly attribute wstring komodoPythonLibDir;
+
+    // Path to siloed Python. This is needed for Komodo macros to be
+    // able to run the SDK scripts.
+    readonly attribute wstring pythonExe;
+
+    // DBGP-related directories.
+    readonly attribute wstring binDBGPDir;
+    readonly attribute wstring perlDBGPDir;
+    readonly attribute wstring pythonDBGPDir;
+    readonly attribute wstring python3DBGPDir; // for version 3 of Python
+};

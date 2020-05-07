@@ -1,0 +1,114 @@
+/*
+
+    Name:       Base16 Twilight Dark
+    Author:     David Hart (http://hart-dev.com)
+
+    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-chrome-devtools)
+    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+*/
+
+.cm-s-base16-twilight-dark.CodeMirror {background: #1e1e1e; color: #c3c3c3;}
+.cm-s-base16-twilight-dark div.CodeMirror-selected {background: #323537 !important;}
+.cm-s-base16-twilight-dark .CodeMirror-gutters {background: #1e1e1e; border-right: 0px;}
+.cm-s-base16-twilight-dark .CodeMirror-linenumber {color: #5f5a60;}
+.cm-s-base16-twilight-dark .CodeMirror-cursor {border-left: 1px solid #838184 !important;}
+
+.cm-s-base16-twilight-dark span.cm-header {color: #5f5a60;}
+.cm-s-base16-twilight-dark span.cm-comment {color: #5f5a60;}
+.cm-s-base16-twilight-dark span.cm-atom {color: #9b859d;}
+.cm-s-base16-twilight-dark span.cm-number {color: #cda869;}
+
+.cm-s-base16-twilight-dark span.cm-property {color: #c3c3c3;}
+.cm-s-base16-twilight-dark span.cm-attribute {color: #cda869;}
+.cm-s-base16-twilight-dark span.cm-keyword {color: #9b859d;}
+.cm-s-base16-twilight-dark span.cm-string {color: #8f9d6a;}
+
+.cm-s-base16-twilight-dark span.cm-variable {color: #cf6a4c;}
+.cm-s-base16-twilight-dark span.cm-variable-2 {color: #7587a6;}
+.cm-s-base16-twilight-dark span.cm-def {color: #7587a6;}
+.cm-s-base16-twilight-dark span.cm-error {background: #cf6a4c; color: #838184;}
+.cm-s-base16-twilight-dark span.cm-bracket {color: #323537;}
+.cm-s-base16-twilight-dark span.cm-tag {color: #cf6a4c;}
+.cm-s-base16-twilight-dark span.cm-link {color: #9b859d;}
+.cm-s-base16-twilight-dark span.cm-builtin {color: #9b859d;}
+
+.cm-s-base16-twilight-dark .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
+
+.cm-s-base16-twilight-dark .CodeMirror-activeline-background { background: #323537 !important; }
+
+
+
+body,
+textarea {
+  background: #1e1e1e;
+  color: #a7a7a7;
+}
+
+#sidebar, .modal {
+  background: #323537;
+  color: #c3c3c3;
+}
+
+a, a:hover {
+    color: #9b703f;
+}
+
+a.option {
+    color: #9b703f !important;
+}
+
+#logos {
+  background: #181818;
+  color: #a7a7a7;
+}
+
+#buttons {
+  background: #323537;
+  color: #838184;
+}
+
+#buttons .function.enabled:hover {
+  color: #c3c3c3;
+}
+
+#buttonTips {
+  background: #9b703f;
+  color: #ffffff;
+}
+
+#pointer:after {
+    border-bottom-color: #9b703f !important;
+}
+
+#linenos {
+  background: #323537;
+  border-color: #464b50 !important;
+}
+
+#linenos a {
+    color: #838184 !important;
+}
+
+.option {
+    background: #1e1e1e !important;
+    color: #838184 !important;
+}
+
+.option:hover {
+    background: #181818 !important;
+}
+
+.dropdown:after {
+    border-top-color: #5f5a60 !important;
+}
+
+#messages li {
+  background: #7587a6;
+  color: #ffffff;
+}
+
+#messages li.error {
+  background: #cf6a4c;
+  color: #ffffff;
+}

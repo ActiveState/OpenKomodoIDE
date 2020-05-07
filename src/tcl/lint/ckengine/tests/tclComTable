@@ -1,0 +1,79 @@
+# tclComTable --
+#
+#	This file contains the table of commands used to check TclCom.
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on TclCom commands.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+# 
+# RCS: @(#) $Id: tclComTable,v 1.6 2000/05/30 22:25:00 wart Exp $
+
+set ::checkTclCom1.0 {
+
+{configure -implicitreleasemodel 1}	{ok}
+{configure -implicitreleasemodel foo}	{1 {0 35} badBoolean {32 3} {}}
+{configure -implicitreleasemodel}	{1 {0 31} numArgs {} {}}
+{configure -currencymode numeric}	{ok}
+{tclcom::configure -currencymode $a}	{ok}
+{configure -currencymode list}		{ok}
+{configure $o $a}			{ok}
+{configure -currencymode foo}	{1 {0 27} badOption {24 3} {{list numeric} foo}}
+{configure -foo list}		{1 {0 19} badOption {10 4} {{-currencymode -implicitreleasemodel} -foo}}
+{configure -currencymode}	{1 {0 23} numArgs {} {}}
+{configure list}		{1 {0 14} numArgs {} {}}
+{configure -currencymode list a}	{1 {0 30} numArgs {} {}}
+
+{createobject a}			{ok}
+{tclcom::createobject a}		{ok}
+{createobject a -hostname a}		{ok}
+{createobject a -name a}		{ok}
+{createobject a -name a -hostname a}	{ok}
+{createobject a -foo}			{1 {0 19} badSwitch {15 4} -foo}
+{createobject a a}			{1 {0 16} numArgs {} {}}
+{createobject a -hostname}		{1 {0 24} noSwitchArg {15 9} -hostname}
+{createobject a -hostname a a}		{1 {0 28} numArgs {} {}}
+{createobject a -name}			{1 {0 20} noSwitchArg {15 5} -name}
+{createobject a -name a a}		{1 {0 24} numArgs {} {}}
+
+{foreachitem {a b c} $a $a {set x}}	{ok}
+{tclcom::foreachitem a $a $a {set x}}	{ok}
+{foreachitem $a $a $a {set x}}		{1 {0 28} warnVarRef {12 2} {}}
+{foreachitem {a $a a} $a $a {set x}}	{1 {0 34} warnVarRef {15 2} {}}
+{foreachitem a $a $a {set}}		{1 {21 3} numArgs {} {}}
+{foreachitem a $a {set} $a}		{ok}
+{foreachitem a $a {set}}		{1 {18 3} numArgs {} {}}
+{foreachitem $a $a {set}}		{1 {19 3} numArgs {} {} 1 {0 23} warnVarRef {12 2} {}}
+{foreachitem $a $a $a {set}}		{1 {22 3} numArgs {} {} 1 {0 26} warnVarRef {12 2} {}}
+{foreachitem a $a $a}			{ok}
+{foreachitem a $a $a {set x} $a}	{1 {0 30} numArgs {} {}}
+
+{info $a $b}			{ok}
+{tclcom::info $a $b}		{ok}
+{info functions a}		{ok}
+{info functions [set]}		{1 {16 3} numArgs {} {}}
+{info functions a $b}		{1 {0 19} numArgs {} {}}
+{info iid a}			{ok}
+{info iid [set]}		{1 {10 3} numArgs {} {}}
+{info iid a $b}			{1 {0 13} numArgs {} {}}
+{info name a}			{ok}
+{info name [set]}		{1 {11 3} numArgs {} {}}
+{info name a $b}		{1 {0 14} numArgs {} {}}
+{info}				{1 {0 4} numArgs {} {}}
+{info foo $a}			{1 {0 11} badOption {5 3} {{functions iid name} foo}}
+{info $a $b $c}			{1 {0 13} numArgs {} {}}
+
+{loadtypelib a}				{ok}
+{tclcom::loadtypelib a}			{ok}
+{loadtypelib $a/b}			{1 {0 16} nonPortFile {12 4} {}}
+{loadtypelib [set]}			{1 {13 3} numArgs {} {}}
+{loadtypelib}				{1 {0 11} numArgs {} {}}
+{loadtypelib $a $a}			{1 {0 17} numArgs {} {}}
+
+{release a}				{ok}
+{tclcom::release a}			{ok}
+{release $a $a}				{ok}
+{release $a $a $a $a $a $a}		{ok}
+{release [set]}				{1 {9 3} numArgs {} {}}
+{release}				{1 {0 7} numArgs {} {}}
+}

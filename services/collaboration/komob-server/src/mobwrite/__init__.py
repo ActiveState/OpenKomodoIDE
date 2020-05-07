@@ -1,0 +1,2 @@
+import core
+import diff_match_patch

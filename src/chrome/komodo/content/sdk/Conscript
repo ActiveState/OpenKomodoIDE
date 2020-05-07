@@ -1,0 +1,67 @@
+
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2010 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'mozChromeDir',
+    'mozComponentsDir',
+    'ranRegxpcomStateFileName',
+    'platform',
+    'productType',
+    'buildFlavour',
+    'komodoTitleBarName',
+    'unsiloedPythonExe',
+    'mozVersion',
+    'withSCC',
+    'withSharedSupport',
+    'withDebugging',
+    'withCodeBrowser',
+);
+
+$cons->InstallInChrome('logging.js');
+$cons->InstallInChrome('color.js');
+$cons->InstallInChrome('dom.js');
+$cons->InstallInChrome('editor.js');
+$cons->InstallInChrome('icons.js');
+$cons->InstallInChrome('prefs.js');
+$cons->InstallInChrome('printing.js');
+$cons->InstallInChrome('keybindings.js');
+$cons->InstallInChrome('commands.js');
+$cons->InstallInChrome('less.js');
+$cons->InstallInChrome('console.js');
+$cons->InstallInChrome('menu.js');
+$cons->InstallInChrome('dialogs.js');
+$cons->InstallInChrome('file.js');
+$cons->InstallInChrome('fonts.js');
+$cons->InstallInChrome('prefs.js');
+$cons->InstallInChrome('button.js');
+$cons->InstallInChrome('ajax.js');
+$cons->InstallInChrome('shell.js');
+$cons->InstallInChrome('locale.js');
+$cons->InstallInChrome('views.js');
+$cons->InstallInChrome('windows.js');
+$cons->InstallInChrome('windows/draggable.js');
+$cons->InstallInChrome('debug.js');
+$cons->InstallInChrome('dynamic-button.js');
+$cons->InstallInChrome('colorscheme.js');
+$cons->InstallInChrome('profiler.js');
+$cons->InstallInChrome('filestatus.js');
+$cons->InstallInChrome('share.js');
+$cons->InstallInChrome('simple-storage.js');
+$cons->InstallInChrome('session-storage.js');
+$cons->InstallInChrome('modal.js');
+$cons->InstallInChrome('socket/tcp.js');
+$cons->InstallInChrome('jsonrpc.js');
+$cons->InstallInChrome('stylesheet.js');
+$cons->InstallInChrome('progress.js');
+$cons->InstallInChrome('simpledebug.js');
+$cons->InstallInChrome('dependencies.js');
+$cons->InstallInChrome('promise.js');
+$cons->InstallInChrome('auth.js');
+
+if ($buildFlavour eq "dev") {
+    $cons->InstallInChrome('benchmark.js');
+}

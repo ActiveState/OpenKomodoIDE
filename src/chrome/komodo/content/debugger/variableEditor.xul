@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % debuggerDTD SYSTEM "chrome://komodo/locale/debugger.dtd">
+  %debuggerDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!-- Generic prompt dialog.
+
+     See "variableEditor.js" for documentation on how to use this dialog.
+  -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+
+<dialog id="dialog-variableeditor"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="OnLoad()"
+        onunload="OnUnload()"
+        orient="vertical"
+        style="min-width: 35em;"
+        flex="1"
+        buttons="accept,cancel"
+        ondialogaccept="return OK();"
+        ondialogcancel="return Cancel();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/mru.js"     type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/debugger/variableEditor.js"  type="application/x-javascript;version=1.7"/>
+
+    <popupset>
+        <panel type="autocomplete" id="popupTextboxAutoComplete" noautofocus="true"/>
+    </popupset>
+
+    <vbox flex="1">
+        <description id="prompt"/>
+        <hbox flex="1">
+            <vbox id="label-box"> <!-- center the label on the textbox -->
+                <spring flex="1"/>
+                <label id="label" control="textbox"/>
+                <spring flex="1"/>
+            </vbox>
+            <textbox id="textbox"
+                     style="min-height: 16px;"
+                     flex="1"
+                     type="autocomplete"
+                     autocompletepopup="popupTextboxAutoComplete"
+                     autocompletesearch="mru"
+                     disableautocomplete="true"
+                     maxrows="10"
+                     completeselectedindex="true"
+                     tabscrolling="true"
+                     ontextentered="this.focus();"
+                     onfocus="this.setSelectionRange(0,this.value.length);"/>
+        </hbox>
+        <radiogroup orient="horizontal" id="datatype">
+           <radio id="radioString" value="1" label="&interpretAsString.label;"/>
+           <radio id="radioExpression" value="0" label="&interpretAsExpression.label;"/>
+         </radiogroup>
+    </vbox>
+
+</dialog>
+

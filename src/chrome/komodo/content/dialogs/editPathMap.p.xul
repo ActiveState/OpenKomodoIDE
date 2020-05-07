@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % dialogsDTD SYSTEM "chrome://komodo/locale/dialogs.dtd">
+  %dialogsDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+
+<dialog id="dialog-editpathmap"
+        title="&URIMapping.title;"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        style="min-width: 35em;"
+        flex="1"
+        width="640"
+        persist="width"
+        buttons="accept,cancel"
+        ondialogcancel="return onCancel();"
+        ondialogaccept="return onOK();"
+        onload="onLoad();">
+
+<script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+<script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/logging.js"/>
+<script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/uriparse.js"/>
+<script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/filepickers.js"/>
+<script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/dialogs.js"/>
+<script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/windowManager.js"/>
+<script type="application/x-javascript;version=1.7">
+<![CDATA[
+var dialog = null;
+var uri = null;
+var path = null;
+var bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://komodo/locale/dialogs.properties");
+
+function onLoad() {
+    // get window arguments and fill in our dialog
+    uri = document.getElementById('uri');
+    path = document.getElementById('path');
+    dialog = document.documentElement;
+    if (window.arguments[0]) {
+        uri.value = window.arguments[0].uri;
+        try {
+            path.value = ko.uriparse.URIToLocalPath(window.arguments[0].path);
+        } catch (ex) {
+            // Could not convert into a local path, leave as is then.
+            path.value = window.arguments[0].path;
+        }
+        if (window.arguments[0].project_name) {
+            document.getElementById("project_radio").setAttribute('label',
+                bundle.formatStringFromName("projectName.label",
+                                            [window.arguments[0].project_name], 1));
+        }
+        
+        if (window.arguments[0].column1)
+            document.getElementById("column1").setAttribute("value", window.arguments[0].column1);
+        
+        if (window.arguments[0].column2)
+            document.getElementById("column2").setAttribute("value", window.arguments[0].column2);
+            
+        if (window.arguments[0].isLocal)
+        {
+            document.getElementById('localBrowse').setAttribute("collapsed", true);
+            document.getElementById('remoteBrowse').setAttribute("label", "Browse");
+        }
+        
+    }
+    updateAccept();
+    if (!opener.ko || ! opener.ko.projects) {
+        var el = document.getElementById("prefchoice-wrapper");
+        el.parentNode.removeChild(el);
+    } else
+    {
+        document.getElementById("prefchoice-wrapper").removeAttribute("collapsed");
+        if (!opener.ko.projects.manager.currentProject) {
+            document.getElementById("prefchoice").disabled = true;
+        }
+    }
+}
+
+function updateAccept() {
+    if (!uri.value || !path.value) {
+        dialog.getButton("accept").disabled = true;
+    } else {
+        dialog.getButton("accept").disabled = false;
+    }
+}
+
+function onOK() {
+    // set the window arguments for results
+    window.arguments[0].uri = document.getElementById('uri').value;
+    // The return (mapped) path needs to be in URI format.
+    window.arguments[0].path = ko.uriparse.pathToURI(document.getElementById('path').value);
+    if (document.getElementById('prefchoice-wrapper'))
+        window.arguments[0].project = document.getElementById('prefchoice').selectedItem.value;
+}
+
+function onCancel() {
+    // set the window arguments for results so we dont do anything with them
+    window.arguments[0].uri = null;
+    window.arguments[0].path = null;
+}
+
+function browseForDir(elem, remote) {
+    if (window.arguments[0] && window.arguments[0].isLocal)
+        remote = false;
+    
+    if (!remote) {
+        ko.filepicker.browseForDir(elem);
+    } else {
+        ko.filepicker.browseForRemoteDir(elem);
+    }
+    var path = elem.value;
+    var uri = document.getElementById('uri').value;
+    if (!uri || uri[uri.length-1] == "/") {
+<!-- # if PLATFORM == "win" -->
+        if (!remote && path[path.length-1] != "\\")
+            document.getElementById('path').value = path +"\\";
+        else
+<!-- # endif -->
+        if (path[path.length-1] != "/")
+            document.getElementById('path').value = path +"/";
+    }
+    updateAccept();
+}
+]]>
+</script>
+
+<vbox flex="1">
+    <grid>
+        <columns>
+            <column/>
+            <column flex="1"/>
+            <column/>
+        </columns>
+        <rows>
+        <row align="center">
+            <label id="column1" value="&URI.label;" control="varName" class="kopadded"
+                   style="width: 50px;margin: 5px 1px;"/>
+            <textbox id="uri" flex="1" oninput="updateAccept()"/>
+            <button id="localBrowse" label="&local.label;" oncommand="browseForDir(document.getElementById('path'))" />
+        </row>
+        <row align="center">
+            <label id="column2" value="&mapsTo.label;" control="varValue" class="kopadded"
+                   style="width: 50px; margin: 5px 1px;"/>
+            <textbox id="path" flex="1" oninput="updateAccept()"/>
+            <button id="remoteBrowse" label="&remote.label;" oncommand="browseForDir(document.getElementById('path'),true);" />
+
+            <!-- This would be nicer looking than having the two buttons
+                 below, but it does not work on Linux for drag/drop operations
+                 due to being called in an existing GTK event. To see an example
+                 of this problem, on linux, drag/drop an unmapped url onto
+                 Komodo, say yes to setup a new mapped uri, in the mapped uri
+                 dialog, try and use the mouse right-click context menu to
+                 copy and/or paste.
+            -->
+            <!--
+            <toolbarbutton id="editPathBrowseButton"
+                           tooltiptext="&browseLocalRemotoDir.tooltiptext;"
+                           type="menu"
+                           persist="buttonstyle"
+                           buttonstyle="pictures">
+                <menupopup id="editpathmap_browse_menupopup">
+                    <menuitem id="editpathmap_browse_local_menuitem"
+                              oncommand="browseForDir(document.getElementById('path'), false)"
+                              label="&browseLocally.label;" />
+                    <menuitem id="editpathmap_browse_remote_menuitem"
+                              oncommand="browseForDir(document.getElementById('path'), true)"
+                              label="&browseRemotely.label;" />
+                </menupopup>
+            </toolbarbutton>
+            -->
+        </row>
+        </rows>
+    </grid>
+    <vbox id="prefchoice-wrapper" collapsed="true">
+    <separator class="thin"/>
+    <vbox id="add-to" flex="1">
+        <radiogroup id="prefchoice">
+        <caption label="&saveMappingTo.label;"/>
+            <radio label="&globalPreferences.label;" selected="true" value="false"/>
+            <radio id="project_radio" label="&currentProjectPreferences.label;" value="true"/>
+        </radiogroup>
+    </vbox>
+    </vbox>
+    <separator class="thin"/>
+
+</vbox>
+</dialog>

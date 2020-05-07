@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2010 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % bindingsDTD SYSTEM "chrome://komodo/locale/bindings.dtd">
+  %bindingsDTD;
+]>
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <!-- A slightly customized <tree/> for use by places
+         See bindings/widgets.xml#cbtree for the full story
+         -->
+    <binding id="places_tree_b" extends="chrome://global/content/bindings/tree.xml#tree">
+        <implementation name="placesTree" implements="nsISupports">
+        <method name="handleReturnKey">
+        <parameter name="event"/>
+        <body>
+        <![CDATA[
+            if (event.shiftKey || event.ctrlKey || event.altKey) {
+                return false;
+            }
+            ko.places.viewMgr.handleReturnKeyPress(event);
+            event.stopPropagation();
+            event.preventDefault();
+            return true;
+        ]]>
+        </body>
+        </method>
+        </implementation>
+        <handlers>
+            <handler event="keypress" keycode="vk_return" phase="capturing">
+                <![CDATA[
+                    this.handleReturnKey(event);
+                    return true;
+                ]]>
+            </handler>
+            <handler event="keypress" keycode="vk_return" phase="target">
+                <![CDATA[
+                    ko.places.viewMgr.view.set_handleNextToggleOpenState(false);
+                    setTimeout(function() {
+                        // Re-enable it later, after the events have blown through.
+                        ko.places.viewMgr.view.set_handleNextToggleOpenState(true);
+                    }, 1);
+                    event.stopPropagation();
+                    event.preventDefault();
+                    return true;
+                ]]>
+            </handler>
+            <handler event="click" clickcount="2" button="2" phase="capturing">
+                <![CDATA[
+                    // Fix bug 89066
+                    //  Double-right-clicks in the places pane are interpreted as double-left-clicks
+                    event.stopPropagation();
+                ]]>
+            </handler>
+        </handlers>
+    </binding>
+    
+    <binding id="projectPlacesTree_b" extends="chrome://global/content/bindings/tree.xml#tree">
+       
+        <handlers>
+            <handler event="click" clickcount="2" phase="capturing">
+                <![CDATA[
+                    event.stopPropagation();
+                ]]>
+            </handler>
+            
+            <handler event="keypress" keycode="vk_delete" phase="capturing">
+                <![CDATA[
+                    ko.places.projects.manager.removeItems(event, this);
+                ]]>
+            </handler>
+        </handlers>
+    </binding>
+    
+</bindings>

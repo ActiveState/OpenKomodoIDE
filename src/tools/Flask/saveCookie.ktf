@@ -1,0 +1,13 @@
+// komodo tool: saveCookie
+// =======================
+// auto_abbreviation: true
+// indent_relative: false
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.0.12
+// =======================
+[[%tabstop1:foo]] = make_response([[%tabstop2:expression]])
+[[%tabstop1:foo]].set_cookie('[[%tabstop3:key]]', '[[%tabstop4:value]]')
+return [[%tabstop1:foo]]
+[[%tabstop5:5]]!@#_currentPos!@#_anchor

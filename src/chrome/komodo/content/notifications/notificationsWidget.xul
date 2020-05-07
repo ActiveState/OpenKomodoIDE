@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/unifiedWindow.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/sidebar.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/notifications.css" type="text/css"?>
+
+<!DOCTYPE page PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % bindingsDTD SYSTEM "chrome://komodo/locale/bindings.dtd">
+  %bindingsDTD;
+  <!ENTITY % notificationsDTD SYSTEM "chrome://komodo/locale/notifications.dtd">
+  %notificationsDTD;
+]>
+
+<page id="notificationWidget" title="(Notifications Widget)"
+      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <vbox flex="1">
+    <richlistbox id="message-container" class="bg_transparent" seltype="multiple" flex="999"/>
+    <box class="widgetToolbarWrap centered">
+        <textbox id="filter-search" flex="1"
+		 emptytext="&filterSearchEmpty;" type="search"
+                 oninput="NotificationsWidgetController.updateFilters()"
+                 oncommand="NotificationsWidgetController.updateFilters()"/>
+        <separator flex="1"/>
+        <toolbar id="toolbar" class="widgetToolbar">
+          <toolbargroup class="solo-toolbaritem">
+            <toolbarbutton type="checkbox" id="filter-error"
+                           tooltiptext="&filterErrorTooltip;"
+                           oncommand="NotificationsWidgetController.updateFilters()"/>
+            <toolbarbutton type="checkbox" id="filter-warning"
+                           tooltiptext="&filterWarningTooltip;"
+                           oncommand="NotificationsWidgetController.updateFilters()"/>
+            <toolbarbutton type="checkbox" id="filter-info"
+                           tooltiptext="&filterInfoTooltip;"
+                           oncommand="NotificationsWidgetController.updateFilters()"/>
+            <toolbarseparator/>
+            <toolbarbutton type="checkbox" id="filter-progress"
+                           tooltiptext="&filterProgressTooltip;"
+                           oncommand="NotificationsWidgetController.updateFilters()"/>
+          </toolbargroup>
+        </toolbar>
+    </box>
+  </vbox>
+
+  <popupset id="mainPopupSet">
+    <menupopup id="notification-context-menu">
+      <menuitem id="notification-copy" label="&copy.label;"
+                class="menuitem-iconic native-copy-icon"
+                observes="cmd_copy"/>
+      <menuitem id="notification-select-all" label="&selectAll.label;"
+                observes="cmd_selectAll"/>
+    </menupopup>
+  </popupset>
+
+  <commandset id="allcommands">
+    <command id="cmd_copy"
+             key="key_cmd_copy"
+             oncommand="goDoCommand('cmd_copy');"/>
+    <command id="cmd_selectAll"
+             key="key_cmd_selectAll"
+             oncommand="goDoCommand('cmd_selectAll');"/>
+  </commandset>
+
+  <script src="chrome://komodo/content/notifications/notificationsWidget.js"
+          type="application/x-javascript;version=1.8"/>
+  <script src="chrome://global/content/globalOverlay.js"/>
+  
+</page>

@@ -1,0 +1,91 @@
+// komodo tool: Generate Debug Config
+// ==================================
+// async: False
+// is_clean: true
+// language: JavaScript
+// rank: 100
+// trigger: trigger_postopen
+// trigger_enabled: False
+// type: macro
+// version: 1.1.5
+// ==================================
+var views = require("ko/views");
+var sys = require("sdk/system");
+var fileio = require("ko/file");
+var listener;
+
+(function()
+{
+    
+    this.getDBGPort = () =>
+    {
+        try
+        {
+            this.checkDbgListener();
+            return listener.port;
+        }
+        catch(e)
+        {
+            console.log("Can't start debug listener: "+e);
+        }
+        
+    };
+    
+    // Checks to see if the listener is on
+    // Turns it on if it's not
+    // sets `listener` for this script
+    this.checkDbgListener = () =>
+    {
+        listener = ko.dbg.listener;
+        if( 0 === listener.port )
+        {
+            listener.start();
+        }
+    };
+    
+    this.createConfigFile = () =>
+    {
+        views.manager.doNewViewAsync("text","editor",this.outPutConfigCallback);
+    };
+    
+    // This is async
+    this.outPutConfigCallback = (view) =>
+    {
+        var text = this.getPHPConfig();
+        view.scimoz.text = text;
+    };
+    
+    this.getPHPConfig = () =>
+    {
+        var port = this.getDBGPort();
+        var xdebugFilename = (sys.platform === "winnt") ? "php_xdebug.dll" : "xdebug.so";
+        var local = ko.dialogs.yesNo("is your PHP server on the same computer as Komodo?");
+        var ip = (local === "Yes") ? "127.0.0.1" : "**Please enter you computer's IP address here**";
+        alert("No navigate to where you installed "+xdebugFilename+" and select it.");
+        var path = ko.filepicker.browseForFile("", xdebugFilename, "Select "+xdebugFilename+" file");
+        var config = "; Make sure you don't need to provide an IP address for your machine in the xdebug.remote_host field\n"+
+                     "zend_extension_ts=\""+path+"\n" +
+                     "zend_extension=\""+path+"\"\n"+
+                     "xdebug.remote_enable=1\n"+
+                     "xdebug.remote_handler=dbgp\n"+
+                     "xdebug.remote_mode=req\n"+
+                     "xdebug.remote_host="+ip+"\n"+
+                     "xdebug.remote_port="+port+"\n"+
+                     "\n"+
+                     "; Copy and paste this to the top of your php.ini file in your PHP install.\n"
+        return config;
+    };
+    try
+    {
+        this.checkDbgListener();
+    }
+    catch(e)
+    {
+        var msg = "Couldn't start debug listener: " + e;
+        alert(msg);
+        console.log(msg);
+        return;
+    }
+    // Starting the debug listener can take longer than this script takes to run
+    setTimeout(this.createConfigFile, 100);
+})();

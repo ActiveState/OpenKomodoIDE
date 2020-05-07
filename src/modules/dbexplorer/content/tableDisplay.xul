@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"[
+  <!ENTITY % dbxDTD SYSTEM "chrome://dbexplorer/locale/dbexplorer.dtd">
+  %dbxDTD;
+]>
+
+<!-- Copyright (c) 2003-2009 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!-- Database Explorer tableDisplay.  See tableDisplay.js for details -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://dbexplorer/skin/dbexplorer.css" type="text/css"?>
+
+<window id="dbexplorer_tableDisplay"
+        windowtype="dbexplorer_tableDisplay"
+        title="&DBExplorer.label;"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        width="600"
+        height="400"
+        screenX="20"
+        screenY="20"
+        persist="screenX screenY width height"
+        onload="onLoad();"
+        onunload="onUnload();"
+        onresize="onResize();"
+        >
+  <script src="chrome://komodo/content/library/logging.js"
+          type="application/x-javascript;version=1.7"/>
+  <script src="chrome://komodo/content/library/trace.js"
+          type="application/x-javascript;version=1.7"/>
+  <script src="chrome://komodo/content/library/uriparse.js"
+          type="application/x-javascript;version=1.7"/>
+  <script src="chrome://xtk/content/xtk.js"
+          type="application/x-javascript;version=1.7"/>
+  <script src="chrome://komodo/content/library/dialogs.js"
+          type="application/x-javascript;version=1.7"/>
+
+  <script src="chrome://dbexplorer/content/tableDisplay.js"        type="application/x-javascript;version=1.7"/>
+
+  <vbox class="dbx-tableDisplay-vbox" flex="1" style="margin: 0px 10px">
+    
+    <grid id="input-grid" debug="true" style="overflow: auto">
+        <columns>
+            <column id="label-column" flex="1"/>
+            <column id="value-column" flex="10" align="left"/>
+        </columns>
+        <rows>
+          <row>
+            <label>Database Type:</label>
+            <textbox class="dbx-readonly-textbox" readonly="true"
+                         id="dbx-dbtype-textbox" />
+          </row>
+          <row>
+            <label id="dbx-connection-info-label"></label>
+            <textbox class="dbx-readonly-textbox" readonly="true"
+                         id="dbx-connection-info-textbox" />
+          </row>
+          <row>
+            <label>&table.label;</label>
+            <textbox class="dbx-readonly-textbox" readonly="true"
+                         id="dbx-current-table" />
+          </row>
+          
+        </rows>
+    </grid>
+    <vbox flex="8" >
+      <tabbox id="dbxtd-tabbox" flex="8"
+              persist="selectedIndex">
+        <tabs id="dbxtd-tabs"  onselect="doSelectTab(event);" >
+          <tab id="dbxtd-tab-1" label="&fullTables.label;" />
+          <tab id="dbxtd-tab-2" label="&query.label;" />
+          <tab id="dbxtd-tab-3" label="&schema.label;" />
+        </tabs>
+        <tabpanels id="dbxtd-tabpanels" flex="1" >
+          <tabpanel id="panelFullTable">
+            <vbox class="dbx-tableDisplay-vbox"
+                      flex="8"
+                      id="tableDataTree-vbox" >
+              <menupopup id="dbx-tableDisplay-popup" onpopupshowing="initContextMenu(event);" />
+              <menupopup id="dbx-tableDisplay-treecols-popup" onpopupshowing="initDataTreeColumnPopupMenu(event);" />
+              <tree id="dbx-tableDisplay-dataTree"
+                        flex="1"
+                        class="zero-space no-border"
+                        orient="vertical"
+                        seltype="multiple">
+                <treecols id="dbx-tableDisplay-dataTreeCols" context="dbx-tableDisplay-treecols-popup"
+                          onclick="onTreecolClick(event);"
+                          
+                />
+                <treechildren id="dbx-tableDisplay-treechildren"  flex="1" context="dbx-tableDisplay-popup" />
+              </tree>
+              <separator />
+              <hbox id="dbx-tableDisplay-hbox-2">
+                <!-- *used* -->
+                <label id="dbx-tableDisplay-rowCountInfo" value="" />
+                <separator align="center"/>
+                <button id="dbx-tableDisplay-refreshTable"
+                        label="&refreshTable.button;"
+                        tooltiptext="&refreshTable.tooltiptext;"
+                        oncommand="refreshTable();" />
+                <separator align="center"/>
+                <button id="dbx-tableDisplay-addRow"
+                        label="&addRow.button;"
+                        tooltiptext="&addRow.tooltiptext;"
+                        oncommand="addRow();" />
+                <separator align="center"/>
+                <!-- *used* -->
+                <checkbox id="dbx-tableDisplay-allowDeletions"
+                        label="&allowRowDeletion.checkbox;"
+                        tooltiptext="&allowRowDeletion.tooltiptext;"
+                        checked="false"
+                        oncommand="updateRowDeletionStatus(this);" />
+              </hbox>
+            </vbox>
+          </tabpanel>
+          <tabpanel id="panelQuery" flex="1">
+            <vbox id="panelQuery-vbox" flex="1">
+              <label value="&query.label;" control="panelQueryText" />
+              <textbox id="panelQueryText" rows="5" cols="50" flex="1"
+                       multiline="true"
+                       minheight="40px"
+                       />
+              <splitter />
+              <tree id="dbx-tableDisplay-queryDataTree"
+                        flex="1"
+                        class="zero-space no-border"
+                        hidecolumnpicker="true"
+                        orient="vertical"
+                        seltype="multiple">
+                <treecols id="dbx-tableDisplay-queryDataTreeCols"
+                          context="dbx-tableDisplay-treecols-popup"
+                          onclick="onTreecolClick(event);"
+                          
+                />
+                <treechildren id="dbx-tableDisplay-query-treechildren"  flex="1"
+                              context="dbx-tableDisplay-popup" />
+              </tree>
+              <hbox id="panelQuery-vb-hbox">
+                <button label="&run.label;" id="panelQuerySearch"
+                        oncommand="runCustomAction();"
+                        />
+              </hbox>
+              <separator />
+              <hbox id="dbx-tableDisplay-tab2-hbox-2">
+                <label id="dbx-tableDisplay-tab2-rowCountInfo" value="" />
+                <separator align="center"/>
+                <button id="dbx-tableDisplay-tab2-refreshTable"
+                        label="&refreshTable.button;"
+                        tooltiptext="&refreshTable.tooltiptext;"
+                        oncommand="refreshQueryTable();" />
+              </hbox>
+            </vbox>
+          </tabpanel>
+          <tabpanel id="schemaView" flex="1">
+            <vbox class="dbx-tableSchema-vbox" flex="1" id="dbx-tableSchema-vbox" style="margin-bottom: 5px;">
+              <tree id="dbx-tableSchema-dataTree"
+                        flex="1"
+                        class="zero-space no-border"
+                        orient="vertical"
+                        context="dbx-tableSchema-popup"
+                        seltype="multiple">
+                <treecols id="dbx-tableSchema-dataTreeCols" />
+                <treechildren id="dbx-tableSchema-treechildren"  />
+              </tree>
+            </vbox>
+          </tabpanel>
+        </tabpanels>
+      </tabbox>
+    </vbox>
+  </vbox>
+      
+</window>

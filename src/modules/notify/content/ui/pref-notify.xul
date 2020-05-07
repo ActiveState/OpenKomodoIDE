@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % notifyDTD SYSTEM "chrome://notify/locale/notify.dtd">
+  %notifyDTD;
+]>
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+<?xml-stylesheet href="less://notify/skin/pref-notify.less" type="text/css"?>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/pref/koPrefUtils.js" type="application/x-javascript;version=1.7" />
+    <script src="chrome://notify/content/js/pref-notify.js" type="application/x-javascript;version=1.7" />
+
+    <vbox flex="1" class="autoscroll">
+        <groupbox orient="vertical" id="behaviour">
+            <caption label="&behaviour.label;" />
+            <checkbox id="notify_use_opacity"
+                      label="&useOpacity.label;"
+                      pref="true"
+                      preftype="boolean"
+                      prefattribute="checked"/>
+            <checkbox id="notify_use_animations"
+                      label="&useAnimations.label;"
+                      pref="true"
+                      preftype="boolean"
+                      prefattribute="checked"/>
+        </groupbox>
+        <groupbox orient="vertical" id="enabled-notifications">
+            <caption label="&enabledNotifyCategories.label;" />
+            <hbox>
+                <label value="Level:"/>
+                <menulist id="level">
+                    <menupopup>
+                        <menuitem label="INFO"
+                                  value="INFO"/>
+                        <menuitem label="WARNING"
+                                  value="WARNING"/>
+                        <menuitem label="ERROR"
+                                  value="ERROR"/>
+                    </menupopup>
+                </menulist>
+            </hbox>
+            <vbox id="enabled-notifications-vbox"></vbox>
+            <vbox id="enabled-notifications-warning-vbox"></vbox>
+            <vbox id="enabled-notifications-error-vbox"></vbox>
+        </groupbox>
+    </vbox>
+
+</window>

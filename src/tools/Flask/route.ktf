@@ -1,0 +1,12 @@
+// komodo tool: route
+// ==================
+// auto_abbreviation: true
+// indent_relative: false
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.0.12
+// ==================
+@app.route('[[%tabstop1:path]]')
+def [[%tabstop2:func_name]]([[%tabstop3:foo]]):
+    return render_template('[[%tabstop4:expression]]')!@#_currentPos!@#_anchor

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window id="test_xul_periodic_table"
+        title="XUL Periodic Table"
+        persist="width height screenX screenY"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <tabbox  flex="1" >
+    <tabs>
+       <tab label="Komodo" />
+       <tab label="Mozilla" />
+    </tabs>
+    <tabpanels flex="1" >
+       <iframe flex="1" type="content-primary" src="komodo.xul" />
+       <iframe flex="1" type="content-primary" src="working.xul" />
+    </tabpanels>
+  </tabbox>
+
+</window>

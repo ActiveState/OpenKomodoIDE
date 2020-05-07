@@ -1,0 +1,34 @@
+<!ENTITY CRITICAL50.label "CRITICAL (50)">
+<!ENTITY DEBUG10.label "DEBUG (10)">
+<!ENTITY ERROR40.label "ERROR (40)">
+<!ENTITY INFO20.label "INFO (20)">
+<!ENTITY WARN30.label "WARN (30)">
+<!ENTITY deleteUnset.label "Delete/Unset">
+<!ENTITY effectiveLevel.label "Effective Level">
+<!ENTITY logger.label "Logger">
+<!ENTITY loggingControl.title "Logging Control">
+<!ENTITY message.label "Message">
+<!ENTITY name.label "Name">
+<!ENTITY setLevel.label "Set Level">
+<!ENTITY status.label "Status">
+<!ENTITY type.label "Type">
+<!ENTITY unset.label "unset">
+<!ENTITY value.label "Value">
+
+<!--commented in file pref_control.xul-->
+<!--
+<!ENTITY copyName.label "Copy name">
+<!ENTITY copyName.accesskey "C">
+<!ENTITY copyValue.label "Copy value">
+<!ENTITY copyValue.accesskey "v">
+<!ENTITY new.label "New">
+<!ENTITY new.accesskey "N">
+<!ENTITY string.label "String">
+<!ENTITY string.accesskey "S">
+<!ENTITY integer.label "Integer">
+<!ENTITY integer.accesskey "I">
+<!ENTITY boolean.label "Boolean">
+<!ENTITY boolean.accesskey "B">
+<!ENTITY modify.label "Modify">
+<!ENTITY modify.accesskey "M">
+-->

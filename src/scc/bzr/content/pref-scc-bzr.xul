@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+    %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+    %prefDTD.INTERNAL;
+  <!ENTITY % bazaarDTD SYSTEM "chrome://bazaar/locale/bazaar-prefs.dtd">
+    %bazaarDTD;
+]>
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="PrefSCCBzr_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/trace.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://bazaar/content/pref-scc-bzr.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="scc-bzr-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox id="bzr_groupbox"
+                  orient="vertical">
+            <caption id="bzr_groupbox_caption">
+                <checkbox id="bzrEnabled"
+                          label="&BzrIntegration.label;"
+                          pref="true"
+                          preftype="boolean"
+                          prefdefault="true"
+                          oncommand="PrefSCCBzr_UpdateEnabledUI();" />
+            </caption>
+            <vbox id="bzr_executable_vbox">
+                <label id="bzr_executable_label"
+                       value="&bzrExecutableUsed.label;" />
+                <hbox id="bzr_executable_hbox">
+                    <menulist id="bzrExecutable"
+                              flex="1"
+                              pref="true"
+                              preftype="string"
+                              prefdefault=""
+                              tooltiptext="&clickOnItemToSelectItAsTheDefault.tooltiptext;"
+                              oncommand="PrefSCCBzr_CheckAgain();">
+                        <menupopup id="avail-exec-list" />
+                    </menulist>
+                    <button id='bzr_browse_executable_button'
+                            label="&browse.label;"
+                            oncommand="PrefSCCBzr_getExecutable();" />
+                </hbox>
+            </vbox>
+            <separator id="bzr_deck_separator" class="thin"/>
+            <deck id="bzrDeck"
+                  flex="1"
+                  selectedIndex='0'>
+                <vbox id="bzr_functional_vbox">
+                    <checkbox id="bzrBackgroundCheck"
+                              label="&checkForStatusChangesFromOutsideOfKomodo.label;"
+                              pref="true"
+                              preftype="boolean"
+                              prefdefault="true"
+                              oncommand="PrefSCCBzr_UpdateBackgroundEnabledUI();" />
+                    <vbox id="bzr_check_time_vbox"
+                          style="padding-left: 20px;">
+                        <hbox id="bzr_check_time_hbox"
+                              align="center">
+                            <label id="bzr_check_time_label"
+                                   value="Check every " />
+                            <textbox id="bzrBackgroundMinutes"
+                                     size="3"
+                                     pref="true"
+                                     preftype="long"
+                                     prefdefault="15"
+                                     />
+                            <label id="bzr_minutes_label"
+                                   value=" minutes" />
+                        </hbox>
+                    </vbox>
+                    <hbox id="bzr_diff_options_hbox"
+                          align="center">
+                        <label id="bzr_diff_options_label"
+                               value="Diff options"/>
+                        <textbox id="bzrDiffOptions"
+                                 size="25"
+                                 pref="true"
+                                 preftype="string"
+                                 prefdefault=""
+                                 />
+                    </hbox>
+                    <checkbox id="bzr_externaldiff_checkbox"
+                              label="&usesExternalDiff.checkbox.label;"
+                              tooltiptext="&usesExternalDiff.checkbox.tooltiptext;"
+                              pref="true"
+                              prefstring="bzr_uses_externaldiff"
+                              preftype="boolean"
+                              prefdefault="false"
+                              />
+                </vbox>
+                <vbox id="bzr_not_functional_vbox"
+                      flex="1">
+                    <description id="bzrNotFunctional"
+                                 style="font-weight: bold;" />
+                    <vbox id="bzr_download_button_vbox"
+                          align="center">
+                        <button id="bzr_download_button"
+                                label="&downloadBzr.label;"
+                                class="button-link-a"
+                                style="cursor:pointer;"
+                                oncommand="parent.opener.ko.browse.openUrlInDefaultBrowser('http://bazaar.canonical.com/')" />
+                    </vbox>
+                    <separator id="bzr_not_functional_separator"
+                               class="thin" />
+                    <vbox id="bzr_checkagain_vbox"
+                          align="right">
+                        <button id="bzr_checkagain_button"
+                                label="&checkAgain.label;"
+                                oncommand="PrefSCCBzr_CheckAgain();" />
+                    </vbox>
+                </vbox>
+            </deck>
+            <separator id="bzr_final_separator" class="thin" />
+        </groupbox>
+
+    </vbox>
+
+</window>
+
+
+
+

@@ -1,0 +1,22 @@
+diff -u -r1.14 src/LexGen.py
+--- scripts/LexGen.py	30 Dec 2007 22:03:23 -0000	1.14
++++ scripts/LexGen.py	21 May 2008 21:00:17 -0000
+@@ -17,12 +17,12 @@ def UpdateVersionNumbers(sci, root):
+         "#define VERSION_SCINTILLA \"" + sci.versionDotted + "\"")
+     UpdateLineInFile(root + "win32/ScintRes.rc", "#define VERSION_WORDS",
+         "#define VERSION_WORDS " + sci.versionCommad)
+-    UpdateLineInFile(root + "qt/ScintillaEditBase/ScintillaEditBase.pro",
+-        "VERSION =",
+-        "VERSION = " + sci.versionDotted)
+-    UpdateLineInFile(root + "qt/ScintillaEdit/ScintillaEdit.pro",
+-        "VERSION =",
+-        "VERSION = " + sci.versionDotted)
++    #UpdateLineInFile(root + "qt/ScintillaEditBase/ScintillaEditBase.pro",
++    #    "VERSION =",
++    #    "VERSION = " + sci.versionDotted)
++    #UpdateLineInFile(root + "qt/ScintillaEdit/ScintillaEdit.pro",
++    #    "VERSION =",
++    #    "VERSION = " + sci.versionDotted)
+     UpdateLineInFile(root + "doc/ScintillaDownload.html", "       Release",
+         "       Release " + sci.versionDotted)
+     ReplaceREInFile(root + "doc/ScintillaDownload.html",

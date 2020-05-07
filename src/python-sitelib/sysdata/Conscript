@@ -1,0 +1,17 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2003-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+Import(
+    "cons",
+    "komodoPythonUtilsDir",
+    "ranRegxpcomStateFileName",
+    "platform",
+    "buildType",
+    "buildFlavour",
+);
+
+$cons->InstallPythonUtility("__init__.py", "sysdata");
+$cons->InstallPythonUtility("errors.py", "sysdata");
+$cons->InstallPythonUtility("pdk.py", "sysdata");
+

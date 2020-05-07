@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Slideshow Lite Demo (by Fred Wu)</title>
+  <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+
+  <link rel="stylesheet" type="text/css" href="css/slideshow.css" media="screen" />
+  <style type="text/css" media="screen">
+    * { margin: auto; }
+    body { margin: 20px 0; background: #cee; font-family: Helvetica, Arial, Verdana, 'Lucida Grande', sans-serif; }
+    h1, h3 { text-align: center; }
+
+    #slideshow2 ul { left: 5px; }
+  </style>
+
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/jquery.slideshow.lite.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    $(function(){
+      $("#slideshow").slideshow();
+      $("#slideshow2").slideshow({
+        pauseSeconds: 4,
+        height: 200,
+        caption: false
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <h1>Slideshow Lite Demo</h1>
+  <h3>by Fred Wu</h3>
+  <br />
+  <div id="slideshow">
+    <a href="http://fredwu.me/"><img src="img/flowing-rock.jpg" width="580" height="360" alt="Flowing Rock" /></a>
+    <img src="img/grass-blades.jpg" width="580" height="360" alt="Grass Blades" />
+    <img src="img/stones.jpg" width="580" height="360" alt="Stones" />
+    <img src="img/sea-mist.jpg" width="580" height="360" alt="Sea Mist" />
+    <img src="img/pier.jpg" width="580" height="360" alt="Pier" />
+    <img src="img/lotus.jpg" width="580" height="360" alt="Lotus" />
+    <img src="img/mojave.jpg" width="580" height="360" alt="Mojave" />
+    <img src="img/lightning.jpg" width="580" height="360" alt="Lightning" />
+    <a href="http://fredwu.me/"><img src="img/ladybug.jpg" width="580" height="360" alt="Ladybug" /></a>
+  </div>
+  <br />
+  <div id="slideshow2">
+    <a href="http://www.google.com/"><img src="img/lightning.jpg" width="580" height="360" alt="Lightning" /></a>
+    <img src="img/mojave.jpg" width="580" height="360" alt="Mojave" />
+    <img src="img/sea-mist.jpg" width="580" height="360" alt="Sea Mist" />
+    <img src="img/ladybug.jpg" width="580" height="360" alt="Ladybug" />
+  </div>
+</body>
+
+</html>

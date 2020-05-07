@@ -1,0 +1,15 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2011 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+Import(
+    'cons',
+    'buildFlavour',
+    'sdkDir',
+    'build',
+    'mozBin',
+    'unsiloedPythonExe',
+);
+
+
+$cons->KoExtUnpack("kodistunpack", SourcePath("fugue.xpi"));

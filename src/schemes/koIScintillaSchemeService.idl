@@ -1,0 +1,161 @@
+#include "nsISupports.idl"
+#include "ISciMoz.idl"
+#include "koILanguage.idl"
+
+interface ISciMoz;
+
+[scriptable, uuid(E116A318-F894-42C5-A7D5-1F37171832AD)]
+interface koIScintillaScheme : nsISupports {
+    attribute boolean writeable;
+    attribute boolean unsaved;
+    attribute wstring name;
+    attribute wstring fname;
+    attribute boolean preferFixed;
+    attribute boolean caretLineVisible;
+    attribute boolean useSelFore;
+    attribute boolean isDirty;
+    /**
+     * The isDarkBackground attribute returns whether the default background
+     * color is dark or light.
+     */
+    readonly attribute boolean isDarkBackground;
+    /**
+     * backgroundColor is a RGB hex value and contains a starting "#", e.g.:
+     *   #33AA9F
+     */
+    readonly attribute AString backgroundColor;
+
+    /**
+     * foregroundColor is a RGB hex value and contains a starting "#", e.g.:
+     *   #33AA9F
+     */
+    readonly attribute AString foregroundColor;
+
+    koIScintillaScheme clone(in wstring newname);
+    
+    /*
+     * @param fname Either the full path to a scheme file, or a scheme name (see unsaved)
+     * @param userDefined False if it's a Komodo-defined scheme
+     * @param unsaved True: fname is the name of a scheme, False: fname is a full path
+     * @returns True iff the object initialized successfully
+     */
+    void init(in wstring fname, in boolean userDefined, in boolean unsaved);
+    void saveAs(in wstring newname);
+    void save();
+    void revert();
+    void remove();
+    
+    /**
+     * Gets or sets the hex color, in RGB color format - e.g. "#FF9600".
+     */
+    string getColor(in string colorname);
+    void setColor(in string colorname, in string colorvalue);
+
+    /**
+     * Get the color as a long integer, in BGR color format.
+     */
+    long getScintillaColor(in string colorname);
+
+    void setFore(in string language, /* null means common styles */
+                 in string styleId,
+                 in string color);
+    void setBack(in string language, /* null means common styles */
+                 in string styleId,
+                 in string color);
+    void setBold(in string language, /* null means common styles */
+                 in string styleId,
+                 in boolean bold);
+    void setItalic(in string language, /* null means common styles */
+                   in string styleId,
+                   in boolean italic);
+    void setFont(in string styleId, in string face);
+    void setLineSpacing(in string styleId, in long spacing);
+    void setFaceType(in string language, in string styleId, in boolean useFixed); 
+    void setSize(in string language, /* null means common styles */
+                 in string styleId, /* null means default */
+                 in long size);
+    void setIndicator(in wstring name, in long style, in string color,
+                      in long alpha, in boolean draw_underneath);
+
+    void setInterfaceStyle(in string style, 
+                   in string key,
+                   in string value);
+    string getInterfaceStyle(in string style,
+                 in string key);
+    string getInterfaceStyleRaw(in string style,
+                 in string key);
+    string getCommon(in string style,
+                 in string key);
+    string getFore(in string language, /* null means common styles */
+                 in string styleId);
+    string getBack(in string language, /* null means common styles */
+                 in string styleId);
+    boolean getBold(in string language, /* null means common styles */
+                 in string styleId);
+    boolean getItalic(in string language, /* null means common styles */
+                      in string styleId);
+    string getFont(in string styleId,      /* encoding_fixed|proportional */
+                   [optional] in boolean fontstack);
+    long getLineSpacing(in string styleId);
+    boolean getFaceType(in string language, /* null means common styles */
+                        in string styleId); /* null means default */
+    long getSize(in string language, /* null means common styles */
+                 in string styleId); /* null means default */
+    void getIndicator(in wstring name, out long style, out string color,
+                      out long alpha, out boolean draw_underneath);
+
+    void resetStyle(in string language, /* null means common styles */
+                    in string styleId);
+    
+    // Similar methods, but for handling UDL sublanguages.
+    void setSubLanguageDefaultBackgroundColor(in string language, in string color);
+    string getSubLanguageDefaultBackgroundColor(in string language);
+
+    void setGlobalSubLanguageBackgroundEnabled(in string language, in boolean allow);
+    boolean getGlobalSubLanguageBackgroundEnabled(in string language);
+
+    void applyScheme(in ISciMoz scintilla,
+                     in string language,
+                     in string encoding,
+                     in boolean useFixed);
+    string getCommonName(in string language,
+                         in long scimozStyleNo);
+    string getSpecificName(in string language,
+                           in long scimozStyleNo);
+    void getHighlightColorInfo(in koILanguage languageObj,
+                               [array, size_is(count)] out wstring colorInfo,
+                               out unsigned long count);
+};
+
+[scriptable, uuid(D116A318-F894-42C5-A7D5-1F37171832AC)]
+interface koIScintillaSchemeService : nsISupports {
+    void reloadAvailableSchemes();
+    void addScheme(in koIScintillaScheme scheme);
+    void removeScheme(in koIScintillaScheme scheme);
+    void getSchemeNames([array, size_is(count)] out wstring schemes,
+                        out unsigned long count);
+    koIScintillaScheme getScheme(in wstring name);
+    void getCommonStyles([array, size_is(count)] out string styleLabels,
+                         out unsigned long count);
+    void getLanguageStyles(in string language,
+                           [array, size_is(count)] out string styleLabels,
+                           out unsigned long count);
+    // Return the list of indicator names in alphabetically sorted order.
+    void getIndicatorNames([array, size_is(count)] out string names,
+                            out unsigned long count);
+    // Return the scimoz indicator number for the given indicator name.
+    long getIndicatorNoForName(in wstring indic_name);
+    wstring getIndicatorNameForNo(in long indic_no);
+    void purgeUnsavedSchemes();
+    void convertToHTMLFile(in ISciMoz scimoz, in wstring title,
+                           in wstring language, in long style_bits,
+                           in string encoding_name, in wstring fname,
+                           in boolean selectionOnly,
+                           in boolean forceColor);
+    // returns new scheme name on success, throws an exception on failiure
+    wstring loadSchemeFromURI(in wstring uri, in wstring schemeName);
+    boolean schemeNameIsValid(in wstring schemeName);
+    // returns previous active scheme.
+    wstring activateScheme(in wstring schemeName);
+};
+

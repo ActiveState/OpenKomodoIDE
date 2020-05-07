@@ -1,0 +1,378 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2010-2011 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % bindingsDTD SYSTEM "chrome://komodo/locale/bindings.dtd">
+  %bindingsDTD;
+]>
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <!-- A toolbox that auto-hides in full screen mode -->
+    <binding id="toolbox"
+             extends="chrome://global/content/bindings/toolbar.xml#toolbox">
+        <content orient="vertical">
+            <xul:vbox anonid="children-box">
+                <children/>
+            </xul:vbox>
+            <xul:box anonid="hover-box" bottom="0"/>
+        </content>
+        <implementation>
+            <constructor>
+            <![CDATA[
+                // make sure we have a reference to the bound method
+                this.onFullScreen = this.onFullScreen.bind(this);
+                window.addEventListener("fullscreen",
+                                        setTimeout.bind(window,
+                                                        this.onFullScreen,
+                                                        10),
+                                        false);
+                this._prefs.addObserver(this._kAutoHidePrefName,
+                                        this.onFullScreen,
+                                        false);
+            ]]>
+            </constructor>
+            <destructor>
+            <![CDATA[
+                this._prefs.removeObserver(this._kAutoHidePrefName,
+                                           this.onFullScreen);
+            ]]>
+            </destructor>
+
+            <field name="_prefs">
+                Components.utils
+                          .import("resource://gre/modules/Services.jsm", {})
+                          .Services
+                          .prefs
+            </field>
+
+            <property name="_kAutoHidePrefName">
+                <getter>
+                    return "browser.fullscreen.autohide";
+                </getter>
+            </property>
+            <property name="_autoHideEnabled">
+                <getter>
+                    if (/^Mac/.test(navigator.platform))
+                    {
+                        return false; // Never autohide on mac
+                    }
+                    if (this._prefs.getPrefType(this._kAutoHidePrefName) !=
+                        this._prefs.PREF_BOOL)
+                    {
+                        return true;
+                    }
+                    return this._prefs.getBoolPref(this._kAutoHidePrefName);
+                </getter>
+                <setter>
+                    return this._prefs.setBoolPref(this._kAutoHidePrefName,
+                                                   val);
+                </setter>
+            </property>
+
+            <method name="onFullScreen">
+                <parameter name="event"/>
+                <body>
+                <![CDATA[
+                    if (window.fullScreen && this._autoHideEnabled) {
+                        this.setAttribute("_fullscreen", "true");
+                    } else {
+                        this.removeAttribute("_fullscreen");
+                    }
+                ]]>
+                </body>
+            </method>
+        </implementation>
+    </binding>
+    
+    <binding id="toolbox-drag"
+             extends="chrome://komodo/content/bindings/toolbar.xml#toolbox">
+    <implementation>
+      <field name="_draggable">true</field>
+      <constructor>
+        this._draggable = require("ko/prefs").getBoolean("ui.hide.chrome");
+        if (!this._draggableStarted) {
+          this._draggableStarted = true;
+          try {
+            new require("ko/windows/draggable")(this);
+          } catch (e) {}
+        }
+      </constructor>
+    </implementation>
+    </binding>
+
+    <!-- A toolbar that will allow overflowed items to be accessible through
+         a separate menu dropdown widget at the edge of the toolbar.
+    -->
+    <binding id="toolbar-overflow"
+             extends="chrome://global/content/bindings/general.xml#basecontrol">
+
+        <content>
+            <children />
+        </content>
+
+        <implementation implements="nsIDOMEventListener">
+            <constructor>
+                <![CDATA[
+                window.addEventListener("resize", this, false);
+                ]]>
+            </constructor>
+            <destructor>
+                <![CDATA[
+                if (this._updateTimerId) {
+                    window.clearTimeout(this._updateTimerId);
+                }
+                window.removeEventListener("resize", this, false);
+                ]]>
+            </destructor>
+
+            <!-- Element to enable/disable when overflowed/underflowed. -->
+            <field name="toolbar_overflow">null</field>
+            
+            <field name="last_check_width">0</field>
+
+            <field name="_updateTimerId">0</field>
+
+            <method name="_updateChildVisibility_callback">
+              <parameter name="event" />
+              <body>
+              <![CDATA[
+                let scrollRect = this.getBoundingClientRect();
+                let childOverflowed = false;
+                for (let i=0; i < this.childNodes.length; i++) {
+                    let child = this.childNodes[i];
+                    // Once a child overflows, all the next ones will.
+                    if (!childOverflowed) {
+                      let childRect = child.getBoundingClientRect();
+                      childOverflowed = childRect.right > scrollRect.right;
+                    }
+                    child.style.visibility = childOverflowed ? "hidden" : "visible";
+                }
+                if (this.toolbar_overflow) {
+                    if (childOverflowed) {
+                        this.toolbar_overflow.removeAttribute("collapsed");
+                    } else {
+                        this.toolbar_overflow.setAttribute("collapsed", "true");
+                    }
+                }
+              ]]>
+              </body>
+            </method>
+
+            <method name="_updateChildVisibility">
+              <parameter name="event" />
+              <body>
+              <![CDATA[
+                // Use a timeout to avoid quickly repeated calls.
+                window.clearTimeout(this._updateTimerId);
+                this._updateTimerId = window.setTimeout(this._updateChildVisibility_callback.bind(this, event), 250);
+              ]]>
+              </body>
+            </method>
+
+            <method name="handleEvent">
+              <parameter name="event" />
+              <body>
+              <![CDATA[
+                switch (event.type) {
+                    case "resize":
+                        if (window.outerWidth != this.lastCheckWidth)
+                        {
+                            this.lastCheckWidth = window.outerWidth;
+                            this._updateChildVisibility(event);
+                        }
+                        break;
+                }
+              ]]>
+              </body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="underflow" phase="capturing">
+            <![CDATA[
+                this._updateChildVisibility(event);
+            ]]>
+            </handler>
+            <handler event="overflow" phase="capturing">
+            <![CDATA[
+                this._updateChildVisibility(event);
+            ]]>
+            </handler>
+        </handlers>
+
+    </binding>
+
+    <!-- similar to toolbar-overflow, but meant to contain child toolbars -->
+    <binding id="toolboxrow-overflow" extends="#toolbar-overflow">
+        <content>
+            <xul:hbox anonid="overflow-container"
+                      style="overflow: hidden; -moz-box-orient: horizontal;"
+                      flex="1">
+                <children/>
+            </xul:hbox>
+            <xul:toolbar>
+                <xul:toolbaritem class="overflow-toolbaritem">
+                    <xul:toolbarbutton anonid="overflow-toolbarbutton"
+                                       class="overflow-toolbarbutton"
+                                       collapsed="true"
+                                       type="menu">
+                        <xul:menupopup anonid="overflow-menupopup"
+                                       class="overflow-menupopup"/>
+                    </xul:toolbarbutton>
+                </xul:toolbaritem>
+            </xul:toolbar>
+        </content>
+
+        <implementation>
+
+            <field name="container">
+                document.getAnonymousElementByAttribute(this, "anonid", "overflow-container")
+            </field>
+            <field name="button">
+                document.getAnonymousElementByAttribute(this, "anonid", "overflow-toolbarbutton")
+            </field>
+            <field name="popup">
+                document.getAnonymousElementByAttribute(this, "anonid", "overflow-menupopup")
+            </field>
+
+            <property name="dirty">
+                <!--
+                  - Whether the popup menu is dirty.  It is considered dirty
+                  - when it needs to be rebuilt; this can be due to the window
+                  - resizing (see the listener in #toolbar-overflow) or due to
+                  - toolbar customization (see uilayout.js,
+                  - ko.uilayout.customizeToolbars)
+                  -->
+                <getter>
+                    return this.button.hasAttribute("dirty");
+                </getter>
+                <setter>
+                    if (val) {
+                        this.button.setAttribute("dirty", true);
+                    } else {
+                        this.button.removeAttribute("dirty");
+                    }
+                </setter>
+            </property>
+
+            <method name="_updateChildVisibility_callback">
+              <parameter name="event" />
+              <body>
+              <![CDATA[
+                var container = this.container;
+                var reverse = this.getAttribute("pack") == "end";
+                var children = Array.slice(this.querySelectorAll("toolbaritem > toolbarbutton")); // XBL, so this.childNodes is right :|
+                var overflow = false;
+                
+                var overflowable = this.querySelectorAll("toolbaritem, toolbaritem > toolbarbutton");
+                for (let i = 0; i < overflowable.length; ++i) {
+                    overflowable[i].setAttribute("overflown", "false");
+                }
+                
+                var isOverflowing = function() {
+                    return container.clientWidth < container.scrollWidth ||
+                           container.clientHeight < container.scrollHeight;
+                };
+
+                if (!reverse) children.reverse();
+                while (isOverflowing() && children.length)
+                {
+                    let child = children.shift();
+                    child.setAttribute("overflown", "true");
+                    overflow = true;
+                }
+                
+                if (!overflow) {
+                    this.button.setAttribute("collapsed", true);
+                } else {
+                    children = Array.slice(this.querySelectorAll("toolbaritem"));
+                    for (let child of children) {
+                        if ( ! child.querySelector('[overflown="false"]'))
+                            child.setAttribute("overflown", "true");
+                    }
+                    
+                    this.button.removeAttribute("collapsed");
+                }
+                
+                this.dirty = true;
+              ]]>
+              </body>
+            </method>
+        </implementation>
+        <handlers>
+            <handler event="popupshowing">
+            <![CDATA[
+                if (!this.dirty) {
+                    // not dirty, no need to do anything
+                    return;
+                }
+                
+                while (this.popup.firstChild) {
+                    this.popup.removeChild(this.popup.firstChild);
+                }
+                
+                var lastParent = null;
+                var q = 'toolbaritem:not([kohidden="true"]) > toolbarbutton[overflown="true"]:not([kohidden="true"])';
+                var overflown = Array.slice(this.querySelectorAll(q));
+                for (let elem of overflown)
+                {
+                    if ( ! elem.getAttribute("label"))
+                        continue;
+                    
+                    if (lastParent && lastParent != elem.parentNode)
+                        this.popup.appendChild(document.createElement("menuseparator"));
+                    
+                    lastParent = elem.parentNode;
+
+                    // build a single menu item
+                    var item = document.createElement("menuitem");
+                    item.setAttribute("label", elem.getAttribute("label"));
+                    if (elem.hasAttribute("image")) {
+                        item.setAttribute("image", elem.getAttribute("image"));
+                        item.classList.add("menuitem-iconic");
+                    } else {
+                        var style = getComputedStyle(elem);
+                        var image = style.listStyleImage;
+                        if (image) {
+                            item.style.listStyleImage = image;
+                            item.style.MozImageRegion = style.MozImageRegion;
+                            item.classList.add("menuitem-iconic");
+                        }
+                    }
+                    item.addEventListener("command", function(evt) {
+                        var event = document.createEvent("XULCommandEvent");
+                        event.initCommandEvent(evt.type,
+                                               evt.canBubble,
+                                               evt.cancelable,
+                                               evt.view,
+                                               evt.detail,
+                                               evt.ctrlKey,
+                                               evt.altKey,
+                                               evt.shiftKey,
+                                               evt.metaKey,
+                                               evt);
+                        elem.dispatchEvent(event);
+                    }, false);
+                    if (elem.id) {
+                        var observes = document.createElement("observes");
+                        observes.setAttribute("element", elem.id);
+                        observes.setAttribute("attribute", "disabled");
+                        item.appendChild(observes);
+                    }
+                    this.popup.appendChild(item);
+                }
+                
+                this.dirty = false;
+            ]]>
+            </handler>
+        </handlers>
+    </binding>
+
+</bindings>
+

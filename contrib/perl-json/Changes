@@ -1,0 +1,315 @@
+Revision history for Perl extension JSON.
+
+## JSON version 2.xx #####################################################
+
+In this version, JSON was totally rewritten.
+
+  * JSON becomes a wrapper to JSON::XS or JSON::PP!
+  * objToJson() and jsonToObj() are obsoleted!
+  * $JSON::* variables are no longer available!
+  * JSON::Parser and JSON::Converter are deleted from the distribution!
+  * JSONRPC* and Apache::JSONRPC are deleted from the distribution!
+     Please check JSON::RPC (supports JSON-RPC protocol v1.1 and 1.0).
+
+##########################################################################
+
+ !! Since 2.16, PP's relaxed option caused an infinite loop in some condition.
+ !! Recommend to update old versions.
+
+2.26  Tue Sep 28 17:41:37 2010
+	[JSON::PP]
+	- cleaned up code and enhanced sort option efficiency in encode.
+
+2.25  Tue Sep 28 16:47:08 2010
+	[JSON]
+	- JSON::Backend::XS::Supportable always executed a needless process
+	    with JSON::XS backend. This made encode/decode a bit slower.
+
+2.24  Mon Sep 27 10:56:24 2010
+	[JSON::PP]
+	- tweaked code.
+	- optimized code in hash object encoding.
+
+2.23  Sun Sep 26 22:08:12 2010
+	[JSON::PP]
+	- modified tied object handling in encode. it made encoding speed faster.
+	    pointed by https://rt.cpan.org/Ticket/Display.html?id=61604
+	- modified t/e10_bignum.t
+            for avoiding a warning in using Math::BigInt dev version
+
+2.22  Wed Aug 25 12:46:13 2010
+	[JSON]
+	- added JSON::XS installing feature in Makefile.PL
+	    with cpan or cpanm (some points suggested by gfx)
+	- check that to_json and from_json are not called as methods (CHORNY)
+	[JSON::PP]
+	- modified for -Duse64bitall -Duselongdouble compiled perl.
+	    11_pc_expo.t too. (these are patched by H.Merijn Brand)
+
+2.21  Mon Apr  5 14:56:52 2010
+	[JSON]
+	- enhanced 'HOW DO I DECODE A DATA FROM OUTER AND ENCODE TO OUTER'
+	- renamed eg/bench_pp_xs.pl to eg/bench_decode.pl
+	- added eg/bench_encode.pl
+
+2.20  Fri Apr  2 12:50:08 2010
+	[JSON]
+	- added eg/bench_pp_xs.pl for benchmark sample
+	- updated 'INCREMENTAL PARSING' section
+	[JSON::PP]
+	- decode_prefix() didn't count a consumed text length properly.
+	- enhanced XS compatibilty
+	    in the case of decoding a white space garbaged text.
+
+2.19  Tue Mar 30 13:40:24 2010
+	[JSON]
+	- fixed typo (rt#53535 by Angel Abad)
+	- added a recommendation
+              refering to (en|de)code_json to pod (suggested by tokuhirom)
+	- added 'HOW DO I DECODE A DATA FROM OUTER AND ENCODE TO OUTER' to pod.
+
+2.18  Tue Mar 23 15:18:10 2010
+	[JSON]
+	- updated document (compatible with JSON::XS 2.29)
+	[JSON::PP]
+	- fixed encode an overloaded 'eq' object bug (reported by Alexey A. Kiritchun)
+	- enhanced an error message compatible to JSON::XS
+
+2.17  Thu Jan  7 12:23:13 2010
+	[JSON]
+	- fixed a problem caused by JSON::XS backend and support_by_pp option
+	  (rt#52842,  rt#52847 by ikegami)
+	[JSON::PP]
+	- made compatible with JSON::XS 2.27
+	- patched decode for incr_parse (rt#52820 by ikegami)
+	- relaxed option caused an infinite loop in some condition.
+
+2.16  Fri Oct 16 15:07:37 2009
+	[JSON][JSON::PP]
+	- made compatible with JSON::XS 2.26
+            *indent adds a final newline
+	- corrected copyrights in JSON::PP58.
+
+2.15  Tue Jun  2 16:36:42 2009
+	[JSON]
+	- made compatible with JSON::XS 2.24
+	- corrected copyrights in some modules.
+	[JSON::PP]
+	 - modified incr_parse, pointed by Martin J. Evans (rt#46439)
+	 - deleted a meaningless code
+
+2.14  Tue Feb 24 11:20:24 2009
+	[JSON]
+	- the compatible XS version was miswritten in document.
+
+2.13  Sat Feb 21 17:01:05 2009
+	[JSON::PP]
+	- decode() didn't upgrade unicode escaped charcters \u0080-\u00ff.
+	  this problem was pointed by rt#43424 (Mika Raento)
+	[JSON::PP::56]
+	- fixed utf8::encode/decode emulators bugs.
+	- defined a missing B module constant in Perl 5.6.0.
+	  (reported by Clinton Pierce)
+	[JSON::PP::5005]
+	- _decode_unicode() returned a 0x80-0xff value as UTF8 encoded byte.
+	[JSON]
+	- added a refference to JSON::XS's document "JSON and ECMAscript".
+	- fixed a typo in the document (pointed by Jim Cromie).
+
+2.12  Wed Jul 16 11:14:35 2008
+	[JSON]
+	- made compatible with JSON::XS 2.22
+
+	[JSON::PP]
+	- fixed the incremental parser in negative nest level
+	    (pointed and patched by Yuval Kogman)
+
+2.11  Tue Jun 17 14:30:01 2008
+	[JSON::PP]
+	- fixed the decoding process which checks number.
+	    regarded number like chars in Unicode (ex. U+FF11) as [\d].
+	- enhanced error messages compatible to JSON::XS.
+
+2.10  Tue Jun  3 18:42:11 2008
+	[JSON]
+	- made compatible with JSON::XS 2.21
+	    * updated the document.
+	- added an item pointed by rt#32361 to the doc.
+
+	[JSON::PP] [JSON::PP58] [JSON::PP56] [JSON::PP5005]
+	- made compatible with JSON::XS 2.21
+	    * added incr_reset
+	- removed useless codes.
+
+2.09  Sun Apr 20 20:45:33 2008
+	[JSON]
+	- made compatible with JSON::XS 2.2
+	- changed pod section totally.
+
+	[JSON::PP] 2.20001
+	- made compatible witg JSON::XS 2.2
+	    * lifted the log2 rounding restriction of max_depth and max_size.
+	    * incremental json parsing (EXPERIMENTAL).
+	    * allow_unknown/get_allow_unknown methods.
+	- the version format was changed.
+	    X.YYZZZ =>  X.YY is the same as JSON::XS. ZZZ is the PP own version.
+	- changed pod section totally.
+
+2.08  Sat Apr 12 22:49:39 2008
+	[JSON]
+	- fixed JSON::Boolean inheritance mechanism.
+            If the backend is XS with support_by_pp mode and using PP only
+            support method, JSON::Boolean did not work correctly.
+            Thanks to hg[at]apteryx's point.
+
+	[JSON::PP] 2.07
+	- Now split into JSON::PP58 for Perl 5.8 and lator.
+	- enhanced an error message compatible to JSON::XS
+            did not croak when TO_JSON method returns same object as passed.
+
+	[JSON::PP58]
+	- modified for Perls post 5.8.0 that don't have utf8::is_utf8.
+	    Thanks to Andreas Koenig.
+
+2.07  Sat Feb 16 15:52:29 2008
+	[JSON]
+	- experimentally added -convert_blessed_universally to define
+	    UNIVERSAL::TO_JSON subroutine.
+
+              use JSON -convert_blessed_universally;
+              $json->convert_blessed->encode( $blessed );
+
+	- and as_nonbleesed is obsoleted (not yet removed). OK?
+	- fixed t/04_pretty.t.
+
+2.06  Fri Feb  8 16:21:59 2008
+	[JSON::PP] 2.06
+	- enhanced the XS compatibility for pretty-printing
+	    and the indent handling was broken!
+
+2.05  Tue Feb  5 13:57:19 2008
+	[JSON::PP] 2.05
+	- enhanced some XS compatibilities for de/encode.
+	- now decode_error can dump high (>127) chars.
+	- enhanced the XS combatilbity of the decoding error.
+	- fixed the utf8 checker while decoding (is_valid_utf8).
+	- implemented utf8::downgrade in JSON::PP56.
+	- enhanced utf8::encode in JSON::PP56.
+	- made utf8::downgrade return a true in JSON::PP5005.
+
+2.04  Sat Jan  5 16:10:01 2008
+	[JSON]
+	- fixed a document typo pointed by kawasaki@annocpan
+	- make DATA handle closed for error mssages in support_by_pp mode.
+	- switched JSON::Backend::XS::Supportable wrapper de/encode
+             to changing symbolic tables for croak messages and speed.
+	- fixed support_by_pp setting
+
+	[JSON::PP] 2.04
+	- enhanced the error message compatiblity to XS.
+
+2.03  Fri Jan  4 14:10:58 2008
+	[JSON]
+	- fixed the description - Transition ways from 1.xx to 2.xx.
+             $JSON::ConvBlessed compat => $json->allow_blessed->as_nonbleesed
+	- support_by_pp supports 'as_nonbleesed' (experimental)
+	- clean up the code for saving memory
+
+	[JSON::PP] 2.03
+	- Now the allo_bignum flag also affects the encoding process.
+            encode() can convert Math::BigInt/Float objects into JSON numbers
+	- added as_nonblessed option (experimental)
+	- cleaned up internal function names (renamed camel case names)
+
+2.02  Wed Dec 26 11:08:19 2007
+	[JSON]
+	- Now support_by_pp allows to use indent_length()
+
+	[JSON::PP] 2.02
+	- added get_indent_length
+
+2.01  Thu Dec 20 11:30:59 2007
+	[JSON]
+	- made the object methods - jsonToObj and objToJson
+          available for a while with warnings.
+
+2.00  Wed Dec 19 11:48:04 2007
+	[JSON]
+	- new version!
+	- modified Makefile.PL for broken Perls (when PERL_DL_NONLAZY = 1).
+
+	[JSON::PP] 2.0104
+	- clean up the document.
+	- use 'subs' instead of CORE::GLOBAL for fixing join() in 5.8.0 - 5.8.2
+	- enhanced decoding error messages for JSON::XS compatibility.
+	- jsonToObj and objToJson warn.
+
+
+1.99_05  Fri Dec 14 18:30:43 2007
+	[JSON]
+	- added a description about the Unicode handling to document.
+
+	[JSON::PP] (2.0103)
+	- Now the JSON::PP56 unicode handling does not require Unicode::String.
+	- Now JSON::PP5005 can de/enocde properly within the Perl 5.005 world.
+	- decode() always utf8::decode()ed to strings.
+	- decode() returned a big integer as string though the integer is
+          smaller than it is so.
+	- a bad know how - added the join() wrapper for Perl 5.8.0 - 5.8.2 bug.
+	- JSON::PP56 encode() did not handle Unicode properly.
+	- added a section about the unicode handling on Perls to JSON::PP doc.
+
+1.99_04  Mon Dec 10 14:28:15 2007
+	[JSON]
+	- modified the tests and source for Perl 5.005
+
+	[JSON::PP] (2.0102)
+	- modified some prototypes in JSON::PP5005.
+
+1.99_03  Mon Dec 10 11:43:02 2007
+	[JSON]
+	- modified tests and document.
+	   in Perl5.8.2 or earlier, decoding with utf8 is broken because of
+           a Perl side problem. (join() had a bug.)
+	- modified Makefile.PL for Perl 5.005.
+	   in the version, 'require JSON' is fail....
+
+	[JSON::PP] (2.0102)
+	- modified string decode function.
+	- enhanced error messages for compatibility to JSON::XS.
+	- enhanced utf8::decode emulator and unpack emulator in JSON::PP56.
+
+1.99_02  Sun Dec  9 05:06:19 2007
+        [JSON::PP] (2.0101)
+	- decoding with utf8 was broken in Perl 5.10
+	    as the behaviour of unpack was changed.
+	- added a fake in JSON::PP5005 (bytes.pm)
+	- added the missing file JONS::PP::Boolean.pm
+
+1.99_01  Sat Dec  8 12:01:43 2007
+	[JSON]
+	- released as version 2.0
+	   this module is incompatible to 1.xx, so check the document.
+
+        [JSON::PP] (2.01 from 0.97)
+	- updated JSON::PP for compatible to JSON::XS 2.01
+	- renamed from_json and to_json to decode_json and encode_json
+	- added get_* to JSON::PP
+	- deleted property() from JSON::PP
+	- deleted strict() and added loose()
+	- deleted disable_UTF8() and self_encode()
+	- renamed singlequote to allow_singlequote
+	- renamed allow_bigint to allow_bignum
+	- max_depth and max_size round up their arguments.
+	- added indent_length and sort_by
+
+
+## JSON version 1.xx
+
+1.15  Wed Nov 14 14:52:31 2007
+	- 1.xx final version.
+
+0.09  Sat Apr  9 15:27:47 2005
+	- original version; created by h2xs 1.22 with options
+		-XA -b 5.5.3 -n JSON
+

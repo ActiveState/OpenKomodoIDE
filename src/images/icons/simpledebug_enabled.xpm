@@ -1,0 +1,24 @@
+/* XPM */
+static char *debug[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 2 1 ",
+"X c #ff8400",
+"  c None",
+/* pixels */
+"                ",
+"     X   X      ",
+"      XXX       ",
+"      XXX       ",
+"      XXX       ",
+"                ",
+"  XXXXX   XXX   ",
+"    XX   XX     ",
+"    X   XXX     ",
+"  XX   XXXXXX   ",
+"      XXXXX     ",
+"     XX XX      ",
+"     XX XX      ",
+"      X X       ",
+"                ",
+"                "
+};

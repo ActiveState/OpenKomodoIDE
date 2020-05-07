@@ -1,0 +1,20 @@
+// komodo tool: hasone
+// ===================
+// auto_abbreviation: true
+// indent_relative: false
+// is_clean: true
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// ===================
+/**
+ * Get the [[%tabstop1:models]] record associated with the [[%tabstop:model]].
+ *
+ * @return \\\\Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasOne
+ */
+public function [[%tabstop1:models]]()
+{
+    return $this->hasOne([[%tabstop:Name]]::class[[%tabstop:, 'foreign_key', 'local_key']]);
+}!@#_currentPos!@#_anchor

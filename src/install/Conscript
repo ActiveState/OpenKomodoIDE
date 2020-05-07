@@ -1,0 +1,165 @@
+#!/usr/local/bin/perl -w
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+use Cwd;
+
+Import(
+    "cons",
+    "platform",
+    "build",
+    "jarring",
+    "installSupportDir",
+    "buildFlavour",
+    "unsiloedPythonExe",
+    "komodoDefaultUserInstallDir",
+    "komodoDevDir",
+    "buildAbsDir",
+    "ranRegxpcomStateFileName",
+    "supportDir",
+    "productType",
+    "productTagLine",
+    "updateChannel",
+    "komodoVersion",
+    "komodoMarketingShortVersion",
+    "msiRegistryId",
+    "msiProductName",
+    "msiInstallName",
+    "msiKomodoId",
+    "msiKomodoVersion",
+    "msiKomodoPrettyId",
+    "msiVccrtMsmPath",
+    "msiVccrtPolicyMsmPath",
+    "mozVersion",
+    "python24",
+    "withHTTPInspector",
+    "withCodeBrowser",
+    "withCollaboration",
+    "withAPIBrowser",
+    "withDebugging",
+    "withProfiling",
+    "withProjectManager",
+    "withPublishing",
+    "withSCC",
+    "withSSO",
+    "withRx",
+    "withSharedSupport",
+    "withPDKIntegration",
+    "withTDKIntegration",
+    "withDatabaseExplorer",
+    "withWatchdogFSNotifications",
+    "komodoTitleBarName",
+    "gnomeDesktopName",
+    "gnomeDesktopGenericName",
+    "gnomeDesktopCategories",
+    "gnomeDesktopShortcutName",
+);
+
+# Build installer-support files.
+if ($buildFlavour eq "full") {
+    if ($platform eq "win") {
+        $komodoVersion =~ /(\d+)\.(\d+)\.(\d+)/;
+        my $majorVer = $1;
+        my $minorVer = $2;
+        $mozVersion =~ /(\d+)/;
+        my $mozMajorVer = $1;
+        my $isPreReleaseVersion = ($komodoVersion =~ /-/ ? "yes" : "no");
+        $cons->Preprocess(
+            "wix/config.p.wxi",
+            "wix/config.wxi",
+            {
+                #"PRODUCT_TYPE" => $productType, # included by default in Preprocess()
+                "PP_PRODUCT_TAG_LINE" => $productTagLine,
+                "PP_MSI_REGISTRY_ID" => $msiRegistryId,
+                "PP_MSI_IS_PRE_RELEASE_VERSION" => $isPreReleaseVersion,
+                "PP_MSI_PRODUCT_NAME" => $msiProductName,
+                "PP_MSI_INSTALL_NAME" => $msiInstallName,
+                "PP_MSI_KOMODO_ID" => $msiKomodoId,
+                "PP_MSI_KOMODO_PRETTY_ID" => $msiKomodoPrettyId,
+                "PP_MSI_KOMODO_VERSION" => $msiKomodoVersion,
+                "PP_MSI_VCCRT_MSM_PATH" => $msiVccrtMsmPath,
+                "PP_MSI_VCCRT_POLICY_MSM_PATH" => $msiVccrtPolicyMsmPath,
+                "PP_VER_MAJOR" => $majorVer,
+                "PP_VER_MINOR" => $minorVer,
+                "PP_MOZ_MAJOR_VERSION" => $mozMajorVer,
+                "PP_UPDATE_CHANNEL" => $updateChannel,
+
+                # Using "AVEC" instead of "WITH" to not collide with the
+                # standard "WITH_*" defines for Komodo's preprocessing
+                # (see the Construct).  This is HACK workaround until
+                # preprocess.py does better explicit marking of
+                # substitutions.
+                "PP_MSI_AVEC_HTTP_INSPECTOR" => ($withHTTPInspector ? "yes" : "no"),
+                "PP_MSI_AVEC_CODE_BROWSER" => ($withCodeBrowser ? "yes" : "no"),
+                "PP_MSI_AVEC_API_BROWSER" => ($withAPIBrowser ? "yes" : "no"),
+                "PP_MSI_AVEC_PROJECT_MANAGER" => ($withProjectManager ? "yes" : "no"),
+                "PP_MSI_AVEC_SCC" => ($withSCC ? "yes" : "no"),
+                "PP_MSI_AVEC_RX" => ($withRx ? "yes" : "no"),
+                "PP_MSI_AVEC_DEBUGGING" => ($withDebugging ? "yes" : "no"),
+                "PP_MSI_AVEC_PROFILING" => ($withProfiling ? "yes" : "no"),
+                "PP_MSI_AVEC_SHARED_SUPPORT" => ($withSharedSupport ? "yes" : "no"),
+                "PP_MSI_AVEC_PDK_INTEGRATION" => ($withPDKIntegration ? "yes" : "no"),
+                "PP_MSI_AVEC_TDK_INTEGRATION" => ($withTDKIntegration ? "yes" : "no"),
+                "PP_MSI_AVEC_DATABASE_EXPLORER" => ($withDatabaseExplorer ? "yes" : "no"),
+                "PP_MSI_AVEC_PUBLISHING" => ($withPublishing ? "yes" : "no"),
+                "PP_MSI_AVEC_SSO" => ($withSSO ? "yes" : "no"),
+                "PP_MSI_AVEC_COLLABORATION" => ($withCollaboration ? "yes" : "no"),
+                "PP_MSI_AVEC_WATCHDOG_FS_NOTIFICATIONS" => ($withWatchdogFSNotifications ? "yes" : "no"),
+            }
+        );
+        $cons->Preprocess(
+            "wix/guids.p.wxi",
+            "wix/guids.wxi",
+            {
+                "PP_UPDATE_CHANNEL" => $updateChannel,
+            }
+        );
+        $cons->Command("wix/cons-coddle",
+            "wix/Makefile",
+            "wix/komodo.wxs.in",
+            "wix/feature-core.template.in",
+            "wix/feature-core.ini",
+            "wix/feature-env.wxs.in",
+            "wix/config.wxi",
+            "wix/guids.wxi",
+            qq(
+                echo copying over WiX Project files... > %0
+            )
+        );
+        $cons->DependsRecursive("wix/komodo.wxs.in", "wix/aswixui", ('\.svn'));
+        $cons->DependsRecursive("wix/komodo.wxs.in", "wix/bin", ('\.svn'));
+    }
+    elsif ($platform eq 'darwin') {
+      # no install scripts necessary for darwin
+    }
+    else {
+        $cons->Preprocess(
+            "_install.p.py",
+            "_install.py",
+            {
+                "__MAIN_INSTALL_SCRIPT__" => "install.sh",
+                "__KOMODO_MAJOR_MINOR__" => $komodoMarketingShortVersion,
+                "__DEFAULT_INSTALLDIR__" => $komodoDefaultUserInstallDir,
+                "__PRODUCT_TAG_LINE__" => $productTagLine,
+                "__GNOME_DESKTOP_NAME__" => $gnomeDesktopName,
+                "__GNOME_DESKTOP_GENERIC_NAME__" => $gnomeDesktopGenericName,
+                "__GNOME_DESKTOP_CATEGORIES__" => $gnomeDesktopCategories,
+                "__GNOME_DESKTOP_SHORTCUT_NAME__" => $gnomeDesktopShortcutName,
+            }
+        );
+        $cons->Install($installSupportDir, "install.sh");
+        $cons->Install("$installSupportDir/support", "_install.py");
+        $cons->Install("$installSupportDir/support", "selinuxlib.py");
+        $cons->Install("$installSupportDir/support",
+                       "../python-sitelib/which.py");
+        local $build = substr($build, 1, length($build)); # drop the leading '#'
+        %consLocal = $cons->copy();
+        $consLocal = new cons(%consLocal);
+        $consLocal->Command("./gdk_check",
+                            "./Makefile.gdk_check",
+                            "./gdk_check.c",
+                            qq{cd $build/install && make -f Makefile.gdk_check});
+        $consLocal->Install("$installSupportDir/support", "gdk_check")
+    }
+}
+

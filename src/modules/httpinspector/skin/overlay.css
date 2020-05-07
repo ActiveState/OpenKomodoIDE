@@ -1,0 +1,9 @@
+/* Copyright (c) 2000-2011 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+/**
+ * HTTP Inspector styles used in the main Komodo window.
+ */
+.http-inspector {
+  list-style-image : url("chrome://komodo/skin/images/komodo_httpInspector.png");
+}

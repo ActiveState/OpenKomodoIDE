@@ -1,0 +1,41 @@
+# blend.test --
+#
+#	This file contains regression tests for the blend checkers.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: blend.test,v 1.2 2000/05/30 22:24:42 wart Exp $
+
+if {[string compare test [info procs resetAnalyzer]] == 1} {
+    source [file join [pwd] [file dirname [info script]] defs.tcl]
+}
+
+analyzer::init
+renameMessageShow
+resetUProcData
+addTestUserProc
+sourcePcxFile blend
+
+# Many of the tests expect that "a" is understood as a defined
+# procedure that takes any number of args.  To keep from getting
+# warnUndefProc warnings, pretend we've already gotten the warning.
+
+lappend ::analyzer::unknownCmds a
+
+foreach blendVer $::protest::supportedVersions(Blend) {
+    resetAnalyzer
+    
+    # Pcx extensions work with the current Tcl version
+    
+    coreTcl::init $::protest::currentVersion(Tcl)
+    blend::init $::protest::currentVersion(Blend)
+    testVersion checkBlend $::protest::currentVersion(Blend)
+}
+
+resetMessageShow
+resetAnalyzer
+resetUProcData
+
+# cleanup
+cleanupTests

@@ -1,0 +1,15 @@
+// komodo tool: fore
+// =================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// =================
+<% /* for... empty... */ %>
+
+{% for [[%tabstop1:1]] in [[%tabstop2:2]] %}
+	[[%tabstop3:3]]
+{% empty %}
+	[[%tabstop4:4]]
+{% endfor %}
+	

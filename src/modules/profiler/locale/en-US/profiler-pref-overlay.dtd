@@ -1,0 +1,5 @@
+<!ENTITY profilingCaption.label "Code Profiling">
+<!ENTITY profilingUponRequest.label "When receiving a remote profiling request:">
+<!ENTITY askMeToAllowProfilingRequests.label "Prompt for request confirmation">
+<!ENTITY allowProfilingRequests.label "Allow all Profiling requests">
+<!ENTITY refuseProfilingRequests.label "Refuse all Profiling requests">

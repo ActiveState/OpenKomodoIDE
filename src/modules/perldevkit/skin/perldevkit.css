@@ -1,0 +1,93 @@
+/* Copyright (c) 2000-2011 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+/* pdk icons */
+
+#menu_pdkPerlApp,
+#tb_pdkPerlApp
+{
+  list-style-image : url("chrome://perldevkit/skin/images/PerlApp-16-16-8.gif");
+}
+#menu_pdkPerlApp[disabled="true"],
+#tb_pdkPerlApp[disabled="true"]
+{
+  list-style-image : url("chrome://perldevkit/skin/images/PerlApp-16-16-8-disable.gif");
+}
+
+#menu_pdkPerlCov,
+#tb_pdkPerlCov
+{
+  list-style-image : url("chrome://perldevkit/skin/images/PerlCov-16-16-8.png");
+}
+#menu_pdkPerlCov[disabled="true"],
+#tb_pdkPerlCov[disabled="true"]
+{
+  list-style-image : url("chrome://perldevkit/skin/images/PerlCov-16-16-8-disable.png");
+}
+
+#menu_pdkPerlSvc,
+#tb_pdkPerlSvc
+{
+  list-style-image : url("chrome://perldevkit/skin/images/PerlSvc-16-16-8.gif");
+}
+#menu_pdkPerlSvc[disabled="true"],
+#tb_pdkPerlSvc[disabled="true"]
+{
+  list-style-image : url("chrome://perldevkit/skin/images/PerlSvc-16-16-8-disable.gif");
+}
+
+#menu_pdkPerlCtrl,
+#tb_pdkPerlCtrl
+{
+  list-style-image : url("chrome://perldevkit/skin/images/PerlCtrl-16-16-8.gif");
+}
+#menu_pdkPerlCtrl[disabled="true"],
+#tb_pdkPerlCtrl[disabled="true"]
+{
+  list-style-image : url("chrome://perldevkit/skin/images/PerlCtrl-16-16-8-disable.gif");
+}
+
+#menu_pdkPerlTray,
+#tb_pdkPerlTray
+{
+  list-style-image : url("chrome://perldevkit/skin/images/PerlTray-16-16-8.gif");
+}
+#menu_pdkPerlTray[disabled="true"],
+#tb_pdkPerlTray[disabled="true"]
+{
+  list-style-image : url("chrome://perldevkit/skin/images/PerlTray-16-16-8-disable.gif");
+}
+
+#menu_pdkPerlNET,
+#tb_pdkPerlNET
+{
+  list-style-image : url("chrome://perldevkit/skin/images/PerlNET-16-16-8.png");
+}
+#menu_pdkPerlNET[disabled="true"],
+#tb_pdkPerlNET[disabled="true"]
+{
+  list-style-image : url("chrome://perldevkit/skin/images/PerlNET-16-16-8-disable.png");
+}
+
+#menu_pdkPerlVBConverter,
+#tb_pdkPerlVBConverter
+{
+  list-style-image : url("chrome://perldevkit/skin/images/VBSPerl-16-16-8.gif");
+}
+#menu_pdkPerlVBConverter[disabled="true"],
+#tb_pdkPerlVBConverter[disabled="true"]
+{
+  list-style-image : url("chrome://perldevkit/skin/images/VBSPerl-16-16-8-disable.gif");
+}
+
+#menu_pdkPerlFilterBuilder,
+#tb_pdkPerlFilterBuilder
+{
+  list-style-image : url("chrome://perldevkit/skin/images/FilterBuilder-16-16-8.png");
+}
+#menu_pdkPerlFilterBuilder[disabled="true"],
+#tb_pdkPerlFilterBuilder[disabled="true"]
+{
+  list-style-image : url("chrome://perldevkit/skin/images/FilterBuilder-16-16-8-disable.png");
+}
+

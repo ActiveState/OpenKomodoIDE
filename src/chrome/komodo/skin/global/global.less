@@ -1,0 +1,243 @@
+@import url("chrome://komodo/skin/global/colors.less");
+@import url("resource://profile/colors.less");
+@import url("chrome://komodo/skin/global/reset.less");
+@import url("chrome://komodo/skin/global/normalize.less");
+@import url("chrome://komodo/skin/global/bindings.less");
+@import url("chrome://komodo/skin/global/chromeless.less");
+@import url("chrome://komodo/skin/global/prefs.less");
+@import url("chrome://komodo/skin/global/icons.less");
+@import url("chrome://komodo/skin/global/mixins.less");
+@import url("chrome://komodo/skin/global/wizard.less");
+@import url("chrome://komodo/skin/global/main.less");
+@import url("chrome://komodo/skin/global/classic.toolbar.less");
+
+@import url("chrome://komodo/skin/global/_scrollbars.less");
+
+@import url("chrome://komodo/skin/global/components/buttons.less");
+@import url("chrome://komodo/skin/global/components/scrolltabs.less");
+@import url("chrome://komodo/skin/global/components/scc.less");
+@import url("chrome://komodo/skin/global/components/customize.less");
+@import url("chrome://komodo/skin/global/components/languages.less");
+@import url("chrome://komodo/skin/global/components/filestatus.less");
+@import url("chrome://komodo/skin/global/components/toolbox.less");
+
+@import url("resource://profile/classic.less");
+
+/* Don't show new tab button on anything but the buffer tabs */
+:not(#tabbed-view):not(.tabbed-view) > tabs toolbarbutton[anonid="tabs-new"]
+{
+    visibility: collapse;
+}
+
+/* Widgets */
+
+#notificationWidget
+{
+    #filter-error { color: @state-error; }
+    #filter-warning { color: @state-warning; }
+    #filter-info { color: @state-info; }
+}
+
+/* Tools */
+
+#results-area[rxx_status="failure"] #results-titlebar {
+    color: @state-error;
+}
+
+#results-area[rxx_status="failure"] #results-message,
+#results-area[rxx_status="failure"] #results-lex-error-message
+{
+    color: @state-error;
+}
+
+/* State Colors */
+
+.state-error { color: @state-error; }
+.state-warning { color: @state-warning; }
+.state-info { color: @state-info; }
+.state-ok { color: @state-ok; }
+
+.box-state-error {
+    color: @state-foreground !important;
+    background-color: @state-error !important;
+}
+
+.box-state-warning {
+    color: @state-foreground !important;
+    background-color: @state-warning !important;
+}
+
+.box-state-info {
+    color: @state-foreground !important;
+    background-color: @state-info !important;
+}
+
+.box-state-ok {
+    color: @state-foreground !important;
+    background-color: @state-ok !important;
+}
+
+/* Special Classes */
+
+.editor-field
+{
+    color: @foreground;
+    background: @background;
+}
+
+.statusbar
+{
+    height: 27px;
+    border: 0;
+    background: @contrast;
+}
+
+/* HUD elements */
+
+.hud, #editorTooltip, tooltip
+{
+    &, label, description
+    {
+        color: @foreground;
+    }
+
+    background: @contrast;
+}
+
+#hud-shell-output div {
+    font-family: monospace;
+}
+
+.spinner.enabled,
+.ui-spinner.enabled
+{
+    .spinner(@special);
+}
+
+.loader.enabled:not([determined="true"])
+{
+    .loader(@special);
+}
+
+.faded_loader.enabled:not([determined="true"])
+{
+    .faded_loader(@textbox-special, average(average(@special, @textbox-special), @textbox-special));
+}
+
+.loader[determined="true"]
+{
+    background: @special;
+    height: 1rem;
+}
+
+// All text fields
+::-moz-selection
+{
+    color: @selected-foreground;
+    background: @selected;
+}
+
+/* Tooltips */
+
+#editorTooltip
+{
+    margin-left: 10px;
+}
+
+/* Spacers that shouldnt even really exist */
+notificationbox spacer,
+scintilla spacer
+{
+    visibility: collapse;
+}
+
+/* Progress Indicator */
+
+.ui-progress-parent
+{
+    min-width: 350px;
+
+    .loader
+    {
+        margin-bottom: 6px;
+    }
+
+    label,
+    .loader
+    {
+        padding-right: 6px;
+    }
+}
+
+.dialog.ui-progress-parent
+{
+    max-width: 350px;
+
+    label
+    {
+        width: 350px;
+    }
+}
+
+/* Version check window */
+
+#versioncheck
+{
+    min-width: 600px;
+    max-width: 600px;
+    min-height: 800px;
+    max-height: 800px;
+
+    button
+    {
+        margin-top: 6px;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+
+        &.primary
+        {
+            background: @special;
+            color: @foreground-special;
+            font-weight: bold;
+
+            &:hover
+            {
+                background: @contrast-special;
+            }
+        }
+    }
+}
+
+/* Clipboard manager, this should really live inside the module */
+
+panel.clipboard
+{
+    max-height: 250px;
+
+    richlistbox
+    {
+        max-height: 250px;
+    }
+
+    &, description
+    {
+        max-width: 400px;
+    }
+
+    description
+    {
+        font-size: 90%;
+    }
+
+    richlistitem
+    {
+        max-height: 50px;
+        overflow: hidden;
+    }
+
+    richlistitem:not(:last-child)
+    {
+        border-bottom: 1px solid @contrast;
+    }
+
+}

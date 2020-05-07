@@ -1,0 +1,31 @@
+@import url("chrome://komodo/skin/global/colors.less");
+@import url("resource://profile/colors.less");
+@import url("chrome://komodo/skin/global/mixins.less");
+
+.preview-browser
+{
+    min-width: 200px
+}
+
+.preview-splitter
+{
+    width: 5px;
+    position: relative;
+    z-index: 1;
+    margin-right: -4px;
+    background: transparent !important;
+    border-left: 1px solid @border;
+}
+
+.preview-outer
+{
+    statusbar
+    {
+        padding: 1px 2px 2px 2px;
+
+        button
+        {
+            padding: 0 4px !important;
+        }
+    }
+}

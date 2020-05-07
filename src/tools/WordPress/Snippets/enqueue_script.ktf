@@ -1,0 +1,14 @@
+{
+  "keyboard_shortcut": "", 
+  "name": "wp_enqueue_script", 
+  "language": "PHP", 
+  "value": [
+    "wp_enqueue_script('[[%tabstop1:handle_name]]', '[[%tabstop2:source]]', [[%tabstop3:array]]('[[%tabstop4:jquery]]'), '[[%tabstop5:version]]', [[%tabstop6:false]]);!@#_currentPos!@#_anchor"
+  ], 
+  "set_selection": 0, 
+  "version": "1.1.5", 
+  "indent_relative": 0, 
+  "type": "snippet", 
+  "treat_as_ejs": "true", 
+  "auto_abbreviation": "true"
+}

@@ -1,0 +1,100 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+#tbtnJSShell {
+  list-style-image: url("chrome://extensiondev/skin/jsshell-large.png");
+}
+
+toolbar[iconsize="small"] #tbtnJSShell {
+  list-style-image: url("chrome://extensiondev/skin/jsshell-small.png");
+}
+
+#tbtnJSEnv {
+  list-style-image: url("chrome://extensiondev/skin/jsenv-large.png");
+}
+
+toolbar[iconsize="small"] #tbtnJSEnv {
+  list-style-image: url("chrome://extensiondev/skin/jsenv-small.png");
+}
+
+#tbtnJSInj {
+  list-style-image: url("chrome://extensiondev/skin/jsinj-large.png");
+}
+
+toolbar[iconsize="small"] #tbtnJSInj {
+  list-style-image: url("chrome://extensiondev/skin/jsinj-small.png");
+}
+
+#tbtnHTMLEdit {
+  list-style-image: url("chrome://extensiondev/skin/htmledit-large.png");
+}
+
+toolbar[iconsize="small"] #tbtnHTMLEdit {
+  list-style-image: url("chrome://extensiondev/skin/htmledit-small.png");
+}
+
+#tbtnXULEdit {
+  list-style-image: url("chrome://extensiondev/skin/xuledit-large.png");
+}
+
+toolbar[iconsize="small"] #tbtnXULEdit {
+  list-style-image: url("chrome://extensiondev/skin/xuledit-small.png");
+}
+
+#tbtnReloadChrome {
+  list-style-image: url("chrome://extensiondev/skin/reloadchrome-large.png");
+}
+
+toolbar[iconsize="small"] #tbtnReloadChrome {
+  list-style-image: url("chrome://extensiondev/skin/reloadchrome-small.png");
+}
+
+#tbtnExtensionBuilder {
+  list-style-image: url("chrome://extensiondev/skin/extensionbuilder-large.png");
+}
+
+toolbar[iconsize="small"] #tbtnExtensionBuilder {
+  list-style-image: url("chrome://extensiondev/skin/extensionbuilder-small.png");
+}
+
+#tbtnJRX {
+  list-style-image: url("chrome://extensiondev/skin/jrx-large.png");
+}
+
+toolbar[iconsize="small"] #tbtnJRX {
+  list-style-image: url("chrome://extensiondev/skin/jrx-small.png");
+}
+
+#tbtnXPath {
+  list-style-image: url("chrome://extensiondev/skin/xpath-large.png");
+}
+
+toolbar[iconsize="small"] #tbtnXPath {
+  list-style-image: url("chrome://extensiondev/skin/xpath-small.png");
+}
+
+.closebutton {
+  list-style-image: url("chrome://global/skin/icons/close.png");
+  -moz-appearance: none;
+  -moz-image-region: rect(0px, 16px, 16px, 0px);
+  padding: 4px 2px;
+  border: none !important;
+}
+ 
+.closebutton:hover {
+  -moz-image-region: rect(0px, 32px, 16px, 16px);
+}
+
+.closebutton:hover:active {
+  -moz-image-region: rect(0px, 48px, 16px, 32px);
+}
+
+
+/* Don't have hover icons yet
+#tbtnJSShell:hover {
+  list-style-image: url("chrome://extensiondev/skin/jsshell-large-hov.png");
+}
+*/
+/* Don't have hover icons yet
+toolbar[iconsize="small"] #tbtnJSShell:hover {
+  list-style-image: url("chrome://extensiondev/skin/jsshell-small-hov.png");
+}
+*/

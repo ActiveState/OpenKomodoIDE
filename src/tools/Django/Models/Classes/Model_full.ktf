@@ -1,0 +1,32 @@
+# komodo tool: Model_full
+# =======================
+# auto_abbreviation: true
+# indent_relative: false
+# language: Python
+# set_selection: false
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# =======================
+<% /* Model (full) */ %>
+
+class [[%tabstop1:MODELNAME]](models.Model):
+    [[%tabstop2:# TODO: Define fields here]]
+
+    class Meta:
+        verbose_name = "[[%tabstop1:MODELNAME]]"
+        verbose_name_plural = "[[%tabstop1:MODELNAME]]s"
+
+    def __str__(self):
+        pass
+
+    def save(self):
+        pass
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('')
+
+    [[%tabstop3:# TODO: Define custom methods here]]
+
+    !@#_currentPos!@#_anchor

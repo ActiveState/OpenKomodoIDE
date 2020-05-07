@@ -1,0 +1,43 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'mozChromeDir',
+    'platform',
+    'productType',
+    'buildFlavour',
+    'unsiloedPythonExe',
+    'mozVersion',
+    'withRx',
+);
+
+$cons->InstallInChrome('find_functions.js');
+$cons->InstallInChrome('findResultsTab.js');
+$cons->Preprocess('findResultsTab.p.xul', 'findResultsTab.xul');
+$cons->InstallInChrome('findResultsTab.xul');
+
+$cons->Preprocess('find2.p.js', 'find2.js');
+$cons->InstallInChrome('find2.js');
+
+$cons->Preprocess('embedded.p.xul', 'embedded.xul',
+                  # Third arg to turn on substitution (of internal
+                  # defines:
+                  {"BOOGABOOGA" => "BOOGABOOGA"});
+$cons->InstallInChrome('embedded.xul');
+
+$cons->InstallInChrome('findbar.xml');
+
+$cons->Preprocess('browseForDirs.p.js', 'browseForDirs.js');
+$cons->InstallInChrome('browseForDirs.js');
+$cons->InstallInChrome('browseForDirs.xul');
+
+$cons->InstallInChrome('confirmrepl.js');
+$cons->InstallInChrome('confirmrepl.xul');
+$cons->InstallInChrome('undorepl.js');
+$cons->InstallInChrome('undorepl.xul');
+
+$cons->InstallInChrome('findtoolbar.js');
+

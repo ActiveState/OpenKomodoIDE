@@ -1,0 +1,21 @@
+{
+  "name": "kopy.io",
+  "version": "0.0.0",
+  "authors": [
+    "Nathan Rijksen <nathanr@activestate.com>"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "codemirror": "~4.6.0",
+    "Cookies": "~0.4.0",
+    "marked": "~0.3.3"
+  }
+}

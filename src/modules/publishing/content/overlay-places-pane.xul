@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2009-2011 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % publishingDTD SYSTEM "chrome://publishing/locale/publishing.dtd">
+  %publishingDTD;
+]>
+<?xml-stylesheet href="chrome://publishing/skin/places-pane.css" type="text/css"?>
+
+<overlay id="overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <menupopup id="places-files-popup">
+        <menu id="placesContextMenu_publishingMenu"
+              insertafter="placesContextMenu_sccMenu"
+              class="menu-iconic"
+              label="&publishing.menu.label;">
+            <menupopup id="places-publishing-popup"
+                       onpopupshowing="ko.publishing.onPlacesPopupShowing(this);">
+                <menuitem id="placesContextMenu_publishingPushFile"
+                          label="&publishingPlacesPushFile.menuitem.label;"
+                          accesskey="&publishingPlacesPushFile.menuitem.accesskey;"
+                          oncommand="ko.commands.doCommandAsync('cmd_publishingPlacesPushFile', event)" />
+                <menuitem id="placesContextMenu_publishingForcePushFile"
+                          label="&publishingPlacesForcePushFile.menuitem.label;"
+                          accesskey="&publishingPlacesForcePushFile.menuitem.accesskey;"
+                          oncommand="ko.commands.doCommandAsync('cmd_publishingPlacesForcePushFile', event)"
+                          />
+                <menuseparator id="places-publishing-seperator-1"/>
+                <menuitem id="placesContextMenu_publishingPullFile"
+                          label="&publishingPlacesPullFile.menuitem.label;"
+                          accesskey="&publishingPlacesPullFile.menuitem.accesskey;"
+                          oncommand="ko.commands.doCommandAsync('cmd_publishingPlacesPullFile', event)" />
+                <menuitem id="placesContextMenu_publishingForcePullFile"
+                          label="&publishingPlacesForcePullFile.menuitem.label;"
+                          accesskey="&publishingPlacesForcePullFile.menuitem.accesskey;"
+                          oncommand="ko.commands.doCommandAsync('cmd_publishingPlacesForcePullFile', event)"
+                          />
+                <menuseparator id="places-publishing-seperator-2"/>
+                <menuitem id="placesContextMenu_publishingDiffFile"
+                          label="&publishingPlacesDiffFile.menuitem.label;"
+                          accesskey="&publishingPlacesDiffFile.menuitem.accesskey;"
+                          oncommand="ko.commands.doCommandAsync('cmd_publishingPlacesDiffFile', event)"
+                          />
+            </menupopup>
+        </menu>
+    </menupopup>
+    
+    <menupopup id="placesSubpanelProjectsContextMenu">
+        <menu id="menu_projCtxt_publishingMenu"
+              insertafter="menu_projCtxt_project_save_separator_2"
+              class="menu-iconic"
+              label="&publishing.menu.label;">
+            <menupopup id="menu_projCtxt_publishing_popup"
+                       onpopupshowing="ko.publishing.onPlacesPopupShowing(this);">
+                <menuitem id="menu_projCtxt_publishingPushFile"
+                          label="&publishingPlacesPushFile.menuitem.label;"
+                          accesskey="&publishingPlacesPushFile.menuitem.accesskey;"
+                          oncommand="ko.commands.doCommandAsync('cmd_publishingPlacesPushFile', event)" />
+                <menuitem id="menu_projCtxt_publishingDiffFile"
+                          label="&publishingPlacesDiffFile.menuitem.label;"
+                          accesskey="&publishingPlacesDiffFile.menuitem.accesskey;"
+                          oncommand="ko.commands.doCommandAsync('cmd_publishingPlacesDiffFile', event)"
+                          />
+            </menupopup>
+        </menu>
+    </menupopup>
+
+</overlay>

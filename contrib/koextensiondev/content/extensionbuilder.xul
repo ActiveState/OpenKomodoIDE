@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window id="extensionbuilder" title="Extension Builder" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<script type="application/x-javascript" src="chrome://extensiondev/content/rdfhistory.js"/>
+<script type="application/x-javascript" src="chrome://extensiondev/content/read-install-rdf.js"/>
+<script type="application/x-javascript" src="chrome://extensiondev/content/extensionbuilder.js"/>
+<hbox>
+<label value="Working Directory:" control="workingdir"/>
+<menulist id="workingdir" oncommand="dirSelectionChanged()" crop="start" flex="1">
+<menupopup>
+</menupopup>
+</menulist>
+<button id="browse-workingdir" label="Browse..." oncommand="browseForExtension()"/>
+</hbox>
+<grid>
+<columns>
+<column/>
+<column/>
+</columns>
+<rows>
+<row>
+<button id="edit-install" label="Edit install.rdf" disabled="true" oncommand="editInstallManifest()"/>
+<button id="build" label="Build extension" disabled="true" oncommand="buildPackage()"/>
+</row>
+<row>
+<button id="install-dev" label="Install For Development" disabled="true" oncommand="installDevChrome()"/>
+<button id="uninstall-dev" label="Remove Development Install" disabled="true" oncommand="unInstallDevChrome()"/>
+</row>
+<row>
+<label value="XPI Filename:"/>
+<textbox id="xpi-filename"/>
+</row>
+</rows>
+</grid>
+<label value="Extra files to add to XPI:"/>
+<vbox id="extra-files" style="border: 2px solid; margin: 2px 4px; -moz-border-top-colors: ThreeDShadow ThreeDDarkShadow; -moz-border-right-colors: ThreeDHighlight ThreeDLightShadow; -moz-border-bottom-colors: ThreeDHighlight ThreeDLightShadow; -moz-border-left-colors: ThreeDShadow ThreeDDarkShadow;  background-color: -moz-Field; color: -moz-FieldText; overflow: auto;" flex="1">
+</vbox>
+<statusbar>
+<statusbarpanel id="status" label="Initializing..." flex="1"/>
+</statusbar>
+</window>

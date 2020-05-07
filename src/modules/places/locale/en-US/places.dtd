@@ -1,0 +1,96 @@
+
+<!ENTITY rebaseFolder.label "Make This Folder Root">
+<!ENTITY showInPlaces.label "Show In Places">
+<!ENTITY refreshView.label "Refresh View">
+<!ENTITY compareFileWith.label "Compare File With…">
+
+<!ENTITY Places.label "Places">
+<!ENTITY filters.label "Filters">
+<!ENTITY makeActiveProject.label "Make Active Project">
+<!ENTITY newPlace.label "New...">
+<!ENTITY existingFolder.label "Existing Folder...">
+<!ENTITY existingRemoteFolder.label "Existing Remote Folder...">
+<!ENTITY existingRemoteFolder.accesskey "X">
+<!ENTITY newFilesPlace.label "New File...">
+<!ENTITY newGroupPlace.label "New Group...">
+<!ENTITY newGroupPlace.accesskey "G">
+<!ENTITY placesNewFileFromTemplate.label "New File From Template...">
+<!ENTITY placesNewFolderFromTemplate.label "New Folder From Template...">
+<!ENTITY placesNewTemplateFromFolder.label "New Template from this Folder...">
+
+<!ENTITY loadPlace.label "Open Directory...">
+<!ENTITY loadRemotePlace.label "Open Remote Directory...">
+<!ENTITY showFileIcons.label "Show Icons">
+<!ENTITY singleClickExpand.label "Click to Expand">
+<!ENTITY defaultView.label "Default View">
+<!ENTITY currentProjectView.label "Current Project View">
+<!ENTITY exportAsProjectFile.label "Export As Project File...">
+<!ENTITY viewAll.label "View All">
+<!ENTITY manageCustomViews.label "Manage Views...">
+<!ENTITY defaultViewFilters.label "Specify the default view filters">
+<!ENTITY userInterfaceShowHidePlacesTab.desc "User Interface: Show/Hide Places Tab">
+
+<!ENTITY placesLoadPlace.desc "Places: Load Place...">
+<!ENTITY placesLoadRemotePlace.desc "Places: Load Remote Place...">
+
+<!ENTITY findInPlace.desc "Places: Search in this file/folder's directory.">
+<!ENTITY replaceInPlace.desc "Places: Search and replace in this file/folder's directory.">
+<!ENTITY deletePlaceItem.desc "Places: Move this item to the system trash.">
+<!ENTITY showFileIcons.desc "Places: Show file &amp; folder icons">
+<!ENTITY singleClickExpand.desc "Places: Single click to expand folders">
+<!ENTITY placeView_defaultView.desc "Places: Filter out typically unwanted items like dotfiles.">
+<!ENTITY placeView_currentProject.desc "Places: Use the filter associated with the current project.">
+<!ENTITY placeView_viewAll.desc "Places: View everything.">
+<!ENTITY placeView_customView.desc "Places: Manage custom view filters.">
+<!ENTITY removeProjectListing.label "Remove from Recent Projects">
+
+<!ENTITY placesUpFolder.label "Move Up One Directory">
+<!ENTITY placesUpFolder.desc "Move up one directory.">
+
+<!ENTITY ShowInExplorer.label "Show in Explorer">
+<!ENTITY rename.label "Rename">
+<!ENTITY placesDirectoryMenu.tooltiptext "Directory-related functions">
+<!ENTITY placesProjectMenu.tooltiptext "Project-related functions">
+<!ENTITY placesBack.tooltiptext "Previous directory in history">
+<!ENTITY placesForward.tooltiptext "Next directory in history">
+<!ENTITY goNextPlace.desc "Places: Load previous place">
+<!ENTITY goPreviousPlace.desc "Places: Reload next place">
+<!ENTITY showCurrentFileInPlaces.desc "Places: Show Current File in Places">
+
+<!ENTITY showInFinder.desc "Places: Show file/folder in the system's file manager">
+<!ENTITY renamePlaceItem.label "Rename...">
+<!ENTITY renamePlaceItem.desc "Places: Rename file or folder">
+<!ENTITY name.label "Name">
+
+<!ENTITY placeView_sortNatural.desc "Places: Sort items by natural order" >
+<!ENTITY placeView_sortAscending.desc "Places: Sort items by ascending order">
+<!ENTITY placeView_sortDescending.desc "Places: Sort items by descending order">
+<!ENTITY sortProjectsDescending.desc "Places: Sort projects by descending order">
+<!ENTITY sortProjectsAscending.desc "Places: Sort projects by ascending order">
+
+<!-- manageViewFilters.xul -->
+<!ENTITY manageViewFilters.caption "Specify Files and Directories to Exclude">
+<!ENTITY fileSystemFilterConfiguration.label "File System Filter Configuration">
+
+<!-- pref_places.xul -->
+<!ENTITY dblClickToRebase.label "Double-click or return makes folder root">
+<!ENTITY show_fullPath_tooltip.label "Show full-path tooltip">
+<!ENTITY places.show_fullPath_tooltip.accesskey "T">
+<!ENTITY showProjectPathExtension.label "Show project path extension">
+<!ENTITY showProjectPath.label "Show full project path">
+<!ENTITY showInPlaces.label "Show in Places">
+<!ENTITY trackCurrentTab.label "Synchronize current file in Places">
+<!ENTITY multiple_project_view.label "Allow multiple open projects">
+<!ENTITY places.allowDragDrop.label "Allow drag &amp; drop items to folders">
+<!ENTITY places.askMeWhatToDo.label "Ask if items should be dragged to folders">
+<!ENTITY places.alwaysDragItems.label "Always drag/drop items">
+<!ENTITY places.neverDragItems.label "Never drag/drop items">
+
+<!ENTITY pref_places_dblClickRebases.accesskey "D">
+<!ENTITY pref_places_showProjectPath.accesskey "F">
+<!ENTITY pref_places_showProjectPathExtension.accesskey "E">
+<!ENTITY places.multiple_project_view.accesskey "M">
+
+<!ENTITY options.label "Options">
+
+<!ENTITY filePreferences.label "File Preferences">

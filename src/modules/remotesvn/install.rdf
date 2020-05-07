@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+	<Description about="urn:mozilla:install-manifest">
+	
+		<em:id>remotesvn@ActiveState.com</em:id>
+		<em:name>Remote Subversion</em:name>
+		<em:version>0.1</em:version>
+		<em:description>Subversion SCC over SSH</em:description>
+		<em:creator>Todd Whiteman</em:creator>
+		<em:homepageURL>http://komodo.activestate.com/addons/remotesvn/</em:homepageURL>
+		<em:updateURL>http://komodo.activestate.com/addons/remotesvn/update.rdf</em:updateURL>
+		<em:optionsURL>chrome://remotesvn/content/remotesvn_options.xul</em:optionsURL>
+		<em:type>2</em:type> <!-- type=extension --> 
+
+		<em:targetApplication>
+			<Description>
+				<!-- Komodo IDE's uuid -->
+				<em:id>{36E66FA0-F259-11D9-850E-000D935D3368}</em:id>
+				<em:minVersion>7.*</em:minVersion>
+				<em:maxVersion>12.*</em:maxVersion>
+			</Description>
+		</em:targetApplication>
+	</Description>
+
+</RDF>

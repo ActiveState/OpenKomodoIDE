@@ -1,0 +1,27 @@
+Integration of a new debugger (new language FOO) into Komodo
+============================================================
+
+Files to change or add.
+
+1.	Everything to change is in //depot/main/Apps/Komodo-devel/src/
+
+2.	chrome/komodo/content/pref/
+		Conscript				add language
+		invocations/category/Conscript		add language
+		invocations/category/FOO.xul		new file
+		invocations/instances/Conscript		add language
+		invocations/instances/FOO.xul		new file
+		pref-FOO.js				new file
+		pref-FOO.xul				new file
+
+3.	debugger/
+		Conscript				add language
+		koRequesterDebugger.py			add language
+		koTclDebugger.py			new file
+		test/FOOConsoleRequesterProxy.py	new file
+
+4.	invocations/koInvokeInterpreters.py		add language
+5.	language/koFOOlanguage.py			new file
+6.	prefs/default-prefs.xml.template		add language
+
+============================================================

@@ -1,0 +1,38 @@
+<!ENTITY commandPublishingDiffCurrentFile.desc "Publishing: Show Changes (Diff) for the Current File">
+<!ENTITY commandPublishingNewConfiguration.desc "Publishing: Create a New Configuration">
+<!ENTITY commandPublishingPlacesDiffFile.desc "Publishing: Diff Selected Places Files">
+<!ENTITY commandPublishingPlacesPushFile.desc "Publishing: Push Selected Places Files">
+<!ENTITY commandPublishingPlacesForcePushFile.desc "Publishing: Force Push Selected Places Files. Overwrites remote!">
+<!ENTITY commandPublishingPlacesPullFile.desc "Publishing: Pull Selected Places Files">
+<!ENTITY commandPublishingPlacesForcePullFile.desc "Publishing: Force Pull Selected Places Files. Overwrites local!">
+<!ENTITY commandPublishingPushCurrentFile.desc "Publishing: Push the Current File">
+<!ENTITY commandPublishingOpenDialogFile.desc "Publishing: Open Dialog">
+<!ENTITY commandPublishingForcePushCurrentFile.desc "Publishing: Force Push the Current File. Overwrites remote!">
+<!ENTITY commandPublishingPullCurrentFile.desc "Publishing: Pull the Current File">
+<!ENTITY commandPublishingForcePullCurrentFile.desc "Publishing: Force Pull the Current File. Overwrites local!">
+<!ENTITY publishing.menu.accesskey "U">
+<!ENTITY publishing.menu.label "Publishing">
+<!ENTITY publishingNewConfig.menuitem.accesskey "N">
+<!ENTITY publishingNewConfig.menuitem.label "New Configuration">
+<!ENTITY publishingPlacesDiffFile.menuitem.accesskey "D">
+<!ENTITY publishingPlacesDiffFile.menuitem.label "Diff">
+<!ENTITY publishingPlacesPushFile.menuitem.accesskey "P">
+<!ENTITY publishingPlacesPushFile.menuitem.label "Push">
+<!ENTITY publishingPlacesForcePushFile.menuitem.accesskey "F">
+<!ENTITY publishingPlacesForcePushFile.menuitem.label "Force Push">
+<!ENTITY publishingPlacesPullFile.menuitem.accesskey "L">
+<!ENTITY publishingPlacesPullFile.menuitem.label "Pull">
+<!ENTITY publishingPlacesForcePullFile.menuitem.accesskey "O">
+<!ENTITY publishingPlacesForcePullFile.menuitem.label "Force Pull">
+<!ENTITY publishingPushFile.menuitem.accesskey "I">
+<!ENTITY publishingPushFile.menuitem.label "Push File">
+<!ENTITY publishingOpenDialog.menuitem.accesskey "P">
+<!ENTITY publishingOpenDialog.menuitem.label "Publish ..">
+<!ENTITY publishingForcePushFile.menuitem.accesskey "F">
+<!ENTITY publishingForcePushFile.menuitem.label "Push File (Force)">
+<!ENTITY publishingPullFile.menuitem.accesskey "U">
+<!ENTITY publishingPullFile.menuitem.label "Pull File">
+<!ENTITY publishingForcePullFile.menuitem.accesskey "L">
+<!ENTITY publishingForcePullFile.menuitem.label "Pull File (Force)">
+<!ENTITY publishingDiffFile.menuitem.accesskey "C">
+<!ENTITY publishingDiffFile.menuitem.label "Show Changes in File">

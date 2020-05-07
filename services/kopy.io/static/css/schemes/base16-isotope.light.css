@@ -1,0 +1,122 @@
+/*
+
+    Name:       Base16 Isotope Light
+    Author:     Jan T. Sott
+
+    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-chrome-devtools)
+    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+*/
+
+.cm-s-base16-isotope-light.CodeMirror {background: #ffffff; color: #404040;}
+.cm-s-base16-isotope-light div.CodeMirror-selected {background: #e0e0e0 !important;}
+.cm-s-base16-isotope-light .CodeMirror-gutters {background: #ffffff; border-right: 0px;}
+.cm-s-base16-isotope-light .CodeMirror-linenumber {color: #c0c0c0;}
+.cm-s-base16-isotope-light .CodeMirror-cursor {border-left: 1px solid #808080 !important;}
+
+.cm-s-base16-isotope-dark span.cm-header {color: #808080;}
+.cm-s-base16-isotope-light span.cm-comment {color: #808080;}
+.cm-s-base16-isotope-light span.cm-atom {color: #cc00ff;}
+.cm-s-base16-isotope-light span.cm-number {color: #ff9900;}
+
+.cm-s-base16-isotope-light span.cm-property {color: #404040;}
+.cm-s-base16-isotope-light span.cm-attribute {color: #ff9900;}
+.cm-s-base16-isotope-light span.cm-keyword {color: #cc00ff;}
+.cm-s-base16-isotope-light span.cm-string {color: #33ff00;}
+
+.cm-s-base16-isotope-light span.cm-variable {color: #ff0000;}
+.cm-s-base16-isotope-light span.cm-variable-2 {color: #0066ff;}
+.cm-s-base16-isotope-light span.cm-def {color: #0066ff;}
+.cm-s-base16-isotope-light span.cm-error {background: #ff0000; color: #808080;}
+.cm-s-base16-isotope-light span.cm-bracket {color: #404040;}
+.cm-s-base16-isotope-light span.cm-tag {color: #ff0000;}
+.cm-s-base16-isotope-light span.cm-link {color: #cc00ff;}
+.cm-s-base16-isotope-light span.cm-builtin {color: #cc00ff;}
+
+.cm-s-base16-isotope-light .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
+
+.cm-s-base16-isotope-dark .CodeMirror-activeline-background { background: #e0e0e0 !important; }
+
+
+
+body,
+textarea {
+  background: #ffffff;
+  color: #606060;
+}
+
+#sidebar, .modal {
+  background: #d0d0d0;
+  color: #404040;
+}
+
+a, a:hover {
+    color: #3300ff;
+}
+
+a.option {
+    color: #3300ff !important;
+}
+
+#logos {
+  background: #c0c0c0;
+  color: #606060;
+}
+
+#buttons {
+  background: #d0d0d0;
+  color: #808080;
+}
+
+#buttons .function.enabled:hover {
+  color: #404040;
+}
+
+#buttonTips {
+  background: #3300ff;
+  color: #ffffff;
+}
+
+#pointer:after {
+    border-bottom-color: #3300ff !important;
+}
+
+#linenos {
+  background: #e0e0e0;
+  border-color: #d0d0d0 !important;
+}
+
+#linenos a {
+    color: #808080 !important;
+}
+
+.option {
+    background: #c0c0c0 !important;
+    color: #606060 !important;
+}
+
+.option:hover {
+    background: #adadad !important;
+}
+
+.dropdown:after {
+    border-top-color: #808080 !important;
+}
+
+#logo-kopy {
+    background: url(../../img/pastebin-logo-dark.png) no-repeat !important;
+}
+
+#logo-komodo {
+    background: url(../../img/komodo-logo-dark.png) no-repeat !important;
+}
+
+#messages li {
+  background: #0066ff;
+  color: #ffffff;
+}
+
+#messages li.error {
+  background: #ff0000;
+  color: #ffffff;
+}

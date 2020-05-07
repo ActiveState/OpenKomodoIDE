@@ -1,0 +1,90 @@
+
+Komodo trouble
+==============
+
+It seems that Komodo/Linux gets into trouble wheneever the debugger
+server is reporting some fault (XMLRPC 500 reply). Maybe even
+without. After starting and using the debugger twice a third attempt
+will invariably fail and exiting Komodo will dump a core.
+
+Given that the debugger server is a completely separate process I
+believe that this a problem inside of Komodo itself. And thus out of
+reach of my expertise.
+
+In some situations [1] Komodo left a running debugger server behind
+with subsequent trouble when starting a new debug session (not a new
+komodo run, address already in use). As my server picks a new port on
+every start this could be something in komodo. I noticed that the
+listening port is configured to a fixed value (9000). I guess that
+komodo opens the listening port only when starting a session and
+closes it after shutdown. In the situations above it seems that there
+is no shutdown, leaving a debugging server and an open listening port
+behind. When trying to open it again the 'adress is already in use'.
+
+Possible solution: When detecting an open listening port just use it.
+Better: Search for running servers and kill them off as remnants of
+the last debug sessions.
+
+[1] Not yet quite clear in what situation exactly this happening.
+
+
+Komodo and Breakpoints:
+
+Adding a breakpoint to a valid line of code is ok: Green circle if the
+debugger is not running, red circle after starting the debugger. I am
+also able to remove the circle by clicking on it.
+
+Adding a breakpoint to a line of code for which this is not possible
+(comment lines for example) some internal datastructures of Komodo get
+out of sync: A green circle is drawn, this circle cannot be removed
+anymore (Because there is no underlying bp at this place, I guess).
+
+The UI should not draw the circle if the engine signals 'invalid bp'.
+
+
+Deficiencies in the Komodo/Tcl debugger
+=======================================
+
+- Conditional breakpoints are not implemented yet.
+  Have to research the tcl debugger/gui version to see how it is done
+  there.
+
+  Note from Brian: 'cond' is a placeholder, Komodo does not support
+	conditional bp's yet. IOW, no need to implement them here yet.
+
+- Ordering of things regarding breakpoints is currently out of whack.	|done
+									|
+  Starting the debugger (step into) and then setting bp's is ok. When	|
+  declaring bp's before starting the debugger I get the			|
+  'addBreakpoints' calls at a time the code is not yet instrumented	|
+  ... Currently I react with a fault reply, not good.			|
+									|
+  I have to force instrumentation of the file somehow before even	|
+  launching the application to debug to get around this.		|
+									/
+- The retrieval of locals (values in the stack) is currently		|done
+  incorrect. I suspect that I handle the virtual stackframes used by	|
+  the tcl debugger wrong (the stack as maintained by the tcl debugger	|
+  and by the tcl runtime are a bit different and my guess is that my	|
+  reaching into a stack frame is off. I have to study the tcl		|
+  debugger/gui a bit more to correct this.				|
+									/
+Nits:									/
+									/
+- The handlers for the incoming protocol requests currently do only a	|done
+  minimal checking of arguments, or even none. This should be changed	|
+  to get added robustness (instead of the engine throwing a tcl error	|
+  stack an errormessage with more information is returned). This also	|
+  servers as cross-check of my knowledge of the protocol.		|
+									/
+- Some places are hackish. Given that I have Tcl 8.3.3. I can do better	|done
+  ([string is integer $foo] instead of [catch {expr {0+$foo}}].		|
+									/
+- In about two places I can use constant strings for the replies.	|done
+  Speedup how much ? (I currently generate xml-strings for replies	|actually 4
+  without going through dom).						|places
+									/
+- Should do more error catching at critical points to get better	|done
+  messaging in case of internal trouble.				|
+									/
+- Should go through the code of the prototype and clean it up a bit.	| done

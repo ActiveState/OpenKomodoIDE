@@ -1,0 +1,270 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2004-2011 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    "cons",
+    "build",
+    "platform",
+    "komodoVersion",
+    "mozComponentsDir",
+    "mozIdlIncludePath",
+    "mozChromeDir",
+    "mozExtensionDir",
+    "mozBin",
+    "idlExportDir",
+    "ranRegxpcomStateFileName",
+    "mozChromeDir",
+    "productType",
+    "sdkDir",
+    'unsiloedPythonExe',
+    "version",
+    "withHTTPInspector",
+    "withRx",
+    "komodoDevDir",
+);
+
+my $imagesDir = "$mozChromeDir/komodo/skin/images";
+
+$cons->Install($imagesDir, "icons/breakpoint_enabled.gif");
+$cons->Install($imagesDir, "icons/breakpoint_disabled.gif");
+$cons->Install($imagesDir, "icons/breakpoint_delete_all.gif");
+$cons->Install($imagesDir, "icons/breakpoint_delete_all_disable.gif");
+$cons->Install($imagesDir, "icons/breakpoint_delete.gif");
+$cons->Install($imagesDir, "icons/breakpoint_delete_disable.gif");
+$cons->Install($imagesDir, "icons/breakpoint_go_to_source_code.gif");
+$cons->Install($imagesDir, "icons/breakpoint_go_to_source_code_disable.gif");
+$cons->Install($imagesDir, "icons/breakpoint_new.gif");
+$cons->Install($imagesDir, "icons/breakpoint_new_disable.gif");
+$cons->Install($imagesDir, "icons/breakpoint_properties.gif");
+$cons->Install($imagesDir, "icons/breakpoint_properties_disable.gif");
+$cons->Install($imagesDir, "icons/breakpoint_toggle_state.gif");
+$cons->Install($imagesDir, "icons/breakpoint_toggle_state_disable.gif");
+
+$cons->Install($imagesDir, "icons/spawnpoint_enabled.gif");
+$cons->Install($imagesDir, "icons/spawnpoint_disabled.gif");
+$cons->Install($imagesDir, "icons/spawnpoint.xpm");
+$cons->Install($imagesDir, "icons/spawnpoint_disable.xpm");
+
+$cons->Install($imagesDir, "icons/breakpoint_enabled.xpm");
+$cons->Install($imagesDir, "icons/breakpoint_disabled.xpm");
+$cons->Install($imagesDir, "icons/breakpoint_enabled.png");
+$cons->Install($imagesDir, "icons/breakpoint_disabled.png");
+
+$cons->Install($imagesDir, "icons/simpledebug_enabled.xpm");
+$cons->Install($imagesDir, "icons/simpledebug_disabled.xpm");
+
+$cons->Install($imagesDir, "icons/bookmark.xpm");
+$cons->Install($imagesDir, "icons/bookmark_0.xpm");
+$cons->Install($imagesDir, "icons/bookmark_1.xpm");
+$cons->Install($imagesDir, "icons/bookmark_2.xpm");
+$cons->Install($imagesDir, "icons/bookmark_3.xpm");
+$cons->Install($imagesDir, "icons/bookmark_4.xpm");
+$cons->Install($imagesDir, "icons/bookmark_5.xpm");
+$cons->Install($imagesDir, "icons/bookmark_6.xpm");
+$cons->Install($imagesDir, "icons/bookmark_7.xpm");
+$cons->Install($imagesDir, "icons/bookmark_8.xpm");
+$cons->Install($imagesDir, "icons/bookmark_9.xpm");
+
+$cons->Install($imagesDir, "icons/cb_xml_element.png");
+$cons->Install($imagesDir, "icons/cb_xml_attribute.png");
+
+$cons->InstallAs("$imagesDir/trees/twisty-right.svg", "icons/trees/twisty-right.svg");
+$cons->InstallAs("$imagesDir/trees/twisty-down.svg", "icons/trees/twisty-down.svg");
+
+$cons->Install($imagesDir, "icons/folder_open.svg");
+$cons->Install($imagesDir, "icons/folder_closed.svg");
+
+# Find system icons
+$cons->Install($imagesDir, "icons/find_stop.png");
+$cons->Install($imagesDir, "icons/find_stop_disable.png");
+
+$cons->Install($imagesDir, "icons/find.png");
+$cons->Install($imagesDir, "icons/find_in_files.png");
+
+
+# Other tool icons
+$cons->InstallAs("$imagesDir/preview_in_browser.png", "shea/preview.png");
+$cons->InstallAs("$imagesDir/preview_in_browser_disable.png", "shea/preview-disabled.png");
+
+
+# Right/left/bottom pane internal icons and icons for the "Workspace" toolbar
+$cons->Install($imagesDir, "icons/minimize_left.gif");
+$cons->Install($imagesDir, "icons/minimize_left_hover.gif");
+$cons->Install($imagesDir, "icons/minimize_left_disable.gif");
+$cons->Install($imagesDir, "icons/minimize_right.png");
+$cons->Install($imagesDir, "icons/minimize_right_hover.png");
+$cons->Install($imagesDir, "icons/minimize_right_disable.png");
+$cons->Install($imagesDir, "icons/minimize_down.gif");
+$cons->Install($imagesDir, "icons/minimize_down_hover.gif");
+$cons->Install($imagesDir, "icons/minimize_down_disable.gif");
+
+$cons->Install($imagesDir, "icons/show_left_pane.png");
+$cons->Install($imagesDir, "icons/hide_left_pane.png");
+$cons->Install($imagesDir, "icons/show_right_pane.png");
+$cons->Install($imagesDir, "icons/hide_right_pane.png");
+$cons->Install($imagesDir, "icons/show_bottom_pane.png");
+$cons->Install($imagesDir, "icons/hide_bottom_pane.png");
+
+# Macro icons
+# Other macro icons are coming from src/images/famfamfam[_derived]/...
+# now. This one still needs a replacement at some point.
+$cons->Install($imagesDir, "icons/macro.png");
+
+
+# Other icons
+$cons->Install($imagesDir, "icons/list_item_add.png");
+$cons->Install($imagesDir, "icons/list_item_add_disable.png");
+$cons->Install($imagesDir, "icons/list_item_edit.png");
+$cons->Install($imagesDir, "icons/list_item_edit_disable.png");
+$cons->Install($imagesDir, "icons/list_item_remove.png");
+$cons->Install($imagesDir, "icons/list_item_remove_disable.png");
+
+if ($platform eq "darwin") {
+    $cons->InstallAs("$imagesDir/menupopup_arrows.png", "icons/plat/mac/menupopup_arrows.png");
+} else {
+    $cons->Install($imagesDir, "icons/menupopup_arrows.png");
+}
+
+if ($withRx) {
+    $cons->Install($imagesDir, "shea/rx.png");
+    $cons->InstallAs("$imagesDir/rx_disable.png", "shea/rx-disabled.png");
+
+    if ($platform eq "win") {
+        $cons->InstallAs("$mozChromeDir/icons/default/komodo_rxx.ico", 'shea/rx.ico');
+    } else {
+        $cons->InstallAs("$mozChromeDir/icons/default/komodo_rxx.xpm", 'shea/rx.xpm');
+    }
+
+}
+
+$cons->Install($imagesDir, "icons/tree_select.png");
+$cons->Install($imagesDir, "icons/tree_select_disable.png");
+
+$cons->Install($imagesDir, "icons/grippy.png");
+$cons->Install($imagesDir, "icons/grippy_vertical.png");
+$cons->Install($imagesDir, "icons/grippy_horizontal.png");
+$cons->Install($imagesDir, "icons/grippy_horizontal_left.png");
+$cons->Install($imagesDir, "icons/grippy_horizontal_right.png");
+$cons->Install($imagesDir, "icons/grippy_vertical_up.png");
+$cons->Install($imagesDir, "icons/grippy_vertical_down.png");
+
+$cons->Install($imagesDir, "icons/ishell.png");
+
+
+# derived famfamfam icons
+$cons->InstallAs("$imagesDir/redo.png", "famfamfam_derived/arrow_redo.png");
+
+$cons->InstallAs("$imagesDir/undo.png", "famfamfam_derived/arrow_undo.png");
+
+$cons->InstallAs("$imagesDir/macro_pause.png", "famfamfam_derived/control_pause_blue.png");
+$cons->InstallAs("$imagesDir/macro_pause_disable.png", "famfamfam_derived/control_pause.png");
+
+$cons->InstallAs("$imagesDir/macro_play.png", "famfamfam_derived/control_play_blue.png");
+$cons->InstallAs("$imagesDir/macro_play_disable.png", "famfamfam_derived/control_play.png");
+
+$cons->InstallAs("$imagesDir/macro_record.png", "famfamfam_derived/control_record_blue.png");
+$cons->InstallAs("$imagesDir/macro_record_disable.png", "famfamfam_derived/control_record.png");
+
+$cons->InstallAs("$imagesDir/macro_save.png", "famfamfam_derived/control_save_blue.png");
+$cons->InstallAs("$imagesDir/macro_save_disable.png", "famfamfam_derived/control_save.png");
+
+$cons->InstallAs("$imagesDir/macro_stop.png", "famfamfam_derived/control_stop_blue.png");
+$cons->InstallAs("$imagesDir/macro_stop_disable.png", "famfamfam_derived/control_stop.png");
+
+$cons->InstallAs("$imagesDir/cut.png", "famfamfam_derived/cut.png");
+
+$cons->InstallAs("$imagesDir/copy.png", "famfamfam_derived/page_copy.png");
+
+$cons->InstallAs("$imagesDir/paste.png", "famfamfam_derived/page_paste.png");
+
+$cons->InstallAs("$imagesDir/print_button.png", "famfamfam_derived/printer.png");
+
+$cons->InstallAs("$imagesDir/help.png", "famfamfam_derived/help.png");
+$cons->InstallAs("$imagesDir/help_disabled.png", "famfamfam_derived/help_disabled.png");
+
+$cons->InstallAs("$imagesDir/save.png", "famfamfam_derived/disk.png");
+
+$cons->InstallAs("$imagesDir/saveAll.png", "famfamfam_derived/disk_multiple.png");
+$cons->InstallAs("$imagesDir/saveAll_disabled.png", "famfamfam_derived/disk_multiple_disabled.png");
+
+$cons->InstallAs("$imagesDir/newText.png", "famfamfam_derived/newText.png");
+$cons->InstallAs("$imagesDir/newText_disabled.png", "famfamfam_derived/newText_disabled.png");
+
+$cons->InstallAs("$imagesDir/open.png", "famfamfam_derived/folder.png");
+$cons->InstallAs("$imagesDir/open_hover.png", "famfamfam_derived/folder_hover.png");
+$cons->InstallAs("$imagesDir/open_disabled.png", "famfamfam_derived/folder_disabled.png");
+
+$cons->InstallAs("$imagesDir/wand.png", "famfamfam_derived/wand.png");
+$cons->InstallAs("$imagesDir/wand_hover.png", "famfamfam_derived/wand_hover.png");
+$cons->InstallAs("$imagesDir/wand_disabled.png", "famfamfam_derived/wand_disabled.png");
+
+$cons->InstallAs("$imagesDir/asterisk_small.png", "famfamfam_derived/asterisk_small.png");
+
+$cons->InstallAs("$imagesDir/accept_disabled.png", "famfamfam_derived/accept_disabled.png");
+$cons->InstallAs("$imagesDir/exclamation_disabled.png", "famfamfam_derived/exclamation_disabled.png");
+$cons->InstallAs("$imagesDir/error_disabled.png", "famfamfam_derived/error_disabled.png");
+$cons->InstallAs("$imagesDir/application_form_edit_disabled.png", "famfamfam_derived/application_form_edit_disabled.png");
+
+# Bordered checkbox icons.
+$cons->Install($imagesDir, "icons/checkbox_bordered_checked.png");
+$cons->Install($imagesDir, "icons/checkbox_bordered_unchecked.png");
+
+# Raw famfamfam icons
+# (Eventually we may just want to install a bunch of these for users to
+# use in toolbar stuff.)
+my %images = (
+    "famfamfam_derived/arrow_up.png" => "$imagesDir/famfamfam/arrow_up.png",
+    "famfamfam_derived/arrow_down.png" => "$imagesDir/famfamfam/arrow_down.png",
+    "famfamfam_derived/page_white_go.png" => "$imagesDir/famfamfam/page_white_go.png",
+    "famfamfam_derived/information.png" => "$imagesDir/famfamfam/information.png",
+);
+foreach my $src (keys %images) {
+    my $dst = $images{$src};
+    $cons->InstallAs($dst, $src);
+}
+
+
+
+# Install the Komodo IDE dialog header - used for the license dialog.
+if ($productType eq 'ide') {
+    $cons->InstallAs("$imagesDir/komodo-ide-dialog-header.png", "other/komodo-ide-dialog-header.png");
+}
+
+## Object Browser icon
+#if ($platform eq "win") {
+#    $cons->InstallAs("$mozChromeDir/icons/default/komodo_objectbrowser.ico", 'shea/objectbrowser.ico');
+#} else {
+#    $cons->InstallAs("$mozChromeDir/icons/default/komodo_objectbrowser.xpm", 'shea/objectbrowser.xpm');
+#}
+
+# HTTP Inspector images
+if ($withHTTPInspector) {
+    $cons->Install($imagesDir, "shea/komodo_httpInspector.png");
+    if ($platform eq "win") {
+        $cons->InstallAs("$mozChromeDir/icons/default/komodo_httpInspector.ico", 'shea/komodo_httpInspector.ico');
+    } else {
+        $cons->InstallAs("$mozChromeDir/icons/default/komodo_httpInspector.xpm", 'shea/komodo_httpInspector.xpm');
+    }
+}
+
+# install famfamfam extension
+$cons->KoExtUnpack("kodistunpack", SourcePath("famfamfam/famfamfam.xpi"));
+
+# Install the icomoon icon listing for the icon picker
+$cons->InstallAs("$mozChromeDir/komodo/content/dialogs/iconlist_icomoon.html", "icomoon/icomoon.html");
+
+# Install the fontawesome icon listing for the icon picker
+$cons->InstallAs("$mozChromeDir/komodo/content/dialogs/iconlist_fontawesome.html", "fontawesome/fontawesome.html");
+
+# install openoffice extension
+$cons->InstallAs("$mozExtensionDir/industrial\@openoffice.org.xpi", "openoffice/industrial.xpi");
+
+# install fileicons
+$cons->InstallRecursive("$mozChromeDir/icons/default/fileicons",
+                        "$komodoDevDir/src/images/fileicons",
+                        ('\.svn', 'Conscript', 'test', '\.pyc'));
+
+$cons->InstallAs("$imagesDir/other/spinner.gif", "other/spinner.gif");
+

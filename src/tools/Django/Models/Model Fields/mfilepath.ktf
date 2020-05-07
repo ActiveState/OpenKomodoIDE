@@ -1,0 +1,10 @@
+# komodo tool: mfilepath
+# ======================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ======================
+<% /* FilePathField (mfilepath) */ %>
+[[%tabstop1:FIELDNAME]] = models.FilePathField([[%tabstop2:2]])

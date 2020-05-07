@@ -1,0 +1,13 @@
+Index: lexlib/WordList.cxx
+===================================================================
+--- lexlib/WordList.cxx	(revision 74195)
++++ lexlib/WordList.cxx	(working copy)
+@@ -175,7 +175,7 @@
+ 	if (0 == words)
+ 		return false;
+ 	unsigned char firstChar = s[0];
+-	int j = starts[firstChar];
++	int j = starts[(int)firstChar];
+ 	if (j >= 0) {
+ 		while (static_cast<unsigned char>(words[j][0]) == firstChar) {
+ 			bool isSubword = false;

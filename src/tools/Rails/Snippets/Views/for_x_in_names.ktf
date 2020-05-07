@@ -1,0 +1,12 @@
+// komodo tool: for x in names
+// ===========================
+// auto_abbreviation: False
+// indent_relative: true
+// set_selection: true
+// treat_as_ejs: false
+// type: snippet
+// version: 1.0.12
+// ===========================
+<% for [[%tabstop1:name]] in [[%tabstop1]]s %>
+  <%= !@#_currentPos!@#_anchor [[%tabstop1]] %>
+<% end %>

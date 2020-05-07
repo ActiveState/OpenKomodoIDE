@@ -1,0 +1,73 @@
+/* Copyright (c) 2000-2006 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "nsIFile.idl"
+#include "koIRemoteFileInfo.idl"
+interface koIAsyncCallback;
+
+// A remote connection instance.
+[scriptable, uuid(e953df1c-979b-48ed-b48d-0c90255564bd)]
+interface koIRemoteConnection : nsISupports {
+    void promptForUsernameAndPassword(in wstring path);
+    boolean open(in wstring server, in long port, in wstring username,
+                 in wstring password, in wstring path, in boolean passive,
+                 [optional] in wstring privatekey);
+    
+    // list caches results.  set refresh to true to force a refresh from the server
+    // A better name for this method would be 'stat', as it's a remote
+    // analog to the stat method, returning a koIRFI object.
+    void list(in wstring path, in boolean refresh, [retval] out koIRemoteFileInfo pathinfo);
+    void close();
+    // refresh removes any cached information for this path and subsequent child paths
+    // and then does a list for this path with refresh set to true.
+    //void refresh(in wstring path);
+    void rename(in wstring oldName, in wstring newName);
+    void removeFile(in wstring name);
+    void removeDirectory(in wstring name);
+    void removeDirectoryRecursively(in wstring path);
+    void changeDirectory(in wstring path);
+    void currentDirectory();
+    void createFile(in wstring name, in long permissions);
+    void createDirectory(in wstring name, in long permissions);
+    // Recursively create all missing directories in the given path.
+    void createDirectories(in wstring path, in long permissions);
+    void getHomeDirectory([retval] out wstring path);
+    void getParentPath(in wstring path, [retval] out wstring parentPath);
+    void chmod(in wstring path, in long permissions);
+
+    void readFile(in wstring name, out unsigned long count, [array, size_is(count), retval] out octet text);
+    void writeFile(in wstring name, [array, size_is(count)] in octet text, in unsigned long count);
+
+    // Remove any cached information held for this path.
+    void invalidatePath(in wstring path, in boolean invalidateChildren);
+
+    attribute wstring alias;   // Server pref alias for connection
+    readonly attribute wstring protocol;
+    readonly attribute wstring server;
+    readonly attribute long port;
+    readonly attribute wstring username;
+    readonly attribute wstring password;
+    readonly attribute wstring privatekey;
+    readonly attribute wstring lastError;
+};
+
+[scriptable, uuid(eebc454e-7700-4406-9da1-66b711c5f3ae)]
+interface koISSHConnection : koIRemoteConnection {
+    // Run the specified command remotely and return the process retval.
+    //   command - command string to be run
+    //   combineStdoutAndStderr - whether the stderr is combined with stdout,
+    //                            when true, the stdout result contains both
+    //                            the outputs from stdout and stderr.
+    //   stdout - normal output from the command
+    //   stderr - error output from the command
+    //            XXX - currently stderr will always be an empty string
+    //                  due to it being unsupported by paramiko.
+    long runCommand(in wstring command, in boolean combineStdoutAndStderr,
+                    // The stdout and stderr should be an AString (in order to
+                    // support null bytes), but multiple AString out values
+                    // cause problems for Python XPCOM components: bug 84054.
+                    out wstring stdout, out wstring stderr);
+    
+    void runCommandAsync(in wstring command, in koIAsyncCallback callbackStdout, in koIAsyncCallback callbackStderr);
+};

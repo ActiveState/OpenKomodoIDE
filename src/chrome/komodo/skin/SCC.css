@@ -1,0 +1,262 @@
+
+#sccToolbar > toolbargrippy {
+  visibility: collapse;
+}
+
+.scc-button-menu
+{
+  list-style-image : url("chrome://komodo/skin/images/scc_icon_update.png");
+}
+
+.scc-button-add {
+  list-style-image : url("chrome://komodo/skin/images/scc_icon_add.png");
+}
+
+.scc-button-edit {
+  list-style-image : url("chrome://komodo/skin/images/scc_icon_edit.png");
+}
+
+.scc-button-revert {
+  list-style-image : url("chrome://komodo/skin/images/scc_icon_revert.png");
+}
+
+.scc-button-remove {
+  list-style-image : url("chrome://komodo/skin/images/scc_icon_delete.png");
+}
+
+.scc-button-update {
+  list-style-image : url("chrome://komodo/skin/images/scc_icon_update.png");
+}
+
+.scc-button-diff {
+  list-style-image : url("chrome://komodo/skin/images/scc_icon_diff.png");
+}
+
+.scc-button-history {
+  list-style-image : url("chrome://komodo/skin/images/scc_icon_history.png");
+}
+
+.scc-button-commit {
+  list-style-image : url("chrome://komodo/skin/images/scc_icon_commit.png");
+}
+
+.scc-button-checkout {
+  list-style-image : url("chrome://komodo/skin/images/scc_icon_checkout.png");
+}
+
+.scc-button-push {
+  list-style-image : url("chrome://komodo/skin/images/scc_icon_push.png");
+}
+
+:-moz-any(.scc-button-add, .scc-button-edit, .scc-button-revert, .scc-button-remove,
+          .scc-button-update, .scc-button-diff, .scc-button-history,
+          .scc-button-commit, .scc-button-checkout, .scc-button-push)[disabled="true"]
+  image:-moz-any(.toolbarbutton-icon,.menu-iconic-icon)
+{
+  opacity: 0.5;
+}
+
+
+.projectTree:-moz-tree-image(project, sccOk) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_ok.png');
+}
+
+.projectTree:-moz-tree-image(project, sccSync) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_sync.png');
+}
+
+.projectTree:-moz-tree-image(project, sccConflict) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_conflict.png');
+}
+
+.projectTree:-moz-tree-image(project, add) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_add.png');
+}
+
+.projectTree:-moz-tree-image(project, delete) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_delete.png');
+}
+
+
+.projectTree:-moz-tree-image(project, sccOk, isReadOnly) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_readonly_ok.png');
+}
+
+.projectTree:-moz-tree-image(project, sccSync, isReadOnly) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_readonly_sync.png');
+}
+
+.projectTree:-moz-tree-image(project, sccConflict, isReadOnly) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_readonly_conflict.png');
+}
+
+.projectTree:-moz-tree-image(project, branch) {
+  /* XXX fixme */
+  list-style-image: url('chrome://komodo/skin/images/project_icon_add.png');
+}
+
+/* XXX fixme integrate icons are needed, currently they match the edit icons */
+.projectTree:-moz-tree-image(project, integrate) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_edit.png');
+}
+
+.projectTree:-moz-tree-image(project, sccOk, integrate) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_edit_ok.png');
+}
+
+.projectTree:-moz-tree-image(project, sccSync, integrate) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_edit_sync.png');
+}
+
+.projectTree:-moz-tree-image(project, sccConflict, integrate) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_edit_conflict.png');
+}
+
+.projectTree:-moz-tree-image(project, edit) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_edit.png');
+}
+
+.projectTree:-moz-tree-image(project, sccOk, edit) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_edit_ok.png');
+}
+
+.projectTree:-moz-tree-image(project, sccSync, edit) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_edit_sync.png');
+}
+
+.projectTree:-moz-tree-image(project, sccConflict, edit) {
+  list-style-image: url('chrome://komodo/skin/images/project_icon_edit_conflict.png');
+}
+
+.projectTree:-moz-tree-image(file, sccOk) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_ok.png');
+}
+
+.projectTree:-moz-tree-image(file, sccSync) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_sync.png');
+}
+
+.projectTree:-moz-tree-image(file, sccConflict) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_conflict.png');
+}
+
+.projectTree:-moz-tree-image(file, add) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_add.png');
+}
+
+.projectTree:-moz-tree-image(file, delete) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_delete.png');
+}
+
+
+.projectTree:-moz-tree-image(file, sccOk, isReadOnly) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_readonly_ok.png');
+}
+
+.projectTree:-moz-tree-image(file, sccSync, isReadOnly) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_readonly_sync.png');
+}
+
+.projectTree:-moz-tree-image(file, sccConflict, isReadOnly) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_readonly_conflict.png');
+}
+
+.projectTree:-moz-tree-image(file, add, isReadOnly) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_readonly_add.png');
+}
+
+.projectTree:-moz-tree-image(file, delete, isReadOnly) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_readonly_delete.png');
+}
+
+
+.projectTree:-moz-tree-image(file, branch) {
+  /* XXX fixme */
+  list-style-image: url('chrome://komodo/skin/images/file_icon_add.png');
+}
+
+/* XXX fixme integrate icons are needed, currently they match the edit icons */
+.projectTree:-moz-tree-image(file, integrate) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_edit.png');
+}
+
+.projectTree:-moz-tree-image(file, sccOk, integrate) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_edit_ok.png');
+}
+
+.projectTree:-moz-tree-image(file, sccSync, integrate) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_edit_sync.png');
+}
+
+.projectTree:-moz-tree-image(file, sccConflict, integrate) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_edit_conflict.png');
+}
+
+.projectTree:-moz-tree-image(file, edit) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_edit.png');
+}
+
+.projectTree:-moz-tree-image(file, sccOk, edit) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_edit_ok.png');
+}
+
+.projectTree:-moz-tree-image(file, sccSync, edit) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_edit_sync.png');
+}
+
+.projectTree:-moz-tree-image(file, sccConflict, edit) {
+  list-style-image: url('chrome://komodo/skin/images/file_icon_edit_conflict.png');
+}
+
+/* scc checkout bindings */
+scc_checkout[type="svn"] {
+    -moz-binding: url('chrome://komodo/content/scc/bindings/svn_checkout.xml#svn_checkout');
+}
+
+/* scc checkout bindings */
+scc_checkout[type="cvs"] {
+    -moz-binding: url('chrome://komodo/content/scc/bindings/cvs_checkout.xml#cvs_checkout');
+}
+
+/* Scc icons in the editor tabs. */
+.file-status-icon[file_scc_status="scc_ok"] {
+  list-style-image : url("chrome://komodo/skin/images/filestatus/ok.svg");
+}
+.file-status-icon[file_scc_status="scc_integrate"] {
+  list-style-image : url("chrome://komodo/skin/images/filestatus/integrate.svg");
+}
+.file-status-icon[file_scc_status="scc_edit"] {
+  list-style-image : url("chrome://komodo/skin/images/filestatus/edit.svg");
+}
+.file-status-icon[file_scc_status="scc_branch"]
+{
+  list-style-image : url("chrome://komodo/skin/images/filestatus/branch.svg");
+}
+
+.file-status-icon[file_scc_status="scc_add"] {
+  list-style-image : url("chrome://komodo/skin/images/filestatus/add.svg");
+}
+.file-status-icon[file_scc_status="scc_delete"] {
+  list-style-image : url("chrome://komodo/skin/images/filestatus/delete.svg");
+}
+
+.file-scc-status-extra-icon[file_scc_status_extra="scc_conflict"] {
+  list-style-image : url("chrome://komodo/skin/images/filestatus/conflict.svg");
+}
+.file-scc-status-extra-icon[file_scc_status_extra="scc_needSync"] {
+  list-style-image : url("chrome://komodo/skin/images/filestatus/sync.svg");
+}
+
+.file-status-icon[file_scc_status] {
+  margin: 2px -3px 0 2px;
+}
+
+.file-scc-status-extra-icon[file_scc_status_extra] {
+  margin: 2px -3px 0 2px;
+}
+
+.file-status-icon:not([file_scc_status]):not([file_status]),
+.file-scc-status-extra-icon:not([file_scc_status_extra]) {
+  /* Collapse scc status images that are not showing anything. */
+  display: none;
+}

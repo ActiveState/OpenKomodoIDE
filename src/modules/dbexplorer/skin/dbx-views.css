@@ -1,0 +1,8 @@
+/* Copyright (c) 2000-2009 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+view[type='dbexplorer-table-display']  {
+  -moz-binding: url('chrome://dbexplorer/content/tableDisplay.xml#view-tableDisplay');
+}

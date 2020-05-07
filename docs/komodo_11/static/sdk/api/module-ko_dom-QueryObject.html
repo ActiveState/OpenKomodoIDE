@@ -1,0 +1,5528 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Komodo IDE SDK Class: QueryObject</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cosmo.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Komodo IDE SDK</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			<li>
+				<a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs" target="_blank">Mozilla SDK</a>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-ko_ajax.html">ko/ajax</a></li><li><a href="module-ko_benchmark.html">ko/benchmark</a></li><li><a href="module-ko_button.html">ko/button</a></li><li><a href="module-ko_color.html">ko/color</a></li><li><a href="module-ko_colorscheme.html">ko/colorscheme</a></li><li><a href="module-ko_commands.html">ko/commands</a></li><li><a href="module-ko_console.html">ko/console</a></li><li><a href="module-ko_debug.html">ko/debug</a></li><li><a href="module-ko_dependencies.html">ko/dependencies</a></li><li><a href="module-ko_dialogs.html">ko/dialogs</a></li><li><a href="module-ko_dom.html">ko/dom</a></li><li><a href="module-ko_dynamic-button.html">ko/dynamic-button</a></li><li><a href="module-ko_editor.html">ko/editor</a></li><li><a href="module-ko_file.html">ko/file</a></li><li><a href="module-ko_filestatus.html">ko/filestatus</a></li><li><a href="module-ko_fonts.html">ko/fonts</a></li><li><a href="module-ko_icons.html">ko/icons</a></li><li><a href="module-ko_keybindings.html">ko/keybindings</a></li><li><a href="module-ko_locale.html">ko/locale</a></li><li><a href="module-ko_logging.html">ko/logging</a></li><li><a href="module-ko_menu.html">ko/menu</a></li><li><a href="module-ko_modal.html">ko/modal</a></li><li><a href="module-ko_prefs.html">ko/prefs</a></li><li><a href="module-ko_printing.html">ko/printing</a></li><li><a href="module-ko_profiler.html">ko/profiler</a></li><li><a href="module-ko_progress.html">ko/progress</a></li><li><a href="module-ko_promise.html">ko/promise</a></li><li><a href="module-ko_session-storage.html">ko/session-storage</a></li><li><a href="module-ko_share.html">ko/share</a></li><li><a href="module-ko_share_kopy.html">ko/share/kopy</a></li><li><a href="module-ko_share_slack.html">ko/share/slack</a></li><li><a href="module-ko_share_slack_api.html">ko/share/slack/api</a></li><li><a href="module-ko_share_slack_dialog.html">ko/share/slack/dialog</a></li><li><a href="module-ko_shell.html">ko/shell</a></li><li><a href="module-ko_simple-storage.html">ko/simple-storage</a></li><li><a href="module-ko_simpledebug.html">ko/simpledebug</a></li><li><a href="module-ko_stylesheet.html">ko/stylesheet</a></li><li><a href="module-ko_views.html">ko/views</a></li><li><a href="module-ko_windows.html">ko/windows</a></li><li><a href="module-ko_windows_draggable.html">ko/windows/draggable</a></li><li><a href="module-template_publish.html">template/publish</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">UI Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-ko_ui_button.html">ko/ui/button</a></li><li><a href="module-ko_ui_caption.html">ko/ui/caption</a></li><li><a href="module-ko_ui_checkbox.html">ko/ui/checkbox</a></li><li><a href="module-ko_ui_column.html">ko/ui/column</a></li><li><a href="module-ko_ui_container.html">ko/ui/container</a></li><li><a href="module-ko_ui_deck.html">ko/ui/deck</a></li><li><a href="module-ko_ui_description.html">ko/ui/description</a></li><li><a href="module-ko_ui_element.html">ko/ui/element</a></li><li><a href="module-ko_ui_filepath.html">ko/ui/filepath</a></li><li><a href="module-ko_ui_groupbox.html">ko/ui/groupbox</a></li><li><a href="module-ko_ui_interpolation-button.html">ko/ui/interpolation-button</a></li><li><a href="module-ko_ui_label.html">ko/ui/label</a></li><li><a href="module-ko_ui_link.html">ko/ui/link</a></li><li><a href="module-ko_ui_list.html">ko/ui/list</a></li><li><a href="module-ko_ui_listbox.html">ko/ui/listbox</a></li><li><a href="module-ko_ui_listcell.html">ko/ui/listcell</a></li><li><a href="module-ko_ui_listcol.html">ko/ui/listcol</a></li><li><a href="module-ko_ui_listcols.html">ko/ui/listcols</a></li><li><a href="module-ko_ui_listhead.html">ko/ui/listhead</a></li><li><a href="module-ko_ui_listheader.html">ko/ui/listheader</a></li><li><a href="module-ko_ui_listitem.html">ko/ui/listitem</a></li><li><a href="module-ko_ui_menu.html">ko/ui/menu</a></li><li><a href="module-ko_ui_menuitem.html">ko/ui/menuitem</a></li><li><a href="module-ko_ui_menulist.html">ko/ui/menulist</a></li><li><a href="module-ko_ui_menupopup.html">ko/ui/menupopup</a></li><li><a href="module-ko_ui_menuseparator.html">ko/ui/menuseparator</a></li><li><a href="module-ko_ui_panel.html">ko/ui/panel</a></li><li><a href="module-ko_ui_radio.html">ko/ui/radio</a></li><li><a href="module-ko_ui_radiogroup.html">ko/ui/radiogroup</a></li><li><a href="module-ko_ui_richlistbox.html">ko/ui/richlistbox</a></li><li><a href="module-ko_ui_richlistitem.html">ko/ui/richlistitem</a></li><li><a href="module-ko_ui_row.html">ko/ui/row</a></li><li><a href="module-ko_ui_separator.html">ko/ui/separator</a></li><li><a href="module-ko_ui_spacer.html">ko/ui/spacer</a></li><li><a href="module-ko_ui_span.html">ko/ui/span</a></li><li><a href="module-ko_ui_spinner.html">ko/ui/spinner</a></li><li><a href="module-ko_ui_textbox.html">ko/ui/textbox</a></li><li><a href="module-ko_ui_toolbarbutton.html">ko/ui/toolbarbutton</a></li><li><a href="module-ko_ui_tooltip.html">ko/ui/tooltip</a></li><li><a href="module-ko_ui_wizardpage.html">ko/ui/wizardpage</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-ko_dom-Constructor.html">ko/dom~Constructor</a></li><li><a href="module-ko_dom-QueryObject.html">ko/dom~QueryObject</a></li><li><a href="module-ko_logging-Logger.html">ko/logging~Logger</a></li><li><a href="module-ko_progress-Progress.html">ko/progress~Progress</a></li><li><a href="module-ko_promise-Promise.html">ko/promise~Promise</a></li><li><a href="module-ko_ui_button-Model.html">ko/ui/button~Model</a></li><li><a href="module-ko_ui_caption-Model.html">ko/ui/caption~Model</a></li><li><a href="module-ko_ui_checkbox-Model.html">ko/ui/checkbox~Model</a></li><li><a href="module-ko_ui_column-Model.html">ko/ui/column~Model</a></li><li><a href="module-ko_ui_container-Model.html">ko/ui/container~Model</a></li><li><a href="module-ko_ui_deck-Model.html">ko/ui/deck~Model</a></li><li><a href="module-ko_ui_description-Model.html">ko/ui/description~Model</a></li><li><a href="module-ko_ui_element-Model.html">ko/ui/element~Model</a></li><li><a href="module-ko_ui_filepath-Model.html">ko/ui/filepath~Model</a></li><li><a href="module-ko_ui_groupbox-Model.html">ko/ui/groupbox~Model</a></li><li><a href="module-ko_ui_interpolation-button-Model.html">ko/ui/interpolation-button~Model</a></li><li><a href="module-ko_ui_label-Model.html">ko/ui/label~Model</a></li><li><a href="module-ko_ui_link-Model.html">ko/ui/link~Model</a></li><li><a href="module-ko_ui_listbox-Model.html">ko/ui/listbox~Model</a></li><li><a href="module-ko_ui_listcell-Model.html">ko/ui/listcell~Model</a></li><li><a href="module-ko_ui_listcols-Model.html">ko/ui/listcols~Model</a></li><li><a href="module-ko_ui_listcol-Model.html">ko/ui/listcol~Model</a></li><li><a href="module-ko_ui_listheader-Model.html">ko/ui/listheader~Model</a></li><li><a href="module-ko_ui_listhead-Model.html">ko/ui/listhead~Model</a></li><li><a href="module-ko_ui_listitem-Model.html">ko/ui/listitem~Model</a></li><li><a href="module-ko_ui_list-Model.html">ko/ui/list~Model</a></li><li><a href="module-ko_ui_menuitem-Model.html">ko/ui/menuitem~Model</a></li><li><a href="module-ko_ui_menulist-Model.html">ko/ui/menulist~Model</a></li><li><a href="module-ko_ui_menupopup-Model.html">ko/ui/menupopup~Model</a></li><li><a href="module-ko_ui_menuseparator-Model.html">ko/ui/menuseparator~Model</a></li><li><a href="module-ko_ui_menu-Model.html">ko/ui/menu~Model</a></li><li><a href="module-ko_ui_panel-Model.html">ko/ui/panel~Model</a></li><li><a href="module-ko_ui_radiogroup-Model.html">ko/ui/radiogroup~Model</a></li><li><a href="module-ko_ui_radio-Model.html">ko/ui/radio~Model</a></li><li><a href="module-ko_ui_richlistbox-Model.html">ko/ui/richlistbox~Model</a></li><li><a href="module-ko_ui_richlistitem-Model.html">ko/ui/richlistitem~Model</a></li><li><a href="module-ko_ui_row-Model.html">ko/ui/row~Model</a></li><li><a href="module-ko_ui_separator-Model.html">ko/ui/separator~Model</a></li><li><a href="module-ko_ui_spacer-Model.html">ko/ui/spacer~Model</a></li><li><a href="module-ko_ui_span-Model.html">ko/ui/span~Model</a></li><li><a href="module-ko_ui_spinner-Model.html">ko/ui/spinner~Model</a></li><li><a href="module-ko_ui_textbox-Model.html">ko/ui/textbox~Model</a></li><li><a href="module-ko_ui_toolbarbutton-Model.html">ko/ui/toolbarbutton~Model</a></li><li><a href="module-ko_ui_tooltip-Model.html">ko/ui/tooltip~Model</a></li><li><a href="module-ko_ui_wizardpage-Model.html">ko/ui/wizardpage~Model</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-10">
+	
+		<div id="main">
+			
+
+	<h1 class="page-title">Class: QueryObject</h1>
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="module-ko_dom.html">ko/dom</a>~</span>
+        
+        QueryObject
+        </h2>
+        
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
+        
+<hr>
+<dt>
+    <h4 class="name" id="QueryObject">
+        <strong>QueryObject</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id=".addClass">
+        <span class="type-signature">&lt;static> </span><strong>addClass</strong>(className)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Adds given class</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>className</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The class name</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".after">
+        <span class="type-signature">&lt;static> </span><strong>after</strong>(value)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Insert content after element</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>String or queryObject</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".append">
+        <span class="type-signature">&lt;static> </span><strong>append</strong>(elem)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Append content to elem</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>elem</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">element</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".appendTo">
+        <span class="type-signature">&lt;static> </span><strong>appendTo</strong>(elem)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Append elem to another element</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>elem</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">element</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".attr">
+        <span class="type-signature">&lt;static> </span><strong>attr</strong>(key, value)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Set/get attributes</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The attribute key</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Mixed</span>
+|
+
+<span class="param-type">Undefined</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The attribute value, or empty if you just want to retrieve it</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".before">
+        <span class="type-signature">&lt;static> </span><strong>before</strong>(value)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Insert content before element</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>String or queryObject</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".childCount">
+        <span class="type-signature">&lt;static> </span><strong>childCount</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get number of child nodes</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".children">
+        <span class="type-signature">&lt;static> </span><strong>children</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get child nodes</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">queryObject</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".clone">
+        <span class="type-signature">&lt;static> </span><strong>clone</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Clone matched element</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>matched element</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Element</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".css">
+        <span class="type-signature">&lt;static> </span><strong>css</strong>(key, value)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Set/get CSS value(s)</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The CSS property name, or an object with css properties/values</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Mixed</span>
+|
+
+<span class="param-type">Undefined</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The CSS property value, or undefined if first arg was an object</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".delete">
+        <span class="type-signature">&lt;static> </span><strong>delete</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Delete matched elements</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".each">
+        <span class="type-signature">&lt;static> </span><strong>each</strong>(action)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Iterate over matched elements</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>action</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The function to call on each iteration</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".element">
+        <span class="type-signature">&lt;static> </span><strong>element</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get first matched element, without wrapping it in a queryObject</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Element</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".empty">
+        <span class="type-signature">&lt;static> </span><strong>empty</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Empty the contents of an element</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".exists">
+        <span class="type-signature">&lt;static> </span><strong>exists</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Checks if element exists</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".find">
+        <span class="type-signature">&lt;static> </span><strong>find</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Find within current element</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">queryObject</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".first">
+        <span class="type-signature">&lt;static> </span><strong>first</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get first matched element</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">queryObject</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".focus">
+        <span class="type-signature">&lt;static> </span><strong>focus</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Focus on element</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".hasClass">
+        <span class="type-signature">&lt;static> </span><strong>hasClass</strong>(className)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Checks for given class</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>className</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The class name</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".hide">
+        <span class="type-signature">&lt;static> </span><strong>hide</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Makes element invisible by setting the visibility attribute</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".html">
+        <span class="type-signature">&lt;static> </span><strong>html</strong>(value)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Set html content of elem</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>String or queryObject</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".last">
+        <span class="type-signature">&lt;static> </span><strong>last</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get last matched element</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">queryObject</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".next">
+        <span class="type-signature">&lt;static> </span><strong>next</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the next sibling for the first element in the selection</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">queryObject</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".off">
+        <span class="type-signature">&lt;static> </span><strong>off</strong>(event, action)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Remove event listener</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Event</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>String event type i.e 'click'</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>action</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Callback function</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".on">
+        <span class="type-signature">&lt;static> </span><strong>on</strong>(event, action)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Add event handler</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Event</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>String event type i.e 'click'</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>action</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">this</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".once">
+        <span class="type-signature">&lt;static> </span><strong>once</strong>(event, action)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Add an event listener which only receives a callback once</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Event</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>String event type i.e 'click'</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>action</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Callback function</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">this</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".outerHtml">
+        <span class="type-signature">&lt;static> </span><strong>outerHtml</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get outer html of elem</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".parent">
+        <span class="type-signature">&lt;static> </span><strong>parent</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Retrieve parent node</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>Parent node</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Element</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".prepend">
+        <span class="type-signature">&lt;static> </span><strong>prepend</strong>(value)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Prepend content to elem</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>String or queryObject</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".prev">
+        <span class="type-signature">&lt;static> </span><strong>prev</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get the previous sibling for the first element in the selection</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">queryObject</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".removeAttr">
+        <span class="type-signature">&lt;static> </span><strong>removeAttr</strong>(key)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Remove Attribute</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The attribute key</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".removeClass">
+        <span class="type-signature">&lt;static> </span><strong>removeClass</strong>(className)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Remove given class</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>className</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The class name</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".replaceWith">
+        <span class="type-signature">&lt;static> </span><strong>replaceWith</strong>(elem)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Replace matched element(s) with ..</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>elem</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Element</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The element</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>returns replaced element</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Element</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".reverse">
+        <span class="type-signature">&lt;static> </span><strong>reverse</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Reverse the element array</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".show">
+        <span class="type-signature">&lt;static> </span><strong>show</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Makes element visible by setting the visibility attribute</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".stop">
+        <span class="type-signature">&lt;static> </span><strong>stop</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Stop any running animations</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".text">
+        <span class="type-signature">&lt;static> </span><strong>text</strong>(value)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Set text content of elem</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The value</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".trigger">
+        <span class="type-signature">&lt;static> </span><strong>trigger</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Trigger an event</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".uniqueId">
+        <span class="type-signature">&lt;static> </span><strong>uniqueId</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Get a unique ID for the matched element</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".unvirtualize">
+        <span class="type-signature">&lt;static> </span><strong>unvirtualize</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Un-virtualizes the element</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">this</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".value">
+        <span class="type-signature">&lt;static> </span><strong>value</strong>(value)
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Set / get value</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Void</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The value</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>this</p>
+</div>
+
+
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".virtualize">
+        <span class="type-signature">&lt;static> </span><strong>virtualize</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Virtualizes the given element, this essentially takes it out of the DOM
+and allows you to make modifications to it without forcing DOM updates</p>
+<p>This element will not be selectable using DOM queries nor will it be
+able to use any sort of parent/sibling queries, until unvirtualized.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">this</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".visible">
+        <span class="type-signature">&lt;static> </span><strong>visible</strong>()
+    </h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Check if element is visible</p>
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-2">
+			<div id="toc" class="col-md-2 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	&copy; 2018 ActiveState Software Inc. All rights reserved.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	
+		on 2018-06-19T18:28:55-07:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

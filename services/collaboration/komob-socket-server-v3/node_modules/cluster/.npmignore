@@ -1,0 +1,8 @@
+test.js
+test
+testing
+examples
+*.sock
+*.pid
+*.log
+node_modules

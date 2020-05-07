@@ -1,0 +1,452 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl">
+
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xbl="http://www.mozilla.org/xbl"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<binding id="view-minimap"
+    extends="chrome://komodo/content/bindings/views-buffer.xml#view-buffer-base">
+    <content flex="1">
+        <!-- mouseout & blur handlers don't fire, but these do -->
+        <xul:scintilla xbl:inherits="flex,focused,context,mozcontext" flex="1"
+                       anonid="minimap"
+                       allowIME="false"
+                       hscroll="off"
+<!-- #if PLATFORM != "linux" -->
+                       mozcontext="minimapContextMenu"
+<!-- #endif -->
+                       />
+    </content>
+    <implementation name="viewminimap" implements="koIScintillaView, koIBookmarkableView, ISciMozEvents, nsIObserver">
+
+        <property name="scintilla" onget="return document.getAnonymousElementByAttribute(this, 'anonid', 'minimap');"/>
+        
+        <field name="SCIMOZ_EVENT_MASK" readonly="true">
+            Components.interfaces.ISciMozEvents.SME_UPDATEUI |
+            Components.interfaces.ISciMozEvents.SME_URIDROPPED
+        </field>
+
+        <method name="initWithView">
+        <parameter name="view" />
+        <body><![CDATA[
+        try {
+            this.view = view;
+            //this.log.setLevel(ko.logging.LOG_DEBUG);
+            var koDoc = view.koDoc;
+            this.koDoc = koDoc;
+            var scintilla = this.scintilla;
+            scintilla.language = koDoc.language;
+            scintilla.symbolMargin = false;
+            scintilla.encoding = koDoc.encoding.python_encoding_name;
+            scintilla.init();
+            scintilla.readOnly = true;
+            scintilla.vScrollBar = false;
+            
+            this.view._setupHighlightColors(scintilla);
+            this._hookSciMozEvents(Components.interfaces.ISciMozEvents.SME_UPDATEUI);
+            var mm_scimoz = scintilla.scimoz;
+            mm_scimoz.zoom = koDoc.prefs.getLong("minimap.zoom",
+                                                 ko.views.manager.DEFAULT_MINIMAP_ZOOM);
+            // Hide all margins.
+            for (var i=0; i <= mm_scimoz.SC_MAX_MARGIN; i++) {
+                mm_scimoz.setMarginWidthN(i, 0);
+            }
+            // Hide all markers.
+            for (var i=0; i <= mm_scimoz.MARKER_MAX; i++) {
+                mm_scimoz.markerDefine(i, mm_scimoz.SC_MARK_EMPTY);
+            }
+            mm_scimoz.selEOLFilled = true;
+            mm_scimoz.caretStyle = mm_scimoz.CARETSTYLE_INVISIBLE;
+            mm_scimoz.caretLineVisible = false;
+            mm_scimoz.setXCaretPolicy(0, 0);
+            mm_scimoz.setYCaretPolicy(0, 0);
+// #if PLATFORM == "linux"
+            // bug 97956: Avoid implicit copy to the X-windows clipboard
+            mm_scimoz.rejectSelectionClaim = true;
+// #endif
+            // bug 97159: Suppress drag/drop involving minimaps
+            mm_scimoz.suppressDragDrop = true;
+            setTimeout(function() {
+                this.syncMinimapFromBuffer();
+            }.bind(this), 10);
+
+
+            this._mouse_drag_handler = event => {
+                if (event.buttons === 1) {
+                    // "1": The primary mouse button is down; all others are up.
+                    // http://www.w3.org/TR/DOM-Level-3-Events/#events-MouseEvent-buttons
+                    this.handleButtonClick(event, true);
+                }
+            };
+            this._mouse_up_handler = event => {
+                window.removeEventListener("mousemove", this._mouse_drag_handler, true);
+                window.removeEventListener("mouseup", this._mouse_up_handler, true);
+                setTimeout(() => this.updateSelectionFromEditor(), 0);
+            };
+        } catch (e) {
+            this.log.exception(e, "Problem in initMinimap\n");
+        }
+        ]]>
+        </body>
+        </method>
+        
+        <method name="attachKoDoc">
+        <parameter name="koDoc"/>
+        <body>
+        <![CDATA[
+            this.koDoc = koDoc;
+            this.scimoz.zoom = koDoc.prefs.getLong("minimap.zoom",
+                                                   ko.views.manager.DEFAULT_MINIMAP_ZOOM);
+            koDoc.addScimoz(this.scimoz);
+        ]]>
+        </body>
+        </method>
+        
+        <method name="releaseKoDoc">
+        <body>
+        <![CDATA[
+            if (this.koDoc) {
+                this.koDoc.prefs.setLongPref("minimap.zoom", this.scimoz.zoom);
+                this.koDoc.releaseScimoz(this.scimoz)
+            }
+        ]]>
+        </body>
+        </method>
+        
+        <field name="firstDocLine">-1</field>
+        <field name="lastDocLine">-1</field>
+        <field name="inMinimap">false</field>
+        
+        <method name="syncMinimapFromBuffer">
+        <body><![CDATA[
+        this.updateFoldLevelsFromEditor();
+        this.update_FVL_FromEditor();
+        this.updateSelectionFromEditor();
+        ]]>
+        </body>
+        </method>
+        
+        <method name="updateFoldLevelsFromEditor">
+        <body><![CDATA[
+        // Use scimoz.contractedFoldNext to quickly move through the list of
+        // fold points, and sync the minimap's with the editor's.
+        var vs = this.view.scimoz;
+        var msz = this.scimoz;
+
+        // If both don't have any code folded, just return.
+        if (vs.allLinesVisible && msz.allLinesVisible) {
+            return;
+        }
+
+        var vsNextFoldLine = 0, msNextFoldLine = 0;
+        // Special case the first line
+        if (vs.getFoldExpanded(0) !== msz.getFoldExpanded(0)) {
+            // Fold at first line differs
+            msz.toggleFold(0);
+        }
+        while (true) {
+            // If either is -1 we need to toggle all the rest
+            if (vsNextFoldLine === -1) {
+                // Close remaining folds in minimap
+                while (msNextFoldLine !== -1) {
+                    msz.toggleFold(msNextFoldLine);
+                    msNextFoldLine = msz.contractedFoldNext(msNextFoldLine + 1);
+                }
+                break;
+            }
+            if (msNextFoldLine === -1) {
+                // The editor has a bunch of folds we need to apply to the minimap.
+                while (vsNextFoldLine !== -1) {
+                    msz.toggleFold(vsNextFoldLine);
+                    vsNextFoldLine = vs.contractedFoldNext(vsNextFoldLine + 1);
+                }
+                break;
+            }
+            if (vsNextFoldLine < msNextFoldLine) {
+                // open fold in minimap based on editor at vsNextFoldLine
+                msz.toggleFold(vsNextFoldLine);
+                vsNextFoldLine = vs.contractedFoldNext(vsNextFoldLine + 1);
+            } else if (vsNextFoldLine > msNextFoldLine) {
+                // close fold in minimap based on editor at msNextFoldLine
+                msz.toggleFold(msNextFoldLine);
+                msNextFoldLine = msz.contractedFoldNext(msNextFoldLine + 1);
+            } else {
+                // editor and minimap are in sync here, move to next point
+                // vsNextFoldLine === msNextFoldLine
+                vsNextFoldLine = vs.contractedFoldNext(vsNextFoldLine + 1);
+                msNextFoldLine = msz.contractedFoldNext(msNextFoldLine + 1);
+            }
+        }
+        ]]>
+        </body>
+        </method>
+        
+        <method name="updateSelectionFromEditor">
+        <body><![CDATA[
+            var firstDocLine, lastDocLineOnScreen;
+            [firstDocLine, lastDocLineOnScreen] = this.view.getEditorViewBoundaries();
+            var vs = this.view.scimoz;
+            var spos = vs.positionFromLine(firstDocLine);
+            var epos = vs.positionFromLine(Math.min(lastDocLineOnScreen + 1, vs.lineCount));
+            
+            var msz = this.scimoz;
+            if (msz.selectionStart !== spos) {
+                msz.gotoPos(spos);
+                msz.selectionStart = spos;
+            }
+            if (msz.selectionEnd !== epos) {
+                msz.selectionEnd = epos;
+            }
+        ]]>
+        </body>
+        </method>
+        
+        <method name="getNewFirstVisibleLineFromEditor">
+        <body><![CDATA[
+            var vs = this.view.scimoz;
+            var firstVisibleLine = vs.firstVisibleLine;
+
+            var msz = this.scimoz;
+
+            // And update the minimap's scroll
+            var numDocLines = vs.lineCount;
+            var numVisibleLines = vs.visibleFromDocLine(numDocLines);
+            if (numVisibleLines > vs.linesOnScreen) {
+                var lastTopVisibleLine = numVisibleLines - vs.linesOnScreen;
+                var numMSZVisibleLines = msz.visibleFromDocLine(msz.lineCount);
+                var lastTopMSZVisibleLine = numMSZVisibleLines - msz.linesOnScreen;
+                var portion_covered = firstVisibleLine / lastTopVisibleLine;
+                var firstMSZVisibleLine = Math.round(lastTopMSZVisibleLine * portion_covered);
+                return firstMSZVisibleLine;
+            }
+            return -1;
+        ]]>
+        </body>
+        </method>
+        
+        <method name="update_FVL_FromEditor">
+        <body><![CDATA[
+            var firstMSZVisibleLine = this.getNewFirstVisibleLineFromEditor();
+            if (firstMSZVisibleLine != -1) {
+                this.scimoz.firstVisibleLine = firstMSZVisibleLine;
+                this.updateEditorViewBoundaries();
+            } else {
+                //dump("views-minimap.p.xml: update_FVL_FromEditor: no need to update minimap.fvl\n");
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="close">
+            <body><![CDATA[
+            scintilla.scimoz.unhookEvents(this);
+            this.koDoc = null;
+            this.view = null;
+            ]]></body>
+        </method>
+        
+        <!--ISciMozEvents implementation-->
+        
+        <field name="ignoreUpdateUIStartTime">0</field>
+        <!-- wait 500 msec after handling a click before responding to UI updates -->
+        <field name="ignoreUpdateUIPeriod">500</field> 
+
+        <!-- Set to true when the minimap is handling the onUpdateUI() call. -->
+        <field name="in_updateui">false</field>
+
+        <method name="onUpdateUI">
+        <parameter name="reason"/>
+        <body>
+        <![CDATA[
+            this.in_updateui = true;
+            try {
+                if (this.view.in_updateui) {
+                    // Ignore calls whilst the editor is updating, as it already
+                    // makes calls to the minimap, to keep the minimap accurate.
+                    // Bug 100956.
+                    return;
+                }
+                if ((reason & this.scimoz.SC_UPDATE_V_SCROLL) == 0) {
+                    return;
+                }
+                var now = new Date().valueOf();
+                if (now - this.ignoreUpdateUIStartTime < this.ignoreUpdateUIPeriod) {
+                    this.updateEditorViewBoundaries();
+                    //dump("In ignore period\n");
+                    return;
+                }
+                
+                var firstDocLine, lastDocLineOnScreen;
+                [firstDocLine, lastDocLineOnScreen] = this.getEditorViewBoundaries();
+                var updateMinimap = (this.firstDocLine !== firstDocLine
+                                     || this.lastDocLine !== lastDocLineOnScreen);
+                if (!updateMinimap) {
+                    //dump("<< mm:onUpdateUI: lines haven't changed\n")
+                    return;
+                }
+    
+                this.view.syncBufferFromMinimap(this);
+                this.updateSelectionFromEditor();
+                this.updateEditorViewBoundaries();
+                this.view.updateEditorViewBoundaries();
+                this.scimoz.dragPosition = -1;
+            } finally {
+                this.in_updateui = false;
+            }
+        ]]>
+        </body>
+        </method>
+                
+        <method name="getClickedLineAndPosition">
+        <parameter name="event" />
+        <parameter name="scimoz" />
+        <body>
+        <![CDATA[
+            var clientX = event.clientX;
+            var clientY = event.clientY;
+            var rect = this.getBoundingClientRect();
+            var winX = this.boxObject.x;
+            var winY = this.boxObject.y;
+            winX = rect.left;
+            winY = rect.top;
+            var pos = scimoz.positionFromPoint(clientX - winX, clientY - winY);
+            return [scimoz.lineFromPosition(pos), pos];
+        ]]>
+        </body>
+        </method>
+
+        <method name="handleButtonClick">
+        <parameter name="event" />
+        <parameter name="dragging" />
+        <body>
+        <![CDATA[
+            var scimoz = this.scimoz;
+            var targetDocLineNo, pos;
+            [targetDocLineNo, pos] = this.getClickedLineAndPosition(event, scimoz);
+            var vs = this.view.scimoz;
+            var targetVisibleLine_V = vs.visibleFromDocLine(targetDocLineNo);
+            var numVisibleLinesBefore_V = Math.round(vs.linesOnScreen / 2);
+            if (!dragging) {
+                // When clicking anywhere in the minimap, center the clicked
+                // line in the V screen.
+                var firstVisibleLine = targetVisibleLine_V - numVisibleLinesBefore_V;
+                if (firstVisibleLine < 0) firstVisibleLine = 0;
+            } else {
+                var midline = vs.firstVisibleLine + numVisibleLinesBefore_V;
+                var offset = targetDocLineNo - midline;
+                var firstVisibleLine = vs.firstVisibleLine + offset;
+            }
+            
+            // 1: Update the view FVL
+            this.view.updateFirstVisibleLineAndUpdateBoundaries(firstVisibleLine);
+
+            // 2. Update the MM FVL
+            this.update_FVL_FromEditor();
+            
+            // 3: Update the minimap selection
+            this.updateSelectionFromEditor();
+            this.updateEditorViewBoundaries();
+            this.ignoreUpdateUIStartTime = new Date().valueOf();
+            this.scimoz.dragPosition = -1;
+        ]]>
+        </body>
+        </method>
+
+        <method name="_reportEvent">
+        <parameter name="event" />
+        <body>
+        <![CDATA[
+            this.log.debug("views-minimap: "
++ event.type + ": event.button: " + event.button
++ ", phase: " + event.eventPhase);
+        ]]>
+        </body>
+        </method>
+
+        <method name="_squelchEvent">
+        <parameter name="event" />
+        <body>
+        <![CDATA[
+            event.preventDefault();
+            event.cancelBubble = true;
+            event.stopPropagation();
+            return false;
+        ]]>
+        </body>
+        </method>
+    </implementation>
+    <handlers>
+        <handler event="keypress" phase="capturing"> 
+            <![CDATA[
+            // Dispatch all keypress events on the minimap onto the main view.
+            var newEvent = document.createEvent("KeyEvents");
+            newEvent.initKeyEvent(event.type, event.bubbles, event.cancelable,
+                                  event.target.ownerDocument.defaultView,
+                                   event.ctrlKey, 
+                                   event.altKey,
+                                   event.shiftKey,
+                                   event.metaKey,
+                                   event.keyCode,
+                                   event.charCode);
+            // If the view doesn't have the focus the keypress event will be ignored.
+            this.view.scintilla.focus();
+            this.view.scintilla.dispatchEvent(newEvent);
+            event.preventDefault();
+            event.cancelBubble = true;
+            event.stopPropagation();
+            return false;
+            ]]>
+        </handler>
+
+        <handler event="click" phase="capturing">
+            <![CDATA[
+            if (event.button !== 0) {
+                // Rebuild the selection, because the right-click destroys it (?)
+                this.updateSelectionFromEditor();
+                return;
+            }
+            this._reportEvent(event);
+            this._squelchEvent(event);
+            ]]>
+        </handler>
+        
+        <handler event="dragstart" phase="capturing">
+            <![CDATA[
+            // Bug 97159 : Don't allow drag/drop in the minimap
+            return false;
+            ]]>
+        </handler>
+        
+        <handler event="dragover" phase="capturing">
+            <![CDATA[
+            // Bug 97159 : Don't allow drag/drop in the minimap
+            event.dataTransfer.dropEffect = "none";
+            ]]>
+        </handler>
+
+        <handler event="mousedown">
+            <![CDATA[
+            if (event.ctrlKey || event.shiftKey || event.altKey || event.metaKey) {
+                return; // ignore mouse down if a modifier is pressed
+            }
+            if (event.buttons == 1) {
+                // "1": The primary mouse button is down; all others are up.
+                // http://www.w3.org/TR/DOM-Level-3-Events/#events-MouseEvent-buttons
+                this.handleButtonClick(event);
+                window.addEventListener("mousemove", this._mouse_drag_handler, true);
+                window.addEventListener("mouseup", this._mouse_up_handler, true);
+            }
+            ]]>
+        </handler>
+   </handlers>
+
+</binding>
+
+
+</bindings>

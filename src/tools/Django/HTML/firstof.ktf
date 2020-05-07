@@ -1,0 +1,9 @@
+// komodo tool: firstof
+// ====================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ====================
+<% /* firstof */ %>
+{% firstof [[%tabstop1:1]] %}

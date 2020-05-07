@@ -1,0 +1,25 @@
+// komodo tool: register_sidebar
+// =============================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// =============================
+<% /* register_sidebar All Options */ %>
+
+   /**
+	* Creates a sidebar
+	* @param string|array $args Builds Sidebar based off of 'name' and 'id' values.
+	*/
+	${1:\$args} = array(
+		${2:${3:'name'          => __( '${4:Sidebar name}', '${5:theme_text_domain}' ),}
+		${6:'id'            => '${7:unique-sidebar-id}',}
+		${8:'description'   => '${9}',}
+		${10:'class'         => '${11}',}
+		${12:'before_widget' => '${13:<li id="%1$s" class="widget %2$s">}',}
+		${14:'after_widget'  => '${15:</li>}',}
+		${16:'before_title'  => '${17:<h2 class="widgettitle">}',}
+		${18:'after_title'   => '${19:</h2>}'}
+	});
+
+	register_sidebar( ${1:\$args} );

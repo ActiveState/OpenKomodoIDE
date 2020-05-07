@@ -1,0 +1,5 @@
+# #if MODE == "dev"
+content scope-shell-gulp content/
+# #else
+content scope-shell-gulp jar:scope-shell-gulp.jar!/content/
+# #endif

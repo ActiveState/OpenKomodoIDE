@@ -1,0 +1,19 @@
+Temporarily stop tracking the mouse movement. This is currently used on Linux
+to send a notificaiton that mouse has been released by the editor, such as when
+a blur event occurs whilst the mouse was down.
+
+Index: src/Editor.cxx
+===================================================================
+--- src/Editor.cxx	(revision 73425)
++++ src/Editor.cxx	(working copy)
+@@ -9607,6 +9607,10 @@
+ 	case SCI_GETIDENTIFIER:
+ 		return GetCtrlID();
+ 
++	case SCI_RELEASEMOUSECAPTURE:
++		SetMouseCapture(false);
++		break;
++
+ 	case SCI_SETTECHNOLOGY:
+ 		// No action by default
+ 		break;

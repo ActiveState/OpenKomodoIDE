@@ -1,0 +1,208 @@
+--- smallstuff/less.js  1.4.1
++++ smallstuff/less.js  trunk
+@@ -1,3 +1,11 @@
++var window = {};
++var EXPORTED_SYMBOLS = [];
++
++window.less = {};
++less = window.less;
++
++(function() {
++
+ /*
+  * LESS - Leaner CSS v1.4.1
+  * http://lesscss.org
+@@ -99,6 +107,8 @@
+             var parserImporter = this;
+             this.queue.push(path);
+ 
++            koLess.addToHierarchy(path, env.sheet.href);
++            
+             //
+             // Import a file asynchronously
+             //
+@@ -110,7 +120,7 @@
+                 parserImporter.files[fullPath] = root;                        // Store the root
+ 
+                 if (e && !parserImporter.error) { parserImporter.error = e; }
+-                
++
+                 callback(e, root, imported);
+             }, env);
+         }
+@@ -227,9 +237,9 @@
+ 
+     function getInput(e, env) {
+         if (e.filename && env.currentFileInfo.filename && (e.filename !== env.currentFileInfo.filename)) {
+-            return parser.imports.contents[e.filename];
++            return parser.imports.contents[e.filename] || "";
+         } else {
+-            return input;
++            return input || "";
+         }
+     }
+ 
+@@ -824,7 +834,7 @@
+                     extendList.push(new(tree.Extend)(new(tree.Selector)(elements), option, index));
+ 
+                 } while($(","))
+-                
++
+                 expect(/^\)/);
+ 
+                 if (isRule) {
+@@ -1604,27 +1614,24 @@
+     };
+ };
+ 
+-if (less.mode === 'browser' || less.mode === 'rhino') {
+-    //
+-    // Used by `@import` directives
+-    //
+-    less.Parser.importer = function (path, currentFileInfo, callback, env) {
+-        if (!/^([a-z-]+:)?\//.test(path) && currentFileInfo.currentDirectory) {
+-            path = currentFileInfo.currentDirectory + path;
+-        }
+-        var sheetEnv = env.toSheet(path);
+-        sheetEnv.processImports = false;
+-        sheetEnv.currentFileInfo = currentFileInfo;
+-
+-        // We pass `true` as 3rd argument, to force the reload of the import.
+-        // This is so we can get the syntax tree as opposed to just the CSS output,
+-        // as we need this to evaluate the current stylesheet.
+-        loadStyleSheet(sheetEnv,
+-            function (e, root, data, sheet, _, path) {
+-                callback.call(null, e, root, path);
+-            }, true);
+-    };
+-}
++//
++// Used by `@import` directives
++//
++less.Parser.importer = function (path, currentFileInfo, callback, env) {
++    if (!/^([a-z-]+:)?\//.test(path) && currentFileInfo.currentDirectory) {
++        path = currentFileInfo.currentDirectory + path;
++    }
++    var sheetEnv = env.toSheet(path);
++    sheetEnv.processImports = false;
++    sheetEnv.currentFileInfo = currentFileInfo;
++
++    // We pass `true` as 3rd argument, to force the reload of the import.
++    // This is so we can get the syntax tree as opposed to just the CSS output,
++    // as we need this to evaluate the current stylesheet.
++    koLess.loadSheet(sheetEnv, function (e, root, data, sheet, _, path) {
++        callback.call(null, e, root, path);
++    });
++};
+ 
+ (function (tree) {
+ 
+@@ -3892,9 +3899,12 @@
+     toCSS: function (env) {
+         if (this.variable) { return "" }
+         else {
++            var value = this.value.toCSS(env);
++            if (value == 'disabled') return;
++
+             try {
+                 return this.name + (env.compress ? ':' : ': ') +
+-                   this.value.toCSS(env) +
++                   value +
+                    this.important + (this.inline ? "" : ";");
+             }
+             catch(e) {
+@@ -4182,10 +4192,16 @@
+ 
+                 // Remove duplicates
+                 for (var i = rules.length - 1; i >= 0; i--) {
+-                    if (rules[i].slice(0, 2) === "/*" ||  _rules.indexOf(rules[i]) === -1) {
+-                        _rules.unshift(rules[i]);
+-                    }
+-                }
++                    try {
++                        if (rules[i].slice(0, 2) === "/*" ||  _rules.indexOf(rules[i]) === -1) {
++                            _rules.unshift(rules[i]);
++                        }
++                    // For some reason this array is not properly formed and I've
++                    // yet to figure the cause, so for now we'll use this workaround
++                    // This is possibly related to "disabled" rules
++                    } catch (e) {}
++                }
++
+                 rules = _rules;
+ 
+                 css.push(debugInfo + selector + 
+@@ -5283,14 +5299,9 @@
+ // browser.js - client-side engine
+ //
+ 
+-var isFileProtocol = /^(file|chrome(-extension)?|resource|qrc|app):/.test(location.protocol);
+-
+-less.env = less.env || (location.hostname == '127.0.0.1' ||
+-                        location.hostname == '0.0.0.0'   ||
+-                        location.hostname == 'localhost' ||
+-                        location.port.length > 0         ||
+-                        isFileProtocol                   ? 'development'
+-                                                         : 'production');
++var isFileProtocol = true;
++
++less.env = 'production'; // 'development'
+ 
+ // Load styles asynchronously (default: false)
+ //
+@@ -5311,7 +5322,7 @@
+    }
+ }
+ 
+-var dumpLineNumbers = /!dumpLineNumbers:(comments|mediaquery|all)/.exec(location.hash);
++var dumpLineNumbers = false;
+ if (dumpLineNumbers) {
+     less.dumpLineNumbers = dumpLineNumbers[1];
+ }
+@@ -5348,31 +5359,12 @@
+     }
+ }
+ 
+-if (/!watch/.test(location.hash)) {
+-    less.watch();
+-}
+-
+ var cache = null;
+ 
+ if (less.env != 'development') {
+     try {
+         cache = (typeof(window.localStorage) === 'undefined') ? null : window.localStorage;
+     } catch (_) {}
+-}
+-
+-//
+-// Get all <link> tags with the 'rel' attribute set to "stylesheet/less"
+-//
+-var links = document.getElementsByTagName('link');
+-var typePattern = /^text\/(x-)?less$/;
+-
+-less.sheets = [];
+-
+-for (var i = 0; i < links.length; i++) {
+-    if (links[i].rel === 'stylesheet/less' || (links[i].rel.match(/stylesheet/) &&
+-       (links[i].type.match(typePattern)))) {
+-        less.sheets.push(links[i]);
+-    }
+ }
+ 
+ //
+@@ -5417,8 +5409,6 @@
+     loadStyles();
+ };
+ less.refreshStyles = loadStyles;
+-
+-less.refresh(less.env === 'development');
+ 
+ function loadStyles() {
+     var styles = document.getElementsByTagName('style');
+@@ -5835,3 +5825,5 @@
+     define(function () { return less; } );
+ }
+ })(window);
++
++}).call();

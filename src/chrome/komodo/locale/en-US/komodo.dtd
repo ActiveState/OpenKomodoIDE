@@ -1,0 +1,941 @@
+<!ENTITY createMappedURI.label "Create Mapped URI">
+<!ENTITY createMappedURI.desc "Editor: Create a Mapped URI for the current buffer">
+<!ENTITY titleBar.title "Komodo">
+<!ENTITY aboutKomodo.label "About Komodo">
+<!ENTITY aboutKomodo.title "About Komodo">
+<!ENTITY aboutMenu.accesskey "A">
+<!ENTITY aboutName.accesskey "A">
+<!ENTITY add.label "Add">
+<!ENTITY addNextWordToCaretSet.label "Multiple Selection - Add Next Occurrence">
+<!ENTITY addNextSubstringToCaretSet.label "Multiple Selection - Add Next Word or Substring Occurrence">
+<!ENTITY addNextWordToCaretSet.desc "Editor: Add Next Word to a Multi-Caret Set">
+<!ENTITY addNextSubstringToCaretSet.desc "Editor: Add Next Word or Substring to a Multi-Caret Set">
+<!ENTITY addAsSnippetInToolbox.label "Add as Snippet into Toolbox">
+<!ENTITY browseForDirectoriesToAddToSearchList.tooltiptext "Browse for directories to add to search list">
+<!ENTITY browserPreview.menu.accesskey "B">
+<!ENTITY browserPreview.menu.label "Browser Preview">
+<!ENTITY bugs.label "Bugs">
+<!ENTITY buttonText.label "Button Text">
+<!ENTITY checkForUpdates.label "Check for Updates...">
+<!ENTITY checkSyntaxNow.label "Check syntax now">
+<!ENTITY cleanLineEndings.label "Clean Line Endings">
+<!ENTITY clearOutput.tooltiptext "Clear Output">
+<!ENTITY clearSearchHighlighting.label "Clear Highlighting">
+<!ENTITY clearWarningErrorSquigglies.label "Clear warning/error squigglies">
+<!ENTITY close.label "Close">
+<!ENTITY close.menu.accesskey "C">
+<!ENTITY close.menu.label "Close">
+<!ENTITY closeAllFiles.menuitem.accesskey "A">
+<!ENTITY closeAllFiles.menuitem.label "All Files">
+<!ENTITY closeOtherFiles.menuitem.accesskey "O">
+<!ENTITY closeOtherFiles.menuitem.label "Other Files">
+<!ENTITY closeFile.menuitem.accesskey "T">
+<!ENTITY closeFile.menuitem.label "Current File">
+<!ENTITY closeProject.label "Close Project">
+<!ENTITY closeAllProjects.label "Close All Projects">
+<!ENTITY code.label "Code">
+<!ENTITY codeConvertFromHexMenu.label "From Hexadecimal">
+<!ENTITY codeConvertToHexMenu.label "To Hexadecimal">
+<!ENTITY codeConvertSelectedTextMenu.label "Convert Selected Text">
+<!ENTITY codeConvertSelectedTextMenu.accesskey "V">
+<!ENTITY codeConvertSelectionFromHex.desc "Code: Convert the Selected Text from Hexadecimal">
+<!ENTITY codeConvertSelectionToHex.desc "Code: Convert the Selected Text to Hexadecimal">
+<!ENTITY collapse.label "Collapse">
+<!ENTITY collapseAll.label "Collapse All">
+<!ENTITY collapseRecursively.label "Collapse Recursively">
+<!ENTITY column.label "Column">
+<!ENTITY commandOutput.label "Command Output">
+<!ENTITY commentRegion.label "Comment Region">
+<!ENTITY community.label "Community">
+<!ENTITY compareFiles.label "Compare Files...">
+<!ENTITY colorSchemeEditor.label "Color Scheme Editor">
+<!ENTITY completeWord.label "Complete Word">
+<!ENTITY content.label "Content">
+<!ENTITY controlClick.accesskey "Ctrl+Click">
+<!ENTITY copy.label "Copy">
+<!ENTITY copy.tooltiptext "Copy">
+<!ENTITY copyButton.accesskey "C">
+<!ENTITY copyFindResults.tooltiptext "Copy the find results to the clipboard">
+<!ENTITY createTemplateFromProject.label "Create Template From Project...">
+<!ENTITY createTemplateFromProject.accesskey "C">
+<!ENTITY currentFilePreferences.label "Current File Preferences...">
+<!ENTITY customizeToolbars.menu.label "Customize...">
+<!ENTITY customizeToolbars.menu.accesskey "C">
+<!ENTITY cut.label "Cut">
+<!ENTITY cut.tooltiptext "Cut">
+<!ENTITY cutButton.accesskey "T">
+<!ENTITY decreaseFont.accesskey "D">
+<!ENTITY decreaseFont.label "Decrease Font Size">
+<!ENTITY decreaseLineIndent.label "Unindent">
+<!ENTITY delete.label "Delete">
+<!ENTITY deleteBlankLines.desc "Editor: Delete Blank Lines">
+<!ENTITY edit.label "Edit">
+<!ENTITY editMacro.label "Edit Userscript">
+<!ENTITY editSnippet.label "Edit Snippet">
+<!ENTITY editPrintdebug.label "Edit Print Statement">
+<!ENTITY editRaw.label "Edit Tool (advanced)">
+<!ENTITY editorInvokeHyperlink.desc "Editor: Invoke Hyperlink">
+<!ENTITY editorAddAsSnippetToToolbox.desc "Editor: Add as Snippet into Toolbox">
+<!ENTITY editorBack.desc "Editor: Back">
+<!ENTITY editorBackspace.desc "Editor: Backspace">
+<!ENTITY editorBeginningOfLine.desc "Editor: Beginning of Line">
+<!ENTITY editorBeginningOfLineFirstVisibleCharFirstColumn.desc "Editor: Beginning of Line (first visible char/first column)">
+<!ENTITY editorCancelAutoComplete.desc "Editor: Cancel AutoComplete">
+<!ENTITY editorCloseAllBuffers.desc "Editor: Close All Buffers">
+<!ENTITY editorCloseCurrentBuffer.desc "Editor: Close Current Buffer">
+<!ENTITY editorCloseOtherBuffers.desc "Editor: Close Other Buffers">
+<!ENTITY editorCopy.desc "Editor: Copy">
+<!ENTITY editorCopyRegion.desc "Editor: Copy Region">
+<!ENTITY editorCurrentFileSettings.desc "Editor: Current File Settings">
+<!ENTITY editorCut.desc "Editor: Cut">
+<!ENTITY editorCutLine.desc "Editor: Cut Line">
+<!ENTITY editorCutRegion.desc "Editor: Cut Region">
+<!ENTITY editorCutRestOfLine.desc "Editor: Cut rest of line">
+<!ENTITY editorDecreaseLineIndent.desc "Editor: Decrease Line Indentation">
+<!ENTITY editorDecreaseLineIndentAlways.desc "Editor: Decrease Line Indentation (Including Single Lines)">
+<!ENTITY editorDelete.desc "Editor: Delete">
+<!ENTITY editorDeleteLine.desc "Editor: Delete Line">
+<!ENTITY editorDeleteWordLeft.desc "Editor: Delete Word Left">
+<!ENTITY editorDeleteWordRight.desc "Editor: Delete Word Right">
+<!ENTITY editorDelimitedBlockSelect.desc "Editor: Delimited Block Select">
+<!ENTITY editorDuplicateLineUp.desc "Editor: Duplicate Line/Selection Up">
+<!ENTITY editorDuplicateLineDown.desc "Editor: Duplicate Line/Selection Down">
+<!ENTITY editorDuplicateSelectionLeft.desc "Editor: Duplicate In-line Selection Left">
+<!ENTITY editorDuplicateSelectionRight.desc "Editor: Duplicate In-line Selection Right">
+<!ENTITY editorEndOfLine.desc "Editor: End of Line">
+<!ENTITY editorExchangeCurrentPointAndMark.desc "Editor: Exchange Current Point and Mark">
+<!ENTITY editorGoToBeginningOfWord.desc "Editor: Go to Beginning of word">
+<!ENTITY editorGoToEndOfDocument.desc "Editor: Go to End of Document">
+<!ENTITY editorGoToEndOfWord.desc "Editor: Go to End of word">
+<!ENTITY editorGoToLine.desc "Editor: Go to Line...">
+<!ENTITY editorGoToNextBookmark.desc "Editor: Go to Next Bookmark">
+<!ENTITY editorGoToNextLine.desc "Editor: Go to Next Line">
+<!ENTITY editorGoToPreviousBookmark.desc "Editor: Go to Previous Bookmark">
+<!ENTITY editorGoToPreviousLine.desc "Editor: Go to Previous Line">
+<!ENTITY editorGoToTopOfDocument.desc "Editor: Go to Top of Document">
+<!ENTITY editorIncreaseLineIndent.desc "Editor: Increase Line Indentation">
+<!ENTITY editorIncreaseLineIndentAlways.desc "Editor: Increase Line Indentation (Including Single Lines)">
+<!ENTITY editorInsertNewline.desc "Editor: Insert Newline">
+<!ENTITY editorInsertNewlineAlignWithCurrentLine.desc "Editor: Insert Newline (align with current line)">
+<!ENTITY editorInsertNewlineContinueComments.desc "Editor: Insert Newline (continue comments)">
+<!ENTITY editorInsertNewlineNoFavors.desc "Editor: Insert Newline (no favors)">
+<!ENTITY editorInsertNewlineStartingOnThePreviousLine.desc "Editor: Insert Newline (starting on the previous line)">
+<!ENTITY editorInsertNextKeyAsLiteralCharacter.desc "Editor: Insert Next Key as Literal Character">
+<!ENTITY editorInsertSnippetByName.desc "Editor: Insert Abbreviation Snippet by Name">
+<!ENTITY editorJoinCurrentAndNextLines.desc "Editor: Join current and next lines">
+<!ENTITY editorLaunchColorPicker.desc "Editor: Launch the Color Picker">
+<!ENTITY editorMoveBackPartOfWord.desc "Editor: Go Back Part of Word">
+<!ENTITY editorMoveBackPartOfWordSameLine.desc "Editor: Go Back Part of Word (Prefer Current Line)">
+<!ENTITY editorMoveForwardPartOfWord.desc "Editor: Go Forward Part of Word">
+<!ENTITY editorMoveForwardPartOfWordSameLine.desc "Editor: Go Forward Part of Word (Prefer Current Line)">
+<!ENTITY editorMoveLeftOneCharacter.desc "Editor: Go Left One Character">
+<!ENTITY editorMoveOneCharacterRight.desc "Editor: Go One Character Right">
+<!ENTITY editorMoveOneWordLeft.desc "Editor: Go One Word Left">
+<!ENTITY editorMoveOneWordLeftSameLine.desc "Editor: Go One Word Left (Prefer Current Line)">
+<!ENTITY editorMoveOneWordRight.desc "Editor: Go One Word Right">
+<!ENTITY editorMoveOneWordRightSameLine.desc "Editor: Go One Word Right (Prefer Current Line)">
+<!ENTITY editorMoveToEndOfWordToLeft.desc "Editor: Go To End Of Word To Left">
+<!ENTITY editorMoveToPreviousMarkInMarkRing.desc "Editor: Go to previous mark in mark ring">
+<!ENTITY editorPageDown.desc "Editor: Page Down">
+<!ENTITY editorPageUp.desc "Editor: Page Up">
+<!ENTITY editorParaUp.desc "Editor: Paragraph Up">
+<!ENTITY editorParaDown.desc "Editor: Paragraph Down">
+<!ENTITY editorPaste.desc "Editor: Paste">
+<!ENTITY editorPasteAndSelect.desc "Editor: Paste and Select">
+<!ENTITY editorPopTransientMark.desc "Editor: Pop Transient Mark">
+<!ENTITY editorTabAwarePaste.desc "Editor: Tab-Aware Paste">
+<!ENTITY editorRedo.desc "Editor: Redo">
+<!ENTITY editorReflowParagraphS.desc "Editor: Reflow paragraph(s)">
+<!ENTITY editorRemoveAllBookmarks.desc "Editor: Remove All Bookmarks">
+<!ENTITY editorRemoveTrailingWhitespace.desc "Editor: Remove Trailing Whitespace from Ends of Lines">
+<!ENTITY editorRepeatNextKeystrokeNTimes.desc "Editor: Repeat next keystroke N times">
+<!ENTITY editorResetLanguageToBestGuess.desc "Editor: Reset language to best guess">
+<!ENTITY editorScrollCurrentLineToCenterOfScreen.desc "Editor: Scroll current line to center of screen">
+<!ENTITY editorScrollCurrentLineToTopOfScreen.desc "Editor: Scroll current line to top of screen">
+<!ENTITY editorScrollOneLineDown.desc "Editor: Scroll One Line Down">
+<!ENTITY editorScrollOneLineUp.desc "Editor: Scroll One Line Up">
+<!ENTITY editorSelectAll.desc "Editor: Select All">
+<!ENTITY editorSelectAllDeprecatedBinding.desc "Editor: Select All (Deprecated Binding)">
+<!ENTITY editorSelectNextCharacter.desc "Editor: Select Next Character">
+<!ENTITY editorSelectNextPartOfWord.desc "Editor: Select Next Part of Word">
+<!ENTITY editorSelectNextPartOfWordSameLine.desc "Editor: Select Next Part of Word (Prefer Current Line)">
+<!ENTITY editorSelectNextWord.desc "Editor: Select Next Word">
+<!ENTITY editorSelectNextWordSameLine.desc "Editor: Select Next Word (Prefer Current Line)">
+<!ENTITY editorSelectPageDown.desc "Editor: Select Page Down">
+<!ENTITY editorSelectPageUp.desc "Editor: Select Page Up">
+<!ENTITY editorSelectPreviousCharacter.desc "Editor: Select Previous Character">
+<!ENTITY editorSelectPreviousPartOfWord.desc "Editor: Select Previous Part of Word">
+<!ENTITY editorSelectPreviousPartOfWordSameLine.desc "Editor: Select Previous Part of Word (Prefer Current Line)">
+<!ENTITY editorSelectPreviousWord.desc "Editor: Select Previous Word">
+<!ENTITY editorSelectPreviousWordSameLine.desc "Editor: Select Previous Word (Prefer Current Line)">
+<!ENTITY editorSelectRectangularNextCharacter.desc "Editor: Select Rectangular Next Character">
+<!ENTITY editorSelectRectangularPageDown.desc "Editor: Select Rectangular Page Down">
+<!ENTITY editorSelectRectangularPageUp.desc "Editor: Select Rectangular Page Up">
+<!ENTITY editorSelectRectangularPreviousCharacter.desc "Editor: Select Rectangular Previous Character">
+<!ENTITY editorSelectRectangularToBeginningOfLineFirstCharFirstColumn.desc "Editor: Select Rectangular to Beginning of Line (first char/first column)">
+<!ENTITY editorSelectRectangularToEndOfLine.desc "Editor: Select Rectangular to End of Line">
+<!ENTITY editorSelectRectangularToNextLine.desc "Editor: Select Rectangular to Next Line">
+<!ENTITY editorSelectRectangularToPreviousLine.desc "Editor: Select Rectangular to Previous Line">
+<!ENTITY editorSelectToBeginningOfLineFirstCharFirstColumn.desc "Editor: Select to Beginning of Line (first char/first column)">
+<!ENTITY editorSelectToBeginningOfLineAnyCharFirstColumn.desc "Editor: Select to Beginning of Line (always first column)">
+<!ENTITY editorSelectToBeginningOfWord.desc "Editor: Select to Beginning of word">
+<!ENTITY editorSelectToEndOfDocument.desc "Editor: Select to End of Document">
+<!ENTITY editorSelectToEndOfLine.desc "Editor: Select to End of Line">
+<!ENTITY editorSelectToEndOfWord.desc "Editor: Select to End of word">
+<!ENTITY editorSelectToNextLine.desc "Editor: Select to Next Line">
+<!ENTITY editorSelectToPreviousLine.desc "Editor: Select to Previous Line">
+<!ENTITY editorSelectToTopOfDocument.desc "Editor: Select to Top of Document">
+<!ENTITY editorSelectWordUnderCursor.desc "Editor: Select the word Under the Cursor">
+<!ENTITY editorSetMark.desc "Editor: Set Mark">
+<!ENTITY editorShowUnsavedChanges.desc "Editor: Show Unsaved Changes">
+<!ENTITY editorToggleBookmark.desc "Editor: Toggle Bookmark">
+<!ENTITY editorToggleOvertypeInsertMode.desc "Editor: Toggle Overtype/Insert Mode">
+<!ENTITY editorTransposeCurrentAndPreviousCharacters.desc "Editor: Transpose Current and Previous Characters">
+<!ENTITY editorTransposeLineUp.desc "Editor: Move (Transpose) Line Up">
+<!ENTITY editorTransposeLineDown.desc "Editor: Move (Transpose) Line Down">
+<!ENTITY editorTransposeCurrentAndPreviousWords.desc "Editor: Transpose Current and Previous Words">
+<!ENTITY editorTriggerPrecedingAutoCompleteListOrCallTip.desc "Editor: Trigger preceding AutoComplete list or CallTip">
+<!ENTITY editorUndo.desc "Editor: Undo">
+<!ENTITY editorZoomFontSizeReset.desc "Editor: Zoom: Reset to Default Size">
+<!ENTITY editorZoomFontSizeDown.desc "Editor: Zoom Font Size Down">
+<!ENTITY editorZoomFontSizeUp.desc "Editor: Zoom Font Size Up">
+<!ENTITY editorHTMLTagRelocator.desc "Editor: HTML Tag Relocator...">
+<!ENTITY enterNextCharacterAsRawLiteral.label "Enter Next Character as Raw Literal">
+<!ENTITY executeMacro.label "Execute Userscript">
+<!ENTITY startTutorial.label "Start Tutorial">
+<!ENTITY editTutorial.label "Edit Tutorial">
+<!ENTITY editTutorialLogic.label "Edit Tutorial Logic">
+<!ENTITY existingFile.label "Existing File...">
+<!ENTITY existingRemoteFile.label "Existing Remote File...">
+<!ENTITY expand.label "Expand">
+<!ENTITY expandAll.label "Expand All">
+<!ENTITY expandRecursively.label "Expand Recursively">
+<!ENTITY exportPackage.label "Export Package...">
+<!ENTITY exportAsZipFile.label "Export as Zip File...">
+<!ENTITY extensionManager.accesskey "A">
+<!ENTITY extensionManager.label "Add-ons">
+<!ENTITY extensionManagerLegacy.label "Add-ons (Legacy)">
+<!ENTITY file.label "File">
+<!ENTITY fileOpen.label "File...">
+<!ENTITY fileEncoding.tooltiptext "File Encoding">
+<!ENTITY filePosition.tooltiptext "File Position">
+<!ENTITY filePreferences.label "File Preferences">
+<!ENTITY fileType.tooltiptext "File Type">
+<!ENTITY filterSymbols.placeholder "Filter Symbols ..">
+<!ENTITY filterSymbols.tooltiptext "Filter Symbols">
+<!ENTITY find.label "Find...">
+<!ENTITY findFilter.placeholder "Filter Tools ..">
+<!ENTITY findFilter.tooltiptext "Only show matches containing these space-separated words. Use minus '-' at the start of a word to exclude matches.">
+<!ENTITY search.tooltiptext "Search Again..">
+<!ENTITY findFind.desc "Find: Find...">
+<!ENTITY findFindInCurrProject.desc "Find: Find in Current Project...">
+<!ENTITY findFindInFiles.desc "Find: Find in Files...">
+<!ENTITY findFindNext.desc "Find: Find Next">
+<!ENTITY findFindNextResult.desc "Find: Find Next Result">
+<!ENTITY findFindPrevResult.desc "Find: Find Prev Result">
+<!ENTITY findFindNextSelected.desc "Find: Find Next Selected">
+<!ENTITY findFindPrevious.desc "Find: Find Previous">
+<!ENTITY findFindPreviousSelected.desc "Find: Find Previous Selected">
+<!ENTITY findHighlightVariableManual.desc "Find: Highlight Variable">
+<!ENTITY findInCurrProject.label "Find in Current Project...">
+<!ENTITY findInFiles.label "Find in Files...">
+<!ENTITY findIncrementalSearch.desc "Find: Incremental Search">
+<!ENTITY findIncrementalSearchBackwards.desc "Find: Incremental Search Backwards">
+<!ENTITY findLabel.accesskey "i">
+<!ENTITY findNext.label "Find Next">
+<!ENTITY findNextWordUnderCursor.accesskey "W">
+<!ENTITY findNextWordUnderCursor.label "Find Next Word under Caret">
+<!ENTITY findReplace.desc "Find: Replace...">
+<!ENTITY findReplaceInFiles.desc "Find: Replace in Files...">
+<!ENTITY findReplaceInCurrProject.desc "Find: Replace in Current Project...">
+<!ENTITY findResults1.label "Find Results 1">
+<!ENTITY findResults2.label "Find Results 2">
+<!ENTITY fold.accesskey "O">
+<!ENTITY fold.label "Fold">
+<!ENTITY folderContextExistingFile.accesskey "i">
+<!ENTITY folderContextNewCommand.accesskey "c">
+<!ENTITY folderContextNewFile.accesskey "f">
+<!ENTITY folderContextNewFolder.accesskey "f">
+<!ENTITY folderContextNewLiveFolder.accesskey "L">
+<!ENTITY folderContextNewtutorial.accesskey "t">
+<!ENTITY folderContextNewMacro.accesskey "u">
+<!ENTITY folderContextNewMenu.accesskey "n">
+<!ENTITY folderContextNewSnippet.accesskey "s">
+<!ENTITY folderContextNewTemplate.accesskey "t">
+<!ENTITY folderContextNewFolderTemplate.accesskey "f">
+<!ENTITY folderContextNewPrintDebug.accesskey "p">
+<!ENTITY folderContextNewToolbar.accesskey "b">
+<!ENTITY folderContextNewURL.accesskey "l">
+<!ENTITY folderContextRemoteFile.accesskey "r">
+<!ENTITY fullScreen.accesskey "F">
+<!ENTITY fullScreen.label "Full Screen">
+<!ENTITY generalCloseProject.desc "General: Close Project">
+<!ENTITY generalCloseAllProjects.desc "General: Close All Projects">
+<!ENTITY generalCreateTemplateFromProject.desc "General: Create Template From Project...">
+<!ENTITY generalEditProperties.desc "General: Edit Properties">
+<!ENTITY generalExportAsHTML.desc "General: Export as HTML...">
+<!ENTITY generalExportSelectionAsHTML.desc "General: Export Selection as HTML...">
+<!ENTITY generalImportFromFileSystemIntoCurrentProject.desc "General: Import From File System into Current Project">
+<!ENTITY generalLeastRecentlyViewedFile.desc "General: Least Recently Viewed File">
+<!ENTITY generalMostRecentlyViewedFile.desc "General: Most Recently Viewed File">
+<!ENTITY generalNewFile.desc "General: New File...">
+<!ENTITY showQuicklaunch.desc "General: Show quick launch screen">
+<!ENTITY generalNewFileDefaultType.desc "General: New File (default type)">
+<!ENTITY generalNewTab.desc "General: New Tab">
+<!ENTITY generalNewProject.desc "General: New Project...">
+<!ENTITY generalNewWindow.desc "General: New Window">
+<!ENTITY generalNextFile.desc "General: Next File">
+<!ENTITY generalNextWindow.desc "General: Change to the Next Komodo Window">
+<!ENTITY generalOpenFileDialog.desc "General: Open File dialog...">
+<!ENTITY generalOpenProject.desc "General: Open Project...">
+<!ENTITY generalSampleProject.desc "General: Sample Project...">
+<!ENTITY generalOpenRemoteProject.desc "General: Open Remote Project...">
+<!ENTITY generalOpenProjectInNewWindow.desc "General: Open Project in a New Window">
+<!ENTITY generalOpenRemoteFileDialog.desc "General: Open Remote File dialog...">
+<!ENTITY generalOpenTemplate.desc "General: Open Template...">
+<!ENTITY generalPerformTheImportFromFileSystemAgainRefreshes.desc "General: Perform the import from file system again (refreshes)">
+<!ENTITY generalPreferences.desc "General: Preferences...">
+<!ENTITY generalPreviousFile.desc "General: Previous File">
+<!ENTITY generalPreviousWindow.desc "General: Change to the Previous Komodo Window">
+<!ENTITY generalPrint.desc "General: Print...">
+<!ENTITY generalPrintPreview.desc "General: Print Preview">
+<!ENTITY generalPrintPreviewSelection.desc "General: Print Preview Selection">
+<!ENTITY generalPrintSelection.desc "General: Print Selection...">
+<!ENTITY generalPrintSetup.desc "General: Print Setup...">
+<!ENTITY generalQuit.desc "General: Quit">
+<!ENTITY generalRefreshStatus.desc "General: Refresh Status">
+<!ENTITY generalRevert.desc "General: Revert">
+<!ENTITY generalRevertProject.desc "General: Revert Project">
+<!ENTITY generalSave.desc "General: Save">
+<!ENTITY generalSaveAll.desc "General: Save All">
+<!ENTITY generalSaveAs.desc "General: Save As...">
+<!ENTITY generalSaveAsRemote.desc "General: Save as Remote...">
+<!ENTITY generalSaveAsTemplate.desc "General: Save as Template">
+<!ENTITY generalSaveProject.desc "General: Save Project">
+<!ENTITY generalSaveProjectAs.desc "General: Save Project As...">
+<!ENTITY generalSwitchToTab1.desc "General: Switch to Tab 1">
+<!ENTITY generalSwitchToTab2.desc "General: Switch to Tab 2">
+<!ENTITY generalSwitchToTab3.desc "General: Switch to Tab 3">
+<!ENTITY generalSwitchToTab4.desc "General: Switch to Tab 4">
+<!ENTITY generalSwitchToTab5.desc "General: Switch to Tab 5">
+<!ENTITY generalSwitchToTab6.desc "General: Switch to Tab 6">
+<!ENTITY generalSwitchToTab7.desc "General: Switch to Tab 7">
+<!ENTITY generalSwitchToTab8.desc "General: Switch to Tab 8">
+<!ENTITY generalSwitchToTab9.desc "General: Switch to Tab 9">
+<!ENTITY generalTogglePanels.desc "General: Toggle Panels">
+
+<!ENTITY quickbookmark.menu.label "Quick Bookmarks">
+<!ENTITY quickbookmark.menu.accesskey "b">
+
+<!ENTITY quickbookmarkToggle_1.lable "Toggle bookmark 1">
+<!ENTITY quickbookmarkToggle_2.lable "Toggle bookmark 2">
+<!ENTITY quickbookmarkToggle_3.lable "Toggle bookmark 3">
+<!ENTITY quickbookmarkToggle_4.lable "Toggle bookmark 4">
+<!ENTITY quickbookmarkToggle_5.lable "Toggle bookmark 5">
+<!ENTITY quickbookmarkToggle_6.lable "Toggle bookmark 6">
+<!ENTITY quickbookmarkToggle_7.lable "Toggle bookmark 7">
+<!ENTITY quickbookmarkToggle_8.lable "Toggle bookmark 8">
+<!ENTITY quickbookmarkToggle_9.lable "Toggle bookmark 9">
+<!ENTITY quickbookmarkToggle_0.lable "Toggle bookmark 0">
+
+<!ENTITY quickbookmarkGoTo_1.lable "Go to bookmark 1">
+<!ENTITY quickbookmarkGoTo_2.lable "Go to bookmark 2">
+<!ENTITY quickbookmarkGoTo_3.lable "Go to bookmark 3">
+<!ENTITY quickbookmarkGoTo_4.lable "Go to bookmark 4">
+<!ENTITY quickbookmarkGoTo_5.lable "Go to bookmark 5">
+<!ENTITY quickbookmarkGoTo_6.lable "Go to bookmark 6">
+<!ENTITY quickbookmarkGoTo_7.lable "Go to bookmark 7">
+<!ENTITY quickbookmarkGoTo_8.lable "Go to bookmark 8">
+<!ENTITY quickbookmarkGoTo_9.lable "Go to bookmark 9">
+<!ENTITY quickbookmarkGoTo_0.lable "Go to bookmark 0">
+
+<!ENTITY goToDefinition.accesskey "D">
+<!ENTITY goToDefinition.label "Go to Definition">
+<!ENTITY gotoLine.accesskey "G">
+<!ENTITY gotoLine.label "Go to Line...">
+<!ENTITY gotoLine.prompt.description "Enter a line number to go to. Prefix + or - to move relative to the current line. For example: +4 will move forward 4 lines. Specify a column # or offset after a comma. eg: +4,-8 moves down 4, left 8.">
+<!ENTITY gotoLine.prompt.label "Line number:">
+<!ENTITY goToTab.menu.accesskey "A">
+<!ENTITY goToTab.menu.label "Go to Tab">
+<!ENTITY help.label "Help">
+<!ENTITY help.tooltiptext "Help">
+<!ENTITY helpAboutKomodo.desc "Help: About Komodo">
+<!ENTITY helpActiveStateProgrammerNetwork.desc "Help: ActiveState Programmer Network">
+<!ENTITY helpActiveStateWebsite.desc "Help: ActiveState Website">
+<!ENTITY helpAlternateHelpOnSelection.desc "Help: Alternate Help on Selection">
+<!ENTITY helpHelp.desc "Help: Help...">
+<!ENTITY helpKomodoBugDatabase.desc "Help: Report a Bug">
+<!ENTITY helpKomodoCommunity.desc "Help: Komodo Community">
+<!ENTITY helpKomodoDiscussMailingListArchives.desc "Help: Komodo Discuss Mailing List Archives">
+<!ENTITY helpLanguageSpecificHelpOnSelection.desc "Help: Language-Specific Help on Selection">
+<!ENTITY helpMenu.accesskey "H">
+<!ENTITY helpShowKeybindings.desc "Help: Show Keybindings...">
+<!ENTITY helpTroubleshootingContactUs.accesskey "C">
+<!ENTITY helpTroubleshootingContactUs.desc "Help: Contact ActiveState using a Web Feedback Form">
+<!ENTITY helpTroubleshootingContactUs.label "Contact ActiveState">
+<!ENTITY helpTroubleshootingMenu.accesskey "S">
+<!ENTITY helpTroubleshootingMenu.label "Troubleshooting">
+<!ENTITY helpTroubleshootingViewErrorLog.accesskey "L">
+<!ENTITY helpTroubleshootingViewErrorLog.label "View Log File">
+<!ENTITY helpTroubleshootingViewErrorLog.desc "Help: Open the Komodo Error Log for viewing">
+<!ENTITY helpTroubleshootingAboutMemory.accesskey "M">
+<!ENTITY helpTroubleshootingAboutMemory.label "Memory Usage">
+<!ENTITY import.label "Import">
+<!ENTITY importPackage.label "Import Package...">
+<!ENTITY increaseFont.accesskey "I">
+<!ENTITY increaseFont.label "Increase Font Size">
+<!ENTITY increaseLineIndent.label "Indent">
+<!ENTITY incrementalSearch.label "Incremental Search">
+<!ENTITY useTemplate.label "Use Template">
+<!ENTITY useFolderTemplate.label "Use Folder Template">
+<!ENTITY editTemplate.label "Edit Template">
+<!ENTITY insertSnippet.label "Insert Snippet">
+<!ENTITY insertPrintdebug.label "Insert Print Statement">
+<!ENTITY joinLines.label "Join Lines">
+<!ENTITY jumpToCorrespondingLine.label "Go to corresponding line">
+<!ENTITY jumpToCorrespondingLineForDiffMode.label "Go to Corresponding Line (for Diff mode)">
+<!ENTITY jumpToMatchingBrace.label "Go to Matching Brace">
+<!ENTITY jumpToNextResult.label "Go to next result">
+<!ENTITY jumpToNextResult.tooltiptext "Go To Next Result">
+<!ENTITY jumpToPreviousResult.tooltiptext "Go To Previous Result">
+<!ENTITY historyBack.accesskey "B">
+<!ENTITY historyBack.label "Back">
+<!ENTITY historyForward.accesskey "F">
+<!ENTITY historyForward.label "Forward">
+<!ENTITY historyBack.tooltiptext "Go back one location">
+<!ENTITY historyForward.tooltiptext "Go forward one location">
+<!ENTITY historyRecentLocations.tooltiptext "Recent locations">
+<!ENTITY editorHistoryBack.desc "Editor: Go Back">
+<!ENTITY editorHistoryForward.desc "Editor: Go Forward">
+<!ENTITY komodoBugDatabase.accesskey "B">
+<!ENTITY komodoBugDatabase.label "Report a Bug">
+<!ENTITY komodoBugDatabase.tooltiptext "Report a bug on GitHub">
+<!ENTITY komodoCommunity.label "Komodo Community">
+<!ENTITY runStartupWizard.label "Run First Start Wizard Again">
+<!ENTITY komodoCommunity.tooltiptext "Komodo Community">
+<!ENTITY komodoEmailLists.tooltiptext "Komodo Email Lists">
+<!ENTITY komodoMemoryUsage.desc "Utilities: Report of Komodo's Memory Usage">
+<!ENTITY komodoResources.label "Komodo Resources">
+<!ENTITY komodoResourcesToolbar.tooltiptext "Komodo Resources Toolbar">
+<!ENTITY line.label "Line">
+<!ENTITY listKeyBindings.label "List Key Bindings">
+<!ENTITY checkConfig.label "Check Configuration">
+<!ENTITY macro.label "Macro">
+<!ENTITY macros.label "Macros">
+<!ENTITY macroEndRecording.desc "Macro: End Recording">
+<!ENTITY macroExecuteLastMacro.desc "Macro: Execute Last Macro">
+<!ENTITY macroNew.menu.accesskey "C">
+<!ENTITY macroNew.menu.label "Create New Macro">
+<!ENTITY macroNew.toolbar.label "New Userscript">
+<!ENTITY macroNew.tooltiptext "Write new Userscript to save to Toolbox">
+<!ENTITY macroNew.command.desc "Macro: Create a new Toolbox Macro">
+<!ENTITY macroPauseRecording.desc "Macro: Pause Recording">
+<!ENTITY macroStartResumeRecording.desc "Macro: Start/Resume Recording">
+<!ENTITY macroToolbar.tooltiptext "Macro Toolbar">
+<!ENTITY macroSaveToToolbox.desc "Macro: Save to Toolbox as Userscript">
+<!ENTITY mailLists.label "Mail Lists">
+<!ENTITY makeLowercase.label "Make Lowercase">
+<!ENTITY makeUppercase.label "Make Uppercase">
+<!ENTITY makeTitleCase.label "Make Title Case">
+<!ENTITY menu.tooltiptext "Menu">
+<!ENTITY menuBlockSelect.accesskey "B">
+<!ENTITY menuDelimitedBlockSelect.accesskey "D">
+<!ENTITY menuBookmarkGotoNext.accesskey "N">
+<!ENTITY menuBookmarkGotoPrevious.accesskey "P">
+<!ENTITY menuBookmarkRemoveAll.accesskey "R">
+<!ENTITY menuBookmarkToggle.accesskey "T">
+<!ENTITY menuBufferClose.accesskey "C">
+<!ENTITY menuBufferNext.accesskey "x">
+<!ENTITY menuBufferPrevious.accesskey "P">
+<!ENTITY menuCleanLineEndings.accesskey "E">
+<!ENTITY menuRemoveTrailingWhitespace.accesskey "W">
+<!ENTITY menuRemoveTrailingWhitespace.label "Remove Trailing Whitespace">
+<!ENTITY menuClearSearchHighlighting.accesskey "H">
+<!ENTITY menuCloseOtherBuffers.accesskey "H">
+<!ENTITY menuCloseOtherBuffers.label "Close Others">
+<!ENTITY menuCode.accesskey "C">
+<!ENTITY menuCodeIntelReTriggerCompletions.label "CodeIntel Completions">
+<!ENTITY menuCodeIntelReTriggerCompletions.accesskey "O">
+<!ENTITY menuComment.accesskey "C">
+<!ENTITY menuCompareFiles.accesskey "C">
+<!ENTITY menuDedent.accesskey "D">
+<!ENTITY menuEdit.accesskey "E">
+<!ENTITY menuEditPrefsCurrent.accesskey "l">
+<!ENTITY menuExportHTML.accesskey "M">
+<!ENTITY menuExportHTMLSelection.accesskey "S">
+<!ENTITY menuFile.accesskey "F">
+<!ENTITY menuFileNew.accesskey "N">
+<!ENTITY menuFileOpen.accesskey "O">
+<!ENTITY menuFind.accesskey "F">
+<!ENTITY menuFindNext.accesskey "N">
+<!ENTITY menuHelpHelp.accesskey "H">
+<!ENTITY menuHelpShowKeybindings.accesskey "K">
+<!ENTITY menuIndent.accesskey "I">
+<!ENTITY menuJoin.accesskey "J">
+<!ENTITY menuMacros.accesskey "M">
+<!ENTITY menuMoveTab.accesskey "M">
+<!ENTITY menuMruFiles.accesskey "F">
+<!ENTITY menuMruWindows.accesskey "w">
+<!ENTITY menuPreferences.accesskey "e">
+<!ENTITY menuPrint.accesskey "P">
+<!ENTITY menuPrintPreview.accesskey "e">
+<!ENTITY menuPrintSettings.accesskey "g">
+<!ENTITY menuProject.accesskey "P">
+<!ENTITY menuReflow.accesskey "R">
+<!ENTITY menuRefreshStatus.accesskey "R">
+<!ENTITY menuReplace.accesskey "R">
+<!ENTITY menuRevert.accesskey "v">
+<!ENTITY menuRotateSplitter.accesskey "R">
+<!ENTITY menuSave.accesskey "S">
+<!ENTITY menuSaveAll.accesskey "l">
+<!ENTITY menuSaveAs.accesskey "A">
+<!ENTITY menuSaveAsOther.accesskey "E">
+<!ENTITY menuShowUnsavedChanges.accesskey "U">
+<!ENTITY menuSplitTab.accesskey "S">
+<!ENTITY menuStartIncrementalSearch.accesskey "I">
+<!ENTITY menuTabify.accesskey "T">
+<!ENTITY menuTools.accesskey "T">
+<!ENTITY menuToolsRecentCommands.accesskey "e">
+<!ENTITY menuToolsRunCommand.accesskey "R">
+<!ENTITY menuUncomment.accesskey "U">
+<!ENTITY menuUntabify.accesskey "N">
+<!ENTITY menuView.accesskey "V">
+<!ENTITY menuViewToolbarsAutoHide.label "Hide Toolbars">
+<!ENTITY menuWatchThread.accesskey "W">
+<!ENTITY menuWorkspace.accesskey "W">
+<!ENTITY menuWorkspaceSave.accesskey "W">
+<!ENTITY menuWorkspaceOpen.accesskey "W">
+<!ENTITY menuWorkspaceManage.accesskey "M">
+
+<!ENTITY minimapZoomFontSizeReset.desc "Minimap: Zoom: Reset to Default Size">
+<!ENTITY minimapZoomFontSizeDown.desc "Minimap: Zoom Font Size Down">
+<!ENTITY minimapZoomFontSizeUp.desc "Minimap: Zoom Font Size Up">
+<!ENTITY minimapHide.desc "Minimap: Hide this Minimap">
+<!ENTITY move.label "Move">
+<!ENTITY moveButton.accesskey "M">
+<!ENTITY moveToOtherTabGroup.label "Go to Split View">
+<!ENTITY moveTabToNewWindow.label "Go to a New Window">
+<!ENTITY navigation.menu.accesskey "N">
+<!ENTITY navigation.menu.label "Navigation">
+<!ENTITY new.label "New">
+<!ENTITY newCommand.label "New Command...">
+<!ENTITY newCustomMenu.label "New Custom Menu">
+<!ENTITY newCustomToolbar.label "New Custom Toolbar">
+<!ENTITY newFile.accesskey "F">
+<!ENTITY newFile.label "New File...">
+<!ENTITY newTab.label "New Tab...">
+<!ENTITY newFileFromTemplate.accesskey "T">
+<!ENTITY newFileFromTemplate.label "File from Template...">
+<!ENTITY newFileUsingDefaultLanguage.tooltiptext "New File Using Default Language">
+<!ENTITY newTab.tooltiptext "New Tab">
+<!ENTITY newTab.label "New Tab">
+<!ENTITY newFolder.label "New Folder...">
+<!ENTITY newFromTemplate.label "New From Template">
+<!ENTITY newTutorial.label "New Tutorial...">
+<!ENTITY newMacro.label "New Userscript...">
+<!ENTITY newProject.label "New Project...">
+<!ENTITY newProjectFromTemplate.label "New Project From Template...">
+<!ENTITY newSnippet.label "New Snippet...">
+<!ENTITY newTemplate.label "New Template...">
+<!ENTITY newFolderTemplate.label "New Folder Template...">
+<!ENTITY newPrintDebug.label "New Print Debug Statement...">
+<!ENTITY newWindow.accesskey "N">
+<!ENTITY newWindow.label "New Window">
+<!ENTITY newURL.label "New URL...">
+<!ENTITY nextBookmark.label "Go to Next Bookmark">
+<!ENTITY nextFile.label "Next Tab">
+<!ENTITY noSelection.label "No selection">
+<!ENTITY notifications.label "Notifications">
+<!ENTITY open.label "Open">
+<!ENTITY open.tooltiptext "Open">
+<!ENTITY openFile.placeholder "Open File &#8230;">
+<!ENTITY openFile.label "Open File">
+<!ENTITY openFile.tooltiptext "Open File">
+<!ENTITY findInFilesToolbar.label "Find in Files Toolbar">
+<!ENTITY openFileToolbar.label "Open File Toolbar">
+<!ENTITY openLabel.accesskey "n">
+<!ENTITY openLine.desc "Editor: Open Line">
+<!ENTITY splitLine.desc "Editor: Split Line">
+<!ENTITY openProject.label "Open Project...">
+<!ENTITY sampleProject.label "Sample Project">
+<!ENTITY openProjectInNewWindow.label "Open Project In New Window...">
+<!ENTITY openThisProject.label "Open Project">
+<!ENTITY openThisProjectInNewWindow.label "Open Project In New Window">
+<!ENTITY openRemoteProject.label "Open Remote Project...">
+<!ENTITY tabPlacement.label "Placement">
+<!ENTITY tabFileActions.label "File Actions">
+<!ENTITY openTabInNewWindow.label "Open in a New Window">
+<!ENTITY openURLInBrowser.label "Open URL In Browser">
+<!ENTITY openURLInTab.label "Open URL In Tab">
+<!ENTITY pageSetup.label "Page Setup">
+<!ENTITY paste.label "Paste">
+<!ENTITY paste.tooltiptext "Paste">
+<!ENTITY pasteButton.accesskey "P">
+<!ENTITY pasteHtml.label "Paste HTML">
+<!ENTITY pasteHtml.menu.accesskey "M">
+<!ENTITY pasteHtml.command.desc "Editor: Paste HTML from the Clipboard">
+<!ENTITY pause.label "Pause">
+<!ENTITY pauseMacroRecording.tooltiptext "Pause Macro Recording">
+<!ENTITY pauseRecording.label "Pause Recording">
+<!ENTITY playLastMacro.tooltiptext "Play Last Macro">
+<!ENTITY preferences.label "Preferences...">
+<!ENTITY pressEnterToFind.tooltiptext "Press Enter to Find">
+<!ENTITY pressEnterToFindInFiles.tooltiptext "Press Enter to Find in Files">
+<!ENTITY preview.label "Preview">
+<!ENTITY previewBufferInBrowser.tooltiptext "Preview Buffer in Browser">
+<!ENTITY previousBookmark.label "Go to Previous Bookmark">
+<!ENTITY previousFile.label "Previous Tab">
+<!ENTITY print.label "Print">
+<!ENTITY print.tooltiptext "Print">
+<!ENTITY printPreview.label "Print Preview">
+<!ENTITY printPreview.title "Print Preview">
+<!ENTITY printPreviewSelection.label "Print Preview Selection">
+<!ENTITY printSelectedText.label "Print Selected Text...">
+<!ENTITY printSelectedTextToHTMLFile.label "Print Selected Text to HTML File...">
+<!ENTITY printSettings.label "Print Settings">
+<!ENTITY printToHTMLFile.label "Print to HTML File...">
+<!ENTITY project.label "Project">
+<!ENTITY projectPreferences.accesskey "P">
+<!ENTITY projectPreferences.label "Project Preferences">
+<!ENTITY projects.label "Projects">
+<!ENTITY projectsToolboxAddNewFile.desc "Projects/Toolbox: Add New File...">
+<!ENTITY projectsToolboxAddNewFileFromTemplate.desc "Projects/Toolbox: Add New File From Template...">
+<!ENTITY projectsToolboxAddNewFolder.desc "Projects/Toolbox: Add New Folder...">
+<!ENTITY projectsToolboxAddRemoteFile.desc "Projects/Toolbox: Add Remote File...">
+<!ENTITY properties.label "Properties">
+<!ENTITY projectProperties.accesskey "P">
+<!ENTITY projectProperties.desc "Projects/Toolbox: Properties">
+<!ENTITY quitApplicationCmd.label "Quit">
+<!ENTITY quitApplicationCmd.accesskey "Q">
+<!ENTITY quitApplicationCmdMac.label "Quit &brandShortName;">
+<!ENTITY quitApplicationCmdMac.accesskey "Q">
+<!ENTITY quitApplicationCmdWin.label "Exit">
+<!ENTITY quitApplicationCmdWin.accesskey "x">
+<!ENTITY removePrevWordInCaretSet.label "Multiple Selection - Remove Previous Occurrence">
+<!ENTITY removePrevWordInCaretSet.desc "Editor: Remove Previous Word in a Multi-Caret Set">
+<!ENTITY rename.label "Rename...">
+<!ENTITY renameTag.label "Rename Tag">
+<!ENTITY renameTag.desc "Editor: Rename Start- and End-Tag Name Simultaneously">
+<!ENTITY reImportFromFileSystemWithTheSameSettings.tooltiptext "Re-Import from File System with the same settings">
+<!ENTITY ready.label "Ready">
+<!ENTITY recentCommands.label "Recent Commands">
+<!ENTITY recentFiles.label "Recent Files">
+<!ENTITY recentProjects.label "Recent Projects">
+<!ENTITY recentWindows.label "Recent Windows">
+<!ENTITY record.label "Record">
+<!ENTITY recordMacro.tooltiptext "Record Macro">
+<!ENTITY redo.label "Redo">
+<!ENTITY redoButton.accesskey "O">
+<!ENTITY redoLastAction.tooltiptext "Redo Last Action">
+<!ENTITY reflowParagraph.label "Reflow Paragraph">
+<!ENTITY refreshStatus.label "Refresh Status">
+<!ENTITY releaseNotes.label "Release Notes">
+<!ENTITY reloadBrowserPreview.desc "Browser Preview: Reload the Current Browser Preview">
+<!ENTITY reloadBrowserPreview.menu.accesskey "P">
+<!ENTITY reloadBrowserPreview.menu.label "Reload Browser Preview">
+<!ENTITY remoteFile.label "Remote File...">
+<!ENTITY remove.label "Remove">
+<!ENTITY removeAllBookmarks.label "Remove All Bookmarks">
+<!ENTITY repeatNextKeystrokeNTimes.label "Repeat Next Keystroke N Times">
+<!ENTITY replace.label "Replace...">
+<!ENTITY scrolling.menu.label "Scrolling">
+<!ENTITY linkViews.label "Link Splitviews">
+<!ENTITY unlinkViews.label "Unlink Views">
+<!ENTITY linkViewsCmd.desc "View: link scrolling of current active split views">
+<!ENTITY unlinkViewsCmd.desc "View: unlink scrolling of current view"> 
+<!ENTITY linkViews.menu.accesskey "L"> 
+<!ENTITY unlinkViews.menu.accesskey "U">
+<!ENTITY replaceInFiles.label "Replace in Files...">
+<!ENTITY replaceInCurrProject.label "Replace in Current Project...">
+<!ENTITY resetFontSize.label "Reset Font Size">
+<!ENTITY resetFontSize.accesskey "R">
+<!ENTITY revert.label "Revert">
+<!ENTITY revertProject.label "Revert Project">
+<!ENTITY rotateTabGroups.label "Rotate Split View">
+<!ENTITY runCommand.label "Run Command...">
+<!ENTITY runLast.label "Run Last">
+<!ENTITY runLastMacro.label "Run Last Macro">
+<!ENTITY save.label "Save">
+<!ENTITY saveAll.label "Save All">
+<!ENTITY saveAllFiles.tooltiptext "Save All Files">
+<!ENTITY saveAsDotDotDot.label "Save As...">
+<!ENTITY saveAsOther.label "Save As Other">
+<!ENTITY saveFile.label "Save File">
+<!ENTITY saveFile.tooltiptext "Save File">
+<!ENTITY saveLastMacroToToolbox.tooltiptext "Save Macro to Toolbox as Userscript">
+<!ENTITY saveProject.label "Save Project">
+<!ENTITY saveProjectAs.label "Save Project As...">
+<!ENTITY renameProject.label "Rename Project...">
+<!ENTITY saveToToolbox.label "Save as Userscript">
+<!ENTITY scrollCurrentLineToCenterOfScreen.label "Scroll Current Line to Center of Screen">
+<!ENTITY scrollCurrentLineToTopOfScreen.label "Scroll Current Line to Top of Screen">
+<!ENTITY sections.tooltiptext "Sections">
+<!ENTITY select.menu.accesskey "S">
+<!ENTITY select.menu.label "Select">
+<!ENTITY selectAll.label "Select All">
+<!ENTITY selectAll.menu.accesskey "A">
+<!ENTITY selectBlock.label "Select Block">
+<!ENTITY selectDelimitedBlock.label "Select Delimited Block">
+<!ENTITY selectToMatchingBrace.label "Select to Matching Brace">
+<!ENTITY selectToMatchingBrace.menu.accesskey "C">
+<!ENTITY selection.label "selection">
+<!ENTITY selectionInformation.tooltiptext "Selection Information">
+<!ENTITY showButtonText.label "Show Button Text">
+<!ENTITY showMenubar.label "Show Menubar">
+<!ENTITY showToolbars.label "Show Toolbars">
+<!ENTITY showSideToolbar.label "Show Side Toolbar">
+<!ENTITY showHideBottomPane.tooltiptext "Show/Hide Bottom Pane">
+<!ENTITY showHideLeftPane.tooltiptext "Show/Hide Left Pane">
+<!ENTITY showHideRightPane.tooltiptext "Show/Hide Right Pane">
+
+<!ENTITY pane.moveTo.tab.label "Combine With Tab">
+<!ENTITY pane.moveTo.tab.new.label "New Tab">
+<!ENTITY pane.moveTo.tab.new.single.label "Separate Tab">
+<!ENTITY pane.moveTo.pane.label "Move To Pane">
+<!ENTITY pane.moveTo.pane.new.label "New Floating Pane">
+<!ENTITY pane.detach.label "Detach Pane">
+<!ENTITY pane.customize.label "Customize...">
+<!ENTITY pane.customize.placeholder.label
+    "Please use the mouse to drag panes into the desired configuration and press Done.">
+<!ENTITY pane.customize.done.label "Done">
+
+<!ENTITY pane.empty.label "This pane has no content. Please right click on a widget tab to move it here.">
+<!ENTITY paneNameLeft "Left Pane">
+<!ENTITY paneNameRight "Right Pane">
+<!ENTITY paneNameBottom "Bottom Pane">
+<!ENTITY showInExplorer.label "Show in Explorer">
+<!ENTITY showInFileManager.label "Show in File Manager">
+<!ENTITY showInFinder.label "Show in Finder">
+<!ENTITY showProjectInPlaces.desc "General: Show in Places">
+<!ENTITY showProjectInPlaces.label "Show in Places">
+<!ENTITY showSpecificTab.tooltiptext "Show Specific Sidebar/Tab">
+<!ENTITY showTab.label "Show Tab">
+<!ENTITY showUnsavedChanges.label "Show Unsaved Changes">
+<!ENTITY sourceCodeCleanLineEndings.desc "Code: Clean Line Endings">
+<!ENTITY sourceCodeClearSyntaxErrorsWarnings.desc "Code: Clear Syntax Errors/Warnings">
+<!ENTITY sourceCodeCollapseAllFolds.desc "Code: Collapse All Folds">
+<!ENTITY sourceCodeCollapseFold.desc "Code: Collapse Fold">
+<!ENTITY sourceCodeCollapseFoldRecursively.desc "Code: Collapse Fold Recursively">
+<!ENTITY sourceCodeCommentRegion.desc "Code: Comment Region">
+<!ENTITY sourceCodeCompleteWord.desc "Code: Complete Word">
+<!ENTITY sourceCodeCompleteWordBackwards.desc "Code: Complete Word (backwards)">
+<!ENTITY sourceCodeConvertSelectionToLowerCase.desc "Code: Convert Selection to Lower Case">
+<!ENTITY sourceCodeConvertSelectionToUpperCase.desc "Code: Convert Selection to Upper Case">
+<!ENTITY sourceCodeConvertSelectionToTitleCase.desc "Code: Convert Selection to Title Case">
+<!ENTITY sourceCodeExpandAllFolds.desc "Code: Expand All Folds">
+<!ENTITY sourceCodeExpandFold.desc "Code: Expand Fold">
+<!ENTITY sourceCodeExpandFoldRecursively.desc "Code: Expand Fold Recursively">
+<!ENTITY sourceCodeGoToDefinition.desc "Code: Go to Definition">
+<!ENTITY sourceCodeJumpToCorrespondingLine.desc "Code: Go to corresponding line">
+<!ENTITY sourceCodeJumpToMatchingBrace.desc "Code: Go to Matching Brace">
+<!ENTITY sourceCodeNextSyntaxErrorWarning.desc "Code: Next Syntax Error/Warning">
+<!ENTITY sourceCodeRunSyntaxCheck.desc "Code: Run Syntax Check">
+<!ENTITY sourceCodeSelectBlock.desc "Code: Select Block">
+<!ENTITY sourceCodeSelectToMatchingBrace.desc "Code: Select to Matching Brace">
+<!ENTITY sourceCodeTabifyRegion.desc "Code: Tabify Region...">
+<!ENTITY sourceCodeToggleFold.desc "Code: Toggle Fold">
+<!ENTITY sourceCodeUnCommentRegion.desc "Code: Un-comment Region">
+<!ENTITY sourceCodeUnTabifyRegion.desc "Code: Un-tabify Region...">
+<!ENTITY splitView.label "Split View">
+<!ENTITY standard.label "Standard">
+<!ENTITY standardToolbar.tooltiptext "Standard Toolbar">
+<!ENTITY startRecording.label "Start Recording">
+<!ENTITY stop.label "Stop">
+<!ENTITY stopRecording.label "Stop Recording">
+<!ENTITY stopRecordingMacro.tooltiptext "Stop Recording Macro">
+<!ENTITY stopSearch.tooltiptext "Stop Search">
+<!ENTITY syntaxCheckingStatus.tooltiptext "Syntax Checking Status">
+<!ENTITY tabifyRegion.label "Tabify Region">
+<!ENTITY tabs.label "Tabs &amp; Sidebars">
+<!ENTITY template.label "Template...">
+<!ENTITY templates.label "Templates">
+<!ENTITY templates.accesskey "t">
+<!ENTITY terminateProcess.tooltiptext "Terminate Process">
+<!ENTITY thisToolboxIsReadOnly.locktip "This toolbox is read-only.">
+<!ENTITY toggleBookmark.label "Toggle Bookmark">
+<!ENTITY toggleBottom.label "Toggle Bottom">
+<!ENTITY toggleLeft.label "Toggle Left">
+<!ENTITY toggleRawParsedOutputView.tooltiptext "Toggle Raw/Parsed Output View">
+<!ENTITY toggleRight.label "Toggle Right">
+<!ENTITY toolbars.label "Toolbars">
+<!ENTITY toolbox2.label "Toolbox">
+<!ENTITY toolboxExportPackage.desc "Toolbox: Export Package">
+<!ENTITY tools.label "Tools">
+<!ENTITY toolsRunCommand.desc "Tools: Run Command...">
+<!ENTITY toolsToolbar.tooltiptext "Tools Toolbar">
+<!ENTITY toolsWatchFile.desc "Tools: Watch File...">
+<!ENTITY unCommentRegion.label "Un-comment Region">
+<!ENTITY undo.label "Undo">
+<!ENTITY undoButton.accesskey "U">
+<!ENTITY undoLastAction.tooltiptext "Undo Last Action">
+<!ENTITY undoReplacements.tooltiptext "Undo Replacements">
+<!ENTITY untabifyRegion.label "Untabify Region">
+<!ENTITY update.label "Update">
+<!ENTITY userInterfaceBrowserPreview.desc "User Interface: Browser Preview">
+<!ENTITY userInterfaceBrowserPreviewInternal.desc "User Interface: Internal Browser Preview - Split View">
+<!ENTITY userInterfaceBrowserPreviewInternalSameTabGroup.desc "User Interface: Internal Browser Preview - Same View">
+<!ENTITY userInterfaceFocusOnBottomPane.desc "User Interface: Focus on Bottom Pane">
+<!ENTITY userInterfaceFocusOnEditor.desc "User Interface: Focus on Editor">
+<!ENTITY userInterfaceFocusOnProjectsPane.desc "User Interface: Focus on Projects Pane">
+<!ENTITY userInterfaceFocusOnToolboxPane.desc "User Interface: Focus on Toolbox Pane">
+<!ENTITY userInterfaceFocusOtherSplitEditorPane.desc "User Interface: Focus on Other Split View">
+<!ENTITY userInterfaceFullScreen.desc "User Interface: Full Screen">
+<!ENTITY userInterfaceMoveTabToAnotherTabWindow.desc "User Interface: Move tab to other split view">
+<!ENTITY userInterfaceMoveTabToANewWindow.desc "User Interface: Move tab to a new window">
+<!ENTITY userInterfaceOpenTabInANewWindow.desc "User Interface: Open tab in a new window">
+<!ENTITY userInterfaceShowHideCodeBrowserTab.desc "User Interface: Show/Hide Code Browser Tab">
+<!ENTITY userInterfaceShowHideEndOfLines.desc "User Interface: Show/Hide End of Lines">
+<!ENTITY userInterfaceShowHideKomodoResourcesToolbar.desc "User Interface: Show/Hide Komodo Resources Toolbar">
+<!ENTITY userInterfaceShowHideMacrosToolbar.desc "User Interface: Show/Hide Macros Toolbar">
+<!ENTITY userInterfaceShowHideFindToolbar.desc "User Interface: Show/Hide Find Toolbar">
+<!ENTITY userInterfaceShowHideOpenToolbar.desc "User Interface: Show/Hide Open Toolbar">
+<!ENTITY userInterfaceShowHideBottomPane.desc "User Interface: Show/Hide Bottom Pane">
+<!ENTITY userInterfaceShowHideLeftPane.desc "User Interface: Show/Hide Left Pane">
+<!ENTITY userInterfaceShowHideStandardToolbar.desc "User Interface: Show/Hide Standard Toolbar">
+<!ENTITY userInterfaceShowHideMenubar.desc "User Interface: Show/Hide Menubar">
+<!ENTITY userInterfaceShowHideToolbars.desc "User Interface: Show/Hide All Toolbars">
+<!ENTITY userInterfaceShowHideSideToolbars.desc "User Interface: Show/Hide Side Toolbar">
+<!ENTITY userInterfaceShowHideToolbarButtonText.desc "User Interface: Show/Hide Toolbar Button Text">
+<!ENTITY userInterfaceShowHideRightPane.desc "User Interface: Show/Hide Right Pane">
+<!ENTITY userInterfaceShowHideToolboxTab.desc "User Interface: Show/Hide Toolbox Tab">
+
+<!ENTITY saveUserWorkspace.desc "Workspace: Save workspace to prefs">
+<!ENTITY openUserWorkspace.desc "Workspace: Open workspace from prefs.">
+<!ENTITY manUserWorkspace.desc "Workspace: Manage/Delete available workspaces.">
+<!ENTITY menuSaveWorkspace.label "Save Workspace">
+<!ENTITY menuOpenWorkspace.label "Workspace">
+<!ENTITY menuManWorkspace.label "Manage Workspace">
+
+<!ENTITY userInterfaceShowHideToolsToolbar.desc "User Interface: Show/Hide Tools Toolbar">
+<!ENTITY userInterfaceShowHideMinimap.desc "User Interface: Show/Hide Editor Minimap">
+<!ENTITY userInterfaceShowHideWhitespace.desc "User Interface: Show/Hide Whitespace">
+<!ENTITY userInterfaceShowHideWorkspaceToolbar.desc "User Interface: Show/Hide Workspace Toolbar">
+<!ENTITY userInterfaceSplitViewOfTab.desc "User Interface: Split view of tab">
+<!ENTITY userInterfaceToggleSplitterOrientation.desc "User Interface: Toggle splitter orientation">
+<!ENTITY userInterfaceUseFixedProportionalFont.desc "User Interface: Use Fixed/Proportional Font">
+<!ENTITY userInterfaceViewHideIndentationGuides.desc "User Interface: View/Hide Indentation Guides">
+<!ENTITY userInterfaceViewHideLineNumbers.desc "User Interface: View/Hide Line Numbers">
+<!ENTITY userInterfaceViewSource.desc "Browser Preview: View Source">
+<!ENTITY userInterfaceWordWrapLongLines.desc "User Interface: Word-wrap long lines">
+<!ENTITY view.label "View">
+<!ENTITY viewAsLanguage.accesskey "L">
+<!ENTITY viewAsLanguage.label "View as Language">
+<!ENTITY viewEOLMarkers.accesskey "E">
+<!ENTITY viewEOLMarkers.label "View EOL Markers">
+<!ENTITY viewIndentationGuides.accesskey "G">
+<!ENTITY viewIndentationGuides.label "View Indentation Guides">
+<!ENTITY viewLineNumbers.accesskey "N">
+<!ENTITY viewLineNumbers.label "View Line Numbers">
+<!ENTITY showHideMinimap.accesskey "M">
+<!ENTITY showHideMinimap.label "View Minimap">
+<!ENTITY hideMinimap.label "Hide Minimap">
+<!ENTITY hideMinimap.accesskey "H">
+<!ENTITY viewWhitespace.accesskey "H">
+<!ENTITY viewWhitespace.label "View Whitespace">
+<!ENTITY watchFile.label "Watch File...">
+<!ENTITY wordWrap.accesskey "W">
+<!ENTITY wordWrap.label "Word Wrap">
+<!ENTITY workspace.label "Workspace">
+<!ENTITY workspaceToolbar.tooltiptext "Workspace Toolbar">
+<!ENTITY wrapSelectionWithCarets.desc "Editor: Wrap Selection With Multiple Carets">
+
+<!ENTITY helpForLanguages.label "Help for Languages">
+<!ENTITY helpLanguagesMenu.accesskey "L">
+<!ENTITY helpPerlMailingLists.desc "Help: Perl Mailing Lists">
+<!ENTITY helpPerlReferenceWeb.desc "Help: Perl Reference">
+<!ENTITY helpPythonMailingLists.desc "Help: Python Mailing Lists">
+<!ENTITY helpPythonReferenceWeb.desc "Help: Python Reference">
+<!ENTITY helpPython3ReferenceWeb.desc "Help: Python3 Reference">
+<!ENTITY helpPHPMailingLists.desc "Help: PHP Mailing Lists">
+<!ENTITY helpPHPReferenceWeb.desc "Help: PHP Reference">
+<!ENTITY helpRubyMailingLists.desc "Help: Ruby Mailing Lists">
+<!ENTITY helpRubyReferenceWeb.desc "Help: Ruby Reference">
+<!ENTITY helpTclMailingLists.desc "Help: Tcl Mailing Lists">
+<!ENTITY helpTclReferenceWeb.desc "Help: Tcl Reference">
+<!ENTITY helpXSLTMailingLists.desc "Help: XSLT Mailing Lists">
+<!ENTITY helpXSLTReferenceWeb.desc "Help: XSLT Reference">
+
+<!ENTITY perlMailingLists.label "Perl Mailing Lists">
+<!ENTITY perlReferenceWeb.label "Perl Reference">
+<!ENTITY pythonMailingLists.label "Python Mailing Lists">
+<!ENTITY pythonReferenceWeb.label "Python Reference">
+<!ENTITY python3ReferenceWeb.label "Python3 Reference">
+<!ENTITY PHPMailingLists.label "PHP Mailing Lists">
+<!ENTITY PHPReferenceWeb.label "PHP Reference">
+<!ENTITY rubyMailingLists.label "Ruby Mailing Lists">
+<!ENTITY rubyReferenceWeb.label "Ruby Reference">
+<!ENTITY tclMailingLists.label "Tcl Mailing Lists">
+<!ENTITY tclReferenceWeb.label "Tcl Reference">
+<!ENTITY XSLTMailingLists.label "XSLT Mailing Lists">
+<!ENTITY XSLTReferenceWeb.label "XSLT Reference">
+
+<!--about.dtd-->
+
+<!--komodo.xul-->
+<!ENTITY projectPanelName.label "Name">
+<!ENTITY lockUnlockFindResults.tooltiptext "Lock/Unlock Find Results">
+<!ENTITY komodoFindToolbarFind.label "Find &#8230;">
+<!ENTITY komodoFindToolbarOpen.label "Open">
+<!ENTITY komodoFindToolbarIn.label "In current file">
+<!ENTITY menuHelpCheckForUpdates.accesskey "U">
+    <!-- Quicklaunch -->
+<!ENTITY quicklaunchOpenWorkspace.label "Open Workspace">
+
+
+<!--commented in file commandsOverlay.xul-->
+<!--
+<!ENTITY editorCopyCurrentLine.desc "Editor: Copy current line">
+-->
+<!ENTITY openAddonsDialog.desc "Add-ons: Open the addon dialog (extension manager)">
+
+
+<!-- Mac system menu definitions -->
+<!ENTITY menuSysMacServices.label "Services">
+<!ENTITY menuSysMacHideApp.label "Hide &brandShortName;">
+<!ENTITY menuSysMacHideOtherApps.label "Hide Others">
+<!ENTITY menuSysMacShowAllApps.label "Show All">
+
+<!ENTITY hideThisAppCmdMac.commandkey "h">
+<!ENTITY hideThisAppCmdMac.modifiers "accel">
+<!ENTITY hideOtherAppsCmdMac.commandkey "h">
+<!ENTITY hideOtherAppsCmdMac.modifiers "accel,alt">
+
+<!-- recently-closed tabs -->
+<!ENTITY menuRecentlyClosedTabs.accesskey "T">
+<!ENTITY recentlyClosedTabs.label "Recently Closed Tabs">
+<!ENTITY reopenLastClosedTab.desc "General: Reopen the Last Closed Tab">
+
+<!ENTITY run.label "Run">
+
+<!-- toolbox definitions -->
+
+<!ENTITY sortNatural.label "Sort Natural">
+<!ENTITY sortNatural.accesskey "N">
+<!ENTITY sortAscending.label "Sort Ascending">
+<!ENTITY sortAscending.accesskey "A">
+<!ENTITY sortDescending.label "Sort Descending">
+<!ENTITY sortDescending.accesskey "D">
+<!ENTITY reloadTools.label "Reload">
+<!ENTITY reloadTools.accesskey "R">
+<!ENTITY importFilesFromFileSystem.label "Import Files from File System">
+<!ENTITY importFolderFromFileSystem.label "Import Folder from File System">
+<!ENTITY importPackage.label "Import kpz Package">
+<!ENTITY importPackageFromWeb.label "Import kpz Package From Web">
+<!ENTITY importSublimeSnippetFolder.label "Import Sublime Snippet Folder">
+<!ENTITY importFrameworkToolbox.label "Import Framework Toolbox">
+<!ENTITY importDjangoToolbox.label "Django Tools">
+<!ENTITY importFlaskToolbox.label "Flask Tools">
+<!ENTITY importPyramidToolbox.label "Pyramid Tools">
+<!ENTITY importRailsToolbox.label "Rails Tools">
+<!ENTITY importDrupalToolbox.label "Drupal Tools">
+<!ENTITY importLaravelToolbox.label "Laravel Tools">
+<!ENTITY importWordPressToolbox.label "WordPress Tools">
+<!ENTITY importCatalystToolbox.label "Catalyst Tools">
+<!ENTITY getMacro.label "Get More Userscripts">
+<!ENTITY getToolbox.label "Get More Toolbox Items">
+<!ENTITY browsePackages.label "Browse Available Packages">
+<!ENTITY contributePackages.label "Contribute Packages">
+<!ENTITY shareTool.label "Share this Tool">
+
+<!ENTITY menuCloseAll.label "Close All">
+<!ENTITY menuCloseAll.accesskey "A">

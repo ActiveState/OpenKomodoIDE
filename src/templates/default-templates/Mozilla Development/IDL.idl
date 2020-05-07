@@ -1,0 +1,14 @@
+/* Copyright (C) [[%date:%Y]] [[%tabstop:MyCompany.com]]
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+
+/* [[%tabstop:...description of component/service...]]
+ *
+ */
+
+[scriptable, uuid([[%guid]])]
+interface [[%tabstop:IMyComponentInterface]]: nsISupports {
+    // attributes, constants, methods, ...
+};
+

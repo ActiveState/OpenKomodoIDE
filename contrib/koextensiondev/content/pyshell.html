@@ -1,0 +1,559 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<!--
+ **** BEGIN LICENSE BLOCK *****
+ *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *  
+ *  The contents of this file are subject to the Mozilla Public License
+ *  Version 1.1 (the "License"); you may not use this file except in
+ *  compliance with the License. You may obtain a copy of the License at
+ *  http://www.mozilla.org/MPL/
+ *  
+ *  Software distributed under the License is distributed on an "AS IS"
+ *  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ *  License for the specific language governing rights and limitations
+ *  under the License.
+ *  
+ *  The Original Code is PyShell code.
+ *  
+ *  The Initial Developer of the Original Code is Todd Whiteman.
+ *  Portions created by the Initial Developer are Copyright (C) 2007-2008.
+ *  All Rights Reserved.
+ *  
+ *  Contributor(s):
+ *    Todd Whiteman   <twhitema@gmail.com>
+ *  
+ *  Alternatively, the contents of this file may be used under the terms of
+ *  either the GNU General Public License Version 2 or later (the "GPL"), or
+ *  the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ *  in which case the provisions of the GPL or the LGPL are applicable instead
+ *  of those above. If you wish to allow use of your version of this file only
+ *  under the terms of either the GPL or the LGPL, and not to allow others to
+ *  use your version of this file under the terms of the MPL, indicate your
+ *  decision by deleting the provisions above and replace them with the notice
+ *  and other provisions required by the GPL or the LGPL. If you do not delete
+ *  the provisions above, a recipient may use your version of this file under
+ *  the terms of any one of the MPL, the GPL or the LGPL.
+ *  
+ * **** END LICENSE BLOCK *****
+-->
+
+<!--
+This Python shell is based on the Jesse Ruderman's JavaScript shell, which
+is available here:
+  http://www.squarefree.com/shell/
+-->
+
+<html onclick="keepFocusInTextbox(event)">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Python Shell 0.6</title>
+
+<script type="text/javascript">
+
+// Global window variables.
+
+var histList = [""]; 
+var histPos = 0;
+var _scope = {};
+var _win; // a top-level context
+var _pyEvalSvc; // xpcom python eval'r
+var question;
+var _in;
+var _out;
+var tooManyMatches = null;
+
+function refocus()
+{
+  _in.blur(); // Needed for Mozilla to scroll correctly.
+  _in.focus();
+}
+
+function init()
+{
+  try {
+    _in = document.getElementById("input");
+    _out = document.getElementById("output");
+  
+    _win = window;
+    _pyEvalSvc = Components.classes["@twhiteman.netfirms.com/pyShell;1"].
+                    createInstance(Components.interfaces.pyIShell);
+  
+    if (opener && !opener.closed)
+    {
+      println("Using bookmarklet version of shell: commands will run in opener's context.", "message");
+      _win = opener;
+    }
+  
+    initTarget();
+  
+    recalculateInputHeight();
+    refocus();
+  } catch (ex) {
+    alert("init:: error: " + ex);
+  }
+}
+
+function initTarget()
+{
+  _win.Shell = window;
+}
+
+
+// Unless the user is selected something, refocus the textbox.
+// (requested by caillon, brendan, asa)
+function keepFocusInTextbox(e) 
+{
+  var g = e.srcElement ? e.srcElement : e.target; // IE vs. standard
+  
+  while (!g.tagName)
+    g = g.parentNode;
+  var t = g.tagName.toUpperCase();
+  if (t=="A" || t=="INPUT")
+    return;
+    
+  if (window.getSelection) {
+    // Mozilla
+    if (String(window.getSelection()))
+      return;
+  }
+  else if (document.getSelection) {
+    // Opera? Netscape 4?
+    if (document.getSelection())
+      return;
+  }
+  else {
+    // IE
+    if ( document.selection.createRange().text )
+      return;
+  }
+  
+  refocus();
+}
+
+function inputKeydown(e) {
+  // Use onkeydown because IE doesn't support onkeypress for arrow keys
+
+  //alert(e.keyCode + " ^ " + e.keycode);
+
+  if (e.shiftKey && e.keyCode == 13) { // shift-enter
+    // don't do anything; allow the shift-enter to insert a line break as normal
+  } else if (e.keyCode == 13) { // enter
+    // execute the input on enter
+    try { go(); } catch(er) { alert(er); };
+    setTimeout(function() { _in.value = ""; }, 0); // can't preventDefault on input, so clear it later
+  } else if (e.keyCode == 38) { // up
+    // go up in history if at top or ctrl-up
+    if (e.ctrlKey || _in.selectionStart == null || _in.selectionStart == 0)
+      hist(true);
+  } else if (e.keyCode == 40) { // down
+    // go down in history if at end or ctrl-down
+    if (e.ctrlKey || _in.selectionStart == null || _in.selectionEnd == _in.textLength)
+      hist(false);
+  } else if (e.keyCode == 9) { // tab
+    tabcomplete();
+    setTimeout(function() { refocus(); }, 0); // refocus because tab was hit
+  } else { }
+
+  setTimeout(recalculateInputHeight, 0);
+  
+  //return true;
+}
+
+function recalculateInputHeight()
+{
+  var rows = _in.value.split(/\n/).length
+    + 1; // prevent scrollbar flickering in Mozilla
+  
+  if (_in.rows != rows) // without this check, it is impossible to select text in Opera 7.60 or Opera 8.0.
+    _in.rows = rows;
+}
+
+function println(s, type)
+{
+  if((s=String(s)))
+  {
+    var newdiv = document.createElement("div");
+    newdiv.appendChild(document.createTextNode(s));
+    newdiv.className = type;
+    _out.appendChild(newdiv);
+    return newdiv;
+  }
+  return null;
+}
+
+function printWithRunin(h, s, type)
+{
+  var div = println(s, type);
+  var head = document.createElement("strong");
+  head.appendChild(document.createTextNode(h + ": "));
+  div.insertBefore(head, div.firstChild);
+}
+
+
+function hist(up)
+{
+  // histList[0] = first command entered, [1] = second, etc.
+  // type something, press up --> thing typed is now in "limbo"
+  // (last item in histList) and should be reachable by pressing 
+  // down again.
+
+  var L = histList.length;
+
+  if (L == 1)
+    return;
+
+  if (up)
+  {
+    if (histPos == L-1)
+    {
+      // Save this entry in case the user hits the down key.
+      histList[histPos] = _in.value;
+    }
+
+    if (histPos > 0)
+    {
+      histPos--;
+      // Use a timeout to prevent up from moving cursor within new text
+      // Set to nothing first for the same reason
+      setTimeout(
+        function() {
+          _in.value = ''; 
+          _in.value = histList[histPos]; 
+          if (_in.setSelectionRange) 
+            _in.setSelectionRange(0, 0);
+        },
+        0
+      );
+    }
+  } 
+  else // down
+  {
+    if (histPos < L-1)
+    {
+      histPos++;
+      _in.value = histList[histPos];
+    }
+    else if (histPos == L-1)
+    {
+      // Already on the current entry: clear but save
+      if (_in.value)
+      {
+        histList[histPos] = _in.value;
+        ++histPos;
+        _in.value = "";
+      }
+    }
+  }
+}
+
+function tabcomplete()
+{
+  /*
+   * Working backwards from s[from], find the spot
+   * where this expression starts.  It will scan
+   * until it hits a mismatched ( or a space,
+   * but it skips over quoted strings.
+   * If stopAtDot is true, stop at a '.'
+   */
+  function findbeginning(s, from, stopAtDot)
+  {
+    /*
+     *  Complicated function.
+     *
+     *  Return true if s[i] == q BUT ONLY IF
+     *  s[i-1] is not a backslash.
+     */
+    function equalButNotEscaped(s,i,q)
+    {
+      if(s.charAt(i) != q) // not equal go no further
+        return false;
+
+      if(i==0) // beginning of string
+        return true;
+
+      if(s.charAt(i-1) == '\\') // escaped?
+        return false;
+
+      return true;
+    }
+
+    var nparens = 0;
+    var i;
+    for(i=from; i>=0; i--)
+    {
+      if(s.charAt(i) == ' ')
+        break;
+
+      if(stopAtDot && s.charAt(i) == '.')
+        break;
+        
+      if(s.charAt(i) == ')')
+        nparens++;
+      else if(s.charAt(i) == '(')
+        nparens--;
+
+      if(nparens < 0)
+        break;
+
+      // skip quoted strings
+      if(s.charAt(i) == '\'' || s.charAt(i) == '\"')
+      {
+        //dump("skipping quoted chars: ");
+        var quot = s.charAt(i);
+        i--;
+        while(i >= 0 && !equalButNotEscaped(s,i,quot)) {
+          //dump(s.charAt(i));
+          i--;
+        }
+        //dump("\n");
+      }
+    }
+    return i;
+  }
+
+  function getcaretpos(inp)
+  {
+    if(inp.selectionEnd)
+      return inp.selectionEnd;
+
+    if(inp.createTextRange)
+    {
+      //dump('using createTextRange\n');
+      var docrange = _win.Shell.document.selection.createRange();
+      var inprange = inp.createTextRange();
+      inprange.setEndPoint('EndToStart', docrange);
+      return inprange.text.length;
+    }
+
+    return inp.value.length; // sucks, punt
+  }
+
+  function setselectionto(inp,pos)
+  {
+    if(inp.selectionStart) {
+      inp.selectionStart = inp.selectionEnd = pos;
+    } else if(inp.createTextRange) {
+      var docrange = _win.Shell.document.selection.createRange();
+      var inprange = inp.createTextRange();
+      inprange.move('character',pos);
+      inprange.select();
+    } else { // err...
+    /*
+      inp.select();
+      if(_win.Shell.document.getSelection())
+        _win.Shell.document.getSelection() = "";
+        */
+    }
+  }
+
+    // get position of cursor within the input box
+    var caret = getcaretpos(_in);
+
+    if (caret) {
+      //dump("----\n");
+      var dotpos, spacepos, complete, obj;
+      //dump("caret pos: " + caret + "\n");
+      // see if there's a dot before here
+      dotpos = findbeginning(_in.value, caret-1, true);
+      //dump("dot pos: " + dotpos + "\n");
+      if(dotpos == -1 || _in.value.charAt(dotpos) != '.') {
+        dotpos = caret;
+        //dump("changed dot pos: " + dotpos + "\n");
+      }
+
+      // look backwards for a non-variable-name character
+      spacepos = findbeginning(_in.value, dotpos-1, false);
+      //dump("space pos: " + spacepos + "\n");
+
+      var objname = "";
+      // get the object we're trying to complete on
+      if (spacepos == dotpos || spacepos+1 == dotpos || dotpos == caret) {
+        if (_in.value.charAt(dotpos) == '(' ||
+            (_in.value.charAt(spacepos) == '(' && (spacepos+1) == dotpos)) {
+          // No completions on "(" character yet...
+          return;
+        }
+        // Okay, we''l just use what we have then
+      } else {
+        // Get the name we want to complet on.
+        objname = _in.value.substr(spacepos+1,dotpos-(spacepos+1));
+      }
+      //dump("objname: |" + objname + "|\n");
+
+      // get the thing we're trying to complete
+      if (dotpos == caret) {
+        if (spacepos+1 == dotpos || spacepos == dotpos) {
+          // nothing to complete
+          //dump("nothing to complete\n");
+          return;
+        }
+        complete = _in.value.substr(spacepos+1,dotpos-(spacepos+1));
+      } else {
+        complete = _in.value.substr(dotpos+1,caret-(dotpos+1));
+      }
+      //dump("complete: '" + complete + "'\n");
+
+      // Get all of the available items for objname.
+      try {
+        var objCount = {};
+        var completions = _pyEvalSvc.getCompletionsForName(objname, complete, objCount);
+      } catch(er) {
+        printError("Could not find members for '" + objname + "'");
+        return;
+      }
+      //dump("completions: " + completions + "\n");
+
+      // ok, now look at all the props/methods of this obj
+      // and find ones starting with 'complete'
+      var matches = [];
+      var bestmatch = null;
+      var a;
+      for (var idx=0; idx < completions.length; idx++) {
+        a = completions[idx];
+        //a = a.toString();
+        //XXX: making it lowercase could help some cases,
+        // but screws up my general logic.
+        if(a.substr(0,complete.length) == complete) {
+          matches.push(a);
+          ////dump("match: " + a + "\n");
+          // if no best match, this is the best match
+          if(bestmatch == null) {
+            bestmatch = a;
+          } else {
+            // the best match is the longest common string
+            function min(a,b){ return ((a<b)?a:b); }
+            var i;
+            for(i=0; i< min(bestmatch.length, a.length); i++) {
+              if(bestmatch.charAt(i) != a.charAt(i))
+                break;
+            }
+            bestmatch = bestmatch.substr(0,i);
+            ////dump("bestmatch len: " + i + "\n");
+          }
+          ////dump("bestmatch: " + bestmatch + "\n");
+        }
+      }
+      bestmatch = (bestmatch || "");
+      //dump("matches: " + matches + "\n");
+      var objAndComplete = (objname || obj) + "." + bestmatch;
+
+      //dump("matches.length: " + matches.length + ", tooManyMatches: " + tooManyMatches + ", objAndComplete: " + objAndComplete + "\n");
+      if (matches.length > 1 && (tooManyMatches == objAndComplete || matches.length <= 10)) {
+        printWithRunin("Matches: ", matches.join(', '), "tabcomplete");
+        tooManyMatches = null;
+      } else if (matches.length > 10) {
+        println(matches.length + " matches.  Press tab again to see them all", "tabcomplete");
+        tooManyMatches = objAndComplete;
+      } else {
+        tooManyMatches = null;
+      }
+
+      if(bestmatch != "")
+      {
+        var sstart;
+        if(dotpos == caret) {
+          sstart = spacepos+1;
+        }
+        else {
+          sstart = dotpos+1;
+        }
+        _in.value = _in.value.substr(0, sstart)
+                  + bestmatch
+                  + _in.value.substr(caret);
+        setselectionto(_in,caret + (bestmatch.length - complete.length));
+      }
+    }
+}
+
+function printQuestion(q)
+{
+  println(q, "input");
+}
+
+function printAnswer(a)
+{
+  if (a !== undefined) {
+    println(a, "normalOutput");
+  }
+}
+
+function printError(er)
+{ 
+  if (er.name)
+    println(er.name + ": " + er.message, "error"); // Because IE doesn't have error.toString.
+  else
+    println(er, "error"); // Because security errors in Moz /only/ have toString.
+}
+
+function go(s)
+{
+  _in.value = question = s ? s : _in.value;
+
+  if (question == "")
+    return;
+
+  histList[histList.length-1] = question;
+  histList[histList.length] = "";
+  histPos = histList.length - 1;
+  
+  // Unfortunately, this has to happen *before* the JavaScript is run, so that 
+  // print() output will go in the right place.
+  _in.value='';
+  recalculateInputHeight();
+  printQuestion(question);
+
+  if (_win.closed) {
+    printError("Target window has been closed.");
+    return;
+  }
+  
+  try { ("Shell" in _win) }
+  catch(er) {
+    printError("The Python Shell cannot access variables in the target window.  The most likely reason is that the target window now has a different page loaded and that page has a different hostname than the original page.");
+    return;
+  }
+
+  if (!("Shell" in _win))
+    initTarget(); // silent
+
+  // Evaluate Shell.question using _win's eval (this is why eval isn't in the |with|, IIRC).
+  try {
+    Shell.printAnswer(_pyEvalSvc.evalPythonString(Shell.question));
+  } catch(er) {
+    Shell.printError(er);
+  }
+  //setTimeout(Shell.refocus, 0);
+}
+
+</script>
+
+<style type="text/css">
+  body { background: white; color: black; }
+  
+  #output { white-space: pre; white-space: pre-wrap; } /* Preserve line breaks, but wrap too if browser supports it */
+  h3 { margin-top: 0; margin-bottom: 0em; }
+  h3 + div { margin: 0; }
+  
+  form { margin: 0; padding: 0; }
+  #input { width: 100%; border: none; padding: 0; }
+  
+  .input { color: blue; background: white; font: inherit; font-weight: bold; margin-top: .5em; /* background: #E6E6FF; */ }
+  .normalOutput { color: black; background: white; }
+  .print { color: brown; background: white; }
+  .error { color: red; background: white; }
+  .propList { color: green; background: white; }
+  .message { color: green; background: white; }
+  .tabcomplete { color: purple; background: white; }
+</style>
+</head>
+
+<body onload="init()">
+
+  <div id="output"><h3>Python Shell 0.6</h3><div>Features: autocompletion of property names with Tab, multiline input with Shift+Enter, input history with (Ctrl+) Up/Down.</div></div>
+
+  <div><textarea id="input" class="input" wrap="off" onkeydown="inputKeydown(event)" rows="1"></textarea></div>
+
+</body>
+
+</html>

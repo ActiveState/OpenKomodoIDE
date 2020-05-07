@@ -1,0 +1,1005 @@
+<!-- ***** BEGIN LICENSE BLOCK *****
+ Version: MPL 1.1/GPL 2.0/LGPL 2.1
+
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.1 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
+
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ License for the specific language governing rights and limitations
+ under the License.
+
+ The Original Code is Komodo code.
+
+ The Initial Developer of the Original Code is ActiveState Software Inc.
+ Portions created by ActiveState Software Inc are Copyright (C) 2000-2007
+ ActiveState Software Inc. All Rights Reserved.
+
+ Contributor(s):
+   ActiveState Software Inc
+
+ Alternatively, the contents of this file may be used under the terms of
+ either the GNU General Public License Version 2 or later (the "GPL"), or
+ the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ in which case the provisions of the GPL or the LGPL are applicable instead
+ of those above. If you wish to allow use of your version of this file only
+ under the terms of either the GPL or the LGPL, and not to allow others to
+ use your version of this file under the terms of the MPL, indicate your
+ decision by deleting the provisions above and replace them with the notice
+ and other provisions required by the GPL or the LGPL. If you do not delete
+ the provisions above, a recipient may use your version of this file under
+ the terms of any one of the MPL, the GPL or the LGPL.
+
+ ***** END LICENSE BLOCK ***** -->
+
+<!ENTITY % autoAbbreviationName.name                "Auto-Abbreviation">
+<!ENTITY connection.label                "Connection">
+
+<!ENTITY connectionDesc.label            "Configure HTTP Proxy settings for how Komodo connects to the Internet for updates, HTML Preview, etc.">
+<!ENTITY connectionSettings.label        "Settings...">
+<!ENTITY connectionSettings.accesskey    "e">
+
+<!ENTITY  connectionsDialog.title       "Connection Settings">
+
+<!ENTITY  proxyTitle.label              "Configure Proxies to Access the Internet">
+<!ENTITY  directTypeRadio.label         "Direct connection to the Internet">
+<!ENTITY  directTypeRadio.accesskey     "d">
+<!ENTITY  WPADTypeRadio.label           "Auto-detect proxy settings for this network">
+<!ENTITY  WPADTypeRadio.accesskey       "w">
+<!ENTITY  manualTypeRadio.label         "Manual proxy configuration:">
+<!ENTITY  manualTypeRadio.accesskey     "m">
+<!ENTITY  autoTypeRadio.label           "Automatic proxy configuration URL:">
+<!ENTITY  autoTypeRadio.accesskey       "a">
+<!ENTITY  reload.label                  "Reload">
+<!ENTITY  reload.accesskey              "e">
+<!ENTITY  ftp.label                     "FTP Proxy:">
+<!ENTITY  ftp.accesskey                 "F">
+<!ENTITY  gopher.label                  "Gopher Proxy:">
+<!ENTITY  gopher.accesskey              "G">
+<!ENTITY  http.label                    "HTTP Proxy:">
+<!ENTITY  http.accesskey                "y">
+<!ENTITY  ssl.label                     "SSL Proxy:">
+<!ENTITY  ssl.accesskey                 "S">
+<!ENTITY  socks.label                   "SOCKS Host:">
+<!ENTITY  socks.accesskey               "C">
+<!ENTITY  socks4.label                  "SOCKS v4">
+<!ENTITY  socks4.accesskey              "K">
+<!ENTITY  socks5.label                  "SOCKS v5">
+<!ENTITY  socks5.accesskey              "v">
+<!ENTITY  port.label                    "Port:">
+<!ENTITY  HTTPport.accesskey            "P">
+<!ENTITY  SSLport.accesskey             "o">
+<!ENTITY  FTPport.accesskey             "r">
+<!-- No accesskey for gopher (':' doesn't go well) - mpt's going to redesign the window -->
+<!ENTITY  gopherPort.accesskey          "">
+<!ENTITY  SOCKSport.accesskey           "t">
+<!ENTITY  noproxy.label                 "No Proxy for:">
+<!ENTITY  noproxy.accesskey             "n">
+<!ENTITY  noproxyExplain.label          "Example: .mozilla.org, .net.nz, 192.168.1.0/24">
+<!ENTITY  shareproxy.label              "Use this proxy server for all protocols">
+<!ENTITY  shareproxy.accesskey          "x">
+
+<!ENTITY AFullWeekdayName.label "&#37;A : full weekday name">
+<!ENTITY APICatalogs.label "API Catalogs">
+<!ENTITY BFullMonthName.label "&#37;B : full month name">
+<!ENTITY DOSWindowsRN.label "DOS/Windows (\r\n)">
+<!ENTITY FTP.label "FTP">
+<!ENTITY FTPS.label "FTPS">
+<!ENTITY FTP.servermode.label "Mode:">
+<!ENTITY FTP.activemode.label "Active">
+<!ENTITY FTP.passivemode.label "Passive">
+<!ENTITY GET.label "GET">
+<!ENTITY HHour24HourClock.label "&#37;H : hour (24-hour clock)">
+<!ENTITY HTML.label "HTML">
+<!ENTITY IHour12HourClock.label "&#37;I : hour (12-hour clock)">
+<!ENTITY L.accesskey "L">
+<!ENTITY MMinute0059.label "&#37;M : minute [00,59]">
+<!ENTITY OK.label "OK">
+<!ENTITY Apply.label "Apply">
+<!ENTITY PHP.label "PHP">
+<!ENTITY PHPDirectories.label "PHP Directories">
+<!ENTITY POST.label "POST">
+<!ENTITY S.accesskey "S">
+<!ENTITY SCP.label "SCP">
+<!ENTITY SFTP.label "SFTP">
+<!ENTITY SSecond.label "&#37;S : second">
+<!ENTITY T.accesskey "T">
+<!ENTITY UNIXN.label "UNIX (\n)">
+<!ENTITY URLEncoded.label "URL Encoded">
+<!ENTITY W.accesskey "W">
+<!ENTITY XDefaultTimeRepresentation.label "&#37;X : default time representation">
+<!ENTITY XMLCatalogs.label "XML Catalogs">
+<!ENTITY XSLT.label "XSLT">
+<!ENTITY YYearWithCentury.label "&#37;Y : year with century">
+<!ENTITY ZTimeZoneName.label "&#37;Z : time zone name">
+<!ENTITY aAbbreviatedWeekdayName.label "&#37;a : abbreviated weekday name">
+<!ENTITY aLiteralCharacter.label "&#37;&#37; : a literal '&#37;' character">
+<!ENTITY add.label "Add...">
+<!ENTITY addAnAPICatalog.label "Add an API catalog...">
+<!ENTITY addAppropriateExtension.label "Add appropriate extension">
+<!ENTITY additionalPerlImportDirectories.label "Additional Perl Import Directories">
+<!ENTITY additionalPythonImportDirectories.label "Additional Python Import Directories">
+<!ENTITY additionalPython3ImportDirectories.label "Additional Python 3 Import Directories">
+<!ENTITY additionalRubyImportDirectories.label "Additional Ruby Import Directories">
+<!ENTITY all.label "All">
+<!ENTITY allowCodingTagToOverrideAutoDetection.label "Allow 'coding:' tag to override auto-detection">
+<!ENTITY allowFileContentsToOverrideTabSettings.label "Allow file contents to override Tab and Indentation settings">
+<!ENTITY allowHTMLMETATagToOverrideAutoDetection.label "Allow HTML META tag to override auto-detection">
+<!ENTITY allowXMLDeclarationToOverrideAutoDetection.label "Allow XML declaration to override auto-detection">
+<!ENTITY alternateHelp.label "Alternate Help">
+<!ENTITY always.label "Always">
+<!ENTITY anonymousLogin.label "Anonymous login">
+<!ENTITY appearance.label "Appearance">
+<!ENTITY arrows.label "Arrows">
+<!ENTITY askMeWhatFilesToClose.label "Ask me what files to close">
+<!ENTITY askMeWhatFilesToReload.label "Ask me what files to reload">
+<!ENTITY askMeWhatToDo.label "Ask me what to do">
+<!ENTITY askMeWhetherToRestoreWorkspace.label "Ask me whether to restore workspace">
+<!ENTITY assignEmptyFilesSpecifiedEOL.label "Assign this EOL to new, empty files">
+<!ENTITY autoAdjustClosingBraces.label "Auto-adjust closing braces">
+<!ENTITY autoDetectFileEncodingWhenOpened.label "Auto-detect file encoding when opened">
+<!ENTITY restoreAutoAbbreviationTriggerCharacters.label "Restore Default %autoAbbreviationName.name; Trigger Characters">
+<!ENTITY autoAbbreviations.label "%autoAbbreviationName.name;s">
+<!ENTITY bAbbreviatedMonthName.label "&#37;b : abbreviated month name">
+<!ENTITY backgroundSpellChecking.label "Background spell checking">
+<!ENTITY backgroundSyntaxChecking.label "Background Syntax Checking">
+<!ENTITY backspaceDecreasesIndentationInLeadingWhitespace.label "'Backspace' decreases indentation in leading whitespace">
+<!ENTITY blockCursor.label "Block cursor">
+<!ENTITY bom.accesskey "B">
+<!ENTITY bookmarkColor.label "Bookmark color">
+<!ENTITY both.label "Both">
+<!ENTITY browse.label "Browse...">
+<!ENTITY browseFiles.label "Browse Files">
+<!ENTITY browserPreview.label "Browser Preview">
+<!ENTITY btnReset.accesskey "s">
+<!ENTITY c.accesskey "c">
+<!ENTITY cDefaultDateAndTimeRepresentation.label "&#37;c : default date and time representation">
+<!ENTITY cancel.label "Cancel">
+<!ENTITY category.label "Category">
+<!ENTITY character.label "Character">
+<!ENTITY cleanTrailingWhitespaceAndEOLMarkers.label "Clean trailing whitespace and EOL markers">
+<!ENTITY cleanWhitespaceOnCurrentLine.label "Always clean current line">
+<!ENTITY cleanLineEnds_ChangedLinesOnly.label "Only clean changed lines">
+<!ENTITY clear.label "Clear">
+<!ENTITY clearButton.accesskey "n">
+<!ENTITY clearList.label "Clear list">
+<!ENTITY clearListOfRecentTemplates.tooltiptext "Clear list of recent templates.">
+<!ENTITY clearPreview.accesskey "l">
+<!ENTITY closeAllFiles.label "Close all files">
+<!ENTITY closeAllOpenFilesInProject.label "Close all open files in project">
+<!ENTITY closeNoFiles.label "Close no files">
+<!ENTITY colors.accesskey "C">
+<!ENTITY colors.label "Colors">
+<!ENTITY commonSyntax.accesskey "o">
+<!ENTITY commonSyntax.label "Common Syntax">
+<!ENTITY configureCommonAssociations.label "Configure common associations...">
+<!ENTITY confirmationDialogs.label "Confirmation Dialogs">
+<!ENTITY cookie.label "Cookie">
+<!ENTITY currentLineBackgroundColor.label "Current line background color">
+<!ENTITY cursorColor.label "Cursor color">
+<!ENTITY cursorOptions.label "Cursor options">
+<!ENTITY cursorWillBeACharacterSizedBlock.tooltiptext "Cursor will be a character sized block">
+<!ENTITY cursorWillBeAVerticalLine.tooltiptext "Cursor will be a vertical line">
+<!ENTITY cursorWillNotBeShown.tooltiptext "Cursor will not be shown">
+<!ENTITY curvyTrees.label "Curvy trees">
+<!ENTITY dDayOfTheMonth0131.label "&#37;d : day of the month [01,31]">
+<!ENTITY debuggerCallingLineBackgroundColor.label "Debugger calling line background color">
+<!ENTITY debuggerCurrentLineBackgroundColor.label "Debugger current line background color">
+<!ENTITY dedentOnColon.label "Unindent line after colon (Python)">
+<!ENTITY defaultConnectionTimeout.label "Default Connection Timeout">
+<!ENTITY defaultEditorEncoding.label "Default Editor Encoding">
+<!ENTITY defaultHTMLDocumentType.label "Default HTML Document Type">
+<!ENTITY defaultPHPInterpreter.label "Default PHP Interpreter">
+<!ENTITY defaultPerlInterpreter.label "Default Perl Interpreter">
+<!ENTITY defaultPythonInterpreter.label "Default Python Interpreter">
+<!ENTITY defaultPython3Interpreter.label "Default Python 3 Interpreter">
+<!ENTITY defaultRubyInterpreter.label "Default Ruby Interpreter">
+<!ENTITY delete.label "Delete">
+<!ENTITY deleteButton.accesskey "d">
+<!ENTITY deleteConfiguration.accesskey "d">
+<!ENTITY deleteScheme.accesskey "D">
+<!ENTITY deleteServer.label "Delete Server">
+<!ENTITY deleteServer.tooltiptext "Delete Server">
+<!ENTITY delimitedBlockSelectDelimiters.label "Delimited block select delimiters:">
+<!ENTITY delimitedBlockSelectDelimiters.description "Note: XML-type documents add &apos;&lt;&apos; and &apos;&gt;&apos; automatically">
+<!ENTITY description.label "Description">
+<!ENTITY detectWhenFilesAreChangedOutsideTheEnvironment.label "Detect when files are changed outside the environment">
+<!ENTITY detectWhenNetworkFilesAreChangedOutsideTheEnvironment.label "Detect when networked files are changed outside the environment">
+<!ENTITY determineFromContent.label "Determine from content">
+
+<!ENTITY directoryImportSettings.label "Settings used for Directory Importing">
+
+<!ENTITY doNotAlertMeIfTheBufferIsUnsavedAndTheFileOnDiskChanged.label "Do not alert me if the buffer is unsaved and the file on disk changed">
+<!ENTITY doNotAlertMeOnBufferRevert.label "Do not alert me when I revert a buffer">
+<!ENTITY doNotAlertMeOnLargeFileLoad.label "Do not alert me when a large buffer will be treated as plain text">
+<!ENTITY doNotRestoreLastWorkspace.label "Do not restore last workspace">
+<!ENTITY doNotWarnWhenFilesCannotBeReOpenedOnStartup.label "Do not warn when files cannot be re-opened on startup">
+<!ENTITY workspaceRestoreHistory.label "Restore Tab History">
+<!ENTITY documentMarkupSettings.label "Document Markup Settings">
+<!ENTITY donTAutoIndent.label "Don't auto-indent">
+<!ENTITY donTShowFoldMarks.label "Don't show fold marks">
+<!ENTITY doubleSlash.label "//">
+<!ENTITY edgeLineBackgroundColorOfTextTooFar.label "Line edge / background color of text too far">
+<!ENTITY edit.label "Edit...">
+<!ENTITY editAssociations.label "&quot;Edit&quot; Associations">
+<!ENTITY editButton.accesskey "e">
+<!ENTITY editPaths.tooltiptext "Edit Paths...">
+<!ENTITY editWithKomodoAssociations.label "&quot;Edit with Komodo&quot; Associations">
+<!ENTITY editor.label "Editor">
+<!ENTITY enableAutocompleteFillUpCharacters.label "Enable autocomplete fill-up characters">
+<!ENTITY enableAutomaticAutocompleteTriggeringWhileYouType.label "Enable automatic autocomplete triggering while you type">
+<!ENTITY enableAutomaticCalltipTriggeringWhileYouType.label "Enable automatic calltip triggering while you type">
+<!ENTITY enableAutoAbbreviationsWithTriggerCharacters.label "Enable %autoAbbreviationName.name;s, with Trigger Characters:">
+<!ENTITY enableBackgroundSpellCheckingAfter.label "Enable background spell checking after">
+<!ENTITY enableBackgroundSyntaxCheckingAfter.label "Enable background syntax checking after">
+<!ENTITY enableElasticTabstops.label "Enable elastic tabstops">
+<!ENTITY enableMultipleSelectionMouse.label "Ctrl+Click creates multiple selections">
+<!ENTITY enableScrollingPastEndOfBufferOnlyAppliesToNewBuffers.label "Enable scrolling past end of buffer (only applies to new buffers)">
+<!ENTITY autoInsertEndTag.label "Automatically insert end tag when typing start tag in HTML/XML documents">
+<!ENTITY enableSoftCharacters.label "Enable soft characters">
+<!ENTITY enableSoftCharacters.description "Inserts closing characters or matching delimiters.
+For example, when entering '(', automatically add a closing ')' after the cursor.">
+<!ENTITY enableSmartSoftCharactersInsideLine.label "Enable soft characters inside lines">
+<!ENTITY enableSmartTabSkipsSoftCharacters.label "Pressing tab moves to right of soft characters">
+<!ENTITY cutCopyWithoutSelection.label "Cut/Copy with no selection will cut/copy the current line">
+<!ENTITY enableTriggeringOfMacrosOnKomodoEvents.label "Enable triggering of userscripts on Komodo events">
+<!ENTITY enableViEmulation.label "Enable Vi emulation">
+<!ENTITY endOfLine.label "End of line">
+<!ENTITY ensureFileEndsWithEOLMarker.label "Ensure file ends with EOL marker">
+<!ENTITY environment.label "Environment">
+<!ENTITY environmentVariable.title "Environment Variable">
+<!ENTITY errorsAndWarnings.label "Errors and warnings">
+<!ENTITY errorsAndWarningsCw.label "Errors and warnings (-cw)">
+<!ENTITY errorsAndWarningsUseTaintModeCwT.label "Errors and warnings, use taint mode (-cwT)">
+<!ENTITY errorsOnly.label "Errors only">
+<!ENTITY errorsOnlyC.label "Errors only (-c)">
+<!ENTITY errorsOnlyUseTaintModeCT.label "Errors only, use taint mode (-cT)">
+<!ENTITY file.label "File">
+<!ENTITY fileAssociations.label "File Associations">
+<!ENTITY fileProperties.label "File Properties">
+<!ENTITY filePropertiesCreated.label "Created:">
+<!ENTITY fileSettings.label "File Settings">
+<!ENTITY fileStatusInProjectManagerAndToolbox.label "File Status in Project Manager and Toolbox">
+<!ENTITY filterCommands.tooltiptext "Filter Commands">
+<!ENTITY filteredTreeView.tooltiptext "Type space-separated words in preference pages">
+<!ENTITY fixedWidth.label "Fixed width">
+<!ENTITY foldSeparateBlockParts.label "Fold Separate Block Parts">
+<!ENTITY folding.label "Folding">
+<!ENTITY foldMarginColor.label "Fold margin color">
+<!ENTITY fonts.accesskey "F">
+<!ENTITY fonts.label "Fonts">
+<!ENTITY fontsAndColors.label "Color Scheme">
+<!ENTITY general.label "General">
+<!ENTITY h.accesskey "h">
+<!ENTITY hash.label "#">
+<!ENTITY help.label "Help">
+<!ENTITY hideQuickLinksPane.label "Hide Quick Links pane">
+<!ENTITY highlightCharactersBeyondEdgeLine.label "Highlight characters that extend beyond the edge line column">
+<!ENTITY highlightCurrentLine.label "Highlight current line">
+<!ENTITY highlightVariable.label "Variable Highlighting">
+<!ENTITY highlightVariableMouse.label "Automatically highlight variables when clicking">
+<!ENTITY highlightVariableKeyboard.label "Automatically highlight variables when typing">
+<!ENTITY highlightVariableMatchPrefix.label "Prefix match when typing">
+<!ENTITY highlightVariableKeyboardDelay.label "Delay in ms:">
+<!ENTITY highlightVariableMinLength.label "Minimum length for automatic highlighting:">
+<!ENTITY highlightVariableUseScope.label "Only show results that are in scope (if available)">
+<!ENTITY htmHTML.label ".htm: HTML">
+<!ENTITY htmlHTML.label ".html: HTML">
+<!ENTITY httpAspnActiveStateComASPNPHP.label "http://php.net/">
+<!ENTITY httpWwwPerl.label "https://www.perl.org/get.html">
+<!ENTITY httpWwwPython.label "https://www.python.org/downloads/">
+<!ENTITY httpWwwRubyLangOrg.label "http://www.ruby-lang.org/">
+<!ENTITY hyperlinks.label "Hyperlinks">
+<!ENTITY hyperlinksEnabled.label "Enable hyperlinks (underlining of text under mouse pointer)">
+<!ENTITY hyperlinksEnabled.description "Ctrl+Clicking on hyperlinks activates them instead of
+adding an additional caret at the clicked position.">
+<!ENTITY hyperlinksEnableGotoDefinition.label "Enable hyperlinking to definition">
+<!ENTITY hyperlinksEnableColorPicker.label "Open color picker when clicking on colors">
+<!ENTITY ifClearedYouWillBePromptedForThisValueTheNextTimeYouPreview.tooltiptext "If cleared, you will be prompted for this value the next time you preview.">
+<!ENTITY ifNoPasswordIsGivenYouLlBePromptedForItUponFirstConnecting.tooltiptext "If no password is given, you'll be prompted for it upon first connecting.">
+<!ENTITY ifNoPathIsGivenTheDefaultPathIsTheCurrentDirectoryAfterLogin.tooltiptext "If no path is given, the default path is the current directory after login.">
+<!ENTITY ifNoPortIsGivenTheDefaultProtocolPortIsUsed.tooltiptext "If no port is given, the default protocol port is used.">
+<!ENTITY ifSearchStringContainsCapitalLetters.label "If search string contains capital letters">
+<!ENTITY importFromFileSystem.title "Import from File System">
+<!ENTITY incrementalSearch.label "Incremental Search">
+<!ENTITY indentStringsAfterParens.label "Force shallow indent at string start">
+<!ENTITY indentToFirstNonEmptyColumn.label "Indent to first non-empty column">
+<!ENTITY indentation.label "Indentation">
+<!ENTITY indentationGlobalSettings.label "Global Indentation Settings">
+<!ENTITY indentation-per-language.label "Per Language Indentation Settings">
+<!ENTITY indentation-per-language-reload-notice.descr "If you make any changes to these per-language settings, you will need to reload any open files of that type or restart Komodo in order for your changes to take effect.">
+<!ENTITY internationalization.label "Internationalization">
+<!ENTITY invisible.label "Invisible">
+<!ENTITY javaScript.label "JavaScript">
+<!ENTITY javaScriptDirectories.label "JavaScript Directories">
+<!ENTITY javascriptNamespaceMapping.label "JavaScript Namespace Mapping">
+<!ENTITY javaScriptNodeSyntaxSettings.label "JavaScript/Node.js Syntax-Checking Settings">
+<!ENTITY jsJavaScript.label ".js: JavaScript">
+<!ENTITY keyBindings.label "Key Bindings">
+<!ENTITY label.1px "1 pixel">
+<!ENTITY label.2px "2 pixels">
+<!ENTITY label.3px "3 pixels">
+<!ENTITY langSpecific.accesskey "L">
+<!ENTITY langSpecific.label "Language Specific">
+<!ENTITY language.label "Language">
+<!ENTITY languageConfigurations.label "Language Configurations">
+<!ENTITY languageHelp.label "Language Help">
+<!ENTITY languageLookupCommands.label "Language Lookup Commands">
+<!ENTITY languageSpecificDefaultEncoding.label "Language-specific Default Encoding">
+<!ENTITY languages.label "Languages">
+<!ENTITY leaveFilenameAlone.label "Leave filename alone">
+<!ENTITY lessUseInterpreter.label "Use Less Interpreter:">
+<!ENTITY lineCursor.label "Line cursor">
+<!ENTITY lintEOLs.label "Enable checking of mixed end-of-line (EOL) characters">
+<!ENTITY lintClearResultsOnEachChange.label "Clear Lint Results On Each Change">
+<!ENTITY mMonth0112.label "&#37;m : month [01,12]">
+<!ENTITY macClassicR.label "Mac Classic (\r)">
+<!ENTITY mostRecentlyUsed.label "Most Recently Used">
+<!ENTITY multipart.label "Multipart">
+<!ENTITY n.accesskey "n">
+<!ENTITY name.label "Name">
+<!ENTITY never.label "Never">
+<!ENTITY new.accesskey "N">
+<!ENTITY new.label "New...">
+<!ENTITY newAssociation.label "New Association">
+<!ENTITY newConfiguration.accesskey "n">
+<!ENTITY newFiles.label "File Opening">
+<!ENTITY newServer.label "New Server">
+<!ENTITY newServer.tooltiptext "New Server">
+<!ENTITY none.label "None">
+<!ENTITY o.accesskey "o">
+<!ENTITY off.label "Off">
+<!ENTITY openNoFiles.label "Open no files">
+<!ENTITY openRecentFiles.label "Open recent files">
+<!ENTITY openingAndClosingProjects.label "Project Management">
+<!ENTITY otherOptions.label "Other Options">
+<!ENTITY overrideTextColorInSelection.label "Override text color in selection">
+<!ENTITY pAMOrPM.label "&#37;p : AM or PM">
+<!ENTITY path.label "Path">
+<!ENTITY pathToAlternatePHPConfigurationFile.label "Path to alternate PHP configuration file">
+<!ENTITY patterns.label "Patterns">
+<!ENTITY nodejs.label "Node.js">
+<!ENTITY perl.label "Perl">
+<!ENTITY perlcriticRCFileLocation.label "Location of .perlcriticrc file to use">
+<!ENTITY phpPHP.label ".php: PHP">
+<!ENTITY plPerl.label ".pl: Perl">
+<!ENTITY plainText.label "Plain text">
+<!ENTITY pmPerlModule.label ".pm: Perl Module">
+<!ENTITY preferTabCharactersOverSpaces.label "Prefer Tab characters over spaces">
+<!ENTITY preferences.title "Preferences">
+<!ENTITY prefsHelpButton.accesskey "H">
+<!ENTITY preserveExistingLineEndings.label "Preserve existing line endings">
+<!ENTITY preserveLineEndings.accesskey "P">
+<!ENTITY preview.label "Preview">
+<!ENTITY previewInBrowser.label "Preview in Browser">
+<!ENTITY previewInExternalBrowserSpecifiedAbove.label "Preview in external browser (specified above)">
+<!ENTITY previewInKomodoTabOtherTabGroup.label "Preview in Komodo tab, other Split View">
+<!ENTITY previewInKomodoTabSameTabGroup.label "Preview in Komodo tab, same Split View">
+<!ENTITY previewInKomodoDialog.label "Preview in a separate Komodo dialog">
+<!ENTITY printInColorAlwaysTrueWhenPrintingToFile.label "Print in color (always true when printing to file)">
+<!ENTITY printLineNumbers.label "Print line numbers">
+<!ENTITY printHeaderFilepath.label "Print the file path in the page header">
+<!ENTITY printFooterPageNumber.label "Print the page number in the page footer">
+<!ENTITY printFooterTimeStamp.label "Print a time stamp in the page footer">
+<!ENTITY printing.label "Printing">
+<!ENTITY printingStyle.label "Printing Style">
+<!ENTITY priority1.label "Priority 1">
+<!ENTITY priority2.label "Priority 2">
+<!ENTITY priority3.label "Priority 3">
+<!ENTITY projectPreferences.label "Project Preferences">
+<!ENTITY projectsAndWorkspace.label "Workspace">
+<!ENTITY properties.label "Properties">
+<!ENTITY proportional.label "Proportional">
+<!ENTITY pyflakesChecking.label "Pyflakes Checking">
+<!ENTITY pep8CheckingStatus.label "Do pep8 Checking">
+<!ENTITY pep8RCFileLocation.label "Location of pep8 config file to use">
+<!ENTITY pylintCheckingStatus.label "Do Pylint Checking">
+<!ENTITY pylintRCFileLocation.label "Location of .pylintrc file to use">
+<!ENTITY pyPython.label ".py: Python">
+<!ENTITY python.label "Python">
+<!ENTITY python3.label "Python 3">
+<!ENTITY pywPython.label ".pyw: Python">
+<!ENTITY rawData.label "Raw Data">
+<!ENTITY rbRuby.label ".rb: Ruby">
+<!ENTITY reApplySettingsToSystem.label "Re-apply settings to system">
+<!ENTITY readOnly.label "Read-only">
+<!ENTITY readonly.accesskey "R">
+<!ENTITY regularExpressionsPythonSyntax.label "Regular expressions (Python syntax)">
+<!ENTITY reloadAllFiles.label "Reload all files">
+<!ENTITY reloadNoFiles.label "Reload no files">
+<!ENTITY remoteAccounts.label "Remote Accounts">
+<!ENTITY remoteDebuggingNewURL.label "When remote debugging a URL:">
+<!ENTITY remove.label "Remove">
+<!ENTITY removeCatalog.label "Remove catalog">
+<!ENTITY repositionCaretAfterTab.label "Reposition &quot;caret&quot; after pressing tab.">
+<!ENTITY repositionCaretAfterTab.tooltiptext "After pressing tab, should an arrow key be based on the old location or the current one?">
+<!ENTITY requestVariable.label "Request Variable">
+<!ENTITY reset.label "Reset">
+<!ENTITY resetLanguageToTheDefaultForThisFileType.tooltiptext "Reset language to the default for this file type.">
+<!ENTITY resetToDefault.tooltiptext "Reset to default">
+<!ENTITY resetToStandardValueOf15.tooltiptext "Reset to standard value of 1.5">
+<!ENTITY restoreFoldStateOnDocumentLoadSlowsDownFileOpening.label "Restore fold state on document load (slows down file opening)">
+<!ENTITY restoreLastWorkspace.label "Restore last workspace">
+<!ENTITY restoreDelimitedBlockSelectDelimiters.label "Restore default delimiters">
+<!ENTITY restoreWrapSelectionDelimiters.label "Restore default delimiters">
+<!ENTITY ruby.label "Ruby">
+<!ENTITY saveOptions.label "File Saving">
+<!ENTITY sassUseInterpreter.label "Use Sass Interpreter:">
+<!ENTITY scssUseInterpreter.label "Use SCSS Interpreter:">
+<!ENTITY scrolling.label "Scrolling">
+<!ENTITY search.accesskey "s">
+<!ENTITY selectACommand.tooltiptext "Select a Command">
+<!ENTITY selected.tooltiptext "Selected">
+<!ENTITY selectionBackgroundColor.label "Selection background color">
+<!ENTITY selectionTextColor.label "Selection text color">
+<!ENTITY servers.label "Servers">
+<!ENTITY settingOnlyAppliesWhenTheCursorStyleIsLine.tooltiptext "Setting only applies when the cursor style is line">
+<!ENTITY setupCommonKomodoFileAssociations.title "Setup Common Komodo File Associations">
+<!ENTITY shortNameYouWishToCallThisServerConnection.tooltiptext "Short name you wish to call this server connection.">
+<!ENTITY showAdvanced.label "Show All Settings">
+<!ENTITY showEdgeLine.label "Draw the edge line column">
+<!ENTITY showEndOfLineCharacters.label "Show end-of-line (EOL) characters">
+<!ENTITY showIndentationGuides.label "Show indentation guides">
+<!ENTITY showLineNumbers.label "Show line numbers">
+<!ENTITY showWhitespaceCharacters.label "Show whitespace characters">
+<!ENTITY signatureBOM.label "Signature (BOM)">
+<!ENTITY signs.label "+/- signs">
+<!ENTITY smartEditing.label "Smart Editing">
+<!ENTITY sourceCodeControlProperties.label "Source Code Control Properties">
+<!ENTITY specifyDefaultProjectFilters.label "Specify the default filters for new projects">
+<!ENTITY specifyTheProjectsActualLocation.label "Project base directory">
+<!ENTITY spellChecking.label "Spell Checking">
+<!ENTITY spellCheckingDictionary.label "Dictionary">
+<!ENTITY spellCheckingIgnoredWords.label "Ignored Words">
+<!ENTITY spellCheckWithinStrings.label "Spell check the content of strings">
+<!ENTITY foldSeparateBlockParts.tooltiptext "Splits folding blocks on single-line constructs like '} ... {'">
+<!ENTITY squareTrees.label "Square trees">
+<!ENTITY startOfLine.label "Start of line">
+<!ENTITY syntaxAndSpellChecking.label "Syntax &amp; Spell Checking">
+<!ENTITY syntaxChecking.label "Syntax Checking">
+<!ENTITY tPerlTestScript.label ".t: Perl Test Script">
+<!ENTITY templates.label "Templates">
+<!ENTITY theServerNameToConnectToEitherADomainNameOrAIPAddress.tooltiptext "The server name to connect to, either a domain name or a IP address.">
+<!ENTITY triggeringMacros.label "Triggering Userscripts">
+<!ENTITY type.label "Type">
+<!ENTITY update.label "Update">
+<!ENTITY updateFileStatusAutomatically.label "Update file status automatically">
+<!ENTITY useEmacsStyleLocalModeVariableModeLocalVariables.label "Use Emacs-style local 'mode' variable (-*- mode: ... -*-, Local Variables: ...)">
+<!ENTITY preferJavaScriptOverNode.label "Prefer JavaScript over Node.js">
+<!ENTITY autoDetectJSvsNode.label "Auto Detect Javascript/Node.js">
+<!ENTITY useFileContentToDetermineLanguage.label "Use File Content to Determine Language">
+<!ENTITY useHorizontalLineOnFolds.label "Use horizontal line on folds">
+<!ENTITY useShebangLine.label "Use shebang line (#!...)">
+<!ENTITY useSignatureBOM.label "Use Byte Order Mark (BOM) signature">
+<!ENTITY useSmartIndent.label "Use Smart Indent">
+<!ENTITY useSmartIndentNoLineUp.label "Use Smart Indent (no continuing statement line-up)">
+<!ENTITY useSSHKeyCheckbox.label "Specify an OpenSSH key file for authentication">
+<!ENTITY useSSHKeyTextbox.tooltip "The file path of the private key you wish to use for Authentication (the file must be in the OpenSSH private key format). If a password is required - it will be prompted for on first use of this key.">
+<!ENTITY useTabCharacterToCompleteWordsLikeCtrlSpace.label "Use Tab character to complete words like Ctrl+Space">
+<!ENTITY usernameUsedToLoginToTheRemoteServer.tooltiptext "Username used to login to the remote server.">
+<!ENTITY value.label "Value">
+<!ENTITY viewAndEditAssociations.label "View and Edit Associations">
+<!ENTITY wWeekday0Sunday6.label "&#37;w : weekday [0(Sunday),6]">
+<!ENTITY webBrowser.label "Web &amp; Browser">
+<!ENTITY whitespaceForegroundColor.label "Whitespace foreground color">
+<!ENTITY wildcard.label "Wildcard">
+<!ENTITY windowsIntegration.label "Windows Integration">
+<!ENTITY word.label "Word">
+<!ENTITY workspace.label "Workspace">
+<!ENTITY wrapSelection.label "Wrap selection with typed delimiter instead of overwriting it">
+<!ENTITY wrapSelectionDelimiters.label "Delimiters:">
+<!ENTITY wrapSelectionKeep.label "Retain selected text">
+<!ENTITY wrapSelectionOnlyPlainText.label "Only wrap plain text selections">
+<!ENTITY xDefaultDateRepresentation.label "&#37;x : default date representation">
+<!ENTITY xmlXML.label ".xml: XML">
+<!ENTITY xslXSLT.label ".xsl: XSLT">
+<!ENTITY xsltXSLT.label ".xslt: XSLT">
+<!ENTITY yYearWithoutCentury0099.label "&#37;y : year without century [00,99]">
+<!ENTITY primaryLanguage.label "Primary Language:">
+
+<!--editenvironvar.xul-->
+<!ENTITY AddEditEnvir.label "Add/Edit Environment Variable">
+<!ENTITY AddEditEnvirName.label "Name:">
+<!ENTITY AddEditEnvirValue.label "Value:">
+
+<!--file-properties.xul-->
+<!ENTITY filePropertiesName.label "Name:">
+<!ENTITY filePropertiesLocation.label "Location:">
+<!ENTITY filePropertiesSize.label "Size:">
+<!ENTITY filePropertiesModified.label "Modified:">
+<!ENTITY filePropertiesAccessed.label "Accessed:">
+<!ENTITY filePropertiesAttributes.label "Attributes:">
+<!ENTITY filePropertiesChangePermissions.button "Change...">
+<!ENTITY filePropertiesLanguage.label "Language:">
+<!ENTITY filePropertiesLanguage.accesskey "L">
+<!ENTITY filePropertiesEncoding.label "Encoding:">
+<!ENTITY filePropertiesEncoding.accesskey "E">
+<!ENTITY filePropertiesLineEndings.label "Line Endings:">
+<!ENTITY filePropertiesLineEndings.accesskey "n">
+<!ENTITY filePropertiesMixedEndings.description "(This file has mixed line endings.)">
+<!ENTITY filePropertiesDefaultDoctype.label "Default DOCTYPE:">
+<!ENTITY filePropertiesDefaultNamespace.label "Default Namespace:">
+
+<!--file-advanced-properties.xul-->
+<!ENTITY fileAdvancedProperties.label "Advanced">
+<!ENTITY filePerformanceTweaks.caption "Document-Specific Performance Settings">
+<!ENTITY filePerformanceTweakEnableCodeintel.label "Enable Codeintel">
+<!ENTITY filePerformanceTweakEnableSyntaxColorizing.label "Enable Syntax Coloring">
+<!ENTITY filePerformanceTweakOverview.description "Settings specific to the current document for turning off features that could be too expensive to run on large files, and are interfering with performance of basic editing features.">
+<!ENTITY filePerformanceTweakLintSettingLocation.description "Syntax-checking on the current document is controlled in the [Editor|Syntax Checking] preference pane.">
+
+<!--editing-properties.xul-->
+
+<!--indent-properties.xul-->
+
+<!--pref.xul-->
+<!ENTITY webAndBrowser.label "Web &amp; Browser">
+
+<!--pref.alllangfonts.xul-->
+<!ENTITY sampleText.label "Sample text:">
+<!ENTITY schemeType.label "Scheme: (system schemes are in bold)">
+<!ENTITY schemeType.accesskey "S">
+<!ENTITY filePrefAllLangFontFamily.label "Font:">
+<!ENTITY filePrefAllLangFixedWidth.label "Fixed width:">
+<!ENTITY filePrefAllLangFixedWidth.accesskey "W">
+<!ENTITY filPrefAllLangForeText "Fore:">
+<!ENTITY filPrefAllLangBackText "Back:">
+<!ENTITY filePrefAllLangProportional.label "Proportional:">
+<!ENTITY lineSpacing.label "Line Spacing:">
+<!ENTITY chooseColorEditorElement.description "Choose colors for Komodo's editor elements (i.e. anything in the editor that is not syntax coloring).">
+<!ENTITY filePrefAllLangColorChoice.label "Color choice:">
+<!ENTITY filePrefAllLangColorChoice.accesskey "h">
+<!ENTITY styleForElements.description "Set styling for syntax elements common to many programming languages.">
+<!ENTITY filePrefAllLangElementType.label "Element type: ">
+<!ENTITY filePrefAllLangElementType1.accesskey "T">
+<!ENTITY filePrefAllLangFace.label "Face:">
+<!ENTITY filePrefAllLangFont.label "Font:">
+<!ENTITY filePrefAllLangSize.label "Size:">
+<!ENTITY filePrefAllLangStyle.label "Style:">
+<!ENTITY filePrefAllLangForeground.label "Foreground:">
+<!ENTITY filePrefAllLangBackground.label "Background:">
+<!ENTITY filePrefSubLanguageBackground.label "Sub-language background:">
+<!ENTITY filePrefUseSubLanguageBackground.label "Use a different background color when used as a sub-language">
+<!ENTITY filePrefSubLanguageBackground.accesskey "S">
+<!ENTITY filePrefUseSubLanguageBackground.accesskey "U">
+<!ENTITY styleForSpecElements.description "Set styling for language-specific syntax elements.">
+<!ENTITY filePrefAllLangLanguage.label "Language:">
+<!ENTITY filePrefAllLangLanguage.accesskey "G">
+<!ENTITY filePrefAllLangElementType2.accesskey "Y">
+<!ENTITY colorPickerToUse.value "Color Picker to use:">
+<!ENTITY colorPickerTestButton.label "Test">
+<!ENTITY fontQuality.label "Font Quality">
+<!ENTITY fontQuality.default.menulabel "Default">
+<!ENTITY fontQuality.no_antialiasing.menulabel "No Anti-Aliasing">
+<!ENTITY fontQuality.antialiased.menulabel "Anti-Aliased">
+<!ENTITY fontQuality.antialiasedWithSmoothing.menulabel "Anti-Aliased with Smoothing">
+
+<!--pref-association.xul-->
+<!ENTITY fileAssociations.description "File Associations determine editor defaults, such as language element colorization. Click pattern to view associated language.">
+<!ENTITY filePrefAssocLang.label "Language">
+<!ENTITY useXmlDeclarations.label "Use XML declarations (&lt;?xml ...&gt;, &lt;!DOCTYPE ...&gt;)">
+
+<!--pref-intl.xul-->
+<!ENTITY useEncodeEnvironment.label "Use encoding defined in environment:">
+<!ENTITY defaultEncoding.label "Default encoding:">
+<!ENTITY dateTime.label "Date &amp; Time">
+<!ENTITY format.label "Format">
+<!ENTITY dateTimeExample.label "Example:">
+
+<!--pref-projects.xul-->
+<!ENTITY displayingRecentProjects.label "Displaying Recent Projects">
+<!ENTITY filePrefProjectWhenStart.label "When starting Komodo:">
+<!ENTITY fileProjectDir.label "Project workspace directory:">
+<!ENTITY filePrefProjectWhenOpenProject.label "When opening a project:">
+<!ENTITY filePrefProjectWhenCloseProject.label "When closing a project:">
+<!ENTITY filePrefProjectUpdateEvery.label "Update every">
+<!ENTITY filePrefProjectMinutes.label " minutes">
+<!ENTITY activeStateNotificationMessages.label "ActiveState Notification Messages">
+<!ENTITY activeStateNotificationMessagesEnabled.label "Enable notification messages from ActiveState">
+<!ENTITY activeStateNotificationMessagesEnabled.tooltiptext "ActiveState will (seldomly) send notifications about important product updates and news. When enabled, these messages will be shown in the statusbar and Notifications pane. Once the message has been seen, it will not appear again.">
+<!ENTITY fullPath.label "Full Path">
+<!ENTITY basenameOnly.label "BaseName Only">
+<!ENTITY parent1.label "Last Parent">
+<!ENTITY parent2.label "Last Two Parents">
+
+<!--pref-editsmart.xul-->
+<!ENTITY msecs.label "msecs">
+<!ENTITY editMatchingDelimiter.label "Edit matching delimiter on select">
+<!ENTITY fileEditSmartWrapLines.label "Wrap long lines by:">
+<!ENTITY fileEditSmartWrapIndentation.label "Wrap indentation:">
+<!ENTITY fileEditSmartWrapMarkers.label "Wrap markers:">
+<!ENTITY fileEditSmartEdgeLine.label "Edge line column:">
+<!ENTITY fileEditSmartFoldMarkStyle.label "Fold mark style:">
+<!ENTITY wordwrapIndentationFixed.label "Fixed alignment">
+<!ENTITY wordwrapIndentationSame.label "Same level alignment">
+<!ENTITY wordwrapIndentationOneLevel.label "One extra level">
+<!-- strings embedded in script-->
+<!ENTITY useTabCharacterToCompleteWords.message "Use Tab character to complete words like __KEY__">
+
+<!--pref-editor.xul-->
+<!ENTITY cursorStyle.label "Cursor style:">
+<!ENTITY widthLineCursor.label "Width of line cursor:">
+<!ENTITY fileChanged.label "If files have been changed:">
+<!ENTITY fileDeleted.label "If files have been deleted:">
+<!ENTITY minimumNumberLineAboveBelowCursor.label "Minimum number of lines to keep above and below cursor:">
+<!ENTITY minimumNumberColumnAfterCursor.label "Minimum number of columns to keep after cursor:">
+<!ENTITY horizScrollWidth.label "Minimum horizontal scrollbar width (in pixels):">
+<!ENTITY horizScrollWidthTracking.label "Automatically adjust the horizontal scrollbar width">
+<!ENTITY horizScrollWidthTracking.tooltiptext "When enabled, this will automatically adjust the horizontal scrollbar width to fit the document width. Note: Enabling this feature can decrease the editor performance.">
+<!ENTITY filePrefEditorMatchCase.label "Matches case:">
+<!ENTITY filePrefEdiorUses.label "Uses:">
+<!ENTITY tabs.label "Tabs">
+<!ENTITY returnToMostRecentBufferOnClose.label "When I close the current tab, switch to the most recently visited tab">
+<!ENTITY dragdrop.label "Drag &amp; Drop">
+<!ENTITY droppingURL.label "When dropping a URL in Komodo:">
+<!-- These three entities are special and must match the button labels from the
+     drag/drop dialog, which are set in the "library.properties" file. -->
+<!ENTITY addAURIMapping.label "Map the URL">
+<!ENTITY enableMouseZoom.label "Enable Font Zooming via the Mouse Wheel">
+<!ENTITY enableMouseZoomHow.tooltiptext "Change font size by Shift-Ctrl-Mouse-Wheel">
+<!ENTITY useMinimapScrollbar.label "Use the Minimap Scrollbar">
+
+<!ENTITY viewSource.label "View source">
+<!ENTITY dropAsText.label "Drop as text">
+
+<!--pref-environ.xul-->
+<!ENTITY startEnvironVar.label "Startup environment variables:">
+<!ENTITY userEnvironVar.label "User environment variables (override defaults):">
+
+<!--pref-find.xul-->
+<!ENTITY bytes.label "bytes">
+<!ENTITY find.label "Find">
+<!ENTITY findFrame.label "Find Frame">
+<!ENTITY pinFindFrame.label "Never auto-close the find frame">
+<!ENTITY findInView.label "Open find results as file tabs">
+<!ENTITY findInFiles.label "Find in Files">
+<!ENTITY findHighlighting.label "Highlighting">
+<!ENTITY findHighlightEnabled.label "Enable highlighting of find and replace results">
+<!ENTITY findHighlightTimeout.label "Find highlighting will timeout after ">
+<!ENTITY findHighlightTimeout.description "This timeout value is used by the 'Find Next' and 'Find Previous' commands to ensure they continue to operate quickly. If the search term highlighting is still running after this amount of time, the highlighting will stop and the cursor will then move to the match location.">
+<!ENTITY findSkipLargeFilesEnabled.label "Skip over large files">
+<!ENTITY findSkipFilesLargerThan.label "Larger than:">
+<!ENTITY findIncrementalHighlightTimeout.label.pre "Incremental highlighting will timeout after ">
+<!ENTITY findIncrementalHighlightTimeout.label.post " msecs (set to 0 to never timeout)">
+<!ENTITY findIncrementalKeysToEditor.label "Editing keys affect buffer when searching" >
+<!ENTITY findIncrementalKeysToEditor.tooltiptext "When enabled, pressing editing keys such as Home and Enter will modify the editing buffer instead of changing the text to search for." >
+
+<!--pref-folderimport.xul-->
+<!ENTITY filesToInclude.label "Files to include: (empty means 'all')">
+<!ENTITY filesToExclude.label "Files and directories to exclude: (empty means 'none')">
+
+<!--pref-html.xul-->
+<!ENTITY syntaxControlHtml.description "Komodo uses Tidy, an HTML syntax checking tool from the W3C, to check for errors in your HTML files.  Here you can set error levels, and the WAI Accessibility Conformance level you wish to support. If you need a deeper level of customization for Tidy, you can customize the way Tidy works by creating a Tidy configuration file. You can find more details on Tidy configuration at the website below.">
+<!ENTITY moreInfoTydy.label "You can find more information about Tidy at:">
+<!ENTITY moreInfoWai.label "You can find more information about WAI at:">
+<!ENTITY errorLevel.label "Error level:">
+<!ENTITY waiAccessibilityLevel.label "WAI accessibility conformance level:">
+<!ENTITY configurationFile.label "Configuration file:">
+<!ENTITY perlHTMLTidy.label "Perl HTML-Tidy">
+<!ENTITY checkWithPerlsHTMLTidy.label "Check With Perl's HTML-Tidy">
+<!ENTITY perlHTMLLint.label "Perl HTML-Lint">
+<!ENTITY checkWithPerlsHTMLLint.label "Check With Perl's HTML-Lint">
+<!ENTITY CheckWithHTMLTidy.label "Check With HTML Tidy">
+<!ENTITY CheckWithHTML5lib.label "Check With html5lib">
+<!ENTITY HTML5lib.label "html5lib">
+<!ENTITY HTMLTidy.label "HTML Tidy">
+<!ENTITY highlightMatchingTag.label "Highlight matching tag on mouse click">
+<!ENTITY highlightMatchingTagRemoveAfter.label "Remove tag highlighting after">
+<!ENTITY highlightMatchingTagConstrain.label "Constrain tag matching to the visible region">
+<!ENTITY editMatchingTags.label "Edit matching tags on select">
+
+<!--pref-indentation.xul-->
+<!ENTITY autoIndentStyle.label "Auto-indent style:">
+<!ENTITY filePrefIndentationSpacePerIndent.label "Number of spaces per indent">
+<!ENTITY filePrefIndentationWhidtTabChar.label "Width of each Tab character">
+
+<!--pref-javascript.xul-->
+<!--pref-project-javascript.xul-->
+
+
+<!ENTITY lintJavaScript_SpiderMonkey.label "Check with Mozilla JS (SpiderMonkey)">
+<!ENTITY lintJavaScriptEnableWarnings.label "Enable warning messages">
+<!ENTITY lintJavaScriptEnableStrict.label "Enable strict warning messages">
+<!ENTITY javascriptFolder.description "Specify any directories that you want Komodo to use for autocomplete and calltips. Komodo will recursively scan these directories for information.">
+<!ENTITY javascriptExcludeFolder.description "Specify any directories you want to exclude from the scan.">
+<!ENTITY javascriptNamespaceMapping.description "Specify any custom namespace mappings for Komodo to use when looking up modules in 'require' statements for code intelligence. These mappings are useful for projects that have non-standard module locations.">
+<!ENTITY eslintChecking.caption "ESLint Linter Checking">
+<!ENTITY eslintChecking.checkbox "Enable the ESLint linter">
+<!ENTITY eslintChecking.description "Use the ESLint linter when doing background syntax checking.">
+<!ENTITY eslintChecking.binary "ESLint binary:">
+<!ENTITY eslintChecking.binaryPlaceholder "Find in node_modules...">
+<!ENTITY eslintChecking.config "ESLint config:">
+<!ENTITY eslintChecking.configPlaceholder "Find in current working directory...">
+
+<!--pref-nodejs.xul-->
+<!ENTITY nodejs.label "Node.js">
+<!ENTITY defaultNodejsInterpreter.label "Default node.js Interpreter">
+<!ENTITY filePrefNodejsUseThisInterpreter.label "Use this interpreter">
+<!ENTITY noNodejsInterpreter.description "No node.js interpreter was found on your system. If you would like to debug and run node.js programs in Komodo you will need to install node.js.">
+<!ENTITY nodejsDirectories.label "Node.js Directories">
+<!ENTITY nodejsFolder.description "Specify any directories you want to load Node modules from. Komodo will recursively scan these directories for autocomplete and calltip information.">
+<!ENTITY nodejsExcludeFolder.description "Specify any directories you want to exclude from the scan.">
+<!ENTITY nodejsNamespaceMapping.label "Node.js Namespace Mapping">
+
+<!-- JSHint, a fork of jshint -->
+<!ENTITY JSHint.label "JSHint">
+<!ENTITY lintJavaScriptWithJSHint.label "Check Code With JSHint">
+<!ENTITY lintJSHintOptions.label "JSHint Options">
+<!ENTITY lintJSHint_Explanation.descr "Use a format like bitwise=false debug=true esnext=true maxerr=5 predef=['document','window']">
+<!ENTITY lintJSHint_WebSiteLabel.label "See all allowed options at: ">
+<!ENTITY chooseACustomOrUpdatedJshint.js.label "Choose a custom or updated jshint.js">
+<!ENTITY defaultJshintLinter.label "Default linter">
+<!ENTITY customJshintLinter.label "Custom linter">
+<!ENTITY separateNamesWithCommas.tooltip "Separate names with commas and/or spaces.">
+
+<!-- TypeScript -->
+<!ENTITY lintTypeScriptWithTSLint.label "Check Code with tslint">
+<!ENTITY lintTSLintConfigFile.label "tslint Config File">
+
+<!--pref-keys.xul-->
+<!ENTITY keyBindingsConfiguration.description "Key bindings determine what key shortcuts will start what command. Click on a command to see and modify its key configuration.">
+<!ENTITY removeAltKeyFromMenu.label "Remove Alt-&lt;letter&gt; shortcuts from menus">
+<!ENTITY keyBindingsSchemes.label "Key Binding Schemes (System schemes are in bold)">
+<!ENTITY keyBindingsSchemes.accesskey "S">
+<!ENTITY filePrefKeysCommands.label "Commands:">
+<!ENTITY filePrefKeysCommands.accesskey "C">
+<!ENTITY noCommandsMatch.description "No commands match the specified search string.">
+
+<!--pref-languages.xul-->
+<!ENTITY languagesSettings.description "Komodo comes with support for a variety of languages. Core editing features are enabled by default for a large set of languages.  For additional configuration of Core languages, select the language in the tree to the left.">
+<!ENTITY languageNames.label "Language names:">
+<!ENTITY languageNames.accesskey "L">
+<!ENTITY primaryLanguage.tooltip "Primary Language">
+<!ENTITY primaryLanguages.label "Primary Languages">
+<!ENTITY primaryLanguages.description "Checked languages show up in the main part of all language popup menus. Other languages show up in the 'Other' menu.">
+
+<!--pref-mappeduri.xul-->
+<!ENTITY mappedURIs.label "Mapped URIs">
+<!ENTITY addAURIMapping.label "Add a URI Mapping">
+<!ENTITY doNotAddAURIMapping.label "Do not add a URI Mapping">
+<!ENTITY mappedUri.description "Specify any mapping of a URI to a local path that you would like Komodo to use when opening files, previewing, debugging, etc.">
+<!ENTITY unmatchedMappedURIs.label "For URIs where no mapping yet exists">
+
+<!--pref-newfiles.xul-->
+<!ENTITY newButtonSettings.description "Specify the default language for newly created files.">
+<!ENTITY newFileEolIndicator.description "Specify the end-of-line (EOL) indicator for newly created files.">
+<!ENTITY noExtensionFile.label "If filename in &quot;New From Template&quot; has no extension:">
+<!ENTITY numberTemplatesRember.label "Number of recent templates to remember:">
+
+<!--pref-ui.xul-->
+<!ENTITY numberOfProjects.label "Number of projects:">
+<!ENTITY numberOfFiles.label "Number of files:">
+
+<!--pref-ui-tabs.xul-->
+<!ENTITY sidePaneTabStyles.caption "Side Pane Layouts">
+<!ENTITY uiPaneSidepanes.left.layout.label "Left pane layout: ">
+<!ENTITY uiPaneSidepanes.right.layout.label "Right pane layout: ">
+<!ENTITY uiPaneSidepanes.bottom.layout.label "Bottom pane layout: ">
+<!ENTITY uiPaneSidebars.menuitem.label "Single tab">
+<!ENTITY uiPaneHorizontalTabs.menuitem.label "Horizontal tabs">
+<!ENTITY uiPaneVerticalTabs.menuitem.label "Vertical tabs">
+<!ENTITY uiPaneIconTabs.menuitem.label "Icons in tabs">
+<!ENTITY interface.caption "Interface">
+<!ENTITY fonts.caption "Fonts">
+<!ENTITY colorscheme.caption "Color Scheme">
+<!ENTITY useGtkDetection.label "Auto detect skin">
+<!ENTITY skin.label "Skin: ">
+<!ENTITY skin.tooltip "Select what UI skin Komodo should use. Note that 'compatibility' skins serve to offer compatibility with existing OS themes, they are not full skins.">
+<!ENTITY skinDefault.label "Default">
+<!ENTITY iconset.label "Icon Set: ">
+<!ENTITY iconset.tooltip "Select what icon set Komodo should use. Note that selecting a skin may set the iconset selection to the best suited iconset for the skin.">
+<!ENTITY colored.value "Colored">
+<!ENTITY iconsetColor.label "Icon Colors:">
+<!ENTITY skinEditorScrollbars.label "Skin Editor Scrollbars">
+<!ENTITY enableSchemeSkinning.label "Color HUD with Color Scheme">
+<!ENTITY colorBase.label "Base">
+<!ENTITY colorToolbar.label "Toolbar">
+<!ENTITY colorWidgets.label "Widgets">
+<!ENTITY colorSelected.label "Selected">
+
+<!--pref-perl.xul-->
+<!ENTITY noPerlInterpreter.description "No Perl interpreter was found on your system. If you would like to debug and run Perl programs in Komodo you will need to install Perl. You can get Perl from ActiveState at">
+<!ENTITY noteRestartPerl.alert "Note: Komodo must be restarted for it to recognize new Perl installations.">
+<!ENTITY filePrefPerlUseThisInterpreter.label "Use this interpreter">
+<!ENTITY filePrefPerlLevelStricness.description "You can configure the level of strictness that is used when doing background syntax checks.">
+<!ENTITY filePrefPerlAdditionalDirectory.description "Specify any additional directories that you want Komodo to add to the Perl path when debugging, syntax checking or in the interactive shell.">
+<!ENTITY filePrefPerlExcludeDirectory.description "Specify any directories you want to exclude from code autocompletion scans.">
+<!ENTITY filePrefPerlIncludeCurrDirForLinting.label "Have syntax checking include the current directory">
+<!ENTITY disableBEGINBlockExecution.label "Don't execute BEGIN blocks in current document during syntax-checking.">
+
+<!ENTITY prefPerl.perlCriticOptions.label "Perl Critic options:">
+<!ENTITY prefPerl.perlCriticOption.off.label "Off">
+<!ENTITY prefPerl.perlCriticOption.gentle.label "Gentle">
+<!ENTITY prefPerl.perlCriticOption.stern.label "Stern">
+<!ENTITY prefPerl.perlCriticOption.harsh.label "Harsh">
+<!ENTITY prefPerl.perlCriticOption.cruel.label "Cruel">
+<!ENTITY prefPerl.perlCriticOption.brutal.label "Brutal">
+<!ENTITY prefPerl.perlCriticOptions.accesskey "c">
+<!ENTITY prefPerl.perlCriticOptionsEnable.description "To enable PerlCritic support, please install the `Perl-Critic' and `criticism' modules.">
+
+
+<!--pref-php.xul-->
+<!ENTITY noPhpInterpreter.description "No PHP interpreter was found on your system PATH. If you would like to debug and run PHP programs in Komodo you will need to enter the path to your PHP executable below, or install PHP if it is not currently installed. You can get PHP from www.php.net.">
+<!ENTITY noteRestartPhp.alert "Note: Komodo must be restarted for it to recognize new PHP installations.">
+<!ENTITY filePrefPhpUseThisInterpreter.label "Use this interpreter">
+<!ENTITY filePrefPhpInifileDirectory.description "Directory containing php.ini">
+<!ENTITY phpFolder.description "Specify any directories that you want Komodo to use for autocomplete and calltips. Komodo will recursively scan these directories for information.">
+<!ENTITY phpExcludeFolder.description "Specify any directories you want to exclude from the scan.">
+<!ENTITY commentStyle.label "Comment Style:">
+<!ENTITY phpDoubleClickSelectsEntireVariable.label "Double-click selects entire variable (including $).">
+<!ENTITY phpDoubleClickSelectsEntireVariable.description "Any changes will only apply to newly opened or re-opened PHP files.">
+
+<!--pref-python.xul-->
+<!ENTITY noPythonInterpreter.description "No Python interpreter was found on your system PATH. If you would like to debug and run Python programs in Komodo you will need to have Python installed and then enter the path to your Python interpreter below. You can get Python from ActiveState at">
+<!ENTITY noPython3Interpreter.description "No Python 3 interpreter was found on your system PATH. If you would like to debug and run Python 3 programs in Komodo you will need to have Python 3 installed and then enter the path to your Python 3 interpreter below. You can get Python from ActiveState at">
+<!ENTITY noteRestartPython.alert "Note: Komodo must be restarted for it to recognize new Python installations.">
+<!ENTITY filePrefPythonUseThisInterpreter.label "Use this interpreter">
+<!ENTITY filePrefPythonAdditionalDirectory.description "Specify any additional directories that you want Komodo to add to the Python path when debugging, syntax checking or in the interactive shell.">
+<!ENTITY filePrefPythonExcludeDirectory.description "Specify any directories you want to exclude from code autocompletion scans.">
+<!ENTITY ClassicPythonChecking.label "Python Interpreter Syntax Checking">
+<!ENTITY lintWithPychecker.label "Do Pychecker Linting">
+<!ENTITY pycheckerWarning.descr "Warning: Pychecker will load modules and run top-level statements. ActiveState recommends using pylint instead.">
+<!ENTITY pycheckerWrapperLocation.label "Location of Pychecker executable">
+<!ENTITY pycheckerRCLocation.label "Location of pycheckrc config file">
+<!ENTITY pycheckerNeedsPath.descr "Pychecker needs an explicit path to the Pychecker script.">
+
+<!--pref-ruby.xul-->
+<!ENTITY noRubyInterpreter.description "No Ruby interpreter was found on your system. If you would like to debug and run Ruby programs in Komodo you will need to install Ruby. You can get Ruby from the Ruby home page at">
+<!ENTITY noteRestartRuby.alert "Note: Komodo must be restarted for it to recognize new Ruby installations.">
+<!ENTITY rubyDebuggerNotWorking.description "The Ruby debugger extension does not work with the version of Ruby selected or that is on your path. You need to use Ruby version 1.8.2 or later.  You can get Ruby from the Ruby home page at">
+<!ENTITY filePrefRubyUseThisInterpreter.label "Use this interpreter">
+<!ENTITY filePrefRubyLevelStricness.description "You can configure the level of strictness that is used when doing background syntax checks.">
+<!ENTITY filePrefRubyAdditionalDirectory.description "Specify any additional directories that you want Komodo to add to the Ruby path when debugging, syntax checking or in the interactive shell.">
+<!ENTITY filePrefRubyExcludeDirectory.description "Specify any directories you want to exclude from code autocompletion scans.">
+
+<!--pref-syntax-checking.xul-->
+<!ENTITY langSpecificSyntaxCheckingProperties.label "Language-specific syntax checking properties">
+<!ENTITY basicChecking.label "Basic Checking">
+
+<!--pref-xml-catalog.xul-->
+<!ENTITY xmlIdentifies.description "Komodo identifies the type of your XML/HTML documents, and uses that to provide autocompletion appropriate for each document.">
+<!ENTITY xmlRangeSchemas.description "Komodo ships with built-in support for a wide range of built-in document schemas, including HTML/XHTML, XSL, XBL, XUL, RDF, Relax-NG, DocBook, Atom, VXML, WML, and SVG (for a full list see the documentation).">
+<!ENTITY xmlAdditionalCatalogs.description "This dialog lets you add your own SGML or XML Catalog files for use in XML/HTML autocompletion. See the documentation for detailed instructions on how to create your own catalog file from a Schema or DTD.">
+
+<!--pref-printing.xul-->
+<!ENTITY printingWrapLongLines.label "Wrap long lines at">
+<!ENTITY printingCharNotWrap.label "characters (0 for no wrapping)">
+<!ENTITY printingScaleSizes.label "Scale font sizes from screen to print by">
+
+<!--pref-project.perl.xul-->
+
+<!--pref-project.php.xul-->
+
+<!--pref-project.python.xul-->
+
+<!--pref-project.ruby.xul-->
+
+<!--pref-save.xul-->
+<!ENTITY fixWhiteSpace.label "Fix whitespace on save:">
+<!ENTITY autoSave.caption "Auto-recovery">
+<!ENTITY autoSaveEvery.desc "When enabled, auto-recovery will create a temporary backup of any unsaved files in case Komodo does not shutdown correctly. Upon next start, any auto-recovery files that were not correctly saved will then be restored.">
+<!ENTITY autoSaveEvery.label "Create recovery info every">
+<!ENTITY secondsZeroDisables.label "seconds (0 to disable)">
+<!ENTITY ifFileNameHasNoExtension.label "If filename has no extension:">
+
+<!--pref-servers.xul-->
+<!ENTITY serverType.label "Server type (*)">
+<!ENTITY connectionName.label "Name (*)">
+<!ENTITY hostName.label "Hostname (*)">
+<!ENTITY portNumber.label "Port">
+<!ENTITY userName.label "Username (*)">
+<!ENTITY password.label "Password">
+<!ENTITY defaultPath.label "Default path (absolute only)">
+<!ENTITY requiredFieldMark.label "Required fields are marked with (*)">
+<!ENTITY timeoutSeconds.label "Timeout (seconds):">
+
+<!--pref-web.xul-->
+<!ENTITY askToSaveCurrentFile.label "Ask to save changed file">
+<!ENTITY alwaysSaveCurrentFile.label "Always save changed file">
+<!ENTITY dontSaveCurrentFile.label "Don't save changed file">
+<!ENTITY saveChangedFiles.label "Save changes before previewing?">
+<!ENTITY whenStartingPreviewOnUnsavedFile.label "When starting a preview on an unsaved file:">
+<!ENTITY whichBrowserUse.description "Which browser should Komodo use when opening URLs?">
+<!ENTITY whichMethodUse.description "Which method should be used to preview files in the browser?">
+<!ENTITY certManager.description "Manage certificates that Komodo will accept for HTTPS connections">
+<!ENTITY certManager.label "View Certificates">
+<!ENTITY certManager.accesskey "C">
+<!ENTITY remoteDebugging.label "Remote Debugging">
+<!ENTITY noChromeExecutable.description "Chrome was not found on your system. If you would like to debug remote web pages in Komodo you will need to install Google Chrome.">
+<!ENTITY filePrefChromeUseThisExecutable.label "Chrome executable to use:">
+
+<!-- pref-winInteg.xul -->
+<!ENTITY makeKomodoTheDefaultEditor.desc "Make Komodo the default editor for these file extensions:">
+<!ENTITY addAnEditWithKomodoAction.desc "Add an 'Edit with Komodo' action for these file extensions:">
+<!ENTITY otherApplicationsMayChangeFileAssociations.desc "Other applications (including other versions of Komodo) may change file associations on the system. Click below to re-apply these file associations to this Komodo version.">
+<!ENTITY warningOneOrMOreFileAssociationNotSet "Warning: One or more of your file association settings are not set in the registry. Click above to re-apply your settings. Details are below.">
+
+<!--preview-properties.xul-->
+<!ENTITY useThisUrlPreview.label "Use this file/URL when previewing in browser:">
+
+<!--koPrefWidgest.xml-->
+<!ENTITY requestMethod.label "Request Method">
+<!ENTITY postType.label "Post Type">
+<!ENTITY browserArguments.label "Browser Arguments">
+
+<!--setupFileAssociations.xul-->
+<!ENTITY yourSystemCanBeConfiguredToRegisterKomodo.desc "Your system can be configured to register Komodo as an editor for specific file types. Select the file extensions for which you would like to register Komodo as an editor.">
+<!ENTITY makeKomodoDefaultEditorForFiletypes.desc "Make Komodo the default editor for the following file types:">
+<!ENTITY addAnEditWithKomodoContextMenuOption.desc "Add an 'Edit with Komodo' context menu option in Explorer for the following file types:">
+
+<!--scc-properties.xul-->
+<!ENTITY sccPropertiesName.label "Name:">
+<!ENTITY sccPropertiesSystem.label "SCC System:">
+<!ENTITY sccPropertiesNA.label "N/A">
+<!ENTITY sccPropertiesStatus.label "Status:">
+<!ENTITY sccPropertiesDepotRev.label "Depot Revision:">
+<!ENTITY sccPropertiesLocalRev.label "Local Revision:">
+
+<!--commented in file pref-alllangfonts.xul-->
+<!--
+<!ENTITY htmlSample.label "HTML Sample">
+<!ENTITY pythonSample.label "Python Sample">
+<!ENTITY perlSample.label "Perl Sample">
+<!ENTITY phpSample.label "PHP Sample">
+                                            -->
+<!--pref-helplang.xul-->
+<!ENTITY default.value "Default:">
+<!ENTITY generalHelp.value "General help:">
+
+<!--pref-alllangfonts.xul-->
+<!ENTITY indicators.accesskey "I">
+<!ENTITY indicators.label "Indicators">
+<!ENTITY indicatorMenu.label "Indicator:">
+<!ENTITY indicators.description "Set the color and styling of indicators.">
+<!ENTITY indicStyle.label "Style:">
+<!ENTITY indicStylePlain.label "Underline">
+<!ENTITY indicStyleSquiggle.label "Squiggle">
+<!ENTITY indicStyleTT.label "TT shapes">
+<!ENTITY indicStyleDiagonal.label "Diagonal hatch">
+<!ENTITY indicStyleStrike.label "Strike">
+<!ENTITY indicStyleHidden.label "Hidden">
+<!ENTITY indicStyleBox.label "Box outline">
+<!ENTITY indicStyleRoundBox.label "Rounded box">
+<!ENTITY indicStyleSquareBox.label "Square box">
+<!ENTITY indicStyleSquigglePixmap.label "Squiggle (Pixel Map)">
+<!ENTITY indicAlpha.label "Alpha (0&#8211;256):">
+<!ENTITY indicColor.label "Color:">
+<!ENTITY indicDrawUnderneath.label "Draw indicator underneath the text">
+<!ENTITY label.4 "4">
+<!ENTITY label.5 "5">
+<!ENTITY label.6 "6">
+<!ENTITY label.7 "7">
+<!ENTITY label.8 "8">
+<!ENTITY label.9 "9">
+<!ENTITY label.10 "10">
+<!ENTITY label.11 "11">
+<!ENTITY label.12 "12">
+<!ENTITY label.13 "13">
+<!ENTITY label.14 "14">
+<!ENTITY label.15 "15">
+<!ENTITY label.16 "16">
+<!ENTITY label.18 "18">
+<!ENTITY label.20 "20">
+<!ENTITY label.24 "24">
+<!ENTITY label.26 "26">
+<!ENTITY label.28 "28">
+<!ENTITY label.32 "32">
+<!ENTITY label.36 "36">
+<!ENTITY label.40 "40">
+<!ENTITY label.48 "48">
+<!ENTITY label.56 "56">
+<!ENTITY label.64 "64">
+<!ENTITY label.72 "72">
+<!ENTITY label.73 "7.3">
+<!ENTITY label.74 "7.4">
+<!ENTITY label.75 "7.5">
+<!ENTITY label.76 "7.6">
+<!ENTITY label.80 "8.0">
+<!ENTITY label.81 "8.1">
+<!ENTITY label.82 "8.2">
+<!ENTITY label.83 "8.3">
+<!ENTITY label.84 "8.4">
+<!ENTITY label.85 "8.5">
+<!ENTITY label.86 "8.6">

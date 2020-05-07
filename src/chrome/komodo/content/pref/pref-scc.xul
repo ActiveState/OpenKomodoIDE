@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="parent.initPanel();"
+        orient="vertical">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="scc-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical">
+            <caption label="&general.label;"/>
+            <hbox align="center">
+                <label value="Show SCC Output on commands:"/>
+                <menulist pref="true"
+                          prefattribute="data"
+                          id="show_scc_tab"
+                          prefstrings="donotask_show_scc_tab,donotask_action_show_scc_tab">
+                    <menupopup>
+                        <menuitem data="false,"   label="&askMeEachTime.label;"/>
+                        <menuitem data="true,Yes" label="&yes.label;"/>
+                        <menuitem data="true,No"  label="&no.label;"/>
+                    </menupopup>
+                </menulist>
+            </hbox>
+        </groupbox>
+    
+        <groupbox orient="vertical">
+            <caption label="&sourceCodeControlActions.label;"/>
+            <label>When executing a Source Code Control command:</label>
+            <hbox align="center">
+                <menulist pref="true" prefattribute="data"
+                          prefstrings="donotask_save_on_scc,donotask_action_save_on_scc">
+                    <menupopup>
+                        <menuitem data="false,"   label="&askMeWhatFilesToSave.label;"/>
+                        <menuitem data="true,All" label="&saveAllModifiedFiles.label;"/>
+                        <menuitem data="true,None"  label="&saveNoFiles.label;"/>
+                    </menupopup>
+                </menulist>
+            </hbox>
+        </groupbox>
+    
+        <groupbox orient="vertical">
+            <caption label="&diffDisplayStyle.label;"/>
+            <hbox align="center">
+                <label>Method used to display 'diff' output:</label>
+                <menulist id="diffDisplayStyle"
+                        pref="true"
+                        prefattribute="data">
+                    <menupopup>
+                        <menuitem data="tab" label="&openEditorTab.label;"/>
+                        <menuitem data="diffwin" label="&createNewWindow.label;"/>
+                    </menupopup>
+                </menulist>
+            </hbox>
+        </groupbox>
+
+    </vbox>
+
+</window>
+
+
+
+

@@ -1,0 +1,39 @@
+<!ENTITY Collaboration "Collaboration">
+<!ENTITY CollaborationShort.label "Collab">
+<!ENTITY Enable "Enable">
+<!ENTITY Disable "Disable">
+<!ENTITY Sessions "Sessions">
+<!ENTITY Contacts "Contacts">
+<!ENTITY Open "Open">
+<!ENTITY Add "Add">
+<!ENTITY Rename "Rename">
+<!ENTITY RenameSession "Rename Session">
+<!ENTITY Delete "Delete">
+<!ENTITY DeleteSession "Delete Session">
+<!ENTITY Leave "Leave Session">
+<!ENTITY remove.label "Remove">
+<!ENTITY confirm.label "Confirm">
+<!ENTITY deny.label "Deny">
+<!ENTITY cancelRequest.label "Cancel Request">
+
+<!ENTITY communication_error_message "Collaboration encountered a communication error and will recover automatically.">
+<!ENTITY force_reconnect "Force reconnect now">
+<!ENTITY collaboration_disabled_message "Collaboration is currently disabled. Enable Collaboration now to start working with multiple people on the same code in realtime.">
+
+<!ENTITY enable_collaboration "Enable Collaboration">
+<!ENTITY new_doc_from_file "New Document from File">
+<!ENTITY empty_doc "New Empty Document">
+<!ENTITY user_to_session "Add User to Session">
+<!ENTITY user_from_session "Remove User from Session">
+<!ENTITY create_new_session "New Session">
+<!ENTITY share_in_new_session "Share in a new Session">
+<!ENTITY tab_already_shared "This tab is already shared">
+<!ENTITY share_in_existing_session "Share in an existing Session">
+<!ENTITY add_contact "Add Contact">
+<!ENTITY remove_contact "Remove Contact">
+<!ENTITY reload "Reload">
+<!ENTITY collab_options "Options">
+
+<!ENTITY my_account "My Account">
+
+<!ENTITY collaboration_always_show_user_flags.label "Always show user flags">

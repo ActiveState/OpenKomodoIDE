@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/scintilla.css" type="text/css"?>
+
+<window title="XUL Periodic Table"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<script src="chrome://komodo/content/library/timers.js"/>
+<script src="chrome://komodo/content/library/open.js"/>
+<script src="chrome://komodo/content/markers.js"/>
+<script src="chrome://global/content/nsDragAndDrop.js"/>
+<script src="chrome://global/content/nsTransferable.js"/>
+
+<html:h2>Tabbed Scintilla Editor</html:h2>
+
+<vbox flex="1">
+
+<groupbox flex="1">
+  <tabbox type="draggable" class="whiteout" orient="vertical" flex="1" id='test_tabbox_2'>
+    <tabs type="scrollable">
+       <tab type="file-tab" id="ytab_2" label="Tab"
+            status="chrome://komodo/skin/images/status_icon_sync.png"
+            action="chrome://komodo/skin/images/status_icon_edit.png"
+            readonly="chrome://komodo/skin/images/status_icon_readonly.png"
+            clean="true"/>
+       <tab type="file-tab" id="ytab_3" label="Tab"
+            status="chrome://komodo/skin/images/status_icon_sync.png"
+            action="chrome://komodo/skin/images/status_icon_edit.png"
+            readonly="chrome://komodo/skin/images/status_icon_readonly.png"
+            clean="true"/>
+       <tab type="file-tab" id="ytab_4" label="Tab"
+            status="chrome://komodo/skin/images/status_icon_sync.png"
+            action="chrome://komodo/skin/images/status_icon_edit.png"
+            readonly="chrome://komodo/skin/images/status_icon_readonly.png"
+            clean="true"/>
+    </tabs>
+    <tabpanels flex="1" >
+       <tabpanel flex="1" style="background-color: red;">
+        <scintilla type="simple" flex="1" class="thin-inset-border"/>
+       </tabpanel>
+       <tabpanel flex="1" style="background-color: green;">
+        <scintilla type="simple" flex="1" class="thin-inset-border"/>
+       </tabpanel>
+       <tabpanel flex="1" style="background-color: blue;">
+        <scintilla type="simple" flex="1" class="thin-inset-border"/>
+       </tabpanel>
+    </tabpanels>
+</tabbox>
+</groupbox>
+</vbox>
+</window>

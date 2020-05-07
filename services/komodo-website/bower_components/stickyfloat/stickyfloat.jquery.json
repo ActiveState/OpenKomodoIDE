@@ -1,0 +1,30 @@
+{
+	"name": "stickyfloat",
+	"title": "stickyfloat",
+	"description": "Makes it possible to have a fixed position element that is relative to it's parent. In other words, floats an element along while scrolling...but does this good.",
+	"keywords": ["float", "sticky", "position", "animation"],
+	"version": "7.4.1",
+	"author": {
+		"name": "Yair Even Or",
+		"url": "http://dropthebit.com"
+	},
+	"maintainers": [
+	{
+		"name": "Yair Even Or",
+		"email": "vsync.design@gmail.com"
+	}
+	],
+	"licenses": [
+	{
+		"type": "MIT",
+		"url": "http://opensource.org/licenses/MIT"
+	}
+	],
+	"bugs": "https://github.com/yairEO/stickyfloat/issues",
+	"homepage": "https://github.com/yairEO/stickyfloat",
+	"docs": "https://github.com/yairEO/stickyfloat",
+	"download": "https://github.com/yairEO/stickyfloat",
+	"dependencies": {
+		"jquery": ">=1.5"
+	}
+}

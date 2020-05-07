@@ -1,0 +1,40 @@
+# Sample content, edit, delete, do whatever you like
+Description: A short description of what your tutorial does
+Author: Your Name
+Version: 1.0
+# Placement can be floating or docked
+Placement: docked
+Callouts:
+    myCallout:
+        Element: "#toolsToolbarGroup"
+        Message: Pay attention to this element, it does XYZ!
+Steps: 
+    -
+      Title: First Step
+      Summary: >
+          Markdown summary. Special features include:
+          
+           * [logic callback link][callback:myCallback] -- See the logic tab
+           * [callout link][callout:myCallout] -- See above
+           * Click this button: ![element:#newButton]
+#                               ![element:#openFilesPaneLabel,chrome://openfiles/content/panel.xul]
+		   
+      Task: >
+          Your Task
+    -
+      Title: Second Step
+      Summary: >
+          Your Summary
+      Task: >
+          Your Task
+      # The following fields are optional
+      #Tips:
+      #    - tip 1
+      #    - tip 2
+      #    - tip 3
+      #Validate: checks for this string
+      #Validate: !!js/regexp /^checks for this regex$/
+      #Validate: myValidationFunction # Calls this validation function in your logic
+      #Success: >
+      #    Shown when the validation succeeds, before continuing
+      #    to the next step

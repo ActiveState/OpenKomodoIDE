@@ -1,0 +1,1057 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % debuggerDTD SYSTEM "chrome://komodo/locale/debugger.dtd">
+  %debuggerDTD;
+]>
+
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xbl="http://www.mozilla.org/xbl"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<binding id="VariableViewer">
+    <content>
+        <xul:tree anonid="variables-tree" flex="1"
+            class="zero-space no-border bg_transparent" orient="vertical" xbl:inherits="orient"
+            onclick="document.getBindingParent(this).onSelect(event);"
+            onselect="document.getBindingParent(this).view.selectionChanged();"
+            hidecolumnpicker="true">
+            <xul:treecols anonid="treecols">
+            <xul:treecol primary="true" id="name" label="&name.label;" flex="2"/>
+            <xul:splitter class="tree-splitter"/>
+            <xul:treecol id="type" label="&type.label;" flex="1"/>
+            <xul:splitter class="tree-splitter"/>
+            <xul:treecol id="value" label="&value.label;" flex="4"/>
+            </xul:treecols>
+            <xul:treechildren id="tree" flex="1"
+                ondblclick="document.getBindingParent(this).dblclickVar(event);"
+                ondragstart="document.getBindingParent(this).beginDrag(event)"
+                ondragover="document.getBindingParent(this).dragOver(event);"
+                ondrop="document.getBindingParent(this).dropOn(event);"/>
+        </xul:tree>
+    </content>
+    <implementation>
+        <constructor>
+        <![CDATA[
+            // HACK: Force restore tree column order to work around a Mozilla bug
+            // where tree splitters in XBL don't work
+            // (Komodo bug 80566 / bug 90238, Mozilla bug 458183)
+            // And yes, this setTimeout is, sadly, necessary.  Getting the
+            // bounding rect of the treecols doesn't help.
+            setTimeout((function () {
+                var tree = document.getAnonymousElementByAttribute(this, "anonid", "variables-tree");
+                tree.columns.restoreNaturalOrder();
+            }).bind(this), 0);
+        ]]>
+        </constructor>
+        <field name="view">null</field>
+        <field name="editable">false</field>
+        <field name="needUpdate">true</field>
+
+        <field name="log">ko.logging.getLogger("koDebuggerVariableViewer")</field>
+
+        <property name="tree">
+        <getter>
+        <![CDATA[
+            return document.getAnonymousNodes(this)[0];
+        ]]>
+        </getter>
+        </property>
+
+        <method name="onLoad">
+        <parameter name="treeView"/>
+        <body>
+        <![CDATA[
+            //dump("loading "+this.prefstring+"\n");
+            this.view = treeView;
+            var treeWidget = this.tree;
+            treeWidget.treeBoxObject
+                    .QueryInterface(Components.interfaces.nsITreeBoxObject)
+                    .view = this.view;
+            this.editable = this.getAttribute("editable")
+            this.view.clearList();
+        ]]>
+        </body>
+        </method>
+
+        <method name="getElement">
+        <parameter name="type"/>
+        <parameter name="id"/>
+        <body>
+        <![CDATA[
+            //dump("looking for element "+type+" "+id+"\n");
+            var v = document.getAnonymousNodes(this);
+            var tree = null;
+            for (var i = 0; i < v.length; i++) {
+                try {
+                    var l = v[i].getElementsByTagNameNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", type);
+                    //dump("found "+l.length+" elements\n");
+                    for (var j = 0; j < l.length; j++) {
+                        if (l[j].getAttribute("id") == id) {
+                            //dump("found element "+id+" at index "+j+"\n");
+                                            return l[j];
+                        }
+                    }
+                } catch (e) {}
+            }
+            //dump("ERROR, could not find element!\n");
+            return null;
+        ]]>
+        </body>
+        </method>
+
+
+        <method name="editWindowDialog">
+        <parameter name="prompt"/>
+        <parameter name="label"/>
+        <parameter name="value"/>
+        <parameter name="title"/>
+        <parameter name="screenX"/>
+        <parameter name="screenY"/>
+        <parameter name="dbgpProperty"/>
+        <parameter name="action"/>
+        <body>
+        <![CDATA[
+            if (typeof(prompt) == 'undefined') prompt = null;
+            if (typeof(label) == 'undefined') label = null;
+            if (typeof(value) == 'undefined') value = null;
+            if (typeof(title) == 'undefined') title = null;
+            if (typeof(screenX) == 'undefined') screenX = null;
+            if (typeof(screenY) == 'undefined') screenY = null;
+            if (typeof(dbgpProperty) == 'undefined') dbgpProperty = null;
+
+            var obj = new Object();
+            obj.prompt = prompt;
+            obj.label = label;
+            obj.value = value;
+            obj.title = title;
+            obj.screenX = screenX;
+            obj.screenY = screenY;
+            obj.dbgpProperty = dbgpProperty;
+            obj.view = this.view;
+            obj.action = action;
+            window.openDialog("chrome://komodo/content/debugger/variableEditor.xul",
+                              "Komodo:VariableEditor",
+                              "chrome,modal,titlebar,resizable",
+                              obj);
+            // the result got handled in the dialog itself
+        ]]>
+        </body>
+        </method>
+
+        <method name="editWindow">
+        <parameter name="prompt"/>
+        <parameter name="defaultResponse"/>
+        <parameter name="dbgpProperty"/>
+        <parameter name="action"/>
+        <body>
+        <![CDATA[
+            var boxObject = this.tree.treeBoxObject
+                    .QueryInterface(Components.interfaces.nsITreeBoxObject);
+
+            var title = "Edit Expression";
+            switch(action) {
+            case 'edit':
+                title = "Edit Variable Value";
+                break;
+            case 'replace':
+                title = "Edit Variable Name or Expression";
+                break;
+            case 'add':
+                title = "Add Variable";
+            }
+            this.editWindowDialog(prompt,
+                                      null, // label,
+                                      defaultResponse, // default value
+                                      title, // title
+                                      window.screenX + boxObject.x,
+                                      window.screenY + boxObject.y,
+                                      dbgpProperty,
+                                      action);
+        ]]>
+        </body>
+        </method>
+
+        <method name="newVar">
+        <parameter name="varname"/>
+        <body>
+        <![CDATA[
+            if (!this.editable) return;
+            this.tree.currentIndex = -1;
+            if (typeof(varname) == 'undefined' || !varname) {
+                this.editWindow("Enter an expression or variable name to be evaluated.", "", null, 'add');
+                return;
+            }
+            if (varname) {
+                if (this.view.haveVariable(varname)) {
+                    return;
+                }
+                this.view.addVariable(varname);
+            }
+            window.setTimeout("window.updateCommands('debugvartab_selection_changed');",0);
+        ]]>
+        </body>
+        </method>
+
+        <method name="dblclickVar">
+        <parameter name="event"/>
+        <body>
+        <![CDATA[
+            var t = event.originalTarget;
+            if (t.localName == "treechildren") {
+
+            // prevent edits on blank areas or twisties
+            if (event.button != 0) return;
+            var row = {};
+            var col = {};
+            var obj = {};
+            var treeWidget = this.tree;
+            var boxObject = treeWidget.treeBoxObject.QueryInterface(Components.interfaces.nsITreeBoxObject)
+            boxObject.getCellAt(event.clientX, event.clientY, row, col, obj);
+
+            try {
+                if (row.value < 0 || row.value >= this.view.rowCount) {
+                this.newVar();
+                return;
+                }
+            } catch (e) {
+                return;
+            }
+
+            // if twisty, toggel
+            if (obj.value == "twisty") {
+                this.view.toggleOpenState(row.value);
+                return;
+            }
+
+            // double click on row, edit it
+            this.editVar(event, col.value);
+            event.cancelBubble = true;
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="getSelectedVariables">
+        <body>
+        <![CDATA[
+            // get the values, put into the tree.
+            var treeWidget = this.tree;
+            if (treeWidget.currentIndex < 0) return [];
+            var variables = this.view.getSelectedVariables();
+            var names = [];
+            for (var i=0; i < variables.length; i++) {
+                names[i] = variables[i].fullname;
+            }
+            return names;
+        ]]>
+        </body>
+        </method>
+
+        <method name="editVar">
+        <parameter name="event"/>
+        <parameter name="column"/>
+        <body>
+        <![CDATA[
+            // get the values, put into the tree.
+            var treeWidget = this.tree;
+            if (treeWidget.currentIndex < 0) return;
+            var variable = this.view.getVariable(treeWidget.currentIndex);
+            if (!variable) return;
+            var name = variable.fullname || variable.name;
+            var value = variable.value;
+            if (!name || name == "") return;
+            
+            if (name == "...Next Page...") {
+                // get and show the next page of data
+                this.view.addChildPage(this.view.getParentIndex(treeWidget.currentIndex));
+            } else if (!this.view.dbgTabManager.session ||
+                       (column == "name" && this.editable == "true")) {
+                // response is a string
+                this.editWindow("Enter a new expression for "+name+":",
+                                name, null, 'replace');
+            } else if (this.view.dbgTabManager.session) {
+                this.editWindow("Enter a new value for "+name+":",
+                                value, variable.debugprop, 'edit');
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="copyVariableValues">
+        <body>
+        <![CDATA[
+            // get the values, put on clipboard
+            var treeWidget = this.tree;
+            var selectedIndices = ko.treeutils.getSelectedIndices(treeWidget.view, false/*rootsOnly*/);
+            if (!selectedIndices.length) return;
+            var idx, variable, name, numValues, values = [];
+            var dbgManager = null;
+            var debuggerMaxTooltipSize;
+            for (var i = 0; i < selectedIndices.length; i++) {
+                idx = selectedIndices[i];
+                variable = this.view.getVariable(idx);
+                if (!variable) {
+                    continue;
+                }
+                if (this.view.isContainer(idx) && this.view.getLevel(idx) == 0) {
+                    // get the tooltip value
+                    try {
+                        if (!dbgManager) {
+                            dbgManager = ko.dbg.manager.currentSession.dbg;
+                            debuggerMaxTooltipSize = ko.prefs.getLongPref("debuggerMaxTooltipSize");
+                        }
+                        var property = dbgManager.propertyGet(variable.name);
+                        var text = property.getTooltip(debuggerMaxTooltipSize);
+                        if (text) {
+                            // You know what dbgp needs -- it needs a getJSONValue(value, maxLength, stackDepth) method
+                            // Rebuilding a JSON string from the human-targeted string getTooltip() generates
+                            // is too error-prone, so don't bother.
+                            text = text.replace("\x00", "\\x00");
+                            values.push(text);
+                        }
+                    } catch(ex) {
+                        this.log.exception(ex, "Error trying to get a compound value");
+                    }
+               } else {
+                    values.push(variable.value);
+               }
+            }
+            var _bundle = (Components.classes["@mozilla.org/intl/stringbundle;1"]
+                           .getService(Components.interfaces.nsIStringBundleService)
+                           .createBundle("chrome://komodo/locale/debugger.properties"));
+            var statusMessage;
+            if ((numValues = values.length) == 0) {
+                statusMessage = _bundle.GetStringByName("No text to copy");
+            } else {
+                var finalValue = numValues == 1 ? values[0] : JSON.stringify(values);
+                xtk.clipboard.setText(finalValue);
+                statusMessage = _bundle.formatStringFromName("copied X", [finalValue.substr(0, 100)], 1);
+            }
+            require("notify/notify").send(statusMessage, "debugger");
+        ]]>
+        </body>
+        </method>
+
+        <method name="deleteVar">
+        <body>
+        <![CDATA[
+            if (this.editable != "true") return;
+            var treeWidget = this.tree;
+            if (treeWidget.currentIndex >= 0) {
+                this.view.removeSelectedVariables();
+            }
+            if (this.view.mVariableList.length < 1) {
+                treeWidget.currentIndex = -1;
+            }
+            window.setTimeout("window.updateCommands('debugvartab_selection_changed');",0);
+        ]]>
+        </body>
+        </method>
+
+        <method name="onSelect">
+        <parameter name="event"/>
+        <body>
+        <![CDATA[
+            // c.f. mozilla/mailnews/base/resources/content/threadPane.js
+            var t = event.originalTarget;
+
+            // single-click on a column
+            if (t.localName == "treecol") {
+                this.updateSortIndicators(t.id)
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="updateSortIndicatorsFromState">
+        <parameter name="columnId"/>
+        <parameter name="sortDirection"/>
+        <body>
+        <![CDATA[
+        if (columnId == null || sortDirection == null) {
+            return;
+        }
+        var sortedColumn = this.getElement("treecol", columnId);
+        // Assume that none of the columns have the sortDirection attribute set.
+        if (sortDirection) {
+            sortedColumn.setAttribute("sortDirection",
+                                      sortDirection < 0 ? "descending" : "ascending");
+        }
+        ]]>
+        </body>
+        </method>
+
+        <method name="updateSortIndicators">
+        <parameter name="sortId"/>
+        <body>
+        <![CDATA[
+            var sortedColumn = null;
+
+            // set the sort indicator on the column we are sorted by
+            var sortDir = 0;
+            if (sortId) {
+                sortedColumn = this.getElement("treecol",sortId);
+                if (sortedColumn) {
+                    var sortDirection = sortedColumn.getAttribute("sortDirection");
+                    if (!sortDirection) {
+                        sortDir = 1;
+                        sortedColumn.setAttribute("sortDirection", "ascending");
+                    } else if (sortDirection == "ascending") {
+                        sortDir = -1;
+                        sortedColumn.setAttribute("sortDirection", "descending");
+                    } else {
+                        sortedColumn.removeAttribute("sortDirection");
+                    }
+                }
+            }
+
+            // remove the sort indicator from all the columns
+            // except the one we are sorted by
+            var currCol = this.tree.firstChild.firstChild;
+            while (currCol) {
+                while (currCol && currCol.localName != "treecol") {
+                    currCol = currCol.nextSibling;
+                }
+                if (currCol && (currCol != sortedColumn)) {
+                    currCol.removeAttribute("sortDirection");
+                }
+                if (currCol) {
+                    currCol = currCol.nextSibling;
+                }
+            }
+            this.view.Sort(sortedColumn, sortDir);
+            return sortDir;
+        ]]>
+        </body>
+        </method>
+
+        <method name="beginDrag">
+        <parameter name="event"/>
+        <body>
+        <![CDATA[
+            event.cancelBubble = true;
+            if (this.getAttribute("candrag")!="true") return false;
+            var varname = this.view.getName(this.tree.currentIndex);
+
+            var dragService = Components.classes["@mozilla.org/widget/dragservice;1"].
+            getService(Components.interfaces.nsIDragService);
+            var trans = Components.classes["@mozilla.org/widget/transferable;1"].
+            createInstance(Components.interfaces.nsITransferable);
+
+
+            trans.addDataFlavor("text/x-expression");
+            var genTextData = Components.classes["@mozilla.org/supports-string;1"].
+            createInstance(Components.interfaces.nsISupportsString);
+            genTextData.data = varname;
+            trans.setTransferData ("text/x-expression", genTextData, genTextData.data.length * 2);
+
+
+            var transArray = Components.classes["@mozilla.org/supports-array;1"].
+            createInstance(Components.interfaces.nsISupportsArray);
+            var genTrans = trans.QueryInterface(Components.interfaces.nsISupports);
+            transArray.AppendElement(genTrans);
+            var nsIDragService = Components.interfaces.nsIDragService;
+            try {
+                dragService.invokeDragSession(event.target, transArray, null,
+                            (nsIDragService.DRAGDROP_ACTION_COPY + nsIDragService.DRAGDROP_ACTION_MOVE));
+            } catch (e) {
+                //exception occurs if you cancel the drop, or drop someplace that doesn't accept it.
+            }
+
+            // don't propagate the event
+            return true;
+        ]]>
+        </body>
+        </method>
+
+        <method name="dragOver">
+        <parameter name="event"/>
+        <body>
+        <![CDATA[
+            event.cancelBubble = true;
+            if (this.getAttribute("candrop")!="true") return false;
+            var dragService = Components.classes["@mozilla.org/widget/dragservice;1"].
+            getService(Components.interfaces.nsIDragService);
+            var dragSession = dragService.getCurrentSession();
+            if ( !dragSession ) {
+                dump("No dragSession in place.\n");
+                return false;
+            }
+            if ( dragSession.isDataFlavorSupported("text/unicode") ||
+                dragSession.isDataFlavorSupported("text/x-expression")) {
+                // XXX examine what rowGroup is
+                var rowGroup = event.target.parentNode.parentNode;
+                rowGroup.setAttribute ( "dd-triggerrepaint", 0 );
+                dragSession.canDrop = true;
+                return true;
+            } else {
+                return false;
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="dropOn">
+        <parameter name="event"/>
+        <body>
+        <![CDATA[
+            event.cancelBubble = true;
+            if (this.getAttribute("candrop")!="true") return false;
+            var dragService = Components.classes["@mozilla.org/widget/dragservice;1"].
+            getService(Components.interfaces.nsIDragService);
+            var dragSession = dragService.getCurrentSession();
+            if ( !dragSession ) {
+                dump ("DropOnTree: no dragSession\n");
+                return false;
+            }
+            // draging things from outside of stack viewer panes
+            var trans = Components.classes["@mozilla.org/widget/transferable;1"].
+            createInstance(Components.interfaces.nsITransferable);
+            trans.addDataFlavor("text/unicode");
+            trans.addDataFlavor("text/x-expression");
+            dragSession.getData ( trans, 0 );
+            var dataObj = new Object();
+            var bestFlavor = new Object();
+            var len = new Object();
+            try {
+                trans.getAnyTransferData ( bestFlavor, dataObj, len );
+            } catch (e) {
+                dump("dataobj empty\n");
+                return false;
+            }
+            dataObj = (dataObj.value.QueryInterface
+                    (Components.interfaces.nsISupportsString));
+            if(dataObj.data == "" || dataObj.data == null) {
+                dump ("DropOnTree: can't find the data in 'object" + "\n");
+                return false;
+            }
+            this.view.addVariable(dataObj.data);
+
+            return true;
+        ]]>
+        </body>
+        </method>
+
+    </implementation>
+    <handlers>
+        <handler event="keypress" keycode="vk_return">
+        <![CDATA[
+        this.editVar();
+        event.cancelBubble = true;
+        ]]>
+        </handler>
+        <handler event="keypress" keycode="vk_insert">
+        <![CDATA[
+        this.newVar();
+        event.cancelBubble = true;
+        ]]>
+        </handler>
+        <handler event="keypress" keycode="vk_delete">
+        <![CDATA[
+        this.deleteVar();
+        event.cancelBubble = true;
+        ]]>
+        </handler>
+        <handler event="keypress">
+        <![CDATA[
+        if (event.cancelBubble) return;
+        var key = ko.keybindings.manager.event2keylabel(event, undefined, 1);
+        if (!key) return;
+        var command = ko.keybindings.manager.key2command[key];
+        if (command == "cmd_copy") {
+            ko.commands.doCommand("cmd_dbgCopyVariableValues");
+            event.cancelBubble = true;
+        }
+        ]]>
+        </handler>
+    </handlers>
+</binding>
+
+<binding id="DebuggerPanel">
+    <content orient="vertical" flex="1">
+            <xul:hbox flex="1" id="DebuggerPanelContent">
+            <xul:vbox flex="1" id="varViewers" collapsed="true"
+                      class="no-border" style="width: 150px">
+                <xul:tabbox flex="1" id="leftTabBox"
+                        class="tabs-bottom"
+                        handleCtrlTab="true"
+                        handleCtrlPageUpDown="true">
+                    <xul:tabpanels id="variables-tabpanels" flex="1">
+                        <xul:tabpanel orient="vertical">
+                            <xul:VariableViewer id="variables-watch-tree"
+                                flex="1" editable="true"
+                                context="context_watchedViewer"
+                                candrag="true"
+                                candrop="true"/>
+                        </xul:tabpanel>
+                        <xul:tabpanel/>
+                    </xul:tabpanels>
+                    <xul:tabs id="variables-tabs"
+                        class="tabs-bottom"
+                        type="scrollable"
+                        collapsable="true"
+                        onselect="
+                            document.getBindingParent(this).updateVariables(event);
+                            window.updateCommands('debugvartab_changed');
+                        "
+                        onfocus="
+                            if (event.originalTarget.localName == 'tab') {
+                                event.originalTarget.panel.focus();
+                            }
+                        ">
+                        <xul:tab id="variables-watch-tab"
+                             label="&watch.label;"/>
+                        <xul:hbox id="editButtonBox" class="solo-toolbaritem">
+                            <xul:toolbarbutton id="button-showHiddenVars"
+                                class="show-hidden-vars-icon"
+                                type="checkbox" checked="false"
+                                observes="cmd_dbgShowHiddenVars"
+                                tooltiptext="&showHiddenVariables.tooltiptext;"/>
+                            <xul:separator/>
+                            <xul:toolbarbutton id="button-editWatchedVar"
+                                class="list-item-edit-icon"
+                                observes="cmd_dbgEditVariable"
+                                tooltiptext="&editWatchVariable.tooltiptext;"/>
+                            <xul:toolbarbutton id="button-addWatchedVar"
+                                class="list-item-add-icon"
+                                observes="cmd_dbgAddVariable"
+                                tooltiptext="&newWatchVariable.tooltiptext;"/>
+                            <xul:toolbarbutton id="button-deleteWatchedVar"
+                                class="list-item-remove-icon"
+                                observes="cmd_dbgDeleteVariable"
+                                tooltiptext="&removeWatch.tooltiptext;"/>
+                        </xul:hbox>
+                    </xul:tabs>
+                </xul:tabbox>
+            </xul:vbox>
+
+            <xul:splitter id="viewer-splitter"
+                          class="grippy_splitter_collapsable"
+                          collapse="before" state="collapsed"
+                          tooltiptext="&collapseExpandPane.tooltiptext;"
+                          style="min-height: 15px;">
+                <xul:grippy/>
+            </xul:splitter>
+
+            <xul:vbox flex="1" class="no-border">
+                <xul:tabbox flex="1" id="rightTabBox"
+                        class="whiteout tabs-bottom"
+                        handleCtrlTab="true"
+                        handleCtrlPageUpDown="true">
+                    <xul:tabpanels id="stack-tabpanels"
+                               flex="1">
+                        <xul:tabpanel orient="vertical">
+                            <xul:view type="terminal"
+                                id="terminal" flex="1"
+                                class="thin-inset-border"/>
+                        </xul:tabpanel>
+                        <xul:tabpanel orient="vertical">
+                            <xul:hbox id="threads-box" align="center"
+                                style="border: 1px ThreeDHighlight outset;"
+                                collapsed="true">
+                                <xul:label value="Threads: "/>
+                                <xul:menulist id="threads-menulist" flex="1"
+                                          allowevents="true"
+                                          oncommand="event.target.oncommand();">
+                                    <xul:menupopup id="threads-menupopup"/>
+                                </xul:menulist>
+                            </xul:hbox>
+                            <xul:listbox id="callstack-listbox"
+                                      class="no-border callstack"
+                                      style="margin: 0px; border: none; padding: 0px;"
+                                      onclick="document.getBindingParent(this).selectStackFrame(event);"
+                                      seltype="single"
+                                      flex="1">
+                                <xul:listhead>
+                                    <xul:listheader label="&callStackLocation.label;"/>
+                                </xul:listhead>
+                            </xul:listbox>
+                        </xul:tabpanel>
+                        <xul:tabpanel orient="vertical">
+                            <xul:view type="browser" class="thin-inset-border"
+                                id="browser" flex="1"
+                                collapsenavbar="true"
+                                disablehistory="true"
+                                src="about:blank"/>
+                        </xul:tabpanel>
+                    </xul:tabpanels>
+                    <xul:tabs id="stack-tabs"
+                        class="tabs-bottom"
+                        type="scrollable"
+                        onselect="window.updateCommands('debugoutputtab_changed');"
+                        collapsable="true">
+                        <xul:tab id="output-tab"
+                             label="&output.label;"/>
+                        <xul:tab id="stack-tab"
+                             label="&callStack.label;"/>
+                        <xul:tab id="html-tab"
+                             label="&HTML.label;"
+                             oncommand="document.getBindingParent(this).panelManager.loadHTMLView();"/>
+                    </xul:tabs>
+                </xul:tabbox>
+            </xul:vbox>
+            </xul:hbox>
+            
+            <xul:hbox id="forDebuggerOnly" collapsed="true" class="widgetToolbarWrap">
+                <xul:toolbar class="widgetToolbar">
+                    <xul:toolbarbutton id="continue-button"
+                                class="debug-continue-icon"
+                                tooltiptext="&goContinue.tooltiptext;"
+                                observes="cmd_dbgGo"/>
+                    <xul:toolbarbutton id="break-button"
+                                class="debug-break-icon"
+                                tooltiptext="&breakNow.tooltiptext;"
+                                observes="cmd_dbgBreakNow"/>
+                    <xul:toolbarbutton id="stop-button"
+                                class="debug-stop-icon"
+                                tooltiptext="&stop.tooltiptext;"
+                                observes="cmd_dbgStop"/>
+                    <xul:toolbarbutton id="detach-button"
+                                class="debug-detach-icon"
+                                tooltiptext="&detach.tooltiptext;"
+                                observes="cmd_dbgDetach"/>
+                    <xul:toolbarseparator style="width: 10px;"/>
+                    <xul:toolbarbutton id="stepin-button"
+                                class="debug-stepin-icon"
+                                tooltiptext="&stepIn.tooltiptext;"
+                                observes="cmd_dbgStepIn"/>
+                    <xul:toolbarbutton id="stepover-button"
+                                class="debug-stepover-icon"
+                                tooltiptext="&stepOver.tooltiptext;"
+                                observes="cmd_dbgStepOver"/>
+                    <xul:toolbarbutton id="stepout-button"
+                                class="debug-stepout-icon"
+                                tooltiptext="&stepOut.tooltiptext;"
+                                observes="cmd_dbgStepOut"/>
+                    <xul:toolbarseparator style="width: 10px;"/>
+                    <xul:toolbarbutton id="inspect-button"
+                                class="debug-inspect-icon"
+                                type="checkbox" checked="false"
+                                tooltiptext="&debuggerInspect.tooltiptext;"
+                                observes="cmd_dbgInspect"/>
+                </xul:toolbar>
+                <xul:label id="desc" flex="1" crop="left"/>
+            </xul:hbox>
+            
+            <xul:commandset>
+                <!-- this is here to force this command to be observed -->
+                <xul:command observes="cmd_dbgMakeWatchedVariable"/>
+                <xul:command observes="cmd_dbgWatchedVariable"/>
+                <xul:command observes="cmd_dbgCopyVariableValues"/>
+                <xul:command observes="cmd_dbgViewAsHex"/>
+            </xul:commandset>
+    </content>
+    <implementation implements="koIAsyncCallback">
+        <field name="infoText">null</field>
+        <field name="outputDeck">null</field>
+        <field name="terminalView">null</field>
+        <field name="terminalHandler">null</field>
+        <field name="browser">null</field>
+        <field name="variablesTabs">null</field>
+        <field name="variablesTabpanels">null</field>
+        <field name="watchVariablesTab">null</field>
+        <field name="watchVariablesTree">null</field>
+        <field name="threadsBox">null</field>
+        <field name="threadsMenuList">null</field>
+        <field name="threadsMenuPopup">null</field>
+        <field name="callstackListbox">null</field>
+        <field name="editButtonBox">null</field>
+        <field name="outputTabs">null</field>
+        <field name="outputTabpanels">null</field>
+        <field name="_htmlUpdateTimeoutId">null</field>
+        <field name="log">ko.logging.getLogger("DebuggerPanel")</field>
+
+        <constructor>
+        <![CDATA[
+            // hook up command observers up to the parent window
+            Array.slice(document.getAnonymousNodes(this)).forEach(function(child) {
+                window.frameElement.hookupObservers("debugger-panel-commandset",
+                                                    child);
+            });
+        ]]>
+        </constructor>
+
+        <method name="updateBroadcaster">
+            <parameter name="commandId"/>
+            <body>
+            <![CDATA[
+                var srcCmd = parent.document.getElementById(commandId);
+                var destCmd = document.getElementById(commandId);
+                for each (let attr in Array.slice(destCmd.attributes)) {
+                    if (!srcCmd.hasAttribute(attr.name))
+                        destCmd.removeAttribute(attr.name);
+                }
+                for each (let attr in Array.slice(srcCmd.attributes)) {
+                    destCmd.setAttributeNS(attr.namespaceURI, attr.name, attr.value);
+                }
+            ]]>
+            </body>
+        </method>
+
+        <method name="onLoad">
+        <parameter name="panelManager"/>
+        <parameter name="showMarginSymbols"/>
+        <body>
+        <![CDATA[
+            this.panelManager = panelManager;
+            this.leftTabBox = this.getElement('tabbox','leftTabBox')
+            this.rightTabBox = this.getElement('tabbox','rightTabBox')
+            this.infoText = this.getElement('label','desc');
+            this.outputDeck = this.getElement('deck','output-deck');
+            this.terminalView = this.getElement('view','terminal');
+            this.browser = this.getElement('view','browser');
+            this.variablesTabs = this.getElement('tabs','variables-tabs');
+            this.variablesTabpanels = this.getElement('tabpanels','variables-tabpanels');
+            this.watchVariablesTab = this.getElement('tab','variables-watch-tab');
+            this.watchVariablesTree = this.getElement('VariableViewer','variables-watch-tree');
+            this.watchVariablesTab.panel = this.variablesTabpanels.firstChild;
+            this.outputTabs = this.getElement('tabs','stack-tabs');
+            this.outputTabpanels = this.getElement('tabpanels','stack-tabpanels');
+
+            this.threadsBox = this.getElement('hbox','threads-box');
+            this.threadsMenuList = this.getElement('menulist','threads-menulist');
+            this.threadsMenuPopup = this.getElement('menupopup','threads-menupopup');
+            this.callstackListbox = this.getElement('listbox','callstack-listbox');
+
+            this.editButtonBox = this.getElement('hbox','editButtonBox');
+
+            this.terminalHandler = Components.classes['@activestate.com/koTerminalHandler;1']
+                                   .createInstance(Components.interfaces.koITerminalHandler);
+            this.initTerminal(showMarginSymbols);
+
+            this.ownerDocument.addEventListener("ko-widget-move",
+                                                this.onWidgetMove.bind(this),
+                                                false);
+            this.ownerDocument.addEventListener("ko-widget-move-completed",
+                                                this.onWidgetMoveComplete.bind(this),
+                                                false);
+        ]]>
+        </body>
+        </method>
+
+        <method name="setInteractive">
+        <parameter name="isInteractiveShell"/>
+        <body>
+        <![CDATA[
+            var stackTabs = this.getElement('tabs','stack-tabs');
+            var i;
+            if (typeof(isInteractiveShell) != 'undefined' && isInteractiveShell) {
+                this.getElement('hbox','forDebuggerOnly').setAttribute('collapsed','true');
+                this.getElement('vbox','varViewers').setAttribute('collapsed','true');
+                this.getElement('splitter','viewer-splitter').setAttribute('state', 'collapsed');
+                this.getElement('label','desc').setAttribute('collapsed','true');
+                this.rightTabBox.setAttribute('handleCtrlTab','false');
+                this.rightTabBox.setAttribute('handleCtrlPageUpDown','false');
+                stackTabs.setAttribute('collapsed','true');
+                for (i=0; i < stackTabs.childNodes.length; i++) {
+                    stackTabs.childNodes[i].setAttribute('hidden','true');
+                }
+                this.terminalView.setFocus();
+            } else {
+                this.getElement('hbox','forDebuggerOnly').removeAttribute('collapsed');
+                this.getElement('vbox','varViewers').removeAttribute('collapsed');
+                this.getElement('splitter','viewer-splitter').setAttribute('state', 'open');
+                this.getElement('label','desc').removeAttribute('collapsed');
+                this.rightTabBox.setAttribute('handleCtrlTab','true');
+                this.rightTabBox.setAttribute('handleCtrlPageUpDown','true');
+                stackTabs.removeAttribute('collapsed');
+                for (i=0; i < stackTabs.childNodes.length; i++) {
+                    stackTabs.childNodes[i].removeAttribute('hidden');
+                }
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="addVariablePanel">
+            <parameter name="context"/>
+        <body>
+        <![CDATA[
+            var NS_XUL = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
+            var tab = document.createElementNS(NS_XUL, 'tab');
+            tab.setAttribute('label', context.name);
+            tab.setAttribute('id',"variables-"+context.id+"-tab");
+            var panel = document.createElementNS(NS_XUL, 'tabpanel');
+            tab.panel = panel;
+            var viewer = document.createElementNS(NS_XUL, 'VariableViewer');
+            viewer.setAttribute('id',"variables-"+context.id+"-watch-tree");
+            viewer.setAttribute('flex',"1");
+            viewer.setAttribute('candrag',"true");
+            viewer.setAttribute('candrop',"false");
+            viewer.setAttribute('context',"context_variableViewer");
+            panel.appendChild(viewer);
+            this.variablesTabs.appendChild(tab);
+            this.variablesTabpanels.appendChild(panel);
+
+            if (context.id == 0 && this.watchVariablesTree.view.mVariableList.length < 1) {
+                this.variablesTabs.selectedItem = tab;
+            }
+
+            return [tab, viewer];
+        ]]>
+        </body>
+        </method>
+
+        <method name="updateVariables">
+            <parameter name="event"/>
+        <body>
+        <![CDATA[
+            if (this.panelManager)
+                this.panelManager.updateVariables();
+        ]]>
+        </body>
+        </method>
+
+        <method name="removeVariablePanels">
+        <body>
+        <![CDATA[
+            this.variablesTabs.selectedIndex = 0;
+            var tab = this.variablesTabs.lastChild;
+            var panel = this.variablesTabpanels.lastChild;
+            while(tab != this.variablesTabs.firstChild) {
+                var prevTab = tab.previousSibling;
+                if (tab.nodeName == 'tab') {
+                    this.variablesTabs.removeChild(tab);
+                    this.variablesTabpanels.removeChild(panel);
+                    panel = this.variablesTabpanels.lastChild;
+                }
+                tab = prevTab;
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="initTerminal">
+            <parameter name="showMarginSymbols"/>
+        <body>
+        <![CDATA[
+        try {
+            if (this.terminalHandler.active) {
+                this.terminalHandler.clear();
+                this.terminalHandler.endSession();
+            }
+            this.terminalView.scintilla.symbolMargin = showMarginSymbols;
+            this.terminalView.init();
+            this.terminalView.initWithTerminal(this.terminalHandler);
+            this.terminalHandler.setAddTextCallback(this);
+        } catch(e) {
+            this.log.exception(e);
+        }
+        ]]>
+        </body>
+        </method>
+
+        <method name="releaseTerminal">
+        <body>
+        <![CDATA[
+        try {
+            // Notify the terminal handler that it no longer has an active
+            // Scintilla widget.
+            this.terminalView.finalizeTerminal();
+            this.terminalHandler = null;
+            if (this._htmlUpdateTimeoutId) {
+                window.clearTimeout(this._htmlUpdateTimeoutId);
+                this._htmlUpdateTimeoutId = null;
+            }
+        } catch(e) {
+            this.log.exception(e);
+        }
+        ]]>
+        </body>
+        </method>
+
+        <method name="callback">
+            <parameter name="result"/>
+            <parameter name="data"/>
+        <body>
+        <![CDATA[
+            if (this.outputTabs.selectedItem.getAttribute("id") == "html-tab") {
+                if (this._htmlUpdateTimeoutId) {
+                    window.clearTimeout(this._htmlUpdateTimeoutId);
+                }
+                this._htmlUpdateTimeoutId = window.setTimeout(function(panelMgr) {
+                                                                    panelMgr.updateHTMLView();
+                                                                    dump("updating the HTML view\n");
+                                                              }
+                                                              , 200, this.panelManager);
+            }
+        ]]>
+        </body>
+        </method>
+
+        <method name="selectStackFrame">
+            <parameter name="event"/>
+        <body>
+        <![CDATA[
+        try {
+            if (event.detail == 2 && event.originalTarget.nodeName == 'listitem') {
+                var index = this.callstackListbox.getIndexOfItem(event.originalTarget)
+                this.panelManager.selectStackFrame(index);
+            }
+        } catch(e) {
+            this.log.exception(e);
+        }
+        ]]>
+        </body>
+        </method>
+
+        <method name="getElement">
+        <parameter name="type"/>
+        <parameter name="id"/>
+        <body>
+        <![CDATA[
+            //dump("looking for element "+type+" "+id+"\n");
+            var v = document.getAnonymousNodes(this);
+            var tree = null;
+            for (var i = 0; i < v.length; i++) {
+                try {
+                    if (v[i].tagName == "xul:" + type && v[i].getAttribute("id") == id) {
+                        return v[i];
+                    }
+                    var l = v[i].getElementsByTagNameNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", type);
+                    //dump("found "+l.length+" elements\n");
+                    for (var j = 0; j < l.length; j++) {
+                        if (l[j].getAttribute("id") == id) {
+                            //dump("found element "+id+" at index "+j+"\n");
+                                            return l[j];
+                        }
+                    }
+                } catch (e) {}
+            }
+            //dump("ERROR, could not find element!\n");
+            return null;
+        ]]>
+        </body>
+        </method>
+
+        <method name="onWidgetMove">
+            <!-- Called on <browser type="ko-widget"> movement -->
+            <parameter name="event"/>
+            <body>
+            <![CDATA[
+                this._browserParent = this.browser.parentNode;
+                this._browserParent.removeChild(this.browser);
+            ]]>
+            </body>
+        </method>
+        <method name="onWidgetMoveComplete">
+            <!-- Called on <browser type="ko-widget"> movement completion -->
+            <parameter name="event"/>
+            <body>
+            <![CDATA[
+                this._browserParent.appendChild(this.browser);
+                delete this._browserParent;
+                this.panelManager.loadHTMLView();
+            ]]>
+            </body>
+        </method>
+
+    </implementation>
+</binding>
+
+</bindings>

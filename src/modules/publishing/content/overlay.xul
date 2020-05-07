@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+
+<!-- Copyright (c) 2009-2010 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % publishingDTD SYSTEM "chrome://publishing/locale/publishing.dtd">
+  %publishingDTD;
+]>
+
+<?xml-stylesheet href="chrome://publishing/skin/publishing.css" type="text/css"?>
+
+<overlay id="overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://publishing/content/publishing.js" type="application/x-javascript" />
+    <script src="chrome://publishing/content/dynamicPublishing.js" type="application/x-javascript" />
+
+    <broadcasterset id="broadcasterset_global">
+        <command id="cmd_publishingNewConfiguration"
+                 key="key_cmd_publishingNewConfiguration"
+                 oncommand="ko.commands.doCommandAsync('cmd_publishingNewConfiguration', event)"
+                 desc="&commandPublishingNewConfiguration.desc;" />
+    </broadcasterset>
+
+    <commandset id="allcommands">
+        <commandset id="publishing_commandset"
+                    oncommandupdate="ko.commands.updateCommandset(this)"
+                    commandupdater="true"
+                    events="SCC,current_view_changed,workspace_restored"
+                    >
+            <command id="cmd_publishingDiffCurrentFile"
+                     key="key_cmd_publishingDiffCurrentFile"
+                     oncommand="ko.commands.doCommandAsync('cmd_publishingDiffCurrentFile', event)"
+                     disabled="true"
+                     desc="&commandPublishingDiffCurrentFile.desc;" />
+            <command id="cmd_publishingPushCurrentFile"
+                     key="key_cmd_publishingPushCurrentFile"
+                     oncommand="ko.commands.doCommandAsync('cmd_publishingPushCurrentFile', event)"
+                     disabled="true"
+                     desc="&commandPublishingPushCurrentFile.desc;" />
+            <command id="cmd_publishingOpenDialog"
+                     key="key_cmd_publishingOpenDialog"
+                     oncommand="ko.commands.doCommandAsync('cmd_publishingOpenDialog', event)"
+                     disabled="true"
+                     desc="&commandPublishingOpenDialogFile.desc;" />
+            <command id="cmd_publishingForcePushCurrentFile"
+                     key="key_cmd_publishingForcePushCurrentFile"
+                     oncommand="ko.commands.doCommandAsync('cmd_publishingForcePushCurrentFile', event)"
+                     disabled="true"
+                     desc="&commandPublishingForcePushCurrentFile.desc;" />
+            <command id="cmd_publishingPullCurrentFile"
+                     key="key_cmd_publishingPullCurrentFile"
+                     oncommand="ko.commands.doCommandAsync('cmd_publishingPullCurrentFile', event)"
+                     disabled="true"
+                     desc="&commandPublishingPullCurrentFile.desc;" />
+            <command id="cmd_publishingForcePullCurrentFile"
+                     key="key_cmd_publishingForcePullCurrentFile"
+                     oncommand="ko.commands.doCommandAsync('cmd_publishingForcePullCurrentFile', event)"
+                     disabled="true"
+                     desc="&commandPublishingForcePullCurrentFile.desc;" />
+        </commandset>
+    </commandset>
+
+    <menupopup id="popup_tools">
+        <menu id="tools_publishing_menu"
+              label="&publishing.menu.label;"
+              accesskey="&publishing.menu.accesskey;"
+              insertbefore="menu_addons_separator"
+              >
+            <menupopup id="tools_publishing_menupopup"
+                       onpopupshowing="ko.publishing.onMenuPopupShowing();">
+                <menuitem id="tools_publishing_open_dialog_menuitem"
+                          label="&publishingOpenDialog.menuitem.label;"
+                          accesskey="&publishingOpenDialog.menuitem.accesskey;"
+                          observes="cmd_publishingOpenDialog" />
+                <menuseparator id="tools_publishing_top_separator" />
+                <menuitem id="tools_publishing_push_file_menuitem"
+                          label="&publishingPushFile.menuitem.label;"
+                          accesskey="&publishingPushFile.menuitem.accesskey;"
+                          observes="cmd_publishingPushCurrentFile" />
+                <menuitem id="tools_publishing_force_push_file_menuitem"
+                          label="&publishingForcePushFile.menuitem.label;"
+                          accesskey="&publishingForcePushFile.menuitem.accesskey;"
+                          observes="cmd_publishingForcePushCurrentFile" />
+                <menuitem id="tools_publishing_pull_file_menuitem"
+                          label="&publishingPullFile.menuitem.label;"
+                          accesskey="&publishingPullFile.menuitem.accesskey;"
+                          observes="cmd_publishingPullCurrentFile" />
+                <menuitem id="tools_publishing_force_pull_file_menuitem"
+                          label="&publishingForcePullFile.menuitem.label;"
+                          accesskey="&publishingForcePullFile.menuitem.accesskey;"
+                          observes="cmd_publishingForcePullCurrentFile" />
+                <menuitem id="tools_publishing_diff_file_menuitem"
+                          label="&publishingDiffFile.menuitem.label;"
+                          accesskey="&publishingDiffFile.menuitem.accesskey;"
+                          observes="cmd_publishingDiffCurrentFile" />
+                <menuseparator id="tools_publishing_fileaction_separator" />
+                <menuitem id="tools_publishing_newconfig_menuitem"
+                          label="&publishingNewConfig.menuitem.label;"
+                          accesskey="&publishingNewConfig.menuitem.accesskey;"
+                          observes="cmd_publishingNewConfiguration" />                
+                <menuseparator id="tools_publishing_newconfig_separator" />
+            </menupopup>
+        </menu>
+    </menupopup>
+
+    <!-- Overlay the editor tab context menu. -->
+    <menupopup id="tabContextMenu">
+        <menu id="tabContext_publishing_menu"
+              label="&publishing.menu.label;"
+              insertbefore="buffertab-context-sep-properties"
+              observes=""
+              >
+            <menupopup id="publishing-edtiortab-popup">
+                <menuitem id="tabContextMenu_publishingPushFile"
+                          label="&publishingPlacesPushFile.menuitem.label;"
+                          accesskey="&publishingPlacesPushFile.menuitem.accesskey;"
+                          observes="cmd_publishingPushCurrentFile" />
+                <menuitem id="tabContextMenu_publishingDiffFile"
+                          label="&publishingPlacesDiffFile.menuitem.label;"
+                          accesskey="&publishingPlacesDiffFile.menuitem.accesskey;"
+                          observes="cmd_publishingDiffCurrentFile"
+                          />
+            </menupopup>
+        </menu>
+    </menupopup>
+
+</overlay>

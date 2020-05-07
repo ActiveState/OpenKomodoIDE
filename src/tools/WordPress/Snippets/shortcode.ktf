@@ -1,0 +1,17 @@
+// komodo tool: shortcode
+// ======================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ======================
+<% /* Shortcode */ %>
+
+function ${2:func_name}( \$atts ) {
+	\$atts = shortcode_atts( array(
+		'default' => 'values'
+	), \$atts );
+
+	// do shortcode actions here
+}
+add_shortcode( '${1:shortcode-id}','${2:func_name}' );

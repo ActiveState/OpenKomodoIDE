@@ -1,0 +1,19 @@
+// komodo tool: ruh
+// ================
+// auto_abbreviation: true
+// indent_relative: false
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// ================
+function your_prefix_activate(){
+    register_uninstall_hook( __FILE__, '[[%tabstop:your_prefix_uninstall]]' );
+}
+register_activation_hook( __FILE__, '[[%tabstop:your_prefix_activate]]' );
+ 
+// And here goes the uninstallation function:
+function your_prefix_uninstall(){
+    [[%tabstop://  codes to perform during unistallation]]
+}!@#_currentPos!@#_anchor

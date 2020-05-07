@@ -1,0 +1,5 @@
+# #if MODE == "dev"
+content scope-shell-yarn content/
+# #else
+content scope-shell-yarn jar:scope-shell-yarn.jar!/content/
+# #endif

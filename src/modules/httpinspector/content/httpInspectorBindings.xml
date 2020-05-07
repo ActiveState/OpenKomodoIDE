@@ -1,0 +1,682 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % httpinspectorDTD SYSTEM "chrome://httpinspector/locale/httpinspector.dtd">
+  %httpinspectorDTD;
+]>
+
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xbl="http://www.mozilla.org/xbl"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="httpInspector_ruleMatch">
+        <content allow_events="true" align="center">
+            <children>
+                <xul:menulist id="menu1">
+                    <xul:menupopup>
+                        <xul:menuitem label="&URL.label;" selected="true" value="3"/>
+                        <xul:menuitem label="&method.label;" selected="true" value="2"/>
+                        <xul:menuitem label="&status.label;" value="5"/>
+                        <xul:menuitem label="&version.label;" value="6"/>
+                        <xul:menuitem label="&header.label;" value="8"/>
+                        <xul:menuitem label="&data.label;" value="7"/>
+                    </xul:menupopup>
+                </xul:menulist>
+                <xul:textbox id="textbox1"
+                             flex="2"
+                             collapsed="true"/>
+                <xul:menulist id="menu2">
+                    <xul:menupopup>
+                        <xul:menuitem label="&contains.label;" value="1"/>
+                        <xul:menuitem label="&regex.label;" value="2"/>
+                    </xul:menupopup>
+                </xul:menulist>
+                <xul:textbox id="textbox2"
+                             flex="2"/>
+                <xul:hbox id="buttonsBox" flex="1" pack="end">
+                    <xul:button id="buttonAddRow"
+                                label="&plus.label;"
+                                oncommand="this.parentNode.parentNode.parentNode.addRow();"/>
+                    <xul:button id="buttonRemoveRow"
+                                label="&minus.label;"
+                                oncommand="this.parentNode.parentNode.parentNode.removeRow();"/>
+                </xul:hbox>
+            </children>
+        </content>
+
+        <implementation>
+            <field name="richlistbox">this.parentNode</field>
+            <field name="koRuleRequirement">null</field>
+            <field name="menu1">null</field>
+            <field name="menu2">null</field>
+            <field name="textbox1">null</field>
+            <field name="textbox2">null</field>
+            <field name="buttonRemoveRow">null</field>
+
+            <constructor>
+            <![CDATA[
+            //dump("this.childNodes.length: " + this.childNodes.length + "\n");
+            try {
+                this.koRuleRequirement = Components.classes["@activestate.com/koHttpInspectorRuleRequirement;1"].
+                                            createInstance(Components.interfaces.koIHttpInspectorRuleRequirement);
+                var v = document.getAnonymousNodes(this);
+                for (var i=0; i < v.length; i++) {
+                    //dump("v[i].id: " + v[i].id + "\n");
+                    if (v[i].id == "menu1") {
+                        this.menu1 = v[i];
+                        this.menu1.addEventListener("ValueChange", this.menu1ValueChanged, false);
+                    } else if (v[i].id == "menu2") {
+                        this.menu2 = v[i];
+                        this.menu2.addEventListener("ValueChange", this.menu2ValueChanged, false);
+                    } else if (v[i].id == "textbox1") {
+                        this.textbox1 = v[i];
+                    } else if (v[i].id == "textbox2") {
+                        this.textbox2 = v[i];
+                    } else if (v[i].id == "buttonsBox") {
+                        var childNodes = v[i].childNodes;
+                        for (var j=0; j < childNodes.length; j++) {
+                            if (childNodes[j].id == "buttonRemoveRow") {
+                                this.buttonRemoveRow = childNodes[j];
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                _httpInspectorRule_log.exception(e);
+            }
+            ]]>
+            </constructor>
+
+            <destructor>
+            <![CDATA[
+            try {
+                this.menu1.removeEventListener("ValueChange", this.menu1ValueChanged, false);
+                this.menu2.removeEventListener("ValueChange", this.menu2ValueChanged, false);
+            } catch (e) {
+                _httpInspectorRule_log.exception(e);
+            }
+            ]]>
+            </destructor>
+
+
+            <method name="addRow">
+                <parameter name="koRuleRequirement"/>
+                <body>
+                <![CDATA[
+                try {
+                    var richlistitem = document.createElement("richlistitem");
+                    richlistitem.setAttribute("class", "httpInspector_ruleMatch");
+                    this.richlistbox.appendChild(richlistitem);
+                    if (koRuleRequirement) {
+                        richlistitem.copyRuleRequirement(koRuleRequirement);
+                    }
+                    this.buttonRemoveRow.disabled = false;
+                } catch (e) {
+                    _httpInspectorRule_log.exception(e);
+                }
+                ]]>
+                </body>
+            </method>
+
+            <method name="removeRow">
+                <body>
+                <![CDATA[
+                    var richlistitems = this.richlistbox.getElementsByTagName("richlistitem");
+                    if (richlistitems.length == 2) {
+                        if (richlistitems[0] == this) {
+                            richlistitems[1].disableRemoveRowButton();
+                        } else {
+                            richlistitems[0].disableRemoveRowButton();
+                        }
+                    }
+                    this.richlistbox.removeChild(this);
+                ]]>
+                </body>
+            </method>
+
+            <method name="_updateUIFromRuleRequirement">
+                <body>
+                <![CDATA[
+                try {
+                    this.menu1.value = this.koRuleRequirement.type;
+                    this.menu2.value = this.koRuleRequirement.match_type;
+                    this.textbox1.value = this.koRuleRequirement.field;
+                    this.textbox2.value = this.koRuleRequirement.value;
+                } catch (e) {
+                    _httpInspectorRule_log.exception(e);
+                }
+                ]]>
+                </body>
+            </method>
+
+            <method name="copyRuleRequirement">
+                <parameter name="koRuleRequirement"/>
+                <body>
+                <![CDATA[
+                try {
+                    this.koRuleRequirement.copy(koRuleRequirement);
+                    this._updateUIFromRuleRequirement();
+                } catch (e) {
+                    _httpInspectorRule_log.exception(e);
+                }
+                ]]>
+                </body>
+            </method>
+
+            <method name="_updateRuleRequirementFromUI">
+                <body>
+                <![CDATA[
+                try {
+                    this.koRuleRequirement.type = this.menu1.value;
+                    this.koRuleRequirement.match_type = this.menu2.value;
+                    this.koRuleRequirement.field = this.textbox1.value;
+                    this.koRuleRequirement.value = this.textbox2.value;
+                } catch (e) {
+                    _httpInspectorRule_log.exception(e);
+                }
+                ]]>
+                </body>
+            </method>
+
+            <method name="getSavedRuleRequirement">
+                <body>
+                <![CDATA[
+                try {
+                    this._updateRuleRequirementFromUI();
+                } catch (e) {
+                    _httpInspectorRule_log.exception(e);
+                }
+                return this.koRuleRequirement;
+                ]]>
+                </body>
+            </method>
+
+            <method name="disableRemoveRowButton">
+                <body>
+                <![CDATA[
+                    this.buttonRemoveRow.disabled = true;
+                ]]>
+                </body>
+            </method>
+
+            <method name="menu1ValueChanged">
+                <parameter name="event"/>
+                <body>
+                <![CDATA[
+                    // Note: "this" object is not the listitem!
+                    var menu1 = event.originalTarget;
+                    //dump("ruleActionMenu1_ValueChanged: " + menu1.value + "\n");
+                    var richlistitem = menu1.parentNode;
+                    if(typeof richlistitem.koRuleRequirement != "undefined")
+                    {
+                        richlistitem.koRuleRequirement.type = parseInt(menu1.value);
+                        richlistitem.updateUI();
+                    }
+                ]]>
+                </body>
+            </method>
+
+            <method name="menu2ValueChanged">
+                <parameter name="event"/>
+                <body>
+                <![CDATA[
+                    // Note: "this" object is not the listitem!
+                    var menu2 = event.originalTarget;
+                    var richlistitem = menu2.parentNode;
+                    if(typeof richlistitem.koRuleRequirement != "undefined")
+                    {
+                        richlistitem.koRuleRequirement.match_type = parseInt(menu2.value);
+                        richlistitem.updateUI();
+                    }
+                ]]>
+                </body>
+            </method>
+
+            <method name="_updateElementUI">
+                <parameter name="element"/>
+                <parameter name="visible"/>
+                <parameter name="enabled"/>
+                <parameter name="value"/>
+                <body>
+                <![CDATA[
+                    element.setAttribute("collapsed", !visible);
+                    if (enabled) {
+                        if (element.getAttribute("disabled")) {
+                            element.removeAttribute("disabled");
+                        }
+                    } else {
+                        element.setAttribute("disabled", true);
+                    }
+                    if (value) {
+                        element.setAttribute("value", value);
+                    }
+                ]]>
+                </body>
+            </method>
+
+            <method name="updateUI">
+                <body>
+                <![CDATA[
+                try {
+                    // UI depends upon the values in koRuleRequirement
+                    var ruleType = this.koRuleRequirement.type;
+                    //dump("updateUI for ruleType: " + ruleType + "\n");
+                    if (ruleType == 8) {    // Header
+                        this._updateElementUI(this.textbox1, true, true);
+                    } else {
+                        this._updateElementUI(this.textbox1, false, false);
+                    }
+                } catch (e) {
+                    //dump(e);
+                    _httpInspectorRule_log.exception(e);
+                }
+                ]]>
+                </body>
+            </method>
+
+        </implementation>
+
+        <handlers>
+        </handlers>
+    </binding>
+
+
+
+
+    <binding id="httpInspector_ruleAction">
+        <content allow_events="true" align="center">
+            <children>
+                <xul:menulist id="menu1">
+                    <xul:menupopup>
+                        <xul:menuitem label="&break.label;" selected="true" value="1"/>
+                        <xul:menuitem label="&delay.label;" value="2"/>
+                        <xul:menuitem label="&timeout.label;" value="3"/>
+                        <xul:menuitem label="&modifyField.label;" value="4"/>
+                        <xul:menuitem label="&setHeader.label;" value="5"/>
+                        <xul:menuitem label="&removeHeader.label;" value="6"/>
+                    </xul:menupopup>
+                </xul:menulist>
+                <xul:menulist id="menu2">
+                    <xul:menupopup>
+                        <xul:menuitem label="&literal.label;" value="1"/>
+                        <xul:menuitem label="&random.label;" value="2"/>
+                    </xul:menupopup>
+                </xul:menulist>
+                <xul:menulist id="menu3"
+                              collapsed="true">
+                    <xul:menupopup>
+                        <xul:menuitem label="&method.label;" value="3"/>
+                        <xul:menuitem label="&URL.label;" value="4"/>
+                        <xul:menuitem label="&clientIP.label;" value="5"/>
+                        <xul:menuitem label="&status.label;" value="6"/>
+                        <xul:menuitem label="&data.label;" value="7"/>
+                    </xul:menupopup>
+                </xul:menulist>
+                <xul:label id="label1"
+                           value=""
+                           collapsed="true"/>
+                <xul:textbox id="textbox1"
+                             flex="2"
+                             collapsed="true"/>
+                <xul:label id="label2"
+                           value=""
+                           collapsed="true"/>
+                <xul:textbox id="textbox2"
+                             flex="2"/>
+                <xul:hbox id="buttonsBox" flex="1" pack="end">
+                    <xul:button id="buttonAddRow"
+                                label="&plus.label;"
+                                oncommand="this.parentNode.parentNode.parentNode.addRow();"/>
+                    <xul:button id="buttonRemoveRow"
+                                label="&minus.label;"
+                                oncommand="this.parentNode.parentNode.parentNode.removeRow();"/>
+                </xul:hbox>
+            </children>
+        </content>
+
+        <implementation>
+            <field name="richlistbox">this.parentNode</field>
+            <field name="koRuleAction">null</field>
+            <field name="menu1">null</field>
+            <field name="menu2">null</field>
+            <field name="menu3">null</field>
+            <field name="label1">null</field>
+            <field name="label2">null</field>
+            <field name="textbox1">null</field>
+            <field name="textbox2">null</field>
+            <field name="buttonAddRow">null</field>
+            <field name="buttonRemoveRow">null</field>
+
+            <constructor>
+            <![CDATA[
+            //dump("this.childNodes.length: " + this.childNodes.length + "\n");
+            try {
+                this.koRuleAction = Components.classes["@activestate.com/koHttpInspectorRuleAction;1"].
+                                            createInstance(Components.interfaces.koIHttpInspectorRuleAction);
+                var v = document.getAnonymousNodes(this);
+                for (var i=0; i < v.length; i++) {
+                    //dump("v[i].id: " + v[i].id + "\n");
+                    var id = v[i].id;
+                    switch (id) {
+                        case "menu1":
+                            this.menu1 = v[i];
+                            this.menu1.addEventListener("ValueChange", this.menu1ValueChanged, false);
+                            break;
+                        case "menu2":
+                            this.menu2 = v[i];
+                            this.menu2.addEventListener("ValueChange", this.menu2ValueChanged, false);
+                            break;
+                        case "menu3":
+                            this.menu3 = v[i];
+                            this.menu3.addEventListener("ValueChange", this.menu3ValueChanged, false);
+                            break;
+                        case "label1":
+                            this.label1 = v[i];
+                            break;
+                        case "label2":
+                            this.label2 = v[i];
+                            break;
+                        case "textbox1":
+                            this.textbox1 = v[i];
+                            break;
+                        case "textbox2":
+                            this.textbox2 = v[i];
+                            break;
+                        case "buttonsBox":
+                            var childNodes = v[i].childNodes;
+                            for (var j=0; j < childNodes.length; j++) {
+                                if (childNodes[j].id == "buttonAddRow") {
+                                    this.buttonAddRow = childNodes[j];
+                                } else if (childNodes[j].id == "buttonRemoveRow") {
+                                    this.buttonRemoveRow = childNodes[j];
+                                }
+                            }
+                            break;
+                    }
+                }
+            } catch (e) {
+                //dump(e);
+                _httpInspectorRule_log.exception(e);
+            }
+            ]]>
+            </constructor>
+
+            <destructor>
+            <![CDATA[
+            try {
+                this.menu1.removeEventListener("ValueChange", this.menu1ValueChanged, false);
+                this.menu2.removeEventListener("ValueChange", this.menu2ValueChanged, false);
+                this.menu3.removeEventListener("ValueChange", this.menu3ValueChanged, false);
+            } catch (e) {
+                _httpInspectorRule_log.exception(e);
+            }
+            ]]>
+            </destructor>
+
+
+            <method name="addRow">
+                <parameter name="koRuleAction"/>
+                <body>
+                <![CDATA[
+                try {
+                    var richlistitem = document.createElement("richlistitem");
+                    richlistitem.setAttribute("class", "httpInspector_ruleAction");
+                    this.richlistbox.appendChild(richlistitem);
+                    if (koRuleAction) {
+                        richlistitem.copyRuleAction(koRuleAction);
+                    }
+                    this.buttonRemoveRow.disabled = false;
+                } catch (e) {
+                    _httpInspectorRule_log.exception(e);
+                }
+                ]]>
+                </body>
+            </method>
+
+            <method name="removeRow">
+                <body>
+                <![CDATA[
+                    var richlistitems = this.richlistbox.getElementsByTagName("richlistitem");
+                    if (richlistitems.length == 2) {
+                        if (richlistitems[0] == this) {
+                            richlistitems[1].disableRemoveRowButton();
+                        } else {
+                            richlistitems[0].disableRemoveRowButton();
+                        }
+                    }
+                    this.richlistbox.removeChild(this);
+                ]]>
+                </body>
+            </method>
+
+            <method name="_updateUIFromRuleAction">
+                <body>
+                <![CDATA[
+                try {
+                    this.menu1.value = this.koRuleAction.type;
+                    this.menu2.value = this.koRuleAction.flags;
+                    this.menu3.value = this.koRuleAction.flags;
+                    this.textbox1.value = this.koRuleAction.value1;
+                    this.textbox2.value = this.koRuleAction.value2;
+                } catch (e) {
+                    _httpInspectorRule_log.exception(e);
+                }
+                ]]>
+                </body>
+            </method>
+
+            <method name="copyRuleAction">
+                <parameter name="koRuleAction"/>
+                <body>
+                <![CDATA[
+                try {
+                    this.koRuleAction.copy(koRuleAction);
+                    this._updateUIFromRuleAction();
+                } catch (e) {
+                    _httpInspectorRule_log.exception(e);
+                }
+                ]]>
+                </body>
+            </method>
+
+            <method name="_updateRuleActionFromUI">
+                <body>
+                <![CDATA[
+                try {
+                    this.koRuleAction.type = this.menu1.value;
+                    if (this.koRuleAction.type == 2) {
+                        // Delay, uses menu 2
+                        this.koRuleAction.flags = this.menu2.value;
+                    } else if (this.koRuleAction.type == 4) {
+                        // Modify field, uses menu 3
+                        this.koRuleAction.flags = this.menu3.value;
+                    } else {
+                        this.koRuleAction.flags = 0;
+                    }
+                    this.koRuleAction.value1 = this.textbox1.value;
+                    this.koRuleAction.value2 = this.textbox2.value;
+                } catch (e) {
+                    _httpInspectorRule_log.exception(e);
+                }
+                ]]>
+                </body>
+            </method>
+
+            <method name="getSavedRuleAction">
+                <body>
+                <![CDATA[
+                try {
+                    this._updateRuleActionFromUI();
+                } catch (e) {
+                    _httpInspectorRule_log.exception(e);
+                }
+                return this.koRuleAction;
+                ]]>
+                </body>
+            </method>
+
+            <method name="disableRemoveRowButton">
+                <body>
+                <![CDATA[
+                    this.buttonRemoveRow.disabled = true;
+                ]]>
+                </body>
+            </method>
+
+            <method name="menu1ValueChanged">
+                <parameter name="event"/>
+                <body>
+                <![CDATA[
+                    // Note: "this" object is not the listitem!
+                    var menu1 = event.originalTarget;
+                    //dump("ot: " + event.originalTarget.nodeName + "\n");
+                    //dump("ruleMenu1_ValueChanged: " + menu1.value + "\n");
+                    var richlistitem = menu1.parentNode;
+                    if( typeof richlistitem.koRuleAction != "undefined")
+                    {
+                        richlistitem.koRuleAction.type = parseInt(menu1.value);
+                        richlistitem.updateUI();
+                    }
+                ]]>
+                </body>
+            </method>
+
+            <method name="menu2ValueChanged">
+                <parameter name="event"/>
+                <body>
+                <![CDATA[
+                    // Note: "this" object is not the listitem!
+                    var menu2 = event.originalTarget;
+                    //dump("ruleMenu1_ValueChanged: " + menu2.value + "\n");
+                    var richlistitem = menu2.parentNode;
+                    if( typeof richlistitem.koRuleAction != "undefined")
+                    {
+                        richlistitem.koRuleAction.flags = parseInt(menu2.value);
+                        richlistitem.updateUI();
+                    }
+                ]]>
+                </body>
+            </method>
+
+            <method name="menu3ValueChanged">
+                <parameter name="event"/>
+                <body>
+                <![CDATA[
+                    // Note: "this" object is not the listitem!
+                    var menu3 = event.originalTarget;
+                    //dump("ruleMenu1_ValueChanged: " + menu3.value + "\n");
+                    var richlistitem = menu3.parentNode;
+                    if( typeof richlistitem.koRuleAction != "undefined")
+                    {
+                        richlistitem.koRuleAction.flags = parseInt(menu3.value);
+                        richlistitem.updateUI();
+                    }
+                ]]>
+                </body>
+            </method>
+
+            <method name="_updateElementUI">
+                <parameter name="element"/>
+                <parameter name="visible"/>
+                <parameter name="enabled"/>
+                <parameter name="value"/>
+                <body>
+                <![CDATA[
+                    element.setAttribute("collapsed", !visible);
+                    if (enabled) {
+                        if (element.getAttribute("disabled")) {
+                            element.removeAttribute("disabled");
+                        }
+                    } else {
+                        element.setAttribute("disabled", true);
+                    }
+                    if (value) {
+                        element.setAttribute("value", value);
+                    }
+                ]]>
+                </body>
+            </method>
+
+            <method name="updateUI">
+                <body>
+                <![CDATA[
+                try {
+                    // UI depends upon the values in koRuleAction
+                    var ruleType = this.koRuleAction.type;
+                    //dump("updateUI for ruleType: " + ruleType + "\n");
+                    switch (ruleType) {
+                        case 1:     // Break
+                            this._updateElementUI(this.menu2, false, false);
+                            this._updateElementUI(this.menu3, false, false);
+                            this._updateElementUI(this.label1, false, false);
+                            this._updateElementUI(this.textbox1, false, false);
+                            this._updateElementUI(this.label2, false, false);
+                            this._updateElementUI(this.textbox2, false, false);
+                            break;
+                        case 2:     // Delay
+                            var flags = this.koRuleAction.flags;
+                            this._updateElementUI(this.menu2, true, true);
+                            this._updateElementUI(this.menu3, false, false);
+                            if (flags == 1) { // Literal
+                                this._updateElementUI(this.label1, true, true, "Value:");
+                                this._updateElementUI(this.textbox1, true, true);
+                                this._updateElementUI(this.label2, false, false);
+                                this._updateElementUI(this.textbox2, false, false);
+                            } else {    // Random
+                                this._updateElementUI(this.label1, true, true, "Between:");
+                                this._updateElementUI(this.textbox1, true, true);
+                                this._updateElementUI(this.label2, true, true, "and:");
+                                this._updateElementUI(this.textbox2, true, true);
+                            }
+                            break;
+                        case 3:     // Timeout
+                            this._updateElementUI(this.menu2, false, false);
+                            this._updateElementUI(this.menu3, false, false);
+                            this._updateElementUI(this.label1, false, false);
+                            this._updateElementUI(this.textbox1, false, false);
+                            this._updateElementUI(this.label2, false, false);
+                            this._updateElementUI(this.textbox2, false, false);
+                            break;
+                        case 4:     // Modify a field
+                            this._updateElementUI(this.menu2, false, true);
+                            this._updateElementUI(this.menu3, true, true);
+                            this._updateElementUI(this.label1, true, true, "Value:");
+                            this._updateElementUI(this.textbox1, true, true);
+                            this._updateElementUI(this.label2, false, false);
+                            this._updateElementUI(this.textbox2, false, false);
+                            break;
+                        case 5:     // Set header
+                            this._updateElementUI(this.menu2, false, true);
+                            this._updateElementUI(this.menu3, false, false);
+                            this._updateElementUI(this.label1, true, true, "Name:");
+                            this._updateElementUI(this.textbox1, true, true);
+                            this._updateElementUI(this.label2, true, true, "Value:");
+                            this._updateElementUI(this.textbox2, true, true);
+                            break;
+                        case 6:     // Remove header
+                            this._updateElementUI(this.menu2, false, true);
+                            this._updateElementUI(this.menu3, false, false);
+                            this._updateElementUI(this.label1, true, true, "Name:");
+                            this._updateElementUI(this.textbox1, true, true);
+                            this._updateElementUI(this.label2, false, false);
+                            this._updateElementUI(this.textbox2, false, false);
+                            break;
+                    }
+                } catch (e) {
+                    //dump(e);
+                    _httpInspectorRule_log.exception(e);
+                }
+                ]]>
+                </body>
+            </method>
+        </implementation>
+
+        <handlers>
+        </handlers>
+    </binding>
+
+</bindings>

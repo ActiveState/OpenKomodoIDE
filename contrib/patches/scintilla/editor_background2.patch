@@ -1,0 +1,14 @@
+For Linux only: use the same background color for all selections.
+diff -r -du src/Editor.cxx src/Editor.cxx
+Index: src/Editor.cxx
+===================================================================
+--- src/Editor.cxx	(revision 73425)
++++ src/Editor.cxx	(working copy)
+@@ -6719,6 +6719,7 @@
+ 
+ 	case SCI_SETSELBACK:
+ 		vs.selColours.back = ColourOptional(wParam, lParam);
++		vs.selBackground2 = ColourOptional(wParam, lParam);
+ 		vs.selAdditionalBackground = ColourDesired(static_cast<long>(lParam));
+ 		InvalidateStyleRedraw();
+ 		break;

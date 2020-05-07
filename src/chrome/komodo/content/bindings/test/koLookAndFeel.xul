@@ -1,0 +1,262 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+
+<!-- rx buttons -->
+<?xml-stylesheet href="chrome://komodo/skin/rx.css" type="text/css"?>
+
+<!DOCTYPE window PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<window title="XUL Periodic Table"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<script src="chrome://komodo/content/library/timers.js"/>
+<html:h1>Komodo Buttons</html:h1>
+
+<vbox flex="1" style="overflow: auto">
+
+<groupbox>
+<caption label="Icon Classes in Komodo"/>
+<html:pre>
+"LookAndFeel" colors
+</html:pre>
+<vbox>
+    <hbox><button class="colorbg-icon button-link-a" label="WindowBackground"
+    style="background-color: WindowBackground;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="WindowForeground"
+    style="background-color: WindowForeground;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="WidgetBackground"
+    style="background-color: WidgetBackground;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="WidgetForeground"
+    style="background-color: WidgetForeground;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="WidgetSelectBackground"
+    style="background-color: WidgetSelectBackground;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="WidgetSelectForeground"
+    style="background-color: WidgetSelectForeground;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="Widget3DHighlight"
+    style="background-color: Widget3DHighlight;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="Widget3DShadow"
+    style="background-color: Widget3DShadow;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="TextBackground"
+    style="background-color: TextBackground;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="TextForeground"
+    style="background-color: TextForeground;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="TextSelectBackground"
+    style="background-color: TextSelectBackground;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="TextSelectBackgroundAttention"
+    style="background-color: TextSelectBackgroundAttention;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="TextSelectBackgroundDisabled"
+    style="background-color: TextSelectBackgroundDisabled;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="TextSelectForeground"
+    style="background-color: TextSelectForeground;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="activeborder"
+    style="background-color: activeborder;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="activecaption"
+    style="background-color: activecaption;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="appworkspace"
+    style="background-color: appworkspace;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="background"
+    style="background-color: background;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="buttonface"
+    style="background-color: buttonface;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="buttonhighlight"
+    style="background-color: buttonhighlight;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="buttonshadow"
+    style="background-color: buttonshadow;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="buttontext"
+    style="background-color: buttontext;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="captiontext"
+    style="background-color: captiontext;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="graytext"
+    style="background-color: graytext;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="highlight"
+    style="background-color: highlight;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="highlighttext"
+    style="background-color: highlighttext;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="inactiveborder"
+    style="background-color: inactiveborder;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="inactivecaption"
+    style="background-color: inactivecaption;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="inactivecaptiontext"
+    style="background-color: inactivecaptiontext;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="infobackground"
+    style="background-color: infobackground;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="infotext"
+    style="background-color: infotext;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="menu"
+    style="background-color: menu;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="menutext"
+    style="background-color: menutext;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="scrollbar"
+    style="background-color: scrollbar;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="threeddarkshadow"
+    style="background-color: threeddarkshadow;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="threedface"
+    style="background-color: threedface;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="threedhighlight"
+    style="background-color: threedhighlight;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="threedlightshadow"
+    style="background-color: threedlightshadow;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="threedshadow"
+    style="background-color: threedshadow;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="window"
+    style="background-color: window;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="windowframe"
+    style="background-color: windowframe;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="windowtext"
+    style="background-color: windowtext;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-field"
+    style="background-color: -moz-field;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-fieldtext"
+    style="background-color: -moz-fieldtext;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-dialog"
+    style="background-color: -moz-dialog;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-dialogtext"
+    style="background-color: -moz-dialogtext;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-dragtargetzone"
+    style="background-color: -moz-dragtargetzone;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-mac-focusring"
+    style="background-color: -moz-mac-focusring;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-mac-menuselect"
+    style="background-color: -moz-mac-menuselect;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-mac-menushadow"
+    style="background-color: -moz-mac-menushadow;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-mac-menutextselect"
+    style="background-color: -moz-mac-menutextselect;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-mac-accentlightesthighlight"
+    style="background-color: -moz-mac-accentlightesthighlight;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-mac-accentregularhighlight"
+    style="background-color: -moz-mac-accentregularhighlight;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-mac-accentface"
+    style="background-color: -moz-mac-accentface;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-mac-accentlightshadow"
+    style="background-color: -moz-mac-accentlightshadow;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-mac-accentregularshadow"
+    style="background-color: -moz-mac-accentregularshadow;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-mac-accentdarkshadow"
+    style="background-color: -moz-mac-accentdarkshadow;"/></hbox>
+
+    <hbox><button class="colorbg-icon button-link-a"
+    label="-moz-mac-accentdarkestshadow"
+    style="background-color: -moz-mac-accentdarkestshadow;"/></hbox>
+</vbox>
+
+</groupbox>
+
+
+
+</vbox>
+
+</window>

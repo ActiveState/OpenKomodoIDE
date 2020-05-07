@@ -1,0 +1,35 @@
+/* Copyright (c) 2006 activestate.com
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+
+interface koIAsyncCallback;
+
+/**
+ * A basic interface for getting some info from the catalog system so we can
+ * display prefs, etc.
+ */
+[scriptable, uuid(e2497788-70fe-11db-9e86-000d935d3368)]
+interface koIXMLCatalogService: nsISupports {
+    /**
+     * Asynchronously get the list of public ids.
+     * @param callback The asynchronous callback to be notified of the ids.  The
+     *      callback data is an array of strings, each being a public id.  The
+     *      IDs will be sorted by value.
+     */
+    void getPublicIDList(in koIAsyncCallback callback);
+    /**
+     * Asynchronously get the list of system ids.
+     * @param callback The asynchronous callback to be notified of the ids.  The
+     *      callback data is an array of strings, each being a system id.  The
+     *      IDs will be sorted by value.
+     */
+    void getSystemIDList(in koIAsyncCallback callback);
+    /**
+     * Asynchronously get the list of namespaces.
+     * @param callback The asynchronous callback to be notified of the
+     *      namespaces.  The callback data is an array of strings, each being a
+     *      namespace.  The strings will be sorted.
+     */
+    void getNamespaceList(in koIAsyncCallback callback);
+};

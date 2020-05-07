@@ -1,0 +1,228 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % openfilesDTD SYSTEM "chrome://openfiles/locale/openfiles.dtd">
+  %openfilesDTD;
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+]>
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+
+<?xml-stylesheet href="less://openfiles/skin/openfiles.less" type="text/css" ?>
+ 
+<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <commandset id="panel-proxy-commandset"/>
+    
+    <vbox flex="1" id="openfilesWrapper">
+        <vbox flex="99">
+            <hbox id="openfilesPrefHbox" class="status-toolbar" align="center">
+                <label
+                       id="openFilesPaneLabel"
+                       value="&openFiles.label;: 0"
+                       class="panel-label desc"/>
+                <toolbarbutton
+                    id="openFilesCloseAll"
+                    class="file-close-button"
+                    tooltiptext="&closeFiles.tooltip;"/>
+                <spacer flex="1"/>
+                <toolbarbutton
+                    id="openfilesPrefButton"
+                    class="cog-icon"
+                    buttonstyle="pictures"
+                    type="menu"
+                    orient="horizontal">
+                    
+                    <menupopup id="openfilesPrefPopup">
+
+                        <menuitem
+                            id="openfilesPrefPopup_ToggleGrouping"
+                            observes="cmd_openfilesGrouping"
+                            label="&groupFiles.label;"
+                            checked="true"
+                            type="checkbox"/>
+                        
+                        <menuitem
+                            id="openfilesPrefPopup_ToggleTabSorting"
+                            observes="cmd_openfilesTabSorting"
+                            label="&sortTabs.label;"
+                            checked="true"
+                            type="checkbox"/>
+
+                        <menuseparator id="openfilesPrefPopupSeparatorGrouping"/>
+
+                        <menuitem
+                            id="openfilesPrefPopup_GroupLang"
+                            observes="cmd_openfilesGroupByLang"
+                            label="&groupByLang.label;"
+                            checked="true"
+                            persist="checked"
+                            name="groupBy"
+                            type="radio"/>
+                        <menuitem
+                            id="openfilesPrefPopup_GroupExt"
+                            observes="cmd_openfilesGroupByExt"
+                            label="&groupByExt.label;"
+                            checked="false"
+                            persist="checked"
+                            name="groupBy"
+                            type="radio"/>
+                        <menuitem
+                            id="openfilesPrefPopup_GroupFolder"
+                            observes="cmd_openfilesGroupByFolder"
+                            label="&groupByFolder.label;"
+                            checked="false"
+                            persist="checked"
+                            name="groupBy"
+                            type="radio"/>
+                        <menuitem
+                            id="openfilesPrefPopup_GroupByLocation"
+                            observes="cmd_openfilesGroupByLocation"
+                            label="&groupByLocation.label;"
+                            checked="false"
+                            persist="checked"
+                            name="groupBy"
+                            type="radio"/>
+                        <menuitem
+                            id="openfilesPrefPopup_GroupPattern"
+                            observes="cmd_openfilesGroupByPattern"
+                            label="&groupByPattern.label;"
+                            checked="false"
+                            persist="checked"
+                            name="groupBy"
+                            type="radio"/>
+
+                        <menuseparator id="openfilesPrefPopupSeparatorGroupBy"/>
+
+                        <menuitem
+                            id="openfilesPrefPopup_SortAlpha"
+                            observes="cmd_openfilesSortAlpha"
+                            label="&sortAlpha.label;"
+                            checked="true"
+                            persist="checked"
+                            name="sortBy"
+                            type="radio"/>
+                        <menuitem
+                            id="openfilesPrefPopup_SortNatural"
+                            observes="cmd_openfilesSortNatural"
+                            label="&sortNatural.label;"
+                            checked="false"
+                            persist="checked"
+                            name="sortBy"
+                            type="radio"/>
+                        <menuitem
+                            id="openfilesPrefPopup_SortByLastOpen"
+                            observes="cmd_openfilesSortLastOpened"
+                            label="&sortLastOpened.label;"
+                            checked="false"
+                            persist="checked"
+                            name="sortBy"
+                            type="radio"/>
+                        <menuitem
+                            id="openfilesPrefPopup_SortByAccessNo"
+                            observes="cmd_openfilesSortAccessNo"
+                            label="&sortAccessNo.label;"
+                            checked="false"
+                            persist="checked"
+                            name="sortBy"
+                            type="radio"/>
+
+                        <menuseparator id="openfilesPrefPopupSeparatorSortBy"/>
+
+                        <menuitem
+                            id="openfilesPrefPopup_SortAscending"
+                            observes="cmd_openfilesSortAscending"
+                            label="&sortAscending.label;"
+                            checked="true"
+                            persist="checked"
+                            name="sortDir"
+                            type="radio"/>
+                        <menuitem
+                            id="openfilesPrefPopup_SortDescending"
+                            observes="cmd_openfilesSortDescending"
+                            label="&sortDescending.label;"
+                            checked="false"
+                            persist="checked"
+                            name="sortDir"
+                            type="radio"/>
+
+                        <menuseparator id="openfilesPrefPopupSeparatorSortDir"/>
+
+                        <menuitem
+                            id="openfilesPrefPopup_ReSort"
+                            observes="cmd_openfilesReSort"
+                            label="&reSort.label;"/>
+
+                    </menupopup>
+                    
+                </toolbarbutton>
+            </hbox>
+            <richlistbox
+                flex="1"
+                id="openfilesListbox"
+                class="bg_transparent" />
+            
+            <richlistitem
+                id="fileTemplate"
+                class="file-item"
+                collapsed="true"
+                align="center">
+                
+                <image
+                    class="file-icon"
+                    src="chrome://komodo/skin/images/existing_file.png"/>
+
+                <label
+                    class="file-title desc"
+                    crop="end"/>
+
+                <label
+                    class="file-dirty desc"
+                    collapsed="true"
+                    value="*"/>
+
+                <spacer flex="1"/>
+
+                <!--
+                    XUL crop is bugged when using 2 cropped & flexed elements
+                    under the same parent, see bug #97298 for more info
+                -->
+                <label
+                    class="file-path desc"
+                    crop="start"
+                    flex="2147483647"/>
+
+                <toolbarbutton
+                    anonid="close-button"
+                    class="file-close-button"
+                    tooltiptext="&closeFile.tooltip;"/>
+                
+            </richlistitem>
+            
+            <!--
+                Used for both groups and splits
+                Groups receive the class name - group-item
+                Splits receive the class name - split-item
+            -->
+            <richlistitem
+                id="groupTemplate"
+                disabled="true"
+                collapsed="true" >
+                
+                <label
+                    class="group-title desc"
+                    crop="start"
+                    flex="1"
+                    value="__group-title"/>
+                
+                <toolbarbutton
+                    anonid="close-button"
+                    class="file-close-button"
+                    tooltiptext="&closeFiles.tooltip;"/>
+                
+            </richlistitem>
+        </vbox>
+    </vbox>
+
+    <script src="chrome://openfiles/content/openfiles.js"
+            type="application/x-javascript"/>
+ 
+</page>

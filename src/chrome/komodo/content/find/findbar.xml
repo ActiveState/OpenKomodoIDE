@@ -1,0 +1,485 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2011 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl" [
+  <!ENTITY % findDTD SYSTEM "chrome://komodo/locale/find.dtd">
+  %findDTD;
+]>
+
+<!-- Graphical find bar frontend -->
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xbl="http://www.mozilla.org/xbl"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <binding id="findbar">
+    <content collapsed="true">
+      <xul:hbox class="ko-findbar-container">
+        <xul:textbox anonid="textbox"
+                     emptytext="&findbar.prompt;"
+                     oninput="onInput();"
+                     type="autocomplete"
+                     autocompletesearch="mru"
+                     autocompletepopup="_child"
+                     autocompletesearchparam="find-patternMru"
+                     enablehistory="true"
+                     ontextentered="this.focus();
+                                    this.setSelectionRange(0, this.textLength);"
+                     class="ko-findbar-textbox">
+          <xul:panel type="autocomplete" noautofocus="true" crop="start"/>
+        </xul:textbox>
+        <xul:toolbarbutton anonid="next"
+                           class="ko-findbar-next"
+                           label="&findbar.next.label;"
+                           tooltiptext="&findbar.next.tooltiptext;"
+                           oncommand="next();"/>
+        <xul:toolbarbutton anonid="prev"
+                           class="ko-findbar-prev"
+                           label="&findbar.previous.label;"
+                           accesskey=""
+                           tooltiptext="&findbar.previous.tooltiptext;"
+                           oncommand="prev();"/>
+        <xul:toolbarbutton anonid="case-sensitive"
+                           class="ko-findbar-case-sensitive"
+                           accesskey=""
+                           type="menu"
+                           oncommand="setCaseSensitivity(event.target.value)">
+          <xul:menupopup>
+            <xul:menuitem label="&findbar.case.insensitive.label;"
+                          tooltiptext="&findbar.case.insensitive.tooltiptext;"
+                          value="FOC_INSENSITIVE"
+                          type="radio"/>
+            <xul:menuitem label="&findbar.case.sensitive.label;"
+                          tooltiptext="&findbar.case.sensitive.tooltiptext;"
+                          value="FOC_SENSITIVE"
+                          type="radio"/>
+            <xul:menuitem label="&findbar.case.smart.label;"
+                          tooltiptext="&findbar.case.smart.tooltiptext;"
+                          value="FOC_SMART"
+                          type="radio"/>
+          </xul:menupopup>
+        </xul:toolbarbutton>
+        <xul:toolbarbutton anonid="pattern-type"
+                           class="ko-findbar-pattern-type"
+                           type="menu"
+                           oncommand="setPatternType(event.target.value)">
+          <xul:menupopup>
+            <xul:menuitem label="&findbar.using.simple.label;"
+                          tooltiptext="&findbar.using.simple.tooltiptext;"
+                          value="FOT_SIMPLE"
+                          type="radio"/>
+            <xul:menuitem label="&findbar.using.wildcard.label;"
+                          tooltiptext="&findbar.using.wildcard.tooltiptext;"
+                          value="FOT_WILDCARD"
+                          type="radio"/>
+            <xul:menuitem label="&findbar.using.regex.label;"
+                          tooltiptext="&findbar.using.regex.tooltiptext;"
+                          value="FOT_REGEX_PYTHON"
+                          type="radio"/>
+          </xul:menupopup>
+        </xul:toolbarbutton>
+        <xul:toolbarbutton anonid="open-dialog"
+                           class="ko-findbar-open-dialog"
+                           tooltip="_child"
+                           oncommand="openDialog();">
+          <xul:tooltip onpopupshowing="_updateOpenDialogTooltip();"
+                       label="&findbar.openDialog.tooltiptext;"/>
+        </xul:toolbarbutton>
+        <xul:spacer/>
+        <xul:hbox anonid="status" class="ko-findbar-status">
+          <xul:hbox class="ko-findbar-status-container">
+            <xul:image class="ko-findbar-status-image"/>
+            <xul:label class="ko-findbar-status-text" anonid="status-text"/>
+          </xul:hbox>
+        </xul:hbox>
+        <xul:spacer flex="1"/>
+        <xul:toolbarbutton anonid="closebutton"
+                           class="ko-findbar-closebutton"
+                           tooltiptext="&findbar.close.tooltiptext;"
+                           oncommand="close();"/>
+      </xul:hbox>
+    </content>
+    <implementation implements="nsIController">
+      <constructor><![CDATA[
+        // The Mozilla controller system only looks at 1) the focused element's
+        // controller, 2) the focused window's controller, and 3) that window's
+        // ancestor windows' controllers.  In our case, when the textbox has
+        // focus, we also want to look at the <scintilla>'s controllers (where
+        // all the interesting commands live), plus the window's controllers
+        // (where the actual find controller lives).  Forward stuff from here
+        // to those controllers.
+        if (typeof(xtk) == "undefined") {
+          Components.classes['@mozilla.org/moz/jssubscript-loader;1']
+                    .getService(Components.interfaces.mozIJSSubScriptLoader)
+                    .loadSubScript('chrome://xtk/content/xtk.js');
+        }
+        xtk.include('controller');
+        this.controllers.appendController(this);
+        let controller = new xtk.ForwardingController([this._view.scintilla,
+                                                       this.ownerDocument.defaultView.controllers]);
+        this.controllers.appendController(controller);
+        // Disable forwarding editing commands that are needed in the textbox
+        // Some users prefer not having this behaviour, see bug 92559
+        if (this._prefs.getBoolean("isearchKeysToEditor", false))
+        {
+          // we want our controller to be used before the textbox's default
+          // controller, so that things like cursor movement go into the editor
+          // instead of the textbox
+          this._textbox.controllers.insertControllerAt(0, new xtk.ForwardingController([this]));
+          // When the user presses backspace, though, let the textbox handle it
+          // instead - must be able to correct mis-typed search text
+          controller.commandAliases.merge({
+            "cmd_back": null,
+            "cmd_backSmart": null,
+          });
+          // Whenever we do any commands, automatically close the find bar
+          let doCommand = controller.doCommand;
+          controller.doCommand = (function(aCommand) {
+            if (controller.supportsCommand(aCommand)) {
+              this.close();
+              doCommand.call(controller, aCommand);
+            }
+          }).bind(this);
+          // Tell the textbox to not eat up/down for autocomplete
+          this._textbox.disableKeyNavigation = true;
+        } else {
+          // Put our controller after the textbox's default controllers, so that
+          // it can handle things like cursor movement, and we can handle things
+          // it doesn't, like editor commands
+          let forwarder = new xtk.ForwardingController([this._textbox, this]);
+          forwarder.commandAliases.merge(xtk.ForwardingController.aliases_textEntry);
+          this._textbox.controllers.appendController(forwarder);
+          // Map newline-related commands to actually do find prev/next; this is
+          // somewhat of a hack, but works close enough.
+          controller.commandAliases.merge({
+            "cmd_newline": "cmd_findNext",
+            "cmd_newlineBare": "cmd_findNext",
+            "cmd_newlineSame": "cmd_findNext",
+            "cmd_newlineExtra": "cmd_findPrevious",
+          });
+        }
+      ]]></constructor>
+
+      <method name="close">
+        <body>
+          if (this.controller) {
+            this.controller._stopIncrementalSearch("User cancelled", false);
+          }
+          this._view.focus();
+        </body>
+      </method>
+      <method name="next">
+        <body>
+          this.controller.searchAgain(false);
+        </body>
+      </method>
+      <method name="prev">
+        <body>
+          this.controller.searchAgain(true);
+        </body>
+      </method>
+      <method name="setCaseSensitivity">
+        <parameter name="val"/>
+        <body>
+          this.caseSensitivity = Components.interfaces.koIFindOptions[val];
+        </body>
+      </method>
+      <method name="setPatternType">
+        <parameter name="val"/>
+        <body>
+          this.patternType = Components.interfaces.koIFindOptions[val];
+        </body>
+      </method>
+      <method name="openDialog">
+        <body>
+          this.controller.convertToDialog();
+        </body>
+      </method>
+
+      <method name="_updateOpenDialogTooltip">
+        <body>
+        <![CDATA[
+          var findBindings = ko.keybindings.manager.command2keysequences('cmd_find');
+          if (findBindings && findBindings.length) {
+            var tooltip = this._openDialog.firstChild;
+            if (!tooltip.hasAttribute("_originalTooltip")) {
+              tooltip.setAttribute("_originalTooltip", tooltip.label);
+            }
+            // XXX marky this should be going through a .properties file
+            tooltip.label = tooltip.getAttribute("_originalTooltip") +
+                            " (" + findBindings[0] + ")";
+          }
+        ]]>
+        </body>
+      </method>
+
+      <method name="focus">
+        <body>
+          this._textbox.focus();
+        </body>
+      </method>
+
+      <method name="selectText">
+        <!-- Set the text selection -->
+        <parameter name="start"/>
+        <parameter name="end"/>
+        <body>
+          if (typeof(start) == "undefined") start = 0;
+          if (typeof(end) == "undefined") end = this._textbox.textLength;
+          this._textbox.setSelectionRange(start, end);
+        </body>
+      </method>
+
+      <method name="onInput">
+        <body>
+        <![CDATA[
+          this.controller.search(this.text);
+        ]]>
+        </body>
+      </method>
+
+      <method name="setStatus">
+        <!-- Set transient status display
+           - findbar.setStatus(type, textKey, ...);
+           - @param type {String} The status type, e.g. "wrapped"
+           - @param textKey {String} The string in find2.properties to use
+           - @param (rest) formatting arguments for the string
+          -->
+        <parameter name="type"/>
+        <parameter name="textKey"/>
+        <body>
+        <![CDATA[
+          // clear the status first
+          for each (var clazz in Array.slice(this.classList)) {
+            if (/^ko-findbar-status-/.test(clazz)) {
+              this.classList.remove(clazz);
+            }
+          }
+          if (!type) {
+            // .setStatus(null) or .setStatus() or .setStatus(""), all meaning
+            // to clear any status
+            return;
+          }
+          // set up the text to display
+          var args = Array.slice(arguments, 2);
+          if (args.length) {
+            this._statusText.value =
+              this._stringBundle.formatStringFromName(textKey, args, args.length);
+          } else {
+            try {
+              this._statusText.value = this._stringBundle.GetStringFromName(textKey);
+            } catch (e if e.result == Components.results.NS_ERROR_FAILURE) {
+              // string not found; possibly, because this has already been localized
+              this._statusText.value = textKey;
+            }
+          }
+          // put any relevant class back in
+          this.classList.add("ko-findbar-status-" + type);
+        ]]>
+        </body>
+      </method>
+
+      <field name="controller"/>
+      <field name="_stringBundle">
+        Components.classes["@mozilla.org/intl/stringbundle;1"]
+                  .getService(Components.interfaces.nsIStringBundleService)
+                  .createBundle("chrome://komodo/locale/find/find2.properties")
+      </field>
+      <field name="_patternType">
+        document.getAnonymousElementByAttribute(this, 'anonid', 'pattern-type')
+      </field>
+      <field name="_textbox">
+        document.getAnonymousElementByAttribute(this, 'anonid', 'textbox')
+      </field>
+      <field name="_caseSensitive">
+        document.getAnonymousElementByAttribute(this, 'anonid', 'case-sensitive')
+      </field>
+      <field name="_openDialog">
+        document.getAnonymousElementByAttribute(this, 'anonid', 'open-dialog')
+      </field>
+      <field name="_view">
+        /* the scintilla this find bar belongs to */
+        document.getBindingParent(this);
+      </field>
+      <field name="_statusText">
+        document.getAnonymousElementByAttribute(this, 'anonid', 'status-text')
+      </field>
+      <field name="_prefs">
+        Components.classes["@activestate.com/koPrefService;1"]
+                  .getService(Components.interfaces.koIPrefService)
+                  .effectivePrefs
+      </field>
+
+      <field name="_log">
+        ko.logging.getLogger("findbar")
+      </field>
+
+      <property name="patternType">
+        <getter>
+          var item = this._patternType.querySelector("menuitem[value^='FOT_'][checked]");
+          if (!item) return undefined;
+          return Components.interfaces.koIFindOptions[item.value];
+        </getter>
+        <setter>
+        <![CDATA[
+          this._log.debug("findbar: patternType := " + val);
+          this.controller.patternType = val;
+          const koIFindOptions = Components.interfaces.koIFindOptions;
+          var name = Object.keys(koIFindOptions)
+                           .filter(function(n) /^FOT_/.test(n) && koIFindOptions[n] == val)[0];
+          var menuitem = this._patternType.getElementsByAttribute("value", name)[0];
+          menuitem.setAttribute("checked", true);
+          this._patternType.setAttribute("value", menuitem.value);
+          this._patternType.tooltipText = menuitem.tooltipText;
+          return this.patternType;
+        ]]>
+        </setter>
+      </property>
+
+      <property name="text">
+        <setter>
+          return this._textbox.value = val;
+        </setter>
+        <getter>
+          return this._textbox.value;
+        </getter>
+      </property>
+
+      <property name="caseSensitivity">
+        <getter>
+          return this.controller.caseSensitivity;
+        </getter>
+        <setter>
+        <![CDATA[
+          this._log.debug("findbar: caseSensitivity := " + val);
+          this.controller.caseSensitivity = val;
+          const koIFindOptions = Components.interfaces.koIFindOptions;
+          var name = Object.keys(koIFindOptions)
+                           .filter(function(n) /^FOC_/.test(n) && koIFindOptions[n] == val)[0];
+          var menuitem = this._caseSensitive.getElementsByAttribute("value", name)[0];
+          menuitem.setAttribute("checked", true);
+          this._caseSensitive.setAttribute("value", menuitem.value);
+          this._caseSensitive.tooltipText = menuitem.tooltipText;
+          return this.caseSensitivity;
+        ]]>
+        </setter>
+      </property>
+
+      <property name="notFound">
+        <!-- This is set to true to indicate that the searched-for text is not
+             found. -->
+        <getter>
+          return this.classList.contains("ko-findbar-status-not-found");
+        </getter>
+        <setter>
+          if (val) {
+            this.classList.add("ko-findbar-status-not-found");
+          } else {
+            this.classList.remove("ko-findbar-status-not-found");
+          }
+          return val;
+        </setter>
+      </property>
+
+      <property name="canOpenDialog">
+        <!-- This is set to false when we shouldn't be able to open the find
+             dialog - typically, when we're not running find in an editor -->
+        <getter>
+          return !this._openDialog.collapsed;
+        </getter>
+        <setter>
+          return !(this._openDialog.collapsed = !val);
+        </setter>
+      </property>
+
+      <!-- nsIController -->
+      <method name="isCommandEnabled">
+        <parameter name="aCommand"/>
+        <body>
+          return this.supportsCommand(aCommand);
+        </body>
+      </method>
+
+      <method name="supportsCommand">
+        <parameter name="aCommand"/>
+        <body>
+          return ["cmd_cancel"].indexOf(aCommand) != -1;
+        </body>
+      </method>
+
+      <method name="doCommand">
+        <parameter name="aCommand"/>
+        <body>
+          switch (aCommand) {
+            case "cmd_cancel":
+              this.close();
+              break;
+          }
+        </body>
+      </method>
+
+      <method name="onEvent">
+        <parameter name="aEventName"/>
+        <body/>
+      </method>
+
+    </implementation>
+
+    <handlers>
+      <handler event="keypress">
+        this.controller._keyHandler(event);
+      </handler>
+      <handler event="keypress" keycode="VK_ESCAPE" phase="capturing">
+        // Handle escape manually so one press with the autocomplete popup open
+        // will close the whole findbar, rather than just the popup.
+        event.stopPropagation();
+        event.preventDefault();
+        this.close();
+      </handler>
+      <handler event="keypress" keycode="VK_RIGHT" modifiers="shift">
+      <![CDATA[
+        if (this._textbox.selectionEnd < this._textbox.textLength) {
+          return;
+        }
+        // shift-right at the end of the textbox; try to extend the text using
+        // the scintilla selection
+        var scimoz = this._view.scimoz;
+        this.text += scimoz.getWCharAt(Math.max(scimoz.currentPos, scimoz.anchor));
+        this.controller.search(this.text, true);
+        event.stopPropagation();
+      ]]>
+      </handler>
+      <handler event="keypress" keycode="VK_RETURN">
+      <![CDATA[
+        // Enter keypress to go to next search match
+        this.controller.searchAgain();
+        event.stopPropagation();
+        event.preventDefault();
+      ]]>
+      </handler>
+      <handler event="blur" phase="capturing">
+      <![CDATA[
+        // we want to capture when the tab key is pressed in the textbox while
+        // the autocomplete textbox is open; when in that state, we want to
+        // accept the input before switching focus. See bug 91433.
+        var textbox = document.getBindingParent(event.originalTarget);
+        if (textbox != this._textbox) {
+          // wrong element
+          return;
+        }
+        if (textbox.popupOpen && textbox.popup.selectedIndex >= 0) {
+          textbox.value = textbox.controller.getValueAt(textbox.popup.selectedIndex);
+          // don't cancel the event, let it do the normal unfcous thing
+        }
+      ]]>
+      </handler>
+    </handlers>
+
+    <resources>
+      <stylesheet src="chrome://komodo/skin/bindings/findbar.css"/>
+    </resources>
+  </binding>
+
+</bindings>

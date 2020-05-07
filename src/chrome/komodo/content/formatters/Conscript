@@ -1,0 +1,19 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2008 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import('cons', 'mozChromeDir');
+
+$cons->InstallInChrome('formatters.js');
+$cons->InstallInChrome('formatters-overlay.xul');
+$cons->InstallInChrome('pref-formatters-overlay.xul');
+$cons->InstallInChrome('pref-formatters.js');
+$cons->InstallInChrome('pref-formatters.xul');
+$cons->InstallInChrome('pref-formatter-editor.js');
+$cons->InstallInChrome('pref-formatter-editor.xul');
+$cons->InstallInChrome('generic/formatter-prefs-overlay.xul');
+$cons->InstallInChrome('generic/formatter_bindings.xml');
+$cons->InstallInChrome('javascript/formatter-prefs-overlay.xul');
+$cons->InstallInChrome('javascript/formatter_bindings.xml');
+

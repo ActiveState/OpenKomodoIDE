@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2013 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % notifyDTD SYSTEM "chrome://notify/locale/notify.dtd">
+  %notifyDTD;
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+]>
+
+<?xml-stylesheet href="less://notify/skin/notify.less" type="text/css"?>
+
+<overlay id="notifyOverlay"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://notify/content/js/observer.js" />
+
+    <popupset id="komodoMainPopupSet">
+        <script id="tpl-notify-panel" type="x-dot-template">
+            <tooltip  anonid="notify-panel"
+                    class="notify-panel {{=it.classlist}}" notify-from="{{=it.from}}">
+                <hbox class="wrapper" align="center">
+                    {{?it.icon}}
+                        <vbox pack="center">
+                            <image class="icon" src="{{=it.icon}}?scheme-color=icons-special"></image>
+                        </vbox>
+                    {{?}}
+                    <vbox> <!-- Description max-width is not respected unless its in a vbox -->
+                        <description class="description">
+                            {{!it.message}}
+                        </description>
+                    </vbox>
+                    {{?it.undo}}
+                        <button class="undo button-plain plain unstyled"/>
+                    {{?}}
+                    {{?!it.noMenu}}
+                    <button type="menu" class="menu button-plain plain unstyled">
+                        <menupopup>
+                            <menuitem   anonid="disableCategory"
+                                        label="&disableNotificationsOfType.label;"/>
+                            <!--<menuitem   anonid="preferences"
+                                        label="&notifyPrefs.label;"/>-->
+                        </menupopup>
+                    </button>
+                    {{?}}
+                    <button class="close button-close unstyled"/>
+                </hbox>
+            </tooltip>
+        </script>
+    </popupset>
+    
+    <hbox id="notification-widget-textbox">
+        <hbox id="notification-widget-active" flex="1" collapsed="true"></hbox>
+        
+        <script id="tpl-notify-widget" type="x-dot-template">
+            <hbox class="wrapper {{=it.classlist}}" flex="1" align="center" notify-from="{{=it.from}}">
+                {{?it.icon}}
+                    <vbox pack="center">
+                        <image class="icon" src="{{=it.icon}}?scheme-color=icons-special"></image>
+                    </vbox>
+                {{?}}
+                <label anonid="notification-widget-text" flex="1" class="description small" crop="center" value="{{!it.message}}"/>
+                {{?it.undo}}
+                    <button class="undo button-plain plain unstyled"/>
+                {{?}}
+                {{?!it.noMenu}}
+                <button type="menu" class="menu button-plain plain unstyled">
+                    <menupopup position="after_end">
+                        <menuitem   anonid="disableCategory"
+                                    label="&disableNotificationsOfType.label;"/>
+                        <!--<menuitem   anonid="preferences"
+                                    label="&notifyPrefs.label;"/>-->
+                    </menupopup>
+                </button>
+                {{?}}
+                <button anonid="notification-widget-button" class="notification-icon unstyled" oncommand="ko.uilayout.toggleTab('notifications-widget', false)"/>
+            </hbox>
+        </script>
+    </hbox>
+
+</overlay>

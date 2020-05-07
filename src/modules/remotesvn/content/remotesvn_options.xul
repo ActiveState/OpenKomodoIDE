@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2007 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+
+<dialog title="Short Project Tab Names - Preferences"
+        orient="vertical"
+        style="padding: 1em;"
+        onload="shortprojecttabnamesLoadPreferences();"
+        ondialogaccept="shortprojecttabnamesSavePreferences();"
+        buttons="accept,cancel"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script type="application/x-javascript" src="chrome://shortprojecttabnames/content/shortprojecttabnames_options.js" />
+
+    <groupbox orient="vertical" id="extension-shortprojecttabnames-prefs">
+        <caption label="General"/>
+        <hbox align="center">
+            <textbox id="extensions.shortprojecttabnames.maxnamelength"
+                     size="2"
+                     maxlength="2"
+                     pref="true"/>
+            <label value="Max length of the left tab labels (0 to leave them unchanged)"/>
+        </hbox>
+    </groupbox>
+
+</dialog>

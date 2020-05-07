@@ -1,0 +1,14 @@
+// komodo tool: style
+// ==================
+// auto_abbreviation: false
+// indent_relative: true
+// language: HTML-common
+// set_selection: false
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ==================
+<%= ko.snippets.HTML_emitLessThanIfNeeded()
+%>style type="text/css">
+[[%tabstop:]]
+</style>!@#_currentPos!@#_anchor

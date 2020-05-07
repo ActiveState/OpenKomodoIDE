@@ -1,0 +1,395 @@
+# twoPass_bb.test --
+#
+#	This file contains Black Box tests that check tclchecker's
+#	handling of user-defined procs.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: twoPass_bb.test,v 1.4 2000/05/30 22:25:05 wart Exp $
+
+if {[string compare test [info procs test]] == 1} {
+    source [file  join [pwd] [file dirname [info script]] defs.tcl]
+}
+
+set tclchecker [findExeFile tclchecker 1]
+
+set echo echo
+
+#
+# generate warnRedefine warnings
+#
+
+test twoPass-1.1 {generate warnRedefine warnings} {
+    set badScript {proc foo {} {}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp foo $msg]
+} {0 0}
+
+test twoPass-1.2 {generate warnRedefine warnings} {
+    set badScript {proc foo {} {}; proc foo {a} {}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp foo $msg]
+} {0 1}
+
+test twoPass-1.3 {generate warnRedefine warnings} {
+    set badScript {proc foo {a} {}; proc foo {} {}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp foo $msg]
+} {0 1}
+
+test twoPass-1.4 {generate warnRedefine warnings} {
+    set badScript {proc foo {a} {}; proc foo {} {set x}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp foo $msg]
+} {0 1}
+
+test twoPass-1.5 {generate warnRedefine warnings} {
+    set badScript {proc foo {a {b c}} {}; proc foo {a b} {}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp foo $msg]
+} {0 1}
+
+test twoPass-1.6 {generate warnRedefine warnings--bug 1038} {} {
+    set badScript {proc foo {} {}; proc foo {} {set x}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp foo $msg]
+} {0 1}
+
+test twoPass-1.7 {generate warnRedefine warnings--bug 1239} {knownBug} {
+    set badScript {proc foo args {}; proc foo $x {}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp foo $msg]
+} {0 1}
+
+test twoPass-1.8 {generate warnRedefine warnings--bug 1038} {} {
+    set badScript {proc foo {} $y; proc foo {} $x}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp foo $msg]
+} {0 1}
+
+test twoPass-1.9 {generate warnRedefine warnings--bug 1038} {} {
+    set badScript {proc foo {} {set x}; proc foo {} {set x}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp foo $msg]
+} {0 1}
+
+test twoPass-1.10 {generate warnRedefine warnings--bug 1038} {} {
+    set badScript {proc foo {} {}; proc foo {} {}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp foo $msg]
+} {0 1}
+
+#
+# generate warnRedefine warnings using rename
+#
+
+test twoPass-2.1 {generate warnRedefine warnings} {
+    set badScript {proc foo {} {}; rename foo set}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp foo $msg]
+} {0 0}
+
+test twoPass-2.2 {generate warnRedefine warnings} {
+    set badScript {proc foo {} {}; proc bar {} {}; rename foo bar}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp foo $msg]
+} {0 0}
+
+#
+# check undefined procs
+#
+
+test twoPass-3.1 {generate undefined procs} {
+    set badScript {set x 1}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-3.2 {generate undefined procs} {
+    set badScript {foo}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: foo*" $msg]
+} {0 1}
+
+test twoPass-3.3 {generate undefined procs} {
+    set badScript {foo bar baz}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: foo*" $msg]
+} {0 1}
+
+test twoPass-3.4 {generate undefined procs} {
+    set badScript {foo bar baz; fuzz buzz}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: foo*" $msg] \
+	    [string match "*undefined procedure: fuzz*" $msg]
+} {0 1 1}
+
+test twoPass-3.5 {generate undefined procs} {
+    set badScript {proc bar {} {foo x y}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: foo*" $msg]
+} {0 1}
+
+test twoPass-3.6 {generate undefined procs} {} {
+    set badScript {lsort -command foo $ls}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: foo*" $msg]
+} {0 1}
+
+test twoPass-3.7 {generate undefined procs} {
+    set badScript {foo bar baz; fuzz buzz; proc foo {a b} {}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: fuzz*" $msg]
+} {0 1}
+
+test twoPass-3.8 {generate undefined procs} {
+    set badScript {foo bar baz; fuzz buzz; proc foo {} {}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: fuzz*" $msg] [regexp procNumArgs $msg]
+} {1 1 1}
+
+test twoPass-3.9 {generate undefined procs} {
+    set badScript {foo bar baz; fuzz buzz; proc foo {a b} {}; wuzz}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: fuzz*" $msg] \
+	    [string match "*undefined procedure: wuzz*" $msg]
+} {0 1 1}
+
+#
+# check renamed procs
+#
+
+test twoPass-4.1 {generate undefined procs using rename} {
+    set badScript {proc foo {} {}; rename foo wuzz; wuzz}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-4.2 {generate undefined procs} {
+    set badScript {proc foo {} {}; wuzz; rename foo wuzz}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-4.3 {generate undefined procs} {
+    set badScript {proc foo {} {}; rename foo wuzz; foo}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-4.4 {generate undefined procs--bug 1039} {knownBug} {
+    set badScript {rename foo wuzz}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: foo*" $msg]
+} {0 1}
+
+test twoPass-4.5 {generate undefined procs--bug 1039} {knownBug} {
+    set badScript {rename foo wuzz; wuzz}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: foo*" $msg]
+} {0 1}
+
+#
+# check user-defined procs in namespaces
+#
+
+test twoPass-5.1 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}}; foo::bar}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-5.2 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}}; ::foo::bar}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-5.3 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}}; bar}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: bar*" $msg]
+} {0 1}
+
+test twoPass-5.4 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}}; ::bar}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: ::bar*" $msg]
+} {0 1}
+
+test twoPass-5.5 {recognize namespace procs} {
+    set badScript {namespace eval foo {proc bar {} {}; bar}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-5.6 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}; ::bar}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: ::bar*" $msg]
+} {0 1}
+
+test twoPass-5.7 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}; foo::bar}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-5.8 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}; ::foo::bar}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-5.9 {recognize namespace procs} {
+    set badScript {namespace eval foo {proc bar {} {}}; namespace eval foo {bar}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-5.10 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}}; namespace eval foo {::bar}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: ::bar*" $msg]
+} {0 1}
+
+test twoPass-5.11 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}}; namespace eval foo {foo::bar}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-5.12 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}}; namespace eval foo {::foo::bar}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-5.13 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}}; foo::bar; proc bar {a} {}; bar a}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-5.14 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}}; proc bar {a} {}; foo::bar a}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg] [regexp procNumArgs $msg]
+} {1 0 1}
+
+test twoPass-5.15 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc bar {} {}}; proc bar {a} {}; foo::bar}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg] [regexp procNumArgs $msg]
+} {0 0 0}
+
+#
+# check user-defined procs in namespaces--these procs share the name with cmds
+#
+
+test twoPass-6.1 {recognize namespace procs--bug 983} {} {
+    set badScript {foo::set}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match "*undefined procedure: foo::set*" $msg]
+} {0 1}
+
+test twoPass-6.2 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc set {} {}}; foo::set}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-6.3 {recognize namespace procs} {
+    set badScript {namespace eval foo {proc set {} {}; set}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-6.4 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc set {} {}; foo::set}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-6.5 {recognize namespace procs} {
+    set badScript {namespace eval foo {proc set {} {}}; namespace eval foo {set}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+test twoPass-6.6 {recognize namespace procs--bug 983} {} {
+    set badScript {namespace eval foo {proc set {} {}}; namespace eval foo {foo::set}}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 0}
+
+
+# Test [incr Tcl] specific checks.
+
+test twoPass-7.1 {check for the correct number of args -- bug 1691} {} {
+    set badScript {class A {}; A}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result
+} {0}
+test twoPass-7.2 {check for the correct number of args -- bug 1691} {} {
+    set badScript {class A {}; A obj1}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result
+} {0}
+test twoPass-7.3 {check for the correct number of args -- bug 1691} {} {
+    set badScript {class A {}; A obj1 bad}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp classNumArgs $msg]
+} {1 1}
+test twoPass-7.3 {check for the correct number of args -- bug 1691} {} {
+    set badScript {class A {constructor {} {}}; A}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result
+} {0}
+test twoPass-7.4 {check for the correct number of args -- bug 1691} {} {
+    set badScript {class A {constructor {} {}}; A obj1}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result
+} {0}
+test twoPass-7.5 {check for the correct number of args -- bug 1691} {} {
+    set badScript {class A {constructor {} {}}; A obj1 bad}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp classNumArgs $msg]
+} {1 1}
+test twoPass-7.6 {check for the correct number of args -- bug 1691} {} {
+    set badScript {class A {constructor {a} {}}; A a}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result
+} {0}
+test twoPass-7.7 {check for the correct number of args -- bug 1691} {} {
+    set badScript {class A {constructor {a} {}}; A obj1 a}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result
+} {0}
+test twoPass-7.8 {check for the correct number of args -- bug 1691} {} {
+    set badScript {class A {constructor {a} {}}; A obj1 a bad}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [regexp classNumArgs $msg]
+} {1 1}
+
+#
+# Redefine built in command that generates warning
+#
+
+test twoPass-8.1 {redefine built in command that generates warning} {
+    set badScript {proc bell {a b c d} {}; bell}
+    set result [catch {exec $echo $badScript | $tclchecker -n -use Tk3.6} msg]
+    # if "Compiled" string is found, then the checker crashed!
+    list $result [regexp warnReserved $msg] [regexp Compiled $msg]
+} {0 1 0}
+
+test twoPass-8.2 {redefine built in command that generates warning} {
+    set badScript {proc tkerror {a b c d} {}; tkerror a}
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    # if "Compiled" string is found, then the checker crashed!
+    list $result [regexp obsoleteCmd $msg] [regexp Compiled $msg]
+} {1 1 0}
+
+# cleanup
+cleanupTests

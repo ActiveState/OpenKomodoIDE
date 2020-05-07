@@ -1,0 +1,23 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2006 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+Import(
+    'cons',
+    'build',
+    'mozChromeDir',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'komodoPythonUtilsDir',
+    'unsiloedPythonExe',
+    'jarring',
+    'mozBin',
+    'buildFlavour',
+);
+
+if ($buildFlavour ne "full") { # don't want this in installer builds
+    $cons->InstallAs("$mozBin/extensions/remotesvn\@ActiveState.com/chrome/content/remotesvn_options.js", 'remotesvn_options.js');
+    $cons->InstallAs("$mozBin/extensions/remotesvn\@ActiveState.com/chrome/content/remotesvn_options.xul", 'remotesvn_options.xul');
+}

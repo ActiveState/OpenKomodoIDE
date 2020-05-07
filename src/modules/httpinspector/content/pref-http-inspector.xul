@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % httpinspectorDTD SYSTEM "chrome://httpinspector/locale/prefs.dtd">
+  %httpinspectorDTD;
+]>
+
+<!-- Copyright (c) 2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="pref_proxydebugger_OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://httpinspector/content/pref-http-inspector.js" type="application/x-javascript;version=1.7"/>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="http-inspector-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical">
+            <caption label="&HTTPInspectorOptions.label;"/>
+            <separator class="thin"/>
+            <checkbox id="httpInspector_enabledAtStartup"
+                      label="&runHTTPInspectorInTheBackgroundWhenKomodoStartsUp.label;"
+                      pref="true"
+                      prefstring="httpInspector_enabledAtStartup"
+                      prefattribute="checked"
+                      oncommand="pref_proxydebugger_doEnabling();"/>
+            <vbox id="vbox_httpInspector"
+                  style="padding-left: 15px; padding-top: 5px;">
+                <description>
+                    The HTTP inspector listens for HTTP connections on the
+                    specified port. Note: most proxies use the port 8080.
+                </description>
+                <separator class="thin"/>
+                <label value="Listen on port:"/>
+                <textbox id="httpInspector_listenPort"
+                         size="5"
+                         pref="true"/>
+                <checkbox id="httpInspector_acceptLocalConnectionsOnly"
+                          label="&onlyAcceptConnectionsFromTheLocalMachine.label;"
+                          pref="true"
+                          prefstring="httpInspector_acceptLocalConnectionsOnly"
+                          prefattribute="checked"/>
+            </vbox>
+        </groupbox>
+    
+        <groupbox id="httpInspector_proxyForwardingGroup"
+                  orient="vertical">
+            <caption label="&HTTPInspectorProxyForwarding.label;"/>
+            <description>
+                Forward HTTP connections which the HTTP Inspector
+                receives, on to the proxy at this address.
+            </description>
+            <separator class="thin"/>
+            <checkbox id="httpInspector_proxyForwardingEnabled"
+                      label="&enableProxyForwarding.label;"
+                      pref="true"
+                      prefstring="httpInspector_proxyForwardingEnabled"
+                      prefattribute="checked"
+                      oncommand="pref_proxydebugger_doEnabling();"/>
+            <vbox id="vbox_httpInspector_forwarding"
+                  style="padding-left: 15px; padding-top: 5px;">
+                <label value="Forward proxy connections on to this host:"/>
+                <textbox id="httpInspector_proxyForwardingAddress"
+                         size="20"
+                         pref="true"/>
+            </vbox>
+        </groupbox>
+
+    </vbox>
+
+</window>
+

@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % debuggerDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %debuggerDTD;
+]>
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/find.css" type="text/css"?>
+
+<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <tree id="findresults" flex="1"
+          seltype="single" class="no-border bg_transparent"
+          onclick="gFindResultsTabManager.onClick(event);"
+          onkeypress="return gFindResultsTabManager.onKeyPress(event);">
+        <treecols>
+            <treecol primary="true"
+                     id="findresults-filename"
+                     label="&file.label;" flex="6"
+                     persist="width"
+                     crop="left"/>
+            <splitter class="tree-splitter"/>
+            <treecol id="findresults-linenum"
+                     label="&line.label;"
+                     persist="width"
+                     style="width: 4em;"/>
+            <splitter class="tree-splitter"/>
+            <treecol id="findresults-context"
+                     persist="width"
+                     label="&content.label;" flex="12"/>
+        </treecols>
+        <treechildren id="findresults-body" flex="1"
+                      class="findresults"/>
+    </tree>
+
+    <box id="findresults_tabpanel-toolbarbox"
+        class="widgetToolbarWrap">
+        <textbox id="findresults-search-textbox"
+                 type="search"
+                 searchbutton="true"
+                 style="width: 20vw; min-width: 200px;"
+                 collapsed="true"
+                 oncommand="gFindResultsTabManager.searchAgain();"
+                 tooltiptext="&search.tooltiptext;"
+                 placeholder="&search.tooltiptext;"
+                 />
+        <textbox id="findresults-filter-textbox"
+                 type="search"
+                 timeout="200"
+                 style="width: 20vw; min-width: 200px;"
+                 collapsed="true"
+                 oncommand="gFindResultsTabManager.updateFilter();"
+                 tooltiptext="&findFilter.tooltiptext;"
+                 placeholder="Filter Results"
+                 />
+        <label id="findresults-desc" flex="1" crop="center"/>
+        <separator flex="1"/>
+        <toolbar id="findtoolbar-button-box" class="widgetToolbar">
+            <toolbarbutton id="findresults-jumptoprev-button"
+                    class="list-item-up-icon"
+                    tooltiptext="&jumpToPreviousResult.tooltiptext;"
+                    oncommand="gFindResultsTabManager.jumpToPrevResult();"/>
+            <toolbarbutton id="findresults-jumptonext-button"
+                    class="list-item-down-icon"
+                    tooltiptext="&jumpToNextResult.tooltiptext;"
+                    oncommand="gFindResultsTabManager.jumpToNextResult();"/>
+            <toolbarbutton id="findresults-undoreplace-button"
+                    class="find-undo-icon"
+                    tooltiptext="&undoReplacements.tooltiptext;"
+                    oncommand="gFindResultsTabManager.undoReplace();"
+                    disabled="true"/>
+            <toolbarbutton id="findresults-copy-button"
+                    class="find-copy-icon"
+                    tooltiptext="&copyFindResults.tooltiptext;"
+                    oncommand="gFindResultsTabManager.copyResults();"/>
+            <toolbarbutton id="findresults-stopsearch-button"
+                    class="find-stop-icon"
+                    tooltiptext="&stopSearch.tooltiptext;"
+                    oncommand="gFindResultsTabManager.stopSearch();"
+                    disabled="true"/>
+        </toolbar>
+        <image id="findresults-icon"
+               collapsed="true" hidden="true"
+               style="padding-left: 3px;"
+               src="chrome://global/skin/icons/loading_16.png"/>
+    </box>
+	
+</page>

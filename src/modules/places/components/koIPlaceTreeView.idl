@@ -1,0 +1,115 @@
+// Copyright (c) 2000-2010 ActiveState Software Inc.
+// See the file LICENSE.txt for licensing information.
+
+#include "nsISupports.idl"
+#include "nsIObserverService.idl"
+#include "nsITreeView.idl"
+#include "koIFileEx.idl"
+#include "koIAsyncOperations.idl"
+
+[scriptable, uuid(358650d5-7fc8-4438-9f41-401761f11f1e)]
+interface koIPlaceTreeView: nsITreeView {
+
+    void initialize();
+    void terminate();
+
+    void setCurrentPlaceWithCallback(in wstring uri,
+                                     in koIAsyncCallback callbackObj);    
+    // What goes into the original tree.
+    void setMainFilters(in wstring exclude_patterns,
+                        in wstring include_patterns);
+    
+    attribute wstring currentPlace; // a URI
+    
+    attribute nsIObserver statusObserver;
+
+    // refreshes the rows in the tree.  This is not the same as invalidate, it
+    // actually removes rows from the tree and regenerates the row list
+    void refresh(in wstring uri);
+
+    long getRowIndexForURI(in wstring uri);
+    void getSelectedURIs([array, size_is(count)] out wstring uris,
+                          out unsigned long count);
+    wstring getSelectedURI();
+    void selectURI(in wstring uri);
+    wstring getURIForRow(in long index);
+
+    const short COPY_MOVE_OK = 0;
+    const short MOVE_SAME_DIR = 1;
+    const short MOVE_OTHER_DIR_FILENAME_CONFLICT = 2;
+    const short COPY_FILENAME_CONFLICT = 3;
+    const short COPY_MOVE_WOULD_KILL_DIR = 4;
+    const short SRC_CONTAINS_TARGET = 4;
+    
+    void treeOperationWouldConflict_MultipleSrc
+        (
+         [array, size_is(count_srcURIs)] in wstring srcURIs,
+         in unsigned long count_srcURIs,
+         in wstring targetURI,
+         in boolean copying,
+         out unsigned long count,
+         [array, size_is(count)] out long res,
+         [array, size_is(count)] out koIFileEx srcFileInfo,
+         [array, size_is(count)] out koIFileEx targetFileInfo);
+    
+    void doTreeOperation(in wstring sourceURI,
+                         in wstring targetURI,
+                         in long targetIndex,
+                         in boolean copying,
+                         in koIAsyncCallback callbackObj);
+    void doTreeOperationToRootNode(in long sourceIndex, in wstring to_uri,
+                         in boolean copying,
+                         in koIAsyncCallback callbackObj);
+    void doTreeCopyWithDestName(in long sourceIndex, in long targetIndex,
+                                in wstring newPath,
+                                in koIAsyncCallback callbackObj);
+    void doTreeCopyWithDestNameAndURI(in wstring sourceURI,
+                                      in wstring targetURI,
+                                      in long targetIndex,
+                                      in wstring newPath,
+                                      in koIAsyncCallback callbackObj);
+    boolean canUndoTreeOperation();
+    void do_undoTreeOperation();
+
+    void addNewFileAtParent(in wstring name, in long parentIndex);
+    void addNewFolderAtParent(in wstring name, in long parentIndex);
+    boolean itemIsNonEmptyFolder(in long sourceIndex);
+    void deleteItems(in unsigned long count_indices, 
+                     [array, size_is(count_indices)] in long indices,
+                     in unsigned long count_srcURIs, 
+                     [array, size_is(count_srcURIs)] in wstring srcURIs);
+    void markRow(in long sourceIndex);
+    void refreshView(in long sourceIndex);
+    void refreshFullTreeView();
+    void renameItem(in long sourceIndex, in wstring baseName, in boolean forceClobber);
+
+    const short SORT_DIRECTION_NAME_NATURAL = 1;
+    const short SORT_DIRECTION_NAME_ASCENDING = 2;
+    const short SORT_DIRECTION_NAME_DESCENDING = 3;
+
+    void sortBy(in wstring key, in long direction);
+    void sortRows();
+
+    // Augment the tree API
+    long getNextSiblingIndex(in long index);
+
+    // See other API parts in koIKPFTreeView.idl
+    // internal api
+    void invalidate();
+
+    attribute boolean handleNextToggleOpenState;
+    // XBL isn't letting me set properties, so expose the setter.
+    void set_handleNextToggleOpenState(in boolean val);
+    
+    void handleCallback(in wstring callback,
+                        in wstring rv,
+                        in long requestID);
+};
+
+[scriptable, uuid(64c32667-e3d0-497c-840c-0c339caf7ec7)]
+interface koIPlaceToolboxTreeView: nsITreeView {
+    void loadFromFileSystem(in wstring uri); // remote or local
+};
+
+
+

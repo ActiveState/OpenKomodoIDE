@@ -1,0 +1,8 @@
+// komodo tool: frt
+// ================
+// auto_abbreviation: true
+// treat_as_ejs: false
+// type: snippet
+// version: 1.0.12
+// ================
+render_template('[[%tabstop1:page]].html', [[%tabstop2:foo]]=[[%tabstop3:bar]])[[%tabstop4:4]]

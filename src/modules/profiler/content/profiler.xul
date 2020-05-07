@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Copyright (c) 2000-2009 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % profilerDTD SYSTEM "chrome://profiler/locale/profiler.dtd">
+  %profilerDTD;
+]>
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+
+<!-- Scintilla CSS. -->
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/scintilla.css" type="text/css"?>
+
+<?xml-stylesheet href="chrome://profiler/skin/profiler.css" type="text/css"?>
+
+<window id="komodo_profiler"
+        title="&profiler.window.title;"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        windowtype="komodo_httpinspector"
+        onload="profiler_onLoad();"
+        onunload="profiler_onUnload();"
+        height="600"
+        width="800"
+        persist="screenX screenY width height">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://xtk/content/treeview.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/trace.js"   type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/markers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://profiler/content/profiler_item_wrapper.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://profiler/content/profiler.js" type="application/x-javascript;version=1.7"/>
+
+    <keyset>
+        <key keycode="VK_ESCAPE" oncommand="window.close()"/>
+    </keyset>
+
+  <!-- Commands -->
+    <commandset id="profiler_commandset">
+      <!-- Toolbox commands -->
+        <command
+            id="cmd_profiler_toggleButtonText"
+            key="key_cmd_profiler_toggleButtonText"
+            oncommand="cmd_profiler_toggleButtonText();"
+            checked="false" />
+        <command
+            id="cmd_profiler_open"
+            key="key_cmd_profiler_open"
+            oncommand="cmd_profiler_open();"/>
+        <command
+            id="cmd_profiler_save"
+            key="key_cmd_profiler_save"
+            oncommand="cmd_profiler_save();"/>
+    </commandset>
+
+    <deck id="profiler_deck" flex="1" selectedIndex="0">
+        <vbox flex="1">
+            <popup id="profiler_toolbox_context_popup">
+                <menuitem id="profiler_toolbox_context_toggleButtonText"
+                    label="&buttonText.label;"
+                    type="checkbox"
+                    observes="cmd_profiler_toggleButtonText"/>
+            </popup>
+        
+            <toolbox id="profiler_toolbox" context="profiler_toolbox_context_popup">
+                <toolboxrow id="main-toolboxrow"
+                            flex="1">
+                    <toolbar
+                        id="profiler_toolbar"
+                        flex="1"
+                        align="stretch"
+                        persist="hidden collapsed buttonstyle"
+                        grippyhidden="true">
+                        <!--class="chromeclass-toolbar"-->
+                        <toolbarbutton id="profiler_open_toolbarbutton"
+                            accesskey="&profiler_open_button.accesskey;"
+                            class="native_open_icon"
+                            tooltiptext="&cmd_profiler_open.tooltiptext;"
+                            observes="cmd_profiler_open"
+                            persist="buttonstyle"
+                            />
+                        <toolbarbutton id="profiler_save_toolbarbutton"
+                            accesskey="&profiler_save_button.accesskey;"
+                            class="native-save-icon"
+                            tooltiptext="&cmd_profiler_save.tooltiptext;"
+                            observes="cmd_profiler_save"
+                            persist="buttonstyle"
+                            />
+                        <toolbarseparator/>
+                        <toolbaritem id="profiler_view_toolbaritem">
+                            <hbox align="center">
+                                <label value="&profiler_layout.label;" control="profiler_view_menulist" />
+                                <menulist id="profiler_view_menulist"
+                                          oncommand="profiler_change_view(this);"
+                                          persist="value">
+                                    <menupopup id="profiler_view_menupopup" />
+                                </menulist>
+                            </hbox>
+                        </toolbaritem>
+                    </toolbar>
+                </toolboxrow>
+            </toolbox>
+            <vbox flex="1">
+                <profilerview id="profilerview" type="" flex="1" />
+            </vbox>
+        </vbox>
+        <vbox flex="1" align="center" pack="center">
+            <description value="Loading history .. "/>
+            <spacer height="15"/>
+            <hbox id="spinner" class="spinner">
+                <hbox class="rect1"/>
+                <hbox class="rect2"/>
+                <hbox class="rect3"/>
+            </hbox>
+        </vbox>
+        <vbox flex="1" pack="center" align="center">
+            <description>
+                Please Load a profile
+            </description>
+            <button accesskey="&profiler_open_button.accesskey;"
+                class="native_open_icon"
+                tooltiptext="&cmd_profiler_open.tooltiptext;"
+                observes="cmd_profiler_open"
+                persist="buttonstyle"/>
+        </vbox>
+    </deck>
+</window>

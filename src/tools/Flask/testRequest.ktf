@@ -1,0 +1,11 @@
+// komodo tool: ftreq
+// ==================
+// auto_abbreviation: true
+// treat_as_ejs: false
+// type: snippet
+// version: 1.0.12
+// ==================
+with app.test_request_context('[[%tabstop1:path]]', method='[[%tabstop2:POST]]'):
+		assert request.path == '[[%tabstop1:path]]'
+		assert.method == '[[%tabstop2:POST]]'
+[[%tabstop3:3]]

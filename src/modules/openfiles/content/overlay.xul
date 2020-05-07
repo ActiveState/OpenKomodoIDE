@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2012 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % openfilesDTD SYSTEM "chrome://openfiles/locale/openfiles.dtd">
+  %openfilesDTD;
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+]>
+
+<?xml-stylesheet href="chrome://openfiles/skin/komodo.css" type="text/css"?>
+ 
+<overlay id="openfilesOverlay"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+  <!-- ****************    Content    ****************** -->
+ 
+    <ko-pane id="workspace_left_area">
+        <browser
+            type="ko-widget"
+            id="openfilesViewbox"
+            label="&openFiles.label;"
+            insertafter="placesViewbox"
+            icon="koicon://ko-svg/chrome/icomoon/skin/files.svg"
+            src="chrome://openfiles/content/panel.xul"/>
+    </ko-pane>
+
+    <commandset id="allcommands">
+    
+        <broadcasterset id="broadcasterset_global">
+    
+            <broadcaster
+                id="cmd_toggleTabBar"
+                key="key_cmd_toggleTabBar"
+                checked=""
+                desc="&viewEditorTabs.label;"
+                oncommand="ko.openfiles.toggleTabBar()"/>
+            <broadcaster
+                id="cmd_toggleOpenFiles"
+                key="key_cmd_toggleOpenFiles"
+                desc="&userInterfaceShowHideOpenFilesTab.desc;"
+                autoCheck="false"
+                oncommand="ko.openfiles.togglePane()"/>
+            <broadcaster
+                id="cmd_focusOpenFiles"
+                key="key_cmd_focusOpenFiles"
+                desc="&userInterfaceFocusOpenFilesTab.desc;"
+                autoCheck="false"
+                oncommand="ko.openfiles.togglePane(false)"/>
+    
+        </broadcasterset>
+        
+        <commandset
+            id="cmdset_openfiles"
+            oncommandupdate="ko.commands.updateCommandset(this, event)"
+            commandupdater="true"
+            events="popupshowing">
+    
+            <command
+                id="cmd_openfilesGrouping"
+                key="key_cmd_openfilesGrouping"
+                oncommand="ko.commands.doCommand('cmd_openfilesGrouping', event)"
+                desc="&groupFiles.desc;"/>
+            
+            <command
+                id="cmd_openfilesTabSorting"
+                key="key_cmd_openfilesTabSorting"
+                oncommand="ko.commands.doCommand('cmd_openfilesTabSorting', event)"
+                desc="&sortTabs.desc;"/>
+    
+            <command
+                id="cmd_openfilesGroupByLang"
+                key="key_cmd_openfilesGroupByLang"
+                oncommand="ko.commands.doCommand('cmd_openfilesGroupByLang', event)"
+                desc="&groupByLang.desc;"/>
+            <command
+                id="cmd_openfilesGroupByExt"
+                key="key_cmd_openfilesGroupByExt"
+                oncommand="ko.commands.doCommand('cmd_openfilesGroupByExt', event)"
+                desc="&groupByExt.desc;"/>
+            <command
+                id="cmd_openfilesGroupByFolder"
+                key="key_cmd_openfilesGroupByFolder"
+                oncommand="ko.commands.doCommand('cmd_openfilesGroupByFolder', event)"
+                desc="&groupByFolder.desc;"/>
+            <command
+                id="cmd_openfilesGroupByLocation"
+                key="key_cmd_openfilesGroupByLocation"
+                oncommand="ko.commands.doCommand('cmd_openfilesGroupByLocation', event)"
+                desc="&groupByLocation.desc;"/>
+            <command
+                id="cmd_openfilesGroupByPattern"
+                key="key_cmd_openfilesGroupByPattern"
+                oncommand="ko.commands.doCommand('cmd_openfilesGroupByPattern', event)"
+                desc="&groupByPattern.desc;"/>
+    
+            <command
+                id="cmd_openfilesSortAlpha"
+                key="key_cmd_openfilesSortAlpha"
+                oncommand="ko.commands.doCommand('cmd_openfilesSortAlpha', event)"
+                desc="&sortAlpha.desc;"/>
+            <command
+                id="cmd_openfilesSortNatural"
+                key="key_cmd_openfilesSortNatural"
+                oncommand="ko.commands.doCommand('cmd_openfilesSortNatural', event)"
+                desc="&sortNatural.desc;"/>
+            <command
+                id="cmd_openfilesSortLastOpened"
+                key="key_cmd_openfilesSortLastOpened"
+                oncommand="ko.commands.doCommand('cmd_openfilesSortLastOpened', event)"
+                desc="&sortLastOpened.desc;"/>
+            <command
+                id="cmd_openfilesSortAccessNo"
+                key="key_cmd_openfilesSortAccessNo"
+                oncommand="ko.commands.doCommand('cmd_openfilesSortAccessNo', event)"
+                desc="&sortAccessNo.desc;"/>
+    
+            <command
+                id="cmd_openfilesSortAscending"
+                key="key_cmd_openfilesSortAscending"
+                oncommand="ko.commands.doCommand('cmd_openfilesSortAscending', event)"
+                desc="&sortAscending.desc;"/>
+            <command
+                id="cmd_openfilesSortDescending"
+                key="key_cmd_openfilesSortDescending"
+                oncommand="ko.commands.doCommand('cmd_openfilesSortDescending', event)"
+                desc="&sortDescending.desc;"/>
+    
+            <command
+                id="cmd_openfilesReSort"
+                key="key_cmd_openfilesReSort"
+                oncommand="ko.commands.doCommand('cmd_openfilesReSort', event)"
+                desc="&reSort.desc;"/>
+    
+        </commandset>
+    
+    </commandset>
+
+    <menupopup id="popup_toolbars">
+        <menuitem
+            id="menu_toggleTabBar"
+            label="&viewEditorTabs.label;"
+            type="checkbox"
+            observes="cmd_toggleTabBar"
+            position="3"
+            tooltiptext="&viewEditorTabs.tooltip;"/>
+    </menupopup>
+</overlay>

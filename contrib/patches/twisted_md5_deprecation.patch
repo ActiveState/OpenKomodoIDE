@@ -1,0 +1,217 @@
+Index: /home/toddw/as/komodo-devel/contrib/twisted/TwistedCore-2.4.0/twisted/cred/identity.py
+===================================================================
+--- cred/identity.py	(revision 67092)
++++ cred/identity.py	(working copy)
+@@ -20,7 +20,8 @@
+ """
+ 
+ # System Imports
+-import md5, types, sys, warnings
++from hashlib import md5
++import types, sys, warnings
+ 
+ # Twisted Imports
+ from twisted.python import failure
+@@ -127,7 +128,7 @@
+         if plaintext is None:
+             self.hashedPassword = None
+         else:
+-            self.hashedPassword = md5.new(plaintext).digest()
++            self.hashedPassword = md5(plaintext).digest()
+ 
+     def setAlreadyHashedPassword(self, cyphertext):
+         """(legacy) Set a password for this identity, already md5 hashed.
+@@ -151,7 +152,7 @@
+             # no password was set, so we can't log in
+             req.errback(Unauthorized("account is disabled"))
+             return req
+-        md = md5.new()
++        md = md5()
+         md.update(self.hashedPassword)
+         md.update(challenge)
+         correct = md.digest()
+@@ -172,7 +173,7 @@
+             # no password was set, so we can't log in
+             req.errback(Unauthorized("account is disabled"))
+             return req
+-        md = md5.new()
++        md = md5()
+         md.update(plaintext)
+         userPass = md.digest()
+         if userPass == self.hashedPassword:
+Index: /home/toddw/as/komodo-devel/contrib/twisted/TwistedCore-2.4.0/twisted/cred/util.py
+===================================================================
+--- cred/util.py	(revision 67092)
++++ cred/util.py	(working copy)
+@@ -16,7 +16,7 @@
+ """
+ 
+ # System Imports
+-import md5
++from hashlib import md5
+ import random
+ 
+ from twisted.cred.error import Unauthorized
+@@ -25,10 +25,10 @@
+     """Respond to a challenge.
+     This is useful for challenge/response authentication.
+     """
+-    m = md5.new()
++    m = md5()
+     m.update(password)
+     hashedPassword = m.digest()
+-    m = md5.new()
++    m = md5()
+     m.update(hashedPassword)
+     m.update(challenge)
+     doubleHashedPassword = m.digest()
+@@ -40,5 +40,5 @@
+     crap = ''
+     for x in range(random.randrange(15,25)):
+         crap = crap + chr(random.randint(65,90))
+-    crap = md5.new(crap).digest()
++    crap = md5(crap).digest()
+     return crap
+Index: /home/toddw/as/komodo-devel/contrib/twisted/TwistedCore-2.4.0/twisted/spread/pb.py
+===================================================================
+--- spread/pb.py	(revision 67092)
++++ spread/pb.py	(working copy)
+@@ -1489,7 +1489,7 @@
+ 
+ # this is the new shiny API you should be using:
+ 
+-import md5
++from hashlib import md5
+ import random
+ from twisted.cred.credentials import ICredentials, IUsernameHashedPassword
+ 
+@@ -1498,10 +1498,10 @@
+ 
+     This is useful for challenge/response authentication.
+     """
+-    m = md5.new()
++    m = md5()
+     m.update(password)
+     hashedPassword = m.digest()
+-    m = md5.new()
++    m = md5()
+     m.update(hashedPassword)
+     m.update(challenge)
+     doubleHashedPassword = m.digest()
+@@ -1512,7 +1512,7 @@
+     crap = ''
+     for x in range(random.randrange(15,25)):
+         crap = crap + chr(random.randint(65,90))
+-    crap = md5.new(crap).digest()
++    crap = md5(crap).digest()
+     return crap
+ 
+ 
+@@ -1753,7 +1753,7 @@
+ 
+     # IUsernameMD5Password
+     def checkMD5Password(self, md5Password):
+-        md = md5.new()
++        md = md5()
+         md.update(md5Password)
+         md.update(self.challenge)
+         correct = md.digest()
+Index: /home/toddw/as/komodo-devel/contrib/twisted/TwistedCore-2.4.0/twisted/test/test_zipstream.py
+===================================================================
+--- test/test_zipstream.py	(revision 67092)
++++ test/test_zipstream.py	(working copy)
+@@ -1,5 +1,5 @@
+ import random
+-import md5
++from hashlib import md5
+ import zipfile
+ import os.path
+ import shutil
+@@ -9,7 +9,7 @@
+ 
+ # create some stuff that can be compressed
+ junk=' '.join([str(random.random()) for n in xrange(1000)])
+-junkmd5=md5.new(junk).hexdigest()
++junkmd5=md5(junk).hexdigest()
+ 
+ class ZipstreamTest(unittest.TestCase):
+     """"""
+@@ -121,4 +121,4 @@
+         
+ def newsum(filename):
+     """Return contents of file as md5 digest"""
+-    return md5.new(dump(filename)).hexdigest()
++    return md5(dump(filename)).hexdigest()
+Index: /home/toddw/as/komodo-devel/contrib/twisted/TwistedCore-2.4.0/twisted/python/otp.py
+===================================================================
+--- python/otp.py	(revision 67092)
++++ python/otp.py	(working copy)
+@@ -48,7 +48,8 @@
+         l = l / 256L
+     return result
+         
+-import md5, sha
++from hashlib import md5
++import sha
+ hashid = {md5: 'md5', sha: 'sha1'}
+ 
+ INITIALSEQUENCE = 1000
+Index: /home/toddw/as/komodo-devel/contrib/twisted/TwistedCore-2.4.0/twisted/protocols/sip.py
+===================================================================
+--- protocols/sip.py	(revision 67092)
++++ protocols/sip.py	(working copy)
+@@ -14,7 +14,7 @@
+ import socket
+ import random
+ import time
+-import md5
++from hashlib import md5
+ import sys
+ from zope.interface import implements
+ 
+Index: /home/toddw/as/komodo-devel/contrib/twisted/TwistedCore-2.4.0/twisted/internet/app.py
+===================================================================
+--- internet/app.py	(revision 67092)
++++ internet/app.py	(working copy)
+@@ -43,11 +43,11 @@
+ import defer, error
+ 
+ def encrypt(passphrase, data):
+-    import md5
++    from hashlib import md5
+     from Crypto.Cipher import AES as cipher
+     if len(data) % cipher.block_size:
+         data = data + (' ' * (cipher.block_size - len(data) % cipher.block_size))
+-    return cipher.new(md5.new(passphrase).digest()[:16]).encrypt(data)
++    return cipher.new(md5(passphrase).digest()[:16]).encrypt(data)
+ 
+ 
+ def quieterWarning():
+Index: /home/toddw/as/komodo-devel/contrib/twisted/TwistedCore-2.4.0/twisted/persisted/sob.py
+===================================================================
+--- persisted/sob.py	(revision 67092)
++++ persisted/sob.py	(working copy)
+@@ -10,7 +10,8 @@
+ Maintainer: U{Moshe Zadka<mailto:moshez@twistedmatrix.com>}
+ """
+ 
+-import os, md5, sys
++import os, sys
++from hashlib import md5
+ try:
+     import cPickle as pickle
+ except ImportError:
+@@ -32,11 +33,11 @@
+     leftover = len(data) % cipher.block_size
+     if leftover:
+         data += ' '*(cipher.block_size - leftover)
+-    return cipher.new(md5.new(passphrase).digest()[:16]).encrypt(data)
++    return cipher.new(md5(passphrase).digest()[:16]).encrypt(data)
+ 
+ def _decrypt(passphrase, data):
+     from Crypto.Cipher import AES
+-    return AES.new(md5.new(passphrase).digest()[:16]).decrypt(data)
++    return AES.new(md5(passphrase).digest()[:16]).decrypt(data)
+ 
+ 
+ class IPersistable(components.Interface):

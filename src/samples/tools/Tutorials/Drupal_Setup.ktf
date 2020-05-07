@@ -1,0 +1,139 @@
+// komodo tool: Drupal Setup
+// =========================
+// is_clean: true
+// type: tutorial
+// version: 1.1.5
+// =========================
+# Sample content, edit, delete, do whatever you like
+Description: Tutorial to quickly set up a Drupal project in Komodo.
+Author: ActiveState
+Version: 1.0
+# Placement can be floating or docked
+Placement: docked
+Callouts:
+    placesWidget:
+        Element: "#placesViewbox"
+        Message: This is the Places widget.
+    projectCog:
+        Element: "#placesSubpanelProjectsTools_SPV"
+        Message: "This is the Project cog menu."
+    uniMenuButton:
+        Element: "#unifiedMenuButton"
+        Message: Access Komodo menus in the Unified Menu.
+        Fail: "Enable the main toolbar using View > Toolbars > Show Toolbars"
+    toolboxWidget:
+        Element: "#toolbox2viewbox"
+        Message: "This is the Toolbox widget."
+        Fail: "Open Toolbox using View > Tabs & Sidebars > Toolbox or Ctrl + Shift + L"
+    goToAnything:
+        Element: "#notification-widget-default-text"
+        Message: "Go to Anything and Notifications."
+        Fail: "Enable the main toolbar using View > Toolbars > Show Toolbars"
+Steps:
+    -
+        Title: Before you begin
+        Summary: >
+            If you are new to the **Komodo IDE** you should complete the
+            **Getting Started** tutorial before continuing.  It is located
+            in the [toolbox][callout:toolboxWidget] in the Tutorials folder.
+            It teaches the basics of using Komodo.
+
+            These are the basic setup steps to get start working with Drupal in Komodo.
+
+            In this tutorial you will learn how to:
+            - Create a Komodo project
+            - Point Komodo at additional content for Code Intelligence
+            - Configure PHP code formatter
+            - Create a custom Toolbox command to start a remote debugging session
+
+            ## Prerequisite
+
+            - An install of Drupal ready to go (This includes a server to run it, eg. XAMPP)
+
+        #Validate: validPageOne -> isPerlFound && isVirtualenvFound
+
+    -
+        Title: Creating a Komodo project
+        Summary: >
+            Your first task is to create a Komodo project that provides the context for the
+            setup commands in this tutorial. All of these steps are completed in Komodo..
+        Task: >
+            1. Select <% if (require("sdk/system").platform == "darwin") { %>
+            **Project menu >
+            <% } else { %>
+            <i class="icon icon-bars"></i>&nbsp;**[Menu button][callout:uniMenuButton] > Project >
+            <% } %>
+            New Project**.
+            1. Use the dialog box to navigate to your project folder and name the project file,
+            and then click *Save*.
+
+        Tips:
+            - You can specify a custom **Project Base URL** in the **Project Preferences** dialog box.  Right click your project and select **Project Preferences** and then enter the custom URL in the **Project Base Directory** text box.            
+
+    -
+        Title: Code Intel Directory In/Excludes
+        Summary: >
+            Komodo allows you to specify code locations for code intelligence
+            scanning that may be outside of your project root.
+            
+            Depending on your need you can set these preference per Project or Globally.
+        Task: >
+            1. Open the preferences dialog that you want
+             1. Project: Right click the project in [Places][callout:placesWidget] then select *Project Preferences*
+             1. Global: `Ctrl + ,` (`Cmd + ,` on OSX) or [Unified menu][callout:uniMenuButton]` > Edit > Preferences`
+            1. `Languages > PHP > PHP Directorys`
+            1. Add directories as needed (eg. Add the *pears* folder in your PHP install to the **excludes** section)
+
+        Tips:
+            - You can set many preferences at the Global, Project, or File level.  Komodo prioritizes preferences in the following hierarchy, File > Project > Global.
+            - When Komodo first opens your Drupal project it will need to scan the code base for Code Completions.  Watch the [Notifications][callout:goToAnything] field.  Komodo will tell you when it's done.  
+
+    -
+        Title: Configure Remote Debugging
+        Summary: >
+            Now we'll setup your environment to allow you to performer remote debugging of your application in Komodo.
+        Task: >
+            1. Download Xdebug from [code.activestate.com](http://code.activestate.com/komodo/remotedebugging/) or [xdebug.org](https://xdebug.org/download.php).  Make sure to find the correct PHP version and build to match yours.
+            1. Place Xdebug somewhere appropriate.  You'll point your `php.ini` at it.
+            1. Check which port Komodo listening for debugging sessions on, `Debug > Listener Status > Host Port` or set one in `Preferences > Debugging > Connection`.
+            1. Find your `php.ini` for you PHP install.  `php --ini` run in the command line  will show you where it is.
+            1. Open it in Komodo and add the following fields to it.
+                ```
+                zend_extension_ts="c:\path\to\php_xdebug.dll"
+                zend_extension="c:\path\to\php_xdebug.dll"
+                xdebug.remote_enable=1
+                xdebug.remote_handler=dbgp
+                xdebug.remote_mode=req
+                xdebug.remote_host=127.0.0.1
+                xdebug.remote_port=*Host Port in Listener Status*
+                ```
+            1. Restart the web server to load the new configuration.
+            1. Verify that Xdebug is configured by checking the output of `phpinfo()`.
+             a. If PHP is on your system PATH you can run `$ php -m` to see all currently installed modules.
+            
+                
+        Tips: 
+            - See our docs for more information on [PHP debugging](http://docs.activestate.com/komodo/12/ manual/debugphp.html#debugging-php-komodo-ide-only_remote-php-debugging).
+// =========================
+// komodo meta: logic
+// =========================
+// Sample content, edit, delete, do whatever you like
+(function() {
+    var {Cc, Ci} = require("chrome");
+    var $ = require("ko/dom");
+    var w = require("ko/windows").getMain();
+    var ko = w.ko;
+    
+    this.start = function() {};
+    this.preStep = function() {};
+    this.step = function() {};
+    this.preClose = function() {};
+    this.close = function() {};
+
+    this.focusPlaces = function()
+    {
+        ko.uilayout.ensureTabShown('placesViewbox', true);
+        w.require("tutorials").logicCallout("placesWidget");
+    };
+    
+}).apply(module.exports);

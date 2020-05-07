@@ -1,0 +1,87 @@
+// komodo tool: Configure Mapped URI
+// =================================
+// async: 0
+// is_clean: true
+// language: JavaScript
+// rank: 100
+// trigger: trigger_postopen
+// trigger_enabled: 0
+// type: macro
+// version: 1.1.5
+// =================================
+(function()
+{
+    var fileDir="";
+    var domainURL="";
+    this.setupMapping = () =>
+    {
+        fileDir = this.getFilePath(fileDir);
+        var tryagain;
+        if ( ! fileDir )
+        {
+            tryagain = this.confirm("No file path selected.  Try again or exit?", "Try again", "Exit");
+            if (tryagain)
+            {
+                fileDir = this.getFilePath(fileDir);
+            }
+            if( ! fileDir)
+            {
+                return;
+            }
+        }
+        domainURL = this.getDomain();
+        if ( ! domainURL )
+        {
+            tryagain = this.confirm("No domain entered.  Try again or exit?", "Try again", "Exit");
+            if (tryagain)
+            {
+                domainURL = this.getDomain();
+            }
+            if( ! domainURL)
+            {
+                return;
+            }
+        }
+        if ( ! this.confirm("Creating mapped URL: "+domainURL+" maps to "+fileDir+".  Is this correct?",
+                                      "Correct","Try Again"))
+        {
+            this.setupMapping();
+            return;
+        }
+        ko.uriparse.addMappedURI(domainURL,fileDir);
+    };
+    
+    this.confirm = (msg, yes, no) =>
+    {
+        return require("ko/dialogs").confirm(msg,
+                                      {"yes":yes,"no":no});
+    };
+    
+    this.getDomain = () =>
+    {
+        var domainURL = require("ko/dialogs").prompt("Enter site domain.  Example: If you server is on your local machine it would be `localhost`.  If it's on a remote server it should be an IP address or a domain name, eg. example.com.", {title:"Set mapped domain"});
+        if( domainURL && ! domainURL.startsWith("http"))
+        {
+            domainURL = "http://"+domainURL;
+        }
+        return domainURL;
+    };
+    
+    this.getFilePath = (defaultDir) =>
+    {
+        var localOrRemote = require("ko/dialogs").customButtons("We need the webroot path on your server.  Depending on your answer we will either open a remote path browser or local path.  Is your PHP server on local host or on a remote host?",
+                                                                {"buttons":[["Local", "L", "Select a webroot from your local drive"],["Remote", "R", "Select a webroot from a remote server"],"Cancel"]});
+        console.log(localOrRemote);
+        if(localOrRemote == "Local")
+        {
+            return ko.filepicker.getFolder(defaultDir);
+        }
+        else if(localOrRemote == "Remote")
+        {
+            return ko.filepicker.remoteFileBrowser(defaultDir,"",Ci.nsIFilePicker.modeGetFolder).file;
+        }
+        return null;
+    };
+    this.setupMapping();
+}
+)()

@@ -1,0 +1,253 @@
+diff --git a/php_xdebug.h b/php_xdebug.h
+index 4ba18d0..cfecd1d 100644
+--- a/php_xdebug.h
++++ b/php_xdebug.h
+@@ -226,7 +226,7 @@ ZEND_BEGIN_MODULE_GLOBALS(xdebug)
+ 	zend_bool     remote_enable;  /* 0 */
+ 	long          remote_port;    /* 9000 */
+ 	char         *remote_host;    /* localhost */
+-	long          remote_mode;    /* XDEBUG_NONE, XDEBUG_JIT, XDEBUG_REQ */
++	long          remote_mode;    /* XDEBUG_NONE, XDEBUG_JIT, XDEBUG_REQ, XDEBUG_PROFILE */
+ 	char         *remote_handler; /* php3, gdb, dbgp */
+ 	zend_bool     remote_autostart; /* Disables the requirement for XDEBUG_SESSION_START */
+ 	zend_bool     remote_connect_back;   /* connect back to the HTTP requestor */
+diff --git a/xdebug.c b/xdebug.c
+index f15d9d4..955ebce 100644
+--- a/xdebug.c
++++ b/xdebug.c
+@@ -221,6 +221,9 @@ static PHP_INI_MH(OnUpdateDebugMode)
+ 	} else if (strcmp(new_value, "req") == 0) {
+ 		XG(remote_mode) = XDEBUG_REQ;
+ 
++	} else if (strcmp(new_value, "profile") == 0) {
++		XG(remote_mode) = XDEBUG_PROFILE;
++
+ 	} else {
+ 		XG(remote_mode) = XDEBUG_NONE;
+ 	}
+@@ -1021,6 +1024,11 @@ PHP_RSHUTDOWN_FUNCTION(xdebug)
+ 	/* Signal that we're no longer in a request */
+ 	XG(in_execution) = 0;
+ 
++	if (XG(remote_enable) && (XG(remote_mode) == XDEBUG_PROFILE) &&
++	    XG(profiler_enabled) && XG(profile_filename)) {
++		// Init the IDE connection to send the profiling results.
++		xdebug_init_debugger(TSRMLS_C);
++	}
+ 	return SUCCESS;
+ }
+ 
+@@ -1361,6 +1369,12 @@ void xdebug_execute_ex(zend_execute_data *execute_data TSRMLS_DC)
+ 			if (xdebug_profiler_init((char *) op_array->filename TSRMLS_CC) == SUCCESS) {
+ 				XG(profiler_enabled) = 1;
+ 			}
++		} else if (XG(remote_mode) == XDEBUG_PROFILE) {
++			// This creates a temp file in the Xdebug tmp dir,
++			// containing the profile data for the running code.
++			if (xdebug_profiler_init(op_array->filename TSRMLS_CC) == SUCCESS) {
++				XG(profiler_enabled) = 1;
++			}
+ 		}
+ 	}
+ 
+diff --git a/xdebug_handler_dbgp.c b/xdebug_handler_dbgp.c
+index 88a6312..104d99c 100644
+--- a/xdebug_handler_dbgp.c
++++ b/xdebug_handler_dbgp.c
+@@ -53,6 +53,7 @@
+ 
+ ZEND_EXTERN_MODULE_GLOBALS(xdebug)
+ static char *create_eval_key_id(int id);
++static int xdebug_do_eval(char *eval_string, zval *ret_zval TSRMLS_DC);
+ 
+ /*****************************************************************************
+ ** Constants and strings for statii and reasons
+@@ -167,6 +168,8 @@ DBGP_FUNC(step_out);
+ DBGP_FUNC(step_over);
+ DBGP_FUNC(detach);
+ 
++DBGP_FUNC(profile_data);
++
+ /* Non standard comments */
+ DBGP_FUNC(xcmd_profiler_name_get);
+ DBGP_FUNC(xcmd_get_executable_lines);
+@@ -211,6 +214,8 @@ static xdebug_dbgp_cmd dbgp_commands[] = {
+ 	DBGP_STOP_FUNC_ENTRY(stop,         XDEBUG_DBGP_POST_MORTEM)
+ 	DBGP_STOP_FUNC_ENTRY(detach,       XDEBUG_DBGP_NONE)
+ 
++	DBGP_FUNC_ENTRY(profile_data,      XDEBUG_DBGP_POST_MORTEM)
++
+ 	/* Non standard functions */
+ 	DBGP_FUNC_ENTRY(xcmd_profiler_name_get,    XDEBUG_DBGP_POST_MORTEM)
+ 	DBGP_FUNC_ENTRY(xcmd_get_executable_lines, XDEBUG_DBGP_NONE)
+@@ -790,6 +795,61 @@ static char* return_source(char *filename, int begin, int end TSRMLS_DC)
+ 	}
+ }
+ 
++#if PHP_VERSION_ID >= 70000
++#define PHP_STR_TYPE zend_string
++#define ENFORCE_SAFE_MODE 0
++#else
++#define PHP_STR_TYPE char
++#define ZSTR_VAL(x) x
++#endif
++
++static PHP_STR_TYPE* return_binary_file_source(char *filename, size_t *len TSRMLS_DC)
++{
++	PHP_STR_TYPE *contents = NULL;
++	php_stream *stream;
++	filename = xdebug_path_from_url(filename TSRMLS_CC);
++	stream = php_stream_open_wrapper(filename, "rb",
++			USE_PATH | ENFORCE_SAFE_MODE | REPORT_ERRORS,
++			NULL);
++	xdfree(filename);
++	if (!stream) {
++		return NULL;
++	}
++
++	/* Read all of the stream in one go. */
++#if PHP_VERSION_ID >= 70000
++	contents = php_stream_copy_to_mem(stream, PHP_STREAM_COPY_ALL, 0);
++	*len = ZSTR_LEN(contents);
++#else
++	*len = php_stream_copy_to_mem(stream, &contents, PHP_STREAM_COPY_ALL, 0);
++#endif
++	php_stream_close(stream);
++	/* Note: These contents must be later free'd using efree. */
++	return contents;
++}
++
++static PHP_STR_TYPE* return_zipped_file(char *filename, size_t *len TSRMLS_DC)
++{
++	char *zip_filename = xdebug_sprintf("%s.zip", filename);
++	char *eval_code = xdebug_sprintf("$xdebug_profile_zip_destination = '%s';\n"
++	                                 "$xdebug_profile_zip = new ZipArchive();\n"
++					 "if ($xdebug_profile_zip->open($xdebug_profile_zip_destination, $overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true) {\n"
++					 "	return false;\n"
++					 "}\n"
++					 "$xdebug_profile_zip->addFile('%s', 'xdebug_profile.out');\n"
++					 "$xdebug_profile_zip->close();\n"
++					 ,
++					 zip_filename, filename);
++
++	int res = xdebug_do_eval(eval_code, NULL TSRMLS_CC);
++	if (res == SUCCESS) {
++		PHP_STR_TYPE *zipped_source = return_binary_file_source(zip_filename, len TSRMLS_CC);
++		// Delete the file.
++		unlink(zip_filename);
++		return zipped_source;
++	}
++	return NULL;
++}
+ 
+ static int check_evaled_code(function_stack_entry *fse, char **filename, int *lineno, int use_fse TSRMLS_DC)
+ {
+@@ -2166,6 +2213,41 @@ DBGP_FUNC(context_get)
+ 	xdebug_xml_add_attribute_ex(*retval, "context", xdebug_sprintf("%d", context_id), 0, 1);
+ }
+ 
++DBGP_FUNC(profile_data)
++{
++	PHP_STR_TYPE *zipped_source;
++	size_t len = 0;
++
++	if (!XG(profiler_enabled) || !XG(profile_filename)) {
++		RETURN_RESULT(XG(status), XG(reason), XDEBUG_ERROR_PROFILING_NOT_STARTED);
++	}
++
++	// We're done profiling - turn it off now.
++	XG(profiler_enable) = 0;
++	XG(profiler_enabled) = 0;
++
++	/* return_file_source allocates memory for source */
++	XG(breakpoints_allowed) = 0;
++	zipped_source = return_zipped_file(XG(profile_filename), &len TSRMLS_CC);
++	XG(breakpoints_allowed) = 1;
++
++	if (!zipped_source) {
++		int   begin = 0, end = 9999999;
++		char *source = return_source(XG(profile_filename), begin, end TSRMLS_CC);
++		unlink(XG(profile_filename));
++		if (!source) {
++			RETURN_RESULT(XG(status), XG(reason), XDEBUG_ERROR_CANT_OPEN_FILE);
++		} else {
++			xdebug_xml_add_text_encode(*retval, source);
++		}
++	} else {
++		xdebug_xml_add_text_ex(*retval, ZSTR_VAL(zipped_source), len, 0, 1);
++		xdebug_xml_add_attribute_ex(*retval, "datatype", "zip", 0, 0);
++		xdebug_xml_add_attribute_ex(*retval, "datalength", xdebug_sprintf("%lu", len), 0, 0);
++		unlink(XG(profile_filename));
++	}
++}
++
+ DBGP_FUNC(xcmd_profiler_name_get)
+ {
+ 	if (XG(profiler_enabled) && XG(profile_filename)) {
+@@ -2490,6 +2572,10 @@ int xdebug_dbgp_init(xdebug_con *context, int mode)
+ 	} else if (mode == XDEBUG_JIT) {
+ 		XG(status) = DBGP_STATUS_BREAK;
+ 		XG(reason) = DBGP_REASON_ERROR;
++	} else if (mode == XDEBUG_PROFILE) {
++		/* XXX: Is this the correct status? */
++		XG(status) = DBGP_STATUS_RUNNING;
++		XG(reason) = DBGP_REASON_OK;
+ 	}
+ 	XG(lastcmd) = NULL;
+ 	XG(lasttransid) = NULL;
+@@ -2525,6 +2611,10 @@ int xdebug_dbgp_init(xdebug_con *context, int mode)
+ 	xdebug_xml_add_attribute_ex(response, "protocol_version", DBGP_VERSION, 0, 0);
+ 	xdebug_xml_add_attribute_ex(response, "appid", xdebug_sprintf("%d", getpid()), 0, 1);
+ 
++	if (mode == XDEBUG_PROFILE) {
++		xdebug_xml_add_attribute_ex(response, "type", "code_profiling", 0, 0);
++	}
++
+ 	if (getenv("DBGP_COOKIE")) {
+ 		xdebug_xml_add_attribute_ex(response, "session", xdstrdup(getenv("DBGP_COOKIE")), 0, 1);
+ 	}
+diff --git a/xdebug_private.h b/xdebug_private.h
+index 624ff48..12628e2 100644
+--- a/xdebug_private.h
++++ b/xdebug_private.h
+@@ -69,6 +69,7 @@ typedef struct xdebug_var {
+ #define XDEBUG_NONE          0
+ #define XDEBUG_JIT           1
+ #define XDEBUG_REQ           2
++#define XDEBUG_PROFILE       3
+ 
+ #define XDEBUG_BREAK         1
+ #define XDEBUG_STEP          2
+index c8768be..3cb6d6f 100644
+--- a/xdebug_profiler.c
++++ b/xdebug_profiler.c
+@@ -66,6 +66,16 @@ int xdebug_profiler_init(char *script_name TSRMLS_DC)
+ 		/* Invalid or empty xdebug.profiler_output_name */
+ 		return FAILURE;
+ 	}
++#ifdef PHP_WIN32
++	// Use actual temporary directory on Windows.
++	if (XG(profiler_output_dir) && strcmp(XG(profiler_output_dir), "\\") == 0) {
++		char sTemp[MAX_PATH];
++		DWORD n = GetTempPath(sizeof(sTemp),sTemp);
++		if (n > 0) {
++			XG(profiler_output_dir) = strdup(sTemp);
++		}
++	}
++#endif
+ 	if (IS_SLASH(XG(profiler_output_dir)[strlen(XG(profiler_output_dir)) - 1])) {
+ 		filename = xdebug_sprintf("%s%s", XG(profiler_output_dir), fname);
+ 	} else {
+Index: /as/komodo-devel/src/xdebug2/tmp/pkg_cache/xdebug-2.2.3/xdebug_stack.c
+index d50b3f7..3762a66 100644
+--- a/xdebug_stack.c
++++ b/xdebug_stack.c
+@@ -501,7 +501,7 @@ void xdebug_init_debugger(TSRMLS_D)
+ 		if (!XG(context).handler) {
+ 			zend_error(E_WARNING, "The remote debug handler '%s' is not supported.", XG(remote_handler));
+ 			XDEBUG_LOG_PRINT(XG(remote_log_file), "E: The remote debug handler '%s' is not supported. :-(\n", XG(remote_handler));
+-		} else if (!XG(context).handler->remote_init(&(XG(context)), XDEBUG_REQ)) {
++		} else if (!XG(context).handler->remote_init(&(XG(context)), XG(remote_mode))) {
+ 			/* The request could not be started, ignore it then */
+ 			XDEBUG_LOG_PRINT(XG(remote_log_file), "E: The debug session could not be started. :-(\n");
+ 		} else {

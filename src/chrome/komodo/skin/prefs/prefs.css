@@ -1,0 +1,68 @@
+/* Copyright (c) 2000-2009 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+.autoscroll
+{
+    overflow: auto;
+}
+
+description.pref_hide {
+    display: none;
+}
+
+description.pref_show {
+    margin-top: 5px;
+    border: orange 1px solid;
+    padding: 2px 1px;
+}
+
+description#pychecker_dangerous.pref_show {
+    border: red 2px solid;
+}
+
+.indentedPref01 {
+    margin-left: 27px;
+}
+
+.indentedPref02 {
+    margin-left: 54px;
+}
+
+.textboxWrapper {
+    -moz-box-align: center;
+}
+
+groupbox#pref-languages-primary-selector-groupbox {
+    visibility:visible;
+}
+groupbox#pref-languages-primary-selector-groupbox.collapse {
+    visibility:collapse;
+}
+
+.legend {
+    font-size: 90%;
+    font-style: italic;
+    padding-left: 10px;
+}
+
+/*
+ * Syntax checking prefs dialog wasn't resizing it's second box properly.
+ * Force the issue by adding a class in pref-syntax-checking.js to act on here.
+ */
+#docSyntaxCheckByLang > vbox:not([active]) {
+    visibility: collapse;
+}
+
+/* Todo: Implement in platform/global CSS */
+*[invalid="true"]
+{
+    outline: 1px solid red;
+}
+
+#interface-font label,
+#interface-font .menulist-label-box,
+#editor-font label,
+#editor-font .menulist-label-box
+{
+    font-family: inherit;
+}

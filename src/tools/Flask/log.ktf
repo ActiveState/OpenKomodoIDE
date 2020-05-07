@@ -1,0 +1,11 @@
+// komodo tool: log
+// ================
+// auto_abbreviation: true
+// indent_relative: false
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.0.12
+// ================
+app.logger.[[%tabstop1:debug]]("[[%tabstop2:A message]]")
+[[%tabstop3:3]]!@#_currentPos!@#_anchor

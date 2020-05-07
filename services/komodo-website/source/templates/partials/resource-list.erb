@@ -1,0 +1,87 @@
+<ul class="trail">
+    <li>
+        <a href="/packages">Packages</a>
+    </li>
+    <li>
+    <% if get_basename() == "packages" %>
+        Latest
+    <% else %>
+        <%= current_page.data.title %>
+    <% end %>
+    </li>
+</ul>
+
+<ul>
+    <% pagination.each do |resource| %>
+        <% image = get_image(resource) %>
+            <li>
+            <a href="/packages/<%= resource.category.resource[0..-5] %>/<%= get_package_slug(resource) %>/" class="push-right preview">
+            <% if resource.has_key? "ksf" %>
+                <%= partial('scheme-mini-preview', :locals => { ksf: resource.ksf }) %>
+            <% end %>
+            <div class="info">
+                <h3>
+                    <a href="/packages/<%= resource.category.resource[0..-5] %>/<%= get_package_slug(resource) %>/"><%= resource.title %></a>
+                </h3>
+                <p>
+                    <%= resource.description %>
+                </p>
+                <div class="author">
+                    By 
+                    <a href="<%= resource.owner.html_url %>"><%= resource.owner.login %></a> 
+                    <% if resource.owner.has_key? "avatar_url" %>
+                    <a href="<%= resource.owner.html_url %>">
+                        <img src="<%= resource.owner.avatar_url %>?s=18">
+                    </a>
+                    <% elsif resource.owner.has_key? "gravatar_id" %>
+                    <a href="<%= resource.owner.html_url %>" class="preview">
+                        <img src="http://gravatar.com/avatar/<%= resource.owner.gravatar_id %>?d=identicon&s=18">
+                    </a>
+                    <% end %>
+                </div>
+            </div>
+            <div class="meta">
+                <div class="push-left">
+                    <% if resource.has_key? "download_count" %>
+                    <span class="downloads">
+                        <i class="icon icon-download" title="Total Downloads"></i>
+                        <span><strong><%= resource.download_count %></strong> Downloads</span>
+                    </span>
+                    <% end %>
+                    <% if resource.has_key? "download_count" and resource.has_key? "stargazers_count" %>
+                    <br/>
+                    <% end %>
+                    <% if resource.has_key? "stargazers_count" %>
+                        <span class="stars">
+                            <i class="icon icon-star"></i>
+                            <span><strong><%= resource.stargazers_count %></strong> Stars</span>
+                        </span>
+                    <% end %>
+                </div>
+                <div class="push-right">
+                    <div class="updated">
+                        <span>Updated <%= timeago(resource.last_update) %></span>
+                    </div>
+                    <div class="version">
+                        <% if resource.releases and resource.releases.length > 0 %>
+                        <% release = resource.releases.first() %>
+                        <a href="<%= release.html_url %>">
+                            Version 
+                            <%= release.tag_name %>
+                            <% if release.prerelease%>
+                                (pre-release)
+                            <% end %>
+                        </a>
+                        <% end %>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </li>
+    <% end %>
+</ul>
+
+<div class="clearfix"></div>
+
+<%= partial('pagination', :locals => { pagination: pagination }) %>

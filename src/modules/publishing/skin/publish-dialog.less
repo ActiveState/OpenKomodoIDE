@@ -1,0 +1,188 @@
+/* Copyright (c) 2010 ActiveState Software Inc. .
+   See the file LICENSE.txt for licensing information. */
+@import url("chrome://komodo/skin/global/colors.less");
+/* publishing settings binding */
+publish_settings {
+    -moz-binding: url('chrome://publishing/content/bindings/publishing_settings.xbl#publish_settings');
+}
+
+#settings_help_vbox
+{
+    background-color: @special;
+    margin: 3px 3px 3px 3px;
+    
+    .caption-text
+    {
+        color: @foreground-special;
+    }
+}
+
+treechildren::-moz-tree-checkbox(nocheckbox)
+{
+  list-style-image: none;
+}
+
+treecol
+{
+    min-width: 25px;
+}
+
+treechildren::-moz-tree-cell-text(urls-column-action-text) {
+    font-style: italic;
+}
+/**
+ * Sync status images for items.
+ */
+treechildren::-moz-tree-image(syncAddFile) {
+  list-style-image: url('koicon://ko-svg/chrome/icomoon/skin/file-plus.svg?size=14&scheme-name=interface&scheme-color=scc-new');
+  width: 14px;
+  height: 14px;
+}
+treechildren::-moz-tree-image(syncModifyFile) {
+  list-style-image: url('koicon://ko-svg/chrome/icomoon/skin/pencil.svg?size=14&scheme-name=interface&scheme-color=scc-modified');
+  width: 14px;
+  height: 14px;
+}
+treechildren::-moz-tree-image(syncRemoveFile) {
+  list-style-image: url('koicon://ko-svg/chrome/icomoon/skin/remove.svg?size=14&scheme-name=interface&scheme-color=scc-deleted');
+  width: 14px;
+  height: 14px;
+}
+
+treechildren::-moz-tree-image(syncAddFolder) {
+  list-style-image: url('koicon://ko-svg/chrome/icomoon/skin/folder-plus.svg?size=14&scheme-name=interface&scheme-color=scc-new');
+  width: 14px;
+  height: 14px;
+}
+treechildren::-moz-tree-image(syncRemoveFolder) {
+  list-style-image: url('koicon://ko-svg/chrome/icomoon/skin/remove.svg?size=14&scheme-name=interface&scheme-color=scc-deleted');
+  width: 14px;
+  height: 14px;
+}
+
+/**
+ * File type icons.
+ */
+treechildren::-moz-tree-image(syncRemoteFolder) {
+  list-style-image: url('koicon://ko-svg/chrome/icomoon/skin/folder-download3.svg?size=14');
+  width: 14px;
+  height: 14px;
+}
+
+treechildren::-moz-tree-image(syncRemoteFile) {
+  list-style-image: url('koicon://ko-svg/chrome/icomoon/skin/file-download2.svg?size=14');
+  width: 14px;
+  height: 14px;
+}
+
+treechildren::-moz-tree-image(syncLocalFolder) {
+  list-style-image: url('koicon://ko-svg/chrome/icomoon/skin/folder-upload2.svg?size=14');
+  width: 14px;
+  height: 14px;
+}
+
+treechildren::-moz-tree-image(syncLocalFile) {
+  list-style-image: url('koicon://ko-svg/chrome/icomoon/skin/file-upload.svg?size=14');
+  width: 14px;
+  height: 14px;
+}
+
+treechildren::-moz-tree-cell-text(syncLoading) {
+    font-style: italic;
+    font-weight: bolder;
+}
+
+treechildren::-moz-tree-checkbox(syncLoading) {
+    list-style-image: none;
+}
+
+
+treechildren::-moz-tree-image(syncLoadingIcon) {
+    list-style-image: url('chrome://global/skin/icons/loading_16.png');
+    width: 16px;
+    height: 16px;
+}
+
+treechildren::-moz-tree-image(syncTransferInProgress) {
+    list-style-image: url('chrome://global/skin/icons/loading_16.png');
+    width: 16px;
+    height: 16px;
+}
+
+treechildren::-moz-tree-image(syncTransferDownloaded) {
+    list-style-image: url("chrome://famfamfamsilk/skin/icons/bullet_black.png");
+    width: 16px;
+    height: 16px;
+}
+
+treechildren::-moz-tree-image(syncTransferCompleted) {
+    list-style-image: url("koicon://ko-svg/chrome/icomoon/skin/checkmark-circle.svg?size=14");
+    width: 16px;
+    height: 16px;
+}
+
+treechildren::-moz-tree-cell-text(syncAdded) {
+    color: @scc-new;
+    font-weight: bolder;
+}
+treechildren::-moz-tree-cell-text(syncRemove) {
+    color: @scc-deleted;
+    font-weight: bolder;
+}
+treechildren::-moz-tree-cell-text(syncModified) {
+    color:@scc-modified;
+    font-weight: bolder;
+}
+treechildren::-moz-tree-cell-text(syncConflict) {
+    color: @scc-conflict;
+    font-weight: bolder;
+}
+treechildren::-moz-tree-cell-text(syncError) {
+    color: red;
+    font-style: italic;
+    font-weight: bolder;
+}
+treechildren::-moz-tree-checkbox(syncError) {
+    list-style-image: none;
+}
+treechildren::-moz-tree-image(syncConflictIcon) {
+    list-style-image: url('koicon://ko-svg/chrome/icomoon/skin/warning2.svg?size=14&scheme-name=interface&scheme-color=scc-conflict');
+    width: 14px;
+    height: 14px;
+}
+treechildren::-moz-tree-image(syncErrorIcon) {
+    list-style-image: url('chrome://komodo/skin/images/exclamation_hover.png');
+    width: 14px;
+    height: 14px;
+}
+treechildren::-moz-tree-image(syncWarnIcon) {
+    list-style-image: url('koicon://ko-svg/chrome/icomoon/skin/warning2.svg?size=14');
+    width: 14px;
+    height: 14px;
+}
+treechildren::-moz-tree-image(syncInfoIcon) {
+    list-style-image: url('chrome://famfamfamsilk/skin/icons/information.png');
+    width: 14px;
+    height: 14px;
+}
+
+.list-item-stop-icon {
+    list-style-image: url('chrome://famfamfamsilk/skin/icons/cancel.png');
+    width: 14px;
+    height: 14px;
+}
+
+.list-item-stop-icon[disabled="true"] {
+    opacity: 0.2;
+}
+
+textbox[invalid="true"]
+{
+  background-color: @state-warning;
+}
+
+textbox[warning="true"]
+{
+  background-color: @foreground-special;
+}
+

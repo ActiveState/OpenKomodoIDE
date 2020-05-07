@@ -1,0 +1,28 @@
+richlistitem.friends-list-friend {
+  -moz-binding: url("chrome://komob/content/friendslist.xml#friendsListFriend");
+}
+
+richlistitem.friends-list-request {
+  font-style: oblique;
+  -moz-binding: url("chrome://komob/content/friendslist.xml#friendsListRequest");
+}
+
+richlistitem.friends-list-pending {
+  font-style: oblique;
+  -moz-binding: url("chrome://komob/content/friendslist.xml#friendsListPending");
+}
+
+richlistitem.friends-list-message {
+  font-style: oblique;
+  -moz-binding: url("chrome://komob/content/friendslist.xml#friendsListMessage");
+}
+
+richlistitem.friends-list-message label {
+  width: 0; /* Make it wrap */
+}
+
+richlistbox {
+  margin: 0;
+  padding: 0;
+}
+

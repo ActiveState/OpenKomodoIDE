@@ -1,0 +1,98 @@
+/* Copyright (c) 2003-2011 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+/*
+ * CSS for the new Rx window.
+ */
+
+
+.regex-shortcuts-button
+{
+    list-style-image : url("chrome://fugue/skin/icons/shortcut.png");
+}
+
+
+/* #if PLATFORM == "darwin" */
+/**
+ * Hacks for Mac platform to be able to differentiate the selected radio button.
+ */
+.button-toolbar-rx
+{
+    opacity: .80;
+}
+.button-toolbar-rx[checked="true"]
+{
+    opacity: 1;
+    font-weight: bold;
+    list-style-image: url('chrome://fugue/skin/icons/star-small.png');
+}
+/* #endif */
+
+
+/* Mode buttons. */
+
+#rxx-action-button-box {
+    margin: 10px 0;
+}
+
+#rxx-stop-button {
+  vertical-align: bottom;
+}
+
+/* rx throbber */
+
+image#rxx-eval-in-progress-image {
+  vertical-align: bottom;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+textbox.delimiter_textbox {
+    min-height: 1.8em;
+    max-width: 3em;
+    max-height: 3em;
+}
+
+#modifiers > label, #modifiers checkbox {
+    margin: 2px;
+    padding: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+#modifiers checkbox[disabled="true"] {
+    visibility: collapse;
+}
+
+.help-icon dropmarker {
+    display: none;
+}
+
+.rxx-box-header > toolbarbutton {
+    margin: 0;
+    padding: 0;
+}
+
+#pattern-row .groupbox-body {
+    margin: 0;
+    padding: 0;
+}
+
+.groupbox-body {
+    margin: 0;
+}
+
+caption, groupbox {
+    margin: 0;
+    padding: 0;
+}
+
+splitter.row-splitter {
+    margin: 10px 0 !important;
+    min-height: 0 !important;
+}
+
+splitter.column-splitter {
+    margin: 0 10px !important;
+    min-width: 0 !important;
+}

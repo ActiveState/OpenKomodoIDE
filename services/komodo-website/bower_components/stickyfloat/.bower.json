@@ -1,0 +1,15 @@
+{
+  "name": "stickyfloat",
+  "homepage": "https://github.com/spinx/stickyfloat",
+  "version": "7.5.0",
+  "_release": "7.5.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "7.5.0",
+    "commit": "7e4fded0fa9feb816e8656708ef5e8dec30611d6"
+  },
+  "_source": "git://github.com/spinx/stickyfloat.git",
+  "_target": "~7.5.0",
+  "_originalSource": "stickyfloat",
+  "_direct": true
+}

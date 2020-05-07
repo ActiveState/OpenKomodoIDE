@@ -1,0 +1,137 @@
+// komodo tool: WP_Query
+// =====================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// =====================
+<% /* New WP_Query Class */ %>
+
+	/**
+	 * The WordPress Query class.
+	 * @link http://codex.wordpress.org/Function_Reference/WP_Query
+	 *
+	 */
+	${1:\$args} = array(
+		${2:
+		${3://Post & Page Parameters
+		${4:'p'             => ${5:1},}
+		${6:'name'          => '${7:hello-world}',}
+		${8:'page_id'       => ${9:1},}
+		${10:'pagename'     => '${11:sample-page}',}
+		${12:'post_parent'  => ${13:1},}
+		${14:'post__in'     => array(${15:1,2,3}),}
+		${16:'post__not_in' => array(${17:1,2,3}),}
+		}
+		${18://Author Parameters
+		${19:'author'      => ${20:'1,2,3,}',}
+		${21:'author_name' => '${22:admin}',}
+		}
+		${23://Category Parameters
+		${24:'cat'              => ${25:1},}
+		${26:'category_name'    => '${27:blog}',}
+		${28:'category__and'    => array(${29: 1, 2}),}
+		${30:'category__in'     => array(${31:1, 2}),}
+		${32:'category__not_in' => array( ${33:1, 2 }),}
+		}
+		${34://Type & Status Parameters
+		${35:'post_type'   => 'any',}
+		${36:'post_status' => 'any',}
+		}
+		${37://Choose ^ 'any' or from below, since 'any' cannot be in an array
+		${38:'post_type' => array(
+			'post',
+			'page',
+			'revision',
+			'attachment',
+			'my-post-type',
+			),
+		}
+		${39:'post_status' => array(
+			'publish',
+			'pending',
+			'draft',
+			'auto-draft',
+			'future',
+			'private',
+			'inherit',
+			'trash'
+			),
+		}}
+		${40://Order & Orderby Parameters
+		${41:'order'               => '${42:DESC}',}
+		${43:'orderby'             => '${44:date}',}
+		${45:'ignore_sticky_posts' => ${46:false},}
+		${47:'year'                => ${48:2012},}
+		${49:'monthnum'            => ${50:1},}
+		${51:'w'                   => ${52:1},}
+		${53:'day'                 => ${54:1},}
+		${55:'hour'                => ${56:12},}
+		${57:'minute'              => ${58:5},}
+		${59:'second'              => ${60:30},}
+		}
+		${61://Tag Parameters
+		${62:'tag'           => '${63:cooking}',}
+		${64:'tag_id'        => ${65:5},}
+		${66:'tag__and'      => array(${67: 1, 2}),}
+		${68:'tag__in'       => array(${69: 1, 2}),}
+		${70:'tag__not_in'   => array(${71: 1, 2}),}
+		${72:'tag_slug__and' => array(${73: 'red', 'blue'}),}
+		${74:'tag_slug__in'  => array(${75: 'red', 'blue'}),}
+		}
+		${76://Pagination Parameters
+		${77:'posts_per_page'         => ${78:10},}
+		${79:'posts_per_archive_page' => ${80:10},}
+		${81:'nopaging'               => ${82:false},}
+		${83:'paged'                  => get_query_var('${84:paged}'),}
+		${85:'offset'                 => ${86:3},}
+		}
+		${87://Custom Field Parameters
+		${88:'meta_key'       => '${89:key}',}
+		${90:'meta_value'     => '${91:value}',}
+		${92:'meta_value_num' => ${93:10},}
+		${94:'meta_compare'   => '${95:=}',}
+		${96:'meta_query'     => array(
+			array(
+				'key' => 'color',
+				'value' => 'blue',
+				'type' => 'CHAR',
+				'compare' => '='
+			),
+			array(
+				'key' => 'price',
+				'value' => array( 1,200 ),
+				'compare' => 'NOT LIKE'
+			),
+		}}
+		${97://Taxonomy Parameters
+		'tax_query' => array(
+		'relation'  => 'AND',
+			array(
+				'taxonomy'         => 'color',
+				'field'            => 'slug',
+				'terms'            => array( 'red', 'blue' ),
+				'include_children' => true,
+				'operator'         => 'IN'
+			),
+			array(
+				'taxonomy'         => 'actor',
+				'field'            => 'id',
+				'terms'            => array( 1, 2, 3 ),
+				'include_children' => false,
+				'operator'         => 'NOT IN'
+			)
+		),
+		}
+		${98://Permission Parameters -
+		'perm' => '${99:readable}',
+		}
+		${100://Parameters relating to caching
+		${101:'no_found_rows'          => ${102:false},}
+		${103:'cache_results'          => ${104:true},}
+		${105:'update_post_term_cache' => ${106:true},}
+		${107:'update_post_meta_cache' => ${108:true},}
+		}
+}	);
+
+${109:\$query} = new WP_Query( ${1:\$args} );

@@ -1,0 +1,20 @@
+// komodo tool: hasmany
+// ====================
+// auto_abbreviation: true
+// indent_relative: false
+// is_clean: true
+// language: PHP
+// set_selection: false
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ====================
+/**
+ * Get the [[%tabstop1:models]] for the [[%tabstop:model]].
+ *
+ * @return \\\\Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany
+ */
+public function [[%tabstop1:models]]()
+{
+    return $this->hasMany([[%tabstop:Name]]::class[[%tabstop:, 'foreign_key', 'local_key']]);
+}!@#_currentPos!@#_anchor

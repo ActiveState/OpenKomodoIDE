@@ -1,0 +1,51 @@
+dbg.tcl:proc dbg::start {application startDir script argList clientData} {
+dbg.tcl:proc dbg::kill {} {
+
+dbg.tcl:proc dbg::step {{level any}} {
+dbg.tcl:proc dbg::evaluate {level script} {
+dbg.tcl:proc dbg::run {{location {}}} {
+dbg.tcl:proc dbg::interrupt {} {
+dbg.tcl:proc dbg::register {event script} {
+dbg.tcl:proc dbg::unregister {event script} {
+dbg.tcl:proc dbg::DeliverEvent {event args} {
+dbg.tcl:proc dbg::getLevel {} {
+dbg.tcl:proc dbg::getPC {} {
+dbg.tcl:proc dbg::getStack {} {
+dbg.tcl:proc dbg::getProcs {} {
+dbg.tcl:proc dbg::getProcLocation {name} {
+dbg.tcl:proc dbg::getProcBody {loc} {
+dbg.tcl:proc dbg::uninstrumentProc {procName loc} {
+dbg.tcl:proc dbg::instrumentProc {procName loc} {
+dbg.tcl:proc dbg::getVariables {level {vars {}}} {
+dbg.tcl:proc dbg::getVar {level maxlen varList} {
+dbg.tcl:proc dbg::setVar {level var value} {
+dbg.tcl:proc dbg::getResult {maxlen} {
+dbg.tcl:proc dbg::addLineBreakpoint {location} {
+dbg.tcl:proc dbg::getLineBreakpoints {{location {}}} {
+dbg.tcl:proc dbg::validateBreakpoints {file blk} {
+dbg.tcl:proc dbg::binarySearch {ls elt} {
+dbg.tcl:proc dbg::addVarBreakpoint {level name} {
+dbg.tcl:proc dbg::getVarBreakpoints {{level {}} {name {}}} {
+dbg.tcl:proc dbg::removeBreakpoint {breakpoint} {
+dbg.tcl:proc dbg::moveLineBreakpoint {breakpoint newLoc} {
+dbg.tcl:proc dbg::disableBreakpoint {breakpoint} {
+dbg.tcl:proc dbg::enableBreakpoint {breakpoint} {
+dbg.tcl:proc dbg::initialize {{dir {}}} {
+dbg.tcl:proc dbg::setServerPort {port} {
+dbg.tcl:proc dbg::getServerPortStatus {} {
+dbg.tcl:proc dbg::closeServerSocket {} {
+dbg.tcl:proc dbg::quit {} {
+dbg.tcl:proc dbg::HandleClientExit {} {
+dbg.tcl:proc dbg::HandleConnect {sock host port} {
+dbg.tcl:proc dbg::SendMessage {args} {
+dbg.tcl:proc dbg::GetMessage {} {
+dbg.tcl:proc dbg::SendAsync {args} {
+dbg.tcl:proc dbg::Send {args} {
+dbg.tcl:proc dbg::HandleNubEvent {} {
+dbg.tcl:proc dbg::ignoreError {} {
+dbg.tcl:proc dbg::Instrument {file script} {
+dbg.tcl:proc dbg::Log {type message} {
+dbg.tcl:proc dbg::InitializeNub {nubVersion tclVersion clientData} {
+dbg.tcl:proc dbg::initInstrument {} {
+dbg.tcl:proc dbg::getAppVersion {} {
+dbg.tcl:proc dbg::isLocalhost {} {

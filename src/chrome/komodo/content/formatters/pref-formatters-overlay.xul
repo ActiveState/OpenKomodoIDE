@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://komodo/locale/formatters/pref-formatters.dtd" >
+
+<overlay id="prefs_formatter_overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <treechildren id="panelChildren">
+        <treeitem id="prefs_formatter_treeitem" insertafter="findItem" advanced="true">
+            <treerow id="prefs_formatter_treecrow">
+                <treecell id="prefs_formatter_treecell"
+                          class="treecell-indent"
+                          url="chrome://komodo/content/formatters/pref-formatters.xul"
+                          label="&Formatters.label;"
+                          helptag="editor.html#editor_formatters"/>
+            </treerow>
+        </treeitem>
+    </treechildren>
+
+</overlay>

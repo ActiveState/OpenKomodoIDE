@@ -1,0 +1,638 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % debuggerDTD SYSTEM "chrome://komodo/locale/debugger.dtd">
+  %debuggerDTD;
+]>
+
+<?xml-stylesheet href="chrome://komodo/skin/debugger.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/debugger.css" type="text/css"?>
+
+<overlay id="overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <!--Debugger support-->
+    <script src="chrome://komodo/content/debugger/debuggerController.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/debugger/debugger.js"            type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/debugger/variableOutlinerView.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/debugger/debugSessionTab.js"     type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/debugger/breakpoints.js"         type="application/x-javascript;version=1.7"/>
+
+
+    <commandset id="allcommands">
+    <!-- debugger specific commands.
+         Update when state of debugger changes, and when debuggability of
+         the current view changes. -->
+    <commandset
+        id="cmdset_interactiveShell"
+        oncommandupdate="ko.dbg.controller.updateInteractiveShellCommands(this)"
+        commandupdater="true"
+        events="interactiveshell"
+        >
+        <command
+            id="cmd_startInteractiveShell" key="key_cmd_startInteractiveShell"
+            desc="&debuggerStartDefaultInteractiveShell.desc;"
+            oncommand="ko.dbg.doCommand('cmd_startInteractiveShell', event)"/>
+        <command
+            id="cmd_toggleInteractiveShell" key="key_cmd_toggleInteractiveShell"
+            desc="&debuggerStartFindHideDefaultInteractiveShell.desc;"
+            oncommand="ko.dbg.doCommand('cmd_toggleInteractiveShell', event)"/>
+        <command
+            id="cmd_startPythonInteractiveShell" key="key_cmd_startPythonInteractiveShell"
+            desc="&debuggerStartPythonInteractiveShell.desc;"
+            oncommand="ko.commands.doCommandAsync('cmd_startPythonInteractiveShell', event)"/>
+        <command
+            id="cmd_startPython3InteractiveShell" key="key_cmd_startPython3InteractiveShell"
+            desc="&debuggerStartPython3InteractiveShell.desc;"
+            oncommand="ko.commands.doCommandAsync('cmd_startPython3InteractiveShell', event)"/>
+        <command
+            id="cmd_startPerlInteractiveShell" key="key_cmd_startPerlInteractiveShell"
+            desc="&debuggerStartPerlInteractiveShell.desc;"
+            oncommand="ko.commands.doCommandAsync('cmd_startPerlInteractiveShell', event)"/>
+        <command
+            id="cmd_startRubyInteractiveShell" key="key_cmd_startRubyInteractiveShell"
+            desc="&debuggerStartRubyInteractiveShell.desc;"
+            oncommand="ko.commands.doCommandAsync('cmd_startRubyInteractiveShell', event)"/>
+        <command
+            id="cmd_startTclInteractiveShell" key="key_cmd_startTclInteractiveShell"
+            desc="&debuggerStartTclInteractiveShell.desc;"
+            oncommand="ko.commands.doCommandAsync('cmd_startTclInteractiveShell', event)"/>
+        <!-- JS Shell
+        <command
+            id="cmd_startJavaScriptInteractiveShell" key="key_cmd_startJavaScriptInteractiveShell"
+            desc="Debugger: Start JavaScript Interactive Shell"
+            oncommand="ko.commands.doCommandAsync('cmd_startJavaScriptInteractiveShell', event)"/>
+        -->
+    </commandset>
+    
+    <commandset id="cmdset_debuggability_changed"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="debuggability_changed"
+        >
+        <command
+            id="cmd_debuggerListener" key="key_cmd_debuggerListener"
+            type="checkbox"
+            oncommand="ko.commands.doCommandAsync('cmd_debuggerListener', event)"
+            desc="&debuggerListenForRemoteDebugger.desc;"/>
+        <command
+            id="cmd_dbgBreakpointToggle" key="key_cmd_dbgBreakpointToggle"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgBreakpointToggle', event)"
+            disabled="true"
+            desc="&debuggerDisableEnableBreakpoint.desc;"/>
+        <command
+            id="cmd_dbgBreakpointAddOrEdit" key="key_cmd_dbgBreakpointAddOrEdit"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgBreakpointAddOrEdit', event)"
+            disabled="true"
+            desc="&debuggerAddEditBreakpoint.desc;"/>
+        <command
+            id="cmd_dbgSpawnpointAddOrEdit" key="key_cmd_dbgSpawnpointAddOrEdit"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgSpawnpointAddOrEdit', event)"
+            disabled="true"
+            desc="&debuggerAddEditSpawnpoint.desc;"/>
+        <command
+            id="cmd_dbgBreakpointClearAllInURI" key="key_cmd_dbgBreakpointClearAllInURI"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgBreakpointClearAllInURI', event)"
+            disabled="true"
+            desc="&debuggerClearAllBreakpoints.desc;"/>
+    </commandset>
+
+    <commandset
+        id="cmdset_debuggability_state_or_view_changed"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="debuggability_changed,debug_state,some_files_open,language_changed,current_view_language_changed"
+        >
+        <command
+            id="cmd_dbgNewSession" key="key_cmd_dbgNewSession"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgNewSession', event)"
+            disabled="true"
+            desc="&debuggerNewSession.desc;"/>
+        <command
+            id="cmd_dbgStepIn" key="key_cmd_dbgStepIn"
+            oncommand="ko.dbg.doCommand('cmd_dbgStepIn', event)"
+            disabled="true"
+            desc="&debuggerStepIn.desc;"/>
+        <command
+            id="cmd_dbgStepOver" key="key_cmd_dbgStepOver"
+            oncommand="ko.dbg.doCommand('cmd_dbgStepOver', event)"
+            disabled="true"
+            desc="&debuggerStepOver.desc;"/>
+        <command
+            id="cmd_dbgStepCursor" key="key_cmd_dbgStepCursor"
+            oncommand="ko.dbg.doCommand('cmd_dbgStepCursor', event)"
+            disabled="true"
+            desc="&debuggerRunToCursor.desc;"/>
+        <command
+            id="cmd_dbgStepOut" key="key_cmd_dbgStepOut"
+            oncommand="ko.dbg.doCommand('cmd_dbgStepOut', event)"
+            disabled="true"
+            desc="&debuggerStepOut.desc;"/>
+        <command
+            id="cmd_dbgBreakNow" key="key_cmd_dbgBreakNow"
+            oncommand="ko.dbg.doCommand('cmd_dbgBreakNow')"
+            disabled="true"
+            desc="&debuggerBreakNow.desc;"/>
+        <command
+            id="cmd_dbgStop" key="key_cmd_dbgStop"
+            oncommand="ko.dbg.doCommand('cmd_dbgStop')"
+            disabled="true"
+            desc="&debuggerStop.desc;"/>
+        <command
+            id="cmd_dbgDetach" key="key_cmd_dbgDetach"
+            oncommand="ko.dbg.doCommand('cmd_dbgDetach')"
+            disabled="true"
+            desc="&debuggerDetach.desc;"/>
+        <command
+            id="cmd_dbgGo" key="key_cmd_dbgGo"
+            oncommand="ko.dbg.doCommand('cmd_dbgGo', event)"
+            disabled="true"
+            desc="&debuggerStart.desc;"/>
+        <command
+            id="cmd_dbgGoSkipDialog" key="key_cmd_dbgGoSkipDialog"
+            oncommand="ko.dbg.doCommand('cmd_dbgGoSkipDialog', event)"
+            desc="&debuggerStartSkipDialog.desc;"/>
+        <command
+            id="cmd_dbgRun" key="key_cmd_dbgRun"
+            oncommand="ko.dbg.doCommand('cmd_dbgRun', event)"
+            disabled="true"
+            desc="&debuggerRunScript.desc;"/>
+        <command
+            id="cmd_dbgShowCurrentStatement" key="key_cmd_dbgShowCurrentStatement"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgShowCurrentStatement', event)"
+            disabled="true"
+            desc="&debuggerShowCurrentStatement.desc;"/>
+    </commandset>
+
+    <commandset
+        id="cmdset_debuggerCheckboxes"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="debuggability_changed, debug_state, debugvartab_changed, debugoutputtab_changed"
+        >
+        <command
+            id="cmd_dbgInspect" key="key_cmd_dbgInspect"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgInspect', event)"
+            type="checkbox"
+            disabled="true"
+            desc="&debuggerInspect.desc;"/>
+        <command
+            id="cmd_dbgInteractiveClearBuffer" key="key_cmd_dbgInteractiveClearBuffer"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgInteractiveClearBuffer', event)"
+            disabled="true"
+            desc="&debuggerInteractiveDebuggerShellClearBuffer.desc;"/>
+        <command
+            id="cmd_dbgInteractiveStop" key="key_cmd_dbgInteractiveStop"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgInteractiveStop', event)"
+            disabled="true"
+            desc="&debuggerInteractiveStop.desc;"/>
+        <command
+            id="cmd_dbgShowHiddenVars" key="key_cmd_dbgShowHiddenVars"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgShowHiddenVars', event)"
+            type="checkbox"
+            disabled="true"
+            desc="&debuggerShowHiddenVariables.desc;"/>
+        <command
+            id="cmd_dbgPrettyPrint" key="key_cmd_dbgPrettyPrint"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgPrettyPrint', event)"
+            type="checkbox"
+            disabled="true"
+            desc="&debuggerPrettyPrint.desc;"/>
+    </commandset>
+    
+    <commandset
+        id="cmdset_debugvartab_changed"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="debuggability_changed, debug_state, debugvartab_changed, debugvartab_selection_changed"
+        >
+      <!-- Some of the commands here need to be explicitly added to
+      /binding#DebuggerPanel/content/xul:commandset
+      -->
+        <command
+            id="cmd_dbgAddVariable" key="key_cmd_dbgAddVariable"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgAddVariable', event);"
+            disabled="true"
+            desc="&debuggerAddWatchVariable.desc;"/>
+        <command
+            id="cmd_dbgMakeWatchedVariable" key="key_cmd_dbgMakeWatchedVariable"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgMakeWatchedVariable', event);"
+            disabled="false"
+            desc="&debuggerMakeSelectionAWatchedVariable.desc;"/>
+        <command
+            id="cmd_dbgWatchedVariable" key="key_cmd_dbgWatchedVariable"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgWatchedVariable', event);"
+            disabled="true"
+            desc="&debuggerEditSelectedVariableName.desc;"/>
+        <command
+            id="cmd_dbgEditVariable" key="key_cmd_dbgEditVariable"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgEditVariable', event);"
+            disabled="true"
+            desc="&debuggerEditSelectedVariableValue.desc;"/>
+        <command
+            id="cmd_dbgDeleteVariable" key="key_cmd_dbgDeleteVariable"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgDeleteVariable', event);"
+            disabled="true"
+            desc="&debuggerDeleteSelectedVariable.desc;"/>
+        <command
+            id="cmd_dbgCopyVariableValues" key="key_cmd_dbgCopyVariableValues"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgCopyVariableValues', event);"
+            disabled="true"
+            desc="&debuggerCopyVariableValues.desc;"/>
+        <command
+            id="cmd_dbgViewAsHex" key="key_cmd_dbgViewAsHex"
+            oncommand="ko.dbg.controller.do_cmd_dbgViewAsHex(
+                           event, document.getElementById('cmd_dbgViewAsHex'));"
+            disabled="true"
+            desc="&debuggerViewAsHex.desc;"/>
+    </commandset>
+
+    <commandset
+        id="cmdset_breakpointManager"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="breakpoint_selection_changed"
+        >
+        <command
+            id="cmd_breakpoint_add" key="key_cmd_breakpoint_add"
+            oncommand="ko.commands.doCommandAsync('cmd_breakpoint_add', event);"
+            disabled="true"
+            desc="&breakpointManagerAddBreakpoint.desc;"/>
+        <command
+            id="cmd_spawnpoint_add" key="key_cmd_spawnpoint_add"
+            oncommand="ko.commands.doCommandAsync('cmd_spawnpoint_add', event);"
+            disabled="true"
+            desc="&breakpointManagerAddTclSpawnpoint.desc;"/>
+        <command
+            id="cmd_breakpoint_goto" key="key_cmd_breakpoint_goto"
+            oncommand="ko.commands.doCommandAsync('cmd_breakpoint_goto', event)"
+            disabled="true"
+            desc="&breakpointManagerShowBreakpoint.desc;"/>
+        <command
+            id="cmd_breakpoint_toggle" key="key_cmd_breakpoint_toggle"
+            oncommand="ko.commands.doCommandAsync('cmd_breakpoint_toggle', event)"
+            disabled="true"
+            desc="&breakpointManagerEnableDisableBreakpoint.desc;"/>
+        <command
+            id="cmd_breakpoint_toggle_all" key="key_cmd_breakpoint_toggle_all"
+            oncommand="ko.commands.doCommandAsync('cmd_breakpoint_toggle_all', event)"
+            disabled="true"
+            desc="&breakpointManagerEnableDisableAllBreakpoints.desc;"/>
+        <command
+            id="cmd_breakpoint_delete" key="key_cmd_breakpoint_delete"
+            oncommand="ko.commands.doCommandAsync('cmd_breakpoint_delete', event)"
+            disabled="true"
+            desc="&breakpointManagerDeleteBreakpoint.desc;"/>
+        <command
+            id="cmd_breakpoint_delete_all" key="key_cmd_breakpoint_delete_all"
+            oncommand="ko.commands.doCommandAsync('cmd_breakpoint_delete_all', event)"
+            disabled="true"
+            desc="&breakpointManagerDeleteAllBreakpoints.desc;"/>
+        <command
+            id="cmd_breakpoint_properties" key="key_cmd_breakpoint_properties"
+            oncommand="ko.commands.doCommandAsync('cmd_breakpoint_properties', event)"
+            disabled="true"
+            desc="&breakpointManagerEditBreakpoint.desc;"/>
+    </commandset>
+    <commandset
+        id="cmdset_debug_selection_changed"
+        oncommandupdate="ko.commands.updateCommandset(this)"
+        commandupdater="true"
+        events="buffer_context_menu_showing,debuggability_changed,debug_state,currentview_is_editor,current_view_changed,select"
+       >
+        <command
+            id="cmd_dbgAddSelectedVariableToWatchTable" key="key_cmd_dbgAddSelectedVariableToWatchTable"
+            oncommand="ko.commands.doCommandAsync('cmd_dbgAddSelectedVariableToWatchTable', event);"
+            disabled="true"
+            desc="&addSelectedVariable.desc;"/>
+    </commandset>
+    </commandset>
+
+    <menubar id="menubar_main">
+        <menu id="menu_debug" label="&debug.label;" accesskey="&menuDebug.accesskey;"
+              insertafter="menu_view">
+            <menupopup id="popup_debug"
+                       onpopupshowing="ko.dbg.manager.handlePopupDebugShowing(this);" >
+                <menuitem label="&goContinue.label;"
+                          id="menu_dbgGo"
+                          accesskey="&buttondbgGo.accesskey;"
+                          observes="cmd_dbgGo"
+                          />
+                <menuitem label="&runWithoutDebugging.label;"
+                          id="menu_dbgRun"
+                          accesskey="&menuDbgRun.accesskey;"
+                          observes="cmd_dbgRun"
+                          />
+                <menuitem label="&stop.label;"
+                          id="menu_dbgStop"
+                          accesskey="&buttondbgStop.accesskey;"
+                          observes="cmd_dbgStop"
+                          />
+                <menuseparator id="popup_debug_menuseparator_1" />
+                <menuitem label="&stepIn.label;"
+                          id="menu_dbgStepIn"
+                          accesskey="&buttondbgStepIn.accesskey;"
+                          observes="cmd_dbgStepIn"
+                          />
+                <menuitem label="&stepOver.label;"
+                          id="menu_dbgStepOver"
+                          accesskey="&buttondbgStepOver.accesskey;"
+                          observes="cmd_dbgStepOver"
+                          />
+                <menuitem label="&stepOut.label;"
+                          id="menu_dbgStepOut"
+                          accesskey="&buttondbgStepOut.accesskey;"
+                          observes="cmd_dbgStepOut"
+                          />
+                <menuitem label="&runToCursor.label;"
+                          id="menu_dbgStepCursor"
+                          accesskey="&buttondbgStepCursor.accesskey;"
+                          observes="cmd_dbgStepCursor"
+                          />
+                <menuitem label="&breakNow.label;"
+                          id="menu_dbgBreakNow"
+                          accesskey="&buttondbgBreakNow.accesskey;"
+                          observes="cmd_dbgBreakNow"
+                          />
+                <menuitem label="&startNewSession.label;"
+                          id="menu_dbgNewSession"
+                          accesskey="&buttondbgNewSession.accesskey;"
+                          observes="cmd_dbgNewSession"
+                          />
+                <menuitem label="&detach.label;"
+                          id="menu_dbgDetach"
+                          accesskey="&buttondbgDetach.accesskey;"
+                          observes="cmd_dbgDetach"
+                          />
+                <menuitem id="menu_dbgInspect"
+                          label="&debuggerInspect.label;"
+                          tooltiptext="&debuggerInspect.tooltiptext;"
+                          accesskey="&menuDebuggerInspect.accesskey;"
+                          observes="cmd_dbgInspect"
+                          />
+                <menuseparator id="popup_debug_menuseparator_2" />
+                <menuitem label="&disableEnableBreakpoint.label;"
+                          id="menu_dbgBreakpointToggle"
+                          accesskey="&menuDbgBreakpointToggle.accesskey;"
+                          observes="cmd_dbgBreakpointToggle"
+                          />
+                <menuitem label="&addEditBreakpoint.label;"
+                          id="menu_dbgBreakpointAddOrEdit"
+                          accesskey="&menuDbgBreakpointAddOrEdit.accesskey;"
+                          observes="cmd_dbgBreakpointAddOrEdit"
+                          />
+                <menuitem label="&addEditSpawnpoint.label;"
+                          id="menu_dbgSpawnpointAddOrEdit"
+                          accesskey="&menuDbgSpawnpointAddOrEdit.accesskey;"
+                          observes="cmd_dbgSpawnpointAddOrEdit"
+                          />
+                <menuitem label="&clearAllBreakpoints.label;"
+                          id="menu_dbgBreakpointClearAllInURI"
+                          observes="cmd_dbgBreakpointClearAllInURI"
+                          />
+                <menuitem label="&showCurrentStatement.label;"
+                          id="menu_dbgShowCurrentStatement"
+                          accesskey="&menuDbgShowCurrentStatement.accesskey;"
+                          observes="cmd_dbgShowCurrentStatement"
+                          />
+                <menuitem label="&prettyPrint.label;"
+                          id="menu_dbgPrettyPrint"
+                          observes="cmd_dbgPrettyPrint"
+                          />
+                <menuseparator id="popup_debug_menuseparator_3" />
+                <menuitem label="&listenForDebuggingConnections.label;"
+                          id="menu_dbgListen"
+                          accesskey="&menuDbgListen.accesskey;"
+                          observes="cmd_debuggerListener"
+                          />
+                <menuitem label="&listenerStatus.label;"
+                          id="menu_dbgListenStatus"
+                          accesskey="&menuDbgStatus.accesskey;"
+                          oncommand="ko.dbg.status();"
+                          />
+            </menupopup>
+        </menu>
+        <menu id="menu_tools">
+            <menupopup id="popup_tools">
+                <menu label="&interactiveShell.label;"
+                      id="menu_interactiveShell"
+                      accesskey="&menuInteractiveShell.accesskey;"
+                      class="menu-iconic ishell-icon"
+                      insertbefore="menu_addons_separator">
+                    <menupopup id="menupopup_interactiveShell">
+                        <menuitem id="menu_toggleInteractiveShell"
+                            observes="cmd_toggleInteractiveShell"
+                            label="&startFindHideDefaultInteractiveShell.label;"
+                            class="menuitem-iconic ishell-icon"
+                            type="dummy_so_menuitem_iconic_works"
+                            language="Python">
+                        </menuitem>
+                        <menuseparator/>
+                        <menuitem id="menu_PythonInteractiveShell"
+                            command="cmd_startPythonInteractiveShell"
+                            label="&startNewPythonShell.label;"
+                            class="menuitem-iconic ishell-icon"
+                            type="dummy_so_menuitem_iconic_works"
+                            language="Python">
+                        </menuitem>
+                        <menuitem id="menu_Python3InteractiveShell"
+                            command="cmd_startPython3InteractiveShell"
+                            label="&startNewPython3Shell.label;"
+                            class="menuitem-iconic ishell-icon"
+                            type="dummy_so_menuitem_iconic_works"
+                            language="Python3">
+                        </menuitem>
+                        <menuitem id="menu_TclInteractiveShell"
+                            command="cmd_startTclInteractiveShell"
+                            label="&startNewTclShell.label;"
+                            class="menuitem-iconic ishell-icon"
+                            type="dummy_so_menuitem_iconic_works"
+                            language="Tcl"/>
+                        <menuitem id="menu_PerlInteractiveShell"
+                            command="cmd_startPerlInteractiveShell"
+                            label="&startNewPerlShell.label;"
+                            class="menuitem-iconic ishell-icon"
+                            type="dummy_so_menuitem_iconic_works"
+                            language="Perl"/>
+                        <menuitem id="menu_RubyInteractiveShell"
+                            command="cmd_startRubyInteractiveShell"
+                            label="&startNewRubyShell.label;"
+                            class="menuitem-iconic ishell-icon"
+                            type="dummy_so_menuitem_iconic_works"
+                            language="Ruby"/>
+                        <menuseparator/>
+                        <menuitem id="menu_ConfigureInteractiveShell"
+                            oncommand="prefs_doGlobalPrefs('ishellItem');"
+                            label="&configure.label;" />
+                    </menupopup>
+                </menu>
+            </menupopup>
+        </menu>
+    </menubar>
+
+    <toolbaritem id="toolsToolbarGroup">
+        <toolbarbutton id="buttonInteractiveShell"
+                       tooltiptext="&interactiveShell.tooltiptext;"
+                       type="menu-button"
+                       persist="buttonstyle"
+                       buttonstyle="pictures"
+                       class="ishell-icon"
+                       toolboxid="toolbox_main"
+                       customizable="true"
+                       insertbefore="buttonRxToolkit"
+                       observes="cmd_startInteractiveShell"
+                       label="&shell.label;">
+            <menupopup id="buttonInteractiveShellPopup">
+                <menuitem id="tbmenu_toggleInteractiveShell"
+                    command="cmd_toggleInteractiveShell"
+                    label="&startFindHideDefaultInteractiveShell.label;"
+                    class="menuitem-iconic ishell-icon"
+                    type="dummy_so_menuitem_iconic_works"
+                    language="Python">
+                </menuitem>
+                <menuseparator/>
+                <menuitem id="tbmenu_PythonInteractiveShell"
+                    command="cmd_startPythonInteractiveShell"
+                    label="&startNewPythonShell.label;"
+                    class="menuitem-iconic ishell-icon"
+                    type="dummy_so_menuitem_iconic_works"
+                    language="Python"/>
+                <menuitem id="tbmenu_Python3InteractiveShell"
+                    command="cmd_startPython3InteractiveShell"
+                    label="&startNewPython3Shell.label;"
+                    class="menuitem-iconic ishell-icon"
+                    type="dummy_so_menuitem_iconic_works"
+                    language="Python3"/>
+                <menuitem id="tbmenu_TclInteractiveShell"
+                    command="cmd_startTclInteractiveShell"
+                    label="&startNewTclShell.label;"
+                    class="menuitem-iconic ishell-icon"
+                    type="dummy_so_menuitem_iconic_works"
+                    language="Tcl"/>
+                <menuitem id="tbmenu_PerlInteractiveShell"
+                    command="cmd_startPerlInteractiveShell"
+                    label="&startNewPerlShell.label;"
+                    class="menuitem-iconic ishell-icon"
+                    type="dummy_so_menuitem_iconic_works"
+                    language="Perl"/>
+                <menuitem id="tbmenu_RubyInteractiveShell"
+                    command="cmd_startRubyInteractiveShell"
+                    label="&startNewRubyShell.label;"
+                    class="menuitem-iconic ishell-icon"
+                    type="dummy_so_menuitem_iconic_works"
+                    language="Ruby"/>
+                <!-- #if 0 -->
+                <menuitem id="tbmenu_JavaScriptInteractiveShell"
+                    command="cmd_startJavaScriptInteractiveShell"
+                    label="&startNewJavaScriptShell.label;"
+                    class="menuitem-iconic ishell-icon"
+                    type="dummy_so_menuitem_iconic_works"
+                    language="JavaScript"/>
+                <!-- #endif -->
+                <menuseparator/>
+                <!--We need to cancel the event otherwise it propagates to the-->
+                <!--toolbarbutton and launches the default interactive shell-->
+                <menuitem id="tbmenu_ConfigureInteractiveShell"
+                    oncommand="prefs_doGlobalPrefs('ishellItem'); event.stopPropagation();"
+                    label="&configure.label;" />
+            </menupopup>
+        </toolbarbutton>
+    </toolbaritem>
+
+    <toolboxrow id="main-toolboxrow">
+        <toolbar id="debuggerToolbar" align="center"
+                 class="chromeclass-toolbar"
+                 mode="icons"
+                 persist="buttonstyle mode"
+                 buttonstyle="pictures"
+                 toolboxid="toolbox_main"
+                 customizable="true"
+                 tooltiptext="&debugToolbar.label;"
+                 insertafter="workspaceToolbar">
+			
+			<toolbaritem id="debugger-toolbaritem1" persist="kohidden">
+				<toolbarbutton id="buttondbgGo"
+					label="&go.label;"
+					class="debug-continue-icon"
+					tooltiptext="&goContinue.tooltiptext;"
+					persist="buttonstyle kohidden"
+					buttonstyle="pictures"
+					observes="cmd_dbgGo"/>
+				<toolbarbutton id="buttondbgBreakNow"
+					label="&break.label;"
+					class="debug-break-icon"
+					tooltiptext="&breakNow.tooltiptext;"
+					persist="buttonstyle kohidden"
+					buttonstyle="pictures"
+					observes="cmd_dbgBreakNow"/>
+				<toolbarbutton id="buttondbgStop"
+					label="&stop.label;"
+					class="debug-stop-icon"
+					tooltiptext="&stop.tooltiptext;"
+					persist="buttonstyle kohidden"
+					buttonstyle="pictures"
+					observes="cmd_dbgStop"/>
+				
+			</toolbaritem>
+            
+			<toolbaritem id="debugger-toolbaritem2" persist="kohidden">
+			
+				<toolbarbutton id="buttondbgStepIn"
+					class="debug-stepin-icon"
+					label="&stepIn.label;"
+					persist="buttonstyle"
+					buttonstyle="pictures kohidden"
+					tooltiptext="&stepIn.tooltiptext;"
+					observes="cmd_dbgStepIn" />
+				<toolbarbutton id="buttondbgStepOver"
+					label="&stepOver.label;"
+					class="debug-stepover-icon"
+					persist="buttonstyle"
+					buttonstyle="pictures kohidden"
+					tooltiptext="&stepOver.tooltiptext;"
+					observes="cmd_dbgStepOver"/>
+				<toolbarbutton id="buttondbgStepOut"
+					label="&stepOut.label;"
+					class="debug-stepout-icon"
+					tooltiptext="&stepOut.tooltiptext;"
+					persist="buttonstyle kohidden"
+					buttonstyle="pictures"
+					observes="cmd_dbgStepOut"/>
+			</toolbaritem>
+				
+        </toolbar>
+    </toolboxrow>
+    
+    <menupopup id="editorContextMenu">
+        <menu id="editor_context_debug_menu"
+              label="&debug.label;"
+              accesskey="&menuDebug.accesskey;"
+              insertbefore="editor-context-sep-extensions">
+            <menupopup id="editor_context_debug_menupopup">
+                <menuitem id="editor-context-spawnpoint-add-or-edit"
+                        label="&addEditSpawnpoint.label;"
+                        observes="cmd_dbgSpawnpointAddOrEdit"/>
+                <menuitem id="editor-context-breakpoint-add-or-edit"
+                        label="&addEditBreakpoint.label;"
+                        observes="cmd_dbgBreakpointAddOrEdit"/>
+                <menuitem id="editor-context-breakpoint-toggle"
+                        label="&disableEnableBreakpoint.label;"
+                        observes="cmd_dbgBreakpointToggle"/>
+                <menuitem label="&addToWatch.label;"
+                        id="menu_dbgAddSelectedVariableToWatchTable"
+                        accesskey="&menuDbgAddSelectedVariableToWatchTable.accesskey;"
+                        observes="cmd_dbgAddSelectedVariableToWatchTable"/>
+            </menupopup>
+        </menu>
+    </menupopup>
+
+    <ko-pane id="workspace_bottom_area">
+        <!-- The Breakpoints panel/tab/manager -->
+        <browser type="ko-widget" id="breakpoints-tabpanel"
+                 insertbefore="runoutput-desc-tabpanel"
+                 label="&breakpoints.label;"
+                 tooltiptext="&breakpointsAndTclSpawnPoints.tooltiptext;"
+                 onselect="ko.dbg.tabSelect();"
+                 src="chrome://komodo/content/debugger/breakpointsTab.xul"
+		 icon="koicon://ko-svg/chrome/icomoon/skin/bug.svg"/>
+    </ko-pane>
+</overlay>

@@ -1,0 +1,115 @@
+<% colors = parseScheme(ksf) %>
+<% if colors.ready %>
+<style type="text/css">
+<%
+common = colors.color(['CommonStyles', 'default_fixed', 'fore'])
+
+keywords = colors.colorFor('keywords', 'python')
+classes = colors.colorFor('classes', 'python')
+strings = colors.colorFor('strings', 'python')
+functions = colors.colorFor('functions', 'python')
+keywords2 = colors.colorFor('keywords2', 'python')
+comments = colors.colorFor('comments', 'python')
+operators = colors.colorFor('operators', 'python')
+numbers = colors.colorFor('numbers', 'python')
+%>
+
+#scheme-preview pre code
+{
+    background: <%= colors.color(['CommonStyles', 'default_fixed', 'back']) %>;
+    color: <%=common%>;
+}
+
+#python .hl-keyword { color: <%=keywords%> }
+#python .ko-keyword { color: <%=keywords2%> }
+#python .hl-string { color: <%=strings%> }
+#python .hl-class .hl-title { color: <%=classes%> }
+#python .hl-function .hl-title { color: <%=functions%> }
+#python .hl-function .hl-params { color: <%=common%> }
+#python .hl-comment { color: <%=comments%> }
+#python .ko-operator { color: <%=operators%> }
+#python .hl-number { color: <%=numbers%> }
+
+<%
+keywords = colors.colorFor('keywords', 'php')
+classes = colors.colorFor('identifiers', 'php')
+strings = colors.colorFor('strings', 'php')
+functions = colors.colorFor('identifiers', 'php')
+keywords2 = colors.colorFor('keywords2', 'php')
+comments = colors.colorFor('comments', 'php')
+operators = colors.colorFor('operators', 'php')
+variables = colors.colorFor('variables', 'php')
+numbers = colors.colorFor('numbers', 'php')
+%>
+
+#php .hl-keyword { color: <%=keywords%> }
+#php .ko-keyword { color: <%=keywords2%> }
+#php .hl-string { color: <%=strings%> }
+#php .hl-class .hl-title { color: <%=classes%> }
+#php .hl-function .hl-title { color: <%=functions%> }
+#php .hl-function .hl-params { color: <%=common%> }
+#php .hl-comment { color: <%=comments%> }
+#php .ko-operator { color: <%=operators%> }
+#php .hl-variable { color: <%=variables%> }
+#php .hl-number { color: <%=numbers%> }
+</style>
+
+<div id="scheme-preview" class="tabs">
+    <pre id="python"><code>
+import math
+class Class:
+    """ this is a docstring """
+    def __init__(self, arg): # one line comment
+        self.x = arg + math.cos(arg + arg)
+        s = 'a string'
+    
+    def display(self, value):
+        print value
+        
+    def increment(self, value):
+        value = value + 1
+        print value
+    
+xyz = Class('foo')
+xyz.increment(10)
+    </code></pre>
+    
+    <pre id="php" style="display: none"><code>
+&lt;?php
+class foo {
+    // a comment
+    var $a;
+    var $b;
+    function display() {
+        echo "This is class foo";
+        echo "a = ".$this-&gt;a."";
+        echo "b = {$this-&gt;b}";
+    }
+    function mul() {
+        return $this-&gt;a*$this-&gt;b;
+    }
+};
+
+$foo1 = new foo;
+$foo1-&gt;a = 2;
+$foo1-&gt;b = 5;
+$foo1-&gt;display();
+echo $foo1-&gt;mul()."";
+    </code></pre>
+    
+    <ul id="scheme-preview-selector">
+        <li>
+            <a href="#python">Python</a>
+        </li>
+        <li>
+            <a href="#php">PHP</a>
+        </li>
+    </ul>
+</div>
+
+<p style="text-align: center">
+    <strong>Warning:</strong> This preview is an approximation, the color scheme may look different within Komodo.
+</p>
+
+<div class="spacer"></div>
+<% end %>

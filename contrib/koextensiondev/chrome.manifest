@@ -1,0 +1,8 @@
+content extensiondev jar:koextensiondev.jar!/content/
+locale extensiondev en-US jar:koextensiondev.jar!/locale/en-US/
+skin extensiondev classic/1.0 jar:koextensiondev.jar!/skin/
+overlay	chrome://browser/content/browser.xul	chrome://extensiondev/content/firefoxOverlay.xul
+overlay	chrome://messenger/content/messenger.xul	chrome://extensiondev/content/thunderbirdOverlay.xul
+overlay chrome://navigator/content/navigatorOverlay.xul chrome://extensiondev/content/seamonkeyOverlay.xul
+overlay chrome://komodo/content/komodo.xul chrome://extensiondev/content/komodoOverlay.xul
+style chrome://global/content/customizeToolbar.xul chrome://extensiondev/skin/extensiondev.css

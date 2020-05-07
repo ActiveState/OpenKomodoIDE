@@ -1,0 +1,46 @@
+nav: 
+  communicate: 
+    - 
+      name: "Contact Us"
+      link: "http://www.activestate.com/company/developer-sales-support-contact"
+    - 
+      name: "Blog / News"
+      link: "http://www.activestate.com/blog"
+    - 
+      name: "Bug Tracker"
+      link: "https://github.com/Komodo/KomodoEdit/issues"
+    - 
+      name: "IRC Chat"
+      link: "http://kiwiirc.com/client/irc.mozilla.org/komodo?nick=komodo_visitor"
+      target: "_blank"
+  social: 
+    - 
+      name: "Twitter"
+      img: "icons/sm/twitter-24x24.png"
+      link: "http://twitter.com/KomodoIDE"
+      target: "_blank"
+    - 
+      name: "Facebook"
+      img: "icons/sm/facebook-24x24.png"
+      link: "https://www.facebook.com/komodoide"
+      target: "_blank"
+    - 
+      name: "Google+"
+      img: "icons/sm/google+-24x24.png"
+      link: "https://plus.google.com/u/0/115431120071336108525/posts"
+      target: "_blank"
+    - 
+      name: "Vimeo"
+      img: "icons/sm/vimeo-24x24.png"
+      link: "https://vimeo.com/channels/komodo"
+      target: "_blank"
+    - 
+      name: "GitHub"
+      img: "icons/sm/github-24x24.png"
+      link: "https://github.com/Komodo"
+      target: "_blank"
+    - 
+      name: "StackOverflow"
+      img: "icons/sm/stackoverflow-24x24.png"
+      link: "http://stackoverflow.com/questions/tagged/komodo"
+      target: "_blank"

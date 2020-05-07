@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<!DOCTYPE bindings PUBLIC "-//MOZILLA//DTD XBL V1.0//EN" "http://www.mozilla.org/xbl">
+<!--
+Display contents of current file.  Start with sqlite3.
+-->
+<bindings
+    xmlns="http://www.mozilla.org/xbl"
+    xmlns:xbl="http://www.mozilla.org/xbl"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <binding id="view-tableDisplay"
+           extends="chrome://komodo/content/bindings/views.xml#view-base">
+    <content orient="vertical" xbl:inherits="closed, pref">
+      <xul:vbox class="dbx-tableDisplay-vbox" flex="10">
+        
+        <xul:grid anonid="input-grid" flex="1" debug="true">
+            <xul:columns>
+                <xul:column anonid="label-column" flex="1"/>
+                <xul:column anonid="value-column" flex="1"/>
+            </xul:columns>
+            <xul:rows flex="1">
+              <xul:row>
+                <xul:label>Database Type:</xul:label>
+                <xul:textbox class="dbx-readonly-textbox" readonly="true"
+                             anonid="dbx-dbtype-textbox" />
+              </xul:row>
+              <xul:row>
+                <xul:label anonid="dbx-connection-info-label"></xul:label>
+                <xul:textbox class="dbx-readonly-textbox" readonly="true"
+                             anonid="dbx-connection-info-textbox" />
+              </xul:row>
+            </xul:rows>
+        </xul:grid>
+        <xul:separator />
+        <!--
+        <xul:vbox class="dbx-tableDisplay-vbox" flex="1" anonid="tableSchemaTree" >
+        </xul:vbox>
+        <xul:separator />
+        -->
+            <!--
+                    onclick="this.parentNode.onSelect(event);"
+                    onselect="this.parentNode.view.selectionChanged();"
+                    onclick="tThis = this; tBP = document.getBindingParent(this); dump('go check [' + tBP + ']\n');"
+                    *alternatively:*
+                    onclick="gDoc = document; wDoc = window.document; tDoc = this.document;"
+                    Force a change.
+            >
+            -->
+        <xul:vbox class="dbx-tableDisplay-vbox"
+                  flex="8"
+                  anonid="tableDataTree-vbox" >
+          <xul:tree anonid="dbx-tableDisplay-dataTree"
+                    flex="1"
+                    class="zero-space no-border"
+                    orient="vertical"
+                    xbl:inherits="orient"
+                    
+                    >
+            <xul:treecols />
+            <xul:treechildren anonid="dbx-tableDisplay-treechildren" flex="1" />
+          </xul:tree>
+        </xul:vbox>
+      </xul:vbox>
+      <children/>
+    </content>
+            
+    <implementation name="view-tableDisplay" implements="nsIObserver">
+      <!-- `document` DEPRECATED in Komodo 6.0.0, use `koDoc` -->
+      <property name="document"
+          onget="this.log.deprecated('`koIView.document` is deprecated, use `koIView.koDoc`');
+              return this.koDoc;"
+          onset="this.log.deprecated('`koIView.document` is deprecated, use `koIView.koDoc`');
+              this.koDoc = val" />
+
+      <field name="XUL_NS">"http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"</field>
+      <method name="init">
+        <body> <![CDATA[
+        ]]> </body>
+      </method>
+      
+      <method name="initialize">
+      <parameter name="tableName"/>
+      <parameter name="koDBConnection"/>
+      <body> <![CDATA[
+        var typeTextbox = document.getAnonymousElementByAttribute(this, "anonid",
+                                                                  "dbx-dbtype-textbox");
+        typeTextbox.value = koDBConnection.getDatabaseDisplayTypeName();
+        var connLabel = document.getAnonymousElementByAttribute(this, "anonid",
+                                                                "dbx-connection-info-label");
+        //XXX: Unhardwire this
+        connLabel.value = "Path:";
+        var connTextbox  = document.getAnonymousElementByAttribute(this, "anonid",
+                                                                  "dbx-connection-info-textbox");
+        connTextbox.value = koDBConnection.getConnectionDisplayInfo();
+                                                                  
+        //XXX: Set the url to "dbxplore://<typeTextbox>/<connTextbox>"
+        //XXX: Set the tab to something short.
+        
+        this.initDataTree(koDBConnection);
+        ]]> </body>
+      </method>
+
+      <method name="initWithDocument">
+      <parameter name="doc"/>
+      <body> <![CDATA[
+          this.log.info("tableDisplay.xml::initWithDocument");
+          this.document = doc;
+          this.parentView.updateLeafName(this);
+          //XXX Do we need to set up a controller?
+          xtk.domutils.fireEvent(this, 'view_document_attached');
+          xtk.domutils.fireEvent(this, 'current_view_changed');
+      ]]> </body>
+      </method>
+
+      <method name="initDataTree">
+      <parameter name="koDBConnection"/>
+      <body> <![CDATA[
+      var names = koDBConnection.getColumnNames({});
+      // dump("column Names: count:" + names.length + ", names: " + names + "\n");
+      var tree = document.getAnonymousElementByAttribute(this, "anonid",
+                                                                "dbx-tableDisplay-dataTree");
+      var treecols_elt = tree.childNodes[0];
+      while (treecols_elt.firstChild) {
+          treecols_elt.removeChild(treecols_elt.firstChild);
+      }
+      var node;
+      for (var name, i = 0; name = names[i]; i++) {
+        if (i > 0) {
+          node = document.createElementNS(this.XUL_NS, "splitter");
+          node.setAttribute("class", "tree-splitter");
+          treecols_elt.appendChild(node);
+        }
+        node = document.createElementNS(this.XUL_NS, "treecol");
+        node.setAttribute("id", names[i]);
+        node.setAttribute("label", names[i]);
+        node.setAttribute("flex", "1");
+        treecols_elt.appendChild(node);
+      }
+      this.dataDumpTreeView = Components.classes["@activestate.com/koDBXTableDumpTreeView;1"]
+        .createInstance(Components.interfaces.koIDBXTableDumpTreeView);
+      if (!this.dataDumpTreeView) {
+          throw("couldn't create a koDatabaseExplorerTreeView");
+      }
+      this.dataDumpTreeView.initialize(koDBConnection);
+      var boxObject = 
+          tree.treeBoxObject.QueryInterface(Components.interfaces.nsITreeBoxObject);
+      boxObject.view = this.dataDumpTreeView;
+      //XXX: Reset this on resize events
+      this.dataDumpTreeView.numVisibleRows = boxObject.getPageLength();
+      boxObject.beginUpdateBatch();
+      boxObject.invalidate();
+      boxObject.endUpdateBatch();
+      ]]> </body>
+      </method>
+    </implementation>
+
+    <handlers>
+    </handlers>
+  </binding>
+
+</bindings>

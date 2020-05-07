@@ -1,0 +1,182 @@
+// A service to maintain a cache of remote connections and connection information.
+//
+// Usage:
+//  - XPCOM methods should use getConnection() to make a remote connection.
+//          - This may be an already opened (cached) connection object
+//  - User code can use saveSessionInfo() to cached a connection username/password
+//  - User code can query getSessionInfo() to find a cached username/password
+//
+
+#include "nsISupports.idl"
+#include "nsILoginInfo.idl"
+#include "koIRemoteFileInfo.idl"
+#include "koIRemoteConnection.idl"
+interface koIAsyncCallback;
+
+/**
+ * Komodo Server Account information.
+ * @since Komodo 5.0.0
+ */
+[scriptable, uuid(a48abf34-6fc8-4c0e-a0a0-a842dff807eb)]
+interface koIServerInfo : nsISupports {
+    readonly attribute wstring guid; // guid of the correspondig nsILoginMetaInfo record
+    readonly attribute wstring raw_hostdata;  // Host data, as stored by the nsILoginManager
+    readonly attribute wstring protocol;
+    readonly attribute wstring alias;
+    readonly attribute wstring hostname;
+    readonly attribute long port;
+    readonly attribute wstring username;
+    readonly attribute wstring password;
+    readonly attribute wstring path;
+    readonly attribute boolean passive;
+    readonly attribute wstring privatekey;
+
+    // Initialize the Komodo server information from the data provided.
+    void init(in wstring guid, in wstring protocol, in wstring alias,
+              in wstring hostname, in wstring port, in wstring username,
+              in wstring password, in wstring path, in wstring passive,
+              [optional] in wstring privatekey);
+
+    // Initialize the Komodo server information from the nsILoginInfo.
+    void initFromLoginInfo(in nsILoginInfo logininfo);
+
+    // Create a nsILoginInfo from the Komodo server information.
+    nsILoginInfo generateLoginInfo();
+};
+
+[scriptable, uuid(D99E7A30-C5F3-43A7-8029-144097D41904)]
+interface koIRemoteConnectionService : nsISupports {
+
+    // Return true if the given url has the prefix that is supported by the
+    // remote connection service. I.e. starts with "ftp://", "scp://" etc...
+    boolean isSupportedRemoteUrl(in wstring url);
+
+    // Return a list of protocols the remote connection service can support
+    void getSupportedProtocolNames(out unsigned long count,
+                                   [array, size_is(count), retval] out wstring protocols);
+
+    // Return url for given connection and koRemoteFileInfo object
+    wstring getUriForConnectionAndRfInfo(in koIRemoteConnection connection,
+                                         in koIRemoteFileInfo rfinfo);
+
+    // Get a connection object given the connection parameters.
+    //  "protocol" is the connection protocol used, i.e. "ftp", "sftp"
+    //  "server" is the remote host name/ip address for the connection.
+    //  "port" is remote port number.
+    //  "username" is the username used when trying to log in.
+    //  "password" is the password used when trying to log in.
+    //  "path" is the path we want to open or go to (only used for display purposes)
+    void getConnection(in wstring protocol, in wstring server, in long port,
+                       in wstring username, in wstring password, in wstring path,
+                       [retval] out koIRemoteConnection connection);
+
+    // Get a connection object given the connection parameters.
+    //  "protocol" is the connection protocol used, i.e. "ftp", "sftp"
+    //  "server" is the remote host name/ip address for the connection.
+    //  "port" is remote port number.
+    //  "username" is the username used when trying to log in.
+    //  "password" is the password used when trying to log in.
+    //  "path" is the path we want to open or go to (only used for display purposes)
+    //  "passive" is the ftp mode, when False it means to use 'Active' ftp mode
+    //  "privatekey" is the optional file path of a SSH private key file.
+    void getConnection2(in wstring protocol, in wstring server, in long port,
+                        in wstring username, in wstring password,
+                        in wstring path, in boolean passive,
+                        [optional] in wstring privatekey,
+                        [retval] out koIRemoteConnection connection);
+
+    // Return the connection object for the given URI, all the connection
+    // details should be included in the supplied URI
+    // ex: ftp://test:tesuser@somesite.com:21/web/info.php
+    void getConnectionUsingUri(in wstring uri,
+                               [retval] out koIRemoteConnection connection);
+
+    // Like getConnectionUsingUri, but does not cache or re-use a cahce
+    // connection. Used when threaded access can be contentous.
+    void getConnectionUsingUriNoCache(in wstring uri,
+                                      [retval] out koIRemoteConnection connection);
+
+    /**
+     * Return the connection object for the given server alias.
+     * @since Komodo 4.4.0
+     */
+    void getConnectionUsingServerAlias(in wstring server_alias,
+                                       [retval] out koIRemoteConnection connection);
+    
+    void getConnByAliasAsync(in wstring server_alias, in koIAsyncCallback callback);
+
+    /**
+     * Return the connection object for the given serverInfo.
+     * @since Komodo 9.0.0
+     */
+    void getConnectionUsingServerInfo(in koIServerInfo serverInfo,
+                                      [retval] out koIRemoteConnection connection);
+
+    // Return the server details for the given URI, array list
+    //   0-protocol, 1-server alias, 2-hostname, 3-port,
+    //   4-username, 5-password, 6-path, 7-passive, 8-privatekey
+    void getServerDetailsFromUri(in wstring uri, out unsigned long count,
+                                 [array, size_is(count)] out wstring data);
+
+    // Return the server preferences for the given server alias, array list
+    //   0-protocol, 1-server alias, 2-hostname, 3-port,
+    //   4-username, 5-password, 6-path, 7-passive, 8-privatekey
+    void getServerPrefSettings(in wstring server_alias, out unsigned long count,
+                               [array, size_is(count)] out wstring data);
+
+    // Functions to cache username/passwords for a connection, so we don't keep
+    // prompting the user when they have already entered this information
+    void saveSessionInfo(in wstring key, [array, size_is(count)]
+                         in wstring text, in unsigned long count);
+    void getSessionInfo(in wstring key, out unsigned long count,
+                        [array, size_is(count)] out wstring data);
+
+    // Functions to cache remote file information for a connection, so we don't
+    // keep requesting the same information from the server over and over
+    //   cache_key: key for connection, usually "%s:%s" % (hostname, username)
+    //   path:      remote path on the server
+    //   rfinfo:    Information on the path (size, mode, child nodes etc...)
+    void setCachedRFInfo(in wstring cache_key, in wstring path,
+                         in koIRemoteFileInfo rfinfo);
+    void getCachedRFInfo(in wstring cache_key, in wstring path,
+                         [retval] out koIRemoteFileInfo rfinfo);
+    //   removeChildPaths: whether to remove cached files that start with this path
+    void removeCachedRFInfo(in wstring cache_key, in wstring path, in long removeChildPaths);
+
+    /**
+     * Return the server information for the given server alias.
+     * @since Komodo 5.0.0
+     */
+    koIServerInfo getServerInfoForAlias(in wstring server_alias);
+
+    /**
+     * Return the list of servers, in koIServerInfo format.
+     * @since Komodo 5.0.0
+     */
+    void getServerInfoList(out unsigned long count,
+                           [array, size_is(count), retval] out koIServerInfo servers);
+    /**
+     * Save the list of servers, in koIServerInfo format.
+     * @since Komodo 5.0.0
+     */
+    void saveServerInfoList(in unsigned long count,
+                            [array, size_is(count)] in koIServerInfo servers);
+    
+    /**
+     * Reset the cached list of servers (sync has to do that when it creates new logins)
+     * @since Komodo 6.1.0
+     */
+    void clearServerInfoListCache();
+
+    /**
+     * Clear the connection cache.
+     * @since Komodo 6.0.0
+     */
+    void clearConnectionCache();
+
+    /**
+     * Remove this connection from the connection cache.
+     * @since Komodo 6.0.0
+     */
+    void removeConnectionFromCache(in koIRemoteConnection connection);
+};

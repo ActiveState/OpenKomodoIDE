@@ -1,0 +1,4 @@
+<!ENTITY HTTPInspector.accesskey "H">
+<!ENTITY HTTPInspector.label "HTTP Inspector">
+<!ENTITY HTTPInspector.tooltiptext "HTTP Inspector">
+<!ENTITY toolsHTTPInspector.desc "Tools: HTTP Inspector">

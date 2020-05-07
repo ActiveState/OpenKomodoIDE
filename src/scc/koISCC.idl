@@ -1,0 +1,355 @@
+/* Copyright (c) 2000-2008 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+#include "nsISupports.idl"
+#include "koIAsyncOperations.idl"
+
+interface koITerminalHandler; // Forward definition
+
+// (Virtual) Base interface for supported SCC subsystems in Komodo.
+//
+// Before using the main methods of a koISCC implementation one must
+// ensure that it is functional (use .isFunctional). This is a
+// cached value. If there is reason to believe that this status may
+// have changed (e.g. the user installed Perforce) then one must
+// call .redetermineIfFunctional().
+//
+// Note: It is up to the user to query Komodo's prefs system to
+// determine if the given SCC system is *enabled*. SCC integration is
+// active if (1) it is functional (check here) and (2) enabled (check
+// user prefs).
+//
+
+/**
+ * The koISCCHistoryItem objects are returned by the koISCC.history() call.
+ */
+[scriptable, uuid(425DA3EF-3910-4790-B1EC-19DA4B86EFA6)]
+interface koISCCHistoryItem : nsISupports
+{
+    attribute wstring version;
+    attribute wstring change;   // Used for perforce (and subversion?)
+    attribute wstring author;
+    attribute wstring date;
+    attribute wstring action;
+    attribute wstring message;
+    attribute wstring uri;      // Needed for branches (different files)
+};
+
+
+/**
+ * The koISCCFileStatusItem objects are returned by the
+ * koISCC.getCommitableFiles() call.
+ */
+[scriptable, uuid(1f3847d3-1aa8-4893-b83e-baca79b9cb38)]
+interface koISCCFileStatusItem : nsISupports
+{
+        /**
+         * The uri spec of the scc item.
+         */
+    attribute wstring uriSpec;
+        /**
+         * The relativePath from where the stat was performed.
+         */
+    attribute wstring relativePath;
+        /**
+         * Status will be one of the koISCC.STATUS_XXX fields.
+         */
+    attribute long status;
+        /**
+         * When there is a newer version available on the server.
+         */
+    attribute boolean isOutOfSync;
+};
+
+
+/**
+ * The koISCC service is used by the Komodo UI to interact with the
+ * supported SCC systems inside of Komodo. All of the actual SCC calls are
+ * made out-of-process and operate asynchronously, so as not to lock up the
+ * Komodo UI whilst a SCC operation is pending.
+ */
+[scriptable, uuid(67d00831-4d59-4cc1-bbd3-08bacab839b2)]
+interface koISCC : nsISupports
+{
+        // Short alias name of the service, i.e. "svn", "cvs", "p4"
+    readonly attribute wstring name;
+
+        // Whether the service is enabled through Komodo preferences.
+    readonly attribute boolean isEnabled;
+
+        // File executable location used by the service.
+    attribute wstring executable;
+
+        // isFunctional is detertimed on initialization, when the executable
+        // location has changed. The service should set this value accordingly.
+    readonly attribute boolean isFunctional;
+
+        // A string explaining why this SCC system is non-functional.  If it
+        // *is* functional then this returns null.
+    readonly attribute wstring reasonNotFunctional;
+
+        // Return a particular value from the scc component.
+        // Currently used name,data values are:
+        //   (diff_options, null) - used for diff commands
+        //   (external_diff, null) - determine if using an external diff tool
+        //   (cmdline_arg_for_diff_revision, revision) - the revision argument
+        //                  to be passed on the command line for this revision.
+        //   (supports_command, command_name) - see if a command is supported.
+        //   (supports_checkout_url, url) - see if the url is supported.
+        //   (get_checkout_command_line, data) - get the expected command line.
+        //   (push_options, null) - get available options for scc push.  Returns
+        //                  an array, each of which is (arg, type, desc)
+        //                  where arg is the argument name
+        //                  where type is a string, one of {bool}
+        //                  where desc is a string to be looked up in a
+        //                      properties file
+        //                  This is used to build the SCC Push UI.
+        //   (push_default_repo, repodir) - for DVCS, default repo to push to
+        //   (branches, repodir) - available branches
+        //   (current_branch, repodir) - the currently checked out branch
+        //   (tags, repodir) - available tags
+    nsIVariant getValue(in AString name, [optional] in AString data);
+
+        // Same as getValue, but called asynchronously
+    koIAsyncOperation getValueAsync(in AString name, in AString data,
+                                    in koIAsyncCallback async_callback);
+
+        // Called to update the status about the executable functionality.
+        // When the executable is changes in the Komodo SCC prefs dialog, the
+        // dialog will temporaryily set the executable of the SCC service
+        // and call this to see if the new executable would be functional.
+    void redetermineIfFunctional();
+
+    // Below is an attempted abstraction of the SCC operations (mainly using
+    // CVS terminology, because it was the first SCC ever supported).
+
+    // TODO: Update what these functions will eventually return!!
+
+    /**
+     * Get the root of the repository.
+     * This typically only makes sense for SCC systems without the ability to
+     * do partial checkouts (mostly, DVCS systems such as git and hg).
+     * @param file Any file or directory in the repository
+     * @returns {AString} The root of the repository.  This may just be the
+     *      directory the given file is in if the SCC supports partial checkouts.
+     */
+    koIAsyncOperation getRoot(in AString file,
+                              in koIAsyncCallback async_callback);
+
+    koIAsyncOperation add(in unsigned long count,
+                          [array, size_is(count)] in wstring files,
+                          in wstring mode,
+                          in wstring message,
+                          in koIAsyncCallback async_callback);
+    
+        /**
+         * Initialize a repo
+         *
+         * Whilst running, the asynchronous callback will be notified of
+         * information (stdout) and warning (stderr) messages through the
+         * "notify" method. When finished, the asynchronous "callback" will be
+         * called with the result status.
+         *
+         * @param URL  Where to create the repo.
+         * @param options  The scc checkout parameters.
+         * @param async_callback  Callback that gets called upon completion.
+         * @param terminalHandler Terminal that will handle stdout/stderr data.
+         */
+    koIAsyncOperation initRepo(in wstring url,
+                               in wstring options,
+                               in koIAsyncCallback async_callback,
+                               in koITerminalHandler terminalHandler);
+    
+    koIAsyncOperation stage(in unsigned long count,
+                          [array, size_is(count)] in wstring files,
+                          in koIAsyncCallback async_callback);
+    
+    koIAsyncOperation unstage(in unsigned long count,
+                          [array, size_is(count)] in wstring files,
+                          in koIAsyncCallback async_callback);
+
+    koIAsyncOperation commit(in unsigned long count,
+                             [array, size_is(count)] in wstring files,
+                             in wstring message,
+                             in wstring options,
+                             in koIAsyncCallback async_callback);
+
+    koIAsyncOperation remove(in unsigned long count,
+                             [array, size_is(count)] in wstring files,
+                             in boolean force,
+                             in boolean recursive,
+                             in koIAsyncCallback async_callback);
+
+    koIAsyncOperation update(in unsigned long count,
+                             [array, size_is(count)] in wstring files,
+                             in wstring options,
+                             in koIAsyncCallback async_callback);
+    
+    koIAsyncOperation pull(in unsigned long count,
+                             [array, size_is(count)] in wstring files,
+                             in wstring options,
+                             in koIAsyncCallback async_callback);
+
+
+    koIAsyncOperation pullRebase(in unsigned long count,
+                             [array, size_is(count)] in wstring files,
+                             in wstring options,
+                             in koIAsyncCallback async_callback);
+
+    koIAsyncOperation revert(in unsigned long count,
+                             [array, size_is(count)] in wstring files,
+                             in wstring options,
+                             in koIAsyncCallback async_callback);
+
+    koIAsyncOperation edit(in unsigned long count,
+                           [array, size_is(count)] in wstring files,
+                           in koIAsyncCallback async_callback);
+
+    koIAsyncOperation diff(in unsigned long count,
+                           [array, size_is(count)] in wstring files,
+                           in wstring options,
+                           in wstring external,
+                           in koIAsyncCallback async_callback);
+
+        /**
+         * Perform a diff on the paths given, which are specified as relative
+         * paths from the base URI.
+         */
+    koIAsyncOperation diffRelative(in wstring baseURI,
+                                   in unsigned long count,
+                                   [array, size_is(count)] in wstring relativePaths,
+                                   in wstring options,
+                                   in wstring external,
+                                   in koIAsyncCallback async_callback);
+
+    koIAsyncOperation diffRevisions(in wstring fileuri1,
+                                    in wstring revision1,
+                                    in wstring fileuri2,
+                                    in wstring revision2,
+                                    in wstring filepath,
+                                    in wstring options,
+                                    in wstring external,
+                                    in koIAsyncCallback async_callback);
+
+        // It makes more sense to do history calls one file at a time.
+    koIAsyncOperation history(in wstring fileuri,
+                              in wstring options,
+                              in unsigned long limit,
+                              in koIAsyncCallback async_callback);
+
+        /**
+         * The status of files under SCC. These values will be returned as
+         * a piece of the getCommitableFiles result.
+         */
+    const long STATUS_UNKNOWN = -1;
+    const long STATUS_OK = 0;
+    const long STATUS_MODIFIED = 1;
+    const long STATUS_ADDED = 2;
+    const long STATUS_DELETED = 3;
+    const long STATUS_REPLACED = 4;
+        // This is only applicable for svn, through the use of "svn propset"
+    const long STATUS_MODIFIED_PROPERTY = 5;
+    const long STATUS_CONFLICT = 6;
+
+        /**
+         * Return the scc status of files for the paths supplied.
+         * This is essential for populating the commit dialog.
+         *
+         * On success, the asynchronous callback will receive a list of
+         * koISCCFileStatusItem's that are modified under the supplied
+         * paths.
+         *
+         * @param files  The file and/or directory URIs to get the status of.
+         * @param recursive  Whether to check directories recursively.
+         * @param options  Specific options for retrieving the scc status.
+         * @param async_callback  Callback that gets called upon completion.
+         */
+    koIAsyncOperation status(in unsigned long count,
+                             [array, size_is(count)] in wstring files,
+                             in boolean recursive,
+                             in wstring options,
+                             in koIAsyncCallback async_callback);
+    
+    koIAsyncOperation status_count(in unsigned long count,
+                             [array, size_is(count)] in wstring files,
+                             in koIAsyncCallback async_callback);
+    
+    koIAsyncOperation checkout_branch(in wstring path,
+                                      in wstring branch,
+                                      in koIAsyncCallback async_callback);
+
+        /**
+         * Perform a checkout with the given parameters.
+         *
+         * Whilst running, the asynchronous callback will be notified of
+         * information (stdout) and warning (stderr) messages through the
+         * "notify" method. When finished, the asynchronous "callback" will be
+         * called with the result status.
+         *
+         * @param repositoryURL  The scc checkout string.
+         * @param locationURI  Where to save the checkout.
+         * @param options  The scc checkout parameters.
+         * @param async_callback  Callback that gets called upon completion.
+         * @param terminalHandler Terminal that will handle stdout/stderr data.
+         */
+    koIAsyncOperation checkout(in wstring repositoryURL,
+                               in wstring locationURI,
+                               in wstring options,
+                               in koIAsyncCallback async_callback,
+                               in koITerminalHandler terminalHandler);
+ 
+
+        /**
+         * Get the text on the repository for the specified file.
+         *
+         * @param baseName  Basename of the file.
+         * @param cwd  Directory wherre the file lives.
+         * @param options  The scc checkout parameters (currently unused).
+         * @param async_callback  Callback that gets called upon completion.
+         */
+    koIAsyncOperation cat(in wstring baseName,
+                          in wstring cwd,
+                          in wstring options,
+                          in koIAsyncCallback async_callback);
+};
+
+
+/**
+ * The koISCCDVCS is an extension of koISCC for distributed version control
+ * systems; it handles things that has a concept of multiple upstream / push
+ * targets.
+ */
+[scriptable, uuid(e4e864f9-213f-42e1-bdbb-73bc3758bc87)]
+interface koISCCDVCS : koISCC
+{
+    /**
+     * Perform a DVCS push operation.
+     *
+     * @param remoteRepoURL The remote repository to push to.
+     * @param localRepoURI The local repoistory to push from.
+     * @param async_callback Callback that gets invoked upon completion.
+     * @param localRef The local revisions to push.
+     * @param options Extra options for the SCC command line.
+     * @returns {void}
+     */
+    koIAsyncOperation push(in AString remoteRepoURL,
+                           in AString localRepoURI,
+                           in koIAsyncCallback async_callback,
+                           [optional, array, size_is(localRevCount)] in wstring localRevs,
+                           [optional] in unsigned long localRevCount,
+                           [optional, array, size_is(localTagCount)] in wstring localTags,
+                           [optional] in unsigned long localTagCount,
+                           [optional] in AString options,
+                           [optional] in boolean dryRun);
+
+    /**
+     * Fetch the list of known remote repositories for the given local checkout
+     * @param localRepoURI The local repository to check
+     * @returns {Array of Array of String} The known remote repoistories; each
+     *      element has two sub-elements, the first is the {String} remote URL,
+     *      and the second is an optional {String} name; the second sub-element
+     *      is null if there is no name.
+     */
+    koIAsyncOperation getKnownRemotes(in AString localRepoURI,
+                                      in koIAsyncCallback async_callback);
+};

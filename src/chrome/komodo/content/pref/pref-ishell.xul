@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+                    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+                    class="kodialog" orient="vertical"
+                    onload="PrefIShell_Onload()">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript;version=1.7" />
+
+    <script type="application/x-javascript;version=1.7">
+    <![CDATA[
+    var log = ko.logging.getLogger("pref-ishell");
+    var gMainWindow;
+    
+    function PrefIShell_Onload() {
+        gMainWindow = ko.windowManager.getMainWindow();
+        parent.initPanel();
+        var radiogroup = document.getElementById('ishell_cwd_type');
+        UpdateCwdType(radiogroup.value);
+        setText();
+    }
+    
+    function setText() {
+        try {
+        // get a keybinding and set the text correctly
+        var text = "Select which interactive shell should be launched by the __KEY__ "+
+                   "key and by the interactive shell toolbar button:";
+        var keylabel = gMainWindow.ko.keybindings.manager.command2keylabel('cmd_toggleInteractiveShell');
+        text = text.replace('__KEY__', keylabel);
+        var node = document.createTextNode(text);
+        document.getElementById('preferred_lang_desc').appendChild(node);
+        }catch(e) {dump(e+'\n');}
+    }
+
+    function doBrowse() {
+        try {
+            var prefName = "ishellPref.defaultDir";
+            var textbox = document.getElementById("ishell_cwd_specific");
+            var defaultDir = ko.filepicker.getExistingDirFromPathOrPref(textbox.value, prefName);
+            var path = ko.filepicker.getFolder(defaultDir);
+            if (path != null) {
+                textbox.value = path;
+                var radiogroup = document.getElementById('ishell_cwd_type');
+                radiogroup.value = 'specific';
+                ko.filepicker.internDefaultDir(prefName, path);
+            }
+        } catch (e) {
+            log.exception(e);
+        }
+    }
+    function UpdateCwdType(type) {
+        try {
+            var cwd = document.getElementById('ishell_cwd_specific');
+            var browse = document.getElementById('browse');
+            if (type == 'specific') {
+                cwd.removeAttribute('disabled');
+                browse.removeAttribute('disabled');
+            } else {
+                cwd.setAttribute('disabled', 'true');
+                browse.setAttribute('disabled', 'true');
+            }
+        } catch (e) {
+            log.exception(e);
+        }
+    }
+    ]]>
+    </script>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="ishell-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox>
+            <separator class="thin"/>
+            <caption label="&preferredLanguage.label;"/>
+            <description id="preferred_lang_desc"/>
+            <!-- This XUL assumed by debugger.js :: invocation.getInteractiveInvocation -->
+            <menulist id="prefered_language"
+                      pref="true" prefattribute="data"
+                      prefstring="interactiveShellDefaultLanguage">
+                <menupopup>
+                    <menuitem data="Python" label="&python.label;"/>
+                    <menuitem data="Python3" label="&python3.label;"/>
+                    <menuitem data="Perl" label="&perl.label;"/>
+                    <menuitem data="Ruby" label="&ruby.label;"/>
+                    <menuitem data="Tcl" label="&tcl.label;"/>
+                </menupopup>
+            </menulist>
+        </groupbox>
+    
+        <separator class="thin"/>
+    
+        <groupbox>
+            <separator class="thin"/>
+            <caption label="&sessionControl.label;"/>
+            <checkbox pref="true" id="interactiveShellCloseOnEnd"
+                      label="&closeTabWhenInteractiveShellSessionEnds.label;"/>
+            <hbox align="center">
+                <label value="Confirm when closing interactive shell:"/>
+                <menulist pref="true"
+                          prefattribute="data"
+                          id="interactiveshell_confirm_close"
+                          prefstrings="donotask_interactiveshell_confirm_close,donotask_action_interactiveshell_confirm_close">
+                    <menupopup>
+                        <menuitem data="false,"   label="&askMeEachTime.label;"/>
+                        <menuitem data="true,Kill Session and Close Tab"  label="&no.label;"/>
+                    </menupopup>
+                </menulist>
+            </hbox>
+        </groupbox>
+    
+        <separator class="thin"/>
+    
+        <groupbox>
+            <separator class="thin"/>
+            <caption label="&workingDirectory.label;"/>
+            <description>
+            Select initial working directory the interactive shells should start in:
+            </description>
+            <radiogroup id="ishell_cwd_type"
+                        pref="true"
+                        flex="1"
+                        prefattribute="value"
+                        orient="horizontal" >
+                <vbox flex="1">
+                    <radio group="ishell_cwd_type" id="project" value="project"
+                            label="&useDirectoryOfActiveProjectOrCurrentFileIfNoProject.label;"
+                            oncommand="UpdateCwdType('project')"/>
+                    <radio group="ishell_cwd_type" id="file" value="file"
+                            label="&useDirectoryOfCurrentFile.label;"
+                            oncommand="UpdateCwdType('file')"/>
+                    <hbox align="center" flex="1">
+                        <radio group="ishell_cwd_type" id="specific" value="specific"
+                                label="&useSpecificDirectory.label;"
+                                oncommand="UpdateCwdType('specific')"/>
+                        <textbox id="ishell_cwd_specific"
+                                 pref="true"
+                                 flex="1"/>
+                        <button id='browse'
+                                label="&browse.label;"
+                                oncommand="doBrowse();"/>
+                    </hbox>
+                </vbox>
+            </radiogroup>
+        </groupbox>
+
+    </vbox>
+
+</window>

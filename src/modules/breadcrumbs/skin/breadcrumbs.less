@@ -1,0 +1,137 @@
+@import url("chrome://komodo/skin/global/colors.less");
+@import url("resource://profile/colors.less");
+
+[anonid="breadcrumbBar"]
+{
+    -moz-appearance: none;
+    background: transparent;
+    margin: 0 0 0 4px;
+    padding: 0;
+    border: 0;
+
+    .breadcrumb
+    {
+        -moz-binding: url("chrome://breadcrumbs/content/bindings/toolbarbutton.xml#toolbarbutton");
+        position: relative;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        
+        &.folder 
+        {
+            .breadcrumb-icon
+            {
+                margin-right: 2px;
+            }
+
+            .breadcrumb-icon
+            {
+                background: url("koicon://ko-svg/chrome/komodo/skin/images/folder_closed.svg?size=14&scheme-name=interface&scheme-color=icons");
+                background-repeat: no-repeat;
+                background-size: 14px 14px;
+                width: 14px;
+                height: 14px;
+                margin-top: -2px;
+                opacity: 0.6;
+            }
+            
+            .toolbarbutton-icon
+            {
+                visibility: collapse;
+            }
+        }
+        
+        &:empty
+        {
+            visibility: visible;
+        }
+        
+        &.overflown
+        {
+            visibility: collapse;
+        }
+
+        &.first-child
+        {
+            margin-left: 6px !important;
+        }
+
+        .toolbarbutton-text
+        {
+            padding: 2px;
+            border-radius: 2px;
+        }
+        
+        &:hover .toolbarbutton-text
+        {
+           background: @button;
+           color: @button-foreground;
+        }
+        
+        .toolbarbutton-icon
+        {
+            margin-right: 4px !important;
+        }
+        
+        .breadcrumb-arrow
+        {
+            margin: 0 2px 0 2px;
+        }
+        
+        .breadcrumb-arrow,
+        .breadcrumb-arrow:before
+        {
+            font-size: 14px;
+            color: @secondary-special;
+        }
+    }
+
+    menuitem, menu
+    {
+        color: @foreground;
+        
+        &.folder-item
+        {
+            & > .menu-iconic-text,
+            & > .menu-iconic-left
+            {
+                color: darken(@foreground, 30%);
+            }
+        }
+        
+        .menu-iconic-left
+        {
+            visibility: visible; /* Override OS preference */
+        }
+
+        .menu-accel
+        {
+            opacity: 0.6;
+        }
+    }
+
+    &.is-remote
+    {
+        menuitem[anonid="findInFolder"],
+        menuitem[anonid="fastOpenHere"],
+        menuitem[anonid="showInPlaces"]
+        {
+            visibility: collapse;
+        }
+    }
+
+    [anonid="breadcrumbOverflowBtn"]
+    {
+        dropmarker
+        {
+            visibility: collapse;
+        }
+
+        menuitem
+        {
+            .menu-iconic-left
+            {
+                visibility: visible; /* Override OS preference */
+            }
+        }
+    }
+}

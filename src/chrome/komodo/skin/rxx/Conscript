@@ -1,0 +1,21 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2011 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'platform',
+    'mozChromeDir',
+    'unsiloedPythonExe',
+    'jarring',
+    'productType',
+    'unsiloedPythonExe',
+    'buildFlavour',
+    'mozVersion',
+);
+
+$cons->Preprocess('rxx.p.css', 'rxx.css');
+$cons->InstallInChrome('rxx.css');
+$cons->InstallInChrome('rxx-overlay.css');
+

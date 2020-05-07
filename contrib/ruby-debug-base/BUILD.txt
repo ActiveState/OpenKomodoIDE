@@ -1,0 +1,68 @@
+Building this gem has never been easy.  Here's how 
+to build it against Ruby 2.0
+
+1. You need to download and build Ruby 2.0.x-py for the system.  A
+binary install doesn't put all necessary .h files in the exported
+/include directory.
+
+2. On Windows, run the following:
+pull in an MS build environment
+win32\configure
+nmake install
+
+Don't run this from the win32 dir or it will fail.  These instructions
+are nicely tucked away at the bottom of readme.w32
+
+OTOH I prefer to go with rubyinstaller.org, and just use their ruby.
+They've applied the most commonly needed patches.
+
+3. cd contrib/ruby-debug-base/linecache-0.5-for-ruby-2.0/ext/trace_nums
+*** obsolete
+
+4. ruby extconf.rb --with-ruby-include=d:/Users/ericp/lab/ruby/ruby-2.0.0-p0
+  (or whatever your path to the ruby source code is).  You'd think the ruby
+  config hash has an entry on where it was built (not that it's
+  helpful on other machines).
+
+5. nmake V=1 ==> problem:
+         cl -nologo -LD -Fetrace_nums.so trace_nums.obj msvcr90-ruby200.lib  old
+names.lib user32.lib advapi32.lib shell32.lib ws2_32.lib imagehlp.lib shlwapi.li
+b  -link -incremental:no -debug -opt:ref -opt:icf -incremental:no -debug -opt:re
+f -opt:icf -dll -libpath:. -libpath:d:/ruby-2.0.0-p0/lib  -implib:trace_nums-i38
+6-mswin32_90.lib -pdb:trace_nums-i386-mswin32_90.pdb -def:trace_nums-i386-mswin3
+2_90.def
+   Creating library trace_nums-i386-mswin32_90.lib and object trace_nums-i386-ms
+win32_90.exp
+trace_nums.obj : error LNK2001: unresolved external symbol _ruby_current_thread
+trace_nums.so : fatal error LNK1120: 1 unresolved externals
+NMAKE : fatal error U1077: '"C:\Program Files (x86)\Microsoft Visual Studio 9.0\
+VC\BIN\cl.EXE"' : return code '0x2'
+Stop.
+
+Solved by using ruby-installer
+
+6. cd contrib/ruby-debug-base/ruby-debug-base-2/ext/ruby_debug
+
+7. gem install debugger-ruby_core_source (for ruby_debug)
+
+8. trace_nums needs the old ruby_core_source, so build it this way, as the gem is broken:
+
+8.1. cd contrib/ruby-debug-base/ruby_core_source
+8.2. gem build ruby_core_source.gemspec
+[ignore warnings about empty licenses and identical description and summary
+* requires openssl
+8.3. gem install ruby_core_source-0.1.4-gem
+
+9. cd .../contrib/ruby-debug-base/linecache19-for-ruby-1.9/ext/trace_nums
+
+10. ruby extconf.rb -- works on Linux
+
+11. cd .../contrib/ruby-debug-base/linecache19-for-ruby1.9/ext/trace_nums
+
+12. ruby extconf.rb
+
+13. make
+
+14. If needed, cp ruby-debug-base-2/lib/ruby-debug-base19.rb linecache19-for-ruby1.9/lib/{linecache19.rb,tracelines19.rb} to prebuilt/ruby/all/MAJOR.MINOR
+
+

@@ -1,0 +1,16 @@
+// komodo tool: autocomplete
+// =========================
+// async: 0
+// icon: chrome://famfamfamsilk/skin/icons/plugin.png
+// language: JavaScript
+// rank: 100
+// trigger: trigger_postopen
+// trigger_enabled: 0
+// type: macro
+// version: 1.0.12
+// =========================
+try {
+    ko.extensions.rails.installPlugin(window, 'http://svn.rubyonrails.org/rails/plugins/auto_complete');
+} catch(ex) {
+    alert(ex + "\n");
+}

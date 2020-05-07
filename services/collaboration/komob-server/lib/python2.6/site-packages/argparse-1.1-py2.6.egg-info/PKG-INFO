@@ -1,0 +1,39 @@
+Metadata-Version: 1.0
+Name: argparse
+Version: 1.1
+Summary: Python command-line parsing library
+Home-page: http://code.google.com/p/argparse/
+Author: Steven Bethard
+Author-email: steven.bethard@gmail.com
+License: Apache 2.0
+Description: The argparse module provides an easy, declarative interface for
+        creating command line tools, which knows how to:
+        
+        * parse the arguments and flags from sys.argv
+        * convert arg strings into objects for your program
+        * format and print informative help messages
+        * and much more... 
+        
+        The argparse module improves on the standard library optparse module
+        in a number of ways including:
+        
+        * handling positional arguments
+        * supporting sub-commands
+        * allowing alternative option prefixes like + and /
+        * handling zero-or-more and one-or-more style arguments
+        * producing more informative usage messages
+        * providing a much simpler interface for custom types and actions 
+        
+        The latest version of argparse, along with API documentation and
+        examples can be found at:
+        
+          http://code.google.com/p/argparse/
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development

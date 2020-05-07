@@ -1,0 +1,20 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2007 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+Import(
+    'cons',
+    'build',
+    'mozChromeDir',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'komodoPythonUtilsDir',
+    'unsiloedPythonExe',
+    'jarring',
+    'mozBin',
+    'buildFlavour',
+);
+
+$cons->InstallAs("$mozBin/extensions/remotesvn\@ActiveState.com/pylib/svnremotelib.py", 'svnremotelib.py');

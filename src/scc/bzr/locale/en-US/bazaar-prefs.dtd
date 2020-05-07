@@ -1,0 +1,7 @@
+<!-- Copyright (c) 2000-2008 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!ENTITY Bazaar.label "Bazaar">
+<!ENTITY BzrIntegration.label "Bazaar Integration">
+<!ENTITY downloadBzr.label "Download Bazaar">
+<!ENTITY bzrExecutableUsed.label "Bazaar executable used (bzr): ">

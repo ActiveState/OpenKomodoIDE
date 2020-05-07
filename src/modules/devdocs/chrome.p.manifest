@@ -1,0 +1,5 @@
+# #if MODE == "dev"
+content devdocs content/
+# #else
+content devdocs jar:devdocs.jar!/content/
+# #endif

@@ -1,0 +1,21 @@
+{
+  "name": "wp_menu_page", 
+  "language": "PHP", 
+  "value": [
+    "", 
+    "[[%tabstop7:placeholder 7]]:// Put this into your __construct function", 
+    "add_action('admin_menu', array($this, 'add_[[%tabstop1:menu_slug]]_menu_page'));}", 
+    "", 
+    "public function add_[[%tabstop1:menu_slug]]_menu_page() {", 
+    "\tadd_menu_page('[[%tabstop2:Page title]]', '[[%tabstop3:Menu title]]', '[[%tabstop4:manage_options]]', '[[%tabstop1:menu_slug]]', array($this, '[[%tabstop1:menu_slug]]_menu_callback'), 'dashicons-[[%tabstop5:icon]]', [[%tabstop6:0]]);", 
+    "}", 
+    "", 
+    "public function [[%tabstop1:menu_slug]]_menu_callback() {", 
+    "\t[[%tabstop0:// Content goes here]]", 
+    "}"
+  ], 
+  "version": "1.1.5", 
+  "type": "snippet", 
+  "treat_as_ejs": "true", 
+  "auto_abbreviation": "true"
+}

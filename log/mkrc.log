@@ -1,0 +1,4 @@
+2020-03-05 11:59:34,289: INFO: mkrc (`master' branch)
+2020-03-05 11:59:34,289: INFO: Retrieving version from src/version.txt
+2020-03-05 11:59:34,290: INFO: Using version 12.0.1 to construct build search path
+2020-03-05 11:59:34,514: ERROR: list index out of range (bin/../util/kopkglib.py#444 in get_devbuild_dir)

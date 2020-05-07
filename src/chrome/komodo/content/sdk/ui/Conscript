@@ -1,0 +1,63 @@
+
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2010 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+
+Import(
+    'cons',
+    'mozChromeDir',
+    'mozComponentsDir',
+    'ranRegxpcomStateFileName',
+    'platform',
+    'productType',
+    'buildFlavour',
+    'komodoTitleBarName',
+    'unsiloedPythonExe',
+    'mozVersion',
+    'withSCC',
+    'withSharedSupport',
+    'withDebugging',
+    'withCodeBrowser',
+);
+
+$cons->InstallInChrome('button.js');
+$cons->InstallInChrome('toolbarbutton.js');
+$cons->InstallInChrome('caption.js');
+$cons->InstallInChrome('checkbox.js');
+$cons->InstallInChrome('column.js');
+$cons->InstallInChrome('container.js');
+$cons->InstallInChrome('description.js');
+$cons->InstallInChrome('element.js');
+$cons->InstallInChrome('groupbox.js');
+$cons->InstallInChrome('label.js');
+$cons->InstallInChrome('menu.js');
+$cons->InstallInChrome('menuitem.js');
+$cons->InstallInChrome('menuseparator.js');
+$cons->InstallInChrome('menulist.js');
+$cons->InstallInChrome('menupopup.js');
+$cons->InstallInChrome('panel.js');
+$cons->InstallInChrome('radio.js');
+$cons->InstallInChrome('radiogroup.js');
+$cons->InstallInChrome('row.js');
+$cons->InstallInChrome('textbox.js');
+$cons->InstallInChrome('wizardpage.js');
+$cons->InstallInChrome('link.js');
+$cons->InstallInChrome('span.js');
+$cons->InstallInChrome('list.js');
+$cons->InstallInChrome('listbox.js');
+$cons->InstallInChrome('listitem.js');
+$cons->InstallInChrome('listhead.js');
+$cons->InstallInChrome('listheader.js');
+$cons->InstallInChrome('listcols.js');
+$cons->InstallInChrome('listcol.js');
+$cons->InstallInChrome('listcell.js');
+$cons->InstallInChrome('filepath.js');
+$cons->InstallInChrome('interpolation-button.js');
+$cons->InstallInChrome('richlistbox.js');
+$cons->InstallInChrome('richlistitem.js');
+$cons->InstallInChrome('separator.js');
+$cons->InstallInChrome('spacer.js');
+$cons->InstallInChrome('spinner.js');
+$cons->InstallInChrome('deck.js');
+$cons->InstallInChrome('tooltip.js');

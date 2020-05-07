@@ -1,0 +1,28 @@
+/* Copyright (c) 2009-2010 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+/*
+ * Used for Komodo's feature control panel.
+ */
+
+
+image.status-pending {
+    list-style-image: url('chrome://global/skin/icons/loading_16.png');
+}
+
+image.status-ready {
+    list-style-image: url('chrome://fugue/skin/icons/tick.png');
+}
+
+image.status-error {
+    list-style-image: url('chrome://fugue/skin/icons/cross-script.png');
+}
+
+image {
+    margin-left: 4px;
+}
+
+label {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}

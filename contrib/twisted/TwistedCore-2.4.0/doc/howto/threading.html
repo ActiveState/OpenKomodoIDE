@@ -1,0 +1,79 @@
+<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><title>Twisted Documentation: Using Threads in Twisted</title><link href="../howto/stylesheet.css" type="text/css" rel="stylesheet" /></head><body bgcolor="white"><h1 class="title">Using Threads in Twisted</h1><div class="toc"><ol><li><a href="#auto0">Introduction</a></li><li><a href="#auto1">Running code in a thread-safe manner</a></li><li><a href="#auto2">Running code in threads</a></li><li><a href="#auto3">Utility Methods</a></li><li><a href="#auto4">Managing the Thread Pool</a></li></ol></div><div class="content"><span></span><h2>Introduction<a name="auto0"></a></h2><p>Before you start using threads, make sure you do at the
+    start of your program:</p><pre class="python">
+<span class="py-src-keyword">from</span> <span class="py-src-variable">twisted</span>.<span class="py-src-variable">python</span> <span class="py-src-keyword">import</span> <span class="py-src-variable">threadable</span>
+<span class="py-src-variable">threadable</span>.<span class="py-src-variable">init</span>()
+</pre><p>This will make certain parts of Twisted thread-safe so you
+    can use them safely. However, note that most parts of Twisted
+    are <em>not</em> thread-safe.</p><h2>Running code in a thread-safe manner<a name="auto1"></a></h2><p>Most code in Twisted is not thread-safe. For example,
+    writing data to a transport from a protocol is not thread-safe.
+    Therefore, we want a way to schedule methods to be run in the
+    main event loop. This can be done using the function <code class="API">twisted.internet.interfaces.IReactorThreads.callFromThread</code>:</p><pre class="python">
+<span class="py-src-keyword">from</span> <span class="py-src-variable">twisted</span>.<span class="py-src-variable">internet</span> <span class="py-src-keyword">import</span> <span class="py-src-variable">reactor</span>
+<span class="py-src-keyword">from</span> <span class="py-src-variable">twisted</span>.<span class="py-src-variable">python</span> <span class="py-src-keyword">import</span> <span class="py-src-variable">threadable</span>
+<span class="py-src-variable">threadable</span>.<span class="py-src-variable">init</span>(<span class="py-src-number">1</span>)
+
+<span class="py-src-keyword">def</span> <span class="py-src-identifier">notThreadSafe</span>(<span class="py-src-parameter">x</span>):
+     <span class="py-src-string">&quot;&quot;&quot;do something that isn't thread-safe&quot;&quot;&quot;</span>
+     <span class="py-src-comment"># ...
+</span>
+<span class="py-src-keyword">def</span> <span class="py-src-identifier">threadSafeScheduler</span>():
+    <span class="py-src-string">&quot;&quot;&quot;Run in thread-safe manner.&quot;&quot;&quot;</span>
+    <span class="py-src-variable">reactor</span>.<span class="py-src-variable">callFromThread</span>(<span class="py-src-variable">notThreadSafe</span>, <span class="py-src-number">3</span>) <span class="py-src-comment"># will run 'notThreadSafe(3)'</span>
+                                             <span class="py-src-comment"># in the event loop
+</span></pre><h2>Running code in threads<a name="auto2"></a></h2><p>Sometimes we may want to run methods in threads - for
+    example, in order to access blocking APIs. Twisted provides
+    methods for doing so using the IReactorThreads API (<code class="API">twisted.internet.interfaces.IReactorThreads</code>).
+    Additional utility functions are provided in <code class="API">twisted.internet.threads</code>. Basically, these
+    methods allow us to queue methods to be run by a thread
+    pool.</p><p>For example, to run a method in a thread we can do:</p><pre class="python">
+<span class="py-src-keyword">from</span> <span class="py-src-variable">twisted</span>.<span class="py-src-variable">internet</span> <span class="py-src-keyword">import</span> <span class="py-src-variable">reactor</span>
+
+<span class="py-src-keyword">def</span> <span class="py-src-identifier">aSillyBlockingMethod</span>(<span class="py-src-parameter">x</span>):
+    <span class="py-src-keyword">import</span> <span class="py-src-variable">time</span>
+    <span class="py-src-variable">time</span>.<span class="py-src-variable">sleep</span>(<span class="py-src-number">2</span>)
+    <span class="py-src-keyword">print</span> <span class="py-src-variable">x</span>
+
+<span class="py-src-comment"># run method in thread
+</span><span class="py-src-variable">reactor</span>.<span class="py-src-variable">callInThread</span>(<span class="py-src-variable">aSillyBlockingMethod</span>, <span class="py-src-string">&quot;2 seconds have passed&quot;</span>)
+</pre><h2>Utility Methods<a name="auto3"></a></h2><p>The utility methods are not part of the <code class="API">twisted.internet.reactor</code> APIs, but are implemented
+    in <code class="API">twisted.internet.threads</code>.</p><p>If we have multiple methods to run sequentially within a thread,
+    we can do:</p><pre class="python">
+<span class="py-src-keyword">from</span> <span class="py-src-variable">twisted</span>.<span class="py-src-variable">internet</span> <span class="py-src-keyword">import</span> <span class="py-src-variable">threads</span>
+
+<span class="py-src-keyword">def</span> <span class="py-src-identifier">aSillyBlockingMethodOne</span>(<span class="py-src-parameter">x</span>):
+    <span class="py-src-keyword">import</span> <span class="py-src-variable">time</span>
+    <span class="py-src-variable">time</span>.<span class="py-src-variable">sleep</span>(<span class="py-src-number">2</span>)
+    <span class="py-src-keyword">print</span> <span class="py-src-variable">x</span>
+
+<span class="py-src-keyword">def</span> <span class="py-src-identifier">aSillyBlockingMethodTwo</span>(<span class="py-src-parameter">x</span>):
+    <span class="py-src-keyword">print</span> <span class="py-src-variable">x</span>
+
+<span class="py-src-comment"># run both methods sequentially in a thread
+</span><span class="py-src-variable">commands</span> = [(<span class="py-src-variable">aSillyBlockingMethodOne</span>, [<span class="py-src-string">&quot;Calling First&quot;</span>], {})]
+<span class="py-src-variable">commands</span>.<span class="py-src-variable">append</span>((<span class="py-src-variable">aSillyBlockingMethodTwo</span>, [<span class="py-src-string">&quot;And the second&quot;</span>], {}))
+<span class="py-src-variable">threads</span>.<span class="py-src-variable">callMultipleInThread</span>(<span class="py-src-variable">commands</span>)
+</pre><p>For functions whose results we wish to get, we can have the
+    result returned as a Deferred:</p><pre class="python">
+<span class="py-src-keyword">from</span> <span class="py-src-variable">twisted</span>.<span class="py-src-variable">internet</span> <span class="py-src-keyword">import</span> <span class="py-src-variable">threads</span>
+
+<span class="py-src-keyword">def</span> <span class="py-src-identifier">doLongCalculation</span>():
+    <span class="py-src-comment"># .... do long calculation here ...
+</span>    <span class="py-src-keyword">return</span> <span class="py-src-number">3</span>
+
+<span class="py-src-keyword">def</span> <span class="py-src-identifier">printResult</span>(<span class="py-src-parameter">x</span>):
+    <span class="py-src-keyword">print</span> <span class="py-src-variable">x</span>
+
+<span class="py-src-comment"># run method in thread and get result as defer.Deferred
+</span><span class="py-src-variable">d</span> = <span class="py-src-variable">threads</span>.<span class="py-src-variable">deferToThread</span>(<span class="py-src-variable">doLongCalculation</span>)
+<span class="py-src-variable">d</span>.<span class="py-src-variable">addCallback</span>(<span class="py-src-variable">printResult</span>)
+</pre><h2>Managing the Thread Pool<a name="auto4"></a></h2><p>The thread pool is implemented by <code class="API">twisted.python.threadpool.ThreadPool</code>.</p><p>We may want to modify the size of the threadpool, increasing
+    or decreasing the number of threads in use.  We can do this
+    do this quite easily:</p><pre class="python">
+<span class="py-src-keyword">from</span> <span class="py-src-variable">twisted</span>.<span class="py-src-variable">internet</span> <span class="py-src-keyword">import</span> <span class="py-src-variable">reactor</span>
+
+<span class="py-src-variable">reactor</span>.<span class="py-src-variable">suggestThreadPoolSize</span>(<span class="py-src-number">30</span>)
+</pre><p>The default size of the thread pool depends on the reactor being used;
+  the default reactor uses a minimum size of 5 and a maximum size of 10.  Be
+  careful that you understand threads and their resource usage before
+  drastically altering the thread pool sizes.</p></div><p><a href="../howto/index.html">Index</a></p><span class="version">Version: 2.4.0</span></body></html>

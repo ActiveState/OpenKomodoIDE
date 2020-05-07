@@ -1,0 +1,1209 @@
+# userproc.test --
+#
+#	This file contains regression tests for the routines in the
+#	userproc.tcl file.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: userproc.test,v 1.2 2000/05/30 22:25:05 wart Exp $
+
+if {[string compare test [info procs resetAnalyzer]] == 1} {
+    source [file  join [pwd] [file dirname [info script]] defs.tcl]
+}
+
+analyzer::init
+
+set p1 [uproc::newProcInfo]
+set p1 [uproc::setName $p1 ::foo]
+set p1 [uproc::setMin  $p1 1]
+set p1 [uproc::setMax  $p1 1]
+set p1 [uproc::setDef  $p1 1]
+set p2 [uproc::newProcInfo]
+set p2 [uproc::setName $p2 ::foo]
+set p2 [uproc::setMin  $p2 1]
+set p2 [uproc::setMax  $p2 -1]
+set p2 [uproc::setDef  $p2 1]
+set p3 [uproc::newProcInfo]
+set p3 [uproc::setName $p3 ::bar]
+set p3 [uproc::setMin  $p3 1]
+set p3 [uproc::setMax  $p3 1]
+set p3 [uproc::setDef  $p3 1]
+set p4 [uproc::newProcInfo]
+set p4 [uproc::setName $p4 ::bar::cat]
+set p4 [uproc::setMin  $p4 1]
+set p4 [uproc::setMax  $p4 1]
+set p4 [uproc::setDef  $p4 1]
+
+test userproc-1.1 {uproc::add} {
+    resetUProcData
+    uproc::add $p1 0
+    list [lsort [array get uproc::userProc]] \
+	    [lsort [array names uproc::userProcCount]] \
+	    [lsort [array names context::knownContext]]
+} {{::foo {{::foo {} 1 1 1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}} ::foo ::foo}
+test userproc-1.2 {uproc::add} {
+    resetUProcData
+    uproc::add $p1 0
+    uproc::add $p1 0
+    list [lsort [array get uproc::userProc]] \
+	    [lsort [array names uproc::userProcCount]] \
+	    [lsort [array names context::knownContext]]
+} {{::foo {{::foo {} 1 1 1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}} ::foo ::foo}
+test userproc-1.3 {uproc::add} {
+    resetUProcData
+    uproc::add $p1 0
+    uproc::add $p2 0
+    list [lsort [array get uproc::userProc]] \
+	    [lsort [array names uproc::userProcCount]] \
+	    [lsort [array names context::knownContext]]
+} {{::foo {{::foo {} 1 1 1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc} {::foo {} 1 1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}} ::foo ::foo}
+test userproc-1.4 {uproc::add} {
+    resetUProcData
+    uproc::add $p1 0
+    uproc::add $p2 0
+    uproc::add $p3 0
+    list [lsort [array get uproc::userProc]] \
+	    [lsort [array names uproc::userProcCount]] \
+	    [lsort [array names context::knownContext]]
+} {{::bar ::foo {{::bar {} 1 1 1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}} {{::foo {} 1 1 1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc} {::foo {} 1 1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}} {::bar ::foo} {::bar ::foo}}
+test userproc-1.5 {uproc::add} {
+    resetUProcData
+    uproc::add $p1 0
+    uproc::add $p2 0
+    uproc::add $p3 0
+    uproc::add $p1 0
+    list [lsort [array get uproc::userProc]] \
+	    [lsort [array names uproc::userProcCount]] \
+	    [lsort [array names context::knownContext]]
+} {{::bar ::foo {{::bar {} 1 1 1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}} {{::foo {} 1 1 1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc} {::foo {} 1 1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}} {::bar ::foo} {::bar ::foo}}
+test userproc-1.6 {uproc::add} {
+    resetUProcData
+    uproc::add $p1 0
+    uproc::add $p2 0
+    uproc::add $p3 0
+    uproc::add $p4 1
+    list [lsort [array get uproc::userProc]] \
+	    [lsort [array names uproc::userProcCount]] \
+	    [lsort [array names context::knownContext]]
+} {{::bar ::bar::cat ::foo {{::bar {} 1 1 1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}} {{::bar::cat {} 1 1 1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}} {{::foo {} 1 1 1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc} {::foo {} 1 1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}} {::bar ::bar::cat ::foo} {::bar ::foo}}
+test userproc-1.7 {uproc::add} {
+    resetUProcData
+    uproc::add $p1 1
+    uproc::add $p2 1
+    uproc::add $p3 1
+    list [lsort [array names context::knownContext]]
+} {::}
+test userproc-1.8 {uproc::add} {
+    resetUProcData
+    uproc::add $p1 1
+    uproc::add $p2 1
+    uproc::add $p3 1
+    uproc::add $p4 1
+    list [lsort [array names context::knownContext]]
+} {{:: ::bar}}
+
+catch {unset p1 p2 p3 p4}
+
+test userproc-2.1 {uproc::addUserProc} {
+    resetUProcData
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addUserProc procName procType
+    uproc::topProcInfo
+} {procName {} 0 -1 -1 public procType {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+test userproc-2.2 {uproc::addUserProc} {
+    resetUProcData
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addUserProc "proc Name" "proc Type"
+    uproc::topProcInfo
+} {{proc Name} {} 0 -1 -1 public {proc Type} {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+test userproc-2.3 {uproc::addUserProc} {
+    resetUProcData
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addUserProc {} {}
+    uproc::topProcInfo
+} {{} {} 0 -1 -1 public {} {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+
+test userproc-3.1 {uproc::addArgList} {
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addArgList {}
+    uproc::topProcInfo
+} {{} {} 1 0 0 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+test userproc-3.2 {uproc::addArgList} {
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addArgList {{a 1}}
+    uproc::topProcInfo
+} {{} {} 1 0 1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+test userproc-3.3 {uproc::addArgList} {
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addArgList {{a 1} {a 1}}
+    uproc::topProcInfo
+} {{} {} 1 0 2 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+test userproc-3.4 {uproc::addArgList} {
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addArgList {a a}
+    uproc::topProcInfo
+} {{} {} 1 2 2 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+test userproc-3.5 {uproc::addArgList} {
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addArgList {a a a}
+    uproc::topProcInfo
+} {{} {} 1 3 3 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+test userproc-3.6 {uproc::addArgList} {
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addArgList {a {a 1}}
+    uproc::topProcInfo
+} {{} {} 1 1 2 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+test userproc-3.7 {uproc::addArgList} {
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addArgList {a {a 1} {a 1}}
+    uproc::topProcInfo
+} {{} {} 1 1 3 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+test userproc-3.8 {uproc::addArgList} {
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addArgList {a args}
+    uproc::topProcInfo
+} {{} {} 1 1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+test userproc-3.9 {uproc::addArgList} {
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addArgList {a args a}
+    uproc::topProcInfo
+} {{} {} 1 3 3 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+test userproc-3.10 {uproc::addArgList} {
+    uproc::pushProcInfo [uproc::newProcInfo]
+    uproc::addArgList {a {a 1 2}}
+    uproc::topProcInfo
+} {{} {} 1 1 2 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}
+
+
+proc initUserProc4 {} {
+    resetUProcData
+
+    set p1 [uproc::newProcInfo]
+    set p2 [uproc::newProcInfo]
+    set p3 [uproc::newProcInfo]
+    set p4 [uproc::newProcInfo]
+    
+    set p1 [uproc::setName $p1 ::foo::bar::b1]
+    set p2 [uproc::setName $p2 ::foo::bar::b2]
+    set p3 [uproc::setName $p3 ::foo::bar::f1]
+    set p4 [uproc::setName $p4 ::foo::bar::f2]
+
+    uproc::add $p1 1
+    uproc::add $p2 1
+    uproc::add $p3 1
+    uproc::add $p4 1
+
+    return
+}
+
+test userproc-4.1 {uproc::copyUserProc} {
+    initUserProc4
+    set result [uproc::copyUserProc ::b1 ::foo::bar::b1]
+    list $result $uproc::userProc(::b1)
+} {1 {{::b1 ::foo::bar 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-4.2 {uproc::copyUserProc} {
+    initUserProc4
+    set r1 [uproc::copyUserProc ::b1 ::foo::bar::b1]
+    set r2 [uproc::copyUserProc ::b2 ::foo::bar::b2]
+    list $r1 $r2 $uproc::userProc(::b1) $uproc::userProc(::b2)
+} {1 1 {{::b1 ::foo::bar 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}} {{::b2 ::foo::bar 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-4.3 {uproc::copyUserProc} {
+    initUserProc4
+    set result [uproc::copyUserProc ::f1 ::foo::bar::f1]
+    list $result $uproc::userProc(::f1)
+} {1 {{::f1 ::foo::bar 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-4.4 {uproc::copyUserProc} {
+    initUserProc4
+    set result [uproc::copyUserProc ::f2 ::foo::bar::f2]
+    list $result $uproc::userProc(::f2)
+} {1 {{::f2 ::foo::bar 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-4.5 {uproc::copyUserProc} {
+    initUserProc4
+    set result [uproc::copyUserProc ::f2 ::foo::bar::f2 newType]
+    list $result $uproc::userProc(::f2)
+} {1 {{::f2 ::foo::bar 0 -1 -1 public newType {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+
+
+proc initUserProc5 {} {
+    resetUProcData
+
+    set p1 [uproc::newProcInfo]
+    set p1 [uproc::setName $p1 ::f1]
+    set p1 [uproc::setMin  $p1 0]
+    set p1 [uproc::setMax  $p1 0]
+    set p1 [uproc::setDef  $p1 1]
+    set p2 [uproc::newProcInfo]
+    set p2 [uproc::setName $p2 ::f2]
+    set p2 [uproc::setMin  $p2 2]
+    set p2 [uproc::setMax  $p2 2]
+    set p2 [uproc::setDef  $p2 1]
+    set p3 [uproc::newProcInfo]
+    set p3 [uproc::setName $p3 ::f3]
+    set p3 [uproc::setMin  $p3 0]
+    set p3 [uproc::setMax  $p3 2]
+    set p3 [uproc::setDef  $p3 1]
+    set p4 [uproc::newProcInfo]
+    set p4 [uproc::setName $p4 ::f4]
+    set p4 [uproc::setMin  $p4 2]
+    set p4 [uproc::setMax  $p4 4]
+    set p4 [uproc::setDef  $p4 1]
+    set p5 [uproc::newProcInfo]
+    set p5 [uproc::setName $p5 ::f5]
+    set p5 [uproc::setMin  $p5 0]
+    set p5 [uproc::setMax  $p5 -1]
+    set p5 [uproc::setDef  $p5 1]
+    set p6 [uproc::newProcInfo]
+    set p6 [uproc::setName $p6 ::f6]
+    set p6 [uproc::setMin  $p6 2]
+    set p6 [uproc::setMax  $p6 -1]
+    set p6 [uproc::setDef  $p6 1]
+    set p7 [uproc::newProcInfo]
+    set p7 [uproc::setName $p7 ::f7]
+    set p7 [uproc::setMin  $p7 0]
+    set p7 [uproc::setMax  $p7 0]
+    set p7 [uproc::setDef  $p7 1]
+    set p8 [uproc::newProcInfo]
+    set p8 [uproc::setName $p8 ::f7]
+    set p8 [uproc::setMin  $p8 2]
+    set p8 [uproc::setMax  $p8 2]
+    set p8 [uproc::setDef  $p8 1]
+    set p9 [uproc::newProcInfo]
+    set p9 [uproc::setName $p9 ::f8]
+    set p9 [uproc::setMin  $p9 0]
+    set p9 [uproc::setMax  $p9 0]
+    set p9 [uproc::setDef  $p9 1]
+    set p0 [uproc::newProcInfo]
+    set p0 [uproc::setName $p0 ::f8]
+    set p0 [uproc::setMin  $p0 2]
+    set p0 [uproc::setMax  $p0 -1]
+    set p0 [uproc::setDef  $p0 1]
+    
+    uproc::add $p1 1
+    uproc::add $p2 1
+    uproc::add $p3 1
+    uproc::add $p4 1
+    uproc::add $p5 1
+    uproc::add $p6 1
+    uproc::add $p7 1
+    uproc::add $p8 1
+    uproc::add $p9 1
+    uproc::add $p0 1
+
+    return
+}
+
+proc uproc::logError {mid range args} {
+    set ::result "$args"
+    return
+}
+
+test userproc-5.1 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f1"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f1 $uproc::userProc(::f1) $tokens 1
+    set result
+} {ok}
+test userproc-5.2 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f1 a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f1 $uproc::userProc(::f1) $tokens 1
+    set result
+} {f1}
+test userproc-5.3 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f2 a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f2 $uproc::userProc(::f2) $tokens 1
+    set result
+} {ok}
+test userproc-5.4 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f2 a a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f2 $uproc::userProc(::f2) $tokens 1
+    set result
+} {f2}
+test userproc-5.5 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f4"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f4 $uproc::userProc(::f4) $tokens 1
+    set result
+} {f4}
+test userproc-5.6 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f4 a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f4 $uproc::userProc(::f4) $tokens 1
+    set result
+} {f4}
+test userproc-5.7 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f4 a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f4 $uproc::userProc(::f4) $tokens 1
+    set result
+} {ok}
+test userproc-5.8 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f4 a a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f4 $uproc::userProc(::f4) $tokens 1
+    set result
+} {ok}
+test userproc-5.9 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f4 a a a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f4 $uproc::userProc(::f4) $tokens 1
+    set result
+} {ok}
+test userproc-5.10 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f4 a a a a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f4 $uproc::userProc(::f4) $tokens 1
+    set result
+} {f4}
+test userproc-5.11 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f5"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f5 $uproc::userProc(::f5) $tokens 1
+    set result
+} {ok}
+test userproc-5.12 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f5 a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f5 $uproc::userProc(::f5) $tokens 1
+    set result
+} {ok}
+test userproc-5.13 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f5 a a a a a a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f5 $uproc::userProc(::f5) $tokens 1
+    set result
+} {ok}
+test userproc-5.14 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f6"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f6 $uproc::userProc(::f6) $tokens 1
+    set result
+} {f6}
+test userproc-5.15 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f6 a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f6 $uproc::userProc(::f6) $tokens 1
+    set result
+} {f6}
+test userproc-5.16 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f6 a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f6 $uproc::userProc(::f6) $tokens 1
+    set result
+} {ok}
+test userproc-5.17 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f6 a a a a a a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f6 $uproc::userProc(::f6) $tokens 1
+    set result
+} {ok}
+test userproc-5.18 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f7"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f7 $uproc::userProc(::f7) $tokens 1
+    set result
+} {ok}
+test userproc-5.19 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f7 a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f7 $uproc::userProc(::f7) $tokens 1
+    set result
+} {f7}
+test userproc-5.20 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f7 a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f7 $uproc::userProc(::f7) $tokens 1
+    set result
+} {ok}
+test userproc-5.21 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f7 a a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f7 $uproc::userProc(::f7) $tokens 1
+    set result
+} {f7}
+test userproc-5.22 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f8"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f8 $uproc::userProc(::f8) $tokens 1
+    set result
+} {ok}
+test userproc-5.23 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f8 a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f8 $uproc::userProc(::f8) $tokens 1
+    set result
+} {f8}
+test userproc-5.24 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f8 a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f8 $uproc::userProc(::f8) $tokens 1
+    set result
+} {ok}
+test userproc-5.25 {uproc::checkUserProc} {
+    initUserProc5
+    set cmd "::f8 a a a a"
+    set analyzer::script $cmd
+    set tokens [lindex [parse command $cmd [parse getrange $cmd]] 3]
+
+    set result ok
+    uproc::checkUserProc ::f8 $uproc::userProc(::f8) $tokens 1
+    set result
+} {ok}
+
+rename uproc::logError {}
+
+proc initUserProc6 {} {
+    resetUProcData
+
+    set p1 [uproc::newProcInfo]
+    set p2 [uproc::newProcInfo]
+    set p3 [uproc::newProcInfo]
+    set p4 [uproc::newProcInfo]
+    set p5 [uproc::newProcInfo]
+    set p6 [uproc::newProcInfo]
+    set p7 [uproc::newProcInfo]
+    set p8 [uproc::newProcInfo]
+
+    set p1 [uproc::setName $p1 foo]
+    set p2 [uproc::setName $p2 foo]
+    set p3 [uproc::setName $p3 foo]
+    set p4 [uproc::setName $p4 foo]
+    set p5 [uproc::setName $p5 foo]
+    set p6 [uproc::setName $p6 foo]
+    set p7 [uproc::setName $p7 foo]
+    set p8 [uproc::setName $p8 bar]
+
+    set p1 [uproc::setType $p1 inherit]
+    set p2 [uproc::setType $p2 class]
+    set p3 [uproc::setType $p3 class]
+    set p4 [uproc::setType $p4 renamed]
+    set p5 [uproc::setType $p5 imported]
+    set p6 [uproc::setType $p6 proc]
+    set p7 [uproc::setType $p7 proc]
+    set p8 [uproc::setType $p8 proc]
+
+    set p1 [uproc::setFile $p1 file0]
+    set p2 [uproc::setFile $p2 file0]
+    set p3 [uproc::setFile $p3 file0]
+    set p4 [uproc::setFile $p4 file0]
+    set p5 [uproc::setFile $p5 file0]
+    set p6 [uproc::setFile $p6 file0]
+    set p7 [uproc::setFile $p7 file0]
+    set p8 [uproc::setFile $p8 file0]
+
+    set p1 [uproc::setLine $p1 1]
+    set p2 [uproc::setLine $p2 1]
+    set p3 [uproc::setLine $p3 1]
+    set p4 [uproc::setLine $p4 1]
+    set p5 [uproc::setLine $p5 1]
+    set p6 [uproc::setLine $p6 1]
+    set p7 [uproc::setLine $p7 1]
+    set p8 [uproc::setLine $p8 1]
+
+    uproc::add $p1 1
+    uproc::add $p2 1
+    uproc::add $p3 1
+    uproc::add $p4 1
+    uproc::add $p5 1
+    uproc::add $p6 1
+    uproc::add $p7 1
+    uproc::add $p8 1
+
+    return
+}
+
+proc uproc::logError {mid range args} {
+    set ::result "$args"
+    return
+}
+
+test userproc-6.1 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined cat proc
+    set result
+} {ok}
+test userproc-6.2 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined bar proc
+    set result
+} {ok}
+test userproc-6.3 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined foo inherit
+    set result
+} {inherit foo proc file0 1}
+test userproc-6.4 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined foo class
+    set result
+} {class foo proc file0 1}
+test userproc-6.5 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined foo renamed
+    set result
+} {renamed foo proc file0 1}
+test userproc-6.6 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined foo imported
+    set result
+} {imported foo proc file0 1}
+test userproc-6.7 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined foo proc
+    set result
+} {proc foo {imported proc} file0 1}
+test userproc-6.8 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file1
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined cat proc
+    set result
+} {ok}
+test userproc-6.9 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file1
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined bar proc
+    set result
+} {ok}
+test userproc-6.10 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file1
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined foo inherit
+    set result
+} {inherit foo proc file0 1}
+test userproc-6.11 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file1
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined foo class
+    set result
+} {class foo proc file0 1}
+test userproc-6.12 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file1
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined foo renamed
+    set result
+} {renamed foo proc file0 1}
+test userproc-6.13 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file1
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined foo imported
+    set result
+} {imported foo proc file0 1}
+test userproc-6.14 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file1
+    set analyzer::currentLine 1
+    
+    set result ok
+    uproc::isRedefined foo proc
+    set result
+} {proc foo proc file0 1}
+test userproc-6.15 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 2
+    
+    set result ok
+    uproc::isRedefined cat proc
+    set result
+} {ok}
+test userproc-6.16 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 2
+    
+    set result ok
+    uproc::isRedefined bar proc
+    set result
+} {ok}
+test userproc-6.17 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 2
+    
+    set result ok
+    uproc::isRedefined foo inherit
+    set result
+} {inherit foo proc file0 1}
+test userproc-6.18 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 2
+    
+    set result ok
+    uproc::isRedefined foo class
+    set result
+} {class foo proc file0 1}
+test userproc-6.19 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 2
+    
+    set result ok
+    uproc::isRedefined foo renamed
+    set result
+} {renamed foo proc file0 1}
+test userproc-6.20 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 2
+    
+    set result ok
+    uproc::isRedefined foo imported
+    set result
+} {imported foo proc file0 1}
+test userproc-6.21 {uproc::isRedefined} {
+    initUserProc6
+    set analyzer::file file0
+    set analyzer::currentLine 2
+    
+    set result ok
+    uproc::isRedefined foo proc
+    set result
+} {proc foo proc file0 1}
+
+rename uproc::logError {}
+set analyzer::file {}
+set analyzer::currentLine 1
+
+proc initUserProc7 {} {
+    resetUProcData
+
+    set p1 [uproc::newProcInfo]
+    set p2 [uproc::newProcInfo]
+    set p3 [uproc::newProcInfo]
+    set p4 [uproc::newProcInfo]
+    set p5 [uproc::newProcInfo]
+    set p6 [uproc::newProcInfo]
+    set p7 [uproc::newProcInfo]
+    set p8 [uproc::newProcInfo]
+
+    set p1 [uproc::setName $p1 ::f1]
+    set p2 [uproc::setName $p2 ::f2]
+    set p3 [uproc::setName $p3 ::foo::f1]
+    set p4 [uproc::setName $p4 ::foo::f2]
+    set p5 [uproc::setName $p5 ::foo::bar::f1]
+    set p6 [uproc::setName $p5 ::foo::bar::f2]
+    set p7 [uproc::setName $p5 ::foo::bar::cat::f1]
+    set p8 [uproc::setName $p5 ::foo::bar::cat::f2]
+    
+    uproc::add $p1 1
+    uproc::add $p2 1
+    uproc::add $p3 1
+    uproc::add $p4 1
+    uproc::add $p5 1
+    uproc::add $p6 1
+    uproc::add $p7 1
+    uproc::add $p8 1
+
+    return
+}
+
+test userproc-7.1 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext :: *]
+} {::f1 ::f2}
+test userproc-7.2 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext :: {?[12]}]
+} {::f1 ::f2}
+test userproc-7.3 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext :: {?[1]}]
+} {::f1}
+test userproc-7.4 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext ::foo *]
+} {::foo::f1 ::foo::f2}
+test userproc-7.5 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext ::foo::bar *]
+} {::foo::bar::f1 ::foo::bar::f2}
+test userproc-7.6 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext ::foo::bar::cat *]
+} {::foo::bar::cat::f1 ::foo::bar::cat::f2}
+test userproc-7.7 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext ::foo bar::cat::*]
+} {}
+test userproc-7.8 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext ::foo bar::*]
+} {}
+test userproc-7.9 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext ::foo::bar cat::*]
+} {}
+test userproc-7.10 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext ::bar *]
+} {}
+test userproc-7.11 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext ::cat *]
+} {}
+test userproc-7.12 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext ::foo cat::*]
+} {}
+test userproc-7.13 {uproc::searchThisContext} {
+    initUserProc7
+    lsort [uproc::searchThisContext ::foo ::bar::cat::*]
+} {}
+
+
+proc initUserProc8 {} {
+    resetUProcData
+
+    set p1 [uproc::newProcInfo]
+    set p2 [uproc::newProcInfo]
+    set p3 [uproc::newProcInfo]
+    set p4 [uproc::newProcInfo]
+    set p5 [uproc::newProcInfo]
+
+    set p1 [uproc::setName $p1 ::f1]
+    set p2 [uproc::setName $p2 ::f2]
+    set p3 [uproc::setName $p3 ::foo::f1]
+    set p4 [uproc::setName $p4 ::foo::f2]
+    set p5 [uproc::setName $p5 ::foo::bar::f1]
+    
+    uproc::add $p1 1
+    uproc::add $p2 1
+    uproc::add $p3 1
+    uproc::add $p4 1
+    uproc::add $p5 1
+
+    return
+}
+
+test userproc-8.1 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists :: f1 pInfo]
+    list $result $pInfo
+} {1 {{::f1 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.2 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists :: f2 pInfo]
+    list $result $pInfo
+} {1 {{::f2 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.3 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists :: f3 pInfo]
+    list $result $pInfo
+} {0 {}}
+test userproc-8.4 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo f1 pInfo]
+    list $result $pInfo
+} {1 {{::foo::f1 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.5 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo f2 pInfo]
+    list $result $pInfo
+} {1 {{::foo::f2 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.6 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo f3 pInfo]
+    list $result $pInfo
+} {0 {}}
+test userproc-8.7 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo bar::f1 pInfo]
+    list $result $pInfo
+} {1 {{::foo::bar::f1 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.8 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo bar::f2 pInfo]
+    list $result $pInfo
+} {0 {}}
+test userproc-8.9 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo ::bar::f1 pInfo]
+    list $result $pInfo
+} {0 {}}
+test userproc-8.10 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo::bar f1 pInfo]
+    list $result $pInfo
+} {1 {{::foo::bar::f1 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.11 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo::bar foo::bar::f1 pInfo]
+    list $result $pInfo
+} {1 {{::foo::bar::f1 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.12 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo::bar ::foo::bar::f1 pInfo]
+    list $result $pInfo
+} {1 {{::foo::bar::f1 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.13 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo::bar foo::f1 pInfo]
+    list $result $pInfo
+} {1 {{::foo::f1 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.14 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo::bar ::f1 pInfo]
+    list $result $pInfo
+} {1 {{::f1 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.15 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo::bar bar::f1 pInfo]
+    list $result $pInfo
+} {0 {}}
+test userproc-8.16 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo::bar f2 pInfo]
+    list $result $pInfo
+} {1 {{::f2 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.17 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo::bar foo::bar::f2 pInfo]
+    list $result $pInfo
+} {0 {}}
+test userproc-8.18 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo::bar ::foo::bar::f2 pInfo]
+    list $result $pInfo
+} {0 {}}
+test userproc-8.19 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo::bar foo::f2 pInfo]
+    list $result $pInfo
+} {1 {{::foo::f2 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.20 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo::bar ::f2 pInfo]
+    list $result $pInfo
+} {1 {{::f2 {} 0 -1 -1 public proc {} 1 analyzer::verifyUserProc analyzer::checkUserProc}}}
+test userproc-8.21 {uproc::exists} {
+    initUserProc8
+    set pInfo {}
+    set result [uproc::exists ::foo::bar bar::f2 pInfo]
+    list $result $pInfo
+} {0 {}}
+
+proc initUserProc9 {} {
+    global p1 p2 p3
+
+    resetUProcData
+
+    set p1 [uproc::newProcInfo]
+    set p2 [uproc::newProcInfo]
+    set p3 [uproc::newProcInfo]
+
+    set p1 [uproc::setName $p1 ::f1]
+    set p2 [uproc::setName $p2 ::f1]
+    set p3 [uproc::setName $p3 ::f1]
+    
+    set p1 [uproc::setMin  $p1 1]
+    set p2 [uproc::setMin  $p2 2]
+    set p3 [uproc::setMin  $p3 3]
+
+    uproc::add $p1 1
+    uproc::add $p2 1
+    uproc::add $p3 1
+
+    return
+}
+
+test userproc-9.1 {uproc::IndexProcInfo} {
+    initUserProc9
+    uproc::IndexProcInfo ::f1 $p1
+} {0}
+test userproc-9.2 {uproc::IndexProcInfo} {
+    initUserProc9
+    uproc::IndexProcInfo ::f1 $p2
+} {1}
+test userproc-9.3 {uproc::IndexProcInfo} {
+    initUserProc9
+    uproc::IndexProcInfo ::f1 $p3
+} {2}
+test userproc-9.4 {uproc::IndexProcInfo} {
+    initUserProc9
+    uproc::IndexProcInfo ::f2 $p1
+} {-1}
+test userproc-9.5 {uproc::IndexProcInfo} {
+    initUserProc9
+    uproc::IndexProcInfo ::f1 {}
+} {-1}
+
+catch {unset p1 p2 p3}
+
+test userproc-10.1 {proc info routines} {
+    set p1 [uproc::newProcInfo]
+    set p1 [uproc::setName $p1 foo]
+    uproc::getName $p1
+} {foo}
+test userproc-10.2 {proc info routines} {
+    set p1 [uproc::newProcInfo]
+    set p1 [uproc::setBase $p1 foo]
+    uproc::getBase $p1
+} {foo}
+test userproc-10.3 {proc info routines} {
+    set p1 [uproc::newProcInfo]
+    set p1 [uproc::setDef $p1 foo]
+    uproc::getDef $p1
+} {foo}
+test userproc-10.4 {proc info routines} {
+    set p1 [uproc::newProcInfo]
+    set p1 [uproc::setMin $p1 foo]
+    uproc::getMin $p1
+} {foo}
+test userproc-10.5 {proc info routines} {
+    set p1 [uproc::newProcInfo]
+    set p1 [uproc::setMax $p1 foo]
+    uproc::getMax $p1
+} {foo}
+test userproc-10.6 {proc info routines} {
+    set p1 [uproc::newProcInfo]
+    set p1 [uproc::setProt $p1 foo]
+    uproc::getProt $p1
+} {foo}
+test userproc-10.7 {proc info routines} {
+    set p1 [uproc::newProcInfo]
+    set p1 [uproc::setType $p1 foo]
+    uproc::getType $p1
+} {foo}
+test userproc-10.8 {proc info routines} {
+    set p1 [uproc::newProcInfo]
+    set p1 [uproc::setFile $p1 foo]
+    uproc::getFile $p1
+} {foo}
+test userproc-10.9 {proc info routines} {
+    set p1 [uproc::newProcInfo]
+    set p1 [uproc::setLine $p1 foo]
+    uproc::getLine $p1
+} {foo}
+test userproc-10.10 {proc info routines} {
+    set p1 [uproc::newProcInfo]
+    set p1 [uproc::setVerifyCmd $p1 foo]
+    uproc::getVerifyCmd $p1
+} {foo}
+test userproc-10.11 {proc info routines} {
+    set p1 [uproc::newProcInfo]
+    set p1 [uproc::setCheckCmd $p1 foo]
+    uproc::getCheckCmd $p1
+} {foo}
+
+test userproc-11.1 {push pop and top procInfo stack} {
+    resetUProcData
+    set uproc::procInfoStack {}
+    uproc::topProcInfo
+} {}
+test userproc-11.2 {push pop and top procInfo stack} {
+    resetUProcData
+    set uproc::procInfoStack {}
+    uproc::popProcInfo
+    uproc::topProcInfo
+} {}
+test userproc-11.3 {push pop and top procInfo stack} {
+    resetUProcData
+    set uproc::procInfoStack {}
+    uproc::pushProcInfo foo
+    uproc::topProcInfo
+} {foo}
+test userproc-11.4 {push pop and top procInfo stack} {
+    resetUProcData
+    set uproc::procInfoStack {}
+    uproc::pushProcInfo foo
+    uproc::pushProcInfo bar
+    uproc::topProcInfo
+} {bar}
+test userproc-11.5 {push pop and top procInfo stack} {
+    resetUProcData
+    set uproc::procInfoStack {}
+    uproc::pushProcInfo foo
+    uproc::pushProcInfo bar
+    uproc::pushProcInfo cat
+    uproc::topProcInfo
+} {cat}
+test userproc-11.6 {push pop and top procInfo stack} {
+    resetUProcData
+    set uproc::procInfoStack {}
+    uproc::pushProcInfo foo
+    uproc::pushProcInfo bar
+    uproc::popProcInfo
+    uproc::topProcInfo
+} {foo}
+test userproc-11.7 {push pop and top procInfo stack} {
+    resetUProcData
+    set uproc::procInfoStack {}
+    uproc::pushProcInfo foo
+    uproc::pushProcInfo bar
+    uproc::popProcInfo
+    uproc::popProcInfo
+    uproc::topProcInfo
+} {}
+
+resetUProcData
+
+# cleanup
+cleanupTests
+
+return

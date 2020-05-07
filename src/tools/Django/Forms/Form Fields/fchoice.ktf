@@ -1,0 +1,10 @@
+# komodo tool: fchoice
+# ====================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ====================
+<% /* ChoiceField (fchoice) */ %>
+[[%tabstop1:FIELDNAME]] = forms.ChoiceField([[%tabstop2:2]])

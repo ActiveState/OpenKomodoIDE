@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<!DOCTYPE window PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<window title="XUL Periodic Table - Parts that Work"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<script>
+<![CDATA[
+
+function setFrame()
+{
+  var listBox = document.getElementById("working-list");
+  var selectedItem = listBox.getSelectedItem(0);
+  var newPage = selectedItem.getAttribute("value");
+  document.getElementById("working-frame").setAttribute("src", newPage);
+}
+
+function viewSource()
+{
+  // try to open a view-source window while inheriting the charset (if any)
+  var listBox = document.getElementById("working-list");
+  var selectedItem = listBox.getSelectedItem(0);
+  var newPage = selectedItem.getAttribute("value");
+  var url = "chrome://komodo/content/bindings/test/"+newPage;
+  window.openDialog("chrome://navigator/content/viewSource.xul",
+             "_blank",
+             "scrollbars,resizable,chrome,dialog=no",
+             url);
+}
+
+]]>
+</script>
+
+ <hbox flex="1">
+    <listbox id="working-list" style="width:10em"
+             onselect="setFrame();"
+             ondblclick="viewSource();">
+       <listitem value="koLookAndFeel.xul"           label="Look and Feel" selected="true" />
+       <listitem value="koButtonBindings.xul"        label="Buttons" />
+       <listitem value="koColorPickerBindings.xul"   label="Color Picker"/>
+       <listitem value="koListbox.xul"               label="Listbox"/>
+       <listitem value="koWidgets.xul"               label="Editor Widgets"/>
+       <listitem value="scrolltab.xul"               label="Scrollable Tabs"/>
+       <listitem value="koToolbars.xul"              label="Toolbars"/>
+
+    </listbox>
+    <splitter resizebefore="closest" resizeafter="grow" />
+    <iframe id="working-frame" flex="1" type="content-primary"
+            src="koLookAndFeel.xul" />
+  </hbox>
+
+</window>

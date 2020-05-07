@@ -1,0 +1,33 @@
+<html><head>
+<style type="text/css">
+body {
+  background-color: #eee;
+}
+
+#data { display:none }
+
+tag {
+  display: block;
+  color: blue;
+  margin-left: 1em;
+  font-weight: bold;
+}
+tag:before { content: '<' attr(name) '>'; }
+tag:after { content: '</' attr(name) '>'; }
+
+tag[marked="true"] {
+  display: block;
+  color: green;
+  margin-left: 1em;
+  font-weight: bold;
+}
+
+text {
+  display: block;
+  color: black;
+  margin-left: 1em;
+  font-weight: normal;
+}
+text:before { content: "#text : \"" attr(value) "\""}
+</style>
+</head><body></body></html>

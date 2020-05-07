@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % rxxDTD SYSTEM "chrome://komodo/locale/rxx.dtd">
+  %rxxDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!-- Prompt for Rx delimiters - dialog.
+  -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/rxx/rxx.css" type="text/css"?>
+
+<dialog id="dialog-rx-delimiters"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="OnLoad()"
+        orient="vertical"
+        flex="1"
+        title="&specifyRxDelimiters.title;"
+        width="363"
+        height="145"
+        persist="width height"
+        buttons="accept,cancel"
+        ondialogaccept="return OK();"
+        ondialogcancel="return Cancel();">
+
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/rxx/setDelimiters.js"  type="application/x-javascript;version=1.7"/>
+    <vbox flex="1" id="vbox1">
+        <hbox id="hbox2">
+            <hbox id="open_hbox" >
+                <label id="open_delimiter_label" control="open_delimiter"
+                   >&openDelimiter.prompt;</label>
+                <textbox id="open_delimiter"
+                         class="delimiter_textbox"
+                         maxlength="1"
+                         maxrows="1"
+                         oninput="onTextChanged(this);"
+                         />
+            </hbox>
+            <hbox id="close_hbox" flex="1">
+                <label id="close_delimiter_label" control="close_delimiter"
+                   >&closeDelimiter.prompt;</label>
+                <textbox id="close_delimiter"
+                         class="delimiter_textbox"
+                         maxlength="1"
+                         maxrows="1"
+                         oninput="onTextChanged(this);"
+                         />
+            </hbox>
+        </hbox>
+        <hbox id="hbox3">
+          <button label="&reset.label;"
+                  id="resetDelimiters"
+                  oncommand="resetDelimiters();" />
+        </hbox>
+    </vbox> 
+</dialog>

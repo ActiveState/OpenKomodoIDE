@@ -1,0 +1,162 @@
+#include "nsISupports.idl"
+
+[scriptable, uuid(75d07497-3b5a-4aa4-ad97-dbd2911086ec)]
+interface koINotification : nsISupports {
+    /**
+     * A single-line user-facing summary of the notification.
+     * The notification is responsible for localizing the message.
+     */
+    attribute AString summary;
+    /**
+     * The tags of the notification.  This should not be localized.
+     * Examples: "scc", "sync"
+     */
+    void getTags([optional] out unsigned long aCount,
+                 [retval, array, size_is(aCount)] out string aTags);
+    /**
+     * Some unique identifier for this type of notification. This may be
+     * used for styling purposes, or to otherwise identify notifications
+     * with the same cause.  Multiple notifications with the same identifier
+     * may exist at once.  For example, this could be "checkout-success" or
+     * "merge-conflict".
+     */
+    readonly attribute ACString identifier;
+    /**
+     * A notification-specific context. This is typically an outer window ID
+     * (for a window-specific notification) or null.
+     * (Sorry, "context" is a reserved word in XPIDL)
+     */
+    readonly attribute wstring contxt;
+    /**
+     * An icon to use for the notification. Note that this may appear at various sizes
+     */
+    attribute ACString iconURL;
+    /**
+     * The severity of the notification; should be one of the SEVERITY_*
+     * values.
+     */
+    attribute unsigned long severity;
+    const unsigned long SEVERITY_INFO    = 0;
+    const unsigned long SEVERITY_WARNING = 1;
+    const unsigned long SEVERITY_ERROR   = 2;
+    /**
+     * Additional text next to the summary
+     */
+    attribute AString description;
+    /**
+     * The time (microseconds from epoch) the notification was initially
+     * added. Expect this to be changed by koINotificationManager.
+     */
+    attribute PRTime time;
+    /**
+     * Whether this notification persists until the user has interacted with
+     * (clicked on) it. Once interaction has occurred, sticky will be set to
+     * false.
+     */
+    attribute boolean sticky;
+};
+
+[scriptable, function, uuid(898d6ab1-2aa6-4ab1-9578-4b4d763ea569)]
+interface koINotificationActionHandler : nsISupports {
+   void handleAction(in koINotification aNotification,
+                     in ACString aActionId);
+};
+
+[scriptable, uuid(93254a65-b0ca-4c38-bd1e-99400055233b)]
+interface koINotificationAction : nsISupports {
+  /**
+   * Identifier for this action; must be unique among all actions for a given
+   * notification.
+   */
+  attribute ACString identifier;
+  /**
+   * Label to display for the action
+   */
+  attribute AString label;
+  /**
+   * The access key to use for the label
+   */
+  attribute ACString accessKey;
+  /**
+   * A URL to use as the icon for the action; may be empty (no icon).
+   */
+  attribute ACString iconURL;
+  /**
+   * A handler for the icon when the user invokes it
+   */
+  attribute koINotificationActionHandler handler;
+  /**
+   * Whether the action should be visible to the user
+   */
+  attribute boolean visible;
+  /**
+   * Whether the action should be enabled. The handler of disabled actions must never
+   * be invoked.
+   */
+  attribute boolean enabled;
+};
+
+[scriptable, uuid(288b737b-dc20-49cb-86c7-bd05091f0a98)]
+interface koINotificationActionable : koINotification {
+    /**
+     * Get the actions associated with this notification.
+     * @param aActionId The id of the action to get; if specified, a maximum of one
+     *                  action (of the matching id) will be returned.
+     */
+    void getActions([optional] in ACString aActionId,
+                    [optional] out unsigned long aCount,
+                    [retval, array, size_is(aCount)]
+                       out koINotificationAction aActions);
+    /**
+     * Add or update the given action.
+     * @returns True if the action was found and updated; false if it was not found
+     *          and added as a new action.
+     */
+    boolean updateAction(in koINotificationAction aAction);
+    /**
+     * Remove the given action.
+     * @returns True if the action was found and removed; false if not found.
+     */
+    boolean removeAction(in ACString aActionId);
+};
+
+/**
+ * A notification of some operation that has a progress
+ */
+[scriptable, uuid(5c469905-905d-452f-8f84-85700a5b65d9)]
+interface koINotificationProgress : koINotification {
+    /**
+     * The current progress of the notification; should always be at least
+     * zero, and never more than maxProgress.
+     */
+    attribute long progress;
+    /**
+     * The maximum possible progress of the notification. Must be greater
+     * than zero. Use PROGRESS_INDETERMINATE to indicate the maximum is unknown
+     * (i.e. indeterminate). Use PROGRESS_NOT_APPLICABLE to indicate that no
+     * progress should be shown.
+     */
+    attribute long maxProgress;
+    /**
+     * Special value for maxProgress to indicate that the total progress is unknown, but
+     * progress exists.
+     */
+    const long PROGRESS_INDETERMINATE = 0;
+    /**
+     * Special value for maxProgress to indicate that, although this notification
+     * implements koINotificationProgress, no progress information should be shown
+     */
+    const long PROGRESS_NOT_APPLICABLE = -1;
+};
+
+/**
+ * A notification with some (possibly long) text as additional detail
+ */
+[scriptable, uuid(12d1ec7c-cf68-4322-aafd-76eadead77ef)]
+interface koINotificationText : koINotification {
+    /**
+     * Some plain text describing additional information about the notification.
+     * For example, this may be the output of running a command.
+     */
+    attribute AString details;
+};

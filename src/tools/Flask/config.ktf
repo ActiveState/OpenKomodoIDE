@@ -1,0 +1,25 @@
+// komodo tool: config
+// ===================
+// auto_abbreviation: true
+// indent_relative: false
+// set_selection: false
+// treat_as_ejs: true
+// type: snippet
+// version: 1.0.12
+// ===================
+<% // Flask Snippets  %>
+class Config(object):
+    DEBUG = False
+    CSRF_ENABLED = True
+
+
+class ProductionConfig(Config):
+    SECRET_KEY = 'kanyewestisprobablyfromgodsfamily'
+
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+    SECRET_KEY = 'iamnotreallysafe'
+    SQLALCHEMY_DATABASE_URI = 'mysql://user:password@development_server/database_name'
+
+    !@#_currentPos!@#_anchor

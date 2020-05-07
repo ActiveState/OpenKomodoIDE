@@ -1,0 +1,37 @@
+# incrTcl.test --
+#
+#	This file contains regression tests for the incrTcl checkers.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: incrTcl.test,v 1.2 2000/05/30 22:24:53 wart Exp $
+
+if {[string compare test [info procs resetAnalyzer]] == 1} {
+    source [file  join [pwd] [file dirname [info script]] defs.tcl]
+}
+
+analyzer::init
+renameMessageShow
+resetUProcData
+addTestUserProc
+
+# Many of the tests expect that "a" is understood as a defined
+# procedure that takes any number of args.  To keep from getting
+# warnUndefProc warnings, pretend we've already gotten the warning.
+
+lappend ::analyzer::unknownCmds a
+
+foreach incrVer $::protest::supportedVersions(Incr) {
+    resetAnalyzer
+    coreTcl::init $::protest::tclVersion(Incr$incrVer)
+    incrTcl::init $incrVer
+    testVersion   checkIncrTcl $incrVer
+}
+
+resetMessageShow
+resetAnalyzer
+resetUProcData
+
+# cleanup
+cleanupTests

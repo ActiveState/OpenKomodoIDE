@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="Onload();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+
+<script>
+//<![CDATA[
+
+var dialog;
+var pretty_field_names;
+var bundle;
+function Onload() {
+        // register with preferences
+        dialog = {
+          debuggerMaxChildren: document.getElementById('debuggerMaxChildren'),
+          debuggerMaxData: document.getElementById('debuggerMaxData'),
+          debuggerMaxDepth: document.getElementById('debuggerMaxDepth'),
+          debuggerMaxTooltipSize: document.getElementById('debuggerMaxTooltipSize')
+        };
+        bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
+           .getService(Components.interfaces.nsIStringBundleService)
+           .createBundle("chrome://komodo/locale/pref/pref-editor.properties");
+        pretty_field_names = {
+          debuggerMaxChildren: bundle.GetStringFromName("Children per page"),
+          debuggerMaxData: bundle.GetStringFromName("Variable Data retrieved"),
+          debuggerMaxDepth: bundle.GetStringFromName("Recursive Depth retrieved"),
+          debuggerMaxTooltipSize: bundle.GetStringFromName("Maximum Debugger tooltip size")
+        };
+        parent.hPrefWindow.onpageload();
+}
+
+function OnPreferencePageOK(prefset)  {
+    var bad_fields = [];
+    var field_to_focus = null;
+    debugger;
+    for (var p in dialog) {
+        var nv = parseInt(dialog[p].value);
+        if (!nv || nv < 0) {
+            bad_fields.push(pretty_field_names[p]);
+            if (!field_to_focus) {
+                field_to_focus = dialog[p];
+            }
+        }
+    }
+    if (bad_fields.length) {
+        ko.dialogs.alert(bundle.formatStringFromName("The following fields must have numeric positive values X",
+                                                     [bad_fields.join(", ")], 1));
+        field_to_focus.select();
+        return false;
+    }
+    return true;
+}
+
+function resetDebuggerDefaults() {
+    dialog.debuggerMaxChildren.value = '25';
+    dialog.debuggerMaxData.value = '10240';
+    dialog.debuggerMaxDepth.value = '1';
+    dialog.debuggerMaxTooltipSize.value = '256';
+}
+
+]]></script>
+
+    <groupbox orient="vertical">
+        <caption label="&performanceTunning.label;"/>
+        <description>
+            These settings affect the debugger variable viewers.  The
+            default settings should be fine for most users, though
+            some users may wish to modify these.  If you do not
+            understand these settings you should leave them set to the
+            defaults.
+        </description>
+        <hbox align="center">
+            <label value="Children per page:"/>
+            <textbox id="debuggerMaxChildren" size="5" pref="true"
+                     default="25"/>
+        </hbox>
+        <hbox align="center">
+            <label value="Variable Data retrieved:"/>
+            <textbox id="debuggerMaxData" size="5" pref="true"
+                     default="10240"/>
+        </hbox>
+        <hbox align="center">
+            <label value="Recursive Depth retrieved:"/>
+            <textbox id="debuggerMaxDepth" size="5" pref="true"
+                     default="1"/>
+        </hbox>
+        <hbox align="center">
+            <label value="Maximum length of data in a debugger tooltip:"/>
+            <textbox id="debuggerMaxTooltipSize" size="5" pref="true"
+                     default="1"/>
+        </hbox>
+        <hbox>
+            <spacer flex="1" />
+            <button label="&reset.label;"
+                    oncommand="resetDebuggerDefaults();"
+                    tooltiptext="&resetToDefaultValues.tooltiptext;"/>
+        </hbox>
+    </groupbox>
+
+</window>
+

@@ -1,0 +1,828 @@
+@import url("chrome://komodo/skin/global/icons/style.less");
+@import url("chrome://komodo/skin/global/colors.less");
+@import url("resource://profile/colors.less");
+
+@twisty-color: escape("@{foreground-widget}");
+
+.icon, [class^="icon-"], [class*=" icon-"], [class$="-icon"], [class*="-icon "],
+{
+    font-size: 14px;
+}
+
+button, toolbarbutton, menuitem, tab
+{
+    &[class$='-icon'] image, [class$='-icon'] image,
+    &[class$='_icon'] image, [class$='_icon'] image,
+    image[class$='-icon'], image[class$='-icon'],
+    image[class$='_icon'], image[class$='_icon'],
+    .toolbarbutton-icon,
+    .button-icon,
+    .menu-iconic-icon,
+    .textbox-search-icon,
+    .native_file_image,
+    dropmarker > image
+    {
+        &:not(.autorepeatbutton-icon)
+        {
+            max-width: 16px;
+        }
+    }
+    
+}
+
+button, toolbarbutton, menuitem, dropmarker, tab,
+.textbox-search-icons, .toolbarbutton-text
+{
+    &:before
+    {
+        color: @icons;
+    }
+}
+
+.icon
+{
+    background-image: none;
+    list-style-image: none;
+    
+    &:before
+    {
+        color: @icons;
+    }
+    
+    & > .toolbarbutton-icon,
+    .tab-icon
+    {
+        visibility: collapse;
+        background-image: none;
+        list-style-image: none;
+    }
+}
+
+.icon-reset
+{
+	font-family: inherit;
+	font-style: inherit;
+	font-weight: inherit;
+	font-variant: inherit;
+	line-height: inherit;
+}
+
+#historyRecentLocations
+{
+    padding-left: 0 !important;
+    width: 12px !important;
+}
+
+.history-back-icon { .icon(); .icon-arrow-left2(); }
+.history-forward-icon { .icon(); .icon-arrow-right2(); }
+.native-undo-icon { .icon(); .icon-undo2(); }
+.native-redo-icon { .icon(); .icon-redo2(); }
+.newtab-icon { font-size: 14px; .icon-plus(); }
+.new-file-icon { .icon(); .icon-file-plus2(); }
+.new-template-icon { .icon(); .icon-file-text(); }
+.project-icon { .icon(); .icon-archive(); }
+.open-file-icon { .icon(); .icon-folder-open2(); }
+.open-workspace-icon{ .icon(); .icon-display3(); }
+.bug-icon{ .icon(); .icon-bug(); }
+.preferences-icon { .icon();.icon-cog(); }
+.customize-panes-icon { .icon();.icon-th(); }
+.native-new-file-icon { .icon(); .icon-file-plus2(); }
+.native_open_icon { .icon(); .icon-folder-open(); }
+.native-save-icon { .icon(); .icon-save(); }
+.save-all-buffers-icon { .icon(); .icon-save-all(); }
+.native-cut-icon { .icon(); .icon-scissors(); }
+.native-copy-icon { .icon(); .icon-copy3(); }
+.native-paste-icon { .icon(); .icon-paste2(); }
+.ishell-icon > .box-inherit { .icon(); .icon-terminal(); }
+.run-command-icon { .icon(); .icon-terminal(); }
+.power-icon { .icon(); .icon-power2(); }
+.docs-icon { .icon(); .icon-bookmark(); }
+.rx-icon { .icon(); .icon-regexp2(); }
+.profiler-icon > .box-inherit { .icon(); .icon-line-chart();}
+.http-inspector { .icon(); .icon-sphere2(); }
+.perl-toolbar-icon > .box-inherit { .icon(); .icon-perl(); }
+.tcl-toolbar-icon > .box-inherit { .icon(); .icon-quill4(); }
+#toggleLeftPane { .icon(); .icon-layout-left(); }
+#toggleRightPane { .icon(); .icon-layout-right(); }
+#toggleBottomPane { .icon(); .icon-layout-bottom(); }
+.eye-icon { .icon-eye3(); }
+.tabPicker-icon > .toolbarbutton-icon { .icon(); .icon-tab-down(); }
+.tabs-select-button > .toolbarbutton-icon-box { .icon(); .icon-tab-down(); }
+.scc-button-menu .toolbarbutton-icon { .icon(); .icon-menu2(); }
+.scc-button-checkout { .icon(); .icon-checkout(); }
+.scc-button-add { .icon(); .icon-add(); }
+.scc-button-edit { .icon(); .icon-edit(); }
+.scc-button-revert { .icon(); .icon-revert(); }
+.scc-button-remove { .icon(); .icon-remove(); }
+.scc-button-update { .icon(); .icon-update(); }
+.scc-button-diff { .icon(); .icon-diff(); }
+.scc-button-history { .icon(); .icon-history(); }
+.scc-button-commit { .icon(); .icon-commit(); }
+.scc-button-push { .icon(); .icon-push(); }
+.debug-continue-icon { .icon(); .icon-play(); }
+.debug-break-icon { .icon(); .icon-pause2(); }
+.debug-stop-icon { .icon(); .icon-stop2(); }
+.debug-inspect-icon { .icon(); .icon-terminal2(); }
+.debug-detach-icon { .icon(); .icon-forward(); }
+.debug-stepin-icon { .icon(); .icon-step-into(); }
+.debug-stepover-icon { .icon(); .icon-step-over(); }
+.debug-stepout-icon { .icon(); .icon-step-out(); }
+.debug-stepout-icon { .icon(); .icon-step-out(); }
+.find-stop-icon { .icon(); .icon-stop3(); }
+.bulletlist-icon { .icon(); .icon-bars(); }
+.macro-new-icon { .icon(); .icon-plus-circle(); }
+.macro-record-icon { .icon(); .icon-record(); }
+.macro-pause-icon { .icon(); .icon-pause(); }
+.macro-stop-icon { .icon(); .icon-stop(); }
+.macro-play-icon { .icon(); .icon-play3(); }
+.macro-save-icon { .icon(); .icon-save-circle(); }
+.komodo-button-community { .icon(); .icon-users4(); }
+.komodo-button-maillist { .icon(); .icon-envelop(); }
+.komodo-button-bugs { .icon(); .icon-bug(); }
+.native-print-icon { .icon-printer3(); }
+.help-icon { .icon-question4(); }
+.newfolder-icon{.icon(); .icon-folder-plus(); }
+.refresh-icon{.icon(); .icon-refresh(); }
+.upfolder-icon{.icon(); .icon-folder-upload(); }
+.goback-icon{.icon(); .icon-arrow-left(); }
+.goforward-icon{.icon(); .icon-arrow-right(); }
+.gohome-icon { .icon(); .icon-home(); }
+.columns-icon { .icon(); .icon-columns(); }
+.find-copy-icon{ .icon(); .icon-files-empty2();}
+.warning-icon{ .icon(); .icon-warning();}
+.icon-share > .box-inherit { .icon(); .icon-earth2() }
+
+// Work around to space out icons from their text or neighbours
+// Add any new icons that require spacing this section so we
+// can easily refactor them out later
+vbox[anonid="quickstart"]
+{
+    .help-icon-quickstart > button > hbox > image
+    {
+        margin-right: 6px;
+    }
+    .bug-icon > hbox > image
+    {
+        margin-right:6px;
+    }
+
+    // Custom icons classes for quickstart page to be able to apply icon
+    // in a different location
+    .help-icon-quickstart > .box-inherit{ .icon(); .icon-question4(); }
+    .open-file-icon-quickstart > .box-inherit{ .icon(); .icon-folder-open2(); }
+    .project-icon-quickstart > .box-inherit{ .icon(); .icon-archive(); }
+    .packages-icon-quickstart > .box-inherit{ .icon(); .icon-download(); }
+}
+
+.newfolder-icon,
+.refresh-icon,
+.upfolder-icon,
+.goback-icon
+{
+    & > hbox,vbox
+    {
+        & > image
+        {
+            margin-right: 6px;
+        }
+    }
+}
+
+.cancel-icon
+{
+    .icon();
+    .icon-close();
+    
+    & > hbox,vbox
+    {
+        & > image
+        {
+            margin-right: 6px;
+        }
+    }
+}
+
+.reload-icon.browser-toolbar-button,
+.reload-icon > .box-inherit
+{
+    .icon();
+    .icon-refresh();
+}
+
+// Finish spacing button fix
+.overflow-toolbarbutton > .toolbarbutton-text { .icon(); .icon-arrow-down3(); }
+
+.menu-history-icon > .box-inherit { .icon(); .icon-clock-o(); }
+.menu-history-icon dropmarker { display: none; }
+
+.regex-shortcuts-button > .toolbarbutton-text { .icon(); .icon-external-link-square(); }
+.regex-shortcuts-button > .toolbarbutton-icon { display: none; }
+.regex-delimiters-button { .icon(); .icon-code(); }
+
+.menu-icon > .toolbarbutton-text {
+    visibility: visible;
+    .icon();
+    .icon-menu4();
+    font-size: 24px !important;
+    text-shadow: 2px 2px 0 @contrast-special;
+    margin: 0 6px;
+}
+.menu-icon > dropmarker { display: none; }
+
+tab[widget] { .icon(); .tab-text { margin-left: 4px; } }
+tab[widget="placesViewbox"] { .icon(); .icon-folder-open(); }
+tab[widget="openfilesViewbox"] { .icon(); .icon-files-empty2(); }
+tab[widget="collab-panel"] { .icon(); .icon-group(); }
+tab[widget="dbexplorer_viewbox"] { .icon(); .icon-database(); }
+tab[widget="toolbox2viewbox"] { .icon(); .icon-briefcase(); }
+tab[widget="symbolbrowser-widget"] { .icon(); .icon-circle-css(); }
+tab[widget="DOMviewbox"] { .icon(); .icon-circle-code(); }
+tab[widget="breakpoints-tabpanel"] { .icon(); .icon-bug(); }
+tab[widget="runoutput-desc-tabpanel"] { .icon(); .icon-terminal2(); }
+tab[widget="unittest-widget"] { .icon(); .icon-lab(); }
+tab[widget="notifications-widget"] { .icon(); .icon-info2(); }
+tab[widget="console-widget"] { .icon(); .icon-display3(); }
+tab[widget="scc-widget"] { .icon(); .icon-scc(); }
+tab[widget="terminal-widget"] { .icon(); .icon-terminal(); }
+tab[widget^="debugsession"]:not([dbg_status="interactive"]) { .icon(); .icon-play(); }
+tab[widget^="debugsession"][dbg_status="interactive"] { .icon(); .icon-play-circle(); }
+tab[widget^="findresults_tabpanel"] { .icon(); .icon-binoculars(); }
+tab[widget^="klint_tabpanel"] { .icon(); .icon-circle-code(); }
+
+/* Find results view */
+tab[view-type="findresults"] .tab-icons:first-child { .icon(); .icon-binoculars(); }
+richlistitem.file-item[view-type="findresults"]
+{
+    .icon();
+    .icon-binoculars();
+    
+    .file-icon
+    {
+        display: none;
+    }
+}
+
+/* Browser preview view */
+tab[view-type="browser"]
+{
+    .tab-icons:first-child
+    {
+        .icon(); .icon-earth2();
+    }
+    
+    .tab-icon
+    {
+        display: none;
+    }
+}
+richlistitem.file-item[view-type="browser"]
+{
+    .icon();
+    .icon-earth2();
+    
+    .file-icon
+    {
+        display: none;
+    }
+}
+
+toolbarbutton[anonid="sccBranchButton"] .toolbarbutton-icon-box {
+    .icon();
+    .icon-scc();
+    margin-right: 4px;
+    
+    &:before
+    {
+        color: #F05133 !important; /* SCC icons are quite committed to this color */
+    }
+}
+
+/* Breakpoints */
+.breakpoint-new-icon > .box-inherit
+{
+    .icon();
+    .icon-plus-circle3();
+    
+    & > .toolbarbutton-text { margin-left: 4px; }
+    & > .toolbarbutton-icon { display: none; }
+}
+
+#breakpoints-tabpanel-hbox > toolbar > toolbarbutton > .toolbarbutton-icon
+{
+    display: none;
+}
+
+.breakpoint-delete-icon { .icon-minus-circle(); }
+.breakpoint-delete-all-icon { .icon-trash(); }
+.breakpoint-toggle-state-icon { .icon-circle-o(); }
+.breakpoint-go-to-source-code-icon { .icon-arrow-circle-right(); }
+.breakpoint-properties-icon { .icon-cog(); }
+
+/* Unit Testing */
+
+#testresults-button-box > toolbarbutton > .toolbarbutton-icon
+{
+    display: none;
+}
+
+#sleuthPane
+{
+    .debug-continue-icon { .icon-play-circle(); }
+    .debug-stop-icon { .icon-stop-circle(); }
+    .edit-testplan-icon { .icon-cog(); }
+}
+
+.icon-unittest-group
+{
+    .icon();
+    .icon-angle-right();
+}
+
+.icon-ok
+{
+    .icon();
+    .icon-check-circle();
+    
+    &:before
+    {
+        color: @state-ok;
+    }
+}
+
+.icon-info
+{
+    .icon();
+    .icon-info-circle();
+    
+    &:before
+    {
+        color: @state-info;
+    }
+}
+
+.icon-warn
+{
+    .icon();
+    .icon-exclamation-circle();
+    
+    &:before
+    {
+        color: @state-warning;
+    }
+}
+
+.icon-error
+{
+    .icon();
+    .icon-exclamation-triangle();
+    
+    &:before
+    {
+        color: @state-error;
+    }
+}
+
+/* Notifications */
+
+#notificationWidget
+{
+    .solo-toolbaritem > toolbarbutton > .toolbarbutton-icon
+    {
+        display: none;
+    }
+    
+    #filter-error { .icon(); .icon-times-circle(); }
+    #filter-warning { .icon(); .icon-exclamation-circle(); }
+    #filter-info { .icon(); .icon-info-circle(); }
+    #filter-progress { .icon(); .icon-clock-o(); }
+}
+
+.scrollbutton-up
+{
+    .icon();
+    .icon-angle-left();
+}
+
+.scrollbutton-down
+{
+    .icon();
+    .icon-angle-right();
+}
+
+.tab-close-button > .toolbarbutton-icon,
+.tabs-closebutton:not([anonid="panel-close-button"])
+{
+    visibility: collapse;
+    display: none;
+}
+
+.textbox-search-icons {
+    .icon();
+    .icon-search();
+    
+    & > image
+    {
+        visibility: collapse;
+        width: 0;
+    }
+}
+
+.close-icon,
+notificationbox .close-icon,
+.tab-close-button,
+.file-close-button,
+.tabs-closebutton
+{
+    .icon();
+    .icon-cross3();
+    font-size: 16px;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+#invoketool_toolbar_options,
+#domviewer-settings-button,
+.collab-sessions-menu-icon,
+.project-tools-icon,
+.preferences-icon,
+.cog-icon,
+{
+    .icon();
+    
+    & > .toolbarbutton-text
+    {
+        .icon();
+        .icon-cog();
+    }
+}
+
+#dbx_button_addDatabase
+{
+    .icon();
+    .icon-plus();
+}
+
+checkbox:not(.label-only)
+{
+    .checkbox-spacer-box
+    {
+        .icon();
+        margin-right: 4px;
+    }
+    
+    .icon();
+    
+    &:not([checked="true"]) .checkbox-spacer-box { .icon-square(); }
+    &[checked="true"] .checkbox-spacer-box { .icon-check-square(); }
+}
+
+listitem[type="checkbox"]
+{
+    listcell
+    {
+        .icon();
+    }
+
+    &:not([checked="true"]) listcell { .icon-square(); }
+    &[checked="true"] listcell { .icon-check-square(); }
+}
+
+menuitem[type="checkbox"]
+{
+    & > .menu-iconic-checker
+    {
+        .icon();
+        margin-right: 4px;
+    }
+    
+    &:not([checked="true"]) > .menu-iconic-checker { .icon-square(); }
+    &[checked="true"] > .menu-iconic-checker { .icon-check-square(); }
+}
+
+radio 
+{
+    .radio-label-box
+    {
+        .icon();
+    }
+    
+    &:not([selected="true"]) .radio-label-box { .icon-circle(); }
+    &[selected="true"] .radio-label-box { .icon-check-circle(); }
+}
+
+menuitem[type="radio"]
+{
+    & > .menu-iconic-checker
+    {
+        .icon();
+        margin-right: 4px;
+    }
+    
+    &:not([checked="true"]) > .menu-iconic-checker { .icon-circle(); }
+    &[checked="true"] > .menu-iconic-checker { .icon-check-circle(); }
+}
+
+treechildren::-moz-tree-twisty
+{
+    width: 14px;
+    height: 14px;
+}
+
+treechildren::-moz-tree-image
+{
+    max-width: 14px;
+    max-height: 14px;
+}
+
+treechildren::-moz-tree-twisty {
+    list-style-image: none !important;
+    opacity: 0.6;
+    background-image: url("koicon://ko-svg/chrome/komodo/skin/images/trees/twisty-right.svg?size=14&scheme-name=interface&scheme-color=button&color=@{twisty-color}");
+    background-size: 14px;
+    background-repeat: no-repeat;
+}
+
+treechildren::-moz-tree-twisty(open) {
+    background-image: url("koicon://ko-svg/chrome/komodo/skin/images/trees/twisty-down.svg?size=14&scheme-name=interface&scheme-color=button&color=@{twisty-color}");
+}
+
+tree:not(.twisty-only) treechildren::-moz-tree-image(folder_open) {
+    list-style-image: url("koicon://ko-svg/chrome/komodo/skin/images/folder_open.svg?size=14&scheme-name=interface&scheme-color=icons");
+    opacity: 0.6;
+}
+tree:not(.twisty-only) treechildren::-moz-tree-image(folder_closed) {
+    list-style-image: url("koicon://ko-svg/chrome/komodo/skin/images/folder_closed.svg?size=14&scheme-name=interface&scheme-color=icons");
+    opacity: 0.6;
+}
+
+treecol[type="checkbox"].icon-checkbox
+{
+    .icon();
+    .icon-checkmark();
+    font-size: 8px;
+    
+    &:before
+    {
+        margin-left: 6px;
+    }
+    
+    image
+    {
+        visibility: collapse;
+    }
+}
+
+treechildren::-moz-tree-checkbox {
+    background-image: url("koicon://ko-svg/chrome/fontawesome/skin/square.svg?size=16") !important;
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    list-style: none !important;
+    margin: 0;
+    padding: 0;
+    margin-left: -2px;
+    width: 16px;
+}
+
+treechildren::-moz-tree-checkbox(checked) {
+    background-image: url("koicon://ko-svg/chrome/fontawesome/skin/check-square.svg?size=16") !important;
+}
+
+treechildren::-moz-tree-checkbox(disabled)
+{
+    opacity: 0.25;
+}
+
+dropmarker {
+    .icon();
+    .icon-down-tiny();
+}
+
+image.tab-icon
+{
+    max-width: 14px !important;
+    height: 14px;
+}
+
+.folder-icon
+{
+    .icon();
+    .icon-folder();
+}
+
+.breadcrumb-arrow
+{
+    .icon();
+    .icon-chevron-right();
+}
+
+menu > .menu-right
+{
+    .icon();
+    .icon-angle-right();
+}
+
+/* Notify */
+
+#notification-widget-textbox button 
+{
+    &.notification-icon
+    {
+        .icon();
+        .icon-exclamation-circle();
+    }
+    
+    &.menu > .box-inherit
+    {
+        .icon();
+        .icon-cog();
+    }
+    
+    &.undo
+    {
+        .icon();
+        .icon-undo2();
+    }
+    
+    dropmarker
+    {
+        display: none;
+    }
+}
+
+.packages-icon,
+.download-icon
+{
+    .icon-download();
+}
+
+button.spinbuttons-up { .icon(); .icon-caret-up(); }
+button.spinbuttons-down { .icon(); .icon-caret-down(); }
+
+/* Find Icons */
+
+checkbox#opt-case,
+.ko-findbar-case-sensitive
+{
+    &[value="ignore-case"] .checkbox-spacer-box,
+    &[value="FOC_INSENSITIVE"] > .toolbarbutton-text
+    {
+        .icon();
+        .icon-case-insensitive();
+    }
+    
+    &[value="match-case"] .checkbox-spacer-box,
+    &[value="FOC_SENSITIVE"] > .toolbarbutton-text
+    {
+        .icon();
+        .icon-case-sensitive();
+    }
+    
+    &[value="smart-case"] .checkbox-spacer-box,
+    &[value="FOC_SMART"] > .toolbarbutton-text
+    {
+        .icon();
+        .icon-smart-case();
+    }
+}
+
+checkbox#opt-word .checkbox-spacer-box
+{
+    .icon-text-width();
+}
+
+checkbox#opt-multiline .checkbox-spacer-box
+{
+    .icon-align-left();
+}
+
+checkbox#opt-regex .checkbox-spacer-box,
+.ko-findbar-pattern-type[value="FOT_REGEX_PYTHON"] > .toolbarbutton-text
+{
+    .icon();
+    .icon-regexp-14();
+}
+
+checkbox#opt-repl .checkbox-spacer-box
+{
+    .icon-refresh();
+}
+
+checkbox#show-replace-all-results .checkbox-spacer-box
+{
+    .icon-eye3();
+}
+
+checkbox#search-in-subdirs .checkbox-spacer-box
+{
+    .icon-recurse-14();
+}
+
+#open-in-rx-btn,
+.ko-findbar-open-dialog
+{
+    .icon();
+    .icon-external-link-square();
+}
+
+.ko-findbar-pattern-type[value="FOT_WILDCARD"] > .toolbarbutton-text
+{
+    .icon();
+    .icon-asterisk();
+}
+
+.ko-findbar-pattern-type[value="FOT_SIMPLE"] > .toolbarbutton-text
+{
+    .icon();
+    .icon-font();
+}
+
+#find-next-btn,
+.ko-findbar-next
+{
+    .icon();
+    .icon-arrow-down();
+}
+
+#find-prev-btn,
+.ko-findbar-prev
+{
+    .icon();
+    .icon-arrow-up();
+}
+
+#pattern-shortcuts .button-internal-box
+{
+    .icon();
+    .icon-arrow-right5();
+    font-size: 16px;
+}
+
+/* Debugging panel icons */
+
+#button-showHiddenVars
+{
+    .icon();
+    .icon-eye2();
+}
+
+/* Misc Buttons */
+
+.rightarrow-button > .button-internal-box
+{
+    .icon();
+    .icon-arrow-right5();
+    
+    & > image
+    {
+        visibility: collapse;
+        display: none;
+    }
+}
+
+.list-item-add-icon
+{
+    .icon-plus-square();
+}
+
+.list-item-edit-icon
+{
+    .icon-pencil-square();
+}
+
+.list-item-remove-icon
+{
+    .icon-minus-square();
+}
+
+.list-item-up-icon
+{
+    .icon();
+    .icon-toggle-up();
+}
+
+.list-item-down-icon
+{
+    .icon();
+    .icon-toggle-down();
+}
+
+/* File Status icons */
+
+.file-collab-icon
+{
+    .icon-user();
+    font-size: 10px;
+}
+
+.file-readonly-icon
+{
+    .icon-lock();
+    font-size: 10px;
+}
+
+.file-publishing-status-icon
+{
+    .icon-cloud();
+    font-size: 10px;
+}

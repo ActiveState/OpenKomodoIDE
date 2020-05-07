@@ -1,0 +1,10 @@
+# komodo tool: fslug
+# ==================
+# auto_abbreviation: true
+# language: Python
+# treat_as_ejs: true
+# type: snippet
+# version: 1.1.5
+# ==================
+<% /* SlugField (fslug) */ %>
+[[%tabstop1:FIELDNAME]] = forms.SlugField([[%tabstop2:2]])

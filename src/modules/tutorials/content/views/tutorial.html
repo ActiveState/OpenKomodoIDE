@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <link href="less://komodo/skin/global/global.less" rel="stylesheet" type="text/css">
+        <link href="less://tutorials/content/less/tutorial.less" rel="stylesheet" type="text/css">
+        <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"></script>
+        <script src="chrome://tutorials/content/js/tutorial.js"></script>
+        
+    </head>
+    <body class="tutorial markdown-body">
+        
+        <a class="orientation icon-layout-bottom" title="Change Orientation"></a>
+        <a class="dock icon-toggle-down" title="Dock/Undock Tutorial Pane"></a>
+        <a class="close icon-close" title="Stop this Tutorial"></a>
+        
+        <script id="tpl-step" type="x-dot-template">
+            <div class="inner {{?it.step.task}}with-task{{?}} {{?it.step.tips}}with-tips{{?}}">
+            
+                <div class="inner-summary">
+                    
+                    <h1>{{=it.step.title}}</h1>
+                    <div class="summary">{{=it.step.summary}}</div>
+                
+                </div>
+                
+                {{?it.step.task}}
+                <div class="inner-task">
+                    <h2>Task</h2>
+                    <div class="task">
+                        {{=it.step.task}}
+                    </div>
+                </div>
+                {{?}}
+                
+                {{?it.step.tips}}
+                <div class="inner-tips">
+                    <div class="tips">
+                        <h2>Tips</h2>
+                        <ul>
+                            {{~it.step.tips :tip:index}}
+                            <li>
+                                {{=tip}}
+                            </li>
+                            {{~}}
+                        </ul>
+                        <p class="notips">
+                            <a href="#" class="give">Give me a Tip!</a>
+                        </p>
+                        <p class="hastips" style="visibility: hidden">
+                            <a href="#" class="give">Give me another Tip!</a>
+                        </p>
+                    </div>
+                </div>
+                {{?}}
+            </div>
+            
+            <div class="validation">
+                <h3>Uh oh</h3>
+                <div style="text-align: center">
+                    <p class="message"></p>
+                    <p>
+                        <a class="continue">Continue Anyway</a>
+                    </p>
+                </div>
+            </div>
+            
+        </script>
+        
+        <script id="tpl-buttons" type="x-dot-template">
+            <div class="buttons">
+                {{?!it.tutorial.hideButtons}}
+                    {{?it.currentStep > 1 || it.isSuccessStep}}
+                        <button class="prevStep">Previous</button>
+                    {{?}}
+                {{?}}
+                <div class="step-counter">
+                    {{=it.currentStep}} / {{=it.tutorial.steps.length}}
+                </div>
+                {{?!it.tutorial.hideButtons}}
+                    {{?!it.step.final}}
+                        <button class="nextStep">Next</button>
+                    {{?}}
+                    {{?it.step.final}}
+                        <button class="nextStep">Finish</button>
+                    {{?}}
+                {{?}}
+            </div>
+        </script>
+        
+        <script id="tpl-success" type="x-dot-template">
+            <div class="inner">
+                {{=it.step.success}}
+            </div>
+        </script>
+        
+        <div id="wrapper"></div>
+        
+        
+    </body>
+</html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+<!-- #if PRODUCT_TYPE == "ide" -->
+<!-- #if PP_UPDATE_CHANNEL == "nightly" -->
+    <?define ProductCode = "9609A7FA-36AA-4CD7-966C-DB3FAD94FFAC" ?>
+    <?define UpgradeCode = "64DE99FE-8467-4974-A0E7-41F09D0708B9" ?>
+<!-- #else -->
+    <?define ProductCode = "B35A1A79-6AD9-440D-A5C6-4D8ADAC1B346" ?>
+    <?define UpgradeCode = "06EEB9C5-1AF5-4633-93F5-9A4D01ED28F8" ?>
+<!-- #endif -->
+<!-- #else -->
+<!-- #error "Invalid product type." -->
+<!-- #endif -->
+</Include>
+

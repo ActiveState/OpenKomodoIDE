@@ -1,0 +1,13 @@
+.codehelper_name {
+    font-weight: bolder;
+}
+
+.codehelper_signature {
+    font-weight: bolder;
+}
+
+.codehelper_doc {
+    white-space: pre-wrap !important;
+    font-weight: lighter;
+    font-size: smaller;
+}

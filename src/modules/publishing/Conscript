@@ -1,0 +1,22 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2009-2010 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+Import(
+    'cons',
+    'platform',
+    'buildFlavour',
+    'sdkDir',
+    'build',
+    'mozBin',
+    'mozVersion',
+    'unsiloedPythonExe',
+    'withPublishing',
+);
+
+if (0) {
+    # For quick development, use this instead of what's done below:
+    $cons->KoExtSourceDevInstall();
+} else {
+    $cons->KoExt("koinstall");
+}

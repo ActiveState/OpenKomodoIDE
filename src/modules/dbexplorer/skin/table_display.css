@@ -1,0 +1,19 @@
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+.dbx-tableDisplay-query-vbox {
+}
+
+.dbx-tableDisplay-query-vbox > .dbx-query-header {
+  background-color: #E7E3DE;
+  min-height: 21px;
+  margin: 0px;
+}
+
+.dbx-tableDisplay-query-vbox > .dbx-query-header > label {
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+/****************************************************************/
+

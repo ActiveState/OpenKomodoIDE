@@ -1,0 +1,19 @@
+"Subject","Body","From: (Name)","From: (Address)","From: (Type)","To: (Name)","To: (Address)","To: (Type)","CC: (Name)","CC: (Address)","CC: (Type)","BCC: (Name)","BCC: (Address)","BCC: (Type)","Billing Information","Categories","Importance","Mileage","Sensitivity"
+"Re: Comments","Greg S <gregs@isp.com> writes:
+
+this is the first comment
+
+
+","Greg S","gregs@isp.com","SMTP","Feedback","feedback@company.com","SMTP","","","SMTP;SMTP;SMTP",,,,,,"Normal",,"Normal"
+"Re: Comments","Joe B <joeb@isp.com> writes:
+
+this is another comment
+
+
+","Joe B","joeb@isp.com","SMTP","Feedback","feedback@company.com","SMTP","","","SMTP;SMTP;SMTP",,,,,,"Normal",,"Normal"
+"Re: Comments","Sally M <sallym@isp.com> writes:
+
+this is a third comment
+
+
+","Sally M","sallym@isp.com","SMTP","Feedback","feedback@company.com","SMTP","","","SMTP;SMTP;SMTP",,,,,,"Normal",,"Normal"

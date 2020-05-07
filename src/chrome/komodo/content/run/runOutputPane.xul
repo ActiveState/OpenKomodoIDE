@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % debuggerDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %debuggerDTD;
+]>
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/scrolltabs.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/sidebar.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+
+<?xul-overlay href="chrome://komodo/content/bindings/scintilla-overlay.xul"?>
+
+<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <vbox flex="1" id="runoutput-desc-tabpanel-vbox">
+        <hbox flex="999" id="runoutput-desc-tabpanel-hbox">
+            <deck id="runoutput-deck"
+                  selectedIndex="0" flex="1">
+                <view type="terminal"
+                      onclick="ko.run.output.scintillaOnClick(event);"
+                      id="runoutput-scintilla"
+                      flex="1" style="cursor: text;"/>
+                <tree id="runoutput-tree" flex="1" class="no-border"
+                      onclick="ko.run.output.treeOnClick(event);"
+                      onkeypress="return ko.run.output.treeOnKeyPress(event);">
+                    <treecols>
+                    <treecol primary="true"
+                             class="treecol-header treecol-inset-header sortDirectionIndicator"
+                             id="runoutput-tree-file"
+                             label="&file.label;" flex="6"
+                             persist="width"
+                             crop="left"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="runoutput-tree-line"
+                             class="treecol-header treecol-inset-header sortDirectionIndicator"
+                             label="&line.label;"
+                             persist="width"
+                             style="width: 5em;"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="runoutput-tree-column"
+                             class="treecol-header treecol-inset-header sortDirectionIndicator"
+                             label="&column.label;"
+                             persist="width"
+                             style="width: 5em;"/>
+                    <splitter class="tree-splitter"/>
+                    <treecol id="runoutput-tree-content"
+                             class="treecol-header treecol-inset-header sortDirectionIndicator"
+                             persist="width"
+                             label="&content.label;" flex="12"/>
+                    </treecols>
+                    <treechildren id="runoutput-tree-body" flex="1"/>
+                </tree>
+            </deck>
+        </hbox>
+
+        <box id="runoutput-desc-tabpanel-toolbar" class="widgetToolbarWrap">
+            <hbox valign="middle" style="width: 50vw; min-width: 400px;">
+                <textbox id="runoutput-command" placeholder="&gt; enter your command" type="search" searchbutton="true" flex="1"/>
+                <toolbarbutton id="run-command-button"
+                        class="run-command-icon"
+                        tooltiptext="&runCommand.label;"
+                        oncommand="ko.run.output.openRunCommand();"/>
+            </hbox>
+            <hbox valign="middle" flex="1">
+                <label id="runoutput-desc" class="desc" crop="center" />
+            </hbox>
+            <toolbar class="widgetToolbar">
+                <toolbarbutton id="runoutput-list-button"
+                        class="bulletlist-icon"
+                        tooltiptext="&toggleRawParsedOutputView.tooltiptext;"
+                        oncommand="ko.run.output.toggleView();"
+                        disabled="true"/>
+                <toolbarbutton id="runoutput-close-button"
+                        class="find-stop-icon"
+                        tooltiptext="&terminateProcess.tooltiptext;"
+                        oncommand="ko.run.output.kill(-1);"
+                        disabled="true"/>
+                <toolbarbutton id="runoutput-clear-button"
+                        class="icon-close"
+                        tooltiptext="&clearOutput.tooltiptext;"
+                        oncommand="ko.run.output.clearOutput();" />
+            </toolbar>
+        </box>
+
+    </vbox>
+
+    <commandset id="runoutput-commandset"/>
+
+    <script src="chrome://komodo/content/run/runOutputWindow.js"	        type="application/x-javascript;version=1.7"/>
+	
+    <hbox id="scintillaOverlayXul"/>
+</page>

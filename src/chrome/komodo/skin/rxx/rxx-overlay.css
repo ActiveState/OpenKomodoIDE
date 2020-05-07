@@ -1,0 +1,14 @@
+/* Copyright (c) 2000-2011 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information. */
+
+/**
+ * Rx Toolkit styles to be used in the main Komodo window.
+ */
+
+.rx-icon {
+  list-style-image : url("chrome://komodo/skin/images/rx.png");
+}
+.rx-icon[disabled="true"] {
+  list-style-image : url("chrome://komodo/skin/images/rx_disable.png");
+}
+

@@ -1,0 +1,46 @@
+/* Copyright (c) 2003-2010 ActiveState Software Inc.
+   See the file LICENSE.txt for licensing information.
+   
+   Authors: David Ascher, Shane Caraveo
+*/
+
+#include "nsISupports.idl"
+#include "koIFileEx.idl"
+
+/*
+  The koIFileService provides construction and caching of file objects.
+  This can then be used by other services, such as the file status service
+*/
+
+[scriptable, uuid(F9E2D05A-B087-455B-9A62-78A095E92123)]
+interface koIFileService: nsISupports
+{
+    koIFileEx getFileFromURI(in wstring URI);
+
+    /* Same as getFileFromURI, but won't store/remember the file instance,
+       which means that Komodo won't try to update the file status information
+       for this path. */
+    koIFileEx getFileFromURINoCache(in wstring URI);
+
+    void getAllFiles([array, size_is(count)] out koIFileEx files,
+                     out unsigned long count);
+    void getStatusCheckFiles([array, size_is(count)] out koIFileEx files,
+                     out unsigned long count);
+    koIFileEx findFileByURI(in wstring URI);
+
+    void getFilesInBaseURI(in wstring path,
+                     [array, size_is(count)] out koIFileEx files,
+                     out unsigned long count);
+
+    wstring makeTempName(in wstring suffix); 
+    wstring makeTempNameInDir(in wstring dir, in wstring suffix); 
+    koIFileEx makeTempFile(in wstring suffix, in string mode);
+    koIFileEx makeTempFileInDir(in wstring dir, in wstring suffix, in string mode);
+    void deleteAllTempFiles();
+    void deleteTempFile(in wstring fname, in boolean remove_fname);
+
+    wstring makeTempDir(in wstring suffix, in wstring prefix);
+    wstring makeTempDirInDir(in wstring dir, in wstring suffix, in wstring prefix);
+    void deleteTempDir(in wstring dname);
+    void deleteAllTempDirs();
+};

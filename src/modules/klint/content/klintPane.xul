@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % kLintDTD SYSTEM "chrome://klint/locale/klint.dtd">
+  %kLintDTD;
+]>
+<?xml-stylesheet href="chrome://klint/skin/klint.css" type="text/css"?>
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/sidebar.css" type="text/css"?>
+
+<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script type="application/x-javascript"
+            src="chrome://klint/content/common.js" />
+    <script type="application/x-javascript"
+            src="chrome://klint/content/klintTreeview.js" />
+    <script type="application/x-javascript"
+            src="chrome://klint/content/klintPane.js" />
+
+    <vbox flex="1">
+        <tree id="klint-tree"
+              class="bg_transparent"
+              flex="999"
+              seltype="single">
+            <treecols>
+                <treecol primary="true"
+                         id="klint-linenum"
+                         style="min-width: 8em;"
+                         label="&klint.line.number.label;"
+                         sortActive="true"
+                         sortDirection="ascending"
+                         onclick="gKlint.sort(event)"
+                         persist="width ordinal hidden sortActive sortDirection"/>
+                <splitter class="tree-splitter"/>
+                <treecol id="klint-messageType"
+                         style="min-width: 8em;"
+                         onclick="gKlint.sort(event)"
+                         label="&klint.message.type.label;"
+                         persist="width ordinal hidden sortActive sortDirection"/>
+                <splitter class="tree-splitter"/>
+                <treecol id="klint-message"
+                         flex="1"
+                         label="&klint.message.text.label;"
+                         onclick="gKlint.sort(event)"
+                         persist="width ordinal hidden sortActive sortDirection"/>
+            </treecols>
+            <treechildren id="klint-treechildren"
+                          class="klintTreeChildren"
+                          flex="1"
+                          ondblclick="gKlint.onDblClick(event);"/>
+        </tree>
+        <box class="widgetToolbarWrap">
+            <textbox id="klint-filter-pattern" type="search" flex="1"
+                emptytext="&klint.filter.by.description.tooltiptext;"
+                onkeypress="gKlint.onTextFilterKeypress(event)"
+                oninput="gKlint.onTextFilterInput(event);" />
+            <label id="klint-count" value="" class="pane-text"/>
+            <separator flex="1"/>
+            <menulist id="klint-filter-type">
+                <menupopup>
+                    <menuitem id="klint-filter-error"
+                        label="&klint.show.errors.label;"
+                        oncommand="gKlint.filterVisibleItems(KlintTreeView.ERROR)"/>
+                    <menuitem id="klint-filter-warning"
+                        label="&klint.show.warnings.label;"
+                        oncommand="gKlint.filterVisibleItems(KlintTreeView.WARNING)"/>
+                    <menuitem id="klint-filter-info"
+                        hidden="true"
+                        label="&klint.show.infos.label;"
+                        oncommand="gKlint.filterVisibleItems(KlintTreeView.INFO)"/>
+                    <menuseparator />
+                    <menuitem id="klint-filter-all"
+                        label="&klint.show.all.label;"
+                        oncommand="gKlint.filterVisibleItems(KlintTreeView.ALL)"/>
+                </menupopup>
+            </menulist>
+        </box>
+    </vbox>
+    
+</page>
+

@@ -1,0 +1,13 @@
+// komodo tool: filter
+// ===================
+// auto_abbreviation: true
+// treat_as_ejs: true
+// type: snippet
+// version: 1.1.5
+// ===================
+<% /* filter */ %>
+
+{% filter [[%tabstop1:1]] %}
+	[[%tabstop2:<%= require("ko/editor").getColumnNumber() %>]]
+{% endfilter %}
+ 

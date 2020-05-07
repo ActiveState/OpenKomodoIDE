@@ -1,0 +1,568 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % debuggerDTD SYSTEM "chrome://komodo/locale/debugger.dtd">
+  %debuggerDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!-- Breakpoint properties dialog. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+
+<dialog id="dialog-breakpointproperties"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="&breakpointProperties.title;"
+        onload="OnLoad()"
+        orient="vertical"
+        flex="1"
+        persist="screenX screenY width height"
+        buttons="accept,cancel,help"
+        ondialogaccept="return OK();"
+        ondialogcancel="return Cancel();"
+        ondialoghelp="require('ko/windows').getMain().ko.help.open('tourlet_condbreak.html', 'tutorial/');">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js"  type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/uriparse.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/filepickers.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/windowManager.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/launch.js"    type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/debugger/breakpointProperties.js" type="application/x-javascript;version=1.7"/>
+
+    <tabbox id="type-tabbox">
+        <tabs>
+            <!-- onfocus fires with Ctrl+Tab and Ctrl+Shift+Tab;
+                 oncommand fires when clicking on the tab;
+                 need both to catch all switches. -->
+            <tab id="line-tab"
+                 onfocus="SwitchedToPanel('line');"
+                 oncommand="SwitchedToPanel('line');"
+                 label="&file.label;"/>
+            <tab id="conditional-tab"
+                 onfocus="SwitchedToPanel('conditional');"
+                 oncommand="SwitchedToPanel('conditional');"
+                 label="&conditional.label;"/>
+            <tab id="watch-tab"
+                 onfocus="SwitchedToPanel('watch');"
+                 oncommand="SwitchedToPanel('watch');"
+                 label="&watch.label;"/>
+            <tab id="call-tab"
+                 onfocus="SwitchedToPanel('call');"
+                 oncommand="SwitchedToPanel('call');"
+                 label="&functionCall.label;"/>
+            <tab id="return-tab"
+                 onfocus="SwitchedToPanel('return');"
+                 oncommand="SwitchedToPanel('return');"
+                 label="&functionReturn.label;"/>
+            <tab id="exception-tab"
+                 onfocus="SwitchedToPanel('exception');"
+                 oncommand="SwitchedToPanel('exception');"
+                 label="&exception.label;"/>
+        </tabs>
+        <tabpanels>
+            <tabpanel id="line-tabpanel" bptype="line"
+                      orient="vertical"
+                      style="padding: 5px;">
+                <description>
+                    Break execution when the program reaches this
+                    location in the file.
+                </description>
+                <separator class="groovy-thin"
+                           style="margin-top: 10px; margin-bottom: 10px;"/>
+                <grid flex="1">
+                    <columns>
+                        <column style="width: 50px;"/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="Language" control="line-language"
+                                   uses-accesskey="true" _accesskey="L"/>
+                            <menulist id="line-language"
+                                      style="min-height: 2em;"
+                                      oncommand="UpdateAttribute('language');">
+                                <menupopup>
+                                    <menuitem value="" label="&unknown.label;"/>
+                                    <menuitem value="Perl" label="&perl.label;"/>
+                                    <menuitem value="PHP" label="&PHP.label;"/>
+                                    <menuitem value="Python" label="&python.label;"/>
+                                    <menuitem value="Ruby" label="&ruby.label;"/>
+                                    <menuitem value="Tcl" label="&tcl.label;"/>
+                                    <menuitem value="XSLT" label="&XSLT.label;"/>
+                                </menupopup>
+                            </menulist>
+                        </row>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="File" control="line-filename"
+                                   uses-accesskey="true" _accesskey="F"/>
+                            <hbox flex="1">
+                                <textbox id="line-filename"
+                                         onkeyup="UpdateAttribute('filename');"
+                                         style="min-height: 2em;"
+                                         flex="1"/>
+                                <button label="&ellipsis.label;" accesskey="&ellipsis.accesskey;"
+                                        style="min-width: 0px; margin-top: 0px; margin-bottom: 0px;"
+                                        tooltiptext="&browseForFile.tooltiptext;"
+                                        oncommand="BrowseForFile();"/>
+                            </hbox>
+                        </row>
+                        <row align="center">
+                            <label value="Line" control="line-lineno"
+                                   uses-accesskey="true" _accesskey="n"/>
+                            <textbox id="line-lineno"
+                                     style="min-height: 2em;"
+                                     onkeyup="UpdateAttribute('lineno');"/>
+                        </row>
+                        <separator class="groovy-thin"
+                                   style="margin-top: 10px; margin-bottom: 10px;"/>
+                        <row align="center">
+                            <label value="Hit Count"
+                                   uses-accesskey="true" _accesskey="H"
+                                   control="line-hit-condition"/>
+                            <hbox>
+                                <menulist id="line-hit-condition"
+                                          sizetopopup="false"
+                                          oncommand="UpdateAttribute('hit-condition');"
+                                          flex="1">
+                                    <menupopup>
+                                        <menuitem value=">=" label="&breakWhenHitCountIsGreaterThanOrEqualTo.label;"/>
+                                        <menuitem value="==" label="&breakWhenHitCountIsEqualTo.label;"/>
+                                        <menuitem value="%" label="&breakWhenHitCountIsAMultipleOf.label;"/>
+                                    </menupopup>
+                                </menulist>
+                                <textbox id="line-hit-value"
+                                         onkeyup="UpdateAttribute('hit-value');"
+                                         style="width: 3em;"/>
+                            </hbox>
+                        </row>
+                    </rows>
+                </grid>
+            </tabpanel>
+            <tabpanel id="conditional-tabpanel" bptype="conditional"
+                      orient="vertical"
+                      style="padding: 5px;">
+                <description>
+                    Break execution when the given condition evaluates to
+                    true.
+                </description>
+                <separator class="groovy-thin"
+                           style="margin-top: 10px; margin-bottom: 10px;"/>
+                <grid flex="1">
+                    <columns>
+                        <column style="width: 50px;"/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="Language" control="conditional-language"
+                                   uses-accesskey="true" _accesskey="L"/>
+                            <menulist id="conditional-language"
+                                      style="min-height: 2em;"
+                                      oncommand="UpdateAttribute('language');">
+                                <menupopup>
+                                    <menuitem value="" label="&unknown.label;"/>
+                                    <menuitem value="Perl" label="&perl.label;"/>
+                                    <menuitem value="PHP" label="&PHP.label;"/>
+                                    <menuitem value="Python" label="&python.label;"/>
+                                    <menuitem value="Ruby" label="&ruby.label;"/>
+                                    <menuitem value="Tcl" label="&tcl.label;"/>
+                                    <menuitem value="XSLT" label="&XSLT.label;"/>
+                                </menupopup>
+                            </menulist>
+                        </row>
+                        <row align="center">
+                            <label value="Condition" control="conditional-condition"
+                                   uses-accesskey="true" _accesskey="d"/>
+                            <textbox id="conditional-condition"
+                                     onkeyup="UpdateAttribute('condition');"
+                                     tooltiptext="&enterAnExpressionEGX1.tooltiptext;"
+                                     style="min-height: 2em;"
+                                     flex="1"/>
+                        </row>
+                        <separator class="groovy-thin"
+                                   style="margin-top: 10px; margin-bottom: 10px;"/>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="File" control="conditional-filename"
+                                   uses-accesskey="true" _accesskey="F"/>
+                            <hbox flex="1">
+                                <textbox id="conditional-filename"
+                                         onkeyup="UpdateAttribute('filename');"
+                                         style="min-height: 2em;"
+                                         flex="1"/>
+                                <button label="&ellipsis.label;" accesskey="&ellipsis.accesskey;"
+                                        style="min-width: 0px; margin-top: 0px; margin-bottom: 0px;"
+                                        tooltiptext="&browseForFile.tooltiptext;"
+                                        oncommand="BrowseForFile();"/>
+                            </hbox>
+                        </row>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="Line" control="conditional-lineno"
+                                   uses-accesskey="true" _accesskey="n"/>
+                            <textbox id="conditional-lineno"
+                                     style="min-height: 2em;"
+                                     onkeyup="UpdateAttribute('lineno');"/>
+                        </row>
+                        <row align="center">
+                            <label value="Hit Count"
+                                   uses-accesskey="true" _accesskey="H"
+                                   control="conditional-hit-condition"/>
+                            <hbox>
+                                <menulist id="conditional-hit-condition"
+                                          sizetopopup="false"
+                                          oncommand="UpdateAttribute('hit-condition');"
+                                          flex="1">
+                                    <menupopup>
+                                        <menuitem value=">=" label="&breakWhenHitCountIsGreaterThanOrEqualTo.label;"/>
+                                        <menuitem value="==" label="&breakWhenHitCountIsEqualTo.label;"/>
+                                        <menuitem value="%" label="&breakWhenHitCountIsAMultipleOf.label;"/>
+                                    </menupopup>
+                                </menulist>
+                                <textbox id="conditional-hit-value"
+                                         onkeyup="UpdateAttribute('hit-value');"
+                                         style="width: 3em;"/>
+                            </hbox>
+                        </row>
+                    </rows>
+                </grid>
+            </tabpanel>
+
+            <tabpanel id="watch-tabpanel" bptype="watch"
+                      orient="vertical"
+                      style="padding: 5px;">
+                <description>
+                    Break execution when the value of an expression has changed.
+                </description>
+                <separator class="groovy-thin"
+                           style="margin-top: 10px; margin-bottom: 10px;"/>
+                <grid flex="1">
+                    <columns>
+                        <column style="width: 50px;"/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="Language" control="watch-language"
+                                   uses-accesskey="true" _accesskey="L"/>
+                            <menulist id="watch-language"
+                                      style="min-height: 2em;"
+                                      oncommand="UpdateAttribute('language');">
+                                <menupopup>
+                                    <menuitem value="" label="&unknown.label;"/>
+                                    <menuitem value="Perl" label="&perl.label;"/>
+                                    <menuitem value="PHP" label="&PHP.label;"/>
+                                    <menuitem value="Python" label="&python.label;"/>
+                                    <menuitem value="Ruby" label="&ruby.label;"/>
+                                    <menuitem value="Tcl" label="&tcl.label;"/>
+                                    <menuitem value="XSLT" label="&XSLT.label;"/>
+                                </menupopup>
+                            </menulist>
+                        </row>
+                        <row align="center">
+                            <label value="Variable" control="watch-condition"
+                                   uses-accesskey="true" _accesskey="v"/>
+                            <textbox id="watch-condition"
+                                     onkeyup="UpdateAttribute('condition');"
+                                     tooltiptext="&enterAnExpressionEGX1.tooltiptext;"
+                                     style="min-height: 2em;"
+                                     flex="1"/>
+                        </row>
+                        <separator class="groovy-thin"
+                                   style="margin-top: 10px; margin-bottom: 10px;"/>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="File" control="watch-filename"
+                                   uses-accesskey="true" _accesskey="F"/>
+                            <hbox flex="1">
+                                <textbox id="watch-filename"
+                                         onkeyup="UpdateAttribute('filename');"
+                                         style="min-height: 2em;"
+                                         flex="1"/>
+                                <button label="&ellipsis.label;" accesskey="&ellipsis.accesskey;"
+                                        style="min-width: 0px; margin-top: 0px; margin-bottom: 0px;"
+                                        tooltiptext="&browseForFile.tooltiptext;"
+                                        oncommand="BrowseForFile();"/>
+                            </hbox>
+                        </row>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="Line" control="watch-lineno"
+                                   uses-accesskey="true" _accesskey="n"/>
+                            <textbox id="watch-lineno"
+                                     style="min-height: 2em;"
+                                     onkeyup="UpdateAttribute('lineno');"/>
+                        </row>
+                        <row align="center">
+                            <label value="Hit Count"
+                                   uses-accesskey="true" _accesskey="H"
+                                   control="watch-hit-condition"/>
+                            <hbox>
+                                <menulist id="watch-hit-condition"
+                                          sizetopopup="false"
+                                          oncommand="UpdateAttribute('hit-condition');"
+                                          flex="1">
+                                    <menupopup>
+                                        <menuitem value=">=" label="&breakWhenHitCountIsGreaterThanOrEqualTo.label;"/>
+                                        <menuitem value="==" label="&breakWhenHitCountIsEqualTo.label;"/>
+                                        <menuitem value="%" label="&breakWhenHitCountIsAMultipleOf.label;"/>
+                                    </menupopup>
+                                </menulist>
+                                <textbox id="watch-hit-value"
+                                         onkeyup="UpdateAttribute('hit-value');"
+                                         style="width: 3em;"/>
+                            </hbox>
+                        </row>
+                    </rows>
+                </grid>
+            </tabpanel>
+
+            <tabpanel id="call-tabpanel" bptype="call"
+                      orient="vertical"
+                      style="padding: 5px;">
+                <description>
+                    Break execution when a function is called.
+                </description>
+                <separator class="groovy-thin"
+                           style="margin-top: 10px; margin-bottom: 10px;"/>
+                <grid flex="1">
+                    <columns>
+                        <column style="width: 50px;"/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="Language" control="call-language"
+                                   uses-accesskey="true" _accesskey="L"/>
+                            <menulist id="call-language"
+                                      style="min-height: 2em;"
+                                      oncommand="UpdateAttribute('language');">
+                                <menupopup>
+                                    <menuitem value="" label="&unknown.label;"/>
+                                    <menuitem value="Perl" label="&perl.label;"/>
+                                    <menuitem value="PHP" label="&PHP.label;"/>
+                                    <menuitem value="Python" label="&python.label;"/>
+                                    <menuitem value="Ruby" label="&ruby.label;"/>
+                                    <menuitem value="Tcl" label="&tcl.label;"/>
+                                    <menuitem value="XSLT" label="&XSLT.label;"/>
+                                </menupopup>
+                            </menulist>
+                        </row>
+                        <row align="center">
+                            <label value="Function" control="call-condition"
+                                   uses-accesskey="true" _accesskey="c"/>
+                            <textbox id="call-function"
+                                     onkeyup="UpdateAttribute('function');"
+                                     tooltiptext="&enterAnFunctionNameEGStringJoin.tooltiptext;"
+                                     style="min-height: 2em;"
+                                     flex="1"/>
+                        </row>
+                        <separator class="groovy-thin"
+                                   style="margin-top: 10px; margin-bottom: 10px;"/>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="File" control="call-filename"
+                                   uses-accesskey="true" _accesskey="F"/>
+                            <hbox flex="1">
+                                <textbox id="call-filename"
+                                         onkeyup="UpdateAttribute('filename');"
+                                         style="min-height: 2em;"
+                                         flex="1"/>
+                                <button label="&ellipsis.label;" accesskey="&ellipsis.accesskey;"
+                                        style="min-width: 0px; margin-top: 0px; margin-bottom: 0px;"
+                                        tooltiptext="&browseForFile.tooltiptext;"
+                                        oncommand="BrowseForFile();"/>
+                            </hbox>
+                        </row>
+                        <row align="center">
+                            <label value="Hit Count"
+                                   uses-accesskey="true" _accesskey="H"
+                                   control="call-hit-condition"/>
+                            <hbox>
+                                <menulist id="call-hit-condition"
+                                          sizetopopup="false"
+                                          oncommand="UpdateAttribute('hit-condition');"
+                                          flex="1">
+                                    <menupopup>
+                                        <menuitem value=">=" label="&breakWhenHitCountIsGreaterThanOrEqualTo.label;"/>
+                                        <menuitem value="==" label="&breakWhenHitCountIsEqualTo.label;"/>
+                                        <menuitem value="%" label="&breakWhenHitCountIsAMultipleOf.label;"/>
+                                    </menupopup>
+                                </menulist>
+                                <textbox id="call-hit-value"
+                                         onkeyup="UpdateAttribute('hit-value');"
+                                         style="width: 3em;"/>
+                            </hbox>
+                        </row>
+                    </rows>
+                </grid>
+            </tabpanel>
+
+            <tabpanel id="return-tabpanel" bptype="return"
+                      orient="vertical"
+                      style="padding: 5px;">
+                <description>
+                    Break execution when a function call has finished.
+                </description>
+                <separator class="groovy-thin"
+                           style="margin-top: 10px; margin-bottom: 10px;"/>
+                <grid flex="1">
+                    <columns>
+                        <column style="width: 50px;"/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="Language" control="return-language"
+                                   uses-accesskey="true" _accesskey="L"/>
+                            <menulist id="return-language"
+                                      style="min-height: 2em;"
+                                      oncommand="UpdateAttribute('language');">
+                                <menupopup>
+                                    <menuitem value="" label="&unknown.label;"/>
+                                    <menuitem value="Perl" label="&perl.label;"/>
+                                    <menuitem value="PHP" label="&PHP.label;"/>
+                                    <menuitem value="Python" label="&python.label;"/>
+                                    <menuitem value="Ruby" label="&ruby.label;"/>
+                                    <menuitem value="Tcl" label="&tcl.label;"/>
+                                    <menuitem value="XSLT" label="&XSLT.label;"/>
+                                </menupopup>
+                            </menulist>
+                        </row>
+                        <row align="center">
+                            <label value="Function" control="return-function"
+                                   uses-accesskey="true" _accesskey="c"/>
+                            <textbox id="return-function"
+                                     onkeyup="UpdateAttribute('function');"
+                                     tooltiptext="&enterAnFunctionNameEGStringJoin.tooltiptext;"
+                                     style="min-height: 2em;"
+                                     flex="1"/>
+                        </row>
+                        <separator class="groovy-thin"
+                                   style="margin-top: 10px; margin-bottom: 10px;"/>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="File" control="return-filename"
+                                   uses-accesskey="true" _accesskey="F"/>
+                            <hbox flex="1">
+                                <textbox id="return-filename"
+                                         onkeyup="UpdateAttribute('filename');"
+                                         style="min-height: 2em;"
+                                         flex="1"/>
+                                <button label="&ellipsis.label;" accesskey="&ellipsis.accesskey;"
+                                        style="min-width: 0px; margin-top: 0px; margin-bottom: 0px;"
+                                        tooltiptext="&browseForFile.tooltiptext;"
+                                        oncommand="BrowseForFile();"/>
+                            </hbox>
+                        </row>
+                        <row align="center">
+                            <label value="Hit Count"
+                                   uses-accesskey="true" _accesskey="H"
+                                   control="return-hit-condition"/>
+                            <hbox>
+                                <menulist id="return-hit-condition"
+                                          sizetopopup="false"
+                                          oncommand="UpdateAttribute('hit-condition');"
+                                          flex="1">
+                                    <menupopup>
+                                        <menuitem value=">=" label="&breakWhenHitCountIsGreaterThanOrEqualTo.label;"/>
+                                        <menuitem value="==" label="&breakWhenHitCountIsEqualTo.label;"/>
+                                        <menuitem value="%" label="&breakWhenHitCountIsAMultipleOf.label;"/>
+                                    </menupopup>
+                                </menulist>
+                                <textbox id="return-hit-value"
+                                         onkeyup="UpdateAttribute('hit-value');"
+                                         style="width: 3em;"/>
+                            </hbox>
+                        </row>
+                    </rows>
+                </grid>
+            </tabpanel>
+
+            <tabpanel id="exception-tabpanel" bptype="exception"
+                      orient="vertical"
+                      style="padding: 5px;">
+                <description>
+                    Break execution when an exception has occurred.
+                </description>
+                <separator class="groovy-thin"
+                           style="margin-top: 10px; margin-bottom: 10px;"/>
+                <grid flex="1">
+                    <columns>
+                        <column style="width: 50px;"/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="Language" control="exception-language"
+                                   uses-accesskey="true" _accesskey="L"/>
+                            <menulist id="exception-language"
+                                      style="min-height: 2em;"
+                                      oncommand="UpdateAttribute('language');">
+                                <menupopup>
+                                    <menuitem value="" label="&unknown.label;"/>
+                                    <menuitem value="Perl" label="&perl.label;"/>
+                                    <menuitem value="PHP" label="&PHP.label;"/>
+                                    <menuitem value="Python" label="&python.label;"/>
+                                    <menuitem value="Ruby" label="&ruby.label;"/>
+                                    <menuitem value="Tcl" label="&tcl.label;"/>
+                                    <menuitem value="XSLT" label="&XSLT.label;"/>
+                                </menupopup>
+                            </menulist>
+                        </row>
+                        <row align="center">
+                            <label value="Exception" control="exception-exception"
+                                   uses-accesskey="true" _accesskey="x"/>
+                            <textbox id="exception-exception"
+                                     onkeyup="UpdateAttribute('exception');"
+                                     tooltiptext="&enterAnExceptionNameEGUnicodeError.tooltiptext;"
+                                     style="min-height: 2em;"
+                                     flex="1"/>
+                        </row>
+                        <separator class="groovy-thin"
+                                   style="margin-top: 10px; margin-bottom: 10px;"/>
+                        <row align="center" style="padding-bottom: 5px;">
+                            <label value="File" control="exception-filename"
+                                   uses-accesskey="true" _accesskey="F"/>
+                            <hbox flex="1">
+                                <textbox id="exception-filename"
+                                         onkeyup="UpdateAttribute('filename');"
+                                         style="min-height: 2em;"
+                                         flex="1"/>
+                                <button label="&ellipsis.label;" accesskey="&ellipsis.accesskey;"
+                                        style="min-width: 0px; margin-top: 0px; margin-bottom: 0px;"
+                                        tooltiptext="&browseForFile.tooltiptext;"
+                                        oncommand="BrowseForFile();"/>
+                            </hbox>
+                        </row>
+                        <row align="center">
+                            <label value="Hit Count"
+                                   uses-accesskey="true" _accesskey="H"
+                                   control="exception-hit-condition"/>
+                            <hbox>
+                                <menulist id="exception-hit-condition"
+                                          sizetopopup="false"
+                                          oncommand="UpdateAttribute('hit-condition');"
+                                          flex="1">
+                                    <menupopup>
+                                        <menuitem value=">=" label="&breakWhenHitCountIsGreaterThanOrEqualTo.label;"/>
+                                        <menuitem value="==" label="&breakWhenHitCountIsEqualTo.label;"/>
+                                        <menuitem value="%" label="&breakWhenHitCountIsAMultipleOf.label;"/>
+                                    </menupopup>
+                                </menulist>
+                                <textbox id="exception-hit-value"
+                                         onkeyup="UpdateAttribute('hit-value');"
+                                         style="width: 3em;"/>
+                            </hbox>
+                        </row>
+                    </rows>
+                </grid>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+
+    <separator class="thin"/>
+
+    <checkbox id="state"
+              oncommand="UpdateAttribute('state');"
+              accesskey="&state.accesskey;"
+              label="&enable.label;"/>
+
+</dialog>
+

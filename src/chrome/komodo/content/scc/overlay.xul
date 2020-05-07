@@ -1,0 +1,229 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % komodoDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %komodoDTD;
+  <!ENTITY % komodoDTD.INTERNAL SYSTEM "chrome://komodo/locale/komodo-internal.dtd">
+  %komodoDTD.INTERNAL;
+  <!ENTITY % komodoDTD.SCC SYSTEM "chrome://komodo/locale/scc.dtd">
+  %komodoDTD.SCC;
+]>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc. -->
+<!-- See the file LICENSE.txt for licensing information. -->
+
+<overlay id="overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script src="chrome://komodo/content/scc/scc.js"                      type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/project/peSCC.js"                type="application/x-javascript;version=1.7"/>
+
+    <commandset id="allcommands">
+        <!--
+            The SCC commands need to be updated when
+                - the current file changes
+                - focus enters or leaves the editor and the current
+                  view corresponds to an SCC document
+                - SCC-related file parts are selected/unselected.
+        -->
+        <commandset
+            id="SCCMenuItems"
+            oncommandupdate="ko.commands.updateCommandset(this);"
+            commandupdater="true"
+            events="SCC,current_place_opened">
+            <command
+                id="cmd_SCCedit" key="key_cmd_SCCedit"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCedit', event);"
+                disabled="true"
+                desc="&sourceControlEdit.desc;"/>
+            <command
+                id="cmd_SCCdiff" key="key_cmd_SCCdiff"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCdiff', event);"
+                disabled="true"
+                desc="&sourceControlCompare.desc;"/>
+            <command
+                id="cmd_SCChistory" key="key_cmd_SCChistory"
+                oncommand="ko.commands.doCommandAsync('cmd_SCChistory', event);"
+                disabled="true"
+                desc="&sourceControlHistory.desc;"/>
+            <command
+                id="cmd_SCCrevert" key="key_cmd_SCCrevert"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCrevert', event);"
+                disabled="true"
+                desc="&sourceControlRevertChanges.desc;"/>
+            <command
+                id="cmd_SCCdiff_File" key="key_cmd_SCCdiff_File"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCdiff_File', event);"
+                disabled="true"
+                desc="&sourceControlCompareFile.desc;"/>
+            <command
+                id="cmd_SCC_openWebService_File" key="key_cmd_SCC_openWebService_File"
+                oncommand="ko.commands.doCommandAsync('cmd_SCC_openWebService_File', event);"
+                disabled="true"
+                desc="&openWebServiceFile.desc;"/>
+            <command
+                id="cmd_SCChistory_File" key="key_cmd_SCChistory_File"
+                oncommand="ko.commands.doCommandAsync('cmd_SCChistory_File', event);"
+                disabled="true"
+                desc="&sourceControlHistoryFile.desc;"/>
+            <command
+                id="cmd_SCCrevert_File" key="key_cmd_SCCrevert_File"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCrevert_File', event);"
+                disabled="true"
+                desc="&sourceControlRevertChangesFile.desc;"/>
+            <command
+                id="cmd_SCCupdate" key="key_cmd_SCCupdate"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCupdate', event);"
+                disabled="true"
+                desc="&sourceControlUpdate.desc;"/>
+            <command
+                id="cmd_SCCcommit" key="key_cmd_SCCcommit"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCcommit', event);"
+                disabled="true"
+                desc="&sourceControlCommitChanges.desc;"/>
+            <command
+                id="cmd_SCCadd_File" key="key_cmd_SCCadd"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCadd_File', event);"
+                disabled="true"
+                desc="&sourceControlAddFile.desc;"/>
+            <command
+                id="cmd_SCCremove_File" key="key_cmd_SCCremove"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCremove_File', event);"
+                disabled="true"
+                desc="&sourceControlRemoveFile.desc;"/>
+            <command
+                id="cmd_SCCcheckout" key="key_cmd_SCCcheckout"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCcheckout', event);"
+                desc="&sourceControlCheckout.desc;"/>
+            <command
+                id="cmd_SCCpush" key="key_cmd_SCCpush"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCpush', event);"
+                desc="&sourceControlPush.desc;"/>
+            <command
+                id="cmd_SCCpull" key="key_cmd_SCCpull"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCpull', event);"
+                desc="&sourceControlPull.desc;"/>
+            <command
+                id="cmd_SCCpullRebase" key="key_cmd_SCCpullRebase"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCpullRebase', event);"
+                desc="&sourceControlPullRebase.desc;"/>
+            <command
+                id="cmd_SCCclone" key="key_cmd_SCCclone"
+                oncommand="ko.commands.doCommandAsync('cmd_SCCclone', event);"
+                desc="&sourceControlClone.desc;"/>
+        </commandset>
+    </commandset>
+
+    <menupopup id="popup_file">
+        <menu insertafter="menu_refreshStatus"
+            id="menu_SCCmenu"
+            label="&sourceControl.label;"
+            class="scc-menu"
+            events="SCC"
+            accesskey="&menuSCCmenu.accesskey;">
+            <menupopup id="popup_file_menupopup">
+                <menuitem label="&commitChanges.label;"
+                          observes="cmd_SCCcommit"
+                          />
+                <menuseparator/>
+                <menuitem label="&push.label;"
+                          observes="cmd_SCCpush"
+                          />
+                <menuitem label="&pull.label;"
+                          observes="cmd_SCCpull"
+                          />
+                <menuitem label="&pullRebase.label;"
+                          id="sccMenuUpdate"
+                          observes="cmd_SCCpullRebase"
+                          />
+                <menuitem label="&update.label;"
+                          observes="cmd_SCCupdate"
+                          />
+                <menuseparator/>
+                <menuitem label="&showChanges.label;"
+                          observes="cmd_SCCdiff"
+                          />
+                <menuitem label="&revertChanges.label;"
+                          observes="cmd_SCCrevert"
+                          />
+                <menuitem label="&history.label;"
+                          observes="cmd_SCChistory"
+                          />
+                <menuseparator/>
+                <menuitem label="&openWebService.label;"
+                          observes="cmd_SCC_openWebService_File"
+                          />
+                <menuitem label="&fileAdd.label;"
+                          observes="cmd_SCCadd_File"
+                          />
+                <menuitem label="&fileRemove.label;"
+                          observes="cmd_SCCremove_File"
+                          />
+                <menuitem label="&fileShowChanges.label;"
+                          observes="cmd_SCCdiff_File"
+                          />
+                <menuitem label="&fileRevertChanges.label;"
+                          observes="cmd_SCCrevert_File"
+                          />
+                <menuitem label="&fileHistory.label;"
+                          observes="cmd_SCChistory_File"
+                          />
+                <menuseparator/>
+                <menuitem label="&sccCheckout.label;"
+                          observes="cmd_SCCcheckout"
+                          />
+            </menupopup>
+        </menu>
+    </menupopup>
+
+    <menupopup id="tabContextMenu">
+        <menu id="menu_SCCmenu3" label="&sourceControl.label;"
+              insertafter="tabContextMenu_separator_2">
+            <menupopup id="menu_SCCpopup3"
+                       onpopupshowing="updateCommands('SCC');">
+                <menuitem label="&openWebService.label;"
+                          observes="cmd_SCC_openWebService_File"
+                          />
+                <menuitem label="&fileAdd.label;"
+                          observes="cmd_SCCadd_File"
+                          />
+                <menuitem label="&fileRemove.label;"
+                          observes="cmd_SCCremove_File"
+                          />
+                <menuitem label="&fileShowChanges.label;"
+                          observes="cmd_SCCdiff_File"
+                          />
+                <menuitem label="&fileRevertChanges.label;"
+                          observes="cmd_SCCrevert_File"
+                          />
+                <menuitem label="&fileHistory.label;"
+                          observes="cmd_SCChistory_File"
+                          />
+            </menupopup>
+        </menu>
+    </menupopup>
+    
+    <menupopup id="popup_test_dialogs">
+        <menuitem label="&SCCCommit.label;"
+                  accesskey="&SCCCommit.accesskey;"
+                  oncommand="test_sccdialog_commit();"/>
+    </menupopup>
+    
+	<ko-pane id="workspace_bottom_area">
+        <browser type="ko-widget" id="scc-widget" label="Version Control"
+                 position="1"
+                 src="chrome://komodo/content/scc/widget.xul"/>
+    </ko-pane>
+    
+    <panel id="hidden-placeholder">
+        <statusbarpanel id="sccStatusbar" anonid="sccStatusbar" collapsed="true">
+            
+            <toolbarbutton anonid="sccBranchButton"
+                           type="menu">
+                
+                <menupopup></menupopup>
+                
+            </toolbarbutton>
+            
+        </statusbarpanel>
+    </panel>
+    
+</overlay>

@@ -1,0 +1,31 @@
+{
+  "name": "wp_plugin_wrapper", 
+  "language": "PHP", 
+  "value": [
+    "", 
+    "/* Plugin Name: [[%tabstop1:My new plugin]]", 
+    " * Plugin URI: [[%tabstop2:http://example.com]]", 
+    " * Description: [[%tabstop3:Description]]", 
+    " * Version: [[%tabstop4:1.0]]", 
+    " * Author: [[%tabstop5:Me]][[%tabstop6:placeholder 6]]:", 
+    " * Author URI: [[%tabstop7:http://example.com]]}[[%tabstop8:placeholder 8]]:", 
+    " * Text Domain: [[%tabstop9:text-domain]]}[[%tabstop10:placeholder 10]]:", 
+    " * Domain Path: [[%tabstop11:domain-path]]}[[%tabstop12:placeholder 12]]:", 
+    " * Network: [[%tabstop13:network]]}", 
+    " */", 
+    "", 
+    "if (!class_exists('[[%tabstop14:MyPluginClass]]')) {", 
+    "\tclass [[%tabstop14:MyPluginClass]] {", 
+    "\t\tpublic function __construct() {", 
+    "\t\t\t[[%tabstop0:placeholder 0]]", 
+    "\t\t}", 
+    "\t}", 
+    "", 
+    "\tnew [[%tabstop14:MyPluginClass]]();", 
+    "}"
+  ], 
+  "version": "1.1.5", 
+  "type": "snippet", 
+  "treat_as_ejs": "true", 
+  "auto_abbreviation": "true"
+}

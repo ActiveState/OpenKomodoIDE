@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % prefDTD SYSTEM "chrome://komodo/locale/pref/pref.dtd">
+  %prefDTD;
+  <!ENTITY % prefDTD.INTERNAL SYSTEM "chrome://komodo/locale/pref-internal.dtd">
+  %prefDTD.INTERNAL;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        orient="vertical"
+        onload="OnLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script type="application/x-javascript;version=1.7"><![CDATA[
+    var log = ko.logging.getLogger("pref-debugger");
+    var g_debugInitialBreakBehavior_label;
+    var g_debugInitialBreakBehavior_menulist;
+    var g_debugAllowRemoteDebug;
+    function OnLoad() {
+        try {
+            parent.initPanel();
+            g_debugInitialBreakBehavior_label = document.getElementById("debugInitialBreakBehavior_label");
+            g_debugInitialBreakBehavior_menulist = document.getElementById("debugInitialBreakBehavior_menulist");
+            g_debugAllowRemoteDebug = document.getElementById("allow_remote_debug");
+            UpdateInitialBreakBehavior();
+        } catch(ex) {
+            log.exception(ex);
+        }
+    }
+    function UpdateInitialBreakBehavior() {
+        g_debugInitialBreakBehavior_menulist.disabled = 
+            g_debugInitialBreakBehavior_label.disabled = g_debugAllowRemoteDebug.selectedIndex === 2;
+        return;
+        var noRemoteDebugging = g_debugAllowRemoteDebug.selectedIndex === 2;
+        g_debugInitialBreakBehavior_menulist.disabled = noRemoteDebugging;
+        g_debugInitialBreakBehavior_label.disabled = noRemoteDebugging;
+    }
+    //]]>
+    </script>
+
+    <!-- This main vbox is to ensure *all* the pref widgets are accessible,
+         as it adds a scrollbar when the contents are too long. -->
+    <vbox id="debugger-prefs-vbox" flex="1" class="autoscroll">
+
+        <groupbox orient="vertical">
+            <caption label="&debuggingSessionStartup.label;"/>
+                <label>When starting a new debug session:</label>
+                <menulist pref="true" prefattribute="data"
+                          prefstrings="donotask_save_on_debug,donotask_action_save_on_debug">
+                    <menupopup>
+                        <menuitem data="false,"   label="&askMeWhatFilesToSave.label;"/>
+                        <menuitem data="true,All" label="&saveAllModifiedFiles.label;"/>
+                        <menuitem data="true,None"  label="&saveNoFiles.label;"/>
+                    </menupopup>
+                </menulist>
+                <label>When receiving a remote debugging connection:</label>
+                <menulist id="allow_remote_debug"
+                          pref="true" prefattribute="data"
+                          prefstrings="donotask_allow_remote_debug,donotask_action_allow_remote_debug"
+                          oncommand="UpdateInitialBreakBehavior();">
+                    <menupopup>
+                        <menuitem data="false," label="&askMeToAllowConnection.label;"/>
+                        <menuitem data="true,Yes" label="&allowTheConnection.label;"/>
+                        <menuitem data="true,No" label="&refuseTheConnection.label;"/>
+                    </menupopup>
+                </menulist>
+                <vbox style="padding-left: 25px; padding-top: 5px;">
+                    <label id="debugInitialBreakBehavior_label">Initial break behavior:</label>
+                    <menulist id="debugInitialBreakBehavior_menulist"
+                              pref="true" prefattribute="data"
+                              prefstring="debug_break_on_remote_connect">
+                        <menupopup>
+                            <menuitem data="true" label="&breakOnFirstExecutableLine.label;"/>
+                            <menuitem data="false" label="&runToFirstBreakpoint.label;"/>
+                        </menupopup>
+                    </menulist>
+                </vbox>
+                <checkbox id="debugSkipDialog"
+                          label="&skipDebuggingOptionsDialog.label;"
+                          style="padding-top: 5px;"
+                          pref="true" prefstring="debugSkipDialog"
+                          prefattribute="checked"/>
+        </groupbox>
+    
+        <groupbox orient="vertical">
+            <caption label="&debuggingSessionShutdown.label;"/>
+            <label value="Confirm when closing debugger session tab:"/>
+            <menulist pref="true"
+                      prefattribute="data"
+                      id="debugger_confirm_close"
+                      prefstrings="donotask_debugger_confirm_close,donotask_action_debugger_confirm_close">
+                <menupopup>
+                    <menuitem data="false,"   label="&askMeEachTime.label;"/>
+                    <menuitem data="true,Kill Session and Close Tab"  label="&no.label;"/>
+                </menupopup>
+            </menulist>
+            <checkbox id="debuggerRestoreStartPosAtEndOfSession"
+                      label="&debuggerRestoreStartPosAtEndOfSession.label;"
+                      style="padding-top: 5px;"
+                      pref="true"
+                      prefattribute="checked"/>        
+        </groupbox>
+    
+        <groupbox orient="vertical">
+            <caption label="&debuggerEditorIntegration.label;"/>
+            <checkbox id="debuggerHoverEnable" label="&showExpressionValuesInHoverTooltips.label;"
+                      pref="true" prefstring="debuggerHoverValue"
+                      prefattribute="checked"/>
+            <checkbox id="debuggerFindLocalFile"
+                      label="&tryToFindFilesOnTheLocalSystemWhenRemoteDebugging.label;"
+                      pref="true" prefstring="debuggerFindLocalFile"
+                      prefattribute="checked"/>
+        </groupbox>
+
+    </vbox>
+
+</window>
+

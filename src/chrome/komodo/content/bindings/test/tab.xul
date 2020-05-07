@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+
+<window title="XUL Periodic Table"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<html:h1>XUL Tabs</html:h1>
+
+<vbox flex="1" style="overflow: auto">
+
+<groupbox>
+<description>
+  This is the standard tabbox.  It looks fine.
+</description>
+<groupbox>
+  <tabbox  flex="1">
+    <tabs >
+       <tab label="Default"     />
+       <tab label="Tab"         />
+       <tab label="Orientation" />
+    </tabs>
+    <tabpanels flex="1" >
+       <label value="Default" />
+       <label value="Tab " />
+       <label value="Orientation" />
+    </tabpanels>
+  </tabbox>
+</groupbox>
+</groupbox>
+
+<groupbox >
+ <description>
+   This one has been turned on its head so that the tabs
+   are on the bottom.  I had to fiddle with the styles to
+   make this look decent.
+ </description>
+<groupbox >
+  <tabbox  flex="1">
+    <tabpanels flex="1" style="border-bottom: 0px solid" >
+       <label value="Tabs"    />
+       <label value="on the"  />
+       <label value="bottom"  />
+    </tabpanels>
+    <tabs flex="1" class="tabs-bottom">
+       <tab label="Tabs"    class="tab-bottom" />
+       <tab label="on the"  class="tab-bottom" />
+       <tab label="Bottom"  class="tab-bottom" />
+    </tabs>
+  </tabbox>
+</groupbox>
+</groupbox>
+
+<groupbox >
+ <description>
+   And here are a couple with the tabs on the side.  They work, but
+   they'll need a bunch of style changes to make them look reasonable.
+ </description>
+<groupbox >
+<hbox>
+  <tabbox flex="1"  orient="horizontal" >
+    <tabs  orient="vertical" class="tabs-left">
+       <tab label="Tabs"    class="tab-left" />
+       <tab label="on the"  class="tab-left" />
+       <tab label="Left"  class="tab-left" />
+    </tabs>
+    <tabpanels flex="1" >
+       <label value="Tabs" />
+       <label value="on the" />
+       <label value="left" />
+    </tabpanels>
+  </tabbox>
+
+ <spacer flex="1" />
+
+  <tabbox flex="1"  orient="horizontal" dir="reverse">
+    <tabs  orient="vertical">
+       <tab label="Tabs"    />
+       <tab label="on the"  />
+       <tab label="Right"  />
+    </tabs>
+    <tabpanels flex="1" >
+       <label value="Tabs" />
+       <label value="on the" />
+       <label value="right" />
+    </tabpanels>
+  </tabbox>
+
+</hbox>
+</groupbox>
+</groupbox>
+
+</vbox>
+
+</window>

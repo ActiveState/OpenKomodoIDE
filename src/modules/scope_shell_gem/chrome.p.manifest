@@ -1,0 +1,5 @@
+# #if MODE == "dev"
+content scope-shell-gem content/
+# #else
+content scope-shell-gem jar:scope-shell-gem.jar!/content/
+# #endif

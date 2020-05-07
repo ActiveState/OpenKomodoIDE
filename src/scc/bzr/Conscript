@@ -1,0 +1,84 @@
+#!/usr/local/bin/perl
+# Copyright (c) 2000-2008 ActiveState Software Inc.
+# See the file LICENSE.txt for licensing information.
+
+Import(
+    'cons',
+    'build',
+    'mozChromeDir',
+    'ranRegxpcomStateFileName',
+    'mozComponentsDir',
+    'mozIdlIncludePath',
+    'idlExportDir',
+    'komodoPythonUtilsDir',
+    'unsiloedPythonExe',
+    'jarring',
+    'mozBin',
+    'supportDir',
+    'buildFlavour',
+    'buildAbsDir',
+    'buildType',
+    'platform',
+    'productType',
+    'mozVersion',
+    'mozExtensionDir',
+);
+
+# The Plan:
+# - dev builds: Install the spellcheck extension with*out* jarring.
+# - full (i.e. installer) builds: Install with jarring.
+
+my $ext_name = "bazaar";
+my $ext_dir = "$mozExtensionDir/$ext_name\@ActiveState.com";
+
+
+if ($buildFlavour eq "full") {
+    $cons->Command(
+        ["$ext_name.xpi", "$ext_name.jar"],
+        "install.rdf",
+        "chrome.manifest",
+        "content/checkout-overlay.xul",
+        "content/pref-scc-bzr.js",
+        "content/pref-scc-bzr.xul",
+        "content/pref-scc-bzr-overlay.xul",
+        "content/bindings/bzr_checkout.xml",
+        "locale/en-US/bazaar.dtd",
+        "locale/en-US/bazaar-prefs.dtd",
+        "skin/bzr.css",
+        "skin/bazaar_logo_32.png",
+        "components/koBzr.py",
+        "pylib/koBzrlib.py",
+        qq(
+           $unsiloedPythonExe bin/run-in-dir.py %1:d zip -X -Dr $ext_name.jar content locale skin
+           $unsiloedPythonExe bin/run-in-dir.py %1:d zip -X -Dr $ext_name.xpi $ext_name.jar install.rdf chrome.manifest components pylib
+        )
+    );
+
+    $cons->Install($ext_dir, "$ext_name.jar");
+    $cons->Install($ext_dir, 'install.rdf');
+    $cons->Install($ext_dir, 'chrome.manifest');
+    $cons->Install("$ext_dir/components", "components/koBzr.py");
+    $cons->Install("$ext_dir/pylib", "pylib/koBzrlib.py");
+}
+
+else { # dev builds
+    $cons->InstallAs("$ext_dir/chrome.manifest", 'devbuild.manifest');
+    $cons->Install($ext_dir, 'install.rdf');
+
+    my @content_files = (
+        "content/checkout-overlay.xul",
+        "content/pref-scc-bzr.js",
+        "content/pref-scc-bzr.xul",
+        "content/pref-scc-bzr-overlay.xul",
+    );
+    foreach my $file (@content_files) {
+        $cons->Install("$ext_dir/content", $file);
+    }
+    $cons->Install("$ext_dir/content/bindings", "content/bindings/bzr_checkout.xml");
+    $cons->Install("$ext_dir/locale/en-US", "locale/en-US/bazaar.dtd");
+    $cons->Install("$ext_dir/locale/en-US", "locale/en-US/bazaar-prefs.dtd");
+    $cons->Install("$ext_dir/skin", "skin/bzr.css");
+    $cons->Install("$ext_dir/skin", "skin/bazaar_logo_32.png");
+    $cons->Install("$ext_dir/components", "components/koBzr.py");
+    $cons->Install("$ext_dir/pylib", "pylib/koBzrlib.py");
+}

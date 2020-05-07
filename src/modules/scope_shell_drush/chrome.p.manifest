@@ -1,0 +1,5 @@
+# #if MODE == "dev"
+content scope-shell-drush content/
+# #else
+content scope-shell-drush jar:scope-shell-drush.jar!/content/
+# #endif

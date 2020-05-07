@@ -1,0 +1,116 @@
+@import url("chrome://komodo/skin/global/colors.less");
+@import url("resource://profile/colors.less");
+
+/**
+ * CSS style rules specific to embedded.xul (the find dialog)
+ */
+
+#find-box-wrap
+{
+    padding: 0 6px 6px 6px;
+}
+
+#find-box-closer
+{
+    height: 6px;
+
+    cursor: s-resize;
+    
+    &:hover
+    {
+        box-shadow: inset 0px 4px 0px 0px @border;
+    }
+}
+
+/* Todo: Remove this custom styling globally */
+.rightarrow-button,
+.button-toolbar-a {
+    -moz-appearance: button;
+}
+
+.button-toolbar-a > .button-internal-box {
+    border: 0 !important;
+}
+
+#find-box-wrap > hbox > spacer
+{
+    margin: 0 6px;
+}
+
+window:not(.mode-replace) #repl-row {
+    visibility: collapse;
+}
+
+.collapsed {
+    visibility: collapse;
+}
+
+#msg-deck {
+    max-width: 600px;
+}
+
+button,
+button#pattern-shortcuts
+{
+    min-width: 16px;
+    min-height: 16px;
+    margin: 0 !important;
+}
+
+#find-row.multiline button,
+#repl-row.multiline button
+{
+    margin: 15px 0 14px;
+}
+
+#find-next-btn, #find-prev-btn
+{
+    max-width: 26px;
+}
+
+#find-options
+{
+    padding-right: 2em;
+}
+
+#opt-case,
+#opt-case .checkbox-spacer-box:before,
+checkbox[checked],
+checkbox[checked] .checkbox-spacer-box:before
+{
+    color: @secondary-special !important;
+}
+
+checkbox:not(#confirm-replacements-in-files) .checkbox-label-box
+{
+    visibility: collapse;
+}
+
+#open-in-rx-btn
+{
+    margin: 0;
+    padding: 0.2rem 4px;
+}
+
+#pattern-shortcuts
+{
+    margin-left: -6px;
+    min-width: 0;
+    margin-right: -8px;
+    
+    image
+    {
+        visibility: collapse;
+    }
+}
+
+#find-next-btn,
+#find-prev-btn
+{
+    padding: 4px;
+    
+    label
+    {
+        visibility: collapse;
+    }
+}

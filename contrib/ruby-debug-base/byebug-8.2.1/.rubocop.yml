@@ -1,0 +1,26 @@
+# Until https://github.com/bbatsov/rubocop/issues/1151 is closed
+AllCops:
+  Exclude:
+    - tmp/**/*
+    - pkg/**/*
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+
+TrivialAccessors:
+  ExactNameMatch: true
+
+Style/ModuleFunction:
+  Enabled: false
+
+# https://github.com/bbatsov/rubocop/pull/72
+Style/AsciiComments:
+  Enabled: false
+
+# Don't see why storing context information in the exception is a bad thing
+Style/RaiseArgs:
+  Enabled: false
+
+Style/ExtraSpacing:
+  Enabled: true
+
+inherit_from: .rubocop_todo.yml

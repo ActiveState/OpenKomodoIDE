@@ -1,0 +1,132 @@
+:root
+{
+  -moz-binding: url("chrome://komodo/content/bindings/windows.xml#root-element");
+}
+
+window:not(#komodo_main):not(.embedded).dialog,
+window#floating-pane
+{
+  -moz-binding: url("chrome://komodo/content/bindings/windows.xml#window-chromeless");
+}
+
+dialog, dialog:root
+{
+  -moz-binding: url("chrome://komodo/content/bindings/windows.xml#dialog-chromeless");
+}
+
+wizard[deferred]
+{
+  -moz-binding: none !important;
+}
+
+:root wizard
+{
+  -moz-binding: url("chrome://komodo/content/bindings/wizard.xml#wizard");
+
+  .wizard-buttons
+  {
+    -moz-binding: url("chrome://komodo/content/bindings/wizard.xml#wizard-buttons");
+  }
+}
+
+wizard:root
+{
+  -moz-binding: url("chrome://global/content/bindings/wizard.xml#wizard");
+}
+
+#toolbox_main {
+  -moz-binding: url("chrome://komodo/content/bindings/toolbar.xml#toolbox-drag");
+}
+
+toolbar[printpreview="true"] {
+  -moz-binding: url("chrome://global/content/printPreviewBindings.xml#printpreviewtoolbar");
+}
+
+#main-toolboxrow,
+#second-toolboxrow {
+  -moz-binding: url('chrome://komodo/content/bindings/toolbar.xml#toolboxrow-overflow');
+}
+
+popup[type="tooltip"] {
+  -moz-binding: url('chrome://komodo/content/bindings/widgets.xml#kopaneltooltip');
+}
+
+tooltip {
+  -moz-binding: url('chrome://komodo/content/bindings/widgets.xml#kotooltip');
+}
+
+tree.codetree {
+    -moz-binding: url('chrome://komodo/content/bindings/widgets.xml#cbtree');
+}
+
+#main-toolboxrow toolbar > toolbaritem > toolbarbutton[type=menu]:not(.overflow-toolbarbutton) {
+  -moz-binding: url("chrome://global/content/bindings/toolbarbutton.xml#menu-vertical");
+}
+
+menuitem:not([type]) {
+  -moz-binding: url("chrome://global/content/bindings/menu.xml#menuitem-iconic");
+}
+
+checkbox {
+  -moz-binding: url("chrome://global/content/bindings/checkbox.xml#checkbox-with-spacing");
+}
+
+radio {
+  -moz-binding: url("chrome://global/content/bindings/radio.xml#radio");
+}
+
+toolbarbutton:not([type]).dynamic-button,
+toolbarbutton[type="menu-button"].dynamic-button .toolbarbutton-menubutton-button {
+  -moz-binding: url('chrome://komodo/content/bindings/buttons.xml#dynamic-toolbarbutton');
+}
+
+toolbarbutton[type="menu"].dynamic-button {
+  -moz-binding: url('chrome://komodo/content/bindings/buttons.xml#dynamic-toolbarbutton-menu');
+}
+
+toolbarbutton[type="menu-button"].dynamic-button {
+  -moz-binding: url('chrome://komodo/content/bindings/buttons.xml#dynamic-toolbarbutton-menu-button');
+}
+
+toolbarbutton[type="menu"] {
+  -moz-binding: url('chrome://komodo/content/bindings/buttons.xml#menu');
+}
+
+menuitem[type="checkbox"],
+menuitem[type="radio"] {
+  -moz-binding: url("chrome://komodo/content/bindings/menu.xml#menuitem-iconic");
+}
+prefwindow:root {
+  -moz-binding: url("chrome://global/content/bindings/preferences.xml#prefwindow");
+}
+
+/* These are mostly redundant from widgets.css, we need to remove them from widgets.css */
+
+/* override the default text-link binding to always open in a different app */
+label.text-link, label[onclick] {
+  -moz-binding: url(chrome://komodo/content/bindings/text-link.xml#text-link);
+}
+
+/* a menupopup that can be used in a menu or menulist */
+langlist  {
+  -moz-binding: url('chrome://komodo/content/bindings/widgets.xml#lang-list');
+}
+
+/* a listbox that manages a list of paths */
+pathlist  {
+  -moz-binding: url('chrome://komodo/content/bindings/widgets.xml#listbox-patheditor');
+}
+
+/* a listbox that manages path/uri mappings */
+mappededitor {
+  -moz-binding: url("chrome://komodo/content/bindings/widgets.xml#tree-mappededitor");
+}
+
+/* a listbox that manages a list of checkbox elements */
+checklistbox  {
+  -moz-binding: url('chrome://komodo/content/bindings/widgets.xml#listbox-checklist');
+}
+
+menuitem.menuitem-file-status {
+  -moz-binding: url("chrome://komodo/content/bindings/widgets.xml#menuitem-file-status");
+}

@@ -1,0 +1,158 @@
+@linkColor: #5a94fb;
+@boxShadowColor: #cce1ff;
+
+input.textbox-input, textbox textarea
+{
+    padding: inherit;
+    border: inherit;
+    background-color: inherit;
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
+}
+
+&:root {
+    background: #222527;
+    margin: 0;
+    padding: 0;
+}
+
+:root, .ui-label, .ui-button, .ui-description, .ui-span {
+    color: rgba(0,0,0,0.7);
+}
+
+.login-box  > .ui-hbox, .login-box  > .ui-vbox, .login-box  > .ui-box,
+.form-wrapper > .ui-hbox, .form-wrapper > .ui-vbox, .form-wrapper > .ui-box,
+.explanation-body > .ui-hbox {
+    &:not(.form-wrapper) {
+        margin: 10px 0;
+    }
+}
+
+.ui-label {
+    margin-bottom: 4px;
+}
+
+.ui-button:not(.link) {
+    padding: 8px 15px;
+    margin-right: 8px;
+    color: #FFF;
+}
+
+.ui-span {
+    width: ~"calc(100vw - 100px)"; 
+    display: inline-block;
+    line-height: 1.5rem;
+    white-space: pre-line;
+}
+
+.login-box {
+    background: white;
+    border-radius: 2px;
+    color: rgba(0,0,0,.7);
+    font-family: sans-serif;
+    font-size: 15px;
+    margin: 20px;
+    padding: 20px;
+}
+
+.ui-label.title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.error {
+    background: #dc3545;
+    border-radius: 2px;
+    padding: 10px;
+
+    .ui-label, .ui-description, .ui-span {
+        color: #FFF;
+    }
+}
+
+.ok {
+    background: rgb(179, 226, 181);
+    border-radius: 2px;
+    padding: 10px;
+}
+
+.explanation-wrapper .header {
+    padding-bottom: 10px;
+    border-bottom: solid 1px #dddddd;
+}
+
+.explanation-body {
+    p {
+        color: rgba(0,0,0,.6);
+        line-height: 140%;
+    }
+}
+
+vbox > label.ui-label {
+    display: inline-block;
+}
+
+textbox {
+    border-radius: 2px;
+    border: solid 1px #cccccc;
+    padding: 8px;
+}
+
+button {
+    background: @linkColor;
+    border-radius: 2px;
+    border: none;
+    border: solid 1px transparent;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    font-size: inherit;
+    line-height: 16px;
+    
+    &:focus {
+        box-shadow: 0 0 0 3px @boxShadowColor;
+        outline: none;
+    }
+}
+
+button.sign-in {
+    font-weight: bold;
+    
+    &:active {
+        background: #377BDD;
+    }
+}
+
+.ui-button.secondary {
+    background: transparent;
+    border: solid 1px @linkColor;
+    color: @linkColor !important;
+}
+
+.help {
+    .ui-button, .ui-description {
+        border: 0;
+        margin-right: 8px;
+    }
+}
+
+button.link {
+    background: none;
+    display: inline;
+}
+
+a, button.link {
+    color: @linkColor;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+groupbox {
+    border: none;
+    box-shadow: none;
+    outline: none;
+}

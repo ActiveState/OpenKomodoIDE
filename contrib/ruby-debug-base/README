@@ -1,0 +1,63 @@
+= ruby-debug
+
+== Overview
+
+ruby-debug is a fast implementation of the standard debugger debug.rb.
+The faster execution speed is achieved by utilizing a new hook Ruby C API.
+
+== Requirements
+
+ruby-debug requires Ruby 1.8.4 or higher.
+
+If you are running Linux or Unix you'll need a C compiler so the extension
+can be compiled when it is installed.
+
+
+== Install
+
+ruby-debug is provided as a RubyGem.  To install:
+
+<tt>gem install ruby-debug</tt>
+
+== Usage
+
+There are two ways of running ruby-debug.
+
+=== rdebug executable:
+
+$ rdebug <your-script>
+
+When you start your script this way, the debugger will stop at
+the first line of code in the script file. So you will be able 
+to set up your breakpoints.
+
+=== ruby-debug API
+
+The second way is to use the ruby-debug API to interrupt your
+code execution at runtime.
+
+  require 'ruby-debug'
+  ...
+  def your_method
+    ...
+    debugger
+    ...
+  end
+
+When Kernel#debugger method is executed, the debugger is activated
+and you will be able to inspect and step through your code.
+
+== Performance
+
+The debug.rb script that comes with the standard library uses 
+Kernel#set_trace_func API. This way it is possible to implement
+the debugger in pure Ruby, but has a negative effect on the speed 
+of your program execution. For each trace call Ruby interpreter 
+creates a Binding object, even though it is not being used most
+of the time. ruby-debug library moves most of the functionality 
+of debug.rb to a native extension, this way significantly improving
+the execution of your program.
+
+== License
+
+See LICENSE for license information.

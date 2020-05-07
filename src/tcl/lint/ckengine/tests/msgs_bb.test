@@ -1,0 +1,609 @@
+# msgs.test --
+#
+#	This file contains Black Box tests that run TclPro Checker on Tcl
+#	code that will produce all possible error and warning messages.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: msgs_bb.test,v 1.6 2000/06/06 22:59:09 hershey Exp $
+
+if {[string compare test [info procs test]] == 1} {
+    lappend auto_path [file join [file dirname [info script]] ..]
+    package require protest
+    namespace import ::protest::*
+}
+
+set tclchecker [findExeFile tclchecker 1]
+
+set echo echo
+
+#
+# generate general core tcl error messages
+#
+
+test msgs-1.1 {generate argAfterArgs error} {
+    set badScript {proc foo {args bar} {}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *argAfterArgs* $msg]
+} {1 1}
+
+test msgs-1.2 {generate argsNotDefault error} {
+    set badScript {proc foo {{args foo}} {}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *argsNotDefault* $msg]
+} {1 1}
+
+test msgs-1.3 {generate badBoolean error} {
+    set badScript {canvas . -confine foo}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badBoolean* $msg]
+} {1 1}
+
+test msgs-1.4 {generate badColorFormat error} {
+    set badScript {canvas . -background #foobar}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badColorFormat* $msg]
+} {1 1}
+
+test msgs-1.5 {generate badColormap error} {
+    set badScript {frame . -colormap fooBarBaz}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badColormap* $msg]
+} {1 1}
+
+test msgs-1.6 {generate badCursor error} {
+    set badScript {frame . -cursor foo}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badCursor* $msg]
+} {1 1}
+
+test msgs-1.7 {generate badEvent error} {
+    set badScript {bind . <Destroy-Button-1> {}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badEvent* $msg]
+} {1 1}
+
+test msgs-1.8 {generate badFloat error} {
+    set badScript {canvas . -closeenough foo}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badFloat* $msg]
+} {1 1}
+
+test msgs-1.9 {generate badIndex error} {
+    set badScript {lrange {a b c d} 1 foo}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badIndex* $msg]
+} {1 1}
+
+test msgs-1.10 {generate badInt error} {
+    set badScript {after foo {script}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badInt* $msg]
+} {1 1}
+
+test msgs-1.11 {generate badGeometry error} {
+    set badScript {wm geometry . a}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badGeometry* $msg]
+} {1 1}
+
+test msgs-1.12 {generate badGridRel error} {
+    set badScript {grid .slave1 x - .slave2}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badGridRel* $msg]
+} {1 1}
+
+test msgs-1.13 {generate badGridMaster error} {
+    set badScript {grid x -}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badGridMaster* $msg]
+} {1 1}
+
+test msgs-1.14 {generate badKey error} {
+    set badScript {place . -bordermode foo}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badKey* $msg]
+} {1 1}
+
+test msgs-1.15 {generate badLevel error} {
+    set badScript {uplevel \#foo {script}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badLevel* $msg]
+} {1 1}
+
+test msgs-1.16 {generate badList error} {
+    set badScript {lindex {{}a} 1}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badList* $msg]
+} {1 1}
+
+test msgs-1.17 {generate badMode error} {
+    set badScript {open foo BARBAZ}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badMode* $msg]
+} {1 1}
+
+test msgs-1.18 {generate badOption error} {
+    set badScript {socket -foo smtp 25}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badOption* $msg]
+} {1 1}
+
+test msgs-1.19 {generate badPalette error} {
+    set badScript {image create photo -palette foo}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badPalette* $msg]
+} {1 1}
+
+test msgs-1.20 {generate badPixel error} {
+    set badScript {text . -tab {foo}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badPixel* $msg]
+} {1 1}
+
+test msgs-1.21 {generate badPriority error} {
+    set badScript {option add pattern value foobar}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badPriority* $msg]
+} {1 1}
+
+test msgs-1.22 {generate badResource error} {
+    set badScript {resource list fooBar}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badResource* $msg]
+} {1 1}
+
+test msgs-1.23 {generate badScreen error} {
+    set badScript {toplevel . -screen w:foo.bar}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badScreen* $msg]
+} {1 1}
+
+test msgs-1.24 {generate badSticky error} {
+    set badScript {grid configure .slave -sticky foobar}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badSticky* $msg]
+} {1 1}
+
+test msgs-1.25 {generate badSwitch error} {
+    set badScript {canvas . -foo bar}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badSwitch* $msg]
+} {1 1}
+
+test msgs-1.26 {generate badTab error} {
+    set badScript {text . -tab {{}a}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badTab* $msg]
+} {1 1}
+
+test msgs-1.27 {generate badTabJust error} {
+    set badScript {text . -tab {100 fooBar}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badTabJust* $msg]
+} {1 1}
+
+test msgs-1.28 {generate badTraceOp error} {
+    set badScript {trace variable foo barbaz {script}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badTraceOp* $msg]
+} {1 1}
+
+test msgs-1.29 {generate badVersion error} {
+    set badScript {package require foo barbaz}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badVersion* $msg]
+} {1 1}
+
+test msgs-1.30 {generate badVirtual error} {
+    set badScript {event add fooBar 10}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badVirtual* $msg]
+} {1 1}
+
+test msgs-1.31 {generate badVisual error} {
+    set badScript {toplevel . -visual fooBar}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badVisual* $msg]
+} {1 1}
+
+test msgs-1.32 {generate badVisualDepth error} {
+    set badScript {toplevel . -visual {staticgray fooBar}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badVisualDepth* $msg]
+} {1 1}
+
+test msgs-1.33 {generate badWholeNum error} {
+    set badScript {grid . -columnspan -100}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badWholeNum* $msg]
+} {1 1}
+
+test msgs-1.34 {generate noExpr error} {
+    set badScript {if {0} {body} elseif}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *noExpr* $msg]
+} {1 1}
+
+test msgs-1.35 {generate noScript error} {
+    set badScript {if {0} {body} elseif {}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *noScript* $msg]
+} {1 1}
+
+test msgs-1.36 {generate noSwitchArg error} {
+    set badScript {clock format 1 -f}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *noSwitchArg* $msg]
+} {1 1}
+
+test msgs-1.37 {generate noVirtual error} {
+    set badScript {event add <<foo>> <<bar>>}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *noVirtual* $msg]
+} {1 1}
+
+test msgs-1.38 {generate noEvent error} {
+    set badScript {event add <<virtual>> {}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *noEvent* $msg]
+} {1 1}
+
+test msgs-1.39 {generate nonDefAfterDef error} {
+    set badScript {proc foo {a b {c d} e} {}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *nonDefAfterDef* $msg]
+} {1 1}
+
+test msgs-1.40 {generate numArgs error} {
+    set badScript {set}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *numArgs* $msg]
+} {1 1}
+
+test msgs-1.41 {generate parse error} {
+    set badScript {lindex {}a 1}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *parse* $msg]
+} {1 1}
+
+test msgs-1.42 {generate procNumArgs error} {
+    set badScript {proc foo {} {} ; foo x}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *procNumArgs* $msg]
+} {1 1}
+
+test msgs-1.43 {generate serverAndPort error} {
+    set badScript {socket -server {script} -myport 20}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *serverAndPort* $msg]
+} {1 1}
+
+test msgs-1.44 {generate socketAsync error} {
+    set badScript {socket -async -server {script}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *socketAsync* $msg]
+} {1 1}
+
+test msgs-1.45 {generate socketServer error} {
+    set badScript {socket -server {script} -async}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *socketServer* $msg]
+} {1 1}
+
+test msgs-1.46 {generate tooManyFieldArg error} {
+    set badScript {proc foo {{a b c}} {}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *tooManyFieldArg* $msg]
+} {1 1}
+
+test msgs-1.47 {generate winAlpha error} {
+    set badScript {canvas .W}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *winAlpha* $msg]
+} {1 1}
+
+test msgs-1.48 {generate winBeginDot error} {
+    set badScript {canvas windowName}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *winBeginDot* $msg]
+} {1 1}
+
+test msgs-1.49 {generate winNotNull error} {
+    set badScript {canvas .foo..foo}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *winNotNull* $msg]
+} {1 1}
+
+test msgs-1.50 {generate badByteNum error} {
+    set badScript {ctype char 256}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badByteNum* $msg]
+} {1 1}
+
+test msgs-1.51 {generate mismatchOptions error} {
+    set badScript {cmdtrace on command $a file $b}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *mismatchOptions* $msg]
+} {1 1}
+
+test msgs-1.52 {generate obsoleteCmd error} {
+    set badScript {tkerror {hello, world}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *obsoleteCmd* $msg]
+} {1 1}
+
+test msgs-1.53 {generate errBadBrktExp error} {
+    set badScript {regexp {[]} a}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *errBadBrktExp* $msg]
+} {1 1}
+
+test msgs-1.54 {generate numListElts error} {
+    set badScript {canvas .a -scrollregion {0 0 0}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *numListElts* $msg]
+} {1 1}
+
+
+#
+# generate portability warning messages
+#
+
+test msgs-2.1 {generate nonPortBitmap error} {
+    set badScript {button .b -bitmap fooBarBaz}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *nonPortBitmap* $msg]
+} {0 1}
+
+test msgs-2.2 {generate nonPortChannel error} {
+    set badScript {puts file1 {hello world}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *nonPortChannel* $msg]
+} {0 1}
+
+test msgs-2.3 {generate nonPortCmd error} {
+    set badScript {resource close badResource}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *nonPortCmd* $msg]
+} {0 1}
+
+test msgs-2.4 {generate nonPortColor error} {
+    set badScript {image create bitmap foo -background fooBar}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *nonPortColor* $msg]
+} {0 1}
+
+test msgs-2.5 {generate nonPortCursor error} {
+    set badScript {button .b -cursor starting}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *nonPortCursor* $msg]
+} {0 1}
+
+test msgs-2.6 {generate nonPortFile error} {
+    set badScript {open $a/$b}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *nonPortFile* $msg]
+} {0 1}
+
+test msgs-2.7 {generate nonPortKeysym error} {
+    set badScript {event generate . <KeyPress> -keysym fooBar}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *nonPortKeysym* $msg]
+} {0 1}
+
+test msgs-2.8 {generate nonPortOption error} {
+    set badScript {wm aspect .}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *nonPortOption* $msg]
+} {0 1}
+
+test msgs-2.9 {generate nonPortVar error} {
+    set badScript {set tcl_precision}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *nonPortVar* $msg]
+} {0 1}
+
+test msgs-2.10 {generate warnUndefProc warning (RFE 1314)} {
+    set badScript {foo bar}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *warnUndefProc* $msg]
+} {0 1}
+
+#
+# generate warning messages
+#
+
+test msgs-3.1 {generate warnDeprecated warning} {
+    set badScript {tkerror {hello, world}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo -use tk4.1} msg]
+    list $result [string match *warnDeprecated* $msg]
+} {0 1}
+
+test msgs-3.2 {generate warnExportPat warning} {
+    set badScript {namespace export ::foo::bar}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *warnExportPat* $msg]
+} {0 1}
+
+test msgs-3.3 {generate warnExpr warning} {
+    set badScript {expr $a + $a}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *warnExpr* $msg]
+} {0 1}
+
+test msgs-3.4 {generate warnExtraClose warning} {
+    set badScript {set x ]}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *warnExtraClose* $msg]
+} {0 1}
+
+test msgs-3.5 {generate warnIfKeyword warning} {
+    set badScript {if {0} {puts hello} {puts world}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *warnIfKeyword* $msg]
+} {0 1}
+
+test msgs-3.6 {generate warnNamespacePat warning} {
+    set badScript {namespace forget ::foo*::}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *warnNamespacePat* $msg]
+} {0 1}
+
+test msgs-3.7 {generate warnPattern warning} {
+    set badScript {string match \"*[a-z]?\" {hello world}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *warnPattern* $msg]
+} {0 1}
+
+test msgs-3.8 {generate warnRedefine warning} {
+    set badScript {proc foo {} {} ; proc foo {a} {}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *warnRedefine* $msg]
+} {0 1}
+
+test msgs-3.9 {generate warnReserved warning} {
+    set badScript {font}
+    # must -use tk4.0 to get this warning
+    set result [catch {exec $echo $badScript | $tclchecker -use tk4.0 -nologo} msg]
+    list $result [string match *warnReserved* $msg]
+} {0 1}
+
+test msgs-3.10 {generate warnUnsupported warning} {
+    set badScript {canvas . -scrollincrement 100}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *warnUnsupported* $msg]
+} {0 1}
+
+test msgs-3.11 {generate warnVarRef warning} {
+    set badScript {incr $foo}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *warnVarRef* $msg]
+} {0 1}
+
+test msgs-3.12 {generate warnQuoteChar warning} {
+    set badScript {regexp {[\]} a}
+    # must -use tcl8.0 to get this warning
+    set result [catch {exec $echo $badScript | $tclchecker -use tcl8.0 -n} msg]
+    list $result [string match *warnQuoteChar* $msg]
+} {0 1}
+
+test msgs-3.13 {generate warnEscapeChar warning} {
+    set badScript {regexp {\\t} a}
+    # must -use tcl8.0 to get this warning
+    set result [catch {exec $echo $badScript | $tclchecker -use tcl8.0 -n} msg]
+    list $result [string match *warnEscapeChar* $msg]
+} {0 1}
+
+test msgs-3.14 {generate warnNotSpecial warning} {
+    set badScript {regexp {\=} a}
+    # must -use tcl8.0 to get this warning
+    set result [catch {exec $echo $badScript | $tclchecker -use tcl8.0 -n} msg]
+    list $result [string match *warnNotSpecial* $msg]
+} {0 1}
+
+test msgs-3.15 {generate warnY2K warning} {
+    set badScript {clock format 1111 -format %y}
+    # must -use tcl8.0 to get this warning
+    set result [catch {exec $echo $badScript | $tclchecker -n} msg]
+    list $result [string match *warnY2K* $msg]
+} {0 1}
+
+#
+# generate [incr Tcl] error messages
+#
+
+test msgs-4.1 {generate incrTcl::badMemberName error} {
+    set badScript {body ::a a a}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badMemberName* $msg]
+} {1 1}
+
+test msgs-4.2 {generate incrTcl::classNumArgs error} {
+    set badScript {class foo {constructor {} {}} ; foo obj1 bar}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *classNumArgs* $msg]
+} {1 1}
+
+test msgs-4.3 {generate incrTcl::classOnly error} {
+    set badScript {public {}}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *classOnly* $msg]
+} {1 1}
+
+# I couldn't recreate the procOutScope messageId
+test msgs-4.4 {generate incrTcl::procOutScope error--bug 1217} {knownBug} {
+    set badScript {}
+    set result [catch {exec $echo $badScript | $tclchecker -onepass -nologo} msg]
+    list $result [string match *procOutScope* $msg]
+} {1 1}
+
+# I couldn't recreate the procProtected messageId
+test msgs-4.5 {generate incrTcl::procProtected error--bug 1217} {knownBug} {
+    set badScript {}
+    set result [catch {exec $echo $badScript | $tclchecker -onepass -nologo} msg]
+    list $result [string match *procProtected* $msg]
+} {1 1}
+
+# I couldn't recreate the nsOnly messageId
+test msgs-4.6 {generate incrTcl::nsOnly error--bug 1217} {knownBug} {
+    set badScript {}
+    set result [catch {exec $echo $badScript | $tclchecker -onepass -nologo} msg]
+    list $result [string match *nsOnly* $msg]
+} {1 1}
+
+# I couldn't recreate the nsOrClassOnly messageId
+test msgs-4.7 {generate incrTcl::nsOrClassOnly error--bug 1217} {knownBug} {
+    set badScript {}
+    set result [catch {exec $echo $badScript | $tclchecker -onepass -nologo} msg]
+    list $result [string match *nsOrClassOnly* $msg]
+} {1 1}
+
+test msgs-4.8 {generate incrTcl::warnUnsupported error} {
+    set badScript {itcl_class a a}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *warnUnsupported* $msg]
+} {0 1}
+
+#
+# generate TclX error messages
+#
+
+test msgs-5.1 {generate tclX::badProfileOpt error} {
+    set badScript {profile -eval off a}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badProfileOpt* $msg]
+} {1 1}
+
+test msgs-5.2 {generate tclX::optionRequired error} {
+    set badScript {profile a}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *optionRequired* $msg]
+} {1 1}
+
+test msgs-5.3 {generate tclX::badLIndex error} {
+    set badScript {lvarpop a foo a}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badLIndex* $msg]
+} {1 1}
+
+test msgs-5.4 {generate tclX::badTlibFile error} {
+    set badScript {loadlibindex a}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *badTlibFile* $msg]
+} {1 1}
+
+#
+# generate Expect error messages
+#
+
+test msgs-6.1 {generate expect::warnAmbiguous warning} {
+    set badScript {exp_interact -e pat1 act1}
+    set result [catch {exec $echo $badScript | $tclchecker -nologo} msg]
+    list $result [string match *warnAmbiguous* $msg]
+} {0 1}
+
+# cleanup
+cleanupTests
+

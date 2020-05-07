@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % setupDTD SYSTEM "chrome://koextgen/locale/setup.dtd">
+  %setupDTD;
+]>
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+
+<wizard
+  id="test"
+  title="&setup.WizardNewKomodoExtension;"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  width="600px"
+  height="600px"
+  buttons="accept,cancel"
+  buttonlabelcancel="&setup.WizardCancel;"
+  buttonlabelaccept="&setup.WizardSave;"
+  onload="setup()"
+  onwizardfinish="return onWizardFinish();"
+  defaultButton="accept"
+  buttonalign="horizontal"
+  buttonorient="horizontal"
+  orient="vertical"
+  >
+  
+    <script type="application/x-javascript">
+    <![CDATA[
+    
+    var data = {};
+    var ext_name = '';
+    
+    var bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://koextgen/locale/setup.properties");
+    function get_val(strId) { return document.getElementById(strId).value; }
+    function set_val(strId, val) { document.getElementById(strId).value = val; }
+    function is_checked(strId) { return document.getElementById(strId).checked; }
+    function set_unchecked(strId) { document.getElementById(strId).checked = false; }
+    function get_nice_name(name) { return trim(name).replace(/[\W]/g,'_').toLowerCase(); }
+    function trim(str) { return str.replace(/^\s*/, '').replace(/\s*$/, ''); }
+
+    function update_url() {
+        var domain = get_val('author-domain');
+        var ext_name = get_nice_name(get_val('name'));
+        set_val('homepageURL', 'http://'+domain+'/'+ext_name);
+    }
+    
+    function update_id() {
+        try {
+            var name = get_val('name');
+            data.vars.ext_name = get_nice_name(name);
+            var domain = get_val('author-domain');
+            var newId = data.vars.ext_name+'@'+domain;
+            set_val('id', newId);
+        } catch(e) {
+            alert(e);
+        }
+    }
+    
+    function setup() {
+        try {
+            if (typeof(window.arguments) == 'undefined') {
+                alert(bundle.GetStringFromName("errorNoWindowsArguments"));
+                return;
+            }
+            data = window.arguments[0];
+            var vars = data.vars;
+            for (var i in vars) {
+                if (i == 'id' || i == 'ext_name') {
+                    //pass
+                } else {
+                    set_val(i, vars[i]);
+                }
+            }
+            if (vars['id']) {
+                var arr = vars.id.split('@');
+                if (arr.length < 2) {
+                    ko.dialogs.alert(bundle.formatStringFromName("extensionIdIsNotTheCorrectFormat", [vars.id], 1));
+                    return;
+                }
+                set_val('author-domain', arr[1]);
+            }
+            update_id();
+            if (!data.vars['homepageUrl']) {
+                update_url();
+            }
+
+            if (data.extensiontype == "komodolang") {
+                // Don't skip page2.
+                document.getElementById("page1").setAttribute("next", "page2");
+                // Show the customizing groupbox on page3.
+                document.getElementById("komodolang_customizing").removeAttribute("hidden");
+            } else if (data.extensiontype == "komodo") {
+                // Show the customizing groupbox on page3.
+                document.getElementById("komodoext_customizing").removeAttribute("hidden");
+            }
+        } catch(e) {
+            alert(e);
+        }
+    }
+
+    function onWizardFinish() {
+        try {
+            //var data = window.arguments[0];
+            for (var i in data.vars) {
+                if (i != 'ext_name') {
+                    data.vars[i] = get_val(i);
+                }
+            }
+            data.vars.ext_name = get_nice_name(data.vars.name);
+            data.valid = true;
+            data.configured = true;
+
+            // Page 2 - Language details.
+            data.lang = trim(get_val("lang"));
+            data.ext = trim(get_val("ext"));
+            data.html_based = is_checked("html_based");
+            data.xml_based = is_checked("xml_based");
+            data.line_comment_slashslash = is_checked("line_comment_slashslash");
+            data.line_comment_hash = is_checked("line_comment_hash");
+            data.line_comment_dashdash = is_checked("line_comment_dashdash");
+            data.line_comment_semicolan = is_checked("line_comment_semicolan");
+            data.line_comment_percent = is_checked("line_comment_percent");
+            data.block_comment_c = is_checked("block_comment_c");
+            data.block_comment_pascal = is_checked("block_comment_pascal");
+            data.keywords = trim(get_val("keywords")).split(/\s+/);
+            data.enable_codeintel = is_checked("codeintel");
+            // Filter out empty strings.
+            data.keywords = data.keywords.filter(function(word) { if (trim(word)) return true; return false; });
+
+            // Fire the callback.
+            data.callback(data);
+        } catch(e) {
+            alert(e);
+        }
+    }
+
+    function validate_page2() {
+        if (!trim(get_val("lang"))) {
+            alert(bundle.GetStringFromName("youMustDefineAlanguageName"));
+            return false;
+        }
+        if (!trim(get_val("ext"))) {
+            alert(bundle.GetStringFromName("youMustDefineAFilenameExtension"));
+            return false;
+        }
+        return true;
+    }
+
+    function checkbox_validate(event) {
+        var id = event.originalTarget.id;
+        var checked = event.originalTarget.checked;
+        if (id == "html_based" && checked) {
+            set_unchecked("xml_based");
+        } else if (id == "xml_based" && checked) {
+            set_unchecked("html_based");
+        }
+    }
+
+    ]]>
+    </script>
+
+    <wizardpage id="page1" pageid="page1" next="page3">
+        <!--<vbox flex="1">-->
+            <caption label="&setup.CaptionExtensionInformation;" />
+            <grid flex="1">
+                <columns>
+                    <column />
+                    <column flex="1" />
+                </columns>
+                <rows>
+                    <row align="center">
+                        <label value="&setup.LabelName;" />
+                        <textbox id="name" type="search" timeout="1000" oncommand="update_id()" />
+                    </row>
+                    <row align="center">
+                        <label value="&setup.LabelVersion;" />
+                        <textbox id="version" />
+                    </row>
+                    <row align="top">
+                        <label value="&setup.LabelDescription;" />
+                        <textbox id="description" multiline="true" value="" />
+                    </row>
+                    <row align="center">
+                        <label value="&setup.LabelAuthor;" />
+                        <textbox id="creator" value="" />
+                    </row>
+                    <row align="center">
+                        <label value="&setup.LabelDomain;" />
+                        <textbox id="author-domain" value="&setup.TextboxYourdomainOrg;" type="search" timeout="1000" oncommand="update_id()" />
+                    </row>
+                    <row align="center">
+                        <label value="&setup.LabelHomePage;" />
+                        <textbox id="homepageURL" value="" />
+                    </row>
+                    <row align="center">
+                        <label value="&setup.LabelExtensionId;" />
+                        <label style="font-weight: bolder;" id="id" />
+                    </row>
+                </rows>
+            </grid>
+        <!--</vbox>-->
+    </wizardpage>
+
+    <wizardpage id="page2"
+                pageid="page2"
+                next="page3"
+                onpageadvanced="return validate_page2();"
+                >
+        <!-- For defining the Komodo language properties -->
+        <caption label="&setup.CaptionLanguageSettings;" />
+        <radiogroup id="lang_base_group" />
+        <groupbox>
+            <grid flex="1">
+                <columns>
+                    <column />
+                    <column flex="1" />
+                </columns>
+                <rows>
+                    <row align="center">
+                        <label value="&setup.LabelLanguageName;" />
+                        <textbox id="lang"
+                                 placeholder="Python"
+                                 tooltiptext="&setup.TextboxTheLanguageNameShouldBeginWithCapital;"
+                                 />
+                    </row>
+                    <row align="center">
+                        <label value="&setup.LabelFilenameExtension;" />
+                        <textbox id="ext"
+                                 placeholder=".py"
+                                 tooltiptext="&setup.TextboxFilesWithThisExtensionWillBeAssociated;"
+                                 />
+                    </row>
+                    <row align="top">
+                        <label value="&setup.LabelHtmlBasedLanguage;" />
+                        <checkbox id="html_based"
+                                  oncommand="checkbox_validate(event);"
+                                  label=" "
+                                  tooltiptext="&setup.CheckboxHtmlBasedLikePhpDjango;"
+                                  group="lang_base_group"
+                                  />
+                    </row>
+                    <row align="center">
+                        <label value="&setup.LabelXmlBasedLanguage;" />
+                        <checkbox id="xml_based"
+                                  oncommand="checkbox_validate(event);"
+                                  label=" "
+                                  tooltiptext="&setup.CheckboxXmlBasedLikeXsltXulAndMxml;"
+                                  group="lang_base_group"
+                                  />
+                    </row>
+                    <row>
+                        <groupbox>
+                            <caption label="&setup.CaptionLineComments;" />
+                                <checkbox id="line_comment_slashslash"
+                                          label="//"
+                                          tooltiptext="&setup.CheckboxCStyleOneLineComments;"
+                                          />
+                                <checkbox id="line_comment_hash"
+                                          label="#"
+                                          tooltiptext="&setup.CheckboxPerlPythonOneLineHashComments;"
+                                          />
+                                <checkbox id="line_comment_dashdash"
+                                          label="--"
+                                          tooltiptext="&setup.CheckboxSqlStyleOneLineComments;"
+                                          />
+                                <checkbox id="line_comment_semicolan"
+                                          label=";"
+                                          tooltiptext="&setup.CheckboxLispStyleOneLineComments;"
+                                          />
+                                <checkbox id="line_comment_percent"
+                                          label="%"
+                                          tooltiptext="&setup.CheckboxErlangStyleOneLineComments;"
+                                          />
+                        </groupbox>
+                        <groupbox>
+                            <caption label="&setup.CaptionBlockComments;" />
+                                <checkbox id="block_comment_c"
+                                          label="/* ... */"
+                                          tooltiptext="&setup.CheckboxCStyleBlockComments;"
+                                          />
+                                <checkbox id="block_comment_pascal"
+                                          label="(* ... *)"
+                                          tooltiptext="&setup.CheckboxPascalStyleBlockComments;"
+                                          />
+                        </groupbox>
+                    </row>
+                </rows>
+            </grid>
+        </groupbox>
+        <groupbox>
+            <caption label="&setup.CaptionKeywords;" />
+            <textbox id="keywords"
+                     multiline="true"
+                     rows="4"
+                     placeholder="Separate the keywords using spaces"
+                     tooltiptext="&setup.TextboxKeywordsAreSpecialIdentifiers;"
+                     />
+        </groupbox>
+        <groupbox>
+            <caption label="&setup.CaptionCodeIntelligence;" />
+                <checkbox id="codeintel"
+                          label="&setup.CheckboxEnableCodeIntelligence;"
+                          tooltiptext="&setup.CheckboxCodeIntelligenceWillBeEnabled;"
+                          />
+        </groupbox>
+    </wizardpage>
+
+    <wizardpage id="page3" pageid="page3">
+        <!-- For creating the extension. -->
+        <groupbox>
+            <caption label="&setup.CaptionBuildingIt;" />
+            <description>&setup.DescriptionAfterCreatingTheExtension;</description>
+        </groupbox>
+        <groupbox>
+            <caption label="&setup.CaptionInstallingIt;" />
+            <description>&setup.DescriptionOnceTheXpiFileIsBuilt;</description>
+        </groupbox>
+        <groupbox id="komodoext_customizing" hidden="true">
+            <caption label="&setup.CaptionCustomizingIt;" />
+            <description>&setup.DescriptionCustomizingIt;</description>
+
+            <label style="font-weight: bold" value="content/*_overlay.xul" />
+            <description style="margin-left: 20px">&setup.CustomizingContentFiles;</description>
+        </groupbox>
+        <groupbox id="komodolang_customizing" hidden="true">
+            <caption label="&setup.CaptionCustomizingIt;" />
+            <description>&setup.DescriptionCustomizingIt;</description>
+
+            <label style="font-weight: bold" value="components/ko*.py" />
+            <description style="margin-left: 20px">&setup.CustomizingComponentFiles;</description>
+
+            <label style="font-weight: bold"  value="pylib/codeintel_*.py" />
+            <description style="margin-left: 20px">&setup.CustomizingPylibFiles;</description>
+
+            <label style="font-weight: bold"  value="udl/*.udl" />
+            <description style="margin-left: 20px">&setup.CustomizingUdlFiles;</description>
+
+            <label style="font-weight: bold"  value="templates/*" />
+            <description style="margin-left: 20px">&setup.CustomizingTemplateFiles;</description>
+        </groupbox>
+    </wizardpage>
+
+</wizard>

@@ -1,0 +1,10 @@
+// komodo tool: url
+// ================
+// auto_abbreviation: true
+// indent_relative: false
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.0.12
+// ================
+url_for('[[%tabstop1:foo]]'[[%tabstop2:2]])[[%tabstop3:3]]!@#_currentPos!@#_anchor

@@ -1,0 +1,958 @@
+# incrTclTable --
+#
+#	This file contains the table of commands used to check [incr Tcl].
+#	This file should be sourced into any test suite that wants to
+#	perform tests based on TclX commands.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# # RCS: @(#) $Id: incrTclTable,v 1.3 2000/05/30 22:24:54 wart Exp $
+
+
+# data type		legal values		illegal values
+# ---------		------------		--------------
+# Class member 		a::a			a a::a::a
+
+
+set checkIncrTcl1.5 {
+{body a::a a a}				{ok}
+{body a::a {a a} a}			{ok}
+{body ::a::a a a}			{ok}
+{body a::a a a a}			{1 {0 15} numArgs {} {}}
+{body a::a a}				{1 {0 11} numArgs {} {}}
+{body a::a}				{1 {0 9} numArgs {} {}}
+{body}					{1 {0 4} numArgs {} {}}
+{body ::a a a}				{1 {0 12} incrTcl::badMemberName {5 3} {}}
+{body a a a}				{1 {0 10} incrTcl::badMemberName {5 1} {}}
+{body a::a {args foo} a}		{1 {0 22} argAfterArgs {10 10} {}}
+{body a::a [set] a}			{1 {11 3} numArgs {} {}}
+{body a::a {{}a} a}			{1 {0 17} badList {11 1} {{list element in braces followed by "a" instead of space}}}
+{body a a {testScanCmd}}		{1 {0 22} incrTcl::badMemberName {5 1} {} 1 {10 11} procNumArgs {} testScanCmd}
+
+
+{itcl_class a a}			{ok}
+{itcl_class a {}}			{ok}
+{itcl_class a}				{1 {0 12} numArgs {} {}}
+{itcl_class [set] {}}			{1 {12 3} numArgs {} {}}
+{itcl_class a {set $a foo}}		{1 {14 10} warnVarRef {18 2} {}}
+{itcl_class a {testScanCmd}}		{1 {14 11} procNumArgs {} testScanCmd}
+
+
+{itcl_info classes}			{ok}
+
+{itcl_info objects}			{ok}
+{itcl_info objects -class Foo}		{ok}
+{itcl_info objects -c Foo}		{1 {0 24} badSwitch {18 2} -c}
+{itcl_info objects -isa Foo}		{ok}
+{itcl_info objects -i Foo}		{1 {0 24} badSwitch {18 2} -i}
+{itcl_info objects Foo*}		{ok}
+{itcl_info objects a a}			{1 {0 21} numArgs {} {}}
+{itcl_info objects -class}		{1 {0 24} noSwitchArg {18 6} -class}
+{itcl_info objects -c}			{1 {0 20} badSwitch {18 2} -c}
+{itcl_info objects -foo}		{1 {0 22} badSwitch {18 4} -foo}
+{itcl_info objects -f}			{1 {0 20} badSwitch {18 2} -f}
+{itcl_info ob}				{ok}
+}
+
+
+set checkIncrTcl2.0 {
+{class a a}				{ok}
+{class a {}}				{ok}
+{class}					{1 {0 5} numArgs {} {}}
+{class a}				{1 {0 7} numArgs {} {}}
+{class a a a}				{1 {0 11} numArgs {} {}}
+{class [set] {}}			{1 {7 3} numArgs {} {}}
+{class a {set $a foo}}			{1 {9 10} warnVarRef {13 2} {}}
+
+
+{code a}				{ok}
+{code {}}				{ok}
+{code -- -a}				{ok}
+{code -namespace a a}			{ok}
+{code}					{1 {0 4} numArgs {} {}}
+{code -a}				{1 {0 7} badSwitch {5 2} -a 1 {0 7} numArgs {} {}}
+{code --}				{1 {0 7} numArgs {} {}}
+{code -namespace}			{1 {0 15} noSwitchArg {5 10} -namespace}
+{code -namespace a}			{1 {0 17} numArgs {} {}}
+{code [set]}				{1 {6 3} numArgs {} {}}
+{code -n}				{1 {0 7} badSwitch {5 2} -n 1 {0 7} numArgs {} {}}
+{code -}				{1 {0 6} badSwitch {5 1} - 1 {0 6} numArgs {} {}}
+
+
+{class a {common a}}			{ok}
+{class a {common a a}}			{ok}
+{class a {common a a a}}		{1 {9 12} numArgs {} {}}
+{class a {common [set]}}		{1 {17 3} numArgs {} {}}
+{class a {common $a}}			{1 {9 9} warnVarRef {16 2} {}}
+{class a {common a [set]}}		{1 {19 3} numArgs {} {}}
+
+
+{configbody a::a a}			{ok}
+{configbody ::a a}			{1 {0 16} incrTcl::badMemberName {11 3} {}}
+{configbody a a}			{1 {0 14} incrTcl::badMemberName {11 1} {}}
+{configbody}				{1 {0 10} numArgs {} {}}
+{configbody a::a}			{1 {0 15} numArgs {} {}}
+{configbody a::a a a}			{1 {0 19} numArgs {} {}}
+{configbody a::a set}			{1 {16 3} numArgs {} {}}
+{configbody a {testScanCmd}}		{1 {0 26} incrTcl::badMemberName {11 1} {} 1 {14 11} procNumArgs {} testScanCmd}
+
+
+{class a {constructor a a}}		{ok}
+{class a {constructor a a a}}		{ok}
+{class a {constructor a}}		{1 {9 13} numArgs {} {}}
+{class a {constructor}}			{1 {9 11} numArgs {} {}}
+{class a {constructor {args a} a}}	{1 {9 22} argAfterArgs {21 8} {}}
+{class a {constructor a {set} a}}	{1 {24 3} numArgs {} {}}
+{class a {constructor a a set}}		{1 {25 3} numArgs {} {}}
+{class a {constructor a {testScanCmd}}}	{1 {24 11} procNumArgs {} testScanCmd}
+
+
+{delete a}				{1 {0 8} badOption {7 1} {{class object namespace} a}}
+
+{delete class a}			{ok}
+{delete class a a}			{ok}
+{delete cl a}				{ok}
+{delete class [set]}			{1 {14 3} numArgs {} {}}
+{delete class a [set]}			{1 {16 3} numArgs {} {}}
+{delete class}				{1 {0 12} numArgs {} {}}
+
+{delete object a}			{ok}
+{delete object a a}			{ok}
+{delete ob a}				{ok}
+{delete object}				{1 {0 13} numArgs {} {}}
+{delete object [set]}			{1 {15 3} numArgs {} {}}
+{delete object a [set]}			{1 {17 3} numArgs {} {}}
+
+
+{class a {method a a {constructor}}}	{ok}
+{class a {method a a {method a a a}}}	{1 {21 12} incrTcl::classOnly {21 6} method}
+{class a {method a a {testScanCmd}}}	{1 {21 11} procNumArgs {} testScanCmd}
+	
+
+{delete namespace a}			{ok}
+{delete namespace a a}			{ok}
+{delete namespace}			{1 {0 16} numArgs {} {}}
+{delete namespace [set]}		{1 {18 3} numArgs {} {}}
+{delete namespace a [set]}		{1 {20 3} numArgs {} {}}
+{delete na a}				{ok}
+
+
+{class a {destructor a}}		{ok}
+{class a {destructor}}			{1 {9 10} numArgs {} {}}
+{class a {destructor a a}}		{1 {9 14} numArgs {} {}}
+{class a {destructor {set}}}		{1 {21 3} numArgs {} {}}
+{class a {destructor {testScanCmd}}}	{1 {21 11} procNumArgs {} testScanCmd}
+
+
+{import}				{1 {0 6} numArgs {} {}}
+{import a}				{1 {0 8} badOption {7 1} {{add all list remove} a}}
+
+{import add a}				{ok}
+{import add a a}			{ok}
+{import add -before a a}		{ok}
+{import add -after a a}			{ok}
+{import ad a}				{ok}
+{import add -b a a}			{1 {0 17} badSwitch {11 2} -b}
+{import add -a a a}			{1 {0 17} badSwitch {11 2} -a}
+{import add}				{1 {0 10} numArgs {} {}}
+{import add -a}				{1 {0 13} badSwitch {11 2} -a 1 {0 13} numArgs {} {}}
+{import add [set]}			{1 {12 3} numArgs {} {}}
+{import add a [set]}			{1 {14 3} numArgs {} {}}
+
+{import all}				{ok}
+{import all a}				{ok}
+{import al}				{ok}
+{import all a a}			{1 {0 14} numArgs {} {}}
+{import all [set]}			{1 {12 3} numArgs {} {}}
+
+{import list}				{ok}
+{import list a}				{ok}
+{import li}				{ok}
+{import list a a}			{1 {0 15} numArgs {} {}}
+{import list [set]}			{1 {13 3} numArgs {} {}}
+
+{import remove a}			{ok}
+{import remove a a}			{ok}
+{import re a}				{ok}
+{import remove}				{1 {0 13} numArgs {} {}}
+{import remove [set]}			{1 {15 3} numArgs {} {}}
+{import remove a [set]}			{1 {17 3} numArgs {} {}}
+
+
+{class a {inherit a}}			{ok}
+{class a {inherit a a}}			{ok}
+{class a {inherit a::b}}		{ok}
+{class a {inherit}}			{1 {9 7} numArgs {} {}}
+{class a {inherit [set]}}		{1 {18 3} numArgs {} {}}
+
+
+{info $a}				 {ok}
+{info $a a}				 {ok}
+{info $a a a}				 {ok}
+{info $a a a a}				 {ok}
+{info $a a a a a}			 {ok}
+{info}					 {1 {0 4} numArgs {} {}}
+{info [set]}				 {1 {6 3} numArgs {} {}}
+{info foo}				 {1 {0 8} badOption {5 3} {{args body classes cmdcount commands complete context default exists globals level library loaded locals namespace objects patchlevel procs protection script tclversion vars which} foo}}
+{info a}				 {1 {0 6} numArgs {} {}}
+
+{info sharedlibextension}		 {1 {0 23} badOption {5 18} {{args body classes cmdcount commands complete context default exists globals level library loaded locals namespace objects patchlevel procs protection script tclversion vars which} sharedlibextension}}
+{info nameofexecutable}			 {1 {0 21} badOption {5 16} {{args body classes cmdcount commands complete context default exists globals level library loaded locals namespace objects patchlevel procs protection script tclversion vars which} nameofexecutable}}
+{info hostname}				 {1 {0 13} badOption {5 8} {{args body classes cmdcount commands complete context default exists globals level library loaded locals namespace objects patchlevel procs protection script tclversion vars which} hostname}}
+
+{info args a}				 {ok}
+{info args}				 {1 {0 9} numArgs {} {}}
+{info args a a}				 {1 {0 13} numArgs {} {}}
+{info args [set]}			 {1 {11 3} numArgs {} {}}
+
+{info body a}				 {ok}
+{info body}				 {1 {0 9} numArgs {} {}}
+{info body a a}				 {1 {0 13} numArgs {} {}}
+{info body [set]}			 {1 {11 3} numArgs {} {}}
+
+{info classes}				{ok}
+{info classes a}			{ok}
+{info cl}				{ok}
+{info classes a a}			{1 {0 16} numArgs {} {}}
+{info classes [set]}			{1 {14 3} numArgs {} {}}
+{info classes a[pwd]*}			{1 {0 20} warnPattern {13 7} {}}
+
+{info cmdcount}				 {ok}
+{info cmdcount a}			 {1 {0 15} numArgs {} {}}
+
+{info commands}				 {ok}
+{info commands a}			 {ok}
+{info commands a a}			 {1 {0 17} numArgs {} {}}
+{info commands a[pwd]*}			 {1 {0 21} warnPattern {14 7} {}}
+
+{info complete a}			 {ok}
+{info complete}				 {1 {0 13} numArgs {} {}}
+{info complete a a}			 {1 {0 17} numArgs {} {}}
+{info complete [set]}			 {1 {15 3} numArgs {} {}}
+
+{info context}				{ok}
+{info con}				{ok}
+{info context a}			{1 {0 14} numArgs {} {}}
+
+{info default a a a}			 {ok}
+{info default}				 {1 {0 12} numArgs {} {}}
+{info default a}			 {1 {0 14} numArgs {} {}}
+{info default a a}			 {1 {0 16} numArgs {} {}}
+{info default a a a a}			 {1 {0 20} numArgs {} {}}
+{info default [set] a a}		 {1 {14 3} numArgs {} {}}
+{info default a [set] a}		 {1 {16 3} numArgs {} {}}
+{info default a a $A}			 {1 {0 19} warnVarRef {17 2} {}}
+
+{info exists a}				 {ok}
+{info exists}				 {1 {0 11} numArgs {} {}}
+{info exists a a}			 {1 {0 15} numArgs {} {}}
+{info exists $A}			 {1 {0 14} warnVarRef {12 2} {}}
+
+{info globals}				 {ok}
+{info globals a}			 {ok}
+{info globals a a}			 {1 {0 16} numArgs {} {}}
+{info globals a[pwd]*}			 {1 {0 20} warnPattern {13 7} {}}
+
+{info level}				 {ok}
+{info level 0}				 {ok}
+{info level 0 a}			 {1 {0 14} numArgs {} {}}
+{info level a}				 {1 {0 12} badInt {11 1} {}}
+
+{info library}				 {ok}
+{info library a}			 {1 {0 14} numArgs {} {}}
+
+{info loaded}				 {ok}
+{info loaded a}				 {ok}
+{info loaded a a}			 {1 {0 15} numArgs {} {}}
+{info loaded {}a}			 {1 {0 15} parse {14 1} {{extra characters after close-brace}}}
+
+{info locals}				 {ok}
+{info locals a}				 {ok}
+{info locals a a}			 {1 {0 15} numArgs {} {}}
+{info locals a[pwd]*}			 {1 {0 19} warnPattern {12 7} {}}
+
+{info namespace}			{1 {0 14} numArgs {} {}}
+
+{info namespace all}			{ok}
+{info namespace all a*}			{ok}
+{info namespace al}			{ok}
+{info namespace all a[pwd]}		{1 {0 25} warnPattern {19 6} {}}
+{info namespace all a a}		{1 {0 22} numArgs {} {}}
+
+{info namespace children}		{ok}
+{info namespace children a}		{ok}
+{info namespace ch}			{ok}
+{info namespace children a a}		{1 {0 27} numArgs {} {}}
+{info namespace children [set]}		{1 {25 3} numArgs {} {}}
+{info namespace children a[pwd]*}	{1 {0 31} warnPattern {24 7} {}}
+
+{info namespace parent}			{ok}
+{info namespace parent a}		{ok}
+{info namespace pa}			{ok}
+{info namespace parent a a}		{1 {0 25} numArgs {} {}}
+{info namespace parent [set]}		{1 {23 3} numArgs {} {}}
+{info namespace parent a[pwd]*}		{1 {0 29} warnPattern {22 7} {}}
+
+{info namespace qualifiers a}		{ok}
+{info namespace qu a}			{ok}
+{info namespace qualifiers}		{1 {0 25} numArgs {} {}}
+{info namespace qualifiers a a}		{1 {0 29} numArgs {} {}}
+{info namespace qualifiers [set]}	{1 {27 3} numArgs {} {}}
+
+{info namespace tail a}			{ok}
+{info namespace ta a}			{ok}
+{info namespace tail}			{1 {0 19} numArgs {} {}}
+{info namespace tail [set]}		{1 {21 3} numArgs {} {}}
+{info namespace tail a a}		{1 {0 23} numArgs {} {}}
+
+{info objects}				{ok}
+{info objects a}			{ok}
+{info objects -class a}			{ok}
+{info objects -isa a}			{ok}
+{info ob}				{ok}
+{info objects -c a}			{1 {0 17} badSwitch {13 2} -c}
+{info objects -i a}			{1 {0 17} badSwitch {13 2} -i}
+{info objects a a}			{1 {0 16} numArgs {} {}}
+{info objects [set]}			{1 {14 3} numArgs {} {}}
+{info objects a[pwd]*}			{1 {0 20} warnPattern {13 7} {}}
+{info objects -a}			{1 {0 15} badSwitch {13 2} -a}
+{info objects [set]}			{1 {14 3} numArgs {} {}}
+
+{info patchlevel}			 {ok}
+{info patchlevel a}			 {1 {0 17} numArgs {} {}}
+
+{info procs}				 {ok}
+{info procs a}				 {ok}
+{info procs a a}			 {1 {0 14} numArgs {} {}}
+{info procs a[pwd]*}			 {1 {0 18} warnPattern {11 7} {}}
+
+{info protection a}			{ok}
+{info prot a}				{ok}
+{info protection a a}			{1 {0 19} numArgs {} {}}
+{info protection -variable a}		{1 {0 27} numArgs {} {}}
+{info protection -variable $a}		{1 {0 28} warnVarRef {26 2} {} 1 {0 28} numArgs {} {}}
+{info protection -v a}			{1 {0 20} badSwitch {16 2} -v}
+{info protection -command a}		{1 {0 26} numArgs {} {}}
+{info protection -c a}			{1 {0 20} badSwitch {16 2} -c}
+
+{info script}				 {ok}
+{info script a}				 {1 {0 13} numArgs {} {}}
+
+{info tclversion}			 {ok}
+{info tclversion a}			 {1 {0 17} numArgs {} {}}
+
+{info vars}				 {ok}
+{info vars a}				 {ok}
+{info vars a a}				 {1 {0 13} numArgs {} {}}
+{info vars a[pwd]*}			 {1 {0 17} warnPattern {10 7} {}}
+
+{info which a}				{ok}
+{info which -command a}			{ok}
+{info which -variable a}		{ok}
+{info which -namespace a}		{ok}
+{info which -variable $a}		{ok}
+{info which [set]}			{1 {12 3} numArgs {} {}}
+{info which -command [set]}		{1 {21 3} numArgs {} {}}
+{info which -variable [set]}		{1 {22 3} numArgs {} {}}
+{info which -namespace [set]}		{1 {23 3} numArgs {} {}}
+{info which -c a}			{1 {0 15} badSwitch {11 2} -c}
+{info which -v a}			{1 {0 15} badSwitch {11 2} -v}
+{info which -n a}			{1 {0 15} badSwitch {11 2} -n}
+
+
+{itcl_class}				{1 {0 10} warnUnsupported {0 10} class 1 {0 10} numArgs {} {}}
+{itcl_class a a}			{1 {0 14} warnUnsupported {0 10} class}
+{itcl_info classes}			{1 {0 17} warnUnsupported {10 7} {{info classes}}}
+{itcl_info objects}			{1 {0 17} warnUnsupported {10 7} {{info objects}}}
+
+{class a {method a}}			{ok}
+{class a {method a a}}			{ok}
+{class a {method a a a}}		{ok}
+
+{class a {method}}			{1 {9 6} numArgs {} {}}
+{class a {method [set]}}		{1 {17 3} numArgs {} {}}
+{class a {method a [set]}}		{1 {19 3} numArgs {} {}}
+{class a {method a {{}a} a}}		{1 {9 16} badList {19 1} {{list element in braces followed by "a" instead of space}}}
+{class a {method a {{}a}}}		{1 {9 14} badList {19 1} {{list element in braces followed by "a" instead of space}}}
+{class a {method a {set} a}}		{ok}
+{class a {method a a {set}}}		{1 {21 3} numArgs {} {}}
+
+
+{namespace a a}				{ok}
+{namespace a}				{ok}
+{namespace a::}				{ok}
+{namespace}				{1 {0 9} numArgs {} {}}
+{namespace a a a}			{1 {0 15} numArgs {} {}}
+{namespace a {set}}			{1 {13 3} numArgs {} {}}
+{namespace a {testScanCmd}}		{1 {13 11} procNumArgs {} testScanCmd}
+
+{private}				{1 {0 7} numArgs {} {}}
+{private a}				{ok}
+{private a a}				{ok}
+{private proc a a a}			{ok}
+{private proc a {{}a} a}		{1 {8 14} badList {16 1} {{list element in braces followed by "a" instead of space}}}
+{private proc a}			{1 {8 6} numArgs {} {}}
+{private proc a a {set}}		{1 {18 3} numArgs {} {}}
+
+{protected a}				{ok}
+{protected a a}				{ok}
+{protected proc a a a}			{ok}
+{protected proc a {{}a} a}		{1 {10 14} badList {18 1} {{list element in braces followed by "a" instead of space}}}
+{protected proc a}			{1 {10 6} numArgs {} {}}
+{protected proc a a {set}}		{1 {20 3} numArgs {} {}}
+
+{public a}				{ok}
+{public a a}				{ok}
+{public proc a a a}			{ok}
+{public proc a {{}a} a}			{1 {7 14} badList {15 1} {{list element in braces followed by "a" instead of space}}}
+{public proc a}				{1 {7 6} numArgs {} {}}
+{public proc a a {set}}			{1 {17 3} numArgs {} {}}
+
+{scope a}				{ok}
+{scope -a}				{ok}
+{scope}					{1 {0 5} numArgs {} {}}
+{scope a a}				{1 {0 9} numArgs {} {}}
+{scope [set]}				{1 {7 3} numArgs {} {}}
+
+{variable a}				{ok}
+{variable a init}			{ok}
+{class a {public variable a a a}} 	{ok}
+{variable a a a}			{1 {0 14} numArgs {} {}}
+{class a {private variable a a a}} 	{1 {17 14} numArgs {} {}}
+{class a {public variable a a {set}}} 	{1 {30 3} numArgs {} {}}
+{variable}				{1 {0 8} numArgs {} {}}
+}
+
+set checkIncrTcl2.1 {
+{info $a}				 {ok}
+{info $a a}				 {ok}
+{info $a a a}				 {ok}
+{info $a a a a}				 {ok}
+{info $a a a a a}			 {ok}
+{info}					 {1 {0 4} numArgs {} {}}
+{info [set]}				 {1 {6 3} numArgs {} {}}
+{info foo}				 {1 {0 8} badOption {5 3} {{args body classes cmdcount commands complete context default exists globals hostname level library loaded locals nameofexecutable namespace objects patchlevel procs protection script sharedlibextension tclversion vars which} foo}}
+{info a}				 {1 {0 6} numArgs {} {}}
+
+{info args a}				 {ok}
+{info args}				 {1 {0 9} numArgs {} {}}
+{info args a a}				 {1 {0 13} numArgs {} {}}
+{info args [set]}			 {1 {11 3} numArgs {} {}}
+
+{info body a}				 {ok}
+{info body}				 {1 {0 9} numArgs {} {}}
+{info body a a}				 {1 {0 13} numArgs {} {}}
+{info body [set]}			 {1 {11 3} numArgs {} {}}
+
+{info classes}				{ok}
+{info classes a}			{ok}
+{info cl}				{ok}
+{info classes a a}			{1 {0 16} numArgs {} {}}
+{info classes [set]}			{1 {14 3} numArgs {} {}}
+{info classes a[pwd]*}			{1 {0 20} warnPattern {13 7} {}}
+
+{info cmdcount}				 {ok}
+{info cmdcount a}			 {1 {0 15} numArgs {} {}}
+
+{info commands}				 {ok}
+{info commands a}			 {ok}
+{info commands a a}			 {1 {0 17} numArgs {} {}}
+{info commands a[pwd]*}			 {1 {0 21} warnPattern {14 7} {}}
+
+{info complete a}			 {ok}
+{info complete}				 {1 {0 13} numArgs {} {}}
+{info complete a a}			 {1 {0 17} numArgs {} {}}
+{info complete [set]}			 {1 {15 3} numArgs {} {}}
+
+{info context}				{ok}
+{info con}				{ok}
+{info context a}			{1 {0 14} numArgs {} {}}
+
+{info default a a a}			 {ok}
+{info default}				 {1 {0 12} numArgs {} {}}
+{info default a}			 {1 {0 14} numArgs {} {}}
+{info default a a}			 {1 {0 16} numArgs {} {}}
+{info default a a a a}			 {1 {0 20} numArgs {} {}}
+{info default [set] a a}		 {1 {14 3} numArgs {} {}}
+{info default a [set] a}		 {1 {16 3} numArgs {} {}}
+{info default a a $A}			 {1 {0 19} warnVarRef {17 2} {}}
+
+{info exists a}				 {ok}
+{info exists}				 {1 {0 11} numArgs {} {}}
+{info exists a a}			 {1 {0 15} numArgs {} {}}
+{info exists $A}			 {1 {0 14} warnVarRef {12 2} {}}
+
+{info globals}				 {ok}
+{info globals a}			 {ok}
+{info globals a a}			 {1 {0 16} numArgs {} {}}
+{info globals a[pwd]*}			 {1 {0 20} warnPattern {13 7} {}}
+
+{info hostname}				 {ok}
+{info hostname a}			 {1 {0 15} numArgs {} {}}
+
+{info level}				 {ok}
+{info level 0}				 {ok}
+{info level 0 a}			 {1 {0 14} numArgs {} {}}
+{info level a}				 {1 {0 12} badInt {11 1} {}}
+
+{info library}				 {ok}
+{info library a}			 {1 {0 14} numArgs {} {}}
+
+{info loaded}				 {ok}
+{info loaded a}				 {ok}
+{info loaded a a}			 {1 {0 15} numArgs {} {}}
+{info loaded {}a}			 {1 {0 15} parse {14 1} {{extra characters after close-brace}}}
+
+{info locals}				 {ok}
+{info locals a}				 {ok}
+{info locals a a}			 {1 {0 15} numArgs {} {}}
+{info locals a[pwd]*}			 {1 {0 19} warnPattern {12 7} {}}
+
+{info nameofexecutable}			 {ok}
+{info nameofexecutable a}		 {1 {0 23} numArgs {} {}}
+
+{info namespace}			{1 {0 14} numArgs {} {}}
+
+{info namespace all}			{ok}
+{info namespace all a*}			{ok}
+{info namespace al}			{ok}
+{info namespace all a[pwd]}		{1 {0 25} warnPattern {19 6} {}}
+{info namespace all a a}		{1 {0 22} numArgs {} {}}
+
+{info namespace children}		{ok}
+{info namespace children a}		{ok}
+{info namespace ch}			{ok}
+{info namespace children a a}		{1 {0 27} numArgs {} {}}
+{info namespace children [set]}		{1 {25 3} numArgs {} {}}
+{info namespace children a[pwd]*}	{1 {0 31} warnPattern {24 7} {}}
+
+{info namespace parent}			{ok}
+{info namespace parent a}		{ok}
+{info namespace pa}			{ok}
+{info namespace parent a a}		{1 {0 25} numArgs {} {}}
+{info namespace parent [set]}		{1 {23 3} numArgs {} {}}
+{info namespace parent a[pwd]*}		{1 {0 29} warnPattern {22 7} {}}
+
+{info namespace qualifiers a}		{ok}
+{info namespace qu a}			{ok}
+{info namespace qualifiers}		{1 {0 25} numArgs {} {}}
+{info namespace qualifiers a a}		{1 {0 29} numArgs {} {}}
+{info namespace qualifiers [set]}	{1 {27 3} numArgs {} {}}
+
+{info namespace tail a}			{ok}
+{info namespace ta a}			{ok}
+{info namespace tail}			{1 {0 19} numArgs {} {}}
+{info namespace tail [set]}		{1 {21 3} numArgs {} {}}
+{info namespace tail a a}		{1 {0 23} numArgs {} {}}
+
+{info objects}				{ok}
+{info objects a}			{ok}
+{info objects -class a}			{ok}
+{info objects -isa a}			{ok}
+{info ob}				{ok}
+{info objects -c a}			{1 {0 17} badSwitch {13 2} -c}
+{info objects -i a}			{1 {0 17} badSwitch {13 2} -i}
+{info objects a a}			{1 {0 16} numArgs {} {}}
+{info objects [set]}			{1 {14 3} numArgs {} {}}
+{info objects a[pwd]*}			{1 {0 20} warnPattern {13 7} {}}
+{info objects -a}			{1 {0 15} badSwitch {13 2} -a}
+{info objects [set]}			{1 {14 3} numArgs {} {}}
+
+{info patchlevel}			 {ok}
+{info patchlevel a}			 {1 {0 17} numArgs {} {}}
+
+{info procs}				 {ok}
+{info procs a}				 {ok}
+{info procs a a}			 {1 {0 14} numArgs {} {}}
+{info procs a[pwd]*}			 {1 {0 18} warnPattern {11 7} {}}
+
+{info protection a}			{ok}
+{info prot a}				{ok}
+{info protection a a}			{1 {0 19} numArgs {} {}}
+{info protection -variable a}		{1 {0 27} numArgs {} {}}
+{info protection -variable $a}		{1 {0 28} warnVarRef {26 2} {} 1 {0 28} numArgs {} {}}
+{info protection -v a}			{1 {0 20} badSwitch {16 2} -v}
+{info protection -command a}		{1 {0 26} numArgs {} {}}
+{info protection -c a}			{1 {0 20} badSwitch {16 2} -c}
+
+{info script}				 {ok}
+{info script a}				 {1 {0 13} numArgs {} {}}
+
+{info sharedlibextension}		{ok}
+{info sharedlibextension a}		{1 {0 25} numArgs {} {}}
+
+{info tclversion}			 {ok}
+{info tclversion a}			 {1 {0 17} numArgs {} {}}
+
+{info vars}				 {ok}
+{info vars a}				 {ok}
+{info vars a a}				 {1 {0 13} numArgs {} {}}
+{info vars a[pwd]*}			 {1 {0 17} warnPattern {10 7} {}}
+
+{info which a}				{ok}
+{info which -command a}			{ok}
+{info which -variable a}		{ok}
+{info which -namespace a}		{ok}
+{info which -variable $a}		{ok}
+{info which [set]}			{1 {12 3} numArgs {} {}}
+{info which -command [set]}		{1 {21 3} numArgs {} {}}
+{info which -variable [set]}		{1 {22 3} numArgs {} {}}
+{info which -namespace [set]}		{1 {23 3} numArgs {} {}}
+{info which -c a}			{1 {0 15} badSwitch {11 2} -c}
+{info which -v a}			{1 {0 15} badSwitch {11 2} -v}
+{info which -n a}			{1 {0 15} badSwitch {11 2} -n}
+
+}
+
+
+set checkIncrTcl2.2 {
+}
+
+
+set checkIncrTcl3.0 {
+{itcl::body a::a a a}			{ok}
+{itcl::body a::a {a a} a}		{ok}
+{itcl::body ::a::a a a}			{ok}
+{itcl::body a::a a a a}			{1 {0 21} numArgs {} {}}
+{itcl::body a::a a}			{1 {0 17} numArgs {} {}}
+{itcl::body a::a}			{1 {0 15} numArgs {} {}}
+{itcl::body}				{1 {0 10} numArgs {} {}}
+{itcl::body ::a a a}			{1 {0 18} incrTcl::badMemberName {11 3} {}}
+{itcl::body a a a}			{1 {0 16} incrTcl::badMemberName {11 1} {}}
+{itcl::body a::a {args foo} a}		{1 {0 28} argAfterArgs {16 10} {}}
+{itcl::body a::a [set] a}		{1 {17 3} numArgs {} {}}
+{itcl::body a::a {{}a} a}		{1 {0 23} badList {17 1} {{list element in braces followed by "a" instead of space}}}
+{itcl::body a a {testScanCmd}}		{1 {0 28} incrTcl::badMemberName {11 1} {} 1 {16 11} procNumArgs {} testScanCmd}
+
+{itcl::code a}				{ok}
+{itcl::code {}}				{ok}
+{itcl::code -- -a}			{ok}
+{itcl::code -namespace a a}		{ok}
+{itcl::code}				{1 {0 10} numArgs {} {}}
+{itcl::code -a}				{1 {0 13} badSwitch {11 2} -a 1 {0 13} numArgs {} {}}
+{itcl::code --}				{1 {0 13} numArgs {} {}}
+{itcl::code -namespace}			{1 {0 21} noSwitchArg {11 10} -namespace}
+{itcl::code -namespace a}		{1 {0 23} numArgs {} {}}
+{itcl::code [set]}			{1 {12 3} numArgs {} {}}
+{itcl::code -n}				{1 {0 13} badSwitch {11 2} -n 1 {0 13} numArgs {} {}}
+{itcl::code -}				{1 {0 12} badSwitch {11 1} - 1 {0 12} numArgs {} {}}
+
+{itcl::configbody a::a a}		{ok}
+{itcl::configbody ::a a}		{1 {0 22} incrTcl::badMemberName {17 3} {}}
+{itcl::configbody a a}			{1 {0 20} incrTcl::badMemberName {17 1} {}}
+{itcl::configbody}			{1 {0 16} numArgs {} {}}
+{itcl::configbody a::a}			{1 {0 21} numArgs {} {}}
+{itcl::configbody a::a a a}		{1 {0 25} numArgs {} {}}
+{itcl::configbody a::a set}		{1 {22 3} numArgs {} {}}
+{itcl::configbody a {testScanCmd}}	{1 {0 32} incrTcl::badMemberName {17 1} {} 1 {20 11} procNumArgs {} testScanCmd}
+
+{delete class a}			{ok}
+{delete class a a}			{ok}
+{delete cl a}				{ok}
+{delete class [set]}			{1 {14 3} numArgs {} {}}
+{delete class a [set]}			{1 {16 3} numArgs {} {}}
+{delete class}				{1 {0 12} numArgs {} {}}
+
+{delete object a}			{ok}
+{delete object a a}			{ok}
+{delete ob a}				{ok}
+{delete object}				{1 {0 13} numArgs {} {}}
+{delete object [set]}			{1 {15 3} numArgs {} {}}
+{delete object a [set]}			{1 {17 3} numArgs {} {}}
+
+{delete a}				{1 {0 8} badOption {7 1} {{class object namespace} a}}
+{delete namespace a}			{1 {0 18} warnUnsupported {7 9} {{namespace delete}}}
+
+{itcl::delete class a}			{ok}
+{itcl::delete class a a}		{ok}
+{itcl::delete cl a}			{ok}
+{itcl::delete class [set]}		{1 {20 3} numArgs {} {}}
+{itcl::delete class a [set]}		{1 {22 3} numArgs {} {}}
+{itcl::delete class}			{1 {0 18} numArgs {} {}}
+
+{itcl::delete object a}			{ok}
+{itcl::delete object a a}		{ok}
+{itcl::delete ob a}			{ok}
+{itcl::delete object}			{1 {0 19} numArgs {} {}}
+{itcl::delete object [set]}		{1 {21 3} numArgs {} {}}
+{itcl::delete object a [set]}		{1 {23 3} numArgs {} {}}
+
+{itcl::delete a}			{1 {0 14} badOption {13 1} {{class object namespace} a}}
+{itcl::delete namespace a}		{1 {0 24} warnUnsupported {13 9} {{namespace delete}}}
+
+{find classes}				{ok}
+{find cl}				{ok}
+{find classes a}			{ok}
+{find classes a*}			{ok}
+{find classes [set]}			{1 {14 3} numArgs {} {}}
+
+{find objects}				{ok}
+{find ob}				{ok}
+{find objects a}			{ok}
+{find objects a*}			{ok}
+{find objects -class a}			{ok}
+{find objects -isa a}			{ok}
+{find objects -class a -isa a}		{ok}
+{find objects -class a a*}		{ok}
+{find objects -isa a a*}		{ok}
+{find objects -class a -isa a a*}	{ok}
+{find objects $opt a $opt a a*}		{ok}
+{find objects a* -class a -isa a}	{1 {0 31} badOption {13 2} {{-class -isa} a*} 1 {0 31} badOption {23 1} {{-class -isa} a}}
+{find objects -isa a a[pwd]*}	{1 {0 27} warnPattern {20 7} {}}
+{find objects -isa a a* a}	{1 {0 24} badOption {20 2} {{-class -isa} a*}}
+{find objects [set]}		{1 {14 3} numArgs {} {}}
+
+{itcl::find}			{1 {0 10} numArgs {} {}}
+{itcl::find a}			{1 {0 12} badOption {11 1} {{classes objects} a}}
+
+{itcl::find classes}			{ok}
+{itcl::find cl}				{ok}
+{itcl::find classes a}			{ok}
+{itcl::find classes a*}			{ok}
+{itcl::find classes [set]}		{1 {20 3} numArgs {} {}}
+
+{itcl::find objects}			{ok}
+{itcl::find ob}				{ok}
+{itcl::find objects a}			{ok}
+{itcl::find objects a*}			{ok}
+{itcl::find objects [set]}		{1 {20 3} numArgs {} {}}
+
+{itcl::find}				{1 {0 10} numArgs {} {}}
+{itcl::find a}				{1 {0 12} badOption {11 1} {{classes objects} a}}
+
+{global a}				{ok}
+
+{info $a}				 {ok}
+{info $a a}				 {ok}
+{info $a a a}				 {ok}
+{info $a a a a}				 {ok}
+{info $a a a a a}			 {ok}
+{info}					 {1 {0 4} numArgs {} {}}
+{info [set]}				 {1 {6 3} numArgs {} {}}
+{info foo}				 {1 {0 8} badOption {5 3} {{args body classes cmdcount commands complete context default exists globals hostname level library loaded locals nameofexecutable namespace objects patchlevel procs protection script sharedlibextension tclversion vars which} foo}}
+{info a}				 {1 {0 6} numArgs {} {}}
+
+{info args a}				 {ok}
+{info args}				 {1 {0 9} numArgs {} {}}
+{info args a a}				 {1 {0 13} numArgs {} {}}
+{info args [set]}			 {1 {11 3} numArgs {} {}}
+
+{info body a}				 {ok}
+{info body}				 {1 {0 9} numArgs {} {}}
+{info body a a}				 {1 {0 13} numArgs {} {}}
+{info body [set]}			 {1 {11 3} numArgs {} {}}
+
+{info classes}				{1 {0 12} warnUnsupported {5 7} {{find classes}}}
+
+{info cmdcount}				 {ok}
+{info cmdcount a}			 {1 {0 15} numArgs {} {}}
+
+{info commands}				 {ok}
+{info commands a}			 {ok}
+{info commands a a}			 {1 {0 17} numArgs {} {}}
+{info commands a[pwd]*}			 {1 {0 21} warnPattern {14 7} {}}
+
+{info complete a}			 {ok}
+{info complete}				 {1 {0 13} numArgs {} {}}
+{info complete a a}			 {1 {0 17} numArgs {} {}}
+{info complete [set]}			 {1 {15 3} numArgs {} {}}
+
+{info context}				{1 {0 12} warnUnsupported {5 7} {{namespace current}}}
+
+{info default a a a}			 {ok}
+{info default}				 {1 {0 12} numArgs {} {}}
+{info default a}			 {1 {0 14} numArgs {} {}}
+{info default a a}			 {1 {0 16} numArgs {} {}}
+{info default a a a a}			 {1 {0 20} numArgs {} {}}
+{info default [set] a a}		 {1 {14 3} numArgs {} {}}
+{info default a [set] a}		 {1 {16 3} numArgs {} {}}
+{info default a a $A}			 {1 {0 19} warnVarRef {17 2} {}}
+
+{info exists a}				 {ok}
+{info exists}				 {1 {0 11} numArgs {} {}}
+{info exists a a}			 {1 {0 15} numArgs {} {}}
+{info exists $A}			 {1 {0 14} warnVarRef {12 2} {}}
+
+{info globals}				 {ok}
+{info globals a}			 {ok}
+{info globals a a}			 {1 {0 16} numArgs {} {}}
+{info globals a[pwd]*}			 {1 {0 20} warnPattern {13 7} {}}
+
+{info hostname}				 {ok}
+{info hostname a}			 {1 {0 15} numArgs {} {}}
+
+{info level}				 {ok}
+{info level 0}				 {ok}
+{info level 0 a}			 {1 {0 14} numArgs {} {}}
+{info level a}				 {1 {0 12} badInt {11 1} {}}
+
+{info library}				 {ok}
+{info library a}			 {1 {0 14} numArgs {} {}}
+
+{info loaded}				 {ok}
+{info loaded a}				 {ok}
+{info loaded a a}			 {1 {0 15} numArgs {} {}}
+{info loaded {}a}			 {1 {0 15} parse {14 1} {{extra characters after close-brace}}}
+
+{info locals}				 {ok}
+{info locals a}				 {ok}
+{info locals a a}			 {1 {0 15} numArgs {} {}}
+{info locals a[pwd]*}			 {1 {0 19} warnPattern {12 7} {}}
+
+{info namespace children}		{1 {0 23} warnUnsupported {15 8} {{namespace children}}}
+{info namespace parent}			{1 {0 21} warnUnsupported {15 6} {{namespace parent}}}
+{info namespace qualifiers}		{1 {0 25} warnUnsupported {15 10} {{namespace qualifiers}}}
+{info namespace tail}			{1 {0 19} warnUnsupported {15 4} {{namespace tail}}}
+{info namespace all}			{1 {0 18} incrTcl::warnUnsupported {5 9} {{}}}
+
+{info objects}				{1 {0 12} warnUnsupported {5 7} {{find objects}}}
+
+{info patchlevel}			 {ok}
+{info patchlevel a}			 {1 {0 17} numArgs {} {}}
+
+{info procs}				 {ok}
+{info procs a}				 {ok}
+{info procs a a}			 {1 {0 14} numArgs {} {}}
+{info procs a[pwd]*}			 {1 {0 18} warnPattern {11 7} {}}
+
+{info protection a}			{1 {0 17} incrTcl::warnUnsupported {5 10} {{}}}
+
+{info script}				 {ok}
+{info script a}				 {1 {0 13} numArgs {} {}}
+
+{info sharedlibextension}		{ok}
+{info sharedlibextension a}		{1 {0 25} numArgs {} {}}
+
+{info tclversion}			 {ok}
+{info tclversion a}			 {1 {0 17} numArgs {} {}}
+
+{info vars}				 {ok}
+{info vars a}				 {ok}
+{info vars a a}				 {1 {0 13} numArgs {} {}}
+{info vars a[pwd]*}			 {1 {0 17} warnPattern {10 7} {}}
+
+{namespace a}				{1 {0 11} warnDeprecated {0 9} {{namespace eval}}}
+
+{namespace children}			 {ok}
+{namespace children ::}			 {ok}
+{namespace children :: a}		 {ok}
+{namespace children :: a a}		 {1 {0 25} numArgs {} {}}
+{namespace children [set] a}		 {1 {20 3} numArgs {} {}}
+{namespace children :: a[pwd]*}		 {1 {0 29} warnPattern {22 7} {}}
+{namespace children :: a[pwd]*::a}	 {1 {0 32} warnPattern {22 10} {}}
+
+{namespace code a}			 {ok}
+{namespace code {a}}			 {ok}
+{namespace code}			 {1 {0 14} numArgs {} {}}
+{namespace code a a}			 {1 {0 18} numArgs {} {}}
+{namespace code {set}}			 {ok}
+
+{namespace current}			 {ok}
+{namespace current a}			 {1 {0 19} numArgs {} {}}
+
+{namespace delete}			 {ok}
+{namespace delete ::a}			 {ok}
+{namespace delete ::a ::a}		 {ok}
+{namespace delete [set]}		 {1 {18 3} numArgs {} {}}
+{namespace delete a [set]}		 {1 {20 3} numArgs {} {}}
+
+{namespace eval a a}			 {ok}
+{namespace eval a a a}			 {ok}
+{namespace eval}			 {1 {0 14} numArgs {} {}}
+{namespace eval a}			 {1 {0 16} numArgs {} {}}
+{namespace eval [set] a}		 {1 {16 3} numArgs {} {}}
+{namespace eval a [set]}		 {1 {18 3} numArgs {} {}}
+{namespace eval a {testScanCmd}}	 {1 {18 11} procNumArgs {} testScanCmd}
+
+{namespace export}			 {ok}
+{namespace export -clear}		 {ok}
+{namespace export -c}			 {ok}
+{namespace export a}			 {ok}
+{namespace export -c a}			 {ok}
+{namespace export -c a a}		 {ok}
+{namespace export -a}			 {1 {0 19} badSwitch {17 2} -a}
+{namespace export AA::*}		 {1 {0 22} warnExportPat {17 5} {}}
+{namespace export a AA::*}		 {1 {0 24} warnExportPat {19 5} {}}
+
+{namespace forget}			 {ok}
+{namespace forget a}			 {ok}
+{namespace forget a a}			 {ok}
+{namespace forget {a[pwd]*::}}		 {1 {0 28} warnNamespacePat {17 11} {}}
+{namespace forget *::}			 {1 {0 20} warnNamespacePat {17 3} {}}
+{namespace forget a a[pwd]*}		 {1 {0 26} warnPattern {19 7} {}}
+
+{namespace import}			 {ok}
+{namespace import -force}		 {ok}
+{namespace import -f}			 {ok}
+{namespace import a}			 {ok}
+{namespace import -f a}			 {ok}
+{namespace import -f a a}		 {ok}
+{namespace import -a}			 {1 {0 19} badSwitch {17 2} -a}
+{namespace import {a[pwd]*::}}		 {1 {0 28} warnNamespacePat {17 11} {}}
+{namespace import *::}			 {1 {0 20} warnNamespacePat {17 3} {}}
+{namespace import a a[pwd]*}		 {1 {0 26} warnPattern {19 7} {}}
+
+{namespace inscope a a}			 {ok}
+{namespace inscope a a a}		 {ok}
+{namespace inscope}			 {1 {0 17} numArgs {} {}}
+{namespace inscope a}			 {1 {0 19} numArgs {} {}}
+{namespace inscope [set] a}		 {1 {19 3} numArgs {} {}}
+{namespace inscope a [set]}		 {1 {21 3} numArgs {} {}}
+
+{namespace origin a}			 {ok}
+{namespace origin}			 {1 {0 16} numArgs {} {}}
+{namespace origin a a}			 {1 {0 20} numArgs {} {}}
+{namespace origin [set]}		 {1 {18 3} numArgs {} {}}
+
+{namespace parent}			 {ok}
+{namespace parent ::}			 {ok}
+{namespace parent a a}			 {1 {0 20} numArgs {} {}}
+{namespace parent [set]}		 {1 {18 3} numArgs {} {}}
+
+{namespace qualifiers a}		 {ok}
+{namespace qualifiers}			 {1 {0 20} numArgs {} {}}
+{namespace qualifiers a a}		 {1 {0 24} numArgs {} {}}
+{namespace qualifiers [set]}		 {1 {22 3} numArgs {} {}}
+
+{namespace tail a}			 {ok}
+{namespace tail}			 {1 {0 14} numArgs {} {}}
+{namespace tail a a}			 {1 {0 18} numArgs {} {}}
+{namespace tail [set]}			 {1 {16 3} numArgs {} {}}
+
+{namespace which a}			 {ok}
+{namespace which -command a}		 {ok}
+{namespace which -variable a}		 {ok}
+{namespace which -c a}			 {ok}
+{namespace which -v a}			 {ok}
+{namespace which -c -v a}		 {ok}
+{namespace which}			 {1 {0 15} numArgs {} {}}
+{namespace which a a}			 {1 {0 19} numArgs {} {}}
+{namespace which a a a}			 {1 {0 21} numArgs {} {}}
+{namespace which -c}			 {1 {0 18} numArgs {} {}}
+{namespace which -v}			 {1 {0 18} numArgs {} {}}
+{namespace which -c -v}			 {1 {0 21} numArgs {} {}}
+{namespace which -c a a}		 {1 {0 22} numArgs {} {}}
+{namespace which -v a a}		 {1 {0 22} numArgs {} {}}
+{namespace which -c -v a a} 		 {1 {0 25} numArgs {} {}}
+{namespace which -a a}			 {1 {0 20} badSwitch {16 2} -a}
+{namespace which -a a a}		 {1 {0 22} badSwitch {16 2} -a 1 {0 22} numArgs {} {}}
+{namespace which [set]}			 {1 {17 3} numArgs {} {}}
+
+{class a {private a}}			{ok}
+{class a {protected a}}			{ok}
+{class a {public a}}			{ok}
+
+{itcl_info classes foo}			{1 {0 21} warnUnsupported {10 7} {{find classes}}}
+{itcl_info objects foo}			{1 {0 21} warnUnsupported {10 7} {{find objects}}}
+
+{class a {variable a}}			{ok}
+{class a {variable a a}}		{ok}
+{class a {variable a a a}}		{ok}
+{class a {variable a a {set}}}		{1 {23 3} numArgs {} {}}
+
+{class a {method a a {variable a b c d}}} {ok}
+{variable a b c d e}			{ok}
+}
+
+set checkIncrTcl3.1 {}

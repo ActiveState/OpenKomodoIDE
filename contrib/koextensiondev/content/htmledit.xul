@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://extensiondev/locale/extensiondev.dtd">
+<window id="htmledit"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        contenttitlesetting="true"
+	title="&htmledit.title;"
+	onload="onLoad()">
+  <script type="application/x-javascript" src="loadsaveutils.js"/>
+  <script type="text/javascript">
+<![CDATA[
+    function onLoad()
+    {
+      var w = document.getElementById('content').contentWindow;
+      w.top = w;
+      w.editbox.top = w;
+      // read startup HTML from a file
+      try {
+        loadFileFromPrefToTextbox("extensions.extensiondev.htmledit.startup", document.getElementById("content").contentWindow.editbox.document.f.ta);
+      } catch(e) {
+        // the pref may not exist
+        dump(e + '\n');
+      }
+    }
+
+    function load()
+    {
+      loadFileToTextbox(window, document.getElementById("content").contentWindow.editbox.document.f.ta, "html");
+    }
+
+    function save()
+    {
+      saveFileFromTextbox(window, document.getElementById("content").contentWindow.editbox.document.f.ta, "html");
+    }
+]]>    
+  </script>
+  <browser id="content" flex="1" type="content-primary" src="&htmledit.html.url;"/>
+  <hbox><button label="Load File..." oncommand="load()"/><button label="Save As..." oncommand="save()"/></hbox>
+</window>

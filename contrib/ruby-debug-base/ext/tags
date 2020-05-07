@@ -1,0 +1,118 @@
+CTX_FL_SET	ruby_debug.c	/^#define CTX_FL_SET(c,f) do { (c)->flags |= (f); } /
+CTX_FL_TEST	ruby_debug.c	/^#define CTX_FL_TEST(c,f) ((c)->flags & (f))$/
+CTX_FL_UNSET	ruby_debug.c	/^#define CTX_FL_UNSET(c,f) do { (c)->flags &= ~(f);/
+FRAME	ruby_debug.c	/^struct FRAME {$/
+FRAME_N	ruby_debug.c	/^#define FRAME_N(n)  (&debug_context->frames[debug_/
+Init_breakpoint	ruby_debug.c	/^Init_breakpoint()$/
+Init_context	ruby_debug.c	/^Init_context()$/
+Init_ruby_debug	ruby_debug.c	/^Init_ruby_debug()$/
+RVarmap	ruby_debug.c	/^struct RVarmap {$/
+SCOPE	ruby_debug.c	/^struct SCOPE {$/
+VALUE	ruby_debug.c	/^    typedef VALUE (*id2ref_func_t)(VALUE, VALUE);$/
+add_to_locked	ruby_debug.c	/^add_to_locked(VALUE thread)$/
+bp_type	ruby_debug.c	/^enum bp_type {BP_POS_TYPE, BP_METHOD_TYPE};$/
+breakpoint_expr	ruby_debug.c	/^breakpoint_expr(VALUE self)$/
+breakpoint_id	ruby_debug.c	/^breakpoint_id(VALUE self)$/
+breakpoint_mark	ruby_debug.c	/^breakpoint_mark(void *data)$/
+breakpoint_pos	ruby_debug.c	/^breakpoint_pos(VALUE self)$/
+breakpoint_source	ruby_debug.c	/^breakpoint_source(VALUE self)$/
+call_at_line	ruby_debug.c	/^call_at_line(VALUE context, debug_context_t *debug/
+call_at_line_unprotected	ruby_debug.c	/^call_at_line_unprotected(VALUE args)$/
+check_breakpoint_expression	ruby_debug.c	/^check_breakpoint_expression(VALUE breakpoint, VALU/
+check_breakpoints_by_method	ruby_debug.c	/^check_breakpoints_by_method(debug_context_t *debug/
+check_breakpoints_by_pos	ruby_debug.c	/^check_breakpoints_by_pos(debug_context_t *debug_co/
+check_frame_number	ruby_debug.c	/^check_frame_number(debug_context_t *debug_context,/
+check_thread_contexts	ruby_debug.c	/^check_thread_contexts()$/
+classname_cmp	ruby_debug.c	/^classname_cmp(VALUE name, VALUE klass)$/
+context_copy_locals	ruby_debug.c	/^context_copy_locals(debug_frame_t *debug_frame)$/
+context_dead	ruby_debug.c	/^context_dead(VALUE self)$/
+context_frame_binding	ruby_debug.c	/^context_frame_binding(VALUE self, VALUE frame)$/
+context_frame_file	ruby_debug.c	/^context_frame_file(VALUE self, VALUE frame)$/
+context_frame_id	ruby_debug.c	/^context_frame_id(VALUE self, VALUE frame)$/
+context_frame_line	ruby_debug.c	/^context_frame_line(VALUE self, VALUE frame)$/
+context_frame_locals	ruby_debug.c	/^context_frame_locals(VALUE self, VALUE frame)$/
+context_frame_self	ruby_debug.c	/^context_frame_self(VALUE self, VALUE frame)$/
+context_ignore	ruby_debug.c	/^context_ignore(VALUE self)$/
+context_is_suspended	ruby_debug.c	/^context_is_suspended(VALUE self)$/
+context_resume	ruby_debug.c	/^context_resume(VALUE self)$/
+context_resume_0	ruby_debug.c	/^context_resume_0(debug_context_t *debug_context)$/
+context_set_tracing	ruby_debug.c	/^context_set_tracing(VALUE self, VALUE value)$/
+context_stack_size	ruby_debug.c	/^context_stack_size(VALUE self)$/
+context_step_over	ruby_debug.c	/^context_step_over(int argc, VALUE *argv, VALUE sel/
+context_stop_frame	ruby_debug.c	/^context_stop_frame(VALUE self, VALUE frame)$/
+context_stop_next	ruby_debug.c	/^context_stop_next(VALUE self, VALUE steps)$/
+context_suspend	ruby_debug.c	/^context_suspend(VALUE self)$/
+context_suspend_0	ruby_debug.c	/^context_suspend_0(debug_context_t *debug_context)$/
+context_thnum	ruby_debug.c	/^context_thnum(VALUE self)$/
+context_thread	ruby_debug.c	/^context_thread(VALUE self)$/
+context_thread_0	ruby_debug.c	/^context_thread_0(debug_context_t *debug_context)$/
+context_tracing	ruby_debug.c	/^context_tracing(VALUE self)$/
+create_binding	ruby_debug.c	/^create_binding(VALUE self)$/
+debug_add_breakpoint	ruby_debug.c	/^debug_add_breakpoint(int argc, VALUE *argv, VALUE /
+debug_at_exit	ruby_debug.c	/^debug_at_exit(VALUE self)$/
+debug_at_exit_c	ruby_debug.c	/^debug_at_exit_c(VALUE proc)$/
+debug_at_exit_i	ruby_debug.c	/^debug_at_exit_i(VALUE proc)$/
+debug_breakpoint_t	ruby_debug.c	/^} debug_breakpoint_t;$/
+debug_breakpoints	ruby_debug.c	/^debug_breakpoints(VALUE self)$/
+debug_catchpoint	ruby_debug.c	/^debug_catchpoint(VALUE self)$/
+debug_check_started	ruby_debug.c	/^debug_check_started()$/
+debug_context_create	ruby_debug.c	/^debug_context_create(VALUE thread)$/
+debug_context_dup	ruby_debug.c	/^debug_context_dup(debug_context_t *debug_context)$/
+debug_context_free	ruby_debug.c	/^debug_context_free(void *data)$/
+debug_context_mark	ruby_debug.c	/^debug_context_mark(void *data)$/
+debug_context_t	ruby_debug.c	/^} debug_context_t;$/
+debug_contexts	ruby_debug.c	/^debug_contexts(VALUE self)$/
+debug_current_context	ruby_debug.c	/^debug_current_context(VALUE self)$/
+debug_debug_load	ruby_debug.c	/^debug_debug_load(VALUE self, VALUE file)$/
+debug_event_hook	ruby_debug.c	/^debug_event_hook(rb_event_t event, NODE *node, VAL/
+debug_frame_t	ruby_debug.c	/^} debug_frame_t;$/
+debug_is_started	ruby_debug.c	/^debug_is_started(VALUE self)$/
+debug_keep_frame_binding	ruby_debug.c	/^debug_keep_frame_binding(VALUE self)$/
+debug_last_interrupted	ruby_debug.c	/^debug_last_interrupted(VALUE self)$/
+debug_post_mortem	ruby_debug.c	/^debug_post_mortem(VALUE self)$/
+debug_remove_breakpoint	ruby_debug.c	/^debug_remove_breakpoint(VALUE self, VALUE id_value/
+debug_resume	ruby_debug.c	/^debug_resume(VALUE self)$/
+debug_set_catchpoint	ruby_debug.c	/^debug_set_catchpoint(VALUE self, VALUE value)$/
+debug_set_keep_frame_binding	ruby_debug.c	/^debug_set_keep_frame_binding(VALUE self, VALUE val/
+debug_set_post_mortem	ruby_debug.c	/^debug_set_post_mortem(VALUE self, VALUE value)$/
+debug_set_tracing	ruby_debug.c	/^debug_set_tracing(VALUE self, VALUE value)$/
+debug_skip	ruby_debug.c	/^debug_skip(VALUE self)$/
+debug_start	ruby_debug.c	/^debug_start(VALUE self)$/
+debug_stop	ruby_debug.c	/^debug_stop(VALUE self)$/
+debug_stop_i	ruby_debug.c	/^debug_stop_i(VALUE self)$/
+debug_suspend	ruby_debug.c	/^debug_suspend(VALUE self)$/
+debug_thread_context	ruby_debug.c	/^debug_thread_context(VALUE self, VALUE thread)$/
+debug_thread_inherited	ruby_debug.c	/^debug_thread_inherited(VALUE klass)$/
+debug_tracing	ruby_debug.c	/^debug_tracing(VALUE self)$/
+eval_expression	ruby_debug.c	/^eval_expression(VALUE args)$/
+filename_cmp	ruby_debug.c	/^filename_cmp(VALUE source, char *file)$/
+find_last_context_func	ruby_debug.c	/^find_last_context_func(VALUE key, VALUE value, VAL/
+get_breakpoint_at	ruby_debug.c	/^get_breakpoint_at(int index) $/
+get_event_name	ruby_debug.c	/^get_event_name(rb_event_t event)$/
+get_top_frame	ruby_debug.c	/^get_top_frame(debug_context_t *debug_context)$/
+id2ref	ruby_debug.c	/^id2ref(VALUE id)$/
+id2ref_error	ruby_debug.c	/^id2ref_error()$/
+id2ref_unprotected	ruby_debug.c	/^id2ref_unprotected(VALUE id)$/
+is_in_locked	ruby_debug.c	/^is_in_locked(VALUE thread_id)$/
+is_thread_alive	ruby_debug.c	/^is_thread_alive(VALUE thread)$/
+isdirsep	ruby_debug.c	/^#define isdirsep(x) ((x) == '\/' || (x) == '\\\\')/
+locked_thread_t	ruby_debug.c	/^} locked_thread_t;$/
+min	ruby_debug.c	/^#define min(x,y) ((x) < (y) ? (x) : (y))$/
+ref2id	ruby_debug.c	/^ref2id(VALUE obj)$/
+remove_from_locked	ruby_debug.c	/^remove_from_locked()$/
+ruby_method_ptr	ruby_debug.c	/^ruby_method_ptr(VALUE class, ID meth_id)$/
+save_call_frame	ruby_debug.c	/^save_call_frame(VALUE self, char *file, int line, /
+save_current_position	ruby_debug.c	/^save_current_position(debug_context_t *debug_conte/
+save_top_binding	ruby_debug.c	/^save_top_binding(debug_context_t *debug_context, V/
+set_current_skipped_status	ruby_debug.c	/^set_current_skipped_status(VALUE status)$/
+set_dyna_vars	ruby_debug.c	/^set_dyna_vars(debug_context_t *debug_context)$/
+set_frame_source	ruby_debug.c	/^set_frame_source(debug_context_t *debug_context, c/
+thread_context_lookup	ruby_debug.c	/^thread_context_lookup(VALUE thread, VALUE *context/
+threads_table_check_i	ruby_debug.c	/^threads_table_check_i(VALUE key, VALUE value, VALU/
+threads_table_clear	ruby_debug.c	/^threads_table_clear(VALUE table)$/
+threads_table_clear_i	ruby_debug.c	/^threads_table_clear_i(VALUE key, VALUE value, VALU/
+threads_table_create	ruby_debug.c	/^threads_table_create()$/
+threads_table_free	ruby_debug.c	/^threads_table_free(void* data)$/
+threads_table_mark	ruby_debug.c	/^threads_table_mark(void* data)$/
+threads_table_mark_keyvalue	ruby_debug.c	/^threads_table_mark_keyvalue(VALUE key, VALUE value/
+threads_table_t	ruby_debug.c	/^} threads_table_t;$/

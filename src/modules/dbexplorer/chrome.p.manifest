@@ -1,0 +1,21 @@
+# #if MODE == "dev"
+content dbexplorer content/
+skin dbexplorer classic/1.0 skin/
+locale dbexplorer en-US locale/en-US/
+# #else
+content dbexplorer jar:dbexplorer.jar!/content/
+skin dbexplorer classic/1.0 jar:dbexplorer.jar!/skin/
+locale dbexplorer en-US jar:dbexplorer.jar!/locale/en-US/
+# #endif
+overlay chrome://komodo/content/komodo.xul chrome://dbexplorer/content/overlay.xul
+
+manifest components/component.manifest
+component {a4904f97-4a23-4d49-ac44-b3a48f0c3361} components/absoluteJSDateConverter.js
+contract @activestate.com/KoDBX_JS_AbsoluteDateConverter;1 {a4904f97-4a23-4d49-ac44-b3a48f0c3361}
+category komodo-DBX-DataConverters Komodo_DBX_Explorer_JS_Absolute_Date_Converter @activestate.com/KoDBX_JS_AbsoluteDateConverter;1
+component {47b74547-afdc-41f2-8935-ecd6e6259ebe} components/kiloAbsoluteJSDateConverter.js
+contract @activestate.com/KoDBX_JS_AbsoluteKiloDateConverter;1 {47b74547-afdc-41f2-8935-ecd6e6259ebe}
+category komodo-DBX-DataConverters Komodo_DBX_Explorer_JS_Absolute_KiloDate_Converter @activestate.com/KoDBX_JS_AbsoluteKiloDateConverter;1
+component {9bd9eb85-f919-48b9-a43e-c9792373ccc8} components/relativeJSDateConverter.js
+contract @activestate.com/KoDBX_JS_RelativeDateConverter;1 {9bd9eb85-f919-48b9-a43e-c9792373ccc8}
+category komodo-DBX-DataConverters Komodo_DBX_Explorer_JS_Relative_Date_Converter @activestate.com/KoDBX_JS_RelativeDateConverter;1

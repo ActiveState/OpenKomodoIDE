@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % httpinspectorDTD SYSTEM "chrome://httpinspector/locale/httpinspector.dtd">
+  %httpinspectorDTD;
+]>
+
+<!-- Copyright (c) 2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/listbox.css" type="text/css"?>
+<?xml-stylesheet href="chrome://httpinspector/skin/httpinspector.css" type="text/css"?>
+
+<window id="komodo_httpInspector_ruleDialog"
+        class="dialog"
+        title="&HTTPInspectorRule.title;"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:nc="http://home.netscape.com/NC-rdf#"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        type="komodo_httpinspector_ruleDialog"
+        orient="vertical"
+        onload="httpInspectorRule_onLoad();"
+        onunload="httpInspectorRule_onUnload();"
+        ondialogaccept="return httpInspectorRule_onAccept();"
+        height="480"
+        width="640"
+        persist="screenX screenY width height">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript;version=1.7"/>
+    <script src="chrome://httpinspector/content/httpInspectorRuleDialog.js" type="application/x-javascript;version=1.7"/>
+
+  <!-- Commands -->
+    <commandset id="httpInspectorRule_commandset">
+        <command id="cmd_httpInspectorRule_startDebugger"
+                 key="key_cmd_httpInspectorRule_startDebugger"
+                 oncommand="gHttpInspector.startStopDebugger()"
+                 desc="&HTTPInspectorStartTheHttpInspector.desc;"/>
+        <command id="cmd_httpInspectorRule_stopDebugger"
+                 key="key_cmd_httpInspectorRule_stopDebugger"
+                 oncommand="gHttpInspector.startStopDebugger()"
+                 desc="&HTTPInspectorStopTheHttpInspector.desc;"/>
+        <command id="cmd_httpInspectorRule_clear"
+                 key="key_cmd_httpInspectorRule_clear"
+                 oncommand="gHttpInspector.clearHistory()"
+                 desc="&HTTPInspectorClearProxyHistory.desc;"/>
+        <command id="cmd_httpInspectorRule_saveRequest"
+                 key="key_cmd_httpInspectorRule_saveRequest"
+                 oncommand="gHttpInspector.saveRequest()"
+                 desc="&HTTPInspectorSavesSubmitsTheRequestChanges.desc;"/>
+    </commandset>
+
+  <!-- Window layout -->
+    <vbox flex="1">
+        <!-- Rule name -->
+        <grid>
+            <columns>
+                <column/>
+                <column flex="1"/>
+            </columns>
+            <rows>
+                <row align="center">
+                    <label id="httpInspectorRule_labelRuleName"
+                           value="Rule Name:"
+                           control="httpInspectorRule_textboxName"/>
+                    <textbox id="httpInspectorRule_textboxName"/>
+                </row>
+                <!-- Rule type -->
+                <row align="center">
+                    <label id="httpInspectorRule_labelRuleType"
+                           value="Rule Type:"
+                           control="httpInspectorRule_radioType"/>
+                    <!-- XXX : Change to menulist? -->
+                    <!--<radiogroup id="httpInspectorRule_radioType">-->
+                    <!--    <radio id="httpInspectorRule_radioOnRequest"-->
+                    <!--           selected="true"-->
+                    <!--           label="On a request message"/>-->
+                    <!--    <radio id="httpInspectorRule_radioOnResponse"-->
+                    <!--           label="On a response message"/>-->
+                    <!--    <radio id="httpInspectorRule_radioOnBoth"-->
+                    <!--           label="On both request and response messages"/>-->
+                    <!--</radiogroup>-->
+                    <menulist id="httpInspectorRule_menulistRuleType">
+                        <menupopup>
+                            <menuitem label="&requestMessage.label;" value="1"/>
+                            <menuitem label="&responseMessage.label;" value="2"/>
+                            <menuitem label="&bothRequestAndResponseMessages.label;" value="3"/>
+                        </menupopup>
+                    </menulist>
+                </row>
+            </rows>
+        </grid>
+        <separator/>
+        <!-- Rule matches -->
+        <radiogroup id="httpInspectorRule_radioMatchOn">
+            <hbox>
+                <radio id="httpInspectorRule_radioMatchOnAll"
+                       label="&matchOnAllOfTheFollowing.label;"
+                       value="1"/>
+                <radio id="httpInspectorRule_radioMatchOnAny"
+                       selected="true"
+                       label="&matchOnAnyOfTheFollowing.label;"
+                       value="2"/>
+            </hbox>
+        </radiogroup>
+        <vbox flex="1" equalsize="always">
+            <richlistbox flex="1"
+                         id="richlistboxRequirement">
+                <richlistitem class="httpInspector_ruleMatch"/>
+            </richlistbox>
+            <vbox flex="1">
+                <!-- Action when matched -->
+                <label id="httpInspectorRule_labelRuleAction"
+                       value="Action to perform:"/>
+                <richlistbox flex="1"
+                             id="richlistboxAction">
+                    <richlistitem class="httpInspector_ruleAction"/>
+                </richlistbox>
+            </vbox>
+        </vbox>
+    </vbox>
+    <separator/>
+    <hbox align="end" pack="end">
+        <button oncommand="httpInspectorRule_onAccept();" label="Save"/>
+        <button oncommand="window.close();" label="Cancel"/>
+    </hbox>
+</window>

@@ -1,0 +1,77 @@
+
+
+debugger::init
+dbg::setServerPort	<-- do not forget
+dbg::start		<-- check server port!!
+
+
+
+
+
+DbgNub_Main defined in applaunch evaluates the sent nub script.  This
+defines DbgNub_Startup and also executes this. This wraps several
+command including 'source'. This means that the 'source' command in
+applaunch immediately after DbgNub_Main is already the wrapped version
+from the nub. This wrapper causes the nub and debugger to instrument
+the initial script.
+
+ test.tcl		Test application
+
+-----------------------------------------------------------------------
+
+-   appLaunch.tcl	engine		Launch a script to be debugged, initializes nub
+*   block.tcl		engine		Mgmt of block data structure
+*   break.tcl		engine		Lowlevel mgmt of breakpoints
+*   dbg.tcl		engine		Debugger side to the nub, see below.
+*   file.tcl		engine		mgmt of open files
+-   initdebug.tcl	engine		initial code to insert into remotely debugged applications
+*   instrument.tcl	engine		instrument a tcl script
+*   location.tcl	engine		mgmt of location information
+*   nub.tcl		engine		debugger nub inserted into a remotely debugged application
+    pref.tcl		engine		store/retrieval of user preferences	tcllib/appsuport
+*   util.tcl		engine		misc. utilities
+
+-----------------------------------------------------------------------
+
+    coverage.tcl	UI + engine	Code coverage mgmt and window
+*   debugger.tcl.in	UI + engine !	Main entry point !! @VERSION@
+    icon.tcl		UI + engine !	Icon drawing + propagating state to the nub
+    proj.tcl		UI + engine	handling of projects
+    system.tcl		UI + engine	system specific data, + launching preferences dialogs
+
+-----------------------------------------------------------------------
+
+    bindings.tcl	UI		setting up bindings for several bindtags.
+    breakWin.tcl	UI
+    codeWin.tcl		UI
+    evalWin.tcl		UI
+    find.tcl		UI		find & goto windows
+    font.tcl		UI
+    gui.tcl		UI
+    guiUtil.tcl		UI
+    image.tcl		UI
+    inspectorWin.tcl	UI
+    menu.tcl		UI
+    portWin.tcl		UI
+    prefWin.tcl		UI
+    procWin.tcl		UI
+    projWin.tcl		UI
+    result.tcl		UI		command result window
+    selection.tcl	UI		selecting lines in a text widget (set bp, ...)
+    stackWin.tcl	UI
+    tabnotebook.tcl	UI
+    tkcon.tcl		UI
+    toolbar.tcl		UI
+    varWin.tcl		UI
+    watchWin.tcl	UI
+    widget.tcl		UI
+
+-----------------------------------------------------------------------
+
+    blend.pdx	Description files which allow the instrumentation
+    oratcl.pdx	of some extensions.
+    sybtcl.pdx
+    tclCom.pdx
+    tcltest.pdx
+    uplevel.pdx
+    xmlGen.pdx

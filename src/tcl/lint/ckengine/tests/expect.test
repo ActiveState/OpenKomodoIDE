@@ -1,0 +1,62 @@
+# expect.test --
+#
+#	This file contains regression tests for the Expect checkers.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: expect.test,v 1.2 2000/05/30 22:24:49 wart Exp $
+
+if {[string compare test [info procs resetAnalyzer]] == 1} {
+    source [file  join [pwd] [file dirname [info script]] defs.tcl]
+}
+
+analyzer::init
+renameMessageShow
+resetUProcData
+addTestUserProc
+
+# Many of the tests expect that "a" and "act*" are understood as a defined
+# procedures that take any number of args.  Also many bad expect calls force
+# "pat*" to be treated as procs.  To keep from getting many uninteresting
+# warnUndefProc warnings, pretend we've already gotten the warning.
+
+lappend ::analyzer::unknownCmds a
+for {set i 1} {$i < 9} {incr i} {
+    lappend ::analyzer::unknownCmds pat$i
+    lappend ::analyzer::unknownCmds act$i
+}
+
+# Run the table driven tests
+foreach expVer $::protest::supportedVersions(Expect) {
+    resetAnalyzer
+    coreTcl::init $::protest::tclVersion(Expect$expVer)
+    expect::init  $expVer
+    testVersion   checkExpect $expVer
+}
+
+# These tests ensure that expect takes lowest priority when installing
+# checkers for non exp* commands.
+
+test expect-1.1 {expect::init, extension conflicts} {
+    resetAnalyzer
+    coreTcl::init $::protest::currentVersion(Tcl)
+    tclX::init $::protest::currentVersion(TclX)
+    expect::init $::protest::currentVersion(Expect)
+    testCmd {fork}
+} {1 {0 4} nonPortCmd {0 4} {{}}}
+test expect-1.2 {expect::init, extension conflicts} {
+    resetAnalyzer
+    coreTcl::init $::protest::currentVersion(Tcl)
+    tclX::init $::protest::currentVersion(TclX)
+    expect::init $::protest::currentVersion(Expect)
+    testCmd {wait -nohang}
+} {ok}
+
+
+resetMessageShow
+resetAnalyzer
+resetUProcData
+
+# cleanup
+cleanupTests

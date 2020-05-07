@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<!DOCTYPE dialog SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % debuggerDTD SYSTEM "chrome://komodo/locale/debugger.dtd">
+  %debuggerDTD;
+]>
+
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+
+<dialog id="DebugListener"
+        windowtype="Komodo:Listener"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="&debuggerListener.title;"
+        orient="vertical"
+        flex="1"
+        buttons="accept"
+        persist="width height screenX screenY"
+        style="min-width: 300px;"
+        onload="OnListenerDialogLoad();">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+<script src="chrome://komodo/content/library/logging.js" type="application/x-javascript;version=1.7"/>
+
+<script type="application/x-javascript;version=1.7"><![CDATA[
+    function OnListenerDialogLoad(){
+        var listener = window.arguments[0];
+        try {
+            var os = Components.classes["@activestate.com/koOs;1"].getService();
+            var prefs = Components.classes["@activestate.com/koPrefService;1"].
+                        getService(Components.interfaces.koIPrefService).prefs;
+            var proxyEnabled = prefs.getBooleanPref("dbgpProxyEnabled");
+            var proxyKey = listener.getKey();
+        } catch(e) {
+            dump(e);
+        }
+        document.getElementById("debuggerOn").setAttribute('value', listener.isListening() ? 'Yes' : 'No');
+        document.getElementById("address").setAttribute('value', listener.address);
+        document.getElementById("port").setAttribute('value', listener.port);
+        document.getElementById("proxyEnabled").setAttribute('value', proxyEnabled ? 'Yes' : 'No');
+        document.getElementById("proxyKey").setAttribute('value', proxyKey);
+        document.getElementById("proxyAddress").setAttribute('value', listener.proxyClientAddress);
+        document.getElementById("proxyPort").setAttribute('value', listener.proxyClientPort);
+        document.getElementById("numsessions").setAttribute('value', listener.currentSessions);
+        document.getElementById("numconnections").setAttribute('value', listener.currentConnections);
+        document.getElementById("totalconnections").setAttribute('value', listener.totalConnections);
+    }
+]]></script>
+
+<grid flex="1">
+    <columns>
+        <column style="min-width: 90px;"/>
+        <column flex="1"/>
+    </columns>
+    <rows>
+        <row align="center">
+            <label value="Debugger Listening:"/>
+            <textbox id="debuggerOn" readonly="true"/>
+        </row>
+        <row align="center">
+            <label value="Host Address:"/>
+            <textbox id="address" readonly="true"/>
+        </row>
+        <row align="center">
+            <label value="Host Port:"/>
+            <textbox id="port" readonly="true"/>
+        </row>
+        <row align="center">
+            <label value="Proxy Enabled:"/>
+            <textbox id="proxyEnabled" readonly="true"/>
+        </row>
+        <row align="center">
+            <label value="Proxy Key:"/>
+            <textbox id="proxyKey" readonly="true"/>
+        </row>
+        <row align="center">
+            <label value="Proxy Client Address:"/>
+            <textbox id="proxyAddress" readonly="true"/>
+        </row>
+        <row align="center">
+            <label value="Proxy Client Port:"/>
+            <textbox id="proxyPort" readonly="true"/>
+        </row>
+        <row align="center">
+            <label value="Current Sessions:"/>
+            <textbox id="numsessions" readonly="true"/>
+        </row>
+        <row align="center">
+            <label value="Current Connections:"/>
+            <textbox id="numconnections" readonly="true"/>
+        </row>
+        <row align="center">
+            <label value="Total Connections:"/>
+            <textbox id="totalconnections" readonly="true"/>
+        </row>
+    </rows>
+</grid>
+
+<separator flex="1" />
+
+</dialog>

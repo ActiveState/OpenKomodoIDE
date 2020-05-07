@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2000-2006 ActiveState Software Inc.
+     See the file LICENSE.txt for licensing information. -->
+
+<!DOCTYPE window SYSTEM "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % findDTD SYSTEM "chrome://komodo/locale/find.dtd">
+  %findDTD;
+  <!ENTITY % theDTD SYSTEM "chrome://refactoring/locale/refactoring.dtd">
+  %theDTD;
+]>
+
+<!-- #if PLATFORM == "win" -->
+<!-- #define ENTER_DIRECTORIES_ENTITY &enterDirectoriesWin.tooltiptext; -->
+<!-- #define ENTER_FILETYPES_TO_INCLUDE_ENTITY &enterFiletypesToIncludeWin.tooltiptext; -->
+<!-- #define ENTER_FILETYPES_TO_EXCLUDE_ENTITY &enterFiletypesToExcludeWin.tooltiptext; -->
+<!-- #else -->
+<!-- #define ENTER_DIRECTORIES_ENTITY &enterDirectoriesUnix.tooltiptext; -->
+<!-- #define ENTER_FILETYPES_TO_INCLUDE_ENTITY &enterFiletypesToIncludeUnix.tooltiptext; -->
+<!-- #define ENTER_FILETYPES_TO_EXCLUDE_ENTITY &enterFiletypesToExcludeUnix.tooltiptext; -->
+<!-- #endif -->
+
+<?xml-stylesheet href="less://komodo/skin/global/global.less" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/autocomplete.css" type="text/css"?>
+
+<?xml-stylesheet href="chrome://komodo/skin/dialogs/find2.css" type="text/css"?>
+<window id="renameClassMember-window"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="&renameClassMember.title;"
+        windowtype="komodo_renameClassMember"
+        class="kodialog mode-replace"
+        persist="screenX screenY"
+        onload="onLoad()"
+        orient="vertical">
+
+    <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/logging.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/dialogs.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/mru.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/uriparse.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/stringutils.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/filepickers.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/windowManager.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/launch.js"/>
+    <script type="application/x-javascript;version=1.7" src="chrome://refactoring/content/renameAttribute.js"/>
+      
+    <keyset id="findKeys">
+        <key keycode="VK_ESCAPE" modifiers="" oncommand="window.close();"/>
+        <key keycode="VK_RETURN" oncommand="ko.dialogs.handleEnterKey();"/>
+<!-- #if PLATFORM != "darwin" -->
+        <key key="W" modifiers="meta" oncommand="window.close();" />
+<!-- #endif -->
+    </keyset>
+    <popupset>
+        <panel type="autocomplete" id="popupTextboxAutoComplete" noautofocus="true"/>
+    </popupset>
+
+    <vbox class="modal-ui">
+
+        <groupbox>
+            <hbox class="ui-hbox">
+                <label id="repl-lbl" value="&newValue.label;" class="ui-label"
+                       control="repl" accesskey="&newValue.accesskey;"/>
+                <textbox id="repl"
+                           flex="1"
+                           type="autocomplete"
+                           class="ui-textbox"
+                           maxrows="10"
+                           autocompletesearch="mru"
+                           autocompletesearchparam="find-replacementMru"
+                           autocompletepopup="popupTextboxAutoComplete"
+                           enablehistory="true"
+                           onfocus="this.setSelectionRange(0, this.value.length);"
+                           completeselectedindex="true"
+                           oninput="update('repl');" />
+
+            </hbox>
+
+            <hbox class="ui-hbox">
+                <label value="&directory.label;" control="dirs" class="ui-label"
+                       accesskey="&directories.accesskey;"/>
+                <textbox id="dirs"
+                         flex="1"
+                         tooltiptext="&enterDirectoriesUnix.tooltiptext;"
+                         type="autocomplete"
+                         class="ui-textbox"
+                         maxrows="10"
+                         autocompletesearch="mru_and_dirpath"
+                         autocompletesearchparam="mru: find-foldersMru; maxmru: 5; multipaths: true"
+                         autocompletepopup="popupTextboxAutoComplete"
+                         enablehistory="true"
+                         tabscrolling="true"
+                         completeselectedindex="true"
+                         onfocus="dirs_on_focus(this, event);"
+                         oninput="update('dirs');"/>
+                <button label="&threeFullStop.label;" accesskey="&threeFullStop.accesskey;"
+                        style="min-width: 0px;"
+                        tooltiptext="&editListDirToSearch.tooltiptext;"
+                        oncommand="browse_for_dirs();"/>
+            </hbox>
+        </groupbox>
+
+        <hbox align="center" pack="center">
+            <button label="Cancel"
+                    accesskey="C"
+                    uses-accesskey="true"
+                    oncommand="window.close()"/>
+            <button id="replace-all-btn"
+                    label="Refactor"
+                    accesskey="R"
+                    uses-accesskey="true"
+                    oncommand="replace_all();"/>
+            <button id="replace-all-btn-force"
+                    label="Refactor without Confirmation"
+                    accesskey="f"
+                    uses-accesskey="true"
+                    oncommand="replace_all(true);"/>
+        </hbox>
+    </vbox>
+
+</window>

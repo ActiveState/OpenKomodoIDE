@@ -1,0 +1,16 @@
+treechildren::-moz-tree-progressmeter {
+  border: 0;
+  color: #D63636;
+  background: #FDD6D6;
+  /*-moz-border-right-colors : none;*/
+}
+
+/* Hide the selection coloring on the progress-meter column. */
+treechildren::-moz-tree-cell(progressNormal, selected) {
+  background-color: -moz-Dialog;
+}
+
+toolbarbutton > image
+{
+    margin-right: 6px;
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+    <Description about="urn:mozilla:install-manifest">
+        <em:id>komob@activestate.com</em:id>
+        <em:name>Komodo Collaboration</em:name>
+        <em:version>0.4.3</em:version>
+        <em:description>Collaborative real-time editing for Komodo</em:description>
+        <em:creator>ActiveState Software Inc.</em:creator>
+        <em:homepageURL>http://www.activestate.com</em:homepageURL>
+        <!-- Icon is from PC.DE:
+             License: Linkware
+             http://www.softicons.com/free-icons/web-icons/berlin-icons-by-pc.de/collaboration-icon
+             -->
+        <em:iconURL>chrome://komob/skin/collaboration_32x32.png</em:iconURL>
+        <em:type>2</em:type>
+
+        <!-- Komodo IDE -->
+        <em:targetApplication>
+            <Description>
+                <em:id>{36E66FA0-F259-11D9-850E-000D935D3368}</em:id>
+                <em:minVersion>7.0.0-alpha1</em:minVersion>
+                <em:maxVersion>12.*</em:maxVersion>
+            </Description>
+        </em:targetApplication>
+
+        <!-- Komodo Edit -->
+        <em:targetApplication>
+            <Description>
+                <em:id>{b1042fb5-9e9c-11db-b107-000d935d3368}</em:id>
+                <em:minVersion>7.0.0-alpha1</em:minVersion>
+                <em:maxVersion>12.*</em:maxVersion>
+            </Description>
+        </em:targetApplication>
+    </Description>
+</RDF>

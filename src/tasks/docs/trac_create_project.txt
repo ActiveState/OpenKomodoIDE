@@ -1,0 +1,79 @@
+# Creating a dev Trac
+
+This doc describes how to create and run a Trac project for testing and
+development of Komodo's tasks extension.  Before following these steps
+you need the Trac prerequisites for your OS.  See one of the following for
+help:
+
+    docs/trac_setup_macosx.txt
+    TODO: write setup docs for other OSes
+
+
+- Create data area, trac project, and (if wanted) svn repo:
+
+        $ mkdir -p $HOME/data/trac/repos
+        $ mkdir -p $HOME/data/trac/projects
+        $ svnadmin create $HOME/data/trac/repos/tracproj1
+        $ trac-admin $HOME/data/trac/projects/tracproj1 initenv tracproj1 sqlite:db/trac.db svn $HOME/data/trac/repos/tracproj1
+        $ export TRACPROJDIR=$HOME/data/trac/projects/tracproj1
+
+- Start the dev server:
+
+        $ tracd --port 8010 $TRACPROJDIR
+        # Browse: http://localhost:8010/tracproj1
+
+  This is called running Trac "standalone"
+  (http://localhost:8010/wiki/TracStandalone).
+
+- Install XmlRpcPlugin (http://trac-hacks.org/wiki/XmlRpcPlugin)
+
+        cd ~/src
+        svn co  http://trac-hacks.org/svn/xmlrpcplugin/trunk xmlrpcplugin
+        cd xmlrpcplugin
+        python setup.py bdist_egg 
+        cp dist/TracXMLRPC-*.egg $TRACPROJDIR/plugins
+
+  Then add this to "trac.ini":
+  
+        [components] 
+        tracrpc.* = enabled 
+
+  Then provide the appropriate Trac permissions for an authorized user
+  to access the API:
+  
+        cd $TRACPROJDIR
+        trac-admin . permission add authenticated XML_RPC 
+
+  This will allow access to the API via
+  http://localhost:8010/tracproj1/login/xmlrpc -- when HTTP auth is setup
+  in the next two steps.
+  
+  To allow anonymous access to the API via
+  <http://localhost:8010/tracproj1/xmlrpc> do this:
+  
+        cd $TRACPROJDIR
+        trac-admin . permission add anonymous XML_RPC 
+
+  Or to *particular* logged-in users (replace "obama" with that user's
+  username):
+    
+        cd $TRACPROJDIR
+        trac-admin . permission add obama XML_RPC 
+
+- Setup HTTP auth:
+
+        cd $TRACPROJDIR
+        touch .htpasswd
+        htpasswd .htpasswd $USER
+
+  You can add one for yourself, but also setup this one for the test suite:
+  
+        $ htpasswd .htpasswd activetest
+        New password: activetest
+        Re-type new password: activetest
+
+
+- Re-start the tracd server:
+
+        tracd --port 8010 --basic-auth=tracproj1,$TRACPROJDIR/.htpasswd,$TRACPROJDIR $TRACPROJDIR
+

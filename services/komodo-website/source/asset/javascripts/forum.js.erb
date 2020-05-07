@@ -1,0 +1,15 @@
+$(document).ready(function()
+{
+
+    var header = "<div id=container>";
+    header += <%= partial('header').to_json() %>;
+    header += "</div>";
+
+    $($(header)).insertBefore("#main");
+    
+    $("header .collapser").click(function()
+    {
+        $("#container header nav").toggleClass("expanded");
+    }) 
+    
+});

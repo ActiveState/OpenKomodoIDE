@@ -1,0 +1,3 @@
+content perlapp jar:perlapp.jar!/content/
+skin perlapp classic/1.0 jar:perlapp.jar!/skin/
+overlay chrome://komodo/content/komodo.xul chrome://perlapp/content/overlay.xul

@@ -1,0 +1,73 @@
+# sybtcl_bb.test --
+#
+#	This file contains Black Box tests that run TclPro Checker on 
+#	SybTcl code that will produce all possible error and warning
+#	messages that are specific to SybTcl.
+#
+# Copyright (c) 1999-2000 by Ajuba Solutions.
+# All rights reserved.
+#
+# RCS: @(#) $Id: sybtcl_bb.oldTest,v 1.4 2000/05/30 22:24:59 wart Exp $
+
+if {[string compare test [info procs test]] == 1} {
+    lappend auto_path [file join [file dirname [info script]] ..]
+    package require protest
+    namespace import ::protest::*
+}
+
+set procheck [findExeFile procheck 1]
+
+if {$tcl_platform(platform) == "windows"} {
+    set echo [file join $::protest::toolsDirectory echo.exe]
+} else {
+    set echo [file join $::protest::toolsDirectory echo]
+}
+
+set pcxDir [file join $::protest::sourceDirectory checker]
+
+# Test for -verbose package name.
+
+test sybtcl-1.1 {Test for -verbose package name} {
+    set script {sybcancel $a}
+    set result [catch {exec $echo $script | $procheck -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg sybtcl]
+    if {$i != -1} {
+	set msg [lindex $msg [expr {$i + 1}]]
+    }
+    list $result $msg 
+} [list 0 $::protest::supportedVersions(Sybtcl)]
+
+# Test to see if bodies of control structures are scanned for
+# user--defined procs.
+
+test sybtcl-2.1 {test scanCmds} {
+    set script {sybevent $a {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $procheck -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+test sybtcl-2.2 {test scanCmds} {
+    set script {sybnext $a {proc foo {} {}}; foo}
+    set result [catch {exec $echo $script | $procheck -pcx $pcxDir -n -q -v} msg]
+    set i [lsearch -exact $msg Errors:]
+    set e [lindex $msg [expr {$i + 1}]]
+    set i [lsearch -exact $msg Warnings:]
+    set w [lindex $msg [expr {$i + 1}]]
+    list $result $e $w
+} [list 0 0 0]
+
+# Run code that trigers sybtcl-specific message IDs.
+
+test sybtcl-3.1 {generate badSubstChar error} {
+    set badScript {sybnext $a {set x} ab}
+    set result [catch {exec $echo $badScript | $procheck -pcx $pcxDir -nologo} msg]
+    list $result [string match *badSubstChar* $msg]
+} {1 1}
+
+# cleanup
+cleanupTests
+

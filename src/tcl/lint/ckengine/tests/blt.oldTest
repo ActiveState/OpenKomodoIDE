@@ -1,0 +1,42 @@
+# blt.test --
+#
+#	This file contains regression tests for the BLT checkers.
+#
+# Copyright (c) 1998-2000 by Ajuba Solutions
+# All rights reserved.
+#
+# RCS: @(#) $Id: blt.oldTest,v 1.2 2000/05/30 22:24:43 wart Exp $
+
+# The test table for BLT is not complete and is broken.  It was 
+# putback so I could merge my diffs from the laptop.  Once the
+# table is finished, remove this comment and the return command below.
+# -Surles
+
+return
+
+if {[string compare test [info procs resetAnalyzer]] == 1} {
+    source [file  join [pwd] [file dirname [info script]] defs.tcl]
+}
+
+if {![regexp parse [info command parse]]} {
+    puts $::tcltest::outputChannel "blt.test:  can't run this test without parse command"
+    return
+}
+
+renameMessageShow
+resetUProcData
+addTestUserProc
+
+foreach bltVer $supportedVersions(BLT) {
+    resetAnalyzer
+    coreTcl::init $tclVersion(BLT$bltVer)
+    blt::init     $bltVer
+    testVersion   checkBLT $bltVer
+}
+
+resetMessageShow
+resetAnalyzer
+resetUProcData
+
+# cleanup
+cleanupTests

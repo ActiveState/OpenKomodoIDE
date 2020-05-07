@@ -1,0 +1,18 @@
+// komodo tool: apply_filters
+// ==========================
+// auto_abbreviation: true
+// indent_relative: false
+// is_clean: true
+// language: PHP
+// set_selection: false
+// treat_as_ejs: false
+// type: snippet
+// version: 1.1.5
+// ==========================
+/*
+ * Apply the filters by calling the 'example_callback' function we
+ * "hooked" to 'example_filter' using the add_filter() function above.
+ * - 'example_filter' is the filter hook $tag
+ * - 'filter me' is the value being filtered
+ * - $arg1 and $arg2 are the additional arguments passed to the callback.
+[[%tabstop:$value]] = apply_filters( '[[%tabstop:example_filter]]', '[[%tabstop:Content to filter]]', [[%tabstop:$arg1]], [[%tabstop:$arg2]] );!@#_currentPos!@#_anchor

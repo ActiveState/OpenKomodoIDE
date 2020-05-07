@@ -1,0 +1,222 @@
+/* GitHub Ribbon  */
+.github-fork-ribbon-wrapper
+{
+    z-index: 110;
+}
+
+.github-fork-ribbon
+{
+    background-color: $color-github-ribbon;
+    @include transition(0.2s background-color);
+
+    a {
+        color: #FFF !important;
+        text-decoration: none !important;
+    }
+
+    &:hover
+    {
+        background-color: darken($color-github-ribbon, 10%);
+    }
+}
+
+@include media($mobile)
+{
+    .github-fork-ribbon
+    {
+        display: none;
+    }
+}
+
+/* Browser Requirement Popup */
+#jr_inner, #jr_header, #jr_footer
+{
+    font-family: $font-base;
+    font-size: 11pt;
+
+    h1
+    {
+        font-size: 13pt;
+    }
+
+    ul
+    {
+        margin: 20px 0;
+
+        li
+        {
+            background-image: none !important;
+            font-size: 10pt;
+            float: none;
+            display: inline-block;
+            height: auto;
+
+            .jr_icon
+            {
+                width: 64px;
+                height: 64px;
+                background-size: 64px 64px !important;
+            }
+
+            &:hover a
+            {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    a
+    {
+        @include link($color-base-link, $color-base-link-hover);
+        display: inline;
+    }
+}
+
+#jr_inner
+{
+    max-width: 620px !important;
+    border-radius: 3px;
+}
+
+#jr_close
+{
+    a
+    {
+        font-size: 11pt;
+        font-weight: bold;
+    }
+
+    &, p
+    {
+        font-size: 9pt;
+        text-align: center;
+    }
+}
+
+/* Docpad Livereload */
+
+html.wait
+{
+    opacity: 0.7;
+
+    #container:before
+    {
+        display: block;
+        position: fixed;
+        bottom: 50px;
+        right: 50px;
+        content: "Reloading ...";
+        font-size: 24pt;
+        font-weight: bold;
+        color: #7F7F7F;
+    }
+}
+
+/* Tooltips */
+.tooltipster-default
+{
+    border-radius: 2px;
+    box-shadow: 0 0 6px 0 rgba(0,0,0,0.2);
+
+    border: 0;
+    background: rgba(0,0,0,0.8);
+    color: #EAEAEA;
+
+    tooltipster-content
+    {
+        padding: 4px;
+    }
+
+    .tooltipster-arrow .tooltipster-arrow-border
+    {
+        border: 0;
+    }
+
+    &.big
+    {
+        max-width: 400px !important;
+        
+        .tooltipster-content
+        {
+            line-height: 1.3;
+            font-size: 12pt;
+            font-weight: bold;
+        }
+    }
+}
+
+/* Lightbox */
+.mfp-bg
+{
+    opacity: 0;
+    @include transition(all 0.2s ease-in-out);
+
+    &.mfp-ready
+    {
+        opacity: 0.7;
+    }
+
+    &.mfp-removing
+    {
+        opacity: 0;
+    }
+}
+
+.mfp-wrap
+{
+    .mfp-content
+    {
+        @include transition(all 0.2s ease-in-out);
+        @include transform(scale(0.8));
+        opacity: 0;
+    }
+
+    &.mfp-ready .mfp-content
+    {
+        @include transform(scale(1));
+        opacity: 1;
+    }
+
+    &.mfp-removing .mfp-content
+    {
+        @include transition(all 0.1s ease-in-out);
+        opacity: 0;
+    }
+}
+
+/* Marketo form *(un)styling */
+
+form.mktoForm
+{
+    font-size: 12pt !important;
+
+    .mktoButtonWrap
+    {
+        margin-left: 210px !important;
+    }
+}
+
+/* Lightbox */
+
+.mfp-figure:after
+{
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.mfp-figure img
+{
+    max-width: 1000px;
+}
+
+/* Google Conversion Tracking */
+
+iframe[name='google_conversion_frame']
+{
+    height: 0 !important;
+    width: 0 !important; 
+    line-height: 0 !important; 
+    font-size: 0 !important;
+    margin-top: -13px;
+    float: left;
+}
