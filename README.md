@@ -1,7 +1,8 @@
 # Komodo IDE
 
-This readme explains how to get started building, using and developing with
-the Komodo IDE source base.
+As we retire Komodo IDE, ActiveState has a renewed focus on being the go-to service for securing the open source software supply chain. Check out our [Platform](https://www.activestate.com/products/platform/) to find out more.
+
+This readme explains how to get started building, using, and developing with the Komodo IDE source base.
 
 ## Table of Contents
 
