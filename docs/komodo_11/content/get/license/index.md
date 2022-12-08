@@ -2,5 +2,4 @@
 title: "Komodo End User License Agreements"
 ---
 
-- <a href="https://www.activestate.com/komodo-ide/license-agreement" target="\_blank">Komodo IDE</a>
-- <a href="https://www.activestate.com/komodo-edit/license-agreement" target="\_blank">Komodo Edit</a>
+- <a href="https://github.com/ActiveState/OpenKomodoIDE/blob/master/LICENSE.txt" target="\_blank">Komodo License Agreement</a>
