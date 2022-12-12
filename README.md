@@ -17,6 +17,7 @@ the entire project.
 
 - [Screenshot](#screenshot)
 - [Download](#download)
+- [Help](#help)
 - [Services](#services)
 - [Building Komodo](#building-komodo)
   - [Building on Windows](#building-on-windows)
@@ -32,6 +33,20 @@ the entire project.
 ## Download
 
 You can [download Komodo IDE installer here](installers/).
+
+## Help
+
+There are several ways to get in contact with the Komodo devs:
+
+Github: <https://github.com/ActiveState/OpenKomodoIDE>
+
+Gitter: <https://gitter.im/ActiveState/Komodo>
+
+Forums: <http://community.komodoide.com/>
+
+Bug Tracker: <https://github.com/ActiveState/OpenKomodoIDE/issues>
+
+IRC: <irc://irc.mozilla.org/#komodo>
 
 ## Services
 
@@ -185,7 +200,7 @@ be downloaded first.
 
 ###### These files need to be changed:
 
-1.  /KomodoEdit/mozilla/build/moz3500-ko9.10/mozilla/configure.in
+1.  /Komodo/mozilla/build/moz3500-ko9.10/mozilla/configure.in
 
 ```
  @@ -7509,8 +7509,6 @@
@@ -199,7 +214,7 @@ fi
 
 See [bug #1153109](https://bugzilla.mozilla.org/show_bug.cgi?id=1153109) in Mozilla's bug database for more information.
 
-2.  /KomodoEdit/mozilla/build/moz3500-ko9.10/mozilla/dom/ipc/Blob.cpp
+2.  /Komodo/mozilla/build/moz3500-ko9.10/mozilla/dom/ipc/Blob.cpp
 
 ```
 @@ -3874,7 +3874,7 @@
@@ -308,7 +323,7 @@ Or to do it all at once (clean, build and run)
 ### Building Complications
 
 If any errors occur during your first built-time and it is not obvious how to fix
-the issue on your own please refer to the [Feedback](#feedback) section on how to get in contact
+the issue on your own please refer to the [Help](#help) section on how to get in contact
 with us.
 
 Note that if building complications arise after you updated your repo with the latest
