@@ -1,0 +1,478 @@
+Open Komodo Development README
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Introduction
+============
+
+This README.txt tells you how to get started building, using and
+developing with the Open Komodo source base. Currently this basically
+means building Komodo Edit (the once free-as-in-beer, now also
+free-as-in-speech Komodo editor).
+
+Komodo is based on Mozilla, so prepare yourself for some serious build
+time. If you have trouble with any of the following instructions please
+log a bug:
+<http://bugs.activestate.com/enter_bug.cgi?product=Komodo>
+
+
+I'm lazy, just show me how to build it
+======================================
+
+If any of these steps break, please first look at the full instructions
+below (especially the "prerequisites" sections).
+
+Build steps on Windows (creating a Komodo 10.10 version):
+
+    REM ---- Build Mozilla
+    cd openkomodo\mozilla
+    setenv-moz-msvc11.bat
+    python build.py configure -k 10.10
+    python build.py distclean all
+    cd ..
+    REM ---- Build Komodo, version (10.10) must match between Komodo and Mozilla
+    set PATH=util\black;%PATH%
+    bk configure -V 10.10.0-devel
+    bk build
+    REM ---- Run Komodo
+    bk run
+
+Build steps on Linux and Mac OS X:
+
+    #---- Build Mozilla
+    cd openkomodo/mozilla
+    python build.py configure -k 10.10
+    python build.py distclean all
+    cd ..
+    #---- Build Komodo, version (10.10) must match between Komodo and Mozilla
+    export PATH=`pwd`/util/black:$PATH   # Komodo's "bk" build tool
+    bk configure -V 10.10.0-devel
+    bk build
+    #---- Run Komodo
+    bk run
+
+
+
+Getting the Source
+==================
+
+If you are reading this, you probably already have it, but for the record:
+The Open Komodo sources are kept in a Subversion repository hosted
+at the openkomodo.com site. Read-only public access is available via:
+
+    svn co http://svn.openkomodo.com/repos/openkomodo/trunk openkomodo
+
+Read/write developer access is available via:
+
+    svn co https://svn.openkomodo.com/repos/openkomodo/trunk openkomodo
+
+The source code is also available (mirrored) on GitHub:
+
+   https://github.com/ActiveState/komodoedit
+   git clone https://github.com/ActiveState/komodoedit.git
+
+
+Build Prerequisites for Windows
+===============================
+
+- Python >=2.7 (but not Python 3.x yet). You can install ActivePython from here:
+  <http://downloads.activestate.com/ActivePython/releases/>
+
+- Visual C++ 11.0 (aka Visual Studio 2012) and all the Platform SDKs for
+  building Mozilla with vc11 as described here:
+    http://developer.mozilla.org/en/docs/Windows_Build_Prerequisites  
+  All of Komodo's core runtime C/C++ is built with Visual C++ 11.0.
+  
+- Install the latest "MozillaBuild-$ver.exe" package into *the default dir*
+  (i.e. "C:\mozilla-build").
+  <http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/>
+
+- Install the latest ActivePerl.
+
+  <http://downloads.activestate.com/ActivePerl/releases/>
+
+  ActivePerl is currently required for the Komodo-part of the build
+  (where the "Mozilla-part of the build" is the other part). The
+  MozillaBuild package (previous step) *does* include a Perl 5.6 build,
+  but it is a mingw-built Perl that the Komodo build system cannot use.
+
+
+
+Build Prerequisites for Mac OS X
+================================
+
+- Python >=2.7 (but not Python 3.x yet). You can install ActivePython from here:
+  <http://downloads.activestate.com/ActivePython/releases/>
+
+  If you prefer the Python builds from python.org should be sufficient
+  as well.
+
+- Xcode. Install the latest one.
+
+  <http://developer.apple.com/tools/download/>
+
+- Xcode Command Line Tools.
+
+  Open the Xcode preferences, then in the Downloads tab, select and install the
+  Command Line Tools.
+
+- MacPorts (<http://www.macports.org/>).
+
+  (Note: Fink may work too but most of the build testing and instructions is
+  done with MacPorts.)
+
+- autoconf v2.13. Once you have MacPorts installed you need just run::
+
+    sudo port install autoconf213
+
+- ensure you are using clang or gcc 4.2 (or higher)::
+
+See <http://developer.mozilla.org/en/docs/Mac_OS_X_Build_Prerequisites>
+for more details on Mac OS X build prerequisites. However, following the
+above steps is *meant to be sufficient* to get building Komodo.
+
+Xcode 8 Prerequisites
+=====================
+
+Officially we do not support Xcode 8, however it is possible to build Komodo
+under Xcode 8 using a new extra steps.
+
+ * Copy over the 10.8 and 10.9 SDK's from an older XCode install, they should be in:
+   Xcode.app/Contents/Developer/Platforms/macOSX.platform/
+ * Set MinimumSDKVersion to 10.9 in Xcode.app/Contents/Developer/Platforms/macOSX.platform/Info.plist
+ * Ensure you are using ccache 3.1 (later versions will break)
+ * Configure Mozilla with `--options=disable-webrtc`
+
+
+Build Prerequisites for Linux
+=============================
+
+- Python >=2.7 (but not Python 3.x yet). You can install ActivePython from here:
+  <http://downloads.activestate.com/ActivePython/releases/>
+
+  If you prefer, your distro's Python 2.7 should be sufficient.
+
+- Everything mentioned in the Mozilla Linux build prerequisites:
+
+  <http://developer.mozilla.org/en/docs/Linux_Build_Prerequisites>
+
+
+
+Building
+========
+
+Komodo is made up of:
+
+- a Python build for the Mozilla PyXPCOM extension
+- a Mozilla build (with a number of Komodo-specific patches)
+- the Komodo-specific build bits: mostly chrome (XUL, JS, ...) and
+  PyXPCOM components (Python)
+
+
+Step 1: Building Python
+-----------------------
+
+Currently the Komodo source tree includes *prebuilt* Python binaries
+in `mozilla/prebuilt/python2.7`. Basically these are vanilla Python 2.7
+builds with the following tweaks:
+
+- [Windows] a patch to disable looking in the registry for sys.path info
+- [Windows] built with VC11 (atypical of all current Python distros)
+- [Mac OS X] a patch to the Python frameworks bin/python stub to allow
+  running `python` in this framework without it having to be installed
+  in one of the standard "/Library/Frameworks",
+  "/System/Library/Frameworks" locations.
+- The builds are shared (atypical of some Linux Python builds)
+
+Currently these are ActivePython builds. However, the plan is to update
+the Komodo build system to support building its own Python from sources
+rather than relying on a prebuilt ActivePython.
+
+
+Step 2: Building Mozilla
+------------------------
+
+This'll take a while but, unless you are doing some lower-level hacking
+for Komodo, you should only need to do this once (in a while).
+
+1. Get into the correct dir:
+
+        cd mozilla
+
+2. (Windows-only) Setup your environment for building.
+
+   - If you installed MozillaBuild into a directory other than
+     "c:\mozilla-build", shame on you. Tell the build where it is:
+     
+        set MOZILLABUILD=...\path\to\your\mozillabuild\base
+
+   - If you have cygwin installed, shame on you (consider MSYS instead).
+     Ensure that your PATH does not contain any cygwin executables or
+     DLLs.
+
+   - Setup your Mozilla environment:
+
+        setenv-moz-msvc11.bat
+
+3. Configure for the mozilla build. You'll want to use something like:
+
+        python build.py configure -k 10.10
+
+   What this configure-step does is create a "config.py" file that guides
+   the build step (next). This is akin to the "./configure" in the common
+   "./configure; make; make install" build trinity.
+   
+   Run `python build.py -h configure` for more details.
+
+4. Build away:
+
+        python build.py all
+    
+   This will take a long time, but you should have a usable Mozilla
+   build when it is done.
+
+
+
+
+
+
+
+##### ** Building with GCC 5.0 and higher **
+   If you are using GCC 5.0, the build may fail. If it does,
+   there are changes that need to be made to two files. However, if you are running
+   a clean build for the first time, you need to allow this part of the build to fail
+   first. This is because the files are in the Mozilla part of the build which has to
+   be downloaded first.
+   
+###### These files need to be changed:
+   1) /KomodoEdit/mozilla/build/moz3500-ko9.10/mozilla/configure.in
+   
+   ```
+    @@ -7509,8 +7509,6 @@
+    eval $(CXX="$CXX" HOST_CXX="$HOST_CXX" $PYTHON -m mozbuild.configure.libstdcxx)
+    AC_SUBST(MOZ_LIBSTDCXX_TARGET_VERSION)
+    AC_SUBST(MOZ_LIBSTDCXX_HOST_VERSION)
++   CXXFLAGS="$CXXFLAGS -D_GLIBCXX_USE_CXX11_ABI=0"
++   HOST_CXXFLAGS="$HOST_CXXFLAGS -D_GLIBCXX_USE_CXX11_ABI=0"
+ fi
+   ```
+   
+   See [bug #1153109](https://bugzilla.mozilla.org/show_bug.cgi?id=1153109) in Mozilla's bug database for more information.
+   
+   2) /KomodoEdit/mozilla/build/moz3500-ko9.10/mozilla/dom/ipc/Blob.cpp
+
+   ```
+   @@ -3874,7 +3874,7 @@
+   // Make sure we can't overflow.
+   if (NS_WARN_IF(UINT64_MAX - aLength < aStart)) {
+     ASSERT_UNLESS_FUZZING();
+-    return nullptr;
++    return false;
+   }
+ 
+   ErrorResult errorResult;
+   @@ -3883,7 +3883,7 @@
+ 
+   if (NS_WARN_IF(aStart + aLength > blobLength)) {
+     ASSERT_UNLESS_FUZZING();
+-    return nullptr;
++    return false;
+   }
+   ```
+   
+   See [Porting to GCC 5](https://gcc.gnu.org/gcc-5/porting_to.html) for more information.
+
+
+
+
+
+
+
+Step 3: Building Komodo
+-----------------------
+
+1. Get the in-house `bk` (a.k.a. Black -- ask trentm for the history if
+   you are curious) tool on you PATH (or a symlink or alias is fine):
+   
+        cd ..    # move back up from the "mozilla" dir
+        export PATH=`pwd`/util/black:$PATH
+        
+   or, on Windows:
+   
+        set PATH=path\to\sourcedir\util\black;%PATH%
+
+2. Configure you Komodo build.
+
+   In general the default configuration is fine for a development build:
+   
+        bk configure
+    
+   If you built Mozilla above for a Komodo version other than the version
+   mentioned in "src/version.txt", then you may have to specify your
+   version. E.g. if you configured above with
+   "python configure.py -k 10.10 ..." then you'd want something like:
+   
+        bk configure -V 10.10.0-devel
+
+   Run `bk help configure` for a (somewhat sparse) listing of available
+   options.
+
+3. Build away:
+
+        bk build
+
+4. Run Komodo:
+
+        bk run [-v]
+
+
+
+The Typical Komodo Build Cycle
+==============================
+
+The typical build cycle for Komodo development is:
+
+- edit some files under "src/..."
+- `bk build`
+- `bk run -v`
+- test
+
+While "bk build" should always build everything necessary, it can be a
+little slow. For a quicker development cycle you can do:
+
+    bk build quick
+
+This will appropriately rebuild *most* changes to interpreted sources: JS,
+Python, CSS, XUL, XBL, DTD. For certain things -- C/C++ changes, new files,
+IDL changes -- you still need to run the slower "bk build".
+
+
+
+Build Troubleshooting Notes
+===========================
+
+- [Windows] The Mozilla build fails with::
+
+        target: patch from ['patches-new']
+        preprocess: warn: defaulting content type for 'patches-new\mozilla-2.0\silo-mo
+        zilla-profiles.ppatch' to 'Text'
+        preprocess: warn: defaulting content type for 'patches-new\mozilla-2.0\silo-mo
+        zilla-runtime.ppatch' to 'Text'
+        Traceback (most recent call last):
+          File "build.py", line 3199, in <module>
+            sys.exit( main(sys.argv) )
+          File "build.py", line 3195, in main
+            return build(args)
+          File "build.py", line 3019, in build
+            newArgv = targetFunc(argv)
+          File "build.py", line 2711, in target_all
+            target_patch()
+          File "build.py", line 2754, in target_patch
+            patchExe=patchExe)
+          File "..\util\patchtree.py", line 760, in patch
+            patchArgs=action[3])
+          File "..\util\patchtree.py", line 395, in _assertCanApplyPatch
+            stdout, stderr, retval = _run(argv, cwd=sourceDir, stdin=patchContent)
+          File "..\util\patchtree.py", line 157, in _run
+            stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+          File "C:\Python27\lib\subprocess.py", line 633, in __init__
+            errread, errwrite)
+          File "C:\Python27\lib\subprocess.py", line 842, in _execute_child
+            startupinfo)
+        WindowsError: [Error 740] The requested operation requires elevation
+
+  This is a problem with an attempt to use "patch.exe" and Windows refusing
+  to run it witout elevated privs. It is doing so because of a boneheaded
+  heuristic. Details here:
+  <http://butnottoohard.blogspot.com/2010/01/windows-7-chronicles-gnu-patch-mtexe.html>
+
+  The solution is to explicitly mark this executable to request those privs.
+
+        cd komodo\mozilla
+        setenv-moz-msvc11.bat      (if you haven't already)
+        cd bin-win32
+        mt -manifest patch.exe.manifest -outputresource:patch.exe;1
+
+  Note: We *have* applied this to patch.exe in the Komodo source tree, but
+  for some reason it rears its ugly head time and again. Don't know why.
+
+- [Windows 7] The Mozilla build fails with::
+
+        checking whether the C++ compiler (cl  ) works... rm: cannot lstat `conftest.exe': Permission denied
+
+  The following discussion thread seems to indicate that this problem "goes
+  away" by one or both of re-starting your command shell and removing the
+  mozilla build object dir and re-starting the build.
+  <http://groups.google.com/group/mozilla.dev.platform/browse_thread/thread/bd1bd1a799835528>
+
+  In my case it worked by simply opening a new "cmd.exe" and re-starting the
+  build::
+
+        cd ...\mozilla
+        python build.py all
+
+- [Linux] On my Ubuntu Dapper install I had to install "automake1.9" to
+  get "aclocal"::
+  
+    sudo apt-get install automake1.9
+
+- [Linux] On my Ubuntu Dapper box /usr/bin/autoconf is a wrapper that
+  defaults to autoconf2.13. PHP 4.3's "phpize" requires autoconf 2.50. I
+  had to tweak "~/opt/php/4.3.11/bin/phpize" to use "autoconf2.50" instead
+  of bare "autoconf".
+
+- "bk configure" fails.
+
+  If "bk configure" fails, here is how to go about trying to help fix it.
+  Background: "bk configure" is doing an autoconf-like thing: gathering a
+  bunch of information (guided by command-line options) that is then
+  written out to a config file (current "bkconfig.py", "bkconfig.pm" and
+  "bkconfig.bat|sh") for use by subsequent build steps. The list of
+  config vars being determined is in the "configuration" dict in
+  "Blackfile.py" ("bk" == Black, hence make is to Makefile as "bk" is to
+  Blackfile.py). The implementation logic for most configuration vars
+  is in "bklocal.py" -- one Python class definition per configuration var.
+  
+  Process to help find the problem:
+  1. Look at the "bk configure" output. The error will be after output
+     that says "determining BLAH...". Look for that "BLAH" string in
+     "bklocal.py" to find the corresponding config var class.
+  2. The awkwardly named "_Determine_Do()" method for that class is where
+     the value is determined. The failure is probably in there. Feel
+     free to put some print statements in there and re-run your
+     "bk configure ..." call to try to suss out the problem.
+  3. Log a bug:
+     <http://bugs.activestate.com/enter_bug.cgi?product=OpenKomodo&component=InternalBuild>
+  
+
+
+Setup to Build a Komodo Installer
+=================================
+
+TODO
+
+Manually Patching Mozilla and Testing
+=====================================
+
+There may come a time when you have to patch Mozilla or test an upstream patch
+to Mozilla, but you don't want to waste an hour or two rebuilding the whole
+thing from scratch. Here's how to do this:
+
+0. The Mozilla source is located in "mozilla/build/mozXXYY-koXX.YY/mozilla/".
+1. `cd mozilla/build/mozXXYY-koXX.YY/mozilla/`
+2. Make your changes to Mozilla (manually, or via patch files, etc.).
+3. Rebuild only the parts of Mozilla affected by your patch by running
+   `./mach build`
+4. Go back to Komodo's "mozilla/" directory with `cd ../../../`
+5. `python build.py pyxpcom`
+6. `python build.py silo_python`
+   Note: If there are errors about a libpython2.7.so, remove:
+     + build/mozXXYY-koXX/mozilla/ko-rel/dist/libs/libpython2.7.so
+     + build/mozXXYY-koXX/mozilla/ko-rel/dist/bin/libpython2.7.so
+   Then re-run `python build.py silo_python`
+7. `python build.py regmozbuild`
+8. Now you can re-build Komodo as normal.
+
+Note: Steps 5, 6, and 7 come from the `python build.py all` target, which
+normally rebuilds Mozilla from scratch. You only need to re-run the targets
+after "build.py"'s "mozilla" target. That's why steps 5, 6, and 7 exist.
