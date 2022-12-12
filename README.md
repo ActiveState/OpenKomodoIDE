@@ -4,16 +4,34 @@
 
 As we retire Komodo IDE, ActiveState has a renewed focus on being the go-to service for securing the open source software supply chain. Check out our [Platform](https://www.activestate.com/products/platform/) to find out more.
 
-This readme explains how to get started building, using, and developing with the Komodo IDE source base.
+This readme explains how to get started building, using and developing with
+the Komodo IDE source base.
+
+Whilst the main Komodo IDE source is hosted under this repository you may also
+want to check out the individual component/addon repositories under
+https://github.com/Komodo in case you only want to contribute to a specific
+component. This'll save you some time and hassle as you would not have to build
+the entire project.
 
 ## Table of Contents
 
+- [Screenshot](#screenshot)
+- [Download](#download)
 - [Services](#services)
 - [Building Komodo](#building-komodo)
-    - [Building on Windows](#building-on-windows)
-    - [Building on Mac & Linux](#building-on-mac-and-linux)
-    - [Building with Docker](#building-with-docker)
-    - [Building Complications](#building-complications)
+  - [Building on Windows](#building-on-windows)
+  - [Building on Mac](#building-on-mac)
+  - [building on Linux](#building-on-linux)
+  - [Building with Docker](#building-with-docker)
+  - [Building Complications](#building-complications)
+
+## Screenshot
+
+![Screenshot](screenshot.png)
+
+## Download
+
+You can [download Komodo IDE installer here](installers/).
 
 ## Services
 
@@ -24,7 +42,7 @@ Komodo IDE has several remote services that are required to get the full functio
 ## Building Komodo
 
 Note that these are simplified steps of the building process, for a more in-depth
-guide check [BUILD.txt](BUILD.txt).
+guide check (outdated) [BUILD.txt](docs/BUILD.txt).
 
 ### Building on Windows
 
@@ -33,221 +51,202 @@ guide check [BUILD.txt](BUILD.txt).
 
 #### Prerequisites
 
- * Python >=2.7 (but not Python 3.x yet). You can [install ActivePython from here](http://downloads.activestate.com/ActivePython/releases).
+- Python >=2.7 (but not Python 3.x yet). You can [install ActivePython from here](http://downloads.activestate.com/ActivePython/releases).
 
- * Visual C++ 11.0 (aka Visual Studio 2012) and all the Platform SDKs for
-   building Mozilla with vc11 [as described here](http://developer.mozilla.org/en/docs/Windows_Build_Prerequisites).
-   
- * Install [version 1.9.0 of "MozillaBuild-$ver.exe"](http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/) package into *the default dir*
-   (i.e. "C:\mozilla-build").
+- Visual C++ 11.0 (aka Visual Studio 2012) and all the Platform SDKs for
+  building Mozilla with vc11 [as described here](http://www.devdoc.net/web/developer.mozilla.org/en-US/docs/Windows_Build_Prerequisites.html).
+- Install [version 1.9.0 of "MozillaBuild-$ver.exe"](http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/) package into _the default dir_
+  (i.e. "C:\mozilla-build").
 
-   * Once installed remove the wget and hg directories
-   * Download version 2.2.0 and install it to a temp directory, then copy the wget directory from 2.2 to the 1.9 install directory
+  - Once installed remove the wget and hg directories
+  - Download version 2.2.0 and install it to a temp directory, then copy the wget directory from 2.2 to the 1.9 install directory
 
- * Install the Perl <= 5.22
+- Install the Perl <= 5.22
 
- * Install Mercurial
+- Install Mercurial
 
-See <http://developer.mozilla.org/en/docs/Windows_Build_Prerequisites> for
+See <http://www.devdoc.net/web/developer.mozilla.org/en-US/docs/Windows_Build_Prerequisites.html> for
 more details on Windows build prerequisites. However, following the above
-steps is *meant to be sufficient* to get Komodo building.
+steps is _meant to be sufficient_ to get Komodo building.
 
 #### Building Steps
 
- * Checkout Komodo IDE: `git clone https://github.com/Komodo/OpenKomodoIDE.git`
+- Checkout Komodo: `git clone https://github.com/ActiveState/OpenKomodoIDE.git`
 
- * Using the command line, enter your checkout directory and run:
+- Using the command line, enter your checkout directory and run:
 
-   ```
-    cd mozilla
-    setenv-moz-msvc11.bat
-    python build.py configure -k 11.10
-    python build.py distclean all
-   ```
+  ```
+   cd mozilla
+   setenv-moz-msvc11.bat
+   python build.py configure -k 11.10
+   python build.py distclean all
+  ```
 
-   This will configure and build mozilla and can take anywhere from 30 minutes
-   to several hours to complete (depending on your specs). For most modern
-   machines it should be about an hour.
+  This will configure and build mozilla and can take anywhere from 30 minutes
+  to several hours to complete (depending on your specs). For most modern
+  machines it should be about an hour.
 
- * After mozilla is built successfully go back to the main repo directory and
-   build komodo:
+- After mozilla is built successfully go back to the main repo directory and
+  build komodo:
 
-   ```
-    cd ..
-    set PATH=util\black;%PATH%
-    bk configure -V 11.10.0-devel # --without-binary-dbgp-clients
-    bk build
-   ```
+  ```
+   cd ..
+   set PATH=util\black;%PATH%
+   bk configure -V 11.10.0-devel # --without-binary-dbgp-clients
+   bk build
+  ```
 
-   This should take significantly less time than building Mozilla.
+  This should take significantly less time than building Mozilla.
 
- * Once the build has completed you can simply run Komodo by executing `bk run`
-   
+- Once the build has completed you can simply run Komodo by executing `bk run`
+
 Upon making any modifications to the source you will again have to run `bk build`,
 or simply `bk build && bk run` to quickly get back into Komodo. Subsequent builds
 should be a lot faster as much of the compiled data is cached.
 
-### Building on Mac and Linux
+### Building on Mac
 
 - [Mac Prerequisites](#mac-prerequisites)
-- [Linux Prerequisites](#linux-prerequisites)
-    - [Ubuntu](#ubuntu)
-    - [Fedora](#fedora)
-    - [Others](#others)
 - [Building Steps](#building-steps-1)
 
 #### Mac Prerequisites
 
- * Python >=2.7 (but not Python 3.x yet). You can
-   [install ActivePython from here](http://downloads.activestate.com/ActivePython/releases).
+- Python >=2.7 (but not Python 3.x yet). You can
+  [install ActivePython from here](http://downloads.activestate.com/ActivePython/releases).
 
-   If you prefer the Python builds from python.org should be sufficient as well.
+  If you prefer the Python builds from python.org should be sufficient as well.
 
- * Xcode 6.4(SDK 10.9 & 10.10). For 8.0 see below. You can get version 6.4 from [the developer downloads site](https://developer.apple.com/downloads/).
-  
-  * MacOSX10.10.sdk or older  
-  * SDK 10.8 for Code Intel. Can be found in Xcode 5.1.1
-  * If you have/need other versions of Xcode installed then you can use `xcode-select` to change the active Xcode:
-  
-     `$ xcode-select -s /Path/To/Xcode\ 6.4.app/`
- 
- * Xcode Command Line Tools.
+- Xcode 6.4(SDK 10.9 & 10.10). For 8.0 see below. You can get version 6.4 from [the developer downloads site](https://developer.apple.com/downloads/).
 
-   Open the Xcode preferences, then in the Downloads tab, select and install the
-   Command Line Tools.
+- MacOSX10.10.sdk or older
+- _IDE ONLY_ SDK 10.8 for Code Intel. Can be found in Xcode 5.1.1
+- If you have/need other versions of Xcode installed then you can use `xcode-select` to change the active Xcode:
 
- * [MacPorts](http://www.macports.org/). (Note: Fink may work too but most of the
-   build testing and instructions is done with MacPorts.)
+  `$ xcode-select -s /Path/To/Xcode\ 6.4.app/`
 
- * autoconf v2.13. Once you have MacPorts installed you need just run
-   `sudo port install autoconf213`
+- Xcode Command Line Tools.
 
- * ensure you are using clang or gcc 4.2 (or higher)
+  Open the Xcode preferences, then in the Downloads tab, select and install the
+  Command Line Tools.
 
-See <http://developer.mozilla.org/en/docs/Mac_OS_X_Build_Prerequisites>
+- [MacPorts](http://www.macports.org/). (Note: Fink may work too but most of the
+  build testing and instructions is done with MacPorts.)
+
+- autoconf v2.13. Once you have MacPorts installed you need just run
+  `sudo port install autoconf213`
+
+- ensure you are using clang or gcc 4.2 (or higher)
+
+See <http://www.devdoc.net/web/developer.mozilla.org/en-US/docs/Mac_OS_X_Build_Prerequisites.html>
 for more details on Mac OS X build prerequisites. However, following the
-above steps is *meant to be sufficient* to get Komodo building.
+above steps is _meant to be sufficient_ to get Komodo building.
 
 ### Xcode 8 Prerequisites
 
 Officially we do not support Xcode 8, however it is possible to build Komodo
 under Xcode 8 using a new extra steps.
 
- * Copy over the 10.8 and 10.9 SDK's from an older XCode install, they should be in:
-   Xcode.app/Contents/Developer/Platforms/macOSX.platform/
- * Set MinimumSDKVersion to 10.9 in Xcode.app/Contents/Developer/Platforms/macOSX.platform/Info.plist
- * Ensure you are using ccache 3.1 (later versions will break)
- * Configure Mozilla with `--options=disable-webrtc`
-
-#### Linux Prerequisites
-
- * Subversion if it's not already installed. Installing from package installers such as apt-get on Ubuntu or yum on Redhat/Fedora is ok.
-
-##### Ubuntu
-
-  `sudo apt-get build-dep firefox`
-
-##### Fedora
-
-  `sudo yum install gcc-c++ patch gtk2-devel libIDL-devel libcurl-devel`
-
-##### Others
-
- * Python >=2.7 (but not Python 3.x yet). You can
-   [install ActivePython from here](http://downloads.activestate.com/ActivePython/releases).
-
-   If you prefer, your distro's Python 2.7 should be sufficient.
-
- * Everything mentioned in the
-   [Mozilla Linux build prerequisites](http://developer.mozilla.org/en/docs/Linux_Build_Prerequisites): 
+- Copy over the 10.8 and 10.9 SDK's from an older XCode install, they should be in:
+  Xcode.app/Contents/Developer/Platforms/macOSX.platform/
+- Set MinimumSDKVersion to 10.9 in Xcode.app/Contents/Developer/Platforms/macOSX.platform/Info.plist
+- Ensure you are using ccache 3.1 (later versions will break)
+- Configure Mozilla with `--options=disable-webrtc`
 
 #### Building Steps
 
- * Checkout Komodo IDE: `git clone https://github.com/Komodo/OpenKomodoIDE.git`
+- Checkout Komodo: `git clone https://github.com/ActiveState/OpenKomodoIDE.git`
 
- * Using the terminal, enter your checkout directory and run:
+- Using the terminal, enter your checkout directory and run:
 
-   ```
-    1) cd komodo/mozilla
-    
-    2) python build.py configure -k 10.10
-    
-    3) python build.py all
-    
-       or 
-    
-       python build.py distclean all
-       (to delete and re-download Mozilla again)
-   ```
+  ```
+   1) cd komodo/mozilla
 
-   This will configure and build mozilla and can take anywhere from 30 minutes
-   to several hours to complete (depending on your specs). For most modern
-   machines it should be about an hour.
-   
+   2) python build.py configure -k 10.10
+
+   3) python build.py all
+
+      or
+
+      python build.py distclean all
+      (to delete and re-download Mozilla again)
+  ```
+
+  This will configure and build mozilla and can take anywhere from 30 minutes
+  to several hours to complete (depending on your specs). For most modern
+  machines it should be about an hour.
+
 ##### ** Building with GCC 5.0 and higher **
-   If you are using GCC 5.0, the build may fail. If it does,
-   there are changes that need to be made to two files. However, if you are running
-   a clean build for the first time, you need to allow this part of the build to fail
-   first. This is because the files are in the Mozilla part of the build which has to
-   be downloaded first.
-   
+
+If you are using GCC 5.0, the build may fail. If it does,
+there are changes that need to be made to two files. However, if you are running
+a clean build for the first time, you need to allow this part of the build to fail
+first. This is because the files are in the Mozilla part of the build which has to
+be downloaded first.
+
 ###### These files need to be changed:
-   1) /OpenKomodoIDE/mozilla/build/moz3500-ko9.10/mozilla/configure.in
-   
-   ```
-    @@ -7509,8 +7509,6 @@
-    eval $(CXX="$CXX" HOST_CXX="$HOST_CXX" $PYTHON -m mozbuild.configure.libstdcxx)
-    AC_SUBST(MOZ_LIBSTDCXX_TARGET_VERSION)
-    AC_SUBST(MOZ_LIBSTDCXX_HOST_VERSION)
+
+1.  /KomodoEdit/mozilla/build/moz3500-ko9.10/mozilla/configure.in
+
+```
+ @@ -7509,8 +7509,6 @@
+ eval $(CXX="$CXX" HOST_CXX="$HOST_CXX" $PYTHON -m mozbuild.configure.libstdcxx)
+ AC_SUBST(MOZ_LIBSTDCXX_TARGET_VERSION)
+ AC_SUBST(MOZ_LIBSTDCXX_HOST_VERSION)
 +   CXXFLAGS="$CXXFLAGS -D_GLIBCXX_USE_CXX11_ABI=0"
 +   HOST_CXXFLAGS="$HOST_CXXFLAGS -D_GLIBCXX_USE_CXX11_ABI=0"
- fi
-   ```
-   
-   See [bug #1153109](https://bugzilla.mozilla.org/show_bug.cgi?id=1153109) in Mozilla's bug database for more information.
-   
-   2) /OpenKomodoIDE/mozilla/build/moz3500-ko9.10/mozilla/dom/ipc/Blob.cpp
+fi
+```
 
-   ```
-   @@ -3874,7 +3874,7 @@
-   // Make sure we can't overflow.
-   if (NS_WARN_IF(UINT64_MAX - aLength < aStart)) {
-     ASSERT_UNLESS_FUZZING();
+See [bug #1153109](https://bugzilla.mozilla.org/show_bug.cgi?id=1153109) in Mozilla's bug database for more information.
+
+2.  /KomodoEdit/mozilla/build/moz3500-ko9.10/mozilla/dom/ipc/Blob.cpp
+
+```
+@@ -3874,7 +3874,7 @@
+// Make sure we can't overflow.
+if (NS_WARN_IF(UINT64_MAX - aLength < aStart)) {
+  ASSERT_UNLESS_FUZZING();
 -    return nullptr;
 +    return false;
-   }
- 
-   ErrorResult errorResult;
-   @@ -3883,7 +3883,7 @@
- 
-   if (NS_WARN_IF(aStart + aLength > blobLength)) {
-     ASSERT_UNLESS_FUZZING();
+}
+
+ErrorResult errorResult;
+@@ -3883,7 +3883,7 @@
+
+if (NS_WARN_IF(aStart + aLength > blobLength)) {
+  ASSERT_UNLESS_FUZZING();
 -    return nullptr;
 +    return false;
-   }
-   ```
-   
-   See [Porting to GCC 5](https://gcc.gnu.org/gcc-5/porting_to.html) for more information.
+}
+```
 
- * After mozilla is built successfully, go back to the main repo directory and
-   build komodo:
+See [Porting to GCC 5](https://gcc.gnu.org/gcc-5/porting_to.html) for more information.
 
-   ```
-    cd ..
-    export PATH=`pwd`/util/black:$PATH   # Komodo's "bk" build tool
-    git submodule update --init
-    git submodule update --remote
-    bk configure -V 10.10.0-devel
-    bk build
-   ```
+- After mozilla is built successfully, go back to the main repo directory and
+  build komodo:
 
-   This should take significantly less time than building Mozilla.
+  ```
+   cd ..
+   export PATH=`pwd`/util/black:$PATH   # Komodo's "bk" build tool
+   git submodule update --init
+   git submodule update --remote
+   bk configure -V 10.10.0-devel
+   bk build
+  ```
 
- * Once the build has completed you can simply run Komodo by executing `bk run`
+  This should take significantly less time than building Mozilla.
+
+- Once the build has completed you can simply run Komodo by executing `bk run`
 
 Upon making any modifications to the source you will again have to run `bk build`,
 or simply `bk build && bk run` to quickly get back into Komodo. Subsequent builds
 should be a lot faster as much of the compiled data is cached.
+
+### Building on Linux
+
+[Linux instructions](docs/Linux_build_guide.md)
+<br />
+<br />
 
 ### Building with Docker
 
@@ -263,9 +262,9 @@ linux distros).
 
 #### Prepare Docker Image
 
- * Build the docker image: `./util/docker/docklet image`
- * Start your container: `./util/docker/docklet start`
- * SSH into your container to start working: `./util/docker/docklet ssh`
+- Build the docker image: `./util/docker/docklet image`
+- Start your container: `./util/docker/docklet start`
+- SSH into your container to start working: `./util/docker/docklet ssh`
 
 Your project files will be mounted at `/komodo/dev`
 
@@ -306,7 +305,6 @@ Or to do it all at once (clean, build and run)
 
 `./util/docker/docklet clean build run`
 
-
 ### Building Complications
 
 If any errors occur during your first built-time and it is not obvious how to fix
@@ -321,12 +319,12 @@ new changes, to do this run `bk distclean` before running your build steps.
 
 **Build a single piece**
 
-Sometimes ```bk build``` is too much and ```bk build quick``` isn't enough.  If ```bk build quick``` doesn't appear to pickup your changes, try pointing ```bk build``` at the piece in question.  
+Sometimes `bk build` is too much and `bk build quick` isn't enough. If `bk build quick` doesn't appear to pickup your changes, try pointing `bk build` at the piece in question.
 
 **Example**
 
-```bk build build/release/modules/places #this will build the places module only```
+`bk build build/release/modules/places #this will build the places module only`
 
-**NOTE**: Do not rely on this method as ```bk build quick``` is faster and in some cases does some steps that the above example won't perform.  Use it as a last ditch effort before you try ```bk distclean && bk build```.
+**NOTE**: Do not rely on this method as `bk build quick` is faster and in some cases does some steps that the above example won't perform. Use it as a last ditch effort before you try `bk distclean && bk build`.
 
 ---
